@@ -39,8 +39,8 @@
 #define QGLOBAL_H
 
 
-#define OSIRIS_VERSION	240
-#define OSIRIS_VERSION_STR	"2.4.0"
+#define OSIRIS_VERSION	241
+#define OSIRIS_VERSION_STR	"2.4.1"
 
 
 //
@@ -168,6 +168,7 @@
 //   USLC	- SCO UnixWare7 C++
 //   CDS	- Reliant C++
 //   KAI	- KAI C++
+//   CLANG	= Clang/LLVM
 //
 
 

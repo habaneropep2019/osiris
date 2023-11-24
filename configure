@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Configures to build the Qt library
 #
@@ -11,8 +11,7 @@
 # To remove the need for the first test, do this:
 # OSIRISDIR=`pwd` export OSIRISDIR
 
-relpath=`dirname $0`
-relpath=`(cd $relpath; pwd)`
+relpath=$(pwd)
 
 HELP=no
 if [ "$1" = -h -o "$1" = -help -o "$1" = --help ]
@@ -20,24 +19,7 @@ then
     HELP=yes
 else
 
-touch .test.qt.
-if [ '!' -f ${OSIRISDIR}/.test.qt. ];
-then
-    rm .test.qt.
-    echo
-    echo
-    echo '   The environment variable $OSIRISDIR is not set correctly. It is currently'
-    echo '   set to "'$OSIRISDIR'", but it should be set to this directory,'
-    echo '   which is "'`pwd`'".'
-    echo
-    echo '   Please read the INSTALL file for instructions on how to set $OSIRISDIR'
-    echo '   correctly. If you have set $OSIRISDIR in your .profile or .login, you '
-    echo '   will need to log out and log in again to make the setting effective.'
-    echo
-    echo
-    exit 1
-fi
-rm .test.qt.
+OSIRISDIR="$(pwd)"
 
 # Find a make command
 if ( make /dev/null ) >/dev/null 2>/dev/null
@@ -57,31 +39,51 @@ fi
 #AB#
 
 # Check for X11 Libraries
-if [ -z `find /usr/include/X11 -name Xlib.h` ]
+if [ -z $(find /usr/include/X11 -name Xlib.h) ]
 	then
 		echo "FATAL: No Xlib.h found in /usr/include/X11 or its subdirectories."
 		echo "You may be missing libx11-dev."
 		exit 1
 	else
-		echo "INFO: Found Xlib at `find /usr/include/X11 -name Xlib.h`"
+		echo "INFO: Found Xlib at $(find /usr/include/X11 -name Xlib.h)"
 fi
 
-if [ -z `find /usr/include/X11 -name shape.h` ]
+if [ -z $(find /usr/include/X11 -name shape.h) ]
 	then
 		echo "FATAL: No shape.h found in /usr/include/X11 or its subdirectories."
 		echo "You may be missing libXext-dev."
 		exit 1
 	else
-		echo "INFO: Found libXext at `find /usr/include/X11 -name shape.h`"
+		echo "INFO: Found libXext at $(find /usr/include/X11 -name shape.h)"
 fi
 
-if [ -z `find /usr/include/X11/Xft -name Xft.h` ]
+if [ -z $(find /usr/include/X11/Xft -name Xft.h) ]
 	then
 		echo "FATAL: No Xft.h found in /usr/include/X11/Xft or its subdirectories."
-		echo "You may be missing libXext-dev."
+		echo "You may be missing libXft-dev."
 		exit 1
 	else
-		echo "INFO: Found libXext at `find /usr/include/X11/Xft -name shape.h`"
+		echo "INFO: Found libXft at $(find /usr/include/X11/Xft -name Xft.h)"
+fi
+
+if [ -z $(find /usr/include -name jpeglib.h) ]
+	then
+		echo "FATAL: No jpeglib.h found in /usr/include or its subdirectories."
+		echo "You may be missing libjpeg-dev or libjpeg62-turbo-dev."
+		exit 1
+	else
+		echo "INFO: Found libjpeg at $(find /usr/include -name jpeglib.h)"
+fi
+
+# Check for Mesa GLU
+
+if [ -z $(find /usr/include/GL -name glu.h) ]
+	then
+		echo "FATAL: No glu.h found in /usr/include/GL or its subdirectories."
+		echo "You may be missing libglu1-mesa-dev."
+		exit 1
+	else
+		echo "INFO: Found Mesa libGLU at $(find /usr/include/GL -name glu.h)"
 fi
 
 # Check for GGE libraries
@@ -93,14 +95,25 @@ if [ ! -e /opt/gge/kernel ]
 		OSIRIS_GGEdev=yes
 fi
 
-# Create lib directory
+# Clean lib directory
 
-mkdir $OSIRISDIR/lib
+rm $OSIRISDIR/lib/null
+
+# Check for Clang
+
+if [ "$(which clang)" == "/usr/bin/clang" ] || [ "$(which clang)" == "/bin/clang" ]
+then
+	echo "Found clang"
+	echo "Clang support will be enabled."
+	CLANG="clang"
+else
+	CLANG=""
+fi
 
 #@AB@#
 
 # Check licensed modules
-MODULES=`$MAKE -f src/Makefile.in listallmodules`
+MODULES=$($MAKE -f src/Makefile.in listallmodules)
 
 # Qt/Embedded?
 if [ -f configs/linux-generic-g++-shared ]
@@ -127,23 +140,20 @@ then
     while true
     do
 	echo
-	echo "This is the Osiris open-source toolkit."
-	echo "Osiris is a fork of Qt version 2.3.2."
+	echo "This is the Osiris open-source toolkit, version 2.4.1."
 	echo
-	if [ -n "$EMB" ]
-	then
-	    echo "You are licensed to use this software under the terms of"
-	    echo "the GNU General Public License (GPL)."
-	    echo
-	else
-	    echo "You are licensed to use this software under the terms of either"
-	    echo "the Q Public License (QPL) or the GNU General Public License (GPL)."
-	    echo "Some portions may also be licensed under the Libranext Software and"
-	    echo "Development License, version 2 (SADL2)."
-	    echo
-	    echo "Type 'Q' to view the Q Public License."
-	    echo "Type 'S' to view the SADL2 License."
-	fi
+	echo "Osiris is modified and distributed under the terms of"
+	echo "the GNU General Public License (GPL), version 2."
+	echo
+	echo "Since Osiris was forked from Qt 2.3.2, much of the source code"
+	echo "is tri-licensed under the GPL, QPL and Qt Commercial License."
+	echo "However, as distributed, Osiris uses the GPL version 2."
+	echo
+	echo "Some portions may also be licensed under the Libranext Software and"
+	echo "Development License, version 2 (SADL2)."
+	echo
+	echo "Type 'Q' to view the Q Public License."
+	echo "Type 'S' to view the SADL2 License."
 	echo "Type 'G' to view the GNU General Public License."
 	echo "Type 'yes' to accept this license offer."
 	echo "Type 'no' to decline this license offer."
@@ -182,22 +192,22 @@ else
 	E="Qt$EMB Professional Edition"
 	Edition=pro
 
-	if [ -f $HOME/.qt-license ]
+	if [ -f "$HOME"/.qt-license ]
 	then
-	    . $HOME/.qt-license
-	    if echo $Products | grep >/dev/null 'qt-enterprise'
+	    . "$HOME"/.qt-license
+	    if echo "$Products" | grep >/dev/null 'qt-enterprise'
 	    then
 		E="Qt$EMB Enterprise Edition"
 		Edition=ent
 	    else
-		MODULES="$Products "`$MAKE -f src/Makefile.in listpromodules`
+		MODULES="$Products "$($MAKE -f src/Makefile.in listpromodules)
 		if [ -n "$EMB" ]
 		then
 		    MODULES="$MODULES network"
 		fi
 	    fi
-	    ExpiryDate=`echo $ExpiryDate | sed -e "s,-,,g"`
-	    NOW=`date +%Y%m%d`
+	    ExpiryDate=$(echo "$ExpiryDate" | sed -e "s,-,,g")
+	    NOW=$(date +%Y%m%d)
 	    if [ "$NOW" -gt "0$ExpiryDate" ]
 	    then
 		echo
@@ -288,7 +298,7 @@ VERBOSE=no
 DEBUG=no
 SHARED=yes
 GIF=yes
-OPENGL=auto
+OPENGL=yes
 THREAD=yes
 SM=no
 ZLIB=no
@@ -421,14 +431,17 @@ while [ -n "$1" ]; do
    -xkb)
 	XKB=yes
 	;;
+   -no-opengl)
+    OPENGL=no
+    ;;
    -no-*)
-       MODULE=`echo $1 | sed -e "s/-no-//"`;
+       MODULE=$(echo "$1" | sed -e "s/-no-//");
        if [ -d "src/$MODULE" ]
        then
-	   MODULES=`echo $MODULES | sed -e "s/$MODULE//"`
+	   MODULES=$(echo "$MODULES" | sed -e "s/$MODULE//")
        else
-	   FEATURE=`echo $1 | sed -e "s/-/_/g" | tr '[a-z]' '[A-Z]'`;
-	   QT_CXX="$QT_CXX -DQT"`echo $1 | sed -e "s/-/_/g" | tr '[a-z]' '[A-Z]'`
+	   FEATURE=$(echo "$1" | sed -e "s/-/_/g" | tr '[a-z]' '[A-Z]');
+	   QT_CXX="$QT_CXX -DQT"$(echo "$1" | sed -e "s/-/_/g" | tr '[a-z]' '[A-Z]')
        fi
     #buildpath=`dirname $a | sed -e "s;$sepath;.;g"`
 	;;
@@ -463,7 +476,7 @@ while [ -n "$1" ]; do
 	R_FLAGS="$R_FLAGS -R$1"
 	;;
    *)
-       echo $1: unknown argument
+       echo "$1": unknown argument
        HELP=yes;
        ERROR=yes
 	;;
@@ -473,17 +486,17 @@ done
 
 if [ -z "$PLATFORM" ]
 then
-    UNAME_MACHINE=`(uname -m) 2>/dev/null` || UNAME_MACHINE=unknown
-    UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
-    UNAME_SYSTEM=`(uname -s) 2>/dev/null` || UNAME_SYSTEM=unknown
-    UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
+    UNAME_MACHINE=$((uname -m) 2>/dev/null) || UNAME_MACHINE=unknown
+    UNAME_RELEASE=$((uname -r) 2>/dev/null) || UNAME_RELEASE=unknown
+    UNAME_SYSTEM=$((uname -s) 2>/dev/null) || UNAME_SYSTEM=unknown
+    UNAME_VERSION=$((uname -v) 2>/dev/null) || UNAME_VERSION=unknown
 
     ARCH=""
     if [ -f configs/linux-generic-g++-shared ]
     then
 	# This is a Qt/Embedded distribution
 	SM=no
-	MODULES=`echo $MODULES | sed -e 's/opengl//'`
+	MODULES=$(echo "$MODULES" | sed -e 's/opengl//')
 	PLATFORMS="linux-generic-g++ linux-mips-g++ linux-x86-g++ linux-arm-g++"
 	case "$UNAME_MACHINE" in
 	 *86) ARCH=x86-
@@ -491,8 +504,7 @@ then
 	esac
     else
 	##### Generate?  Look in configs/?
-	PLATFORMS="freebsd-g++ hurd-g++ linux-cxx linux-g++
-	    netbsd-g++ openbsd-g++ solaris-cc-gcc solaris-cc solaris-64 solaris-g++ sunos-g++"
+	PLATFORMS="freebsd-g++ hurd-g++ linux-cxx linux-g++ linux-clang netbsd-g++ openbsd-g++ solaris-cc-gcc solaris-cc solaris-64 solaris-g++ sunos-g++"
     fi
 
     PLATFORM_NOTES=""
@@ -511,7 +523,12 @@ then
 	PLATFORM=netbsd-g++
 	;;
      Linux:*)
-	PLATFORM=linux-${ARCH}g++
+    if [ "$CLANG" == "clang" ]
+    then
+    	PLATFORM=linux-${ARCH}clang
+    else
+		PLATFORM=linux-${ARCH}g++
+	fi
 	;;
      SunOS:5*)
 	#PLATFORM=solaris-g++
@@ -551,22 +568,22 @@ fi
 
 TARGET=$PLATFORM
 XTARGET=$XPLATFORM
-if [ "x$SHARED" = "xyes" ]; then
+if [ "$SHARED" = "yes" ]; then
     TARGET="${TARGET}-shared"
     XTARGET="${XTARGET}-shared"
-    if [ '!' -f $relpath/configs/$TARGET ]; then
+    if [ '!' -f "$relpath"/configs/"$TARGET" ]; then
         echo
         echo
-        echo '    No shared library support for platform/compiler ' $TARGET
+        echo '    No shared library support for platform/compiler ' "$TARGET"
         echo "    Available platforms: $PLATFORMS"
         echo
         echo
         exit 2
     fi
-    if [ '!' -f $relpath/configs/$XTARGET ]; then
+    if [ '!' -f "$relpath"/configs/"$XTARGET" ]; then
         echo
         echo
-        echo '    No shared library support for platform/compiler ' $XTARGET
+        echo '    No shared library support for platform/compiler ' "$XTARGET"
         echo "    Available platforms: $PLATFORMS"
         echo
         echo
@@ -575,19 +592,19 @@ if [ "x$SHARED" = "xyes" ]; then
 else
     TARGET="${TARGET}-static"
     XTARGET="${XTARGET}-static"
-    if [ '!' -f $relpath/configs/$TARGET ]; then
+    if [ '!' -f "$relpath"/configs/"$TARGET" ]; then
         echo
         echo
-        echo '    No static library support for platform/compiler ' $TARGET
+        echo '    No static library support for platform/compiler ' "$TARGET"
         echo "    Available platforms: $PLATFORMS"
         echo
         echo
         exit 2
     fi
-    if [ '!' -f $relpath/configs/$XTARGET ]; then
+    if [ '!' -f "$relpath"/configs/"$XTARGET" ]; then
         echo
         echo
-        echo '    No static library support for platform/compiler ' $XTARGET
+        echo '    No static library support for platform/compiler ' "$XTARGET"
         echo "    Available platforms: $PLATFORMS"
         echo
         echo
@@ -595,7 +612,7 @@ else
     fi
 fi
 
-if [ "x$DEBUG" = "xyes" ]; then
+if [ "$DEBUG" = "yes" ]; then
     TARGET="${TARGET}-debug"
     XTARGET="${XTARGET}-debug"
 fi
@@ -607,7 +624,7 @@ if [ -z "$TARGET" -o '!' -f "$CONFIG" ];
 then
     echo
     echo
-    echo '    The specified platform/compiler not supported: ' $TARGET
+    echo '    The specified platform/compiler not supported: ' "$TARGET"
     echo "    Available platforms: $PLATFORMS"
     echo
     echo
@@ -617,7 +634,7 @@ if [ -z "$XTARGET" -o '!' -f "$XCONFIG" ];
 then
     echo
     echo
-    echo '    The specified platform/compiler not supported: ' $XTARGET
+    echo '    The specified platform/compiler not supported: ' "$XTARGET"
     echo "    Available platforms: $PLATFORMS"
     echo
     echo
@@ -684,7 +701,7 @@ chmod +w src/tools/qconfig.h
 if [ -n "$QCONFIG" ]
 then
     QCONFIG=qconfig-$QCONFIG.h
-    if [ -f src/tools/$QCONFIG ]
+    if [ -f src/tools/"$QCONFIG" ]
     then
 	# "no" means "use system png" in this script
 	#if grep -q QT_NO_IMAGEIO_PNG  src/tools/$QCONFIG
@@ -692,12 +709,12 @@ then
 	#    LIBPNG=no
 	#    ZLIB=no
 	#fi
-	if grep -q QT_NO_TRUETYPE  src/tools/$QCONFIG
+	if grep -q QT_NO_TRUETYPE  src/tools/"$QCONFIG"
 	then
 	    FT=no
 	fi
 	echo "// Copied from $QCONFIG" >src/tools/qconfig.h
-	cat src/tools/$QCONFIG >>src/tools/qconfig.h
+	cat src/tools/"$QCONFIG" >>src/tools/qconfig.h
     else
 	echo >&2 "configure: no such file: src/tools/$QCONFIG"
 	exit 1
@@ -732,7 +749,7 @@ fi
 if [ -n "$DEPTHS" ]
 then
     DV=;D4=;D8=;D16=;D24=;D32=
-    for D in `echo "$DEPTHS" | sed -e 's/,/ /g'`
+    for D in $(echo "$DEPTHS" | sed -e 's/,/ /g')
     do
 	case "$D" in
 	    v) DV=y; D8=y
@@ -784,7 +801,7 @@ fi
 
 # Auto-detect opengl support
 
-if echo $MODULES | grep >/dev/null opengl
+if echo "$MODULES" | grep >/dev/null opengl
 then
     DUMMY=dummy
 else
@@ -792,7 +809,7 @@ else
 fi
 
 # Find default thread option for target
-if grep >/dev/null '^SYSCONF_LIBS_THREAD' $XCONFIG
+if grep >/dev/null '^SYSCONF_LIBS_THREAD' "$XCONFIG"
 then
     AUTOTHREAD=yes
     AUTOTHREAD=no  ####### leave off for now
@@ -824,13 +841,13 @@ then
 	echo "OpenGL auto-detection..."
     fi
 
-    LIBS=`sed -n -e '/^SYSCONF_LIBS_OPENGL[	]*=/ { s/[^=]*=[	 ]*//; s/-l/ /g; p; }' $XCONFIG`
-    GLDIRS=`sed -n -e '/^SYSCONF_LFLAGS_OPENGL[	]*=/ { s/[^=]*=[	 ]*//; s/-L/ /g; p; }' $XCONFIG`
-    XDIRS=`sed -n -e '/^SYSCONF_LFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-L/ /g; p; }' $XCONFIG`
+    LIBS=$(sed -n -e '/^SYSCONF_LIBS_OPENGL[	]*=/ { s/[^=]*=[	 ]*//; s/-l/ /g; p; }' "$XCONFIG")
+    GLDIRS=$(sed -n -e '/^SYSCONF_LFLAGS_OPENGL[	]*=/ { s/[^=]*=[	 ]*//; s/-L/ /g; p; }' "$XCONFIG")
+    XDIRS=$(sed -n -e '/^SYSCONF_LFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-L/ /g; p; }' "$XCONFIG")
     LIBDIRS="$GLDIRS $XDIRS /usr/lib /lib"
     for L in $L_FLAGS
     do
-        LL=`echo $L | sed -e 's/^-L//'`
+        LL=$(echo "$L" | sed -e 's/^-L//')
         LIBDIRS="$LIBDIRS $LL"
     done
 
@@ -840,7 +857,7 @@ then
 	F=
 	for LIBDIR in $LIBDIRS
 	do
-	    FOUND_LIB=`ls $LIBDIR/lib$L.* 2>/dev/null`
+	    FOUND_LIB=$(ls "$LIBDIR"/lib"$L".* 2>/dev/null)
 	    if [ ! -z "$FOUND_LIB" ]
 	    then
 		F=yes
@@ -850,11 +867,11 @@ then
 		break
 	    fi
 	done
-	if [ ! -z "$FOUND_LIB" -a  ! "x$THREAD" = "xyes" -a ! -z "$F" ]; then
-	    LDD_P=`which ldd 2>/dev/null`
+	if [ ! -z "$FOUND_LIB" -a  ! "$THREAD" = "yes" -a ! -z "$F" ]; then
+	    LDD_P=$(which ldd 2>/dev/null)
 	    if [ ! -z "$LDD_P" ]; then
 	        for a in $FOUND_LIB; do
-		    if $LDD_P $a 2>/dev/null | grep -i thread >/dev/null 2>&1
+		    if $LDD_P "$a" 2>/dev/null | grep -i thread >/dev/null 2>&1
 		    then
 			FOUND_LIB=$a
 			F_REASON="threads"
@@ -866,9 +883,9 @@ then
         fi
 
 	if [ -z "$F" ]; then
-	    MODULES=`echo $MODULES | sed -e 's/opengl//'`
+	    MODULES=$(echo "$MODULES" | sed -e 's/opengl//')
 	    OPENGL=no
-		   if [ "x$F_REASON" = "xthreads" ]; then
+		   if [ "$F_REASON" = "threads" ]; then
 		      echo "        $FOUND_LIB is a threaded library, Qt needs to be as well."
 		    else
 			if [ "$VERBOSE" = "yes" ]; then
@@ -882,12 +899,12 @@ then
     if [ "$OPENGL" = "yes" ]
     then
 	INCS="GL/gl.h GL/glu.h"
-	GLDIRS=`sed -n -e '/^SYSCONF_CXXFLAGS_OPENGL[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' $XCONFIG`
-	XDIRS=`sed -n -e '/^SYSCONF_CXXFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' $XCONFIG`
+	GLDIRS=$(sed -n -e '/^SYSCONF_CXXFLAGS_OPENGL[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' "$XCONFIG")
+	XDIRS=$(sed -n -e '/^SYSCONF_CXXFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' "$XCONFIG")
 	INCDIRS="$GLDIRS $XDIRS /usr/include /include"
 	for I in $I_FLAGS
 	do
-           II=`echo $I | sed -e 's/^-I//'`
+           II=$(echo "$I" | sed -e 's/^-I//')
            INCDIRS="$INCDIRS $II"
 	done
 
@@ -897,7 +914,7 @@ then
 	    F=
 	    for INCDIR in $INCDIRS
 	    do
-		if [ -f $INCDIR/$I ]
+		if [ -f "$INCDIR"/"$I" ]
 		then
 		    F=yes
 		    if [ "$VERBOSE" = "yes" ]; then
@@ -907,7 +924,7 @@ then
 		fi
 	    done
 	    if [ -z "$F" ]; then
-		MODULES=`echo $MODULES | sed -e 's/opengl//'`
+		MODULES=$(echo "$MODULES" | sed -e 's/opengl//')
 		OPENGL=no
 		    if [ "$VERBOSE" = "yes" ]; then
 			echo "Could not find $I anywhere in $INCDIRS"
@@ -930,9 +947,9 @@ fi
 if [ $SM = auto ]
 then
     SM=no
-    for INC in `sed -n -e '/^SYSCONF_CXXFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' $XCONFIG`
+    for INC in $(sed -n -e '/^SYSCONF_CXXFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' "$XCONFIG")
     do
-	if [ -f $INC/X11/SM/SM.h ]
+	if [ -f "$INC"/X11/SM/SM.h ]
 	then
 	    SM=yes
 	    break
@@ -949,14 +966,14 @@ then
 	echo "Xft auto-detection..."
     fi
 
-    XDIRS=`sed -n -e '/^SYSCONF_LFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-L/ /g; p; }' $XCONFIG`
+    XDIRS=$(sed -n -e '/^SYSCONF_LFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-L/ /g; p; }' "$XCONFIG")
     LIBDIRS="$XDIRS /usr/lib /lib"
 
     FOUND_LIB=
     F=
     for LIBDIR in $LIBDIRS
     do
-	FOUND_LIB=`ls $LIBDIR/libXft.* 2>/dev/null`
+	FOUND_LIB=$(ls "$LIBDIR"/libXft.* 2>/dev/null)
 	if [ ! -z "$FOUND_LIB" ]
 	then
 	    F=yes
@@ -980,7 +997,7 @@ then
     if [ "$XFT" = "yes" ]
     then
 	INCS="X11/Xft/Xft.h"
-	XDIRS=`sed -n -e '/^SYSCONF_CXXFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' $XCONFIG`
+	XDIRS=$(sed -n -e '/^SYSCONF_CXXFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' "$XCONFIG")
 	INCDIRS="$XDIRS /usr/include /include"
 
 	for I in $INCS
@@ -988,7 +1005,7 @@ then
 	    F=
 	    for INCDIR in $INCDIRS
 	    do
-		if [ -f $INCDIR/$I ]
+		if [ -f "$INCDIR"/"$I" ]
 		then
 		    F=yes
 		    if [ "$VERBOSE" = "yes" ]; then
@@ -1021,10 +1038,10 @@ fi
 
 case "$XPLATFORM" in
 solaris-*)
-    UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
+    UNAME_RELEASE=$((uname -r) 2>/dev/null) || UNAME_RELEASE=unknown
     case "$UNAME_RELEASE" in
     5.7)
-	if [ "x$VERBOSE" = "xyes" ]
+	if [ "$VERBOSE" = "yes" ]
 	then
 		echo "XKB extension known to be broken on this platform."
 	fi
@@ -1033,8 +1050,8 @@ solaris-*)
     esac
     ;;
 tru64-*)
-    UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
-    if [ "x$VERBOSE" = "xyes" ]
+    UNAME_RELEASE=$((uname -r) 2>/dev/null) || UNAME_RELEASE=unknown
+    if [ "$VERBOSE" = "yes" ]
     then
 	echo "XKB extension not supported on this platform."
     fi
@@ -1057,12 +1074,12 @@ then
     if [ "$XKB" != "yes" ]
     then
 	INC="X11/XKBlib.h"
-	XDIRS=`sed -n -e '/^SYSCONF_CXXFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' $XCONFIG`
+	XDIRS=$(sed -n -e '/^SYSCONF_CXXFLAGS_X11[	]*=/ { s/[^=]*=[	 ]*//; s/-I/ /g; p; }' "$XCONFIG")
 	INCDIRS="$XDIRS /usr/include /include"
 	F=
 	for INCDIR in $INCDIRS
 	do
-	    if [ -f $INCDIR/$INC ]
+	    if [ -f "$INCDIR"/$INC ]
 	    then
 		F=yes
 		XKBLIB_H=$INCDIR/$INC
@@ -1095,7 +1112,7 @@ fi
 
 if [ "$XKB" = "yes" ] && [ -f "$XKBLIB_H" ]
 then
-    grep XkbSetPerClientControls $XKBLIB_H >/dev/null || XKB=no
+    grep XkbSetPerClientControls "$XKBLIB_H" >/dev/null || XKB=no
     
     if [ "$VERBOSE" = "yes" ]
     then
@@ -1111,8 +1128,8 @@ fi
 # Next, emit a usage message if something failed.
 
 if [ "$HELP" = "yes" ]; then
-   [ "x$ERROR" = "xyes" ] && echo
-    if [ "x$SM" = "xno" ]
+   [ "$ERROR" = "yes" ] && echo
+    if [ "$SM" = "no" ]
     then
 	SMY=" "
 	SMN="*"
@@ -1122,11 +1139,11 @@ if [ "$HELP" = "yes" ]; then
     fi
 
 
-    MODULES_HELP=`$MAKE -f src/Makefile.in listaddonentmodules`
-    if [ -f $HOME/.qt-license ]
+    MODULES_HELP=$($MAKE -f src/Makefile.in listaddonentmodules)
+    if [ -f "$HOME"/.qt-license ]
     then
-    . $HOME/.qt-license
-	    if echo $Products | grep >/dev/null 'qt-enterprise'
+    . "$HOME"/.qt-license
+	    if echo "$Products" | grep >/dev/null 'qt-enterprise'
 	    then
 		MODULES_HELP="opengl table network canvas"
 	    else
@@ -1183,6 +1200,8 @@ each option:
 
     -no-g++-exceptions . Disable exceptions on platforms using the GNU C++
 			 compiler by using the -fno-exceptions flag.
+			 
+	-no-opengl ......... Disables using OpenGL, which is enabled by default
 
     -no-xft ............ Disable support for Anti-Aliased fonts through the
 			 Xft extension library (XFree86 4.0.2 and newer).
@@ -1221,7 +1240,7 @@ Qt/Embedded only:
 
 EOF
 
-   [ "x$ERROR" = "xyes" ] && exit 1
+   [ "$ERROR" = "yes" ] && exit 1
    exit 0;
 fi
 
@@ -1232,15 +1251,15 @@ fi
 QT_LIBS=""
 QT_MODOBJ=""
 
-[ "x$GIF" = "xyes" ] && QT_CXX="${QT_CXX} -DQT_BUILTIN_GIF_READER=1"
-[ "x$GIF" = "xno" ] && QT_CXX="${QT_CXX} -DQT_BUILTIN_GIF_READER=0"
-[ "x$JPEG" = "xno" ] && QT_CXX="${QT_CXX} -DQT_NO_IMAGEIO_JPEG"
-[ "x$MNG" = "xno" ] && QT_CXX="${QT_CXX} -DQT_NO_IMAGEIO_MNG"
-[ "x$NAS_SOUND" = "xyes" ] && QT_CXX="${QT_CXX} -DQT_NAS_SUPPORT"
-[ "x$SM" = "xno" ] && QT_CXX="${QT_CXX} -DQT_NO_SM_SUPPORT"
-[ "x$XFT" = "xyes" ] && QT_CXX="${QT_CXX} -DQT_XFT"
-[ "x$XFT" = "xno" ] && QT_CXX="${QT_CXX} -DQT_NO_XKB"
-if [ "x$THREAD" = "xyes" ]
+[ "$GIF" = "yes" ] && QT_CXX="${QT_CXX} -DQT_BUILTIN_GIF_READER=1"
+[ "$GIF" = "no" ] && QT_CXX="${QT_CXX} -DQT_BUILTIN_GIF_READER=0"
+[ "$JPEG" = "no" ] && QT_CXX="${QT_CXX} -DQT_NO_IMAGEIO_JPEG"
+[ "$MNG" = "no" ] && QT_CXX="${QT_CXX} -DQT_NO_IMAGEIO_MNG"
+[ "$NAS_SOUND" = "yes" ] && QT_CXX="${QT_CXX} -DQT_NAS_SUPPORT"
+[ "$SM" = "no" ] && QT_CXX="${QT_CXX} -DQT_NO_SM_SUPPORT"
+[ "$XFT" = "yes" ] && QT_CXX="${QT_CXX} -DQT_XFT"
+[ "$XFT" = "no" ] && QT_CXX="${QT_CXX} -DQT_NO_XKB"
+if [ "$THREAD" = "yes" ]
 then
    cat >src-mt.mk <<EOF
 SHELL=/bin/sh
@@ -1270,21 +1289,21 @@ all:
 EOF
 fi
 
-[ "x$SM" = "xyes" ] && QT_LIBS="${QT_LIBS} -lSM -lICE"
-[ "x$XFT" = "xyes" ] && QT_LIBS="${QT_LIBS} -lXft"
+[ "$SM" = "yes" ] && QT_LIBS="${QT_LIBS} -lSM -lICE"
+[ "$XFT" = "yes" ] && QT_LIBS="${QT_LIBS} -lXft"
 chmod +w src/tools/qmodules.h
 cat >src/tools/qmodules.h << EOF
 // These modules are licensed to $Licensee
 EOF
 for MODULE in $MODULES
 do
-    if [ -d src/$MODULE ]
+    if [ -d src/"$MODULE" ]
     then
-	M=`echo $MODULE | tr '[a-z]' '[A-Z]'`
+	M=$(echo "$MODULE" | tr '[a-z]' '[A-Z]')
 	echo "#define QT_MODULE_$M" >>src/tools/qmodules.h
         QT_MODOBJ=$QT_MODOBJ' \
 	    $(OBJECTS_'$MODULE')'
-	if [ $MODULE = opengl ]
+	if [ "$MODULE" = opengl ]
 	then
 	    I_FLAGS=$I_FLAGS' $(SYSCONF_CXXFLAGS_OPENGL)'
 	    QT_LIBS=$QT_LIBS' $(SYSCONF_LFLAGS_OPENGL) $(SYSCONF_LIBS_OPENGL)'
@@ -1292,16 +1311,16 @@ do
     fi
 done
 chmod -w src/tools/qmodules.h
-[ "x$LIBPNG" = "xno" ] && QT_LIBS="${QT_LIBS} -lpng"
-[ "x$ZLIB" = "xno" ] && QT_LIBS="${QT_LIBS} -lz"
-[ "x$JPEG" = "xyes" ] && QT_LIBS="${QT_LIBS} -ljpeg"
-[ "x$MNG" = "xyes" ] && QT_LIBS="${QT_LIBS} -lmng -ljpeg" # assume JNG support
-[ "x$NAS_SOUND" = "xyes" ] && QT_LIBS="${QT_LIBS} -laudio -lXt" # Xt junk in audio library
+[ "$LIBPNG" = "no" ] && QT_LIBS="${QT_LIBS} -lpng"
+[ "$ZLIB" = "no" ] && QT_LIBS="${QT_LIBS} -lz"
+[ "$JPEG" = "yes" ] && QT_LIBS="${QT_LIBS} -ljpeg"
+[ "$MNG" = "yes" ] && QT_LIBS="${QT_LIBS} -lmng -ljpeg" # assume JNG support
+[ "$NAS_SOUND" = "yes" ] && QT_LIBS="${QT_LIBS} -laudio -lXt" # Xt junk in audio library
 QT_LIBS="$L_FLAGS $R_FLAGS $QT_LIBS $l_FLAGS"
 
 
 # Check if we are using gcc/g++
-COMPILER=`echo $PLATFORM | cut -f 2- -d-`
+COMPILER=$(echo "$PLATFORM" | cut -f 2- -d-)
 if [ "$COMPILER" = "g++" ]
 then
     if [ "$GPLUSPLUS_EXCEPTIONS" = "no" ]
@@ -1367,6 +1386,14 @@ then
 fi
 
 echo "Thread support..................... $THREAD"
+
+if [ "$CLANG" == "clang" ]
+then
+	CLANGs="yes"
+else
+	CLANGs="no"
+fi
+
 if [ "$QCONFIG" = qconfig.h ]
 then
     echo "GIF support........................ $GIF"
@@ -1379,6 +1406,7 @@ then
 	echo "Session management................. $SM"
 	echo "Xft support (Anti-Aliased Fonts) .. $XFT"
 	echo "XKB support ....................... $XKB"
+	echo "Experimental Clang support ........ $CLANGs"
     fi
 else
     echo "Configuration...................... $QCONFIG"
@@ -1387,11 +1415,11 @@ echo
 
 echo Creating makefiles...
 
-sepath=`echo $relpath | sed -e 's/\\./\\\\./g'`
+sepath=$(echo "$relpath" | sed -e 's/\\./\\\\./g')
 
 if [ $KDE = yes ]
 then
-    if [ '!' -f $KDEDIR/bin/dcopserver ]
+    if [ '!' -f "$KDEDIR"/bin/dcopserver ]
     then
 	KDE=no
 	echo ""
@@ -1403,24 +1431,24 @@ then
     fi
 fi
 
-for a in `find $relpath/. -name Makefile.in -print | sort` ; do
-    dir=`dirname $a`
-    buildpath=`echo "$dir" | sed -e "s;$sepath;.;g"`
-    test -d $buildpath || mkdir $buildpath
+for a in $(find "$relpath"/. -name Makefile.in -print | sort) ; do
+    dir=$(dirname "$a")
+    buildpath=$(echo "$dir" | sed -e "s;$sepath;.;g")
+    test -d "$buildpath" || mkdir "$buildpath"
     N=$buildpath/Makefile
     M=$a
-    if [ -f $dir/Makefile-$Edition.in ]
+    if [ -f "$dir"/Makefile-"$Edition".in ]
     then
 	M=$dir/Makefile-$Edition.in
     fi
     if [ $KDE = yes ]
     then
-	if [ -f $dir/Makefile-kde.in ]
+	if [ -f "$dir"/Makefile-kde.in ]
 	then
 	    M=$dir/Makefile-kde.in
 	fi
     fi
-    if [ $buildpath = ././src/moc ]
+    if [ "$buildpath" = ././src/moc ]
     then
 	# Don't cross-compile this
 	CONF=$CONFIG
@@ -1428,7 +1456,7 @@ for a in `find $relpath/. -name Makefile.in -print | sort` ; do
 	CONF=$XCONFIG
     fi
 
-    if [ $buildpath = ././examples -o $buildpath = ././tutorial ]
+    if [ "$buildpath" = ././examples -o "$buildpath" = ././tutorial ]
     then
 	if [ -n "$NONSTDQCONFIG" ]
 	then
@@ -1440,7 +1468,7 @@ for a in `find $relpath/. -name Makefile.in -print | sort` ; do
 
     if [ -n "$M" ]
     then
-	REQ=`sed -n -e '/^REQUIRES *=/ { s/[^=]*= *//; p; }' $M`
+	REQ=$(sed -n -e '/^REQUIRES *=/ { s/[^=]*= *//; p; }' "$M")
 	for r in $REQ
 	do
 	    if [ "$r" = large-config ]
@@ -1471,7 +1499,7 @@ for a in `find $relpath/. -name Makefile.in -print | sort` ; do
 		    M=
 		    break
 		fi
-	    elif echo $MODULES | grep -v "$r" >/dev/null
+	    elif echo "$MODULES" | grep -v "$r" >/dev/null
 	    then
 		M=
 		break
@@ -1480,14 +1508,14 @@ for a in `find $relpath/. -name Makefile.in -print | sort` ; do
     fi
     if [ -z "$M" ]
     then
-	echo "all clean:" >$N
-	echo "	@echo 'Some requirements ($REQ) are not met.'" >>$N
-	echo "	@echo 'Skipped.'" >>$N
+	echo "all clean:" >"$N"
+	echo "	@echo 'Some requirements ($REQ) are not met.'" >>"$N"
+	echo "	@echo 'Skipped.'" >>"$N"
 	if [ "$VERBOSE" = "yes" ]; then
-	   echo '  Created dummy' $N
+	   echo '  Created dummy' "$N"
 	fi
     else
-	cat > $N <<EOF
+	cat > "$N" <<EOF
 #############################################################################
 # Automatically generated from $M
 # Build options from $1
@@ -1495,51 +1523,51 @@ for a in `find $relpath/. -name Makefile.in -print | sort` ; do
 
 EOF
 
-	if [ $N = ././src/moc/Makefile ] ; then
+	if [ "$N" = ././src/moc/Makefile ] ; then
 	# we don't want to link moc to SM and ICE
 	    OPT="sed -e s/^QT_LIBS_OPT.*$//g .buildopts"
 	else
 	    OPT="cat .buildopts"
 	fi
 
-	if [ $relpath != `pwd` ] ; then
-	    echo VPATH=$relpath/$buildpath >> $N
-	    $OPT >> $N
-	    if [ $N = ././src/moc/Makefile ] ; then
-		cat $CONF | sed -e "s/^SYSCONF_LIBS_QTAPP.*$/SYSCONF_LIBS_QTAPP =/" >> $N
+	if [ "$relpath" != $(pwd) ] ; then
+	    echo VPATH="$relpath"/"$buildpath" >> "$N"
+	    $OPT >> "$N"
+	    if [ "$N" = ././src/moc/Makefile ] ; then
+		cat "$CONF" | sed -e "s/^SYSCONF_LIBS_QTAPP.*$/SYSCONF_LIBS_QTAPP =/" >> "$N"
 	    else
 		if [ $OPENGL = "no" ]
 		then
-	  	    cat $CONF | sed -e "s/^SYSCONF_LIBS_OPENGL.*$/SYSCONF_LIBS_OPENGL =/" >> $N
+	  	    cat "$CONF" | sed -e "s/^SYSCONF_LIBS_OPENGL.*$/SYSCONF_LIBS_OPENGL =/" >> "$N"
 		else
-		    cat $CONF >> $N
+		    cat "$CONF" >> "$N"
 		fi
 	    fi
 
 	    sed -e's/	\$(MOC) [^ ]* -o .*/	$(MOC) $< -o $@/g' \
-		-e's/\(	\$(CXX) -c \$(CXXFLAGS) \$(INCPATH) -o\) [^ ]* [^ ]*/\1 $@ $</g' $M >> $N
+		-e's/\(	\$(CXX) -c \$(CXXFLAGS) \$(INCPATH) -o\) [^ ]* [^ ]*/\1 $@ $</g' "$M" >> "$N"
 	else
-	    $OPT >> $N
-	    if [ $N = ././src/moc/Makefile ] ; then
-		cat $CONF $M | sed -e "s/^SYSCONF_LIBS_QTAPP.*$/SYSCONF_LIBS_QTAPP =/" >> $N
+	    $OPT >> "$N"
+	    if [ "$N" = ././src/moc/Makefile ] ; then
+		cat "$CONF" "$M" | sed -e "s/^SYSCONF_LIBS_QTAPP.*$/SYSCONF_LIBS_QTAPP =/" >> "$N"
 	    else
                 if [ $OPENGL = "no" ]
                 then
-                    cat $CONF $M | sed -e "s/^SYSCONF_LIBS_OPENGL.*$/SYSCONF_LIBS_OPENGL =/" >> $N
+                    cat "$CONF" "$M" | sed -e "s/^SYSCONF_LIBS_OPENGL.*$/SYSCONF_LIBS_OPENGL =/" >> "$N"
                 else
-                    cat $CONF $M >> $N
+                    cat "$CONF" "$M" >> "$N"
                 fi
 	    fi
 	fi
 	if [ "$VERBOSE" = "yes" ]; then
-	   echo '  Created' $N
+	   echo '  Created' "$N"
 	fi
     fi
 done
 
-if echo $LD_LIBRARY_PATH | grep >/dev/null $OSIRISDIR/lib
+if echo "$LD_LIBRARY_PATH" | grep >/dev/null $OSIRISDIR/lib
 then
-    if grep >/dev/null SYSCONF_RPATH $XCONFIG
+    if grep >/dev/null SYSCONF_RPATH "$XCONFIG"
     then
 	echo # Using -R/-rpath, so no need to warn
     else
@@ -1553,6 +1581,6 @@ then
     fi
 fi
 
-echo Qt is now configured for building. Just run $MAKE.
-echo To reconfigure, run $MAKE clean and configure.
+echo "Osiris is now configured for building. Just run "$MAKE"."
+echo "To reconfigure, run "$MAKE" clean and configure."
 echo

@@ -6,13 +6,13 @@ Osiris is a graphical toolkit for X11-based Linux and Unix platforms.
 
 ## About
 
-Osiris is actually a fork of the Qt toolkit, from version 2.3.2. Osiris is mostly source copmatible (but not binary compatible) with Qt 2.3.2 (with the exception of some naming conventions potentially changing). This means that you can compile legacy applications built originally for Qt2 using Osiris. In addition, porting from Qt1 takes very little work.
+Osiris is actually a fork of the Qt toolkit, from version 2.3.2. Osiris is largely source compatible (but not binary compatible) with Qt 2.3.2 (with the exception of some naming conventions potentially changing). This means that you can compile legacy applications built originally for Qt2 using Osiris. In addition, porting from Qt1 takes very little work.
 
 Osiris was previously part of ZFreeKit.
 
 #### But why not use modern Qt?
 
-Good question. If you're asking that, chances are that you SHOULD use modern Qt. Qt6 is a masterful toolkit. It's high-quality, robust, and the documentation is second to none. Osiris is not meant to be a competitor nor a replacement for modern Qt. 
+Good question. If you're asking that, chances are that you SHOULD use modern Qt. Qt6 is a masterful toolkit. It's high-quality, robust, and the documentation is second to none. Osiris is not meant to be a competitor nor a replacement for modern Qt.
 
 Fun fact: If you've traversed the code, you'd be surprised to find that more code thatn you'd expect from legacy Qt versions is still present in modern versions. No need to fix what isn't broken.
 
@@ -24,7 +24,7 @@ Osiris is based on Qt2, which is a much improved version from Qt1. It also is ex
 
 Osiris is **not** in any way, form, or shape affiliated with or supported by Trolltech, Nokia, Digia, the Free KDE Foundation, or the Qt Company. Osiris is a fork of the Qt toolkit, originally developed by Trolltech. Osiris is the _upstream_ of Osiris, meaning that bug reports, patches, etc., should be directed here to the Osiris project _not_ to the Qt bug tracker (or other Qt services). Some references to Qt either remain because they have not been replaced, need to remain for credit/copyright purposes, or for other functional reasons.
 
-Osiris is provided **WITHOUT** any warranty or guarantee of any kind, either express or implied. The Osiris project, Libranext Computer Systems, contribtors, and copyright holders expressly disclaim any liability with the use of or distribution of this software.
+Osiris is provided **WITHOUT** any warranty or guarantee of any kind, either express or implied. The Osiris project, Libranext Computer Systems, contributors, and copyright holders expressly disclaim any liability with the use of or distribution of this software.
 
 
 ## A note about security
@@ -39,13 +39,7 @@ Since Osiris is based on Qt, it inherits the original licensing scheme. For Qt v
 
 It's important to note that some files may be (or have been) replaced with new or different versions that are not tri-licensed.
 
-#### Licensing of Osiris files
-
-New files and functionality will be licensed under the GPLv2, the modified BSD license (3-clause BSD license), and/or the SADLv2. Backported features from newer versions of Qt will retain their respective licensing.
-
-#### About the Q Public License
-
-The QPL is an open-source free software license. However, it requires modifications to be distributed as patches, or some other separate format from the source code. When Osiris was part of ZFreeKit, I aimed to maintain QPL compatability in case some legacy program was QPL licensed. However, this makes it notoriously difficult to maintain the source base in a modern source version control system as it's not easy to follow changes without having to apply patches first and then go through the clobbered up or non-existent history. Osiris will not maintain a patchset. You can, however, generate one yourself if desired
+Osiris is distributed and modified under the terms of the GNU GPL version 2 (with the exception of some individual files that may be more permissively licensed). As of version 2.4.1, generating a patchset to use the QPL is no longer an option as some files are GPLv2 only.
 
 #### About using Osiris under a Qt commercial license
 
@@ -53,7 +47,7 @@ The Osiris project nor Libranext Computer Systems play any part in the commerica
 
 ## System Requirements
 
-Osiris requires a Linux system running a X Windows System. The GNU autotools system and the standard set of GNU development tools are required to build (make, gcc, g++, byacc, flex, etc.). Osiris will run on either 32-bit or 64-bit x86 systems. Other processors have not been tested. Compiling using clang has not been tested and is not currently supported, but will be implemented for at least Linux platforms in the future.
+Osiris requires a Linux system running a X Windows System. G++ and Clang++ are supported. Osiris will run on either 32-bit or 64-bit x86 systems. Other processors have not been tested. The configure script will automatically enabled Clang++ support if Clang is detected.
 
 Osiris is extremely lean on a modern computer, takes very little time to compile, and is not resource intensive while running.
 
@@ -63,6 +57,7 @@ At a minimum, to run Osiris, you'll need a Pentium 133mhz or better CPU, 64mb of
 | --- | --- | --- |
 | libpng | 1.6.0 | 1.6.40 |
 | zlib | 1.2.13 | 1.2.13 |
+| libglu | 9.0 | 9.0.2 |
 
 #### A note about older libpng and zlib versions
 
@@ -80,13 +75,15 @@ A lot of ports to other platforms are inherited from the original Qt code. These
 
 #### What about Wayland support?
 
-Osiris does not have any clue about Wayland - it hadn't even been thought of when Qt2.3.2 was mainstream. Limited testing has been done to confirm that applications at least start and display under XWayland. Clipboard functionality is all but guaranteed to **not** work under XWayland, and this isn't a Wayland bug either.
-
-I'd like to eventually get a working native Wayland backend, but it's low on the list right now. I'll gladly accept patches or bug reports however.
+Wayland support is planned, eventually. There is no ETA however. Applications ported to Osiris should work properly under XWayland however, with the exception being window managers. Patches/PRs are welcome.
 
 #### What about Python3 bindings?
 
 None available *yet*, sorry! It's on the to-do list somewhere.
+
+#### A note on clipboard functionality under X11
+
+Getting the clipboard implemented correctly under X11 is ridiculously complicated. Osiris has some partial fixes to improve X11 clipboard functionality over Qt2.3.2, but it's still not perfect. For now, clipboard functionality is still on the to-do list, although it's not top priority unless we get a lot of users needing it for their applications. The reason being that the clipboard will be re-implemented when Wayland support happens, so it's not currently worth spending a lot of time on.
 
 ## Buildling and debugging
 
@@ -94,7 +91,7 @@ None available *yet*, sorry! It's on the to-do list somewhere.
 
 You probably need to be root for this.
 
-Extract the source to the directory you wish to install to. `/opt/osiris` is the recommended location. Use extreme caution when installing to /usr/local/ or any other location.
+Extract the source to the directory you wish to install to. `/opt/osiris` is the recommended location. Use extreme caution when installing to /usr/local/ or any other location. **New for Osiris 2.4.1:** The configure script will assume the current working directory is both the source tree and the directory to install to. `$OSIRISDIR` does not need to be set for `configure` to work anymore. However, it should still be set in your `.profile` as instructed below.
 
 Set the needed environment variables. Usually adding the following to your `.profile`, logging out, and logging back in again is sufficient. This should be done for both root _and_ any local users who will be using Osiris.
 
@@ -123,3 +120,4 @@ Credits to the following are due because they have either contributed directly t
 - Robert McIsaac
 - Helio Chissini de Castro
 - The Trinity Desktop Environment project
+- Keith Chambers

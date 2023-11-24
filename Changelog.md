@@ -2,6 +2,28 @@
 
 # Osiris releases
 
+#### Osiris 2.4.1
+
+Osiris 2.4.1 is a maintenance release. As a reminder, Osiris is a fork of Qt version 2.3.2. Osiris 2.4.1 is the second Osiris release since the fork. It is not source compatible, although the required changes are very very minimal. See Porting.md for details.
+
+- Added support for Clang/Clang++. Clang is automatically used if detected. Should work with Clang 14+
+- Fixed examples/httpd: main() missing type specifier (should have been int, none present)
+- Removed the need for the environment variable OSIRISDIR in the configure script, making it easier to use
+- Removed configs for long obsolete platforms and platforms that have no planned support in Osiris.
+- Bumped OSIRIS_VER and OSIRIS_VER_STR to reflect new Osiris release 2.4.1
+- Fixed a bug in qtextbrowser that would cause a segfault when forwardStack was empty. This bug was introduced in Qt 2.1.0, with a release date of April 2000. That's a bugfix almost 23 years later!
+- Modified qclipboard_x11 to enable QT_CLIPBOARD_DEBUG macro when configure is run with -debug. This provides some useful output when debugging clipboard issues and removes the need to manually edit a file to uncomment a macro.
+- Added missing header file check in configure for libjpeg
+- Fixed the libXft header file check in configure
+- Fixed a minor spelling issue for a warning in designer/pixmapchooser
+- Workaround for Designer to fix an issue where it washes out the window when the Composite extension is enabled on X11 displays
+- libqt(,mt) is now libosiris(,mt)
+- Updated configure script to clarify some printed license information
+- Removed all other currently unsupported platform configs
+- Added missing header file check in configure for Mesa libGLU
+- Remove registration link and other obsolete items from Designer
+- Update "About Qt" to "About Osiris" in Designer
+
 #### Osiris 2.4.0
 
 Osiris 2.4.0 is a fork of Qt 2.3.2. This is a bugfix and security fix release. Osiris is mostly source-compatible. It is likely not binary compatible.

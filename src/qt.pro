@@ -6,9 +6,9 @@ unix:CONFIG += x11
 embedded:CONFIG -= x11
 #x11:CONFIG += xft
 
-TARGET		= qt
+TARGET		= osiris
 embedded:TARGET	= qte
-VERSION		= 2.3.2
+VERSION		= 2.4.1
 DESTDIR		= ../lib
 DLLDESTDIR	= ../bin
 
@@ -103,10 +103,10 @@ win32:TMAKE_CXXFLAGS   += -DUNICODE
 #win32:TMAKE_CFLAGS    += -MT
 #win32:TMAKE_CXXFLAGS  += -MT
 
-MNG_INCLUDEPATH		= 3rdparty/libmng
-PNG_INCLUDEPATH		= 3rdparty/libpng
-ZLIB_INCLUDEPATH	= 3rdparty/zlib
-FT_INCLUDEPATH		= 3rdparty/freetype/src 3rdparty/freetype/include 3rdparty/freetype/builds/unix
+#MNG_INCLUDEPATH		= 3rdparty/libmng
+#PNG_INCLUDEPATH		= 3rdparty/libpng
+#ZLIB_INCLUDEPATH	= 3rdparty/zlib
+#FT_INCLUDEPATH		= 3rdparty/freetype/src 3rdparty/freetype/include 3rdparty/freetype/builds/unix
 #mng:INCLUDEPATH        += $$MNG_INCLUDEPATH
 png:INCLUDEPATH        += $$PNG_INCLUDEPATH
 zlib:INCLUDEPATH       += $$ZLIB_INCLUDEPATH

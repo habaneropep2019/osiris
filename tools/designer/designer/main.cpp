@@ -204,6 +204,15 @@ int main( int argc, char *argv[] )
     signal( SIGSEGV, crashHandler );
 #endif
 
+/*
+ * Temporary fix for Designer when running on X11 displays with Composite extension enabled, Designer must use ARGB
+ * visuals mistakenly. We try to work around that here.
+ */
+
+#if defined(_WS_X11_)
+    setenv("XLIB_SKIP_ARGB_VISUALS","1",1);
+#endif
+
     QApplication::setColorSpec( QApplication::ManyColor );
 
 #if defined(HAVE_KDE)

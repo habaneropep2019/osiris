@@ -39,7 +39,9 @@
 
 #ifndef QT_NO_CLIPBOARD
 
-// #define QT_CLIPBOARD_DEBUG
+#if defined(DEBUG)
+#define QT_CLIPBOARD_DEBUG
+#endif
 
 #include "qapplication.h"
 #include "qbitmap.h"
