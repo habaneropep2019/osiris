@@ -120,3 +120,4 @@ Credits to the following are due because they have either contributed directly t
 - Robert McIsaac
 - Helio Chissini de Castro
 - The Trinity Desktop Environment project
+- Keith Chambers
