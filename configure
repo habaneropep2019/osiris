@@ -75,6 +75,17 @@ if [ -z $(find /usr/include -name jpeglib.h) ]
 		echo "INFO: Found libjpeg at $(find /usr/include -name jpeglib.h)"
 fi
 
+# Check for Mesa GLU
+
+if [ -z $(find /usr/include/GL -name glu.h) ]
+	then
+		echo "FATAL: No glu.h found in /usr/include/GL or its subdirectories."
+		echo "You may be missing libglu1-mesa-dev."
+		exit 1
+	else
+		echo "INFO: Found Mesa libGLU at $(find /usr/include/GL -name glu.h)"
+fi
+
 # Check for GGE libraries
 if [ ! -e /opt/gge/kernel ]
 	then

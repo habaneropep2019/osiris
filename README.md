@@ -57,6 +57,7 @@ At a minimum, to run Osiris, you'll need a Pentium 133mhz or better CPU, 64mb of
 | --- | --- | --- |
 | libpng | 1.6.0 | 1.6.40 |
 | zlib | 1.2.13 | 1.2.13 |
+| libglu | 9.0 | 9.0.2 |
 
 #### A note about older libpng and zlib versions
 
