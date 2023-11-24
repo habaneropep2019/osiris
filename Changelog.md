@@ -19,6 +19,7 @@ Osiris 2.4.1 is a maintenance release. As a reminder, Osiris is a fork of Qt ver
 - Workaround for Designer to fix an issue where it washes out the window when the Composite extension is enabled on X11 displays
 - libqt(,mt) is now libosiris(,mt)
 - Updated configure script to clarify some printed license information
+- Removed all other currently unsupported platform configs
 
 #### Osiris 2.4.0
 
