@@ -9,6 +9,7 @@ The table below shows what features are tested and/or supported on various platf
 | **Modern libpng**  | ✅             | 🕑              | 🕑              | 🕑 🔜 3️⃣       |
 | **Modern zlib**    | ✅             | 🕑              | 🕑              | 🕑 🔜 3️⃣       |
 | **64-bit builds**  | ✅             | 🕑              | 🕑              | 🕑 🔜 3️⃣       |
+| **arm64 support**  | ✅             | 🕑              | 🕑              | 🕑 🔜 3️⃣       |
 | **Clang++ support**| ✅             | ⚠️              | ⚠️              | ⚠️             |
 | **G++ support**    | ✅             | 🕑              | 🕑              | 🕑             |
 | **Designer**       | ✅             | 🕑              | 🕑              | 🕑 🔜 3️⃣       |
