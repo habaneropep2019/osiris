@@ -18,7 +18,7 @@ The table below shows what features are tested and/or supported on various platf
 | **Shared builds**  | ✅             | 🕑              | 🕑              | 🕑 🔜 3️⃣       |
 | **Examples**       | ✅             | 🕑              | 🕑              | 🕑              |
 | **X11 support**       | ✅             | 🕑              | 🕑              | 🕑              |
-| **XWayland support**       | 🛠️             | 🕑              | 🕑              | 🕑              |
+| **XWayland support**       | ✅             | 🕑              | 🕑              | 🕑              |
 | **Wayland backend**       | 🔜 2️⃣          | 🚫              | 🚫              | 🚫              |
 | **GGE backend**       | 🔜 3️⃣            | 🚫              | 🚫              | 🚫              |
 | **OpenGL support**       | 🛠️             | 🕑              | 🕑              | 🕑              |
