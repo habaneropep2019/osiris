@@ -110,8 +110,8 @@ public:
 
 #ifndef QT_NO_CLIPBOARD
     void	cut();
-    void	copy(QClipboard::Mode mode = QClipboard::Mode::Clipboard) const;
-    void	paste(QClipboard::Mode mode = QClipboard::Mode::Clipboard);
+    void	copy(QClipboard::Mode mode = QClipboard::Clipboard) const;
+    void	paste(QClipboard::Mode mode = QClipboard::Clipboard);
 #endif
 
     void setAlignment( int flag );
