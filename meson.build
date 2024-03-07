@@ -860,6 +860,7 @@ executable('moc',
 #
 
 qutil_source_path = 'tools/designer/util'
+qutil_include_path = 'tools/designer/util'
 qutil_sources = [
     qutil_source_path / 'qprocess.cpp',
     qutil_source_path / 'qprocess_unix.cpp',
@@ -876,7 +877,7 @@ qutil_include_directories = [
 
 moc_exe = find_program('moc', dirs : [ get_option('prefix') / 'osiris/bin' ])
 
-cmd = run_command(moc_exe, qutil_source_path / 'qprocess.h', '-o', qutil_source_path / 'moc_qprocess.cpp', check : true)
+cmd = run_command(moc_exe, qutil_include_path / 'qprocess.h', '-o', qutil_source_path / 'moc_qprocess.cpp', check : true)
 
 qutil_lib = shared_library('qutil',
                             qutil_sources,
@@ -896,7 +897,6 @@ uic_sources = [
     uic_source_path / 'uic.cpp',
     uic_source_path / '../shared/widgetdatabase.cpp',
     uic_source_path / '../shared/domtool.cpp',
-    uic_source_path / '../shared/widgetdatabase.cpp',
     uic_source_path / '../integration/kdevelop/kdewidgets.cpp'
 ]
 
@@ -913,5 +913,142 @@ executable('uic',
             cpp_args : [],
             install : true,
             link_with : osirislib,
+            install_dir : get_option('prefix') / 'osiris/bin',
+)
+
+#
+# Build and install designer tool
+#
+
+designer_source_path = 'tools/designer/designer'
+designer_include_directories = [
+    'include',
+    designer_source_path / '../shared',
+    qutil_include_path
+]
+
+designer_sources = [
+    designer_source_path / 'about.cpp',
+    designer_source_path / 'asciivalidator.cpp',
+    designer_source_path / 'checkboxpreview.cpp',
+    designer_source_path / 'command.cpp',
+    designer_source_path / 'config.cpp',
+    designer_source_path / 'connectioneditor.cpp',
+    designer_source_path / 'connectioneditorimpl.cpp',
+    designer_source_path / 'connectionviewer.cpp',
+    designer_source_path / 'connectionviewerimpl.cpp',
+    designer_source_path / 'createtemplate.cpp',
+    designer_source_path / 'customwidgeteditor.cpp',
+    designer_source_path / 'customwidgeteditorimpl.cpp',
+    designer_source_path / 'defs.cpp',
+    designer_source_path / 'editslots.cpp',
+    designer_source_path / 'editslotsimpl.cpp',
+    designer_source_path / 'formlist.cpp',
+    designer_source_path / 'formsettings.cpp',
+    designer_source_path / 'formsettingsimpl.cpp',
+    designer_source_path / 'formwindow.cpp',
+    designer_source_path / 'help.cpp',
+    designer_source_path / 'helpdialog.cpp',
+    designer_source_path / 'helpdialogimpl.cpp',
+    designer_source_path / 'hierarchyview.cpp',
+    designer_source_path / 'iconvieweditor.cpp',
+    designer_source_path / 'iconvieweditorimpl.cpp',
+    designer_source_path / 'import.cpp',
+    designer_source_path / 'layout.cpp',
+    designer_source_path / 'listboxeditor.cpp',
+    designer_source_path / 'listboxeditorimpl.cpp',
+    designer_source_path / 'listvieweditor.cpp',
+    designer_source_path / 'listvieweditorimpl.cpp',
+    designer_source_path / 'listviewpreview.cpp',
+    designer_source_path / 'main.cpp',
+    designer_source_path / 'mainwindow.cpp',
+    designer_source_path / 'metadatabase.cpp',
+    designer_source_path / 'moc_about.cpp',
+    designer_source_path / 'moc_asciivalidator.cpp',
+    designer_source_path / 'moc_checkboxpreview.cpp',
+    designer_source_path / 'moc_command.cpp',
+    designer_source_path / 'moc_connectioneditor.cpp',
+    designer_source_path / 'moc_connectioneditorimpl.cpp',
+    designer_source_path / 'moc_connectionviewer.cpp',
+    designer_source_path / 'moc_connectionviewerimpl.cpp',
+    designer_source_path / 'moc_createtemplate.cpp',
+    designer_source_path / 'moc_customwidgeteditor.cpp',
+    designer_source_path / 'moc_customwidgeteditorimpl.cpp',
+    designer_source_path / 'moc_editslots.cpp',
+    designer_source_path / 'moc_editslotsimpl.cpp',
+    designer_source_path / 'moc_formlist.cpp',
+    designer_source_path / 'moc_formsettings.cpp',
+    designer_source_path / 'moc_formsettingsimpl.cpp',
+    designer_source_path / 'moc_formwindow.cpp',
+    designer_source_path / 'moc_help.cpp',
+    designer_source_path / 'moc_helpdialog.cpp',
+    designer_source_path / 'moc_helpdialogimpl.cpp',
+    designer_source_path / 'moc_hierarchyview.cpp',
+    designer_source_path / 'moc_iconvieweditor.cpp',
+    designer_source_path / 'moc_iconvieweditorimpl.cpp',
+    designer_source_path / 'moc_import.cpp',
+    designer_source_path / 'moc_layout.cpp',
+    designer_source_path / 'moc_listboxeditor.cpp',
+    designer_source_path / 'moc_listboxeditorimpl.cpp',
+    designer_source_path / 'moc_listvieweditor.cpp',
+    designer_source_path / 'moc_listvieweditorimpl.cpp',
+    designer_source_path / 'moc_listviewpreview.cpp',
+    designer_source_path / 'moc_mainwindow.cpp',
+    designer_source_path / 'moc_multilineeditor.cpp',
+    designer_source_path / 'moc_multilineeditorimpl.cpp',
+    designer_source_path / 'moc_newform.cpp',
+    designer_source_path / 'moc_newformimpl.cpp',
+    designer_source_path / 'moc_orderindicator.cpp',
+    designer_source_path / 'moc_paletteeditor.cpp',
+    designer_source_path / 'moc_paletteeditorimpl.cpp',
+    designer_source_path / 'moc_pixmapchooser.cpp',
+    designer_source_path / 'moc_pixmapfunction.cpp',
+    designer_source_path / 'moc_preferences.cpp',
+    designer_source_path / 'moc_previewstack.cpp',
+    designer_source_path / 'moc_propertyeditor.cpp',
+    designer_source_path / 'moc_radiopreview.cpp',
+    designer_source_path / 'moc_sizehandle.cpp',
+    designer_source_path / 'moc_styledbutton.cpp',
+    designer_source_path / 'moc_texteditpreview.cpp',
+    designer_source_path / 'moc_topicchooser.cpp',
+    designer_source_path / 'moc_topicchooserimpl.cpp',
+    designer_source_path / 'moc_widgetfactory.cpp',
+    designer_source_path / 'moc_widgetpreview.cpp',
+    designer_source_path / 'multilineeditor.cpp',
+    designer_source_path / 'multilineeditorimpl.cpp',
+    designer_source_path / 'newform.cpp',
+    designer_source_path / 'newformimpl.cpp',
+    designer_source_path / 'orderindicator.cpp',
+    designer_source_path / 'paletteeditor.cpp',
+    designer_source_path / 'paletteeditorimpl.cpp',
+    designer_source_path / 'pixmapchooser.cpp',
+    designer_source_path / 'pixmapfunction.cpp',
+    designer_source_path / 'preferences.cpp',
+    designer_source_path / 'previewstack.cpp',
+    designer_source_path / 'propertyeditor.cpp',
+    designer_source_path / 'radiopreview.cpp',
+    designer_source_path / 'resource.cpp',
+    designer_source_path / 'sizehandle.cpp',
+    designer_source_path / 'splashloader.cpp',
+    designer_source_path / 'styledbutton.cpp',
+    designer_source_path / 'texteditpreview.cpp',
+    designer_source_path / 'topicchooser.cpp',
+    designer_source_path / 'topicchooserimpl.cpp',
+    designer_source_path / 'widgetfactory.cpp',
+    designer_source_path / 'widgetpreview.cpp',
+    designer_source_path / '../shared/widgetdatabase.cpp',
+    designer_source_path / '../shared/domtool.cpp',
+    designer_source_path / '../integration/kdevelop/kdewidgets.cpp',
+]
+
+designer_defines = []
+
+executable('designer',
+            designer_sources,
+            dependencies : [z_dep],
+            include_directories : designer_include_directories,
+            cpp_args : designer_defines,
+            install : true,
+            link_with : [osirislib, qutil_lib],
             install_dir : get_option('prefix') / 'osiris/bin',
 )
