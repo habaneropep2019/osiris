@@ -1,4 +1,8 @@
-project('osiris', 'cpp', default_options : 'prefix=/opt')
+project('osiris', 'cpp',
+        default_options : 'prefix=/opt',
+        license : 'GPL-2.0-only OR SADL-2.0-only',
+        license_files: ['LICENSE.GPL', 'LICENSE.SADL2']
+)
 
 project_defines = '-DQT_NO_IMAGEIO_MNG -DQT_NO_SM_SUPPORT'
 
