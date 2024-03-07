@@ -14,10 +14,6 @@ if get_option('mng').disabled()
     project_defines += ' -DQT_NO_IMAGEIO_MNG'
 endif
 
-if get_option('nas_sound').enabled()
-    project_defines += ' -DQT_NAS_SUPPORT'
-endif
-
 if get_option('xft').enabled()
     project_defines += ' -DQT_XFT'
 else
