@@ -20,6 +20,10 @@ else
     project_defines += ' -DQT_NO_XKB'
 endif
 
+if get_option('multithread').enabled()
+    project_defines += ' -DQT_THREAD_SUPPORT'
+endif
+
 tools_source_path = 'src/tools'
 tools_sources = [
     tools_source_path / 'qdir_unix.cpp',
