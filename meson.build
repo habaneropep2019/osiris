@@ -468,7 +468,6 @@ kernel_headers = [
     kernel_header_path / 'qevent.h',
     kernel_header_path / 'qfocusdata.h',
     kernel_header_path / 'qfont.h',
-    # kernel_header_path / 'qfontdata_p.h',
     kernel_header_path / 'qfontinfo.h',
     kernel_header_path / 'qfontmetrics.h',
     kernel_header_path / 'qguardedptr.h',
@@ -478,7 +477,6 @@ kernel_headers = [
     kernel_header_path / 'qkeycode.h',
     kernel_header_path / 'qjpegio.h',
     kernel_header_path / 'qlayout.h',
-    # kernel_header_path / 'qlayoutengine_p.h',
     kernel_header_path / 'qtranslator.h',
     kernel_header_path / 'qmetaobject.h',
     kernel_header_path / 'qmime.h',
@@ -492,7 +490,6 @@ kernel_headers = [
     kernel_header_path / 'qobjectlist.h',
     kernel_header_path / 'qpaintdevice.h',
     kernel_header_path / 'qpaintdevicedefs.h',
-    # kernel_header_path / 'qpainter_p.h',
     kernel_header_path / 'qpainter.h',
     kernel_header_path / 'qpalette.h',
     kernel_header_path / 'qpaintdevicemetrics.h',
@@ -521,7 +518,6 @@ kernel_headers = [
     kernel_header_path / 'qstyle.h',
     kernel_header_path / 'qstylesheet.h',
     kernel_header_path / 'qthread.h',
-    # kernel_header_path / 'qthread_p.h',
     kernel_header_path / 'qtimer.h',
     kernel_header_path / 'qurl.h',
     kernel_header_path / 'qlocalfs.h',
@@ -533,18 +529,17 @@ kernel_headers = [
     kernel_header_path / 'qwindowdefs.h',
     kernel_header_path / 'qwmatrix.h',
     kernel_header_path / 'qvariant.h',
-    #
-    # TODO: Audit all below
-    #       Was not included in src/qt.pro, but is checked into includes/
-    kernel_header_path / 'q1xcompatibility.h',
     kernel_header_path / 'qt.h',
     kernel_header_path / 'qt_x11.h',
     kernel_header_path / 'qsession.h',
-    # Seems like it should be included for embedded builds
     kernel_header_path /  'qsharedmemory.h',
     kernel_header_path /  'qvfbhdr.h',
     kernel_header_path /  'qwindow.h'
 ]
+
+if get_option('qt1compat').enabled()
+    kernel_headers += kernel_header_path / 'q1xcompatibility.h'
+endif
 
 network_header_path = 'src/network'
 network_headers = [
@@ -575,11 +570,8 @@ tools_headers = [
     tools_header_path / 'qeucjpcodec.h',
     tools_header_path / 'qeuckrcodec.h',
     tools_header_path / 'qfile.h',
-    # tools_header_path / 'qfiledefs_p.h',
     tools_header_path / 'qfileinfo.h',
-    # TODO: Audit: Was not included in src/qt.pro, but is checked into includes/
     tools_header_path / 'qkoi8codec.h',
-    # TODO: Audit: Was not included in src/qt.pro, but is checked into includes/
     tools_header_path / 'qfeatures.h',
     tools_header_path / 'qgarray.h',
     tools_header_path / 'qgbkcodec.h',
@@ -596,7 +588,6 @@ tools_headers = [
     tools_header_path / 'qjpunicode.h',
     tools_header_path / 'qlist.h',
     tools_header_path / 'qmap.h',
-    # TODO: Audit: Was not included in src/qt.pro, but is checked into includes/
     tools_header_path / 'qmodules.h',
     tools_header_path / 'qptrdict.h',
     tools_header_path / 'qqueue.h',
@@ -605,10 +596,8 @@ tools_headers = [
     tools_header_path / 'qshared.h',
     tools_header_path / 'qsjiscodec.h',
     tools_header_path / 'qsortedlist.h',
-    # TODO: Audit: Was not included in src/qt.pro, but is checked into includes/
     tools_header_path / 'qsmartptr.h',
     tools_header_path / 'qstack.h',
-    # TODO: Audit: Was not included in src/qt.pro, but is checked into includes/
     tools_header_path / 'qvaluestack.h',
     tools_header_path / 'qstring.h',
     tools_header_path / 'qstringlist.h',
@@ -616,7 +605,6 @@ tools_headers = [
     tools_header_path / 'qstrvec.h',
     tools_header_path / 'qtextcodec.h',
     tools_header_path / 'qtextstream.h',
-    # TODO: Audit: Was not included in src/qt.pro, but is checked into includes/
     tools_header_path / 'qtl.h',
     tools_header_path / 'qtsciicodec.h',
     tools_header_path / 'qutfcodec.h',
@@ -778,23 +766,12 @@ compat_headers = [
 
 extension_header_path = 'extensions'
 extension_headers = [
-    extension_header_path / 'nsplugin/src/jri.h',
-    extension_header_path / 'nsplugin/src/jritypes.h',
-    extension_header_path / 'nsplugin/src/npapi.h',
-    extension_header_path / 'nsplugin/src/npupp.h',
-    extension_header_path / 'nsplugin/src/qnp.h',
     extension_header_path / 'xt/src/qxt.h',
 ]
 
 unix_headers = [
     dialog_header_path / 'qprintdialog.h',
-    # TODO: This is included in src/qt.pro, but not checked into include
-    #       Also in general it seems like _p.h files are private and not
-    #       to be installed
-    # kernel_header_path / 'qpsprinter_p.h',
     kernel_header_path / 'qfontdatabase.h',
-    # TODO: This file doesn't exist. It's guarded by _WS_QWS_ macro
-    # widgets_header_path / 'qcompactstyle.h',
 ]
 
 osiris_includes = dialog_headers
