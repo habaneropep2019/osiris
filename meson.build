@@ -378,7 +378,7 @@ osiris_include_directories = [
     'include',
 ]
 
-x11_dep = dependency('X11', required : true)
+x11_dep = dependency('X11', 'x11', required : true)
 xft_dep = dependency('xft', required : true)
 xext_dep = dependency('xext', required : true)
 glu_dep = dependency('glu', required : true)
