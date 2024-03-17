@@ -28,7 +28,189 @@ if get_option('multithread').enabled()
     project_defines += ' -DQT_THREAD_SUPPORT'
 endif
 
+install_dir = get_option('prefix') / 'osiris/bin'
+
+dialog_header_path = 'src/dialogs'
+kernel_header_path = 'src/kernel'
+network_header_path = 'src/network'
+tools_header_path = 'src/tools'
+
 tools_source_path = 'src/tools'
+kernel_source_path = 'src/kernel'
+widgets_source_path = 'src/widgets'
+dialog_source_path = 'src/dialogs'
+iconview_source_path = 'src/iconview'
+workspaces_source_path = 'src/workspace'
+network_source_path = 'src/network'
+canvas_source_path = 'src/canvas'
+table_source_path = 'src/table'
+xml_source_path = 'src/xml'
+opengl_source_path = 'src/opengl'
+
+#
+# Build and install the moc tool
+#
+
+moc_source_path = 'src/moc'
+moc_sources = [
+    moc_source_path / 'mocgen.cpp',
+    tools_source_path / 'qbuffer.cpp',
+    tools_source_path / 'qcollection.cpp',
+    tools_source_path / 'qcstring.cpp',
+    tools_source_path / 'qdatastream.cpp',
+    tools_source_path / 'qdatetime.cpp',
+    tools_source_path / 'qfile.cpp',
+    tools_source_path / 'qgarray.cpp',
+    tools_source_path / 'qgdict.cpp',
+    tools_source_path / 'qglist.cpp',
+    tools_source_path / 'qglobal.cpp',
+    tools_source_path / 'qgvector.cpp',
+    tools_source_path / 'qiodevice.cpp',
+    tools_source_path / 'qregexp.cpp',
+    tools_source_path / 'qstring.cpp',
+    tools_source_path / 'qtextcodec.cpp',
+    tools_source_path / 'qtextstream.cpp',
+    tools_source_path / 'qutfcodec.cpp',
+    tools_source_path / 'qfile_unix.cpp'
+]
+
+moc_include_directories = [
+    'include',
+    moc_source_path,
+    tools_header_path,
+]
+
+moc_compile_args = [
+    '-Wno-unused',
+    '-Wno-parentheses',
+    '-w',
+    '-DQT_NO_CODECS',
+    '-DQT_LITE_UNICODE',
+    '-std=c++11'
+]
+
+cc = meson.get_compiler('cpp')
+
+m_dep = cc.find_library('m', required : true)
+z_dep = cc.find_library('z', required : true)
+
+executable('moc',
+            moc_sources,
+            dependencies : [z_dep],
+            include_directories : moc_include_directories,
+            cpp_args : moc_compile_args,
+            install : true,
+            install_dir : install_dir,
+)
+
+moc_header_file_roots = [
+    [kernel_source_path, 'qabstractlayout'],
+    [kernel_source_path, 'qaccel'],
+    [kernel_source_path, 'qapplication'],
+    [kernel_source_path, 'qasyncio'],
+    [kernel_source_path, 'qclipboard'],
+    [kernel_source_path, 'qdialog'],
+    [kernel_source_path, 'qdragobject'],
+    [kernel_source_path, 'qguardedptr'],
+    [kernel_source_path, 'qlayout'],
+    [kernel_source_path, 'qtranslator'],
+    [kernel_source_path, 'qnetworkprotocol'],
+    [kernel_source_path, 'qsemimodal'],
+    [kernel_source_path, 'qsessionmanager'],
+    [kernel_source_path, 'qsignalmapper'],
+    [kernel_source_path, 'qsizegrip'],
+    [kernel_source_path, 'qsocketnotifier'],
+    [kernel_source_path, 'qsound'],
+    [kernel_source_path, 'qstyle'],
+    [kernel_source_path, 'qstylesheet'],
+    [kernel_source_path, 'qtimer'],
+    [kernel_source_path, 'qlocalfs'],
+    [kernel_source_path, 'qurloperator'],
+    [kernel_source_path, 'qwidget'],
+    [widgets_source_path, 'qbuttongroup'],
+    [widgets_source_path, 'qbutton'],
+    [widgets_source_path, 'qcheckbox'],
+    [widgets_source_path, 'qcdestyle'],
+    [widgets_source_path, 'qcombobox'],
+    [widgets_source_path, 'qcommonstyle'],
+    [widgets_source_path, 'qdial'],
+    [widgets_source_path, 'qframe'],
+    [widgets_source_path, 'qgrid'],
+    [widgets_source_path, 'qgroupbox'],
+    [widgets_source_path, 'qhbuttongroup'],
+    [widgets_source_path, 'qheader'],
+    [widgets_source_path, 'qhgroupbox'],
+    [widgets_source_path, 'qhbox'],
+    [widgets_source_path, 'qlabel'],
+    [widgets_source_path, 'qlcdnumber'],
+    [widgets_source_path, 'qlineedit'],
+    [widgets_source_path, 'qlistbox'],
+    [widgets_source_path, 'qlistview'],
+    [widgets_source_path, 'qmainwindow'],
+    [widgets_source_path, 'qmenubar'],
+    [widgets_source_path, 'qmotifstyle'],
+    [widgets_source_path, 'qmotifplusstyle'],
+    [widgets_source_path, 'qmultilineedit'],
+    [widgets_source_path, 'qplatinumstyle'],
+    [widgets_source_path, 'qpopupmenu'],
+    [widgets_source_path, 'qprogressbar'],
+    [widgets_source_path, 'qpushbutton'],
+    [widgets_source_path, 'qradiobutton'],
+    [widgets_source_path, 'qscrollbar'],
+    [widgets_source_path, 'qscrollview'],
+    [widgets_source_path, 'qsgistyle'],
+    [widgets_source_path, 'qslider'],
+    [widgets_source_path, 'qspinbox'],
+    [widgets_source_path, 'qsplitter'],
+    [widgets_source_path, 'qstatusbar'],
+    [widgets_source_path, 'qtabbar'],
+    [widgets_source_path, 'qtabwidget'],
+    [widgets_source_path, 'qtableview'],
+    [widgets_source_path, 'qtextbrowser'],
+    [widgets_source_path, 'qtextview'],
+    [widgets_source_path, 'qtoolbar'],
+    [widgets_source_path, 'qtoolbutton'],
+    [widgets_source_path, 'qtooltip'],
+    [widgets_source_path, 'qvalidator'],
+    [widgets_source_path, 'qvbox'],
+    [widgets_source_path, 'qvbuttongroup'],
+    [widgets_source_path, 'qvgroupbox'],
+    [widgets_source_path, 'qwidgetstack'],
+    [widgets_source_path, 'qwindowsstyle'],
+    [widgets_source_path, 'qaction'],
+    [dialog_source_path, 'qcolordialog'],
+    [dialog_source_path, 'qfiledialog'],
+    [dialog_source_path, 'qfontdialog'],
+    [dialog_source_path, 'qmessagebox'],
+    [dialog_source_path, 'qprogressdialog'],
+    [dialog_source_path, 'qtabdialog'],
+    [dialog_source_path, 'qwizard'],
+    [dialog_source_path, 'qinputdialog'],
+    [dialog_source_path, 'qprintdialog'],
+    [iconview_source_path, 'qiconview'],
+    [workspaces_source_path, 'qworkspace'],
+    [network_source_path, 'qdns'],
+    [network_source_path, 'qftp'],
+    [network_source_path, 'qserversocket'],
+    [network_source_path, 'qsocket'],
+    [canvas_source_path, 'qcanvas'],
+    [table_source_path, 'qtable'],
+    [opengl_source_path, 'qgl'],
+]
+
+moc_exe = find_program('moc', dirs : [ install_dir ])
+
+foreach root_tuple : moc_header_file_roots
+    directory_path = root_tuple[0]
+    filename_root = root_tuple[1]
+
+    src_header_file = directory_path / (filename_root + '.h')
+    dst_cpp_file = directory_path / ('moc_' + filename_root + '.cpp')
+
+    run_command(moc_exe, src_header_file, '-o', dst_cpp_file, check : true)
+
+endforeach
+
 tools_sources = [
     tools_source_path / 'qdir_unix.cpp',
     tools_source_path / 'qfile_unix.cpp',
@@ -67,7 +249,6 @@ tools_sources = [
     tools_source_path / 'qutfcodec.cpp'
 ]
 
-kernel_source_path = 'src/kernel'
 kernel_sources = [
     kernel_source_path / 'qpsprinter.cpp',
     kernel_source_path / 'qthread_unix.cpp',
@@ -176,7 +357,6 @@ kernel_sources = [
     kernel_source_path / 'moc_qwidget.cpp'
 ]
 
-widgets_source_path = 'src/widgets'
 widgets_sources = [
     widgets_source_path / 'qbuttongroup.cpp',
     widgets_source_path / 'qbutton.cpp',
@@ -287,7 +467,6 @@ widgets_sources = [
     widgets_source_path / 'moc_qaction.cpp'
 ]
 
-dialog_source_path = 'src/dialogs'
 dialogs_sources = [
     dialog_source_path / 'qprintdialog.cpp',
     dialog_source_path / 'qcolordialog.cpp',
@@ -309,21 +488,16 @@ dialogs_sources = [
     dialog_source_path / 'moc_qprintdialog.cpp'
 ]
 
-iconview_source_path = 'src/iconview'
 iconview_sources = [
     iconview_source_path / 'qiconview.cpp',
-    # TODO: Does this need to be generated?
     iconview_source_path / 'moc_qiconview.cpp'
 ]
 
-workspaces_source_path = 'src/workspace'
 workspace_sources = [ 
     workspaces_source_path / 'qworkspace.cpp',
-    # TODO: Does this need to be generated?
     workspaces_source_path / 'moc_qworkspace.cpp'
 ]
 
-network_source_path = 'src/network'
 network_sources = [
     network_source_path / 'qdns.cpp',
     network_source_path / 'qftp.cpp',
@@ -339,25 +513,21 @@ network_sources = [
     network_source_path / 'moc_qsocket.cpp'
 ]
 
-canvas_source_path = 'src/canvas'
 canvas_sources = [
     canvas_source_path / 'qcanvas.cpp',
     canvas_source_path / 'moc_qcanvas.cpp'
 ]
 
-table_source_path = 'src/table'
 table_sources = [
     table_source_path / 'qtable.cpp',
     table_source_path / 'moc_qtable.cpp'
 ]
 
-xml_source_path = 'src/xml'
 xml_sources = [
     xml_source_path / 'qxml.cpp',
     xml_source_path / 'qdom.cpp'
 ]
 
-opengl_source_path = 'src/opengl'
 opengl_sources = [
     opengl_source_path / 'qgl.cpp',
     opengl_source_path / 'qgl_x11.cpp',
@@ -385,16 +555,11 @@ glu_dep = dependency('glu', required : true)
 gl_dep = dependency('gl', required : true)
 xmu_dep = dependency('xmu', required : true)
 glx_dep = dependency('glx', required : true)
-png_dep = dependency('png', 'libpng', required : true)
-jpeg_dep = dependency('jpeg', 'libjpeg', required : true)
+png_dep = dependency('libpng', required : true)
+jpeg_dep = dependency('libjpeg', required : true)
 sm_dep = dependency('sm', required : true)
 ice_sound_dep =  dependency('ice', required : true)
 freetype2_dep =  dependency('freetype2', required : true)
-
-cc = meson.get_compiler('cpp')
-
-m_dep = cc.find_library('m', required : true)
-z_dep = cc.find_library('z', required : true)
 
 osiris_deps = [
     x11_dep,
@@ -438,8 +603,6 @@ osirislib = shared_library('osiris',
 # Install headers
 #
 
-dialog_header_path = 'src/dialogs'
-
 dialog_headers = [
     dialog_header_path / 'qcolordialog.h',
     dialog_header_path / 'qfiledialog.h',
@@ -450,8 +613,6 @@ dialog_headers = [
     dialog_header_path / 'qwizard.h',
     dialog_header_path / 'qinputdialog.h',
 ]
-
-kernel_header_path = 'src/kernel'
 
 kernel_headers = [
     kernel_header_path / 'qabstractlayout.h',
@@ -545,7 +706,6 @@ if get_option('qt1compat').enabled()
     kernel_headers += kernel_header_path / 'q1xcompatibility.h'
 endif
 
-network_header_path = 'src/network'
 network_headers = [
     network_header_path / 'qdns.h',
     network_header_path / 'qftp.h',
@@ -556,7 +716,7 @@ network_headers = [
     network_header_path / 'qsocketdevice.h'
 ]
 
-tools_header_path = 'src/tools'
+
 tools_headers = [
     tools_header_path / 'qarray.h',
     tools_header_path / 'qasciicache.h',
@@ -614,7 +774,6 @@ tools_headers = [
     tools_header_path / 'qutfcodec.h',
     tools_header_path / 'qvector.h',
     tools_header_path / 'qvaluelist.h',
-
     tools_header_path / 'qconfig-dist.h',
     tools_header_path / 'qconfig-large.h',
     tools_header_path / 'qconfig-medium.h',
@@ -809,57 +968,6 @@ endif
 install_headers(osiris_includes, install_dir : get_option('prefix') / 'osiris/include')
 
 #
-# Build and install the moc tool
-#
-
-moc_source_path = 'src/moc'
-moc_sources = [
-    moc_source_path / 'mocgen.cpp',
-    tools_source_path / 'qbuffer.cpp',
-    tools_source_path / 'qcollection.cpp',
-    tools_source_path / 'qcstring.cpp',
-    tools_source_path / 'qdatastream.cpp',
-    tools_source_path / 'qdatetime.cpp',
-    tools_source_path / 'qfile.cpp',
-    tools_source_path / 'qgarray.cpp',
-    tools_source_path / 'qgdict.cpp',
-    tools_source_path / 'qglist.cpp',
-    tools_source_path / 'qglobal.cpp',
-    tools_source_path / 'qgvector.cpp',
-    tools_source_path / 'qiodevice.cpp',
-    tools_source_path / 'qregexp.cpp',
-    tools_source_path / 'qstring.cpp',
-    tools_source_path / 'qtextcodec.cpp',
-    tools_source_path / 'qtextstream.cpp',
-    tools_source_path / 'qutfcodec.cpp',
-    tools_source_path / 'qfile_unix.cpp'
-]
-
-moc_include_directories = [
-    'include',
-    moc_source_path,
-    tools_header_path,
-]
-
-moc_compile_args = [
-    '-Wno-unused',
-    '-Wno-parentheses',
-    '-w',
-    '-DQT_NO_CODECS',
-    '-DQT_LITE_UNICODE',
-    '-std=c++11'
-]
-
-executable('moc', 
-            moc_sources,
-            dependencies : [z_dep],
-            include_directories : moc_include_directories,
-            cpp_args : moc_compile_args,
-            install : true,
-            install_dir : get_option('prefix') / 'osiris/bin',
-)
-
-#
 # Build and install qutil library
 #
 
@@ -878,8 +986,6 @@ qutil_include_directories = [
 #
 # Run moc on qprocess.h to generate moc_qprocess.cpp 
 #
-
-moc_exe = find_program('moc', dirs : [ get_option('prefix') / 'osiris/bin' ])
 
 cmd = run_command(moc_exe, qutil_include_path / 'qprocess.h', '-o', qutil_source_path / 'moc_qprocess.cpp', check : true)
 
@@ -917,7 +1023,7 @@ executable('uic',
             cpp_args : [],
             install : true,
             link_with : osirislib,
-            install_dir : get_option('prefix') / 'osiris/bin',
+            install_dir : install_dir,
 )
 
 #
@@ -930,6 +1036,107 @@ designer_include_directories = [
     designer_source_path / '../shared',
     qutil_include_path
 ]
+
+ui_file_names = [
+    'listboxeditor',
+    'connectioneditor',
+    'editslots',
+    'newform',
+    'listvieweditor',
+    'connectionviewer',
+    'customwidgeteditor',
+    'texteditpreview',
+    'listviewpreview',
+    'paletteeditor',
+    'radiopreview',
+    'checkboxpreview',
+    'widgetpreview',
+    'iconvieweditor',
+    'preferences',
+    'helpdialog',
+    'topicchooser',
+    'multilineeditor',
+    'formsettings',
+    'about',
+    'pixmapfunction',
+    'createtemplate',
+]
+
+uic_exe = find_program('uic', dirs : [ install_dir ])
+
+foreach ui_file_name : ui_file_names
+    path_root = designer_source_path / ui_file_name
+
+    ui_path = path_root + '.ui'
+    header_path = path_root + '.h'
+    source_path = path_root + '.cpp'
+
+    run_command(uic_exe, ui_path, '-o', header_path, check : true)
+    run_command(uic_exe, ui_path, '-i', header_path, '-o', source_path, check : true)
+endforeach
+
+designer_moc_files = [
+    'command',
+    'formwindow',
+    'layout',
+    'mainwindow',
+    'pixmapchooser',
+    'propertyeditor',
+    'sizehandle',
+    'orderindicator',
+    'widgetfactory',
+    'hierarchyview',
+    'listboxeditorimpl',
+    'connectioneditorimpl',
+    'newformimpl',
+    'formlist',
+    'help',
+    'editslotsimpl',
+    'listvieweditorimpl',
+    'connectionviewerimpl',
+    'customwidgeteditorimpl',
+    'paletteeditorimpl',
+    'styledbutton',
+    'previewstack',
+    'iconvieweditorimpl',
+    'helpdialogimpl',
+    'topicchooserimpl',
+    'multilineeditorimpl',
+    'formsettingsimpl',
+    'asciivalidator',
+    'import',
+    'listboxeditor',
+    'connectioneditor',
+    'editslots',
+    'newform',
+    'listvieweditor',
+    'connectionviewer',
+    'customwidgeteditor',
+    'texteditpreview',
+    'listviewpreview',
+    'paletteeditor',
+    'radiopreview',
+    'checkboxpreview',
+    'widgetpreview',
+    'iconvieweditor',
+    'preferences',
+    'helpdialog',
+    'topicchooser',
+    'multilineeditor',
+    'formsettings',
+    'about',
+    'pixmapfunction',
+    'createtemplate',
+]
+
+foreach moc_file_root : designer_moc_files
+
+    src_header_file = designer_source_path / (moc_file_root + '.h')
+    dst_cpp_file = designer_source_path / ('moc_' + moc_file_root + '.cpp')
+
+    run_command(moc_exe, src_header_file, '-o', dst_cpp_file, check : true)
+
+endforeach
 
 designer_sources = [
     designer_source_path / 'about.cpp',
@@ -1054,5 +1261,5 @@ executable('designer',
             cpp_args : designer_defines,
             install : true,
             link_with : [osirislib, qutil_lib],
-            install_dir : get_option('prefix') / 'osiris/bin',
+            install_dir : install_dir,
 )
