@@ -1,6 +1,6 @@
 project('osiris', 'cpp',
         default_options : 'prefix=/opt',
-        license : 'GPL-2.0-only OR SADL-2.0-only',
+        license : 'GPL-2.0-only',
         license_files: ['LICENSE.GPL', 'LICENSE.SADL2']
 )
 
