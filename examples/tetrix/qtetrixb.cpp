@@ -16,122 +16,122 @@
 
 const int waitAfterLineTime = 500;
 
-QTetrixBoard::QTetrixBoard( QWidget *p, const char *name )
-    : QFrame( p, name )
+QTetrixBoard::QTetrixBoard(QWidget *p, const char *name)
+    : QFrame(p, name)
 {
-    setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    setFrameStyle(QFrame::Panel | QFrame::Sunken);
     paint = 0;
     timer = new QTimer(this);
-    connect( timer, SIGNAL(timeout()), SLOT(timeout()) );
+    connect(timer, SIGNAL(timeout()), SLOT(timeout()));
 
-    colors[0].setRgb(200,100,100);
-    colors[1].setRgb(100,200,100);
-    colors[2].setRgb(100,100,200);
-    colors[3].setRgb(200,200,100);
-    colors[4].setRgb(200,100,200);
-    colors[5].setRgb(100,200,200);
-    colors[6].setRgb(218,170,  0);
+    colors[0].setRgb(200, 100, 100);
+    colors[1].setRgb(100, 200, 100);
+    colors[2].setRgb(100, 100, 200);
+    colors[3].setRgb(200, 200, 100);
+    colors[4].setRgb(200, 100, 200);
+    colors[5].setRgb(100, 200, 200);
+    colors[6].setRgb(218, 170, 0);
 
-    xOffset          = -1;      // -1 until a resizeEvent is received.
-    blockWidth       = 20;
-    yOffset          = 30;
-    blockHeight      = 20;
-    noGame           = TRUE;
-    isPaused         = FALSE;
+    xOffset = -1; // -1 until a resizeEvent is received.
+    blockWidth = 20;
+    yOffset = 30;
+    blockHeight = 20;
+    noGame = TRUE;
+    isPaused = FALSE;
     waitingAfterLine = FALSE;
-    updateTimeoutTime();   // Sets timeoutTime
+    updateTimeoutTime(); // Sets timeoutTime
 }
 
-void QTetrixBoard::startGame(int gameType,int fillRandomLines)
+void QTetrixBoard::startGame(int gameType, int fillRandomLines)
 {
-    if ( isPaused )
-        return;		// ignore if game is paused
+    if (isPaused)
+        return; // ignore if game is paused
     noGame = FALSE;
-    GenericTetrix::startGame( gameType, fillRandomLines );
+    GenericTetrix::startGame(gameType, fillRandomLines);
     // Note that the timer is started by updateLevel!
 }
 
-
 void QTetrixBoard::pause()
 {
-    if ( noGame )			// game not active
+    if (noGame) // game not active
         return;
     isPaused = !isPaused;
-    if ( isPaused ) {
-	timer->stop();
+    if (isPaused)
+    {
+        timer->stop();
         hideBoard();
     }
     else
-	timer->start(timeoutTime);
+        timer->start(timeoutTime);
     update();
 }
 
-
-void QTetrixBoard::drawSquare(int x,int y,int value)
+void QTetrixBoard::drawSquare(int x, int y, int value)
 {
-    if (xOffset == -1)    // Before first resizeEvent?
+    if (xOffset == -1) // Before first resizeEvent?
         return;
 
-    const int X = xOffset  + x*blockWidth;
-    const int Y = yOffset  + (y - 1)*blockHeight;
+    const int X = xOffset + x * blockWidth;
+    const int Y = yOffset + (y - 1) * blockHeight;
 
     bool localPainter = paint == 0;
     QPainter *p;
-    if ( localPainter )
-	p = new QPainter( this );    
+    if (localPainter)
+        p = new QPainter(this);
     else
-	p = paint;
-    drawTetrixButton( p, X, Y, blockWidth, blockHeight,
-		      value == 0 ? 0 : &colors[value-1] );
+        p = paint;
+    drawTetrixButton(p, X, Y, blockWidth, blockHeight,
+                     value == 0 ? 0 : &colors[value - 1]);
     /*
     if ( value != 0 ) {
-	QColor tc, bc;
-	tc = colors[value-1].light();
-	bc = colors[value-1].dark();
-	p->drawShadePanel( X, Y, blockWidth, blockHeight,
-			   tc, bc, 1, colors[value-1], TRUE );
+    QColor tc, bc;
+    tc = colors[value-1].light();
+    bc = colors[value-1].dark();
+    p->drawShadePanel( X, Y, blockWidth, blockHeight,
+               tc, bc, 1, colors[value-1], TRUE );
     }
     else
-	p->fillRect( X, Y, blockWidth, blockHeight, backgroundColor() );
-	*/
-    if ( localPainter )
-	delete p;
+    p->fillRect( X, Y, blockWidth, blockHeight, backgroundColor() );
+    */
+    if (localPainter)
+        delete p;
 }
 
-void QTetrixBoard::drawNextSquare( int x, int y, int value )
+void QTetrixBoard::drawNextSquare(int x, int y, int value)
 {
-    if ( value == 0 )
-        emit drawNextSquareSignal (x, y, 0 );
+    if (value == 0)
+        emit drawNextSquareSignal(x, y, 0);
     else
-        emit drawNextSquareSignal( x, y, &colors[value-1] );
+        emit drawNextSquareSignal(x, y, &colors[value - 1]);
 }
 
-void QTetrixBoard::updateRemoved( int noOfLines )
+void QTetrixBoard::updateRemoved(int noOfLines)
 {
-    if ( noOfLines > 0 ) {
+    if (noOfLines > 0)
+    {
         timer->stop();
-        timer->start( waitAfterLineTime );
+        timer->start(waitAfterLineTime);
         waitingAfterLine = TRUE;
     }
-    emit updateRemovedSignal( noOfLines );
+    emit updateRemovedSignal(noOfLines);
 }
 
-void QTetrixBoard::updateScore( int newScore )
+void QTetrixBoard::updateScore(int newScore)
 {
-    emit updateScoreSignal( newScore );
+    emit updateScoreSignal(newScore);
 }
 
-void QTetrixBoard::updateLevel( int newLevel )
+void QTetrixBoard::updateLevel(int newLevel)
 {
     timer->stop();
     updateTimeoutTime();
-    timer->start( timeoutTime );
-    emit updateLevelSignal( newLevel );
+    timer->start(timeoutTime);
+    emit updateLevelSignal(newLevel);
 }
 
 void QTetrixBoard::pieceDropped(int)
 {
-    if ( waitingAfterLine ) // give player a break if a line has been removed
+    if (waitingAfterLine) // give player a break if a line has been removed
         return;
     newPiece();
 }
@@ -145,26 +145,30 @@ void QTetrixBoard::gameOver()
 
 void QTetrixBoard::timeout()
 {
-    if ( waitingAfterLine ) {
-	timer->stop();
-	waitingAfterLine = FALSE;
-	newPiece();
-	timer->start( timeoutTime );
-    } else {
+    if (waitingAfterLine)
+    {
+        timer->stop();
+        waitingAfterLine = FALSE;
+        newPiece();
+        timer->start(timeoutTime);
+    }
+    else
+    {
         oneLineDown();
     }
 }
 
-void QTetrixBoard::drawContents( QPainter *p )
+void QTetrixBoard::drawContents(QPainter *p)
 {
     const char *text = "Press \"Pause\"";
     QRect r = contentsRect();
-    paint = p;				// set widget painter
-    if ( isPaused ) {
-	p->drawText( r, AlignCenter | AlignVCenter, text );
+    paint = p; // set widget painter
+    if (isPaused)
+    {
+        p->drawText(r, AlignCenter | AlignVCenter, text);
         return;
     }
-    int x1,y1,x2,y2;
+    int x1, y1, x2, y2;
     x1 = (r.left() - xOffset) / blockWidth;
     if (x1 < 0)
         x1 = 0;
@@ -189,50 +193,51 @@ void QTetrixBoard::drawContents( QPainter *p )
     if (y2 >= boardHeight())
         y2 = boardHeight() - 1;
 
-    updateBoard( x1, y1, x2, y2, TRUE );
-    paint = 0;				// reset widget painter
+    updateBoard(x1, y1, x2, y2, TRUE);
+    paint = 0; // reset widget painter
     return;
 }
 
 void QTetrixBoard::resizeEvent(QResizeEvent *e)
 {
     QSize sz = e->size();
-    blockWidth  = (sz.width() - 3)/10;
-    blockHeight = (sz.height() - 3)/22;
-    xOffset     = 1;
-    yOffset     = 1;
+    blockWidth = (sz.width() - 3) / 10;
+    blockHeight = (sz.height() - 3) / 22;
+    xOffset = 1;
+    yOffset = 1;
 }
 
-void QTetrixBoard::keyPressEvent( QKeyEvent *e )
+void QTetrixBoard::keyPressEvent(QKeyEvent *e)
 {
-    if ( noGame || isPaused || waitingAfterLine )
+    if (noGame || isPaused || waitingAfterLine)
         return;
-    switch( e->key() ) {
-	case Key_Left :
-	    moveLeft();
-	    break;
-	case Key_Right :
-	    moveRight();
-	    break;
-	case Key_Down :
-	    rotateRight();
-	    break;
-	case Key_Up :
-	    rotateLeft();
-	    break;
-	case Key_Space :
-	    dropDown();
-	    break;
-	case Key_D :
-	    oneLineDown();
-	    break;
-        default:
-	    return;
+    switch (e->key())
+    {
+    case Key_Left:
+        moveLeft();
+        break;
+    case Key_Right:
+        moveRight();
+        break;
+    case Key_Down:
+        rotateRight();
+        break;
+    case Key_Up:
+        rotateLeft();
+        break;
+    case Key_Space:
+        dropDown();
+        break;
+    case Key_D:
+        oneLineDown();
+        break;
+    default:
+        return;
     }
     e->accept();
 }
 
 void QTetrixBoard::updateTimeoutTime()
 {
-    timeoutTime = 1000/(1 + getLevel());
+    timeoutTime = 1000 / (1 + getLevel());
 }

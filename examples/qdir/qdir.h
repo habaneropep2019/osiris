@@ -31,13 +31,12 @@ class PixmapView : public QScrollView
     Q_OBJECT
 
 public:
-    PixmapView( QWidget *parent );
-    void setPixmap( const QPixmap &pix );
-    void drawContents( QPainter *p, int, int, int, int );
+    PixmapView(QWidget *parent);
+    void setPixmap(const QPixmap &pix);
+    void drawContents(QPainter *p, int, int, int, int);
 
 private:
     QPixmap pixmap;
-
 };
 
 class Preview : public QWidgetStack
@@ -45,29 +44,27 @@ class Preview : public QWidgetStack
     Q_OBJECT
 
 public:
-    Preview( QWidget *parent );
-    void showPreview( const QUrl &u, int size );
+    Preview(QWidget *parent);
+    void showPreview(const QUrl &u, int size);
 
 private:
     QMultiLineEdit *normalText;
     QTextView *html;
     PixmapView *pixmap;
-
 };
 
 class PreviewWidget : public QVBox,
-		      public QFilePreview
+                      public QFilePreview
 {
     Q_OBJECT
 
 public:
-    PreviewWidget( QWidget *parent );
-    void previewUrl( const QUrl &u );
+    PreviewWidget(QWidget *parent);
+    void previewUrl(const QUrl &u);
 
 private:
     QSpinBox *sizeSpinBox;
     Preview *preview;
-
 };
 
 class CustomFileDialog : public QFileDialog
@@ -79,13 +76,13 @@ public:
     ~CustomFileDialog();
 
 protected:
-    void showEvent( QShowEvent *e );
+    void showEvent(QShowEvent *e);
 
 public slots:
-    void setDir2( const QString & );
+    void setDir2(const QString &);
 
 private slots:
-    void bookmarkChosen( int i );
+    void bookmarkChosen(int i);
     void goHome();
 
 private:
@@ -93,7 +90,6 @@ private:
     QPopupMenu *bookmarkMenu;
     QStringList bookmarkList;
     int addId;
-
 };
 
 #endif
