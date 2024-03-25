@@ -21,80 +21,6 @@
 
 QWidget *cursorWidget( QPoint * = 0 );
 
-class QDragger;
-
-
-class DropWindow : public QWidget
-{
-    Q_OBJECT
-public:
-    void paintEvent( QPaintEvent * );
-    void closeEvent( QCloseEvent * );
-
-    QDragger *master;
-};
-
-
-struct DropInfo {
-    DropInfo()	{ w=0; }
-   ~DropInfo()  { delete w; }
-    DropWindow *w;
-    bool userOpened;
-};
-
-struct DraggedInfo {
-    QWidget *w;
-    QWidget *mother;
-    QPoint   pos;
-};
-
-
-class QDragger : public QObject
-{
-    Q_OBJECT
-public:
-    QDragger();
-    ~QDragger();
-    
-    bool notify( QObject *, QEvent * ); // event filter
-    void closeDropWindow( DropWindow * );
-public slots:
-    void openDropWindow();
-    void killDropWindow();
-    void killAllDropWindows();
-    void sendChildHome();
-    void sendAllChildrenHome();
-private:
-    bool isParentToDragged( QWidget * );
-    bool noWidgets( QWidget * );
-    void killDropWindow( DropInfo * );
-    void killAllDropWindows( bool );
-    void sendChildHome( DraggedInfo * );
-    void sendAllChildrenHome( QWidget * );
-    QWidget *openDropWindow( const QRect&, bool );
-
-    bool startGrab();
-    void grabFinished();
-    bool dragEvent( QWidget *, QMouseEvent * );
-    bool killDropEvent( QMouseEvent * );
-    bool sendChildEvent( QMouseEvent * );
-
-    bool		   killingDrop;
-    bool		   sendingChild;
-    QWidget		  *clickedWidget;
-    QWidget		  *hostWidget;
-    QCursor		   cursor;
-
-    QPopupMenu*		   menu;
-    QPoint		   clickOffset;
-    QColor		   dragBackground;
-    QColor		   dragForeground;
-    DraggedInfo		   dragInfo;
-    QIntDict<DraggedInfo>  draggedDict;
-    QIntDict<DropInfo>	   dropDict;
-};
-
-
 QDragApplication::QDragApplication( int &argc, char **argv )
     : QApplication( argc, argv )
 {
@@ -498,6 +424,3 @@ QWidget *cursorWidget( QPoint *p )
 	*p = curpos;
     return QApplication::widgetAt( curpos );
 }
-
-
-#include "qdragapp.moc"

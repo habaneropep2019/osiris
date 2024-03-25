@@ -12,10 +12,10 @@
 #include "qdragapp.h"
 #include "qfont.h"
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication::setColorSpec( QApplication::CustomColor );
-    QDragApplication a(argc,argv);
+    QApplication::setColorSpec(QApplication::CustomColor);
+    QDragApplication a(argc, argv);
     QTetrix *tetrix = new QTetrix;
     a.setMainWidget(tetrix);
     tetrix->setCaption("Qt Example - Tetrix");

@@ -16,31 +16,33 @@
 
 class QSlider;
 
-class FontRowTable : public QFrame {
+class FontRowTable : public QFrame
+{
     Q_OBJECT
 public:
-    FontRowTable( QWidget* parent=0, const char* name=0 );
+    FontRowTable(QWidget *parent = 0, const char *name = 0);
 
     QSize sizeHint() const;
 
 signals:
-    void fontInformation(const QString&);
+    void fontInformation(const QString &);
 
 public slots:
     void setRow(int);
 
-
 protected:
     QSize cellSize() const;
-    void paintEvent( QPaintEvent* );
+    void paintEvent(QPaintEvent *);
+
 private:
     int row;
 };
 
-class FontDisplayer : public QMainWindow {
+class FontDisplayer : public QMainWindow
+{
     Q_OBJECT
 public:
-    FontDisplayer( QWidget* parent=0, const char* name=0 );
+    FontDisplayer(QWidget *parent = 0, const char *name = 0);
 };
 
 #endif

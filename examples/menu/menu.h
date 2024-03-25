@@ -14,7 +14,7 @@
 #include <qwidget.h>
 #include <qmenubar.h>
 #include <qlabel.h>
-
+#include <qapplication.h>
 
 class MenuExample : public QWidget
 {
