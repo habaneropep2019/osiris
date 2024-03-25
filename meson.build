@@ -1,31 +1,34 @@
 project('osiris', 'cpp',
         default_options : 'prefix=/opt',
         license : 'GPL-2.0-only',
-        license_files: ['LICENSE.GPL', 'LICENSE.SADL2']
+        license_files: ['LICENSE.GPL']
 )
 
-project_defines = '-DQT_NO_IMAGEIO_MNG -DQT_NO_SM_SUPPORT'
+project_defines = [
+    '-DQT_NO_IMAGEIO_MNG',
+    '-DQT_NO_SM_SUPPORT',
+]
 
 if get_option('gif').enabled()
-    project_defines += ' -DQT_BUILTIN_GIF_READER=1'
+    project_defines += '-DQT_BUILTIN_GIF_READER=1'
 endif
 
 if get_option('jpeg').disabled()
-    project_defines += ' -DQT_NO_IMAGEIO_JPEG'
+    project_defines += '-DQT_NO_IMAGEIO_JPEG'
 endif
 
 if get_option('mng').disabled()
-    project_defines += ' -DQT_NO_IMAGEIO_MNG'
+    project_defines += '-DQT_NO_IMAGEIO_MNG'
 endif
 
 if get_option('xft').enabled()
-    project_defines += ' -DQT_XFT'
+    project_defines += '-DQT_XFT'
 else
-    project_defines += ' -DQT_NO_XKB'
+    project_defines += '-DQT_NO_XKB'
 endif
 
 if get_option('multithread').enabled()
-    project_defines += ' -DQT_THREAD_SUPPORT'
+    project_defines += '-DQT_THREAD_SUPPORT'
 endif
 
 install_dir = get_option('prefix') / 'osiris/bin'
@@ -550,6 +553,7 @@ osiris_include_directories = [
 
 x11_dep = dependency('X11', 'x11', required : true)
 xft_dep = dependency('xft', required : true)
+fontconfig_dep = dependency('fontconfig', required : true)
 xext_dep = dependency('xext', required : true)
 glu_dep = dependency('glu', required : true)
 gl_dep = dependency('gl', required : true)
@@ -565,6 +569,7 @@ osiris_deps = [
     x11_dep,
     gl_dep,
     xft_dep,
+    fontconfig_dep,
     xext_dep,
     m_dep,
     z_dep,
@@ -1263,3 +1268,7 @@ executable('designer',
             link_with : [osirislib, qutil_lib],
             install_dir : install_dir,
 )
+
+if get_option('examples').enabled()
+    subdir('examples')
+endif
