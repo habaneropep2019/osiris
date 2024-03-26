@@ -6,7 +6,7 @@ std_include_paths = [
 
 std_cpp_args = []
 
-if get_option('multithread').enabled()
+if get_option('multi-thread').enabled()
     std_cpp_args += '-DQT_THREAD_SUPPORT'
 endif
 
@@ -32,7 +32,7 @@ subdir('forever')
 subdir('ftpclient')
 subdir('gear')
 subdir('glpixmap')
-if get_option('multithread').enabled()
+if get_option('multi-thread').enabled()
     subdir('guithreads')
 endif
 subdir('hello')
@@ -66,7 +66,7 @@ subdir('richtext')
 subdir('rot13')
 subdir('scribble')
 subdir('scrollview')
-if get_option('multithread').enabled()
+if get_option('multi-thread').enabled()
     subdir('semaphores')
 endif
 subdir('sharedbox')

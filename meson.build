@@ -9,6 +9,13 @@ project_defines = [
     '-DQT_NO_SM_SUPPORT',
 ]
 
+build_multithread = get_option('multi-thread').enabled()
+build_singlethread = get_option('single-thread').enabled()
+
+if not (build_multithread or build_singlethread)
+    error('Both -Dmulti-thread and -Dsingle-thread disabled. Not building libosiris')
+endif
+
 if get_option('gif').enabled()
     project_defines += '-DQT_BUILTIN_GIF_READER=1'
 endif
@@ -25,13 +32,6 @@ if get_option('xft').enabled()
     project_defines += '-DQT_XFT'
 else
     project_defines += '-DQT_NO_XKB'
-endif
-
-osiris_lib_name = 'osiris'
-
-if get_option('multithread').enabled()
-    project_defines += '-DQT_THREAD_SUPPORT'
-    osiris_lib_name += '-mt'
 endif
 
 install_dir = get_option('prefix') / 'osiris/bin'
@@ -599,13 +599,31 @@ osiris_sources += table_sources
 osiris_sources += xml_sources
 osiris_sources += opengl_sources
 
-osirislib = shared_library(osiris_lib_name,
-                            osiris_sources,
-                            cpp_args : project_defines,
-                            include_directories : osiris_include_directories,
-                            dependencies : osiris_deps,
-                            install : true
-)
+default_osirislib = []
+
+if get_option('single-thread').enabled()
+    osirislib = shared_library('osiris',
+                               osiris_sources,
+                               cpp_args : project_defines,
+                               include_directories : osiris_include_directories,
+                               dependencies : osiris_deps,
+                               install : true
+    )
+    default_osirislib = osirislib
+endif
+
+if get_option('multi-thread').enabled()
+    defines = project_defines
+    defines += '-DQT_THREAD_SUPPORT'
+    osirislib_mt = shared_library('osiris-mt',
+                                  osiris_sources,
+                                  cpp_args : defines,
+                                  include_directories : osiris_include_directories,
+                                  dependencies : osiris_deps,
+                                  install : true
+    )
+    default_osirislib = osirislib_mt
+endif
 
 #
 # Install headers
@@ -1002,7 +1020,7 @@ qutil_lib = shared_library('qutil',
                             cpp_args : ['-fPIC', '-w'],
                             include_directories : qutil_include_directories,
                             dependencies : [z_dep],
-                            link_with : osirislib,
+                            link_with : default_osirislib,
                             install : true
 )
 
@@ -1030,7 +1048,7 @@ executable('uic',
             include_directories : uic_include_directories,
             cpp_args : [],
             install : true,
-            link_with : osirislib,
+            link_with : default_osirislib,
             install_dir : install_dir,
 )
 
@@ -1268,7 +1286,7 @@ executable('designer',
             include_directories : designer_include_directories,
             cpp_args : designer_defines,
             install : true,
-            link_with : [osirislib, qutil_lib],
+            link_with : [default_osirislib, qutil_lib],
             install_dir : install_dir,
 )
 

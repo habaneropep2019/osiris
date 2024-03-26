@@ -10,5 +10,5 @@ executable('overlayx11',
             cpp_args : std_cpp_args,
             install : false,
             dependencies : [x11_dep, gl_dep],
-            link_with : [osirislib],
+            link_with : [default_osirislib],
 )

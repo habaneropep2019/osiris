@@ -15,5 +15,5 @@ executable('glixmap',
             cpp_args : std_cpp_args,
             dependencies : [gl_dep],
             install : false,
-            link_with : [osirislib],
+            link_with : [default_osirislib],
 )

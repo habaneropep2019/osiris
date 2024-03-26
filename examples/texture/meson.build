@@ -15,5 +15,5 @@ executable('texture',
             cpp_args : std_cpp_args,
             dependencies : [gl_dep, glu_dep],
             install : false,
-            link_with : [osirislib],
+            link_with : [default_osirislib],
 )
