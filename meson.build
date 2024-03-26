@@ -1275,3 +1275,7 @@ executable('designer',
 if get_option('examples').enabled()
     subdir('examples')
 endif
+
+if get_option('tutorial').enabled()
+    subdir('tutorial')
+endif
