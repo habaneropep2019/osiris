@@ -27,8 +27,11 @@ else
     project_defines += '-DQT_NO_XKB'
 endif
 
+osiris_lib_name = 'osiris'
+
 if get_option('multithread').enabled()
     project_defines += '-DQT_THREAD_SUPPORT'
+    osiris_lib_name += '-mt'
 endif
 
 install_dir = get_option('prefix') / 'osiris/bin'
@@ -596,7 +599,7 @@ osiris_sources += table_sources
 osiris_sources += xml_sources
 osiris_sources += opengl_sources
 
-osirislib = shared_library('osiris',
+osirislib = shared_library(osiris_lib_name,
                             osiris_sources,
                             cpp_args : project_defines,
                             include_directories : osiris_include_directories,

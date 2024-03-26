@@ -4,7 +4,11 @@ std_include_paths = [
     '../../include'
 ]
 
-std_cpp_args = [ '-DQT_THREAD_SUPPORT' ]
+std_cpp_args = []
+
+if get_option('multithread').enabled()
+    std_cpp_args += '-DQT_THREAD_SUPPORT'
+endif
 
 subdir('aclock')
 subdir('action')
@@ -28,7 +32,9 @@ subdir('forever')
 subdir('ftpclient')
 subdir('gear')
 subdir('glpixmap')
-subdir('guithreads')
+if get_option('multithread').enabled()
+    subdir('guithreads')
+endif
 subdir('hello')
 subdir('helpviewer')
 subdir('httpd')
@@ -60,7 +66,9 @@ subdir('richtext')
 subdir('rot13')
 subdir('scribble')
 subdir('scrollview')
-subdir('semaphores')
+if get_option('multithread').enabled()
+    subdir('semaphores')
+endif
 subdir('sharedbox')
 subdir('showimg')
 subdir('sound')
