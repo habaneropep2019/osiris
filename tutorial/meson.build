@@ -1,7 +1,17 @@
-
 std_include_paths = [
-    '../../include'
+    '.',
+    '../../src/dialogs',
+    '../../src/iconview',
+    '../../src/kernel',
+    '../../src/network',
+    '../../src/opengl',
+    '../../src/table',
+    '../../src/tools',
+    '../../src/widgets',
+    '../../src/workspace',
+    '../../src/xml',
 ]
+
 std_cpp_args = []
 
 tutorial_install_dir = meson.source_root() + '/bin/tutorial'

@@ -55,6 +55,20 @@ table_source_path = 'src/table'
 xml_source_path = 'src/xml'
 opengl_source_path = 'src/opengl'
 
+osiris_include_directories = [
+    'src/canvas',
+    'src/dialogs',
+    'src/iconview',
+    'src/kernel',
+    'src/network',
+    'src/opengl',
+    'src/table',
+    'src/tools',
+    'src/widgets',
+    'src/workspace',
+    'src/xml',
+]
+
 #
 # Build and install the moc tool
 #
@@ -83,7 +97,7 @@ moc_sources = [
 ]
 
 moc_include_directories = [
-    'include',
+    osiris_include_directories,
     moc_source_path,
     tools_header_path,
 ]
@@ -218,6 +232,43 @@ foreach root_tuple : moc_header_file_roots
     moc_generated_files += custom_target(target_name,
           input : src_header_file,
           output : 'moc_' + filename_root + '.cpp',
+          command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
+          build_by_default : true)
+
+endforeach
+
+#
+# Generate moc files from *.cpp. Some *.cpp files use Q_OBJECT, etc and
+# need their implementation generated. The resulting .moc file is then
+# included at the bottom of the source file
+#
+# Command: moc <filename>.cpp -o <filename.moc>
+#
+moc_source_file_roots = [
+    [dialog_source_path, 'qcolordialog'],
+    [dialog_source_path, 'qfiledialog'],
+    [iconview_source_path, 'qiconview'],
+    [kernel_source_path, 'qmovie'],
+    [kernel_source_path, 'qthread_unix'],
+    [opengl_source_path, 'qgl_x11'],
+    [widgets_source_path, 'qeffects'],
+    [widgets_source_path, 'qmainwindow'],
+    [widgets_source_path, 'qtoolbar'],
+    [widgets_source_path, 'qtooltip'],
+    [widgets_source_path, 'qwhatsthis'],
+    [workspaces_source_path, 'qworkspace'],
+]
+
+foreach root_tuple : moc_source_file_roots
+    directory_path = root_tuple[0]
+    filename_root = root_tuple[1]
+
+    src_header_file = directory_path / (filename_root + '.cpp')
+
+    target_name = root_tuple[1] + '_moc_cpp'
+    moc_generated_files += custom_target(target_name,
+          input : src_header_file,
+          output : filename_root + '.moc',
           command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
           build_by_default : true)
 
@@ -452,20 +503,6 @@ xml_sources = [
 opengl_sources = [
     opengl_source_path / 'qgl.cpp',
     opengl_source_path / 'qgl_x11.cpp',
-]
-
-osiris_include_directories = [
-    'src/dialogs',
-    'src/iconview',
-    'src/kernel',
-    'src/network',
-    'src/opengl',
-    'src/table',
-    'src/tools',
-    'src/widgets',
-    'src/workspace',
-    'src/xml',
-    'include',
 ]
 
 x11_dep = dependency('X11', 'x11', required : true)
@@ -922,7 +959,7 @@ qutil_sources = [
 ]
 
 qutil_include_directories = [
-    'include'
+    osiris_include_directories
 ]
 
 qprocess_moc_file = custom_target('qprocess_moc',
@@ -959,7 +996,7 @@ uic_sources = [
 uic_include_directories = [
     uic_source_path / '../shared',
     uic_source_path / '../util',
-    'include'
+    osiris_include_directories,
 ]
 
 uic_exe = executable('uic',
@@ -978,7 +1015,7 @@ uic_exe = executable('uic',
 
 designer_source_path = 'tools/designer/designer'
 designer_include_directories = [
-    'include',
+    osiris_include_directories,
     designer_source_path / '../shared',
     qutil_include_path,
     designer_source_path,

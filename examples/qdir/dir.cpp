@@ -27,7 +27,7 @@
 #include <qtooltip.h>
 
 #include "../dirview/dirview.h"
-#include "qdir.h"
+#include "dir.h"
 
 #include <stdlib.h>
 

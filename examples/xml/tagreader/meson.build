@@ -5,7 +5,16 @@ sources = [
 
 include_paths = [
     '.',
-    '../../../include',
+    '../../../src/dialogs',
+    '../../../src/iconview',
+    '../../../src/kernel',
+    '../../../src/network',
+    '../../../src/opengl',
+    '../../../src/table',
+    '../../../src/tools',
+    '../../../src/widgets',
+    '../../../src/workspace',
+    '../../../src/xml',
 ]
 
 executable('tagreader',

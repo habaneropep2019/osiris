@@ -6,9 +6,8 @@ sources = [
 ]
 
 include_paths = [
-    '.',
+    std_include_paths,
     '../dirview',
-    '../../../include',
 ]
 
 generated_moc_files = [dirview_moc_file]

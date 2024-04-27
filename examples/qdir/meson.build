@@ -1,6 +1,6 @@
 sources = [
     'main.cpp',
-    'qdir.cpp',
+    'dir.cpp',
     '../dirview/dirview.cpp',
 ]
 
@@ -8,8 +8,8 @@ generated_moc_files = [dirview_moc_file]
 
 generated_moc_files += custom_target('example_qdir_mocfile_0',
     depends : [ moc_exe ],
-    input : 'qdir.h',
-    output : 'moc_qdir.cpp',
+    input : 'dir.h',
+    output : 'moc_dir.cpp',
     command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
     build_by_default : true)
 

@@ -1,6 +1,7 @@
 #include <qapplication.h>
 
-#include "qdir.h"
+#include <cstdio>
+#include "dir.h"
 
 int main(int argc, char **argv)
 {
