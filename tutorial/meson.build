@@ -4,6 +4,8 @@ std_include_paths = [
 ]
 std_cpp_args = []
 
+tutorial_install_dir = meson.source_root() + '/bin/tutorial'
+
 subdir('t1')
 subdir('t2')
 subdir('t3')

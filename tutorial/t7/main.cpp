@@ -13,7 +13,6 @@
 
 #include "lcdrange.h"
 
-
 class MyWidget : public QVBox
 {
 public:
