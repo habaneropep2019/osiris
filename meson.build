@@ -1,7 +1,8 @@
 project('osiris', 'cpp',
-        default_options : 'prefix=/opt',
+        default_options : ['prefix=/opt'],
         license : 'GPL-2.0-only',
-        license_files: ['LICENSE.GPL']
+        license_files: ['LICENSE.GPL'],
+        version : '2.4.1',
 )
 
 project_defines = [
@@ -35,6 +36,7 @@ else
 endif
 
 install_dir = get_option('prefix') / 'osiris/bin'
+lib_install_dir = get_option('prefix') / 'osiris/lib'
 
 dialog_header_path = 'src/dialogs'
 kernel_header_path = 'src/kernel'
@@ -100,7 +102,7 @@ cc = meson.get_compiler('cpp')
 m_dep = cc.find_library('m', required : true)
 z_dep = cc.find_library('z', required : true)
 
-executable('moc',
+moc_exe = executable('moc',
             moc_sources,
             dependencies : [z_dep],
             include_directories : moc_include_directories,
@@ -204,16 +206,20 @@ moc_header_file_roots = [
     [opengl_source_path, 'qgl'],
 ]
 
-moc_exe = find_program('moc', dirs : [ install_dir ])
+moc_generated_files = []
 
 foreach root_tuple : moc_header_file_roots
     directory_path = root_tuple[0]
     filename_root = root_tuple[1]
 
     src_header_file = directory_path / (filename_root + '.h')
-    dst_cpp_file = directory_path / ('moc_' + filename_root + '.cpp')
 
-    run_command(moc_exe, src_header_file, '-o', dst_cpp_file, check : true)
+    target_name = root_tuple[1] + '_moc'
+    moc_generated_files += custom_target(target_name,
+          input : src_header_file,
+          output : 'moc_' + filename_root + '.cpp',
+          command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
+          build_by_default : true)
 
 endforeach
 
@@ -338,29 +344,6 @@ kernel_sources = [
     kernel_source_path / 'qwidget.cpp',
     kernel_source_path / 'qwmatrix.cpp',
     kernel_source_path / 'qvariant.cpp',
-    kernel_source_path / 'moc_qabstractlayout.cpp',
-    kernel_source_path / 'moc_qaccel.cpp',
-    kernel_source_path / 'moc_qapplication.cpp',
-    kernel_source_path / 'moc_qasyncio.cpp',
-    kernel_source_path / 'moc_qclipboard.cpp',
-    kernel_source_path / 'moc_qdialog.cpp',
-    kernel_source_path / 'moc_qdragobject.cpp',
-    kernel_source_path / 'moc_qguardedptr.cpp',
-    kernel_source_path / 'moc_qlayout.cpp',
-    kernel_source_path / 'moc_qtranslator.cpp',
-    kernel_source_path / 'moc_qnetworkprotocol.cpp',
-    kernel_source_path / 'moc_qsemimodal.cpp',
-    kernel_source_path / 'moc_qsessionmanager.cpp',
-    kernel_source_path / 'moc_qsignalmapper.cpp',
-    kernel_source_path / 'moc_qsizegrip.cpp',
-    kernel_source_path / 'moc_qsocketnotifier.cpp',
-    kernel_source_path / 'moc_qsound.cpp',
-    kernel_source_path / 'moc_qstyle.cpp',
-    kernel_source_path / 'moc_qstylesheet.cpp',
-    kernel_source_path / 'moc_qtimer.cpp',
-    kernel_source_path / 'moc_qlocalfs.cpp',
-    kernel_source_path / 'moc_qurloperator.cpp',
-    kernel_source_path / 'moc_qwidget.cpp'
 ]
 
 widgets_sources = [
@@ -420,57 +403,6 @@ widgets_sources = [
     widgets_source_path / 'qwindowsstyle.cpp',
     widgets_source_path / 'qaction.cpp',
     widgets_source_path / 'qeffects.cpp',
-    widgets_source_path / 'moc_qbuttongroup.cpp',
-    widgets_source_path / 'moc_qbutton.cpp',
-    widgets_source_path / 'moc_qcheckbox.cpp',
-    widgets_source_path / 'moc_qcdestyle.cpp',
-    widgets_source_path / 'moc_qcombobox.cpp',
-    widgets_source_path / 'moc_qcommonstyle.cpp',
-    widgets_source_path / 'moc_qdial.cpp',
-    widgets_source_path / 'moc_qframe.cpp',
-    widgets_source_path / 'moc_qgrid.cpp',
-    widgets_source_path / 'moc_qgroupbox.cpp',
-    widgets_source_path / 'moc_qhbuttongroup.cpp',
-    widgets_source_path / 'moc_qheader.cpp',
-    widgets_source_path / 'moc_qhgroupbox.cpp',
-    widgets_source_path / 'moc_qhbox.cpp',
-    widgets_source_path / 'moc_qlabel.cpp',
-    widgets_source_path / 'moc_qlcdnumber.cpp',
-    widgets_source_path / 'moc_qlineedit.cpp',
-    widgets_source_path / 'moc_qlistbox.cpp',
-    widgets_source_path / 'moc_qlistview.cpp',
-    widgets_source_path / 'moc_qmainwindow.cpp',
-    widgets_source_path / 'moc_qmenubar.cpp',
-    widgets_source_path / 'moc_qmotifstyle.cpp',
-    widgets_source_path / 'moc_qmotifplusstyle.cpp',
-    widgets_source_path / 'moc_qmultilineedit.cpp',
-    widgets_source_path / 'moc_qplatinumstyle.cpp',
-    widgets_source_path / 'moc_qpopupmenu.cpp',
-    widgets_source_path / 'moc_qprogressbar.cpp',
-    widgets_source_path / 'moc_qpushbutton.cpp',
-    widgets_source_path / 'moc_qradiobutton.cpp',
-    widgets_source_path / 'moc_qscrollbar.cpp',
-    widgets_source_path / 'moc_qscrollview.cpp',
-    widgets_source_path / 'moc_qsgistyle.cpp',
-    widgets_source_path / 'moc_qslider.cpp',
-    widgets_source_path / 'moc_qspinbox.cpp',
-    widgets_source_path / 'moc_qsplitter.cpp',
-    widgets_source_path / 'moc_qstatusbar.cpp',
-    widgets_source_path / 'moc_qtabbar.cpp',
-    widgets_source_path / 'moc_qtabwidget.cpp',
-    widgets_source_path / 'moc_qtableview.cpp',
-    widgets_source_path / 'moc_qtextbrowser.cpp',
-    widgets_source_path / 'moc_qtextview.cpp',
-    widgets_source_path / 'moc_qtoolbar.cpp',
-    widgets_source_path / 'moc_qtoolbutton.cpp',
-    widgets_source_path / 'moc_qtooltip.cpp',
-    widgets_source_path / 'moc_qvalidator.cpp',
-    widgets_source_path / 'moc_qvbox.cpp',
-    widgets_source_path / 'moc_qvbuttongroup.cpp',
-    widgets_source_path / 'moc_qvgroupbox.cpp',
-    widgets_source_path / 'moc_qwidgetstack.cpp',
-    widgets_source_path / 'moc_qwindowsstyle.cpp',
-    widgets_source_path / 'moc_qaction.cpp'
 ]
 
 dialogs_sources = [
@@ -483,25 +415,14 @@ dialogs_sources = [
     dialog_source_path / 'qtabdialog.cpp',
     dialog_source_path / 'qwizard.cpp',
     dialog_source_path / 'qinputdialog.cpp',
-    dialog_source_path / 'moc_qcolordialog.cpp',
-    dialog_source_path / 'moc_qfiledialog.cpp',
-    dialog_source_path / 'moc_qfontdialog.cpp',
-    dialog_source_path / 'moc_qmessagebox.cpp',
-    dialog_source_path / 'moc_qprogressdialog.cpp',
-    dialog_source_path / 'moc_qtabdialog.cpp',
-    dialog_source_path / 'moc_qwizard.cpp',
-    dialog_source_path / 'moc_qinputdialog.cpp',
-    dialog_source_path / 'moc_qprintdialog.cpp'
 ]
 
 iconview_sources = [
     iconview_source_path / 'qiconview.cpp',
-    iconview_source_path / 'moc_qiconview.cpp'
 ]
 
 workspace_sources = [ 
     workspaces_source_path / 'qworkspace.cpp',
-    workspaces_source_path / 'moc_qworkspace.cpp'
 ]
 
 network_sources = [
@@ -513,20 +434,14 @@ network_sources = [
     network_source_path / 'qsocket.cpp',
     network_source_path / 'qsocketdevice.cpp',
     network_source_path / 'qsocketdevice_unix.cpp',
-    network_source_path / 'moc_qdns.cpp',
-    network_source_path / 'moc_qftp.cpp',
-    network_source_path / 'moc_qserversocket.cpp',
-    network_source_path / 'moc_qsocket.cpp'
 ]
 
 canvas_sources = [
     canvas_source_path / 'qcanvas.cpp',
-    canvas_source_path / 'moc_qcanvas.cpp'
 ]
 
 table_sources = [
     table_source_path / 'qtable.cpp',
-    table_source_path / 'moc_qtable.cpp'
 ]
 
 xml_sources = [
@@ -537,7 +452,6 @@ xml_sources = [
 opengl_sources = [
     opengl_source_path / 'qgl.cpp',
     opengl_source_path / 'qgl_x11.cpp',
-    opengl_source_path / 'moc_qgl.cpp'
 ]
 
 osiris_include_directories = [
@@ -598,6 +512,7 @@ osiris_sources += canvas_sources
 osiris_sources += table_sources
 osiris_sources += xml_sources
 osiris_sources += opengl_sources
+osiris_sources += moc_generated_files
 
 default_osirislib = []
 
@@ -607,7 +522,8 @@ if get_option('single-thread').enabled()
                                cpp_args : project_defines,
                                include_directories : osiris_include_directories,
                                dependencies : osiris_deps,
-                               install : true
+                               install : true,
+                               install_dir : lib_install_dir,
     )
     default_osirislib = osirislib
 endif
@@ -620,7 +536,8 @@ if get_option('multi-thread').enabled()
                                   cpp_args : defines,
                                   include_directories : osiris_include_directories,
                                   dependencies : osiris_deps,
-                                  install : true
+                                  install : true,
+                                  install_dir : lib_install_dir,
     )
     default_osirislib = osirislib_mt
 endif
@@ -1002,18 +919,20 @@ qutil_include_path = 'tools/designer/util'
 qutil_sources = [
     qutil_source_path / 'qprocess.cpp',
     qutil_source_path / 'qprocess_unix.cpp',
-    qutil_source_path / 'moc_qprocess.cpp'
 ]
 
 qutil_include_directories = [
     'include'
 ]
 
-#
-# Run moc on qprocess.h to generate moc_qprocess.cpp 
-#
+qprocess_moc_file = custom_target('qprocess_moc',
+        depends : moc_exe,
+        input : qutil_include_path / 'qprocess.h',
+        output : 'moc_qprocess.cpp',
+        command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
+        build_by_default : true)
 
-cmd = run_command(moc_exe, qutil_include_path / 'qprocess.h', '-o', qutil_source_path / 'moc_qprocess.cpp', check : true)
+qutil_sources += qprocess_moc_file
 
 qutil_lib = shared_library('qutil',
                             qutil_sources,
@@ -1021,7 +940,8 @@ qutil_lib = shared_library('qutil',
                             include_directories : qutil_include_directories,
                             dependencies : [z_dep],
                             link_with : default_osirislib,
-                            install : true
+                            install : true,
+                            install_dir : lib_install_dir,
 )
 
 #
@@ -1042,7 +962,7 @@ uic_include_directories = [
     'include'
 ]
 
-executable('uic', 
+uic_exe = executable('uic',
             uic_sources,
             dependencies : [z_dep],
             include_directories : uic_include_directories,
@@ -1060,7 +980,8 @@ designer_source_path = 'tools/designer/designer'
 designer_include_directories = [
     'include',
     designer_source_path / '../shared',
-    qutil_include_path
+    qutil_include_path,
+    designer_source_path,
 ]
 
 ui_file_names = [
@@ -1088,7 +1009,7 @@ ui_file_names = [
     'createtemplate',
 ]
 
-uic_exe = find_program('uic', dirs : [ install_dir ])
+generated_ui_files = []
 
 foreach ui_file_name : ui_file_names
     path_root = designer_source_path / ui_file_name
@@ -1097,8 +1018,37 @@ foreach ui_file_name : ui_file_names
     header_path = path_root + '.h'
     source_path = path_root + '.cpp'
 
-    run_command(uic_exe, ui_path, '-o', header_path, check : true)
-    run_command(uic_exe, ui_path, '-i', header_path, '-o', source_path, check : true)
+    header_target_name = ui_file_name + '_header'
+    source_target_name = ui_file_name + '_source'
+
+    generated_ui_header = custom_target(header_target_name,
+        depends : uic_exe,
+        input : ui_path,
+        output : ui_file_name + '.h',
+        install_dir : designer_source_path,
+        command : [uic_exe, '@INPUT@', '-o', '@OUTPUT@' ],
+        build_by_default : true)
+
+    generated_ui_source = custom_target(source_target_name,
+        depends : [ uic_exe, generated_ui_header ],
+        input : [ ui_path, generated_ui_header ],
+        output : ui_file_name + '.cpp',
+        command : [uic_exe, '@INPUT0@', '-i', '@INPUT1@', '-o', '@OUTPUT@'],
+        build_by_default : true)
+
+    moc_target_name = ui_file_name + '_moc'
+
+    generated_moc_file = custom_target(moc_target_name,
+        depends : [ moc_exe, generated_ui_header ],
+        input : generated_ui_header,
+        output : 'moc_ ' + ui_file_name + '.cpp',
+        command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
+        build_by_default : true)
+
+    generated_ui_files += generated_ui_header
+    generated_ui_files += generated_ui_source
+    generated_ui_files += generated_moc_file
+
 endforeach
 
 designer_moc_files = [
@@ -1131,152 +1081,69 @@ designer_moc_files = [
     'formsettingsimpl',
     'asciivalidator',
     'import',
-    'listboxeditor',
-    'connectioneditor',
-    'editslots',
-    'newform',
-    'listvieweditor',
-    'connectionviewer',
-    'customwidgeteditor',
-    'texteditpreview',
-    'listviewpreview',
-    'paletteeditor',
-    'radiopreview',
-    'checkboxpreview',
-    'widgetpreview',
-    'iconvieweditor',
-    'preferences',
-    'helpdialog',
-    'topicchooser',
-    'multilineeditor',
-    'formsettings',
-    'about',
-    'pixmapfunction',
-    'createtemplate',
 ]
+
+generated_moc_files = []
 
 foreach moc_file_root : designer_moc_files
 
     src_header_file = designer_source_path / (moc_file_root + '.h')
     dst_cpp_file = designer_source_path / ('moc_' + moc_file_root + '.cpp')
 
-    run_command(moc_exe, src_header_file, '-o', dst_cpp_file, check : true)
+    target_name = moc_file_root + '_moc'
+
+    generated_moc_files += custom_target(target_name,
+        depends : [ moc_exe, generated_ui_files ],
+        input : src_header_file,
+        output : 'moc_' + moc_file_root + '.cpp',
+        command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
+        build_by_default : true)
 
 endforeach
 
 designer_sources = [
-    designer_source_path / 'about.cpp',
     designer_source_path / 'asciivalidator.cpp',
-    designer_source_path / 'checkboxpreview.cpp',
     designer_source_path / 'command.cpp',
     designer_source_path / 'config.cpp',
-    designer_source_path / 'connectioneditor.cpp',
     designer_source_path / 'connectioneditorimpl.cpp',
-    designer_source_path / 'connectionviewer.cpp',
     designer_source_path / 'connectionviewerimpl.cpp',
-    designer_source_path / 'createtemplate.cpp',
-    designer_source_path / 'customwidgeteditor.cpp',
     designer_source_path / 'customwidgeteditorimpl.cpp',
     designer_source_path / 'defs.cpp',
-    designer_source_path / 'editslots.cpp',
     designer_source_path / 'editslotsimpl.cpp',
     designer_source_path / 'formlist.cpp',
-    designer_source_path / 'formsettings.cpp',
     designer_source_path / 'formsettingsimpl.cpp',
     designer_source_path / 'formwindow.cpp',
     designer_source_path / 'help.cpp',
-    designer_source_path / 'helpdialog.cpp',
     designer_source_path / 'helpdialogimpl.cpp',
     designer_source_path / 'hierarchyview.cpp',
-    designer_source_path / 'iconvieweditor.cpp',
     designer_source_path / 'iconvieweditorimpl.cpp',
     designer_source_path / 'import.cpp',
     designer_source_path / 'layout.cpp',
-    designer_source_path / 'listboxeditor.cpp',
     designer_source_path / 'listboxeditorimpl.cpp',
-    designer_source_path / 'listvieweditor.cpp',
     designer_source_path / 'listvieweditorimpl.cpp',
-    designer_source_path / 'listviewpreview.cpp',
     designer_source_path / 'main.cpp',
     designer_source_path / 'mainwindow.cpp',
     designer_source_path / 'metadatabase.cpp',
-    designer_source_path / 'moc_about.cpp',
-    designer_source_path / 'moc_asciivalidator.cpp',
-    designer_source_path / 'moc_checkboxpreview.cpp',
-    designer_source_path / 'moc_command.cpp',
-    designer_source_path / 'moc_connectioneditor.cpp',
-    designer_source_path / 'moc_connectioneditorimpl.cpp',
-    designer_source_path / 'moc_connectionviewer.cpp',
-    designer_source_path / 'moc_connectionviewerimpl.cpp',
-    designer_source_path / 'moc_createtemplate.cpp',
-    designer_source_path / 'moc_customwidgeteditor.cpp',
-    designer_source_path / 'moc_customwidgeteditorimpl.cpp',
-    designer_source_path / 'moc_editslots.cpp',
-    designer_source_path / 'moc_editslotsimpl.cpp',
-    designer_source_path / 'moc_formlist.cpp',
-    designer_source_path / 'moc_formsettings.cpp',
-    designer_source_path / 'moc_formsettingsimpl.cpp',
-    designer_source_path / 'moc_formwindow.cpp',
-    designer_source_path / 'moc_help.cpp',
-    designer_source_path / 'moc_helpdialog.cpp',
-    designer_source_path / 'moc_helpdialogimpl.cpp',
-    designer_source_path / 'moc_hierarchyview.cpp',
-    designer_source_path / 'moc_iconvieweditor.cpp',
-    designer_source_path / 'moc_iconvieweditorimpl.cpp',
-    designer_source_path / 'moc_import.cpp',
-    designer_source_path / 'moc_layout.cpp',
-    designer_source_path / 'moc_listboxeditor.cpp',
-    designer_source_path / 'moc_listboxeditorimpl.cpp',
-    designer_source_path / 'moc_listvieweditor.cpp',
-    designer_source_path / 'moc_listvieweditorimpl.cpp',
-    designer_source_path / 'moc_listviewpreview.cpp',
-    designer_source_path / 'moc_mainwindow.cpp',
-    designer_source_path / 'moc_multilineeditor.cpp',
-    designer_source_path / 'moc_multilineeditorimpl.cpp',
-    designer_source_path / 'moc_newform.cpp',
-    designer_source_path / 'moc_newformimpl.cpp',
-    designer_source_path / 'moc_orderindicator.cpp',
-    designer_source_path / 'moc_paletteeditor.cpp',
-    designer_source_path / 'moc_paletteeditorimpl.cpp',
-    designer_source_path / 'moc_pixmapchooser.cpp',
-    designer_source_path / 'moc_pixmapfunction.cpp',
-    designer_source_path / 'moc_preferences.cpp',
-    designer_source_path / 'moc_previewstack.cpp',
-    designer_source_path / 'moc_propertyeditor.cpp',
-    designer_source_path / 'moc_radiopreview.cpp',
-    designer_source_path / 'moc_sizehandle.cpp',
-    designer_source_path / 'moc_styledbutton.cpp',
-    designer_source_path / 'moc_texteditpreview.cpp',
-    designer_source_path / 'moc_topicchooser.cpp',
-    designer_source_path / 'moc_topicchooserimpl.cpp',
-    designer_source_path / 'moc_widgetfactory.cpp',
-    designer_source_path / 'moc_widgetpreview.cpp',
-    designer_source_path / 'multilineeditor.cpp',
     designer_source_path / 'multilineeditorimpl.cpp',
-    designer_source_path / 'newform.cpp',
     designer_source_path / 'newformimpl.cpp',
     designer_source_path / 'orderindicator.cpp',
-    designer_source_path / 'paletteeditor.cpp',
     designer_source_path / 'paletteeditorimpl.cpp',
     designer_source_path / 'pixmapchooser.cpp',
-    designer_source_path / 'pixmapfunction.cpp',
-    designer_source_path / 'preferences.cpp',
     designer_source_path / 'previewstack.cpp',
     designer_source_path / 'propertyeditor.cpp',
-    designer_source_path / 'radiopreview.cpp',
     designer_source_path / 'resource.cpp',
     designer_source_path / 'sizehandle.cpp',
     designer_source_path / 'splashloader.cpp',
     designer_source_path / 'styledbutton.cpp',
-    designer_source_path / 'texteditpreview.cpp',
-    designer_source_path / 'topicchooser.cpp',
     designer_source_path / 'topicchooserimpl.cpp',
     designer_source_path / 'widgetfactory.cpp',
-    designer_source_path / 'widgetpreview.cpp',
     designer_source_path / '../shared/widgetdatabase.cpp',
     designer_source_path / '../shared/domtool.cpp',
     designer_source_path / '../integration/kdevelop/kdewidgets.cpp',
 ]
+
+designer_sources += generated_moc_files
+designer_sources += generated_ui_files
 
 designer_defines = []
 
