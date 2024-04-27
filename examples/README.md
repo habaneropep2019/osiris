@@ -1,3 +1,7 @@
+# Examples
+
+## Overview
+
 - aclock
   This example displays an analog clock widget.
 
@@ -244,3 +248,8 @@
   This example lets the user rotate, shear and scale text and graphics
   arbitrarily.
 
+## Running
+
+To build and run, configure and compile the project with the `examples` feature enabled, and install with `meson install --tags bin-example`
+
+The binaries will be installed to ./bin/examples.

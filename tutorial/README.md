@@ -8,3 +8,7 @@ t2/t2, t3/t3 and so on).  Typing 'make' in each subdirectory builds
 just that tutorial program.
 
 Feel free to send comments about the tutorial to qt-bugs@trolltech.com.
+
+To build and run, configure and compile the project with the `tutorial` feature enabled, and install with `meson install --tags bin-tutorial`
+
+The binaries will be installed to ./bin/tutorials.
