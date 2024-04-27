@@ -1,15 +1,30 @@
 sources = [
     'main.cpp',
     'application.cpp',
-    'moc_application.cpp',
 ]
 
-run_command(moc_exe, 'application.h', '-o', 'moc_application.cpp', check : true)
+generated_moc_files = []
+
+generated_moc_files += custom_target('example_mdi_mocfile_0',
+    depends : [ moc_exe ],
+    input : 'application.h',
+    output : 'moc_application.cpp',
+    command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
+    build_by_default : true)
+
+sources += generated_moc_files
 
 executable('mdi',
             sources,
             include_directories : std_include_paths,
             cpp_args : std_cpp_args,
-            install : false,
+            install : true,
+            install_tag : 'bin-example',
+            install_dir : examples_install_dir + '/mdi',
             link_with : [default_osirislib],
+)
+
+install_data('document.xpm', 'fileopen.xpm', 'fileprint.xpm', 'filesave.xpm',
+             install_dir : examples_install_dir + '/mdi',
+             install_tag : 'bin-example',
 )

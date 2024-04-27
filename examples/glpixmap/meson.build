@@ -1,19 +1,34 @@
 sources = [
     'main.cpp',
     'glbox.cpp',
-    'moc_glbox.cpp',
     'globjwin.cpp',
-    'moc_globjwin.cpp',
 ]
 
-run_command(moc_exe, 'glbox.h', '-o', 'moc_glbox.cpp', check : true)
-run_command(moc_exe, 'globjwin.h', '-o', 'moc_globjwin.cpp', check : true)
+generated_moc_files = []
+
+generated_moc_files += custom_target('example_glpixmap_mocfile_0',
+    depends : [ moc_exe ],
+    input : 'glbox.h',
+    output : 'moc_glbox.cpp',
+    command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
+    build_by_default : true)
+
+generated_moc_files += custom_target('example_glpixmap_mocfile_1',
+    depends : [ moc_exe ],
+    input : 'globjwin.h',
+    output : 'moc_globjwin.cpp',
+    command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
+    build_by_default : true)
+
+sources += generated_moc_files
 
 executable('glixmap',
             sources,
             include_directories : std_include_paths,
             cpp_args : std_cpp_args,
             dependencies : [gl_dep],
-            install : false,
+            install : true,
+            install_tag : 'bin-example',
+            install_dir : examples_install_dir + '/glpixmap',
             link_with : [default_osirislib],
 )

@@ -1,21 +1,41 @@
 sources = [
     'main.cpp',
     'http.cpp',
-    'moc_http.cpp',
     'nntp.cpp',
-    'moc_nntp.cpp',
     'view.cpp',
-    'moc_view.cpp',
 ]
 
-run_command(moc_exe, 'http.h', '-o', 'moc_http.cpp', check : true)
-run_command(moc_exe, 'nntp.h', '-o', 'moc_nntp.cpp', check : true)
-run_command(moc_exe, 'view.h', '-o', 'moc_view.cpp', check : true)
+generated_moc_files = []
+
+generated_moc_files += custom_target('example_networkprotocol_mocfile_0',
+    depends : [ moc_exe ],
+    input : 'http.h',
+    output : 'moc_http.cpp',
+    command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
+    build_by_default : true)
+
+generated_moc_files += custom_target('example_networkprotocol_mocfile_1',
+    depends : [ moc_exe ],
+    input : 'nntp.h',
+    output : 'moc_nntp.cpp',
+    command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
+    build_by_default : true)
+
+generated_moc_files += custom_target('example_networkprotocol_mocfile_2',
+    depends : [ moc_exe ],
+    input : 'view.h',
+    output : 'moc_view.cpp',
+    command : [moc_exe, '@INPUT@', '-o', '@OUTPUT@'],
+    build_by_default : true)
+
+sources += generated_moc_files
 
 executable('networkprotocol',
             sources,
             include_directories : std_include_paths,
             cpp_args : std_cpp_args,
-            install : false,
+            install : true,
+            install_tag : 'bin-example',
+            install_dir : examples_install_dir + '/neteworkprotocol',
             link_with : [default_osirislib],
 )

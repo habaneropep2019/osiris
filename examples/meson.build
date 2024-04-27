@@ -1,4 +1,3 @@
-
 std_include_paths = [
     '.',
     '../../include'
@@ -6,9 +5,28 @@ std_include_paths = [
 
 std_cpp_args = []
 
-if get_option('multi-thread').enabled()
+thread_support = get_option('multi-thread').enabled()
+
+if thread_support
     std_cpp_args += '-DQT_THREAD_SUPPORT'
 endif
+
+examples_install_dir = meson.source_root() + '/bin/examples'
+
+#
+# These are placeholders for moc file targets
+# They are shared among more than one example
+#
+dirview_moc_file = ''
+aclock_moc_file = ''
+dclock_moc_file = ''
+buttongroup_moc_file = ''
+lineedits_moc_file = ''
+listboxcombo_moc_file = ''
+checklists_moc_file = ''
+progressbar_moc_file = ''
+rangecontrols_moc_file = ''
+richtext_moc_file = ''
 
 subdir('aclock')
 subdir('action')
@@ -32,7 +50,7 @@ subdir('forever')
 subdir('ftpclient')
 subdir('gear')
 subdir('glpixmap')
-if get_option('multi-thread').enabled()
+if thread_support
     subdir('guithreads')
 endif
 subdir('hello')
@@ -66,7 +84,7 @@ subdir('richtext')
 subdir('rot13')
 subdir('scribble')
 subdir('scrollview')
-if get_option('multi-thread').enabled()
+if thread_support
     subdir('semaphores')
 endif
 subdir('sharedbox')
