@@ -2,6 +2,16 @@
 
 # Osiris releases
 
+#### Osiris 2.4.2
+
+Osiris 2.4.2 is mostly a maintenance release, although the build system changed from Makefiles to Meson.
+
+- Build system changed from Makefiles to Meson
+- Minor fixes to improve support for MiDE
+- Moved additional licenses to COPYING folder
+- Removed obsolete
+
+
 #### Osiris 2.4.1
 
 Osiris 2.4.1 is a maintenance release. As a reminder, Osiris is a fork of Qt version 2.3.2. Osiris 2.4.1 is the second Osiris release since the fork. It is not source compatible, although the required changes are very very minimal. See Porting.md for details.
