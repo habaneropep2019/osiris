@@ -14,32 +14,34 @@
 
 void TetrixPiece::rotateLeft()
 {
-    if ( pieceType == 5 )    // don't rotate square piece type
+    if (pieceType == 5) // don't rotate square piece type
         return;
     int tmp;
-    for (int i = 0 ; i < 4 ; i++) {
+    for (int i = 0; i < 4; i++)
+    {
         tmp = getXCoord(i);
-        setXCoord(i,getYCoord(i));
-        setYCoord(i,-tmp);
+        setXCoord(i, getYCoord(i));
+        setYCoord(i, -tmp);
     }
 }
 
 void TetrixPiece::rotateRight()
 {
-    if ( pieceType == 5 )    // don't rotate square piece type
+    if (pieceType == 5) // don't rotate square piece type
         return;
     int tmp;
-    for (int i = 0 ; i < 4 ; i++) {
+    for (int i = 0; i < 4; i++)
+    {
         tmp = getXCoord(i);
-        setXCoord(i,-getYCoord(i));
-        setYCoord(i,tmp);
+        setXCoord(i, -getYCoord(i));
+        setYCoord(i, tmp);
     }
 }
 
 int TetrixPiece::getMinX()
 {
     int tmp = coordinates[0][0];
-    for(int i = 1 ; i < 4 ; i++)
+    for (int i = 1; i < 4; i++)
         if (tmp > coordinates[i][0])
             tmp = coordinates[i][0];
     return tmp;
@@ -48,17 +50,16 @@ int TetrixPiece::getMinX()
 int TetrixPiece::getMaxX()
 {
     int tmp = coordinates[0][0];
-    for(int i = 1 ; i < 4 ; i++)
+    for (int i = 1; i < 4; i++)
         if (tmp < coordinates[i][0])
             tmp = coordinates[i][0];
     return tmp;
-
 }
 
 int TetrixPiece::getMinY()
 {
     int tmp = coordinates[0][1];
-    for(int i = 1 ; i < 4 ; i++)
+    for (int i = 1; i < 4; i++)
         if (tmp > coordinates[i][1])
             tmp = coordinates[i][1];
     return tmp;
@@ -67,7 +68,7 @@ int TetrixPiece::getMinY()
 int TetrixPiece::getMaxY()
 {
     int tmp = coordinates[0][1];
-    for(int i = 1 ; i < 4 ; i++)
+    for (int i = 1; i < 4; i++)
         if (tmp < coordinates[i][1])
             tmp = coordinates[i][1];
     return tmp;
@@ -75,49 +76,49 @@ int TetrixPiece::getMaxY()
 
 void TetrixPiece::initialize(int type)
 {
-    static int pieceTypes[7][4][2] = {{{ 0,-1},
-                                       { 0, 0},
+    static int pieceTypes[7][4][2] = {{{0, -1},
+                                       {0, 0},
                                        {-1, 0},
                                        {-1, 1}},
 
-                                      {{ 0,-1},
-                                       { 0, 0},
-                                       { 1, 0},
-                                       { 1, 1}},
+                                      {{0, -1},
+                                       {0, 0},
+                                       {1, 0},
+                                       {1, 1}},
 
-                                      {{ 0,-1},
-                                       { 0, 0},
-                                       { 0, 1},
-                                       { 0, 2}},
+                                      {{0, -1},
+                                       {0, 0},
+                                       {0, 1},
+                                       {0, 2}},
 
                                       {{-1, 0},
-                                       { 0, 0},
-                                       { 1, 0},
-                                       { 0, 1}},
+                                       {0, 0},
+                                       {1, 0},
+                                       {0, 1}},
 
-                                      {{ 0, 0},
-                                       { 1, 0},
-                                       { 0, 1},
-                                       { 1, 1}},
+                                      {{0, 0},
+                                       {1, 0},
+                                       {0, 1},
+                                       {1, 1}},
 
-                                      {{-1,-1},
-                                       { 0,-1},
-                                       { 0, 0},
-                                       { 0, 1}},
+                                      {{-1, -1},
+                                       {0, -1},
+                                       {0, 0},
+                                       {0, 1}},
 
-                                      {{ 1,-1},
-                                       { 0,-1},
-                                       { 0, 0},
-                                       { 0, 1}}};
+                                      {{1, -1},
+                                       {0, -1},
+                                       {0, 0},
+                                       {0, 1}}};
     if (type < 1 || type > 7)
         type = 1;
     pieceType = type;
-    for(int i = 0 ; i < 4 ; i++) {
-            coordinates[i][0] = pieceTypes[type - 1][i][0];
-            coordinates[i][1] = pieceTypes[type - 1][i][1];
+    for (int i = 0; i < 4; i++)
+    {
+        coordinates[i][0] = pieceTypes[type - 1][i][0];
+        coordinates[i][1] = pieceTypes[type - 1][i][1];
     }
 }
-
 
 /*
  *	Sigh, oh beautiful nostalgia! This random algorithm has
@@ -163,19 +164,19 @@ void TetrixPiece::setRandomSeed(double seed)
 {
     QCString buffer;
     if (seed < 0)
-        seed = - seed;
+        seed = -seed;
     if (seed >= 1)
-        seed = seed - (double) ((int) seed);
-    buffer.sprintf("%1.5f",(float) seed);
-    for (int i = 0 ; i < 5 ; i++)
+        seed = seed - (double)((int)seed);
+    buffer.sprintf("%1.5f", (float)seed);
+    for (int i = 0; i < 5; i++)
         if ((buffer[i + 2] - '0') % 2 == 0)
-	    buffer[i + 2]++;
+            buffer[i + 2]++;
     randomSeed = atof(buffer);
 }
 
 int TetrixPiece::randomValue(int maxPlusOne)
 {
-    randomSeed = randomSeed*147;
-    randomSeed = randomSeed - (double) ((int) randomSeed);
-    return (int) (randomSeed*maxPlusOne);
+    randomSeed = randomSeed * 147;
+    randomSeed = randomSeed - (double)((int)randomSeed);
+    return (int)(randomSeed * maxPlusOne);
 }

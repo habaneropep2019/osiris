@@ -17,63 +17,49 @@
 
 Rot13::Rot13()
 {
-    left = new QMultiLineEdit( this, "left" );
-    right = new QMultiLineEdit( this, "right" );
-    connect( left, SIGNAL(textChanged()), this, SLOT(changeRight()) );
-    connect( right, SIGNAL(textChanged()), this, SLOT(changeLeft()) );
+    left = new QMultiLineEdit(this, "left");
+    right = new QMultiLineEdit(this, "right");
+    connect(left, SIGNAL(textChanged()), this, SLOT(changeRight()));
+    connect(right, SIGNAL(textChanged()), this, SLOT(changeLeft()));
 
-    QPushButton * quit = new QPushButton( "&Quit", this );
-    quit->setFocusPolicy( NoFocus );
-    connect( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+    QPushButton *quit = new QPushButton("&Quit", this);
+    quit->setFocusPolicy(NoFocus);
+    connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
 
-    QGridLayout * l = new QGridLayout( this, 2, 2, 5 );
-    l->addWidget( left, 0, 0 );
-    l->addWidget( right, 0, 1 );
-    l->addWidget( quit, 1, 1, AlignRight );
+    QGridLayout *l = new QGridLayout(this, 2, 2, 5);
+    l->addWidget(left, 0, 0);
+    l->addWidget(right, 0, 1);
+    l->addWidget(quit, 1, 1, AlignRight);
 
     left->setFocus();
 }
 
-
 void Rot13::changeLeft()
 {
-    left->blockSignals( TRUE );
-    left->setText( rot13( right->text() ) );
-    left->blockSignals( FALSE );
+    left->blockSignals(TRUE);
+    left->setText(rot13(right->text()));
+    left->blockSignals(FALSE);
 }
-
 
 void Rot13::changeRight()
 {
-    right->blockSignals( TRUE );
-    right->setText( rot13( left->text() ) );
-    right->blockSignals( FALSE );
+    right->blockSignals(TRUE);
+    right->setText(rot13(left->text()));
+    right->blockSignals(FALSE);
 }
 
-
-QString Rot13::rot13( const QString & input ) const
+QString Rot13::rot13(const QString &input) const
 {
     QString r = input;
     int i = r.length();
-    while( i-- ) {
-	if ( r[i] >= QChar('A') && r[i] <= QChar('M') ||
-	     r[i] >= QChar('a') && r[i] <= QChar('m') )
-	    r[i] = (char)((int)QChar(r[i]) + 13);
-	else if  ( r[i] >= QChar('N') && r[i] <= QChar('Z') ||
-		   r[i] >= QChar('n') && r[i] <= QChar('z') )
-	    r[i] = (char)((int)QChar(r[i]) - 13);
+    while (i--)
+    {
+        if (r[i] >= QChar('A') && r[i] <= QChar('M') ||
+            r[i] >= QChar('a') && r[i] <= QChar('m'))
+            r[i] = (char)((int)QChar(r[i]) + 13);
+        else if (r[i] >= QChar('N') && r[i] <= QChar('Z') ||
+                 r[i] >= QChar('n') && r[i] <= QChar('z'))
+            r[i] = (char)((int)QChar(r[i]) - 13);
     }
     return r;
-}
-
-
-int main( int argc, char ** argv )
-{
-    QApplication a( argc, argv );
-    Rot13 r;
-    r.resize( 400, 400 );
-    a.setMainWidget( &r );
-    r.setCaption("Qt Example - ROT13");
-    r.show();
-    return a.exec();
 }

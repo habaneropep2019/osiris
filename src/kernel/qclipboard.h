@@ -58,19 +58,19 @@ public:
 
     enum Mode { Clipboard, Selection };
 
-    void	clear(Mode mode);
+    void	clear(Mode mode = QClipboard::Clipboard);
 
 #if defined(_WS_X11_)
     bool ownsSelection(Mode mode) const;
 #endif
     
 #ifndef QT_NO_MIMECLIPBOARD
-    QMimeSource* data(Mode mode = Mode::Clipboard) const;
-    void  setData( QMimeSource*, Mode mode = Mode::Clipboard );
+    QMimeSource* data(Mode mode = Clipboard) const;
+    void  setData( QMimeSource*, Mode mode = Clipboard );
 #endif
-    QString     text(Mode mode = Mode::Clipboard) const;
-    QString     text(QCString& subtype, Mode mode = Mode::Clipboard) const;
-    void	setText( const QString &, Mode mode = Mode::Clipboard);
+    QString     text(Mode mode = Clipboard) const;
+    QString     text(QCString& subtype, Mode mode = Clipboard) const;
+    void	setText( const QString &, Mode mode = Clipboard);
 #ifndef QT_NO_MIMECLIPBOARD
     QImage	image() const;
     QPixmap	pixmap() const;

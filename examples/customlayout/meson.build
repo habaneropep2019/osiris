@@ -1,0 +1,16 @@
+sources = [ 
+    'main.cpp',
+    'border.cpp',
+    'card.cpp',
+    'flow.cpp',
+]
+
+executable('customlayout',
+            sources,
+            include_directories : std_include_paths,
+            cpp_args : std_cpp_args,
+            install : true,
+            install_tag : 'bin-example',
+            install_dir : examples_install_dir + '/customlayout',
+            link_with : [default_osirislib],
+)

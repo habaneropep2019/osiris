@@ -175,10 +175,10 @@ public slots:
     void       deselect();
     void       selectAll();
 #ifndef QT_NO_CLIPBOARD
-    void       paste(QClipboard::Mode mode = QClipboard::Mode::Clipboard);
-    void       pasteSubType(const QCString& subtype, QClipboard::Mode mode = QClipboard::Mode::Clipboard);
+    void       paste(QClipboard::Mode mode = QClipboard::Clipboard);
+    void       pasteSubType(const QCString& subtype, QClipboard::Mode mode = QClipboard::Clipboard);
     void       copyText() const;
-    void       copy(QClipboard::Mode mode = QClipboard::Mode::Clipboard) const;
+    void       copy(QClipboard::Mode mode = QClipboard::Clipboard) const;
     void       cut();
 #endif
     void       insert( const QString& );

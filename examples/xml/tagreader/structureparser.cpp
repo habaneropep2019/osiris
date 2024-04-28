@@ -4,7 +4,7 @@ $Id: qt/examples/xml/tagreader/structureparser.cpp   2.3.2   edited 2001-01-26 $
 
 #include "structureparser.h"
 
-#include <iostream.h>
+#include <iostream>
 #include <qstring.h>
  
 bool StructureParser::startDocument()
@@ -17,7 +17,7 @@ bool StructureParser::startElement( const QString&, const QString&,
                                     const QString& qName, 
                                     const QXmlAttributes& )
 {
-    cout << indent << qName << endl;
+    std::cout << indent << qName << std::endl;
     indent += "    ";
     return TRUE;
 }

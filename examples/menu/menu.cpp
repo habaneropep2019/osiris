@@ -301,15 +301,3 @@ void MenuExample::resizeEvent( QResizeEvent * )
 {
     label->setGeometry( 20, rect().center().y()-20, width()-40, 40 );
 }
-
-
-int main( int argc, char ** argv )
-{
-    QApplication a( argc, argv );
-    MenuExample m;
-
-    a.setMainWidget( &m );
-    m.setCaption("Qt Examples - Menus");
-    m.show();
-    return a.exec();
-}

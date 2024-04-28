@@ -8,6 +8,10 @@
 **
 *****************************************************************************/
 
+#ifndef QT_THREAD_SUPPORT
+#error Qt Thread Support is required for this example
+#endif
+
 #include <qapplication.h>
 #include <qhbox.h>
 #include <qthread.h>

@@ -49,6 +49,10 @@
 #undef B0 // Terminal hang-up.  We assume that you do not want that.
 #endif
 
+#if defined(GrayScale)
+#undef GrayScale
+#endif
+
 class Q_EXPORT QPrinter : public QPaintDevice
 {
 public:
@@ -66,27 +70,39 @@ public:
 
     enum ColorMode   { GrayScale, Color };
 
-    QString printerName() const;
-    virtual void setPrinterName( const QString &);
-    bool outputToFile()	const;
-    virtual void setOutputToFile( bool );
-    QString outputFileName()const;
-    virtual void setOutputFileName( const QString &);
+    QString printerName() const
+    { return printer_name; }
 
-    QString printProgram() const;
+    virtual void setPrinterName( const QString &);
+    bool outputToFile()	const
+    { return output_file; }
+
+    virtual void setOutputToFile( bool );
+    QString outputFileName() const
+    { return output_filename; }
+
+    virtual void setOutputFileName( const QString &fileName);
+
+    QString printProgram() const
+    { return print_prog; }
+
     virtual void setPrintProgram( const QString &);
 
     QString printerSelectionOption() const;
     virtual void setPrinterSelectionOption( const QString & );
 
-    QString docName() const;
+    QString docName() const
+    { return doc_name; }
     virtual void setDocName( const QString &);
-    QString creator() const;
+    QString creator() const
+    { return creator_name; }
     virtual void setCreator( const QString &);
 
-    Orientation orientation()	const;
+    Orientation orientation()	const
+    { return orient; }
     virtual void setOrientation( Orientation );
-    PageSize	pageSize()	const;
+    PageSize	pageSize()	const
+    { return (PageSize) ( ((int)page_size) & 255 ); }
     virtual void setPageSize( PageSize );
 
     virtual void setPageOrder( PageOrder );
@@ -99,13 +115,21 @@ public:
     bool		fullPage() const;
     QSize	margins()	const;
 
-    int		fromPage()	const;
-    int		toPage()	const;
+    int		fromPage()	const
+    { return from_pg; }
+
+    int		toPage()	const
+    { return to_pg; }
     virtual void setFromTo( int fromPage, int toPage );
-    int		minPage()	const;
-    int		maxPage()	const;
+    int		minPage()	const
+    { return min_pg; }
+
+    int		maxPage()	const
+    { return max_pg; }
+
     virtual void setMinMax( int minPage, int maxPage );
-    int		numCopies()	const;
+    int		numCopies()	const
+    { return ncopies; }
     virtual void setNumCopies( int );
 
     bool	newPage();
@@ -155,46 +179,6 @@ private:	// Disabled copy constructor and operator=
     QPrinter &operator=( const QPrinter & );
 #endif
 };
-
-
-inline QString QPrinter::printerName() const
-{ return printer_name; }
-
-inline bool QPrinter::outputToFile() const
-{ return output_file; }
-
-inline QString QPrinter::outputFileName() const
-{ return output_filename; }
-
-inline QString QPrinter::printProgram() const
-{ return print_prog; }
-
-inline QString QPrinter::docName() const
-{ return doc_name; }
-
-inline QString QPrinter::creator() const
-{ return creator_name; }
-
-inline QPrinter::PageSize QPrinter::pageSize() const
-{ return (PageSize) ( ((int)page_size) & 255 ); }
-
-inline QPrinter::Orientation QPrinter::orientation() const
-{ return orient; }
-
-inline int QPrinter::fromPage() const
-{ return from_pg; }
-
-inline int QPrinter::toPage() const
-{ return to_pg; }
-
-inline int QPrinter::minPage() const
-{ return min_pg; }
-
-inline int QPrinter::maxPage() const
-{ return max_pg; }
-
-inline int QPrinter::numCopies() const
-{ return ncopies; }
 
 #endif // QT_NO_PRINTER
 

@@ -12,6 +12,7 @@
 #define MAINWIN_H
 
 #include <qmainwindow.h>
+#include "dirview.h"
 
 class QtFileIconView;
 class DirectoryView;
