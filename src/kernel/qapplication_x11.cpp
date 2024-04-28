@@ -2970,15 +2970,6 @@ int QApplication::x11ProcessEvent( XEvent* event )
 		} while ( (popup = qApp->activePopupWidget()) );
 		return 1;
 	    }
-	} else {
-	    void qt_np_process_foreign_event(XEvent*); // in qnpsupport.cpp
- 	    if ( !activeModalWidget() ||
- 		 ( event->type != ButtonRelease &&
-		   event->type != ButtonPress &&
-		   event->type != MotionNotify &&
-		   event->type != XKeyPress &&
-		   event->type != XKeyRelease ) )
-		qt_np_process_foreign_event( event );
 	}
 	return -1;
     }
@@ -3839,8 +3830,6 @@ int qStartTimer( int interval, QObject *obj )
     t->timeout = currentTime + t->interval;
     t->obj = obj;
     insertTimer( t );				// put timer in list
-    void qt_np_enable_timers();			// in qnpsupport.cpp
-    qt_np_enable_timers();
     return id;
 }
 

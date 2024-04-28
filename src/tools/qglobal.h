@@ -39,8 +39,8 @@
 #define QGLOBAL_H
 
 
-#define OSIRIS_VERSION	241
-#define OSIRIS_VERSION_STR	"2.4.1"
+#define OSIRIS_VERSION	242
+#define OSIRIS_VERSION_STR	"2.4.2"
 
 
 //
@@ -134,7 +134,7 @@
 #elif defined(_SEQUENT_)
 #define _OS_DYNIX_
 #else
-#error "Qt has not been ported to this OS - talk to qt-bugs@trolltech.com"
+#error "Osiris has not been ported to this OS - submit an issue at https://centre.libranext.com/libranext/osiris"
 #endif
 
 #if defined(_OS_MAC_) || defined(_OS_MSDOS_) || defined(_OS_OS2_) || defined(_OS_WIN32_)

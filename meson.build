@@ -2,7 +2,7 @@ project('osiris', 'cpp',
         default_options : ['prefix=/opt', 'cpp_std=c++11'],
         license : 'GPL-2.0-only',
         license_files: ['LICENSE.GPL'],
-        version : '2.4.1',
+        version : '2.4.2',
 )
 
 project_defines = [
@@ -329,7 +329,6 @@ kernel_sources = [
     kernel_source_path / 'qregion_x11.cpp',
     kernel_source_path / 'qsound_x11.cpp',
     kernel_source_path / 'qwidget_x11.cpp',
-    kernel_source_path / 'qnpsupport.cpp',
     kernel_source_path / 'qwidgetcreate_x11.cpp',
     kernel_source_path / 'qabstractlayout.cpp',
     kernel_source_path / 'qaccel.cpp',

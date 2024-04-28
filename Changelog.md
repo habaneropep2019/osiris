@@ -9,7 +9,7 @@ Osiris 2.4.2 is mostly a maintenance release, although the build system changed 
 - Build system changed from Makefiles to Meson
 - Minor fixes to improve support for MiDE
 - Moved additional licenses to COPYING folder
-- Removed obsolete
+- Removed obsolete Netscape Plugin Support
 
 
 #### Osiris 2.4.1
