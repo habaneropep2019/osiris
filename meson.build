@@ -1,5 +1,5 @@
 project('osiris', 'cpp',
-        default_options : ['prefix=/opt'],
+        default_options : ['prefix=/opt', 'cpp_std=c++11'],
         license : 'GPL-2.0-only',
         license_files: ['LICENSE.GPL'],
         version : '2.4.1',
