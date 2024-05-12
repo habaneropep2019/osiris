@@ -1200,3 +1200,8 @@ endif
 if get_option('tutorial').enabled()
     subdir('tutorial')
 endif
+
+install_subdir('tools/designer/pics/large', install_dir : get_option('prefix') / 'osiris/share/pixmaps', strip_directory : false)
+install_subdir('tools/designer/pics/mini', install_dir : get_option('prefix') / 'osiris/share/pixmaps', strip_directory : false)
+install_subdir('tools/designer/pics/small', install_dir : get_option('prefix') / 'osiris/share/pixmaps', strip_directory : false)
+

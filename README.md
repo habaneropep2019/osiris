@@ -102,11 +102,13 @@ As of April 2024, work on Pysiris has begun, although no release date is availab
 
 Getting the clipboard implemented correctly under X11 is ridiculously complicated. Osiris has some partial fixes to improve X11 clipboard functionality over Qt2.3.2, but it's still not perfect. For now, clipboard functionality is still on the to-do list, although it's not top priority unless we get a lot of users needing it for their applications. The reason being that the clipboard will be re-implemented when Wayland support happens, so it's not currently worth spending a lot of time on.
 
-## Buildling and debugging
+## Building and debugging
 
 #### Building a release version on Linux platforms
 
 **New for 2.4.2:** The build system has changed to Meson, so it's even easier to compile and install Osiris.
+
+**Notes for Ubuntu systems:** You will need to install the following packages to build Osiris: `libx11-dev gawk bison flex build-essential libjpeg62-dev libxext-dev libxft-dev libglu1-mesa-dev libxmu-dev`
 
 The default behavior is to install Osiris to `/opt`. Examples and tutorials are built, but are installed to the source working directory. It is not currently recommended to install Osiris to `/usr`.
 
