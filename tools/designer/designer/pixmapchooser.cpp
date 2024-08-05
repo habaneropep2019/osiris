@@ -365,24 +365,39 @@ const QPixmap * ImageIconProvider::pixmap( const QFileInfo &fi )
     }
 }
 
+#ifndef ASSET_PATH_PIXMAPS
+#error ASSET_PATH_PIXMAPS should have been defined in the build system
+#endif
+
 PixmapChooser::PixmapChooser()
 {
-    // #### hardcoded at the moment
-    miniPixDir = "../pics/mini/";
-    noSizePixDir = "../pics/";
-    smallPixDir = "../pics/small/";
-    largePixDir = "../pics/large/";
+    miniPixDir = ASSET_PATH_PIXMAPS "/mini/";
+    noSizePixDir = ASSET_PATH_PIXMAPS "/";
+    smallPixDir = ASSET_PATH_PIXMAPS "/small/";
+    largePixDir = ASSET_PATH_PIXMAPS "/large/";
 }
 
 QString PixmapChooser::pixmapPath( Size size ) const
 {
-    if ( size == Small )
-	return smallPixDir;
-    if ( size == Mini )
-	return miniPixDir;
-    if ( size == NoSize )
-	return noSizePixDir;
-    return largePixDir;
+	switch(size)
+	{
+		case Size::Small:
+			return smallPixDir;
+		case Size::Mini:
+			return miniPixDir;
+		case Size::NoSize:
+			return noSizePixDir;
+		case Size::Large:
+			return largePixDir;
+		case Size::Disabled:
+			// TODO: This should be pre-calculated
+			return smallPixDir + "disabled/";
+		default:
+			//
+			// This should never happen
+			//
+		return largePixDir;
+	}
 }
 
 QPixmap PixmapChooser::loadPixmap( const QString &name, Size size )
@@ -418,16 +433,24 @@ QPixmap PixmapChooser::loadPixmap( const QString &name, Size size )
 
     Embed *e = &embed_vec[ 0 ];
     while ( e->name ) {
-	if ( QString( e->name ) == lookup ) {
-	    QImage img;
-	    img.loadFromData( (const uchar*)e->data, e->size );
-	    QPixmap pix;
-	    pix.convertFromImage( img );
-	    return pix;
-	}
-	e++;
+		if ( QString( e->name ) == lookup ) {
+			QImage img;
+			img.loadFromData( (const uchar*)e->data, e->size );
+			QPixmap pix;
+			if (pix.convertFromImage( img ) != TRUE)
+			{
+				//
+				// TODO: Handle error
+				//
+			}
+			return pix;
+		}
+		e++;
     }
 
+	const QString pixmaps_path = pixmapChooser->pixmapPath(size);
+	const QString pixmap_path = pixmaps_path + name;
+
     // fallback
-    return QPixmap( pixmapChooser->pixmapPath( size ) + name );
+    return QPixmap(pixmap_path);
 }

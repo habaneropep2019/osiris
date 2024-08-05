@@ -1183,7 +1183,11 @@ designer_sources = [
 designer_sources += generated_moc_files
 designer_sources += generated_ui_files
 
-designer_defines = []
+pixmaps_install_dir = assets_install_dir / 'pixmaps'
+
+designer_defines = [
+    '-DASSET_PATH_PIXMAPS="' + pixmaps_install_dir + '"'
+]
 
 executable('designer',
             designer_sources,
@@ -1202,8 +1206,6 @@ endif
 if get_option('tutorial').enabled()
     subdir('tutorial')
 endif
-
-pixmaps_install_dir = assets_install_dir / 'pixmaps'
 
 install_subdir('tools/designer/pics/large', install_dir : pixmaps_install_dir, strip_directory : false)
 install_subdir('tools/designer/pics/mini', install_dir : pixmaps_install_dir, strip_directory : false)
