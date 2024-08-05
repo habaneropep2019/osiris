@@ -1,5 +1,5 @@
 project('osiris', 'cpp',
-        default_options : ['prefix=/opt', 'cpp_std=c++11'],
+        default_options : ['prefix=/opt/osiris', 'cpp_std=c++11'],
         license : 'GPL-2.0-only',
         license_files: ['LICENSE.GPL'],
         version : '2.4.2',
@@ -37,8 +37,9 @@ endif
 
 install_dir = get_option('prefix') / 'bin'
 lib_install_dir = get_option('prefix') / 'lib'
-include_install_dir = get_option('prefix') / 'include'
-assets_install_dir = get_option('prefix') / 'share'
+include_install_dir = get_option('prefix') / 'include/osiris'
+
+designer_assets_install_dir = get_option('prefix') / 'share/designer'
 
 dialog_header_path = 'src/dialogs'
 kernel_header_path = 'src/kernel'
@@ -1183,7 +1184,7 @@ designer_sources = [
 designer_sources += generated_moc_files
 designer_sources += generated_ui_files
 
-pixmaps_install_dir = assets_install_dir / 'pixmaps'
+pixmaps_install_dir = designer_assets_install_dir / 'pixmaps'
 
 designer_defines = [
     '-DASSET_PATH_PIXMAPS="' + pixmaps_install_dir + '"',
