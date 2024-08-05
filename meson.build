@@ -1186,7 +1186,8 @@ designer_sources += generated_ui_files
 pixmaps_install_dir = assets_install_dir / 'pixmaps'
 
 designer_defines = [
-    '-DASSET_PATH_PIXMAPS="' + pixmaps_install_dir + '"'
+    '-DASSET_PATH_PIXMAPS="' + pixmaps_install_dir + '"',
+    '-DDESIGNER=1'
 ]
 
 executable('designer',
