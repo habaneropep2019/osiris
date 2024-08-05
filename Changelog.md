@@ -11,6 +11,7 @@ Osiris 2.4.2 is mostly a maintenance release, although the build system changed 
 - Moved additional licenses to COPYING folder
 - Removed obsolete Netscape Plugin Support
 - Compiles as C++11 by default now
+- Designer pixmap assets are now configured to reside in `<PREFIX>/share/designer/pixmaps/`, fixing bug #10
 
 
 #### Osiris 2.4.1
