@@ -53,14 +53,12 @@ public:
     TextBrowser( QWidget *parent = 0, const char *name = 0 ) : QTextBrowser( parent, name ) {}
 
     void setSource( const QString &name ) {
-	QUrl u( context(), name );
-	if ( !u.isLocalFile() ) {
-	    QMessageBox::information( this, tr( "Help" ), tr( "Can't load and display non-local file\n"
-							      "%1" ).arg( name ) );
-	    return;
-	}
-
-	QTextBrowser::setSource( name );
+        QUrl u( context(), name );
+        if ( !u.isLocalFile() ) {
+            QMessageBox::information( this, tr( "Help" ), tr( "Can't load and display non-local file\n" "%1" ).arg( name ) );
+            return;
+        }
+        QTextBrowser::setSource( name );
     }
 
 };
@@ -86,8 +84,7 @@ Help::Help( const QString& home, MainWindow* parent, const char *name )
     browser = new TextBrowser( this );
     browser->mimeSourceFactory()->setFilePath( home );
     browser->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    browser->mimeSourceFactory()->addFilePath( QString( getenv( "OSIRISDIR" ) ) + "/tools/designer/manual" );
-    browser->mimeSourceFactory()->addFilePath( QString( getenv( "OSIRISDIR" ) ) + "/doc/html/designer" );
+    browser->mimeSourceFactory()->addFilePath( DESIGNER_INSTALL_PREFIX "/doc/html" );
     browser->mimeSourceFactory()->addFilePath( parent->documentationPath() );
     connect( browser, SIGNAL( textChanged() ),
 	     this, SLOT( textChanged() ) );

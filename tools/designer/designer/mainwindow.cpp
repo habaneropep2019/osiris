@@ -125,7 +125,7 @@ MainWindow::MainWindow( bool asClient )
     : QMainWindow( 0, "mainwindow", WType_TopLevel | WDestructiveClose ),
 #endif
       grd( 10, 10 ), sGrid( TRUE ), snGrid( TRUE ), restoreConfig( TRUE ), splashScreen( TRUE ),
-      docPath( "$OSIRISDIR/doc/html" ), client( asClient )
+      docPath( DESIGNER_INSTALL_PREFIX "/doc/html" ), client( asClient )
 {
     self = this;
     setIcon( PixmapChooser::loadPixmap( "logo" ) );
@@ -3203,7 +3203,7 @@ void MainWindow::createNewTemplate()
 	QMessageBox::information( this, tr( "Create Template" ), tr( "Couldn't create the template" ) );
 	return;
     }
-    fn.prepend( QString( getenv( "OSIRISDIR" ) ) + "/tools/designer/templates/" );
+    fn.prepend( DESIGNER_INSTALL_PREFIX "/tools/templates/" );
     fn.append( ".ui" );
     QFile f( fn );
     if ( !f.open( IO_WriteOnly ) ) {
@@ -3295,9 +3295,7 @@ void MainWindow::checkTempFiles()
 
 void MainWindow::openHelpForDialog( const QString &dia )
 {
-    QString manualdir = QString( getenv( "OSIRISDIR" ) ) + "/tools/designer/manual/book1.html";
-    if ( !QFile::exists( manualdir ) )
-	manualdir = QString( getenv( "OSIRISDIR" ) ) + "/doc/html/designer/book1.html";
+    QString manualdir = DESIGNER_INSTALL_PREFIX "/doc/html/book1.html";
     QFile file( manualdir );
     if ( !file.open( IO_ReadOnly ) )
 	return;
