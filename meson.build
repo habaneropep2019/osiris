@@ -553,6 +553,9 @@ osiris_sources += xml_sources
 osiris_sources += opengl_sources
 osiris_sources += moc_generated_files
 
+osiris_lib_version = meson.project_version()
+osiris_lib_postfix = osiris_lib_version
+
 default_osirislib = []
 
 if get_option('single-thread').enabled()
@@ -563,6 +566,8 @@ if get_option('single-thread').enabled()
                                dependencies : osiris_deps,
                                install : true,
                                install_dir : lib_install_dir,
+                               version : osiris_lib_version,
+                               soversion : osiris_lib_postfix,
     )
     default_osirislib = osirislib
 endif
@@ -577,6 +582,8 @@ if get_option('multi-thread').enabled()
                                   dependencies : osiris_deps,
                                   install : true,
                                   install_dir : lib_install_dir,
+                                  version : osiris_lib_version,
+                                  soversion : osiris_lib_postfix,
     )
     default_osirislib = osirislib_mt
 endif
@@ -981,6 +988,8 @@ qutil_lib = shared_library('qutil',
                             link_with : default_osirislib,
                             install : true,
                             install_dir : lib_install_dir,
+                            version : osiris_lib_version,
+                            soversion : osiris_lib_postfix,
 )
 
 #
