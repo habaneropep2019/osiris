@@ -365,16 +365,16 @@ const QPixmap * ImageIconProvider::pixmap( const QFileInfo &fi )
     }
 }
 
-#ifndef ASSET_PATH_PIXMAPS
-#error ASSET_PATH_PIXMAPS should have been defined in the build system
+#ifndef DESIGNER_INSTALL_PREFIX
+#error DESIGNER_INSTALL_PREFIX should have been defined in the build system
 #endif
 
 PixmapChooser::PixmapChooser()
 {
-    miniPixDir = ASSET_PATH_PIXMAPS "/mini/";
-    noSizePixDir = ASSET_PATH_PIXMAPS "/";
-    smallPixDir = ASSET_PATH_PIXMAPS "/small/";
-    largePixDir = ASSET_PATH_PIXMAPS "/large/";
+    miniPixDir = DESIGNER_INSTALL_PREFIX "/pixmaps/mini/";
+    noSizePixDir = DESIGNER_INSTALL_PREFIX "/pixmaps/";
+    smallPixDir = DESIGNER_INSTALL_PREFIX "/pixmaps/small/";
+    largePixDir = DESIGNER_INSTALL_PREFIX "/pixmaps/large/";
 }
 
 QString PixmapChooser::pixmapPath( Size size ) const
