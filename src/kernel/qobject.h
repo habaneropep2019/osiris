@@ -39,216 +39,245 @@
 #define QOBJECT_H
 
 #ifndef QT_H
-#include "qobjectdefs.h"
-#include "qwindowdefs.h"
-#include "qstring.h"
-#include "qevent.h"
-#include "qnamespace.h"
-#include "qstringlist.h" // obsolete
+# include "qobjectdefs.h"
+# include "qwindowdefs.h"
+# include "qstring.h"
+# include "qevent.h"
+# include "qnamespace.h"
+# include "qstringlist.h" // obsolete
 #endif // QT_H
 
 #define QT_TR_NOOP(x) (x)
-#define QT_TRANSLATE_NOOP(scope,x) (x)
+#define QT_TRANSLATE_NOOP(scope, x) (x)
 
 class QMetaObject;
 class QVariant;
 
 #ifndef QT_MOC_CPP
 
-class Q_EXPORT QObject: public Qt
+class Q_EXPORT QObject : public Qt
 {
-    Q_PROPERTY( QCString name READ name WRITE setName )
+	Q_PROPERTY(QCString name READ name WRITE setName)
 
-public:
-    QObject( QObject *parent=0, const char *name=0 );
-    virtual ~QObject();
+      public:
+	QObject(QObject *parent = 0, const char *name = 0);
+	virtual ~QObject();
 
-    static QString tr( const char * );
-    static QString tr( const char *, const char * );
+	static QString tr(const char *);
+	static QString tr(const char *, const char *);
 
-    virtual bool event( QEvent * );
-    virtual bool eventFilter( QObject *, QEvent * );
+	virtual bool event(QEvent *);
+	virtual bool eventFilter(QObject *, QEvent *);
 
-    virtual QMetaObject *metaObject() const { return staticMetaObject(); }
-    virtual const char	*className()  const;
+	virtual QMetaObject *metaObject() const
+	{
+		return staticMetaObject();
+	}
+	virtual const char *className() const;
 
-    bool	 isA( const char * )	 const;
-    bool	 inherits( const char * ) const;
+	bool isA(const char *) const;
+	bool inherits(const char *) const;
 
-    const char  *name() const;
-    const char  *name( const char * defaultName ) const;
+	const char *name() const;
+	const char *name(const char *defaultName) const;
 
-    virtual void setName( const char *name );
-    bool	 isWidgetType()	  const { return isWidget; }
-    bool	 highPriority()	  const { return FALSE; }
+	virtual void setName(const char *name);
+	bool isWidgetType() const
+	{
+		return isWidget;
+	}
+	bool highPriority() const
+	{
+		return FALSE;
+	}
 
-    bool	 signalsBlocked()  const { return blockSig; }
-    void	 blockSignals( bool b );
+	bool signalsBlocked() const
+	{
+		return blockSig;
+	}
+	void blockSignals(bool b);
 
-    int		 startTimer( int interval );
-    void	 killTimer( int id );
-    void	 killTimers();
+	int startTimer(int interval);
+	void killTimer(int id);
+	void killTimers();
 
-    QObject           *child( const char *name, const char *type = 0 );
-    const QObjectList *children() const { return childObjects; }
+	QObject *child(const char *name, const char *type = 0);
+	const QObjectList *children() const
+	{
+		return childObjects;
+	}
 
-    static const QObjectList *objectTrees();
+	static const QObjectList *objectTrees();
 
-    //### make queryList const in 3.0
-    QObjectList	      *queryList( const char *inheritsClass = 0,
-				  const char *objName = 0,
-				  bool regexpMatch = TRUE,
-				  bool recursiveSearch = TRUE );
+	// ### make queryList const in 3.0
+	QObjectList *queryList(const char *inheritsClass = 0,
+			       const char *objName = 0, bool regexpMatch = TRUE,
+			       bool recursiveSearch = TRUE);
 
-    virtual void insertChild( QObject * );
-    virtual void removeChild( QObject * );
+	virtual void insertChild(QObject *);
+	virtual void removeChild(QObject *);
 
-    void	 installEventFilter( const QObject * );
-    void	 removeEventFilter( const QObject * );
+	void installEventFilter(const QObject *);
+	void removeEventFilter(const QObject *);
 
-    static bool  connect( const QObject *sender, const char *signal,
-			  const QObject *receiver, const char *member );
-    bool	 connect( const QObject *sender, const char *signal,
-			  const char *member ) const;
-    static bool  disconnect( const QObject *sender, const char *signal,
-			     const QObject *receiver, const char *member );
-    bool	 disconnect( const char *signal=0,
-			     const QObject *receiver=0, const char *member=0 );
-    bool	 disconnect( const QObject *receiver, const char *member=0 );
+	static bool connect(const QObject *sender, const char *signal,
+			    const QObject *receiver, const char *member);
+	bool connect(const QObject *sender, const char *signal,
+		     const char *member) const;
+	static bool disconnect(const QObject *sender, const char *signal,
+			       const QObject *receiver, const char *member);
+	bool disconnect(const char *signal = 0, const QObject *receiver = 0,
+			const char *member = 0);
+	bool disconnect(const QObject *receiver, const char *member = 0);
 
-    void	 dumpObjectTree();
-    void	 dumpObjectInfo();
+	void dumpObjectTree();
+	void dumpObjectInfo();
 
-#ifndef QT_NO_PROPERTIES
-    bool setProperty( const char *name, const QVariant& value ); // virtual in Qt 3.0
-    QVariant property( const char *name ) const;    // virtual in Qt 3.0
-#endif // QT_NO_PROPERTIES
+# ifndef QT_NO_PROPERTIES
+	bool setProperty(const char *name, const QVariant &value); // virtual in
+								   // Qt 3.0
+	QVariant property(const char *name) const; // virtual in Qt 3.0
+# endif // QT_NO_PROPERTIES
 
-signals:
-    void	 destroyed();
+      signals:
+	void destroyed();
 
-public:
-    QObject	*parent() const { return parentObj; }
+      public:
+	QObject *parent() const
+	{
+		return parentObj;
+	}
 
-private slots:
-    void	 cleanupEventFilter();
+      private slots:
+	void cleanupEventFilter();
 
-protected:
-    bool	 activate_filters( QEvent * );
-    QConnectionList *receivers( const char *signal ) const;
-    void	 activate_signal( const char *signal );
-    void	 activate_signal( const char *signal, short );
-    void	 activate_signal( const char *signal, int );
-    void	 activate_signal( const char *signal, long );
-    void	 activate_signal( const char *signal, const char * );
-    void	 activate_signal_bool( const char *signal, bool );
-    void	 activate_signal_string( const char *signal, QString );
-    void	 activate_signal_strref( const char *signal, const QString & );
+      protected:
+	bool activate_filters(QEvent *);
+	QConnectionList *receivers(const char *signal) const;
+	void activate_signal(const char *signal);
+	void activate_signal(const char *signal, short);
+	void activate_signal(const char *signal, int);
+	void activate_signal(const char *signal, long);
+	void activate_signal(const char *signal, const char *);
+	void activate_signal_bool(const char *signal, bool);
+	void activate_signal_string(const char *signal, QString);
+	void activate_signal_strref(const char *signal, const QString &);
 
-    const QObject *sender();
+	const QObject *sender();
 
 
-    virtual void initMetaObject();
-    static QMetaObject* staticMetaObject();
+	virtual void initMetaObject();
+	static QMetaObject *staticMetaObject();
 
-    virtual void timerEvent( QTimerEvent * );
-    virtual void childEvent( QChildEvent * );
+	virtual void timerEvent(QTimerEvent *);
+	virtual void childEvent(QChildEvent *);
 
-    virtual void connectNotify( const char *signal );
-    virtual void disconnectNotify( const char *signal );
-    virtual bool checkConnectArgs( const char *signal, const QObject *receiver,
-				   const char *member );
-    static QCString normalizeSignalSlot( const char *signalSlot );
+	virtual void connectNotify(const char *signal);
+	virtual void disconnectNotify(const char *signal);
+	virtual bool checkConnectArgs(const char *signal,
+				      const QObject *receiver,
+				      const char *member);
+	static QCString normalizeSignalSlot(const char *signalSlot);
 
-    static  void badSuperclassWarning( const char *className,
-				       const char *superclassName );
+	static void badSuperclassWarning(const char *className,
+					 const char *superclassName);
 
-private:
-    uint	isSignal   : 1;
-    uint	isWidget   : 1;
-    uint	pendTimer  : 1;
-    uint	pendEvent  : 1;
-    uint	blockSig   : 1;
-    uint	wasDeleted : 1;
-    uint	isTree : 1;
+      private:
+	uint isSignal:1;
+	uint isWidget:1;
+	uint pendTimer:1;
+	uint pendEvent:1;
+	uint blockSig:1;
+	uint wasDeleted:1;
+	uint isTree:1;
 
-    QMetaObject *queryMetaObject() const;
-    static QMetaObject *metaObj;
-    const char	*objname;
-    QObject	*parentObj;
-    QObjectList *childObjects;
-    QSignalDict *connections;
-    QObjectList *senderObjects;
-    QObjectList *eventFilters;
-    // ### 3.0 todo: add d pointer
+	QMetaObject *queryMetaObject() const;
+	static QMetaObject *metaObj;
+	const char *objname;
+	QObject *parentObj;
+	QObjectList *childObjects;
+	QSignalDict *connections;
+	QObjectList *senderObjects;
+	QObjectList *eventFilters;
+	// ### 3.0 todo: add d pointer
 
-    QObject	*sigSender;
+	QObject *sigSender;
 
-    friend class QApplication;
-    friend class QBaseApplication;
-    friend class QWidget;
-    friend class QSignal;
-    friend class QSenderObject;
+	friend class QApplication;
+	friend class QBaseApplication;
+	friend class QWidget;
+	friend class QSignal;
+	friend class QSenderObject;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QObject( const QObject & );
-    QObject &operator=( const QObject & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QObject(const QObject &);
+	QObject &operator=(const QObject &);
+# endif
 
-public:
-    // obsolete
-#ifndef QT_NO_STRINGLIST
-    QStringList  superClasses( bool includeThis = FALSE ) const; // obsolete, remove 3.0
-#endif
+      public:
+	// obsolete
+# ifndef QT_NO_STRINGLIST
+	QStringList superClasses(bool includeThis = FALSE) const; // obsolete,
+								  // remove 3.0
+# endif
 };
 
 #endif
 
-inline bool QObject::connect( const QObject *sender, const char *signal,
-			      const char *member ) const
+inline bool QObject::connect(const QObject *sender, const char *signal,
+			     const char *member) const
 {
-    return connect( sender, signal, this, member );
+	return connect(sender, signal, this, member);
 }
 
-inline bool QObject::disconnect( const char *signal,
-				 const QObject *receiver, const char *member )
+inline bool QObject::disconnect(const char *signal, const QObject *receiver,
+				const char *member)
 {
-    return disconnect( this, signal, receiver, member );
+	return disconnect(this, signal, receiver, member);
 }
 
-inline bool QObject::disconnect( const QObject *receiver, const char *member )
+inline bool QObject::disconnect(const QObject *receiver, const char *member)
 {
-    return disconnect( this, 0, receiver, member );
+	return disconnect(this, 0, receiver, member);
 }
 
 inline const QObject *QObject::sender()
 {
-    return sigSender;
+	return sigSender;
 }
 
 
-class Q_EXPORT QSenderObject : public QObject		// object for sending signals
+class Q_EXPORT QSenderObject : public QObject // object for sending signals
 {
-public:
-    void setSender( QObject *s ) { sigSender=s; }
-    /*
-     * The following code was changed to use code by Martin Tobias Holmedahl Sandsmark
-     * via https://invent.kde.org/sandsmark/qt2/-/commit/750f30c69b4a4f322b6a44b624941d68d4264e23
-     * The licensing notice on the reference file is the same as this file.
-     */
-    static void setSenderSafe( QObject *s, QObject *r ) { r->sigSender=s; }
-    /*
-     * End copied code
-     */
+      public:
+	void setSender(QObject *s)
+	{
+		sigSender = s;
+	}
+	/*
+	 * The following code was changed to use code by Martin Tobias Holmedahl
+	 * Sandsmark via
+	 * https://invent.kde.org/sandsmark/qt2/-/commit/750f30c69b4a4f322b6a44b624941d68d4264e23
+	 * The licensing notice on the reference file is the same as this file.
+	 */
+	static void setSenderSafe(QObject *s, QObject *r)
+	{
+		r->sigSender = s;
+	}
+	/*
+	 * End copied code
+	 */
 };
 
 #ifdef QT_NO_TRANSLATION
-inline QString QObject::tr( const char *s ) {
-    return QString::fromLatin1( s );
+inline QString QObject::tr(const char *s)
+{
+	return QString::fromLatin1(s);
 }
-inline QString QObject::tr( const char *s, const char * ) {
-    return QString::fromLatin1( s );
+inline QString QObject::tr(const char *s, const char *)
+{
+	return QString::fromLatin1(s);
 }
 #endif
 

@@ -14,21 +14,21 @@ class QSlider;
 
 class LCDRange : public QVBox
 {
-    Q_OBJECT
-public:
-    LCDRange( QWidget *parent=0, const char *name=0 );
+	Q_OBJECT
+      public:
+	LCDRange(QWidget *parent = 0, const char *name = 0);
 
-    int value() const;
+	int value() const;
 
-public slots:
-    void setValue( int );
-    void setRange( int minVal, int maxVal );
+      public slots:
+	void setValue(int);
+	void setRange(int minVal, int maxVal);
 
-signals:
-    void valueChanged( int );
+      signals:
+	void valueChanged(int);
 
-private:
-    QSlider  *slider;
+      private:
+	QSlider *slider;
 };
 
 

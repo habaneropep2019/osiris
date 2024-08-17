@@ -39,8 +39,8 @@
 #define QSERVERSOCKET_H
 
 #ifndef QT_H
-#include "qobject.h"
-#include "qsocket.h"
+# include "qobject.h"
+# include "qsocket.h"
 #endif // QT_H
 #ifndef QT_NO_NETWORK
 
@@ -49,35 +49,36 @@ class QServerSocketPrivate;
 
 class Q_EXPORT QServerSocket : public QObject
 {
-    Q_OBJECT
-public:
-    QServerSocket( Q_UINT16 port, int backlog = 0,
-		   QObject *parent=0, const char *name=0 );
-    QServerSocket( const QHostAddress & address, Q_UINT16 port, int backlog = 0,
-		   QObject *parent=0, const char *name=0 );
-    QServerSocket( QObject *parent=0, const char *name=0 );
-    virtual ~QServerSocket();
+	Q_OBJECT
+      public:
+	QServerSocket(Q_UINT16 port, int backlog = 0, QObject *parent = 0,
+		      const char *name = 0);
+	QServerSocket(const QHostAddress &address, Q_UINT16 port,
+		      int backlog = 0, QObject *parent = 0,
+		      const char *name = 0);
+	QServerSocket(QObject *parent = 0, const char *name = 0);
+	virtual ~QServerSocket();
 
-    bool ok() const;
+	bool ok() const;
 
-    Q_UINT16 port() const ;
+	Q_UINT16 port() const;
 
-    int socket() const ;
-    virtual void setSocket( int socket );
+	int socket() const;
+	virtual void setSocket(int socket);
 
-    QHostAddress address() const ;
+	QHostAddress address() const;
 
-    virtual void newConnection( int socket ) = 0;
+	virtual void newConnection(int socket) = 0;
 
-protected:
-    QSocketDevice *socketDevice();
+      protected:
+	QSocketDevice *socketDevice();
 
-private slots:
-    void incomingConnection( int socket );
+      private slots:
+	void incomingConnection(int socket);
 
-private:
-    QServerSocketPrivate *d;
-    void init( const QHostAddress & address, Q_UINT16 port, int backlog );
+      private:
+	QServerSocketPrivate *d;
+	void init(const QHostAddress &address, Q_UINT16 port, int backlog);
 };
 
 #endif // QT_NO_NETWORK

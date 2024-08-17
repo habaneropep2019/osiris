@@ -16,35 +16,34 @@
 
 class Nntp : public QNetworkProtocol
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    Nntp();
-    virtual ~Nntp();
-    virtual int supportedOperations() const;
+      public:
+	Nntp();
+	virtual ~Nntp();
+	virtual int supportedOperations() const;
 
-protected:
-    virtual void operationListChildren( QNetworkOperation *op );
-    virtual void operationGet( QNetworkOperation *op );
+      protected:
+	virtual void operationListChildren(QNetworkOperation *op);
+	virtual void operationGet(QNetworkOperation *op);
 
-    QSocket *commandSocket;
-    bool connectionReady;
-    bool readGroups;
-    bool readArticle;
+	QSocket *commandSocket;
+	bool connectionReady;
+	bool readGroups;
+	bool readArticle;
 
-private:
-    bool checkConnection( QNetworkOperation *op );
-    void close();
-    void parseGroups();
-    void parseArticle();
+      private:
+	bool checkConnection(QNetworkOperation *op);
+	void close();
+	void parseGroups();
+	void parseArticle();
 
-protected slots:
-    void hostFound();
-    void connected();
-    void closed();
-    void readyRead();
-    void error( int );
-
+      protected slots:
+	void hostFound();
+	void connected();
+	void closed();
+	void readyRead();
+	void error(int);
 };
 
 #endif

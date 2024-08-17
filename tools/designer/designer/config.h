@@ -26,37 +26,38 @@
 
 class Config
 {
-public:
-    typedef QMap< QString, QString > ConfigGroup;
-    
-    Config( const QString &fn );
-    ~Config();
-    
-    void setGroup( const QString &gname );
-    void writeEntry( const QString &key, const QString &value );
-    void writeEntry( const QString &key, int num );
-#ifdef Q_HAS_BOOL_TYPE
-    void writeEntry( const QString &key, bool b );
-#endif
-    void writeEntry( const QString &key, const QStringList &lst, const QChar &sep );
-    
-    QString readEntry( const QString &key, const QString &deflt = QString::null );
-    int readNumEntry( const QString &key, int deflt = -1 );
-    bool readBoolEntry( const QString &key, bool deflt = FALSE );
-    QStringList readListEntry( const QString &key, const QChar &sep ); 
-    
-    void clearGroup();
-    
-    void write( const QString &fn = QString::null );
-    
-protected:
-    void read();
-    void parse( const QString &line );
-    
-    QMap< QString, ConfigGroup > groups;
-    QMap< QString, ConfigGroup >::Iterator git;
-    QString filename;
+      public:
+	typedef QMap<QString, QString> ConfigGroup;
 
+	Config(const QString &fn);
+	~Config();
+
+	void setGroup(const QString &gname);
+	void writeEntry(const QString &key, const QString &value);
+	void writeEntry(const QString &key, int num);
+#ifdef Q_HAS_BOOL_TYPE
+	void writeEntry(const QString &key, bool b);
+#endif
+	void writeEntry(const QString &key, const QStringList &lst,
+			const QChar &sep);
+
+	QString readEntry(const QString &key,
+			  const QString &deflt = QString::null);
+	int readNumEntry(const QString &key, int deflt = -1);
+	bool readBoolEntry(const QString &key, bool deflt = FALSE);
+	QStringList readListEntry(const QString &key, const QChar &sep);
+
+	void clearGroup();
+
+	void write(const QString &fn = QString::null);
+
+      protected:
+	void read();
+	void parse(const QString &line);
+
+	QMap<QString, ConfigGroup> groups;
+	QMap<QString, ConfigGroup>::Iterator git;
+	QString filename;
 };
 
 #endif

@@ -11,15 +11,15 @@
 #include "rangecontrols.h"
 #include <qapplication.h>
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    RangeControls rangecontrols;
-    rangecontrols.resize( 500, 300 );
-    rangecontrols.setCaption( "Qt Example - Range Control Widgets" );
-    a.setMainWidget( &rangecontrols );
-    rangecontrols.show();
+	RangeControls rangecontrols;
+	rangecontrols.resize(500, 300);
+	rangecontrols.setCaption("Qt Example - Range Control Widgets");
+	a.setMainWidget(&rangecontrols);
+	rangecontrols.show();
 
-    return a.exec();
+	return a.exec();
 }

@@ -17,13 +17,13 @@ class QCheckBox;
 
 class RangeControls : public QVBox
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    RangeControls( QWidget *parent = 0, const char *name = 0 );
+      public:
+	RangeControls(QWidget *parent = 0, const char *name = 0);
 
-private:
-    QCheckBox *notches, *wrapping;
+      private:
+	QCheckBox *notches, *wrapping;
 };
 
 #endif

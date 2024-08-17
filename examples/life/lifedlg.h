@@ -24,41 +24,41 @@ class QComboBox;
 
 class LifeTimer : public QTimer
 {
-    Q_OBJECT
-public:
-    LifeTimer( QWidget *parent );
-    enum { MAXSPEED = 1000 };
+	Q_OBJECT
+      public:
+	LifeTimer(QWidget *parent);
+	enum { MAXSPEED = 1000 };
 
-public slots:
-    void	setSpeed( int speed );
-    void	pause( bool );
+      public slots:
+	void setSpeed(int speed);
+	void pause(bool);
 
-private:
-    int		interval;
+      private:
+	int interval;
 };
 
 
 class LifeDialog : public QWidget
 {
-    Q_OBJECT
-public:
-    LifeDialog( int scale = 10, QWidget *parent = 0, const char *name = 0 );
-public slots:
-    void	getPattern( int );
+	Q_OBJECT
+      public:
+	LifeDialog(int scale = 10, QWidget *parent = 0, const char *name = 0);
+      public slots:
+	void getPattern(int);
 
-protected:
-    virtual void resizeEvent( QResizeEvent * e );
+      protected:
+	virtual void resizeEvent(QResizeEvent *e);
 
-private:
-    enum { TOPBORDER = 70, SIDEBORDER = 10 };
+      private:
+	enum { TOPBORDER = 70, SIDEBORDER = 10 };
 
-    LifeWidget	*life;
-    QPushButton *qb;
-    LifeTimer	*timer;
-    QPushButton *pb;
-    QComboBox	*cb;
-    QLabel	*sp;
-    QSlider	*scroll;
+	LifeWidget *life;
+	QPushButton *qb;
+	LifeTimer *timer;
+	QPushButton *pb;
+	QComboBox *cb;
+	QLabel *sp;
+	QSlider *scroll;
 };
 
 

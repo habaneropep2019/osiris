@@ -39,33 +39,35 @@
 #define QUTFCODEC_H
 
 #ifndef QT_H
-#include "qtextcodec.h"
+# include "qtextcodec.h"
 #endif // QT_H
 
 #ifndef QT_NO_TEXTCODEC
 
-class Q_EXPORT QUtf8Codec : public QTextCodec {
-public:
-    virtual int mibEnum() const;
-    const char* name() const;
+class Q_EXPORT QUtf8Codec : public QTextCodec
+{
+      public:
+	virtual int mibEnum() const;
+	const char *name() const;
 
-    QTextDecoder* makeDecoder() const;
+	QTextDecoder *makeDecoder() const;
 
-    QCString fromUnicode(const QString& uc, int& len_in_out) const;
+	QCString fromUnicode(const QString &uc, int &len_in_out) const;
 
-    int heuristicContentMatch(const char* chars, int len) const;
+	int heuristicContentMatch(const char *chars, int len) const;
 };
 
-class Q_EXPORT QUtf16Codec : public QTextCodec {
-public:
-    virtual int mibEnum() const;
-    const char* name() const;
+class Q_EXPORT QUtf16Codec : public QTextCodec
+{
+      public:
+	virtual int mibEnum() const;
+	const char *name() const;
 
-    QTextDecoder* makeDecoder() const;
-    QTextEncoder* makeEncoder() const;
+	QTextDecoder *makeDecoder() const;
+	QTextEncoder *makeEncoder() const;
 
-    int heuristicContentMatch(const char* chars, int len) const;
+	int heuristicContentMatch(const char *chars, int len) const;
 };
 
-#endif //QT_NO_TEXTCODEC
+#endif // QT_NO_TEXTCODEC
 #endif // QUTFCODEC_H

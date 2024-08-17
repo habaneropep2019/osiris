@@ -22,37 +22,34 @@
 
 class GLBox : public QGLWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
+      public:
+	GLBox(QWidget *parent, const char *name,
+	      const QGLWidget *shareWidget = 0);
+	~GLBox();
 
-    GLBox( QWidget* parent, const char* name, const QGLWidget* shareWidget=0 );
-    ~GLBox();
+      public slots:
 
-public slots:
+	void setXRotation(int degrees);
+	void setYRotation(int degrees);
+	void setZRotation(int degrees);
 
-    void		setXRotation( int degrees );
-    void		setYRotation( int degrees );
-    void		setZRotation( int degrees );
+      protected:
+	void initializeGL();
+	void paintGL();
+	void resizeGL(int w, int h);
 
-protected:
+	virtual GLuint makeObject();
 
-    void		initializeGL();
-    void		paintGL();
-    void		resizeGL( int w, int h );
+      private:
+	GLuint object;
+	GLuint localDisplayList;
 
-    virtual GLuint 	makeObject();
+	static GLuint sharedDisplayList;
+	static int sharedListUsers;
 
-private:
-
-    GLuint		object;
-    GLuint		localDisplayList;
-
-    static GLuint	sharedDisplayList;
-    static int		sharedListUsers;
-
-    GLfloat xRot, yRot, zRot, scale;
-
+	GLfloat xRot, yRot, zRot, scale;
 };
 
 

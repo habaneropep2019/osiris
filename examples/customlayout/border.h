@@ -20,86 +20,80 @@
 
 class BorderWidgetItem : public QWidgetItem
 {
-public:
-    BorderWidgetItem( QWidget *w )
-        : QWidgetItem( w )
-    {}
+      public:
+	BorderWidgetItem(QWidget *w) : QWidgetItem(w)
+	{
+	}
 
-    void setGeometry( const QRect &r )
-    { widget()->setGeometry( r ); }
-
+	void setGeometry(const QRect &r)
+	{
+		widget()->setGeometry(r);
+	}
 };
 
 class BorderLayout : public QLayout
 {
-public:
-    enum Position {
-        West = 0,
-        North,
-        South,
-        East,
-        Center
-    };
+      public:
+	enum Position { West = 0, North, South, East, Center };
 
-    struct BorderLayoutStruct
-    {
-        BorderLayoutStruct( QLayoutItem *i, Position p ) {
-            item = i;
-            pos = p;
-        }
+	struct BorderLayoutStruct {
+		BorderLayoutStruct(QLayoutItem *i, Position p)
+		{
+			item = i;
+			pos = p;
+		}
 
-        QLayoutItem *item;
-        Position pos;
-    };
+		QLayoutItem *item;
+		Position pos;
+	};
 
-    enum SizeType {
-        Minimum = 0,
-        SizeHint
-    };
+	enum SizeType { Minimum = 0, SizeHint };
 
-    BorderLayout( QWidget *parent, int border = 0, int autoBorder = -1,
-                  const char *name = 0 )
-        : QLayout( parent, border, autoBorder, name ), cached( 0, 0 ), mcached( 0, 0 ),
-          sizeDirty( TRUE ), msizeDirty( TRUE )
-    {}
+	BorderLayout(QWidget *parent, int border = 0, int autoBorder = -1,
+		     const char *name = 0)
+		: QLayout(parent, border, autoBorder, name), cached(0, 0),
+		  mcached(0, 0), sizeDirty(TRUE), msizeDirty(TRUE)
+	{
+	}
 
-    BorderLayout( QLayout* parent, int autoBorder = -1, const char *name = 0 )
-        : QLayout( parent, autoBorder, name  ), cached( 0, 0 ), mcached( 0, 0 ),
-          sizeDirty( TRUE ), msizeDirty( TRUE )
-    {}
+	BorderLayout(QLayout *parent, int autoBorder = -1, const char *name = 0)
+		: QLayout(parent, autoBorder, name), cached(0, 0),
+		  mcached(0, 0), sizeDirty(TRUE), msizeDirty(TRUE)
+	{
+	}
 
-    BorderLayout( int autoBorder = -1, const char *name = 0 )
-        : QLayout( autoBorder, name ), cached( 0, 0 ), mcached( 0, 0 ),
-          sizeDirty( TRUE ), msizeDirty( TRUE )
-    {}
+	BorderLayout(int autoBorder = -1, const char *name = 0)
+		: QLayout(autoBorder, name), cached(0, 0), mcached(0, 0),
+		  sizeDirty(TRUE), msizeDirty(TRUE)
+	{
+	}
 
-    ~BorderLayout();
+	~BorderLayout();
 
-    void addItem( QLayoutItem *item );
+	void addItem(QLayoutItem *item);
 
-    void addWidget( QWidget *widget, Position pos );
-    void add( QLayoutItem *item, Position pos );
+	void addWidget(QWidget *widget, Position pos);
+	void add(QLayoutItem *item, Position pos);
 
-    bool hasHeightForWidth() const;
+	bool hasHeightForWidth() const;
 
-    QSize sizeHint() const;
-    QSize minimumSize() const;
+	QSize sizeHint() const;
+	QSize minimumSize() const;
 
-    QLayoutIterator iterator();
+	QLayoutIterator iterator();
 
-    QSizePolicy::ExpandData expanding() const;
+	QSizePolicy::ExpandData expanding() const;
 
-protected:
-    void setGeometry( const QRect &rect );
+      protected:
+	void setGeometry(const QRect &rect);
 
-private:
-    void doLayout( const QRect &rect, bool testonly = FALSE );
-    void calcSize( SizeType st );
+      private:
+	void doLayout(const QRect &rect, bool testonly = FALSE);
+	void calcSize(SizeType st);
 
-    QList<BorderLayoutStruct> list;
-    QSize cached, mcached;
-    bool sizeDirty, msizeDirty;
-
+	QList<BorderLayoutStruct> list;
+	QSize cached, mcached;
+	bool sizeDirty, msizeDirty;
 };
 
 #endif

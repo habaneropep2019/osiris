@@ -21,18 +21,18 @@ class QMultiLineEdit;
 
 class Rot13 : public QWidget
 {
-    Q_OBJECT
-public:
-    Rot13();
+	Q_OBJECT
+      public:
+	Rot13();
 
-    QString rot13(const QString &) const;
+	QString rot13(const QString &) const;
 
-private slots:
-    void changeLeft();
-    void changeRight();
+      private slots:
+	void changeLeft();
+	void changeRight();
 
-private:
-    QMultiLineEdit *left, *right;
+      private:
+	QMultiLineEdit *left, *right;
 };
 
 #endif

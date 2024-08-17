@@ -118,48 +118,48 @@
  *****************************************************************************/
 
 #if defined(_WS_WIN_)
-#define COLOR0_PIX 0x00ffffff
-#define COLOR1_PIX 0
+# define COLOR0_PIX 0x00ffffff
+# define COLOR1_PIX 0
 #else
-#define COLOR0_PIX 0
-#define COLOR1_PIX 1
+# define COLOR0_PIX 0
+# define COLOR1_PIX 1
 #endif
 
 static QColor stdcol[19];
 
-QT_STATIC_CONST_IMPL QColor & Qt::color0 = stdcol[0];
-QT_STATIC_CONST_IMPL QColor & Qt::color1  = stdcol[1];
-QT_STATIC_CONST_IMPL QColor & Qt::black  = stdcol[2];
-QT_STATIC_CONST_IMPL QColor & Qt::white = stdcol[3];
-QT_STATIC_CONST_IMPL QColor & Qt::darkGray = stdcol[4];
-QT_STATIC_CONST_IMPL QColor & Qt::gray = stdcol[5];
-QT_STATIC_CONST_IMPL QColor & Qt::lightGray = stdcol[6];
-QT_STATIC_CONST_IMPL QColor & Qt::red = stdcol[7];
-QT_STATIC_CONST_IMPL QColor & Qt::green = stdcol[8];
-QT_STATIC_CONST_IMPL QColor & Qt::blue = stdcol[9];
-QT_STATIC_CONST_IMPL QColor & Qt::cyan = stdcol[10];
-QT_STATIC_CONST_IMPL QColor & Qt::magenta = stdcol[11];
-QT_STATIC_CONST_IMPL QColor & Qt::yellow = stdcol[12];
-QT_STATIC_CONST_IMPL QColor & Qt::darkRed = stdcol[13];
-QT_STATIC_CONST_IMPL QColor & Qt::darkGreen = stdcol[14];
-QT_STATIC_CONST_IMPL QColor & Qt::darkBlue = stdcol[15];
-QT_STATIC_CONST_IMPL QColor & Qt::darkCyan = stdcol[16];
-QT_STATIC_CONST_IMPL QColor & Qt::darkMagenta = stdcol[17];
-QT_STATIC_CONST_IMPL QColor & Qt::darkYellow = stdcol[18];
+QT_STATIC_CONST_IMPL QColor &Qt::color0 = stdcol[0];
+QT_STATIC_CONST_IMPL QColor &Qt::color1 = stdcol[1];
+QT_STATIC_CONST_IMPL QColor &Qt::black = stdcol[2];
+QT_STATIC_CONST_IMPL QColor &Qt::white = stdcol[3];
+QT_STATIC_CONST_IMPL QColor &Qt::darkGray = stdcol[4];
+QT_STATIC_CONST_IMPL QColor &Qt::gray = stdcol[5];
+QT_STATIC_CONST_IMPL QColor &Qt::lightGray = stdcol[6];
+QT_STATIC_CONST_IMPL QColor &Qt::red = stdcol[7];
+QT_STATIC_CONST_IMPL QColor &Qt::green = stdcol[8];
+QT_STATIC_CONST_IMPL QColor &Qt::blue = stdcol[9];
+QT_STATIC_CONST_IMPL QColor &Qt::cyan = stdcol[10];
+QT_STATIC_CONST_IMPL QColor &Qt::magenta = stdcol[11];
+QT_STATIC_CONST_IMPL QColor &Qt::yellow = stdcol[12];
+QT_STATIC_CONST_IMPL QColor &Qt::darkRed = stdcol[13];
+QT_STATIC_CONST_IMPL QColor &Qt::darkGreen = stdcol[14];
+QT_STATIC_CONST_IMPL QColor &Qt::darkBlue = stdcol[15];
+QT_STATIC_CONST_IMPL QColor &Qt::darkCyan = stdcol[16];
+QT_STATIC_CONST_IMPL QColor &Qt::darkMagenta = stdcol[17];
+QT_STATIC_CONST_IMPL QColor &Qt::darkYellow = stdcol[18];
 
 
 /*****************************************************************************
   QColor member functions
  *****************************************************************************/
 
-bool QColor::color_init   = FALSE;		// color system not initialized
-bool QColor::globals_init = FALSE;		// global color not initialized
-bool QColor::lazy_alloc = TRUE;			// lazy color allocation
+bool QColor::color_init = FALSE; // color system not initialized
+bool QColor::globals_init = FALSE; // global color not initialized
+bool QColor::lazy_alloc = TRUE; // lazy color allocation
 
 
-QColor* QColor::globalColors()
+QColor *QColor::globalColors()
 {
-    return stdcol;
+	return stdcol;
 }
 
 
@@ -181,33 +181,34 @@ QColor* QColor::globalColors()
 
 void QColor::initGlobalColors()
 {
-    globals_init = TRUE;
-    stdcol[ 0].pix = COLOR0_PIX;
-    stdcol[ 1].pix = COLOR1_PIX;
+	globals_init = TRUE;
+	stdcol[0].pix = COLOR0_PIX;
+	stdcol[1].pix = COLOR1_PIX;
 #ifdef _WS_QWS_
-    stdcol[ 0].rgbVal = 0;
-    stdcol[ 1].rgbVal = 0x00ffffff; //######### QWS color allocation is a mess
+	stdcol[0].rgbVal = 0;
+	stdcol[1].rgbVal = 0x00ffffff; // ######### QWS color allocation is a
+				       // mess
 #else
-    stdcol[ 0].rgbVal = 0x00ffffff;
-    stdcol[ 1].rgbVal = 0;
+	stdcol[0].rgbVal = 0x00ffffff;
+	stdcol[1].rgbVal = 0;
 #endif
-    stdcol[ 2].setRgb(   0,   0,   0 );
-    stdcol[ 3].setRgb( 255, 255, 255 );
-    stdcol[ 4].setRgb( 128, 128, 128 );
-    stdcol[ 5].setRgb( 160, 160, 164 );
-    stdcol[ 6].setRgb( 192, 192, 192 );
-    stdcol[ 7].setRgb( 255,   0,   0 );
-    stdcol[ 8].setRgb(   0, 255,   0 );
-    stdcol[ 9].setRgb(   0,   0, 255 );
-    stdcol[10].setRgb(   0, 255, 255 );
-    stdcol[11].setRgb( 255,   0, 255 );
-    stdcol[12].setRgb( 255, 255,   0 );
-    stdcol[13].setRgb( 128,   0,   0 );
-    stdcol[14].setRgb(   0, 128,   0 );
-    stdcol[15].setRgb(   0,   0, 128 );
-    stdcol[16].setRgb(   0, 128, 128 );
-    stdcol[17].setRgb( 128,   0, 128 );
-    stdcol[18].setRgb( 128, 128,   0 );
+	stdcol[2].setRgb(0, 0, 0);
+	stdcol[3].setRgb(255, 255, 255);
+	stdcol[4].setRgb(128, 128, 128);
+	stdcol[5].setRgb(160, 160, 164);
+	stdcol[6].setRgb(192, 192, 192);
+	stdcol[7].setRgb(255, 0, 0);
+	stdcol[8].setRgb(0, 255, 0);
+	stdcol[9].setRgb(0, 0, 255);
+	stdcol[10].setRgb(0, 255, 255);
+	stdcol[11].setRgb(255, 0, 255);
+	stdcol[12].setRgb(255, 255, 0);
+	stdcol[13].setRgb(128, 0, 0);
+	stdcol[14].setRgb(0, 128, 0);
+	stdcol[15].setRgb(0, 0, 128);
+	stdcol[16].setRgb(0, 128, 128);
+	stdcol[17].setRgb(128, 0, 128);
+	stdcol[18].setRgb(128, 128, 0);
 }
 
 
@@ -239,14 +240,14 @@ void QColor::initGlobalColors()
   be set directly to \a pixel (skips the normal allocation procedure).
 */
 
-QColor::QColor( QRgb rgb, uint pixel )
+QColor::QColor(QRgb rgb, uint pixel)
 {
-    if ( pixel == 0xffffffff ) {
-	setRgb( rgb );
-    } else {
-	rgbVal = (rgb & RGB_MASK) | RGB_DIRECT;
-	pix    = pixel;
-    }
+	if (pixel == 0xffffffff) {
+		setRgb(rgb);
+	} else {
+		rgbVal = (rgb & RGB_MASK) | RGB_DIRECT;
+		pix = pixel;
+	}
 }
 
 
@@ -265,12 +266,12 @@ QColor::QColor( QRgb rgb, uint pixel )
   \sa setRgb(), setHsv()
 */
 
-QColor::QColor( int x, int y, int z, Spec colorSpec )
+QColor::QColor(int x, int y, int z, Spec colorSpec)
 {
-    if ( colorSpec == Hsv )
-	setHsv( x, y, z );
-    else
-	setRgb( x, y, z );
+	if (colorSpec == Hsv)
+		setHsv(x, y, z);
+	else
+		setRgb(x, y, z);
 }
 
 
@@ -279,9 +280,9 @@ QColor::QColor( int x, int y, int z, Spec colorSpec )
   \sa setNamedColor()
 */
 
-QColor::QColor( const QString& name )
+QColor::QColor(const QString &name)
 {
-    setNamedColor( name );
+	setNamedColor(name);
 }
 
 
@@ -290,9 +291,9 @@ QColor::QColor( const QString& name )
   \sa setNamedColor()
 */
 
-QColor::QColor( const char *name )
+QColor::QColor(const char *name)
 {
-    setNamedColor( QString(name) );
+	setNamedColor(QString(name));
 }
 
 
@@ -301,12 +302,12 @@ QColor::QColor( const char *name )
   Constructs a color that is a copy of \a c.
 */
 
-QColor::QColor( const QColor &c )
+QColor::QColor(const QColor &c)
 {
-    if ( !globals_init )
-	initGlobalColors();
-    rgbVal = c.rgbVal;
-    pix	   = c.pix;
+	if (!globals_init)
+		initGlobalColors();
+	rgbVal = c.rgbVal;
+	pix = c.pix;
 }
 
 
@@ -314,13 +315,13 @@ QColor::QColor( const QColor &c )
   Assigns a copy of the color \c and returns a reference to this color.
 */
 
-QColor &QColor::operator=( const QColor &c )
+QColor &QColor::operator=(const QColor &c)
 {
-    if ( !globals_init )
-	initGlobalColors();
-    rgbVal = c.rgbVal;
-    pix	   = c.pix;
-    return *this;
+	if (!globals_init)
+		initGlobalColors();
+	rgbVal = c.rgbVal;
+	pix = c.pix;
+	return *this;
 }
 
 
@@ -346,24 +347,24 @@ QColor &QColor::operator=( const QColor &c )
 
 QString QColor::name() const
 {
-    QString s;
-    s.sprintf( "#%02x%02x%02x", red(), green(), blue() );
-    return s;
+	QString s;
+	s.sprintf("#%02x%02x%02x", red(), green(), blue());
+	return s;
 }
 
 
-static int hex2int( QChar hexchar )
+static int hex2int(QChar hexchar)
 {
-    int v;
-    if ( hexchar.isDigit() )
-	v = hexchar.digitValue();
-    else if ( hexchar >= 'A' && hexchar <= 'F' )
-	v = hexchar.cell() - 'A' + 10;
-    else if ( hexchar >= 'a' && hexchar <= 'f' )
-	v = hexchar.cell() - 'a' + 10;
-    else
-	v = 0;
-    return v;
+	int v;
+	if (hexchar.isDigit())
+		v = hexchar.digitValue();
+	else if (hexchar >= 'A' && hexchar <= 'F')
+		v = hexchar.cell() - 'A' + 10;
+	else if (hexchar >= 'a' && hexchar <= 'f')
+		v = hexchar.cell() - 'a' + 10;
+	else
+		v = 0;
+	return v;
 }
 
 
@@ -381,37 +382,37 @@ static int hex2int( QChar hexchar )
   </ul>
 */
 
-void QColor::setNamedColor( const QString& name )
+void QColor::setNamedColor(const QString &name)
 {
-    if ( name.isEmpty() ) {
-	setRgb( 0 );
-    } else if ( name[0] == '#' ) {
-	const QChar *p = name.unicode()+1;
-	int len = name.length()-1;
-	int r, g, b;
-	if ( len == 12 ) {
-	    r = (hex2int(p[0]) << 4) + hex2int(p[1]);
-	    g = (hex2int(p[4]) << 4) + hex2int(p[5]);
-	    b = (hex2int(p[8]) << 4) + hex2int(p[9]);
-	} else if ( len == 9 ) {
-	    r = (hex2int(p[0]) << 4) + hex2int(p[1]);
-	    g = (hex2int(p[3]) << 4) + hex2int(p[4]);
-	    b = (hex2int(p[6]) << 4) + hex2int(p[7]);
-	} else if ( len == 6 ) {
-	    r = (hex2int(p[0]) << 4) + hex2int(p[1]);
-	    g = (hex2int(p[2]) << 4) + hex2int(p[3]);
-	    b = (hex2int(p[4]) << 4) + hex2int(p[5]);
-	} else if ( len == 3 ) {
-	    r = (hex2int(p[0]) << 4) + hex2int(p[0]);
-	    g = (hex2int(p[1]) << 4) + hex2int(p[1]);
-	    b = (hex2int(p[2]) << 4) + hex2int(p[2]);
+	if (name.isEmpty()) {
+		setRgb(0);
+	} else if (name[0] == '#') {
+		const QChar *p = name.unicode() + 1;
+		int len = name.length() - 1;
+		int r, g, b;
+		if (len == 12) {
+			r = (hex2int(p[0]) << 4) + hex2int(p[1]);
+			g = (hex2int(p[4]) << 4) + hex2int(p[5]);
+			b = (hex2int(p[8]) << 4) + hex2int(p[9]);
+		} else if (len == 9) {
+			r = (hex2int(p[0]) << 4) + hex2int(p[1]);
+			g = (hex2int(p[3]) << 4) + hex2int(p[4]);
+			b = (hex2int(p[6]) << 4) + hex2int(p[7]);
+		} else if (len == 6) {
+			r = (hex2int(p[0]) << 4) + hex2int(p[1]);
+			g = (hex2int(p[2]) << 4) + hex2int(p[3]);
+			b = (hex2int(p[4]) << 4) + hex2int(p[5]);
+		} else if (len == 3) {
+			r = (hex2int(p[0]) << 4) + hex2int(p[0]);
+			g = (hex2int(p[1]) << 4) + hex2int(p[1]);
+			b = (hex2int(p[2]) << 4) + hex2int(p[2]);
+		} else {
+			r = g = b = 0;
+		}
+		setRgb(r, g, b);
 	} else {
-	    r = g = b = 0;
+		setSystemNamedColor(name);
 	}
-	setRgb( r, g, b );
-    } else {
-	setSystemNamedColor( name );
-    }
 }
 
 
@@ -420,9 +421,9 @@ void QColor::setNamedColor( const QString& name )
 
 /*! \obsolete */
 
-void QColor::getHsv( int &h, int &s, int &v ) const
+void QColor::getHsv(int &h, int &s, int &v) const
 {
-    hsv( &h, &s, &v );
+	hsv(&h, &s, &v);
 }
 
 
@@ -440,51 +441,59 @@ void QColor::getHsv( int &h, int &s, int &v ) const
   \sa setHsv(), rgb()
 */
 
-void QColor::hsv( int *h, int *s, int *v ) const
+void QColor::hsv(int *h, int *s, int *v) const
 {
-    int r = qRed(rgbVal);
-    int g = qGreen(rgbVal);
-    int b = qBlue(rgbVal);
-    uint max = r;				// maximum RGB component
-    int whatmax = 0;				// r=>0, g=>1, b=>2
-    if ( (uint)g > max ) {
-	max = g;
-	whatmax = 1;
-    }
-    if ( (uint)b > max ) {
-	max = b;
-	whatmax = 2;
-    }
-    uint min = r;				// find minimum value
-    if ( (uint)g < min ) min = g;
-    if ( (uint)b < min ) min = b;
-    int delta = max-min;
-    *v = max;					// calc value
-    *s = max ? (510*delta+max)/(2*max) : 0;
-    if ( *s == 0 ) {
-	*h = -1;				// undefined hue
-    } else {
-	switch ( whatmax ) {
-	    case 0:				// red is max component
-		if ( g >= b )
-		    *h = (120*(g-b)+delta)/(2*delta);
-		else
-		    *h = (120*(g-b+delta)+delta)/(2*delta) + 300;
-		break;
-	    case 1:				// green is max component
-		if ( b > r )
-		    *h = 120 + (120*(b-r)+delta)/(2*delta);
-		else
-		    *h = 60 + (120*(b-r+delta)+delta)/(2*delta);
-		break;
-	    case 2:				// blue is max component
-		if ( r > g )
-		    *h = 240 + (120*(r-g)+delta)/(2*delta);
-		else
-		    *h = 180 + (120*(r-g+delta)+delta)/(2*delta);
-		break;
+	int r = qRed(rgbVal);
+	int g = qGreen(rgbVal);
+	int b = qBlue(rgbVal);
+	uint max = r; // maximum RGB component
+	int whatmax = 0; // r=>0, g=>1, b=>2
+	if ((uint)g > max) {
+		max = g;
+		whatmax = 1;
 	}
-    }
+	if ((uint)b > max) {
+		max = b;
+		whatmax = 2;
+	}
+	uint min = r; // find minimum value
+	if ((uint)g < min)
+		min = g;
+	if ((uint)b < min)
+		min = b;
+	int delta = max - min;
+	*v = max; // calc value
+	*s = max ? (510 * delta + max) / (2 * max) : 0;
+	if (*s == 0) {
+		*h = -1; // undefined hue
+	} else {
+		switch (whatmax) {
+		case 0: // red is max component
+			if (g >= b)
+				*h = (120 * (g - b) + delta) / (2 * delta);
+			else
+				*h = (120 * (g - b + delta) + delta) /
+					     (2 * delta) +
+				     300;
+			break;
+		case 1: // green is max component
+			if (b > r)
+				*h = 120 +
+				     (120 * (b - r) + delta) / (2 * delta);
+			else
+				*h = 60 + (120 * (b - r + delta) + delta) /
+						  (2 * delta);
+			break;
+		case 2: // blue is max component
+			if (r > g)
+				*h = 240 +
+				     (120 * (r - g) + delta) / (2 * delta);
+			else
+				*h = 180 + (120 * (r - g + delta) + delta) /
+						   (2 * delta);
+			break;
+		}
+	}
 }
 
 
@@ -498,41 +507,60 @@ void QColor::hsv( int *h, int *s, int *v ) const
   \sa hsv(), setRgb()
 */
 
-void QColor::setHsv( int h, int s, int v )
+void QColor::setHsv(int h, int s, int v)
 {
 #if defined(CHECK_RANGE)
-    if ( h < -1 || (uint)s > 255 || (uint)v > 255 ) {
-	qWarning( "QColor::setHsv: HSV parameters out of range" );
-	return;
-    }
-#endif
-    int r=v, g=v, b=v;
-    if ( s == 0 || h == -1 ) {			// achromatic case
-	// Ignore
-    } else {					// chromatic case
-	if ( (uint)h >= 360 )
-	    h %= 360;
-	uint f = h%60;
-	h /= 60;
-	uint p = (uint)(2*v*(255-s)+255)/510;
-	uint q, t;
-	if ( h&1 ) {
-	    q = (uint)(2*v*(15300-s*f)+15300)/30600;
-	    switch( h ) {
-		case 1: r=(int)q; g=(int)v, b=(int)p; break;
-		case 3: r=(int)p; g=(int)q, b=(int)v; break;
-		case 5: r=(int)v; g=(int)p, b=(int)q; break;
-	    }
-	} else {
-	    t = (uint)(2*v*(15300-(s*(60-f)))+15300)/30600;
-	    switch( h ) {
-		case 0: r=(int)v; g=(int)t, b=(int)p; break;
-		case 2: r=(int)p; g=(int)v, b=(int)t; break;
-		case 4: r=(int)t; g=(int)p, b=(int)v; break;
-	    }
+	if (h < -1 || (uint)s > 255 || (uint)v > 255) {
+		qWarning("QColor::setHsv: HSV parameters out of range");
+		return;
 	}
-    }
-    setRgb( r, g, b );
+#endif
+	int r = v, g = v, b = v;
+	if (s == 0 || h == -1) { // achromatic case
+		// Ignore
+	} else { // chromatic case
+		if ((uint)h >= 360)
+			h %= 360;
+		uint f = h % 60;
+		h /= 60;
+		uint p = (uint)(2 * v * (255 - s) + 255) / 510;
+		uint q, t;
+		if (h & 1) {
+			q = (uint)(2 * v * (15300 - s * f) + 15300) / 30600;
+			switch (h) {
+			case 1:
+				r = (int)q;
+				g = (int)v, b = (int)p;
+				break;
+			case 3:
+				r = (int)p;
+				g = (int)q, b = (int)v;
+				break;
+			case 5:
+				r = (int)v;
+				g = (int)p, b = (int)q;
+				break;
+			}
+		} else {
+			t = (uint)(2 * v * (15300 - (s * (60 - f))) + 15300) /
+			    30600;
+			switch (h) {
+			case 0:
+				r = (int)v;
+				g = (int)t, b = (int)p;
+				break;
+			case 2:
+				r = (int)p;
+				g = (int)v, b = (int)t;
+				break;
+			case 4:
+				r = (int)t;
+				g = (int)p, b = (int)v;
+				break;
+			}
+		}
+	}
+	setRgb(r, g, b);
 }
 
 
@@ -551,11 +579,11 @@ void QColor::setHsv( int h, int s, int v )
   \sa setRgb(), hsv()
 */
 
-void QColor::rgb( int *r, int *g, int *b ) const
+void QColor::rgb(int *r, int *g, int *b) const
 {
-    *r = qRed(rgbVal);
-    *g = qGreen(rgbVal);
-    *b = qBlue(rgbVal);
+	*r = qRed(rgbVal);
+	*g = qGreen(rgbVal);
+	*b = qBlue(rgbVal);
 }
 
 
@@ -565,19 +593,19 @@ void QColor::rgb( int *r, int *g, int *b ) const
   \sa rgb(), setHsv()
 */
 
-void QColor::setRgb( int r, int g, int b )
+void QColor::setRgb(int r, int g, int b)
 {
 #if defined(CHECK_RANGE)
-    if ( (uint)r > 255 || (uint)g > 255 || (uint)b > 255 )
-	qWarning( "QColor::setRgb: RGB parameter(s) out of range" );
+	if ((uint)r > 255 || (uint)g > 255 || (uint)b > 255)
+		qWarning("QColor::setRgb: RGB parameter(s) out of range");
 #endif
-    rgbVal = ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
-    if ( lazy_alloc || !color_init ) {
-	rgbVal |= RGB_DIRTY;			// alloc later
-	pix = 0;
-    } else {
-	alloc();				// alloc now
-    }
+	rgbVal = ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
+	if (lazy_alloc || !color_init) {
+		rgbVal |= RGB_DIRTY; // alloc later
+		pix = 0;
+	} else {
+		alloc(); // alloc now
+	}
 }
 
 
@@ -589,15 +617,15 @@ void QColor::setRgb( int r, int g, int b )
   \sa rgb(), setHsv()
 */
 
-void QColor::setRgb( QRgb rgb )
+void QColor::setRgb(QRgb rgb)
 {
-    if ( lazy_alloc || !color_init ) {
-	rgbVal = (rgb & RGB_MASK) | RGB_DIRTY;	// alloc later
-	pix = 0;
-    } else {
-	rgbVal = (rgb & RGB_MASK);
-	alloc();				// alloc now
-    }
+	if (lazy_alloc || !color_init) {
+		rgbVal = (rgb & RGB_MASK) | RGB_DIRTY; // alloc later
+		pix = 0;
+	} else {
+		rgbVal = (rgb & RGB_MASK);
+		alloc(); // alloc now
+	}
 }
 
 /*!
@@ -632,25 +660,25 @@ void QColor::setRgb( QRgb rgb )
   \sa dark()
 */
 
-QColor QColor::light( int factor ) const
+QColor QColor::light(int factor) const
 {
-    if ( factor <= 0 )				// invalid lightness factor
-	return *this;
-    else if ( factor < 100 )			// makes color darker
-	return dark( 10000/factor );
+	if (factor <= 0) // invalid lightness factor
+		return *this;
+	else if (factor < 100) // makes color darker
+		return dark(10000 / factor);
 
-    int h, s, v;
-    hsv( &h, &s, &v );
-    v = (factor*v)/100;
-    if ( v > 255 ) {				// overflow
-	s -= v-255;				// adjust saturation
-	if ( s < 0 )
-	    s = 0;
-	v = 255;
-    }
-    QColor c;
-    c.setHsv( h, s, v );
-    return c;
+	int h, s, v;
+	hsv(&h, &s, &v);
+	v = (factor * v) / 100;
+	if (v > 255) { // overflow
+		s -= v - 255; // adjust saturation
+		if (s < 0)
+			s = 0;
+		v = 255;
+	}
+	QColor c;
+	c.setHsv(h, s, v);
+	return c;
 }
 
 
@@ -670,18 +698,18 @@ QColor QColor::light( int factor ) const
   \sa light()
 */
 
-QColor QColor::dark( int factor ) const
+QColor QColor::dark(int factor) const
 {
-    if ( factor <= 0 )				// invalid darkness factor
-	return *this;
-    else if ( factor < 100 )			// makes color lighter
-	return light( 10000/factor );
-    int h, s, v;
-    hsv( &h, &s, &v );
-    v = (v*100)/factor;
-    QColor c;
-    c.setHsv( h, s, v );
-    return c;
+	if (factor <= 0) // invalid darkness factor
+		return *this;
+	else if (factor < 100) // makes color lighter
+		return light(10000 / factor);
+	int h, s, v;
+	hsv(&h, &s, &v);
+	v = (v * 100) / factor;
+	QColor c;
+	c.setHsv(h, s, v);
+	return c;
 }
 
 
@@ -718,9 +746,9 @@ QColor QColor::dark( int factor ) const
   \sa lazyAlloc(), pixel(), alloc()
 */
 
-void QColor::setLazyAlloc( bool enable )
+void QColor::setLazyAlloc(bool enable)
 {
-    lazy_alloc = enable;
+	lazy_alloc = enable;
 }
 
 
@@ -747,12 +775,13 @@ void QColor::setLazyAlloc( bool enable )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator<<( QDataStream &s, const QColor &c )
+QDataStream &operator<<(QDataStream &s, const QColor &c)
 {
-    Q_UINT32 p = (Q_UINT32)c.rgb();
-    if ( s.version() == 1 )			// Swap red and blue
-	p = ((p << 16) & 0xff0000) | ((p >> 16) & 0xff) | (p & 0xff00ff00);
-    return s << p;
+	Q_UINT32 p = (Q_UINT32)c.rgb();
+	if (s.version() == 1) // Swap red and blue
+		p = ((p << 16) & 0xff0000) | ((p >> 16) & 0xff) |
+		    (p & 0xff00ff00);
+	return s << p;
 }
 
 /*!
@@ -762,14 +791,15 @@ QDataStream &operator<<( QDataStream &s, const QColor &c )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator>>( QDataStream &s, QColor &c )
+QDataStream &operator>>(QDataStream &s, QColor &c)
 {
-    Q_UINT32 p;
-    s >> p;
-    if ( s.version() == 1 )			// Swap red and blue
-	p = ((p << 16) & 0xff0000) | ((p >> 16) & 0xff) | (p & 0xff00ff00);
-    c.setRgb( p );
-    return s;
+	Q_UINT32 p;
+	s >> p;
+	if (s.version() == 1) // Swap red and blue
+		p = ((p << 16) & 0xff0000) | ((p >> 16) & 0xff) |
+		    (p & 0xff00ff00);
+	c.setRgb(p);
+	return s;
 }
 #endif
 

@@ -39,16 +39,24 @@
 #define QSHARED_H
 
 #ifndef QT_H
-#include "qglobal.h"
+# include "qglobal.h"
 #endif // QT_H
 
 
-struct QShared
-{
-    QShared()		{ count = 1; }
-    void ref()		{ count++; }
-    bool deref()	{ return !--count; }
-    uint count;
+struct QShared {
+	QShared()
+	{
+		count = 1;
+	}
+	void ref()
+	{
+		count++;
+	}
+	bool deref()
+	{
+		return !--count;
+	}
+	uint count;
 };
 
 

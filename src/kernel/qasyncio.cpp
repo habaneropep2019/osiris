@@ -65,10 +65,10 @@ QAsyncIO::~QAsyncIO()
 /*!
   Ensures only one object can respond to changes in readiness.
 */
-void QAsyncIO::connect(QObject* obj, const char *member)
+void QAsyncIO::connect(QObject *obj, const char *member)
 {
-    signal.disconnect(0, 0);
-    signal.connect(obj, member);
+	signal.disconnect(0, 0);
+	signal.connect(obj, member);
 }
 
 /*!
@@ -77,7 +77,7 @@ void QAsyncIO::connect(QObject* obj, const char *member)
 */
 void QAsyncIO::ready()
 {
-    signal.activate();
+	signal.activate();
 }
 
 
@@ -108,7 +108,8 @@ void QAsyncIO::ready()
 */
 void QDataSink::maybeReady()
 {
-    if (readyToReceive()) ready();
+	if (readyToReceive())
+		ready();
 }
 
 /*!
@@ -154,7 +155,8 @@ void QDataSink::maybeReady()
 */
 void QDataSource::maybeReady()
 {
-    if (readyToSend()) ready();
+	if (readyToSend())
+		ready();
 }
 
 /*!
@@ -174,7 +176,7 @@ void QDataSource::maybeReady()
 */
 bool QDataSource::rewindable() const
 {
-    return FALSE;
+	return FALSE;
 }
 
 /*!
@@ -191,7 +193,7 @@ bool QDataSource::rewindable() const
 */
 void QDataSource::enableRewind(bool)
 {
-    qFatal("Attempted to make unrewindable QDataSource rewindable");
+	qFatal("Attempted to make unrewindable QDataSource rewindable");
 }
 
 /*!
@@ -200,12 +202,13 @@ void QDataSource::enableRewind(bool)
 */
 void QDataSource::rewind()
 {
-    qFatal("Attempted to rewind unrewindable QDataSource");
+	qFatal("Attempted to rewind unrewindable QDataSource");
 }
 
 /*!
   \class QIODeviceSource qasyncio.h
-  \brief The QIODeviceSource class is a QDataSource that draws data from a QIODevice
+  \brief The QIODeviceSource class is a QDataSource that draws data from a
+  QIODevice
 
   This class encapsulates retrieving data from a QIODevice (such as a QFile).
 */
@@ -218,11 +221,9 @@ void QDataSource::rewind()
   The higher \a buffer_size, the more efficient but the less interleaved
   the operation will be with other processing.
 */
-QIODeviceSource::QIODeviceSource(QIODevice* device, int buffer_size) :
-    buf_size(buffer_size),
-    buffer(new uchar[buf_size]),
-    iod(device),
-    rew(FALSE)
+QIODeviceSource::QIODeviceSource(QIODevice *device, int buffer_size)
+	: buf_size(buffer_size), buffer(new uchar[buf_size]), iod(device),
+	  rew(FALSE)
 {
 }
 
@@ -232,8 +233,8 @@ QIODeviceSource::QIODeviceSource(QIODevice* device, int buffer_size) :
 */
 QIODeviceSource::~QIODeviceSource()
 {
-    delete iod;
-    delete [] buffer;
+	delete iod;
+	delete[] buffer;
 }
 
 /*!
@@ -241,20 +242,20 @@ QIODeviceSource::~QIODeviceSource()
 */
 int QIODeviceSource::readyToSend()
 {
-    if ( iod->status() != IO_Ok || !(iod->state() & IO_Open) )
-	return -1;
+	if (iod->status() != IO_Ok || !(iod->state() & IO_Open))
+		return -1;
 
-    int n = QMIN((uint)buf_size, iod->size()-iod->at());
-    return n ? n : -1;
+	int n = QMIN((uint)buf_size, iod->size() - iod->at());
+	return n ? n : -1;
 }
 
 /*!
   Reads and sends a block of data.
 */
-void QIODeviceSource::sendTo(QDataSink* sink, int n)
+void QIODeviceSource::sendTo(QDataSink *sink, int n)
 {
-    iod->readBlock((char*)buffer, n);
-    sink->receive(buffer, n);
+	iod->readBlock((char *)buffer, n);
+	sink->receive(buffer, n);
 }
 
 /*!
@@ -262,7 +263,7 @@ void QIODeviceSource::sendTo(QDataSink* sink, int n)
 */
 bool QIODeviceSource::rewindable() const
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
@@ -270,7 +271,7 @@ bool QIODeviceSource::rewindable() const
 */
 void QIODeviceSource::enableRewind(bool on)
 {
-    rew = on;
+	rew = on;
 }
 
 /*!
@@ -278,12 +279,12 @@ void QIODeviceSource::enableRewind(bool on)
 */
 void QIODeviceSource::rewind()
 {
-    if (!rew) {
-	QDataSource::rewind();
-    } else {
-	iod->reset();
-	ready();
-    }
+	if (!rew) {
+		QDataSource::rewind();
+	} else {
+		iod->reset();
+		ready();
+	}
 }
 
 
@@ -307,44 +308,43 @@ void QIODeviceSource::rewind()
   Constructs a QDataPump to move data from a given \a data_source
   to a given \a data_sink.
 */
-QDataPump::QDataPump(QDataSource* data_source, QDataSink* data_sink) :
-    source(data_source), sink(data_sink)
+QDataPump::QDataPump(QDataSource *data_source, QDataSink *data_sink)
+	: source(data_source), sink(data_sink)
 {
-    source->connect(this, SLOT(kickStart()));
-    sink->connect(this, SLOT(kickStart()));
-    connect(&timer, SIGNAL(timeout()), this, SLOT(tryToPump()));
-    timer.start(0, TRUE);
+	source->connect(this, SLOT(kickStart()));
+	sink->connect(this, SLOT(kickStart()));
+	connect(&timer, SIGNAL(timeout()), this, SLOT(tryToPump()));
+	timer.start(0, TRUE);
 }
 
 void QDataPump::kickStart()
 {
-    if (!timer.isActive()) {
-	interval = 0;
-	timer.start(0, TRUE);
-    }
+	if (!timer.isActive()) {
+		interval = 0;
+		timer.start(0, TRUE);
+	}
 }
 
 void QDataPump::tryToPump()
 {
-    int supply, demand;
+	int supply, demand;
 
-    supply = source->readyToSend();
-    demand = sink->readyToReceive();
-    if (demand <= 0) {
-	return;
-    }
-    interval = 0;
-    if (supply < 0) {
-	// All done (until source signals change in readiness)
-	sink->eof();
-	return;
-    }
-    if (!supply)
-	return;
-    source->sendTo(sink, QMIN(supply, demand));
+	supply = source->readyToSend();
+	demand = sink->readyToReceive();
+	if (demand <= 0) {
+		return;
+	}
+	interval = 0;
+	if (supply < 0) {
+		// All done (until source signals change in readiness)
+		sink->eof();
+		return;
+	}
+	if (!supply)
+		return;
+	source->sendTo(sink, QMIN(supply, demand));
 
-    timer.start(0, TRUE);
+	timer.start(0, TRUE);
 }
 
 #endif // QT_NO_ASYNC_IO
-

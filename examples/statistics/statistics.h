@@ -16,38 +16,40 @@
 
 class TableItem : public QTableItem
 {
-public:
-    TableItem( QTable *t, EditType et, const QString &txt ) : QTableItem( t, et, txt ) {}
-    void paint( QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected );
+      public:
+	TableItem(QTable *t, EditType et, const QString &txt)
+		: QTableItem(t, et, txt)
+	{
+	}
+	void paint(QPainter *p, const QColorGroup &cg, const QRect &cr,
+		   bool selected);
 };
 
 class ComboItem : public QTableItem
 {
-public:
-    ComboItem( QTable *t, EditType et );
-    QWidget *createEditor() const;
-    void setContentFromEditor( QWidget *w );
-    void setText( const QString &s );
-    
-private:
-    QComboBox *cb;
+      public:
+	ComboItem(QTable *t, EditType et);
+	QWidget *createEditor() const;
+	void setContentFromEditor(QWidget *w);
+	void setText(const QString &s);
 
+      private:
+	QComboBox *cb;
 };
 
 class Table : public QTable
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    Table();
-    void sortColumn( int col, bool ascending, bool wholeRows );
+      public:
+	Table();
+	void sortColumn(int col, bool ascending, bool wholeRows);
 
-private slots:
-    void recalcSum( int row, int col );
+      private slots:
+	void recalcSum(int row, int col);
 
-private:
-    void initTable();
-
+      private:
+	void initTable();
 };
 
 #endif

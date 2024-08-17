@@ -35,7 +35,7 @@
 #define QGRID_H
 
 #ifndef QT_H
-#include "qframe.h"
+# include "qframe.h"
 #endif // QT_H
 
 #ifndef QT_NO_GRID
@@ -44,25 +44,26 @@ class QGridLayout;
 
 class Q_EXPORT QGrid : public QFrame
 {
-    Q_OBJECT
-public:
-    enum Direction { Horizontal, Vertical };
-    QGrid( int n, QWidget *parent=0, const char *name=0, WFlags f=0 );
-    QGrid( int n, Direction, QWidget *parent=0, const char *name=0,
-	   WFlags f=0 );
-    void setSpacing( int );
-    QSize sizeHint() const;
+	Q_OBJECT
+      public:
+	enum Direction { Horizontal, Vertical };
+	QGrid(int n, QWidget *parent = 0, const char *name = 0, WFlags f = 0);
+	QGrid(int n, Direction, QWidget *parent = 0, const char *name = 0,
+	      WFlags f = 0);
+	void setSpacing(int);
+	QSize sizeHint() const;
 
-protected:
-    void frameChanged();
+      protected:
+	void frameChanged();
 
-private:
-    QGridLayout *lay;
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QGrid( const QGrid & );
-    QGrid& operator=( const QGrid & );
-#endif
+      private:
+	QGridLayout *lay;
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QGrid(const QGrid &);
+	QGrid &operator=(const QGrid &);
+# endif
 };
 
 #endif // QT_NO_GRID

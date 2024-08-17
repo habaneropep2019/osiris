@@ -17,39 +17,38 @@
 
 class FtpViewItem : public QListViewItem
 {
-public:
-    FtpViewItem( QListView *parent, const QUrlInfo &i );
-    
-    QString key( int c, bool ) const;
-    QString text( int c ) const;
-    const QPixmap* pixmap( int c ) const;
-    
-    QUrlInfo entryInfo() {
-	return info;
-    }
-    
-private:
-    QUrlInfo info;
-    
+      public:
+	FtpViewItem(QListView *parent, const QUrlInfo &i);
+
+	QString key(int c, bool) const;
+	QString text(int c) const;
+	const QPixmap *pixmap(int c) const;
+
+	QUrlInfo entryInfo()
+	{
+		return info;
+	}
+
+      private:
+	QUrlInfo info;
 };
 
 class FtpView : public QListView
 {
-    Q_OBJECT
-    
-public:
-    FtpView( QWidget *parent );
-    QValueList<QUrlInfo> selectedItems() const;
-    
-public slots:
-    void slotInsertEntries( const QValueList<QUrlInfo> &info );
-    
-signals:
-    void itemSelected( const QUrlInfo &info );
-    
-private slots:
-    void slotSelected( QListViewItem *item );
-    
+	Q_OBJECT
+
+      public:
+	FtpView(QWidget *parent);
+	QValueList<QUrlInfo> selectedItems() const;
+
+      public slots:
+	void slotInsertEntries(const QValueList<QUrlInfo> &info);
+
+      signals:
+	void itemSelected(const QUrlInfo &info);
+
+      private slots:
+	void slotSelected(QListViewItem *item);
 };
 
 #endif

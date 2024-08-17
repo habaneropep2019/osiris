@@ -18,21 +18,21 @@
 
 class Biff : public QWidget
 {
-    Q_OBJECT
-public:
-    Biff( QWidget *parent=0, const char *name=0 );
+	Q_OBJECT
+      public:
+	Biff(QWidget *parent = 0, const char *name = 0);
 
-protected:
-    void	timerEvent( QTimerEvent * );
-    void	paintEvent( QPaintEvent * );
-    void	mousePressEvent( QMouseEvent * );
+      protected:
+	void timerEvent(QTimerEvent *);
+	void paintEvent(QPaintEvent *);
+	void mousePressEvent(QMouseEvent *);
 
-private:
-    QDateTime	lastModified;
-    QPixmap	hasNewMail;
-    QPixmap	noNewMail;
-    QString	mailbox;
-    bool	gotMail;
+      private:
+	QDateTime lastModified;
+	QPixmap hasNewMail;
+	QPixmap noNewMail;
+	QString mailbox;
+	bool gotMail;
 };
 
 

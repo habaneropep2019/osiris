@@ -39,52 +39,59 @@
 #define QSOCKETNOTIFIER_H
 
 #ifndef QT_H
-#include "qobject.h"
+# include "qobject.h"
 #endif // QT_H
 
 
 class Q_EXPORT QSocketNotifier : public QObject
 {
-    Q_OBJECT
-public:
-    enum Type { Read, Write, Exception };
+	Q_OBJECT
+      public:
+	enum Type { Read, Write, Exception };
 
-    QSocketNotifier( int socket, Type, QObject *parent=0, const char *name=0 );
-   ~QSocketNotifier();
+	QSocketNotifier(int socket, Type, QObject *parent = 0,
+			const char *name = 0);
+	~QSocketNotifier();
 
-    int		 socket()	const;
-    Type	 type()		const;
+	int socket() const;
+	Type type() const;
 
-    bool	 isEnabled()	const;
-    virtual void setEnabled( bool );
+	bool isEnabled() const;
+	virtual void setEnabled(bool);
 
-signals:
-    void	 activated( int socket );
+      signals:
+	void activated(int socket);
 
-protected:
-    bool	 event( QEvent * );
+      protected:
+	bool event(QEvent *);
 
-private:
-    int		 sockfd;
-    Type	 sntype;
-    bool	 snenabled;
+      private:
+	int sockfd;
+	Type sntype;
+	bool snenabled;
 
-private:	// Disabled copy constructor and operator=
+      private: // Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
-    QSocketNotifier( const QSocketNotifier & );
-    QSocketNotifier &operator=( const QSocketNotifier & );
+	QSocketNotifier(const QSocketNotifier &);
+	QSocketNotifier &operator=(const QSocketNotifier &);
 #endif
 };
 
 
 inline int QSocketNotifier::socket() const
-{ return sockfd; }
+{
+	return sockfd;
+}
 
 inline QSocketNotifier::Type QSocketNotifier::type() const
-{ return sntype; }
+{
+	return sntype;
+}
 
 inline bool QSocketNotifier::isEnabled() const
-{ return snenabled; }
+{
+	return snenabled;
+}
 
 
 #endif // QSOCKETNOTIFIER_H

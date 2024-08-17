@@ -11,11 +11,11 @@
 #include "wizard.h"
 #include <qapplication.h>
 
-int main(int argc,char **argv)
+int main(int argc, char **argv)
 {
-    QApplication a(argc,argv);
+	QApplication a(argc, argv);
 
-    Wizard wizard;
-    wizard.setCaption("Qt Example - Wizard");
-    return wizard.exec();
+	Wizard wizard;
+	wizard.setCaption("Qt Example - Wizard");
+	return wizard.exec();
 }

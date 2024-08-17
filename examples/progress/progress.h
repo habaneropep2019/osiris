@@ -19,28 +19,25 @@
 
 class AnimatedThingy : public QLabel
 {
-public:
-    AnimatedThingy(QWidget *parent, const QString &s);
+      public:
+	AnimatedThingy(QWidget *parent, const QString &s);
 
-    void show();
-    void hide();
-    QSize sizeHint() const;
+	void show();
+	void hide();
+	QSize sizeHint() const;
 
-protected:
-    void timerEvent(QTimerEvent *);
-    void paintEvent(QPaintEvent *event);
+      protected:
+	void timerEvent(QTimerEvent *);
+	void paintEvent(QPaintEvent *event);
 
-private:
-    void inc(int &x, int &dx, int b);
+      private:
+	void inc(int &x, int &dx, int b);
 
-    enum
-    {
-        nqix = 10
-    };
-    int ox[2][nqix];
-    int oy[2][nqix];
-    int x0, y0, x1, y1;
-    int dx0, dy0, dx1, dy1;
-    QString label;
-    int step;
+	enum { nqix = 10 };
+	int ox[2][nqix];
+	int oy[2][nqix];
+	int x0, y0, x1, y1;
+	int dx0, dy0, dx1, dy1;
+	QString label;
+	int step;
 };

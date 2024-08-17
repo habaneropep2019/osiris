@@ -35,29 +35,31 @@
 **
 **********************************************************************/
 
-#define	 INCLUDE_MENUITEM_DEF
+#define INCLUDE_MENUITEM_DEF
 #include "qmenudata.h"
 #ifndef QT_NO_MENUDATA
-#include "qpopupmenu.h"
-#include "qmenubar.h"
-#include "qapplication.h"
-#include "qguardedptr.h"
+# include "qpopupmenu.h"
+# include "qmenubar.h"
+# include "qapplication.h"
+# include "qguardedptr.h"
 
-class QMenuItemData {
-public:
-    QCustomMenuItem    *custom_item;	// custom menu item
+class QMenuItemData
+{
+      public:
+	QCustomMenuItem *custom_item; // custom menu item
 };
 
-class QMenuDataData {
-    // attention: also defined in qmenubar.cpp and qpopupmenu.cpp
-public:
-    QMenuDataData();
-    QGuardedPtr<QWidget> aWidget;
-    int aInt;
+class QMenuDataData
+{
+	// attention: also defined in qmenubar.cpp and qpopupmenu.cpp
+      public:
+	QMenuDataData();
+	QGuardedPtr<QWidget> aWidget;
+	int aInt;
 };
-QMenuDataData::QMenuDataData()
-    : aInt(-1)
-{}
+QMenuDataData::QMenuDataData() : aInt(-1)
+{
+}
 
 // NOT REVISED
 /*!
@@ -85,27 +87,27 @@ QMenuDataData::QMenuDataData()
 
 QMenuItem::QMenuItem()
 {
-    ident	 = -1;
-    is_separator = FALSE;
-    is_checked   = FALSE;
-    is_enabled	 = TRUE;
-    is_dirty	 = TRUE;
-    iconset_data	 = 0;
-    pixmap_data	 = 0;
-    popup_menu	 = 0;
-    widget_item	 = 0;
-    accel_key	 = 0;
-    signal_data	 = 0;
-    d = 0;
+	ident = -1;
+	is_separator = FALSE;
+	is_checked = FALSE;
+	is_enabled = TRUE;
+	is_dirty = TRUE;
+	iconset_data = 0;
+	pixmap_data = 0;
+	popup_menu = 0;
+	widget_item = 0;
+	accel_key = 0;
+	signal_data = 0;
+	d = 0;
 }
 
 QMenuItem::~QMenuItem()
 {
-    delete iconset_data;
-    delete pixmap_data;
-    delete signal_data;
-    delete widget_item;
-    delete d;
+	delete iconset_data;
+	delete pixmap_data;
+	delete signal_data;
+	delete widget_item;
+	delete d;
 }
 
 
@@ -113,23 +115,25 @@ QMenuItem::~QMenuItem()
   QMenuData member functions
  *****************************************************************************/
 
-QMenuItemData* QMenuItem::extra()
+QMenuItemData *QMenuItem::extra()
 {
-    if ( !d ) d = new QMenuItemData;
-    return d;
+	if (!d)
+		d = new QMenuItemData;
+	return d;
 }
 
 QCustomMenuItem *QMenuItem::custom() const
 {
-    if ( !d ) return 0;
-    return d->custom_item;
+	if (!d)
+		return 0;
+	return d->custom_item;
 }
 
 
 static int get_seq_id()
 {
-    static int seq_no = -2;
-    return seq_no--;
+	static int seq_no = -2;
+	return seq_no--;
 }
 
 
@@ -139,18 +143,18 @@ static int get_seq_id()
 
 QMenuData::QMenuData()
 {
-    actItem = -1;				// no active menu item
-    mitems = new QMenuItemList;			// create list of menu items
-    CHECK_PTR( mitems );
-    mitems->setAutoDelete( TRUE );
-    parentMenu = 0;				// assume top level
-    isPopupMenu = FALSE;
-    isMenuBar = FALSE;
-    mouseBtDn = FALSE;
-    badSize = TRUE;
-    avoid_circularity = 0;
-    actItemDown = FALSE;
-    d = new QMenuDataData;
+	actItem = -1; // no active menu item
+	mitems = new QMenuItemList; // create list of menu items
+	CHECK_PTR(mitems);
+	mitems->setAutoDelete(TRUE);
+	parentMenu = 0; // assume top level
+	isPopupMenu = FALSE;
+	isMenuBar = FALSE;
+	mouseBtDn = FALSE;
+	badSize = TRUE;
+	avoid_circularity = 0;
+	actItemDown = FALSE;
+	d = new QMenuDataData;
 }
 
 /*!
@@ -159,14 +163,14 @@ QMenuData::QMenuData()
 
 QMenuData::~QMenuData()
 {
-    register QMenuItem *mi = mitems->first();
-    while ( mi ) {
-	if ( mi->popup_menu )			// reset parent pointer for all
-	    mi->popup_menu->parentMenu = 0;	//   child menus
-	mi = mitems->next();
-    }
-    delete mitems;				// delete menu item list
-    delete d;
+	register QMenuItem *mi = mitems->first();
+	while (mi) {
+		if (mi->popup_menu) // reset parent pointer for all
+			mi->popup_menu->parentMenu = 0; //   child menus
+		mi = mitems->next();
+	}
+	delete mitems; // delete menu item list
+	delete d;
 }
 
 
@@ -174,7 +178,7 @@ QMenuData::~QMenuData()
   Virtual function; notifies subclasses about an item that has been changed.
 */
 
-void QMenuData::updateItem( int )		// reimplemented in subclass
+void QMenuData::updateItem(int) // reimplemented in subclass
 {
 }
 
@@ -183,7 +187,7 @@ void QMenuData::updateItem( int )		// reimplemented in subclass
   inserted or removed.
 */
 
-void QMenuData::menuContentsChanged()		// reimplemented in subclass
+void QMenuData::menuContentsChanged() // reimplemented in subclass
 {
 }
 
@@ -192,7 +196,7 @@ void QMenuData::menuContentsChanged()		// reimplemented in subclass
   state (enabled/disabled or checked/unchecked).
 */
 
-void QMenuData::menuStateChanged()		// reimplemented in subclass
+void QMenuData::menuStateChanged() // reimplemented in subclass
 {
 }
 
@@ -201,7 +205,7 @@ void QMenuData::menuStateChanged()		// reimplemented in subclass
   inserted.
 */
 
-void QMenuData::menuInsPopup( QPopupMenu * )	// reimplemented in subclass
+void QMenuData::menuInsPopup(QPopupMenu *) // reimplemented in subclass
 {
 }
 
@@ -210,7 +214,7 @@ void QMenuData::menuInsPopup( QPopupMenu * )	// reimplemented in subclass
   removed.
 */
 
-void QMenuData::menuDelPopup( QPopupMenu * )	// reimplemented in subclass
+void QMenuData::menuDelPopup(QPopupMenu *) // reimplemented in subclass
 {
 }
 
@@ -221,77 +225,77 @@ void QMenuData::menuDelPopup( QPopupMenu * )	// reimplemented in subclass
 
 uint QMenuData::count() const
 {
-    return mitems->count();
+	return mitems->count();
 }
 
 
 
-    /*!
-  Internal function that insert a menu item.  Called by all insert()
-  functions.
+/*!
+Internal function that insert a menu item.  Called by all insert()
+functions.
 */
 
-int QMenuData::insertAny( const QString *text, const QPixmap *pixmap,
-			  QPopupMenu *popup, const QIconSet* iconset, int id, int index,
-			  QWidget* widget, QCustomMenuItem* custom )
+int QMenuData::insertAny(const QString *text, const QPixmap *pixmap,
+			 QPopupMenu *popup, const QIconSet *iconset, int id,
+			 int index, QWidget *widget, QCustomMenuItem *custom)
 {
-    if ( index < 0 || index > (int) mitems->count() )	// append
-	index = mitems->count();
-    if ( id < 0 )				// -2, -3 etc.
-	id = get_seq_id();
+	if (index < 0 || index > (int)mitems->count()) // append
+		index = mitems->count();
+	if (id < 0) // -2, -3 etc.
+		id = get_seq_id();
 
-    register QMenuItem *mi = new QMenuItem;
-    CHECK_PTR( mi );
-    mi->ident = id;
-    if ( widget != 0 ) {
-	mi->widget_item = widget;
-	mi->is_separator = !widget->isFocusEnabled();
-    } else if ( custom != 0 ) {
-	mi->extra()->custom_item = custom;
-	mi->is_separator = custom->isSeparator();
-    } else if ( text == 0 && pixmap == 0 && popup == 0 ) {
-	mi->is_separator = TRUE;		// separator
-    } else {
-	mi->text_data = text?*text:QString::null;
-	mi->accel_key = Qt::Key_unknown;
-	if ( pixmap )
-	    mi->pixmap_data = new QPixmap( *pixmap );
-	if ( (mi->popup_menu = popup) ) 
-	    menuInsPopup( popup );
-	if ( iconset )
-	    mi->iconset_data = new QIconSet( *iconset );
-    }
+	register QMenuItem *mi = new QMenuItem;
+	CHECK_PTR(mi);
+	mi->ident = id;
+	if (widget != 0) {
+		mi->widget_item = widget;
+		mi->is_separator = !widget->isFocusEnabled();
+	} else if (custom != 0) {
+		mi->extra()->custom_item = custom;
+		mi->is_separator = custom->isSeparator();
+	} else if (text == 0 && pixmap == 0 && popup == 0) {
+		mi->is_separator = TRUE; // separator
+	} else {
+		mi->text_data = text ? *text : QString::null;
+		mi->accel_key = Qt::Key_unknown;
+		if (pixmap)
+			mi->pixmap_data = new QPixmap(*pixmap);
+		if ((mi->popup_menu = popup))
+			menuInsPopup(popup);
+		if (iconset)
+			mi->iconset_data = new QIconSet(*iconset);
+	}
 
-    mitems->insert( index, mi );
-    menuContentsChanged();			// menu data changed
-    return mi->ident;
+	mitems->insert(index, mi);
+	menuContentsChanged(); // menu data changed
+	return mi->ident;
 }
 
 /*!
   Internal function that finds the menu item where \a popup is located,
   storing its index at \a index if \a index is not NULL.
 */
-QMenuItem *QMenuData::findPopup( QPopupMenu *popup, int *index )
+QMenuItem *QMenuData::findPopup(QPopupMenu *popup, int *index)
 {
-    int i = 0;
-    QMenuItem *mi = mitems->first();
-    while ( mi ) {
-	if ( mi->popup_menu == popup )		// found popup
-	    break;
-	i++;
-	mi = mitems->next();
-    }
-    if ( index && mi )
-	*index = i;
-    return mi;
+	int i = 0;
+	QMenuItem *mi = mitems->first();
+	while (mi) {
+		if (mi->popup_menu == popup) // found popup
+			break;
+		i++;
+		mi = mitems->next();
+	}
+	if (index && mi)
+		*index = i;
+	return mi;
 }
 
-void QMenuData::removePopup( QPopupMenu *popup )
+void QMenuData::removePopup(QPopupMenu *popup)
 {
-    int index = 0;
-    QMenuItem *mi = findPopup( popup, &index );
-    if ( mi )
-	removeItemAt( index );
+	int index = 0;
+	QMenuItem *mi = findPopup(popup, &index);
+	if (mi)
+		removeItemAt(index);
 }
 
 
@@ -299,7 +303,7 @@ void QMenuData::removePopup( QPopupMenu *popup )
   does nothing, but that virtual ### remove 3.0
 */
 
-void QMenuData::setAllDirty( bool  )
+void QMenuData::setAllDirty(bool)
 {
 }
 
@@ -376,15 +380,14 @@ void QMenuData::setAllDirty( bool  )
   qnamespace.h
 */
 
-int QMenuData::insertItem( const QString &text,
-			   const QObject *receiver, const char* member,
-			   int accel, int id, int index )
+int QMenuData::insertItem(const QString &text, const QObject *receiver,
+			  const char *member, int accel, int id, int index)
 {
-    int actualID = insertAny( &text, 0, 0, 0, id, index );
-    connectItem( actualID, receiver, member );
-    if ( accel )
-	setAccel( accel, actualID );
-    return actualID;
+	int actualID = insertAny(&text, 0, 0, 0, id, index);
+	connectItem(actualID, receiver, member);
+	if (accel)
+		setAccel(accel, actualID);
+	return actualID;
 }
 
 /*!\overload
@@ -396,16 +399,15 @@ int QMenuData::insertItem( const QString &text,
   qnamespace.h
 */
 
-int QMenuData::insertItem( const QIconSet& icon,
-			   const QString &text,
-			   const QObject *receiver, const char* member,
-			   int accel, int id, int index )
+int QMenuData::insertItem(const QIconSet &icon, const QString &text,
+			  const QObject *receiver, const char *member,
+			  int accel, int id, int index)
 {
-    int actualID = insertAny( &text, 0, 0, &icon, id, index );
-    connectItem( actualID, receiver, member );
-    if ( accel )
-	setAccel( accel, actualID );
-    return actualID;
+	int actualID = insertAny(&text, 0, 0, &icon, id, index);
+	connectItem(actualID, receiver, member);
+	if (accel)
+		setAccel(accel, actualID);
+	return actualID;
 }
 
 /*!\overload
@@ -420,15 +422,14 @@ int QMenuData::insertItem( const QIconSet& icon,
   \sa removeItem(), changeItem(), setAccel(), connectItem()
 */
 
-int QMenuData::insertItem( const QPixmap &pixmap,
-			   const QObject *receiver, const char* member,
-			   int accel, int id, int index )
+int QMenuData::insertItem(const QPixmap &pixmap, const QObject *receiver,
+			  const char *member, int accel, int id, int index)
 {
-    int actualID = insertAny( 0, &pixmap, 0, 0, id, index );
-    connectItem( actualID, receiver, member );
-    if ( accel )
-	setAccel( accel, actualID );
-    return actualID;
+	int actualID = insertAny(0, &pixmap, 0, 0, id, index);
+	connectItem(actualID, receiver, member);
+	if (accel)
+		setAccel(accel, actualID);
+	return actualID;
 }
 
 
@@ -446,16 +447,15 @@ int QMenuData::insertItem( const QPixmap &pixmap,
   qnamespace.h
 */
 
-int QMenuData::insertItem( const QIconSet& icon,
-			   const QPixmap &pixmap,
-			   const QObject *receiver, const char* member,
-			   int accel, int id, int index )
+int QMenuData::insertItem(const QIconSet &icon, const QPixmap &pixmap,
+			  const QObject *receiver, const char *member,
+			  int accel, int id, int index)
 {
-    int actualID = insertAny( 0, &pixmap, 0, &icon, id, index );
-    connectItem( actualID, receiver, member );
-    if ( accel )
-	setAccel( accel, actualID );
-    return actualID;
+	int actualID = insertAny(0, &pixmap, 0, &icon, id, index);
+	connectItem(actualID, receiver, member);
+	if (accel)
+		setAccel(accel, actualID);
+	return actualID;
 }
 
 
@@ -465,9 +465,9 @@ int QMenuData::insertItem( const QIconSet& icon,
   \sa removeItem(), changeItem(), setAccel(), connectItem()
 */
 
-int QMenuData::insertItem( const QString &text, int id, int index )
+int QMenuData::insertItem(const QString &text, int id, int index)
 {
-    return insertAny( &text, 0, 0, 0, id, index );
+	return insertAny(&text, 0, 0, 0, id, index);
 }
 
 /*!\overload
@@ -478,10 +478,10 @@ int QMenuData::insertItem( const QString &text, int id, int index )
   \sa removeItem(), changeItem(), setAccel(), connectItem()
 */
 
-int QMenuData::insertItem( const QIconSet& icon,
-			   const QString &text, int id, int index )
+int QMenuData::insertItem(const QIconSet &icon, const QString &text, int id,
+			  int index)
 {
-    return insertAny( &text, 0, 0, &icon, id, index );
+	return insertAny(&text, 0, 0, &icon, id, index);
 }
 
 /*!\overload
@@ -496,10 +496,10 @@ int QMenuData::insertItem( const QIconSet& icon,
   \sa removeItem(), changeItem(), setAccel(), connectItem()
 */
 
-int QMenuData::insertItem( const QString &text, QPopupMenu *popup,
-			   int id, int index )
+int QMenuData::insertItem(const QString &text, QPopupMenu *popup, int id,
+			  int index)
 {
-    return insertAny( &text, 0, popup, 0, id, index );
+	return insertAny(&text, 0, popup, 0, id, index);
 }
 
 /*!\overload
@@ -515,11 +515,10 @@ int QMenuData::insertItem( const QString &text, QPopupMenu *popup,
   \sa removeItem(), changeItem(), setAccel(), connectItem()
 */
 
-int QMenuData::insertItem( const QIconSet& icon,
-			   const QString &text, QPopupMenu *popup,
-			   int id, int index )
+int QMenuData::insertItem(const QIconSet &icon, const QString &text,
+			  QPopupMenu *popup, int id, int index)
 {
-    return insertAny( &text, 0, popup, &icon, id, index );
+	return insertAny(&text, 0, popup, &icon, id, index);
 }
 
 /*!\overload
@@ -531,9 +530,9 @@ int QMenuData::insertItem( const QIconSet& icon,
   \sa removeItem(), changeItem(), setAccel(), connectItem()
 */
 
-int QMenuData::insertItem( const QPixmap &pixmap, int id, int index )
+int QMenuData::insertItem(const QPixmap &pixmap, int id, int index)
 {
-    return insertAny( 0, &pixmap, 0, 0, id, index );
+	return insertAny(0, &pixmap, 0, 0, id, index);
 }
 
 /*!\overload
@@ -544,10 +543,10 @@ int QMenuData::insertItem( const QPixmap &pixmap, int id, int index )
   \sa removeItem(), changeItem(), setAccel(), connectItem()
 */
 
-int QMenuData::insertItem( const QIconSet& icon,
-			   const QPixmap &pixmap, int id, int index )
+int QMenuData::insertItem(const QIconSet &icon, const QPixmap &pixmap, int id,
+			  int index)
 {
-    return insertAny( 0, &pixmap, 0, &icon, id, index );
+	return insertAny(0, &pixmap, 0, &icon, id, index);
 }
 
 
@@ -564,10 +563,10 @@ int QMenuData::insertItem( const QIconSet& icon,
   \sa removeItem(), changeItem(), setAccel(), connectItem()
 */
 
-int QMenuData::insertItem( const QPixmap &pixmap, QPopupMenu *popup,
-			   int id, int index )
+int QMenuData::insertItem(const QPixmap &pixmap, QPopupMenu *popup, int id,
+			  int index)
 {
-    return insertAny( 0, &pixmap, popup, 0, id, index );
+	return insertAny(0, &pixmap, popup, 0, id, index);
 }
 
 
@@ -584,11 +583,10 @@ int QMenuData::insertItem( const QPixmap &pixmap, QPopupMenu *popup,
   \sa removeItem(), changeItem(), setAccel(), connectItem()
 */
 
-int QMenuData::insertItem( const QIconSet& icon,
-			   const QPixmap &pixmap, QPopupMenu *popup,
-			   int id, int index )
+int QMenuData::insertItem(const QIconSet &icon, const QPixmap &pixmap,
+			  QPopupMenu *popup, int id, int index)
 {
-    return insertAny( 0, &pixmap, popup, &icon, id, index );
+	return insertAny(0, &pixmap, popup, &icon, id, index);
 }
 
 
@@ -624,9 +622,9 @@ int QMenuData::insertItem( const QIconSet& icon,
 
   \sa removeItem()
 */
-int QMenuData::insertItem( QWidget* widget, int id, int index )
+int QMenuData::insertItem(QWidget *widget, int id, int index)
 {
-    return insertAny( 0, 0, 0, 0, id, index, widget );
+	return insertAny(0, 0, 0, 0, id, index, widget);
 }
 
 
@@ -640,9 +638,9 @@ int QMenuData::insertItem( QWidget* widget, int id, int index )
 
   \sa connectItem(), removeItem(), QCustomMenuItem
 */
-int QMenuData::insertItem( QCustomMenuItem* custom, int id, int index )
+int QMenuData::insertItem(QCustomMenuItem *custom, int id, int index)
 {
-    return insertAny( 0, 0, 0, 0, id, index, 0, custom );
+	return insertAny(0, 0, 0, 0, id, index, 0, custom);
 }
 
 /*!\overload
@@ -655,9 +653,10 @@ int QMenuData::insertItem( QCustomMenuItem* custom, int id, int index )
 
   \sa connectItem(), removeItem(), QCustomMenuItem
 */
-int QMenuData::insertItem( const QIconSet& icon, QCustomMenuItem* custom, int id, int index )
+int QMenuData::insertItem(const QIconSet &icon, QCustomMenuItem *custom, int id,
+			  int index)
 {
-    return insertAny( 0, 0, 0, &icon, id, index, 0, custom );
+	return insertAny(0, 0, 0, &icon, id, index, 0, custom);
 }
 
 
@@ -671,9 +670,9 @@ int QMenuData::insertItem( const QIconSet& icon, QCustomMenuItem* custom, int id
   menubar, separators are ignored (to comply with the Windows style
   guide).
 */
-int QMenuData::insertSeparator( int index )
+int QMenuData::insertSeparator(int index)
 {
-    return insertAny( 0, 0, 0, 0, -1, index );
+	return insertAny(0, 0, 0, 0, -1, index);
 }
 
 /*!
@@ -687,20 +686,20 @@ int QMenuData::insertSeparator( int index )
   \sa removeItem(), clear()
 */
 
-void QMenuData::removeItemAt( int index )
+void QMenuData::removeItemAt(int index)
 {
-    if ( index < 0 || index >= (int)mitems->count() ) {
-#if defined(CHECK_RANGE)
-	qWarning( "QMenuData::removeItem: Index %d out of range", index );
-#endif
-	return;
-    }
-    QMenuItem *mi = mitems->at( index );
-    if ( mi->popup_menu )
-	menuDelPopup( mi->popup_menu );
-    mitems->remove();
-    if ( !QApplication::closingDown() )		// avoid trouble
-	menuContentsChanged();
+	if (index < 0 || index >= (int)mitems->count()) {
+# if defined(CHECK_RANGE)
+		qWarning("QMenuData::removeItem: Index %d out of range", index);
+# endif
+		return;
+	}
+	QMenuItem *mi = mitems->at(index);
+	if (mi->popup_menu)
+		menuDelPopup(mi->popup_menu);
+	mitems->remove();
+	if (!QApplication::closingDown()) // avoid trouble
+		menuContentsChanged();
 }
 
 
@@ -711,15 +710,15 @@ void QMenuData::removeItemAt( int index )
 
 void QMenuData::clear()
 {
-    register QMenuItem *mi = mitems->first();
-    while ( mi ) {
-	if ( mi->popup_menu )
-	    menuDelPopup( mi->popup_menu );
-	mitems->remove();
-	mi = mitems->current();
-    }
-    if ( !QApplication::closingDown() )		// avoid trouble
-	menuContentsChanged();
+	register QMenuItem *mi = mitems->first();
+	while (mi) {
+		if (mi->popup_menu)
+			menuDelPopup(mi->popup_menu);
+		mitems->remove();
+		mi = mitems->current();
+	}
+	if (!QApplication::closingDown()) // avoid trouble
+		menuContentsChanged();
 }
 
 
@@ -729,10 +728,10 @@ void QMenuData::clear()
   \sa setAccel(), QAccel, qnamespace.h
 */
 
-int QMenuData::accel( int id ) const
+int QMenuData::accel(int id) const
 {
-    QMenuItem *mi = findItem( id );
-    return mi ? mi->key() : 0;
+	QMenuItem *mi = findItem(id);
+	return mi ? mi->key() : 0;
 }
 
 /*!
@@ -778,14 +777,14 @@ int QMenuData::accel( int id ) const
   \sa accel(), insertItem(), QAccel, qnamespace.h
 */
 
-void QMenuData::setAccel( int key, int id )
+void QMenuData::setAccel(int key, int id)
 {
-    QMenuData *parent;
-    QMenuItem *mi = findItem( id, &parent );
-    if ( mi ) {
-	mi->accel_key = key;
-	parent->menuContentsChanged();
-    }
+	QMenuData *parent;
+	QMenuItem *mi = findItem(id, &parent);
+	if (mi) {
+		mi->accel_key = key;
+		parent->menuContentsChanged();
+	}
 }
 
 /*!
@@ -794,10 +793,10 @@ void QMenuData::setAccel( int key, int id )
   \sa changeItem(), text(), pixmap()
 */
 
-QIconSet* QMenuData::iconSet( int id ) const
+QIconSet *QMenuData::iconSet(int id) const
 {
-    QMenuItem *mi = findItem( id );
-    return mi ? mi->iconSet() : 0;
+	QMenuItem *mi = findItem(id);
+	return mi ? mi->iconSet() : 0;
 }
 
 /*!
@@ -807,10 +806,10 @@ QIconSet* QMenuData::iconSet( int id ) const
   \sa changeItem(), pixmap(), iconSet()
 */
 
-QString QMenuData::text( int id ) const
+QString QMenuData::text(int id) const
 {
-    QMenuItem *mi = findItem( id );
-    return mi ? mi->text() : QString::null;
+	QMenuItem *mi = findItem(id);
+	return mi ? mi->text() : QString::null;
 }
 
 /*!
@@ -819,10 +818,10 @@ QString QMenuData::text( int id ) const
   \sa changeItem(), text(), iconSet()
 */
 
-QPixmap *QMenuData::pixmap( int id ) const
+QPixmap *QMenuData::pixmap(int id) const
 {
-    QMenuItem *mi = findItem( id );
-    return mi ? mi->pixmap() : 0;
+	QMenuItem *mi = findItem(id);
+	return mi ? mi->pixmap() : 0;
 }
 
 /*!\obsolete
@@ -833,9 +832,9 @@ QPixmap *QMenuData::pixmap( int id ) const
   \sa text()
 */
 
-void QMenuData::changeItem( const QString &text, int id )
+void QMenuData::changeItem(const QString &text, int id)
 {
-    changeItem( id, text);
+	changeItem(id, text);
 }
 
 /*!\obsolete
@@ -846,9 +845,9 @@ void QMenuData::changeItem( const QString &text, int id )
   \sa pixmap()
 */
 
-void QMenuData::changeItem( const QPixmap &pixmap, int id )
+void QMenuData::changeItem(const QPixmap &pixmap, int id)
 {
-    changeItem( id, pixmap );
+	changeItem(id, pixmap);
 }
 
 /*!\obsolete
@@ -858,9 +857,9 @@ void QMenuData::changeItem( const QPixmap &pixmap, int id )
   \sa pixmap()
 */
 
-void QMenuData::changeItem( const QIconSet &icon, const QString &text, int id )
+void QMenuData::changeItem(const QIconSet &icon, const QString &text, int id)
 {
-    changeItem( id, icon, text );
+	changeItem(id, icon, text);
 }
 
 
@@ -870,22 +869,22 @@ void QMenuData::changeItem( const QIconSet &icon, const QString &text, int id )
   \sa text()
 */
 
-void QMenuData::changeItem( int id, const QString &text )
+void QMenuData::changeItem(int id, const QString &text)
 {
-    QMenuData *parent;
-    QMenuItem *mi = findItem( id, &parent );
-    if ( mi ) {					// item found
-	if ( mi->text_data == text )		// same string
-	    return;
-	if ( mi->pixmap_data ) {		// delete pixmap
-	    delete mi->pixmap_data;
-	    mi->pixmap_data = 0;
+	QMenuData *parent;
+	QMenuItem *mi = findItem(id, &parent);
+	if (mi) { // item found
+		if (mi->text_data == text) // same string
+			return;
+		if (mi->pixmap_data) { // delete pixmap
+			delete mi->pixmap_data;
+			mi->pixmap_data = 0;
+		}
+		mi->text_data = text;
+		if (!mi->accel_key && text.find('\t') != -1)
+			mi->accel_key = Qt::Key_unknown;
+		parent->menuContentsChanged();
 	}
-	mi->text_data = text;
-	if ( !mi->accel_key && text.find( '\t' ) != -1 )
-	    mi->accel_key = Qt::Key_unknown;
-	parent->menuContentsChanged();
-    }
 }
 
 /*!
@@ -894,25 +893,24 @@ void QMenuData::changeItem( int id, const QString &text )
   \sa pixmap()
 */
 
-void QMenuData::changeItem( int id, const QPixmap &pixmap )
+void QMenuData::changeItem(int id, const QPixmap &pixmap)
 {
-    QMenuData *parent;
-    QMenuItem *mi = findItem( id, &parent );
-    if ( mi ) {					// item found
-	register QPixmap *i = mi->pixmap_data;
-	bool fast_refresh = i != 0 &&
-	    i->width() == pixmap.width() &&
-	    i->height() == pixmap.height() &&
-	    !mi->text();
-	if ( !mi->text_data.isNull() )		// delete text
-	    mi->text_data = QString::null;
-	mi->pixmap_data = new QPixmap( pixmap );
-	delete i; // old mi->pixmap_data, could be &pixmap
-	if ( fast_refresh )
-	    parent->updateItem( id );
-	else
-	    parent->menuContentsChanged();
-    }
+	QMenuData *parent;
+	QMenuItem *mi = findItem(id, &parent);
+	if (mi) { // item found
+		register QPixmap *i = mi->pixmap_data;
+		bool fast_refresh = i != 0 && i->width() == pixmap.width() &&
+				    i->height() == pixmap.height() &&
+				    !mi->text();
+		if (!mi->text_data.isNull()) // delete text
+			mi->text_data = QString::null;
+		mi->pixmap_data = new QPixmap(pixmap);
+		delete i; // old mi->pixmap_data, could be &pixmap
+		if (fast_refresh)
+			parent->updateItem(id);
+		else
+			parent->menuContentsChanged();
+	}
 }
 
 /*!
@@ -920,10 +918,10 @@ void QMenuData::changeItem( int id, const QPixmap &pixmap )
   \sa pixmap()
 */
 
-void QMenuData::changeItem( int id, const QIconSet &icon, const QString &text )
+void QMenuData::changeItem(int id, const QIconSet &icon, const QString &text)
 {
-    changeItem(id, text);
-    changeItemIconSet(id,  icon);
+	changeItem(id, text);
+	changeItemIconSet(id, icon);
 }
 
 /*!
@@ -931,10 +929,10 @@ void QMenuData::changeItem( int id, const QIconSet &icon, const QString &text )
   \sa pixmap()
 */
 
-void QMenuData::changeItem( int id, const QIconSet &icon, const QPixmap &pixmap )
+void QMenuData::changeItem(int id, const QIconSet &icon, const QPixmap &pixmap)
 {
-    changeItem(id, pixmap);
-    changeItemIconSet(id,  icon);
+	changeItem(id, pixmap);
+	changeItemIconSet(id, icon);
 }
 
 
@@ -944,20 +942,20 @@ void QMenuData::changeItem( int id, const QIconSet &icon, const QPixmap &pixmap 
   \sa pixmap()
 */
 
-void QMenuData::changeItemIconSet( int id, const QIconSet &icon )
+void QMenuData::changeItemIconSet(int id, const QIconSet &icon)
 {
-    QMenuData *parent;
-    QMenuItem *mi = findItem( id, &parent );
-    if ( mi ) {					// item found
-	register QIconSet *i = mi->iconset_data;
-	bool fast_refresh = i != 0;
-	mi->iconset_data = new QIconSet( icon );
-	delete i; // old mi->iconset_data, could be &icon
-	if ( fast_refresh )
-	    parent->updateItem( id );
-	else
-	    parent->menuContentsChanged();
-    }
+	QMenuData *parent;
+	QMenuItem *mi = findItem(id, &parent);
+	if (mi) { // item found
+		register QIconSet *i = mi->iconset_data;
+		bool fast_refresh = i != 0;
+		mi->iconset_data = new QIconSet(icon);
+		delete i; // old mi->iconset_data, could be &icon
+		if (fast_refresh)
+			parent->updateItem(id);
+		else
+			parent->menuContentsChanged();
+	}
 }
 
 
@@ -967,10 +965,10 @@ void QMenuData::changeItemIconSet( int id, const QIconSet &icon )
   \sa setItemEnabled()
 */
 
-bool QMenuData::isItemEnabled( int id ) const
+bool QMenuData::isItemEnabled(int id) const
 {
-    QMenuItem *mi = findItem( id );
-    return mi ? mi->isEnabled() : FALSE;
+	QMenuItem *mi = findItem(id);
+	return mi ? mi->isEnabled() : FALSE;
 }
 
 /*!
@@ -979,18 +977,18 @@ bool QMenuData::isItemEnabled( int id ) const
   \sa isItemEnabled()
 */
 
-void QMenuData::setItemEnabled( int id, bool enable )
+void QMenuData::setItemEnabled(int id, bool enable)
 {
-    QMenuData *parent;
-    QMenuItem *mi = findItem( id, &parent );
-    if ( mi && (bool)mi->is_enabled != enable ) {
-	mi->is_enabled = enable;
-#ifndef QT_NO_ACCEL
-	if ( mi->popup() )
-	    mi->popup()->enableAccel( enable );
-#endif
-	parent->menuStateChanged();
-    }
+	QMenuData *parent;
+	QMenuItem *mi = findItem(id, &parent);
+	if (mi && (bool)mi->is_enabled != enable) {
+		mi->is_enabled = enable;
+# ifndef QT_NO_ACCEL
+		if (mi->popup())
+			mi->popup()->enableAccel(enable);
+# endif
+		parent->menuStateChanged();
+	}
 }
 
 
@@ -999,10 +997,10 @@ void QMenuData::setItemEnabled( int id, bool enable )
   \sa setItemChecked()
 */
 
-bool QMenuData::isItemChecked( int id ) const
+bool QMenuData::isItemChecked(int id) const
 {
-    QMenuItem *mi = findItem( id );
-    return mi ? mi->isChecked() : FALSE;
+	QMenuItem *mi = findItem(id);
+	return mi ? mi->isChecked() : FALSE;
 }
 
 /*!
@@ -1013,16 +1011,17 @@ bool QMenuData::isItemChecked( int id ) const
   \sa isItemChecked()
 */
 
-void QMenuData::setItemChecked( int id, bool check )
+void QMenuData::setItemChecked(int id, bool check)
 {
-    QMenuData *parent;
-    QMenuItem *mi = findItem( id, &parent );
-    if ( mi && (bool)mi->is_checked != check ) {
-	mi->is_checked = check;
-	if ( parent->isPopupMenu && !((QPopupMenu *)parent)->isCheckable() )
-	    ((QPopupMenu *)parent)->setCheckable( TRUE );
-	parent->menuStateChanged();
-    }
+	QMenuData *parent;
+	QMenuItem *mi = findItem(id, &parent);
+	if (mi && (bool)mi->is_checked != check) {
+		mi->is_checked = check;
+		if (parent->isPopupMenu &&
+		    !((QPopupMenu *)parent)->isCheckable())
+			((QPopupMenu *)parent)->setCheckable(TRUE);
+		parent->menuStateChanged();
+	}
 }
 
 
@@ -1032,9 +1031,9 @@ void QMenuData::setItemChecked( int id, bool check )
   \sa indexOf()
 */
 
-QMenuItem *QMenuData::findItem( int id ) const
+QMenuItem *QMenuData::findItem(int id) const
 {
-    return findItem( id, 0 );
+	return findItem(id, 0);
 }
 
 
@@ -1046,30 +1045,30 @@ QMenuItem *QMenuData::findItem( int id ) const
   \sa indexOf()
 */
 
-QMenuItem * QMenuData::findItem( int id, QMenuData ** parent ) const
+QMenuItem *QMenuData::findItem(int id, QMenuData **parent) const
 {
-    if ( parent )
-	*parent = (QMenuData *)this;		// ###
+	if (parent)
+		*parent = (QMenuData *)this; // ###
 
-    if ( id == -1 )				// bad identifier
-	return 0;
-    QMenuItemListIt it( *mitems );
-    QMenuItem *mi;
-    while ( (mi=it.current()) ) {		// search this menu
-	++it;
-	if ( mi->ident == id )			// found item
-	    return mi;
-    }
-    it.toFirst();
-    while ( (mi=it.current()) ) {		// search submenus
-	++it;
-	if ( mi->popup_menu ) {
-	    mi = mi->popup_menu->findItem( id, parent );
-	    if ( mi )				// found item
-		return mi;
+	if (id == -1) // bad identifier
+		return 0;
+	QMenuItemListIt it(*mitems);
+	QMenuItem *mi;
+	while ((mi = it.current())) { // search this menu
+		++it;
+		if (mi->ident == id) // found item
+			return mi;
 	}
-    }
-    return 0;					// not found
+	it.toFirst();
+	while ((mi = it.current())) { // search submenus
+		++it;
+		if (mi->popup_menu) {
+			mi = mi->popup_menu->findItem(id, parent);
+			if (mi) // found item
+				return mi;
+		}
+	}
+	return 0; // not found
 }
 
 /*!
@@ -1078,20 +1077,20 @@ QMenuItem * QMenuData::findItem( int id, QMenuData ** parent ) const
   \sa idAt(), findItem()
 */
 
-int QMenuData::indexOf( int id ) const
+int QMenuData::indexOf(int id) const
 {
-    if ( id == -1 )				// bad identifier
-	return -1;
-    QMenuItemListIt it( *mitems );
-    QMenuItem *mi;
-    int index = 0;
-    while ( (mi=it.current()) ) {
-	if ( mi->ident == id )			// this one?
-	    return index;
-	++index;
-	++it;
-    }
-    return -1;					// not found
+	if (id == -1) // bad identifier
+		return -1;
+	QMenuItemListIt it(*mitems);
+	QMenuItem *mi;
+	int index = 0;
+	while ((mi = it.current())) {
+		if (mi->ident == id) // this one?
+			return index;
+		++index;
+		++it;
+	}
+	return -1; // not found
 }
 
 /*!
@@ -1100,10 +1099,11 @@ int QMenuData::indexOf( int id ) const
   \sa setId(), indexOf()
 */
 
-int QMenuData::idAt( int index ) const
+int QMenuData::idAt(int index) const
 {
-    return index < (int)mitems->count() && index >= 0 ?
-	   mitems->at(index)->id() : -1;
+	return index < (int)mitems->count() && index >= 0 ?
+		       mitems->at(index)->id() :
+		       -1;
 }
 
 /*!
@@ -1114,10 +1114,10 @@ int QMenuData::idAt( int index ) const
   \sa idAt()
 */
 
-void QMenuData::setId( int index, int id )
+void QMenuData::setId(int index, int id)
 {
-    if ( index < (int)mitems->count() )
-	mitems->at(index)->ident = id;
+	if (index < (int)mitems->count())
+		mitems->at(index)->ident = id;
 }
 
 
@@ -1129,16 +1129,17 @@ void QMenuData::setId( int index, int id )
 
   \sa connectItem(), disconnectItem(), itemParameter()
  */
-bool QMenuData::setItemParameter( int id, int param ) {
-    QMenuItem *mi = findItem( id );
-    if ( !mi )					// no such identifier
-	return FALSE;
-    if ( !mi->signal_data ) {			// create new signal
-	mi->signal_data = new QSignal;
-	CHECK_PTR( mi->signal_data );
-    }
-    mi->signal_data->setParameter( param );
-    return TRUE;
+bool QMenuData::setItemParameter(int id, int param)
+{
+	QMenuItem *mi = findItem(id);
+	if (!mi) // no such identifier
+		return FALSE;
+	if (!mi->signal_data) { // create new signal
+		mi->signal_data = new QSignal;
+		CHECK_PTR(mi->signal_data);
+	}
+	mi->signal_data->setParameter(param);
+	return TRUE;
 }
 
 
@@ -1150,12 +1151,12 @@ bool QMenuData::setItemParameter( int id, int param ) {
 
   \sa connectItem(), disconnectItem(), setItemParameter()
  */
-int QMenuData::itemParameter( int id ) const
+int QMenuData::itemParameter(int id) const
 {
-    QMenuItem *mi = findItem( id );
-    if ( !mi || !mi->signal_data )
-	return id;
-    return mi->signal_data->parameter();
+	QMenuItem *mi = findItem(id);
+	if (!mi || !mi->signal_data)
+		return id;
+	return mi->signal_data->parameter();
 }
 
 
@@ -1167,18 +1168,17 @@ int QMenuData::itemParameter( int id ) const
   \sa disconnectItem(), setItemParameter()
 */
 
-bool QMenuData::connectItem( int id, const QObject *receiver,
-			     const char* member )
+bool QMenuData::connectItem(int id, const QObject *receiver, const char *member)
 {
-    QMenuItem *mi = findItem( id );
-    if ( !mi )					// no such identifier
-	return FALSE;
-    if ( !mi->signal_data ) {			// create new signal
-	mi->signal_data = new QSignal;
-	CHECK_PTR( mi->signal_data );
-	mi->signal_data->setParameter( id );
-    }
-    return mi->signal_data->connect( receiver, member );
+	QMenuItem *mi = findItem(id);
+	if (!mi) // no such identifier
+		return FALSE;
+	if (!mi->signal_data) { // create new signal
+		mi->signal_data = new QSignal;
+		CHECK_PTR(mi->signal_data);
+		mi->signal_data->setParameter(id);
+	}
+	return mi->signal_data->connect(receiver, member);
 }
 
 
@@ -1190,32 +1190,32 @@ bool QMenuData::connectItem( int id, const QObject *receiver,
   \sa connectItem(), setItemParameter()
 */
 
-bool QMenuData::disconnectItem( int id, const QObject *receiver,
-				const char* member )
+bool QMenuData::disconnectItem(int id, const QObject *receiver,
+			       const char *member)
 {
-    QMenuItem *mi = findItem( id );
-    if ( !mi || !mi->signal_data )		// no identifier or no signal
-	return FALSE;
-    return mi->signal_data->disconnect( receiver, member );
+	QMenuItem *mi = findItem(id);
+	if (!mi || !mi->signal_data) // no identifier or no signal
+		return FALSE;
+	return mi->signal_data->disconnect(receiver, member);
 }
 
 /*!
   Sets a Whats This help for a certain menu item.
 
   \arg \e id is the menu item id.
-  \arg \e text is the Whats This help text in rich text format ( see QStyleSheet)
+  \arg \e text is the Whats This help text in rich text format ( see
+  QStyleSheet)
 
   \sa whatsThis()
  */
-void QMenuData::setWhatsThis( int id, const QString& text )
+void QMenuData::setWhatsThis(int id, const QString &text)
 {
-
-    QMenuData *parent;
-    QMenuItem *mi = findItem( id, &parent );
-    if ( mi ) {
-	mi->setWhatsThis( text );
-	parent->menuContentsChanged();
-    }
+	QMenuData *parent;
+	QMenuItem *mi = findItem(id, &parent);
+	if (mi) {
+		mi->setWhatsThis(text);
+		parent->menuContentsChanged();
+	}
 }
 
 /*!
@@ -1224,11 +1224,10 @@ void QMenuData::setWhatsThis( int id, const QString& text )
 
   \sa setWhatsThis()
  */
-QString QMenuData::whatsThis( int id ) const
+QString QMenuData::whatsThis(int id) const
 {
-
-    QMenuItem *mi = findItem( id );
-    return mi? mi->whatsThis() : QString::null;
+	QMenuItem *mi = findItem(id);
+	return mi ? mi->whatsThis() : QString::null;
 }
 
 
@@ -1236,8 +1235,8 @@ QString QMenuData::whatsThis( int id ) const
 // NOT REVISED
 /*!
   \class QCustomMenuItem qmenudata.h
-  \brief The QCustomMenuItem class is an abstract base class for custom menu items in
-  popup menus.
+  \brief The QCustomMenuItem class is an abstract base class for custom menu
+items in popup menus.
 
   A custom menu item is a menu item that is defined by two purely
   virtual functions, paint() and sizeHint(). The size hint tells the
@@ -1299,7 +1298,7 @@ QCustomMenuItem::~QCustomMenuItem()
   changes. For menu items that show their own individual font entry,
   you want to ignore this.
  */
-void QCustomMenuItem::setFont( const QFont&  )
+void QCustomMenuItem::setFont(const QFont &)
 {
 }
 
@@ -1312,7 +1311,7 @@ void QCustomMenuItem::setFont( const QFont&  )
  */
 bool QCustomMenuItem::fullSpan() const
 {
-    return FALSE;
+	return FALSE;
 }
 
 /*!
@@ -1320,11 +1319,12 @@ bool QCustomMenuItem::fullSpan() const
  */
 bool QCustomMenuItem::isSeparator() const
 {
-    return FALSE;
+	return FALSE;
 }
 
 
-/*! \fn void QCustomMenuItem::paint( QPainter* p, const QColorGroup& cg, bool act,  bool enabled, int x, int y, int w, int h );
+/*! \fn void QCustomMenuItem::paint( QPainter* p, const QColorGroup& cg, bool
+  act,  bool enabled, int x, int y, int w, int h );
 
   Paints this item. When this function is invoked, the painter \a p is
   set to the right font and the right foreground color suitable for a
@@ -1351,15 +1351,15 @@ bool QCustomMenuItem::isSeparator() const
   If the index is invalid (for example -1), the object itself is
   deactivated.
  */
-void QMenuData::activateItemAt( int index )
+void QMenuData::activateItemAt(int index)
 {
-#ifndef QT_NO_MENUBAR
-    if ( isMenuBar )
-	( (QMenuBar*)this )->activateItemAt( index );
-    else
-#endif
-    if ( isPopupMenu )
-	( (QPopupMenu*)this )->activateItemAt( index );
+# ifndef QT_NO_MENUBAR
+	if (isMenuBar)
+		((QMenuBar *)this)->activateItemAt(index);
+	else
+# endif
+		if (isPopupMenu)
+		((QPopupMenu *)this)->activateItemAt(index);
 }
 
 #endif

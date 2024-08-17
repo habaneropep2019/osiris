@@ -13,17 +13,17 @@
 
 #include "mainwindow.h"
 
-int main( int argc, char ** argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    ABMainWindow *mw = new ABMainWindow();
-    mw->setCaption( "Qt Example - Addressbook" );
-    a.setMainWidget( mw );
-    mw->show();
+	ABMainWindow *mw = new ABMainWindow();
+	mw->setCaption("Qt Example - Addressbook");
+	a.setMainWidget(mw);
+	mw->show();
 
-    a.connect( &a, SIGNAL( lastWindowClosed() ), &a, SLOT( quit() ) );
-    int result = a.exec();
-    delete mw;
-    return result;
+	a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
+	int result = a.exec();
+	delete mw;
+	return result;
 }

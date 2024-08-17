@@ -19,20 +19,20 @@ class QMultiLineEdit;
 
 class View : public QVBox
 {
-    Q_OBJECT
-    
-public:
-    View();
-    
-private slots:
-    void downloadFile();
-    void newData( const QByteArray &ba );
+	Q_OBJECT
 
-private:
-    QMultiLineEdit *fileView;
-    QUrlOperator op;
-    
-    QString getOpenFileName();
+      public:
+	View();
+
+      private slots:
+	void downloadFile();
+	void newData(const QByteArray &ba);
+
+      private:
+	QMultiLineEdit *fileView;
+	QUrlOperator op;
+
+	QString getOpenFileName();
 };
 
 #endif

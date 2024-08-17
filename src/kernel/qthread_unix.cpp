@@ -45,10 +45,10 @@
 
 #if defined(QT_THREAD_SUPPORT)
 
-#include <qapplication.h>
-#include <qlist.h>
+# include <qapplication.h>
+# include <qlist.h>
 
-#include "qthread_p.h"
+# include "qthread_p.h"
 
 
 /**************************************************************************
@@ -129,10 +129,10 @@
 */
 QMutex::QMutex(bool recursive)
 {
-    if (recursive)
-	d = new QRMutexPrivate();
-    else
-	d = new QMutexPrivate();
+	if (recursive)
+		d = new QRMutexPrivate();
+	else
+		d = new QMutexPrivate();
 }
 
 
@@ -141,7 +141,7 @@ QMutex::QMutex(bool recursive)
 */
 QMutex::~QMutex()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -153,7 +153,7 @@ QMutex::~QMutex()
 */
 void QMutex::lock()
 {
-    d->lock();
+	d->lock();
 }
 
 
@@ -167,7 +167,7 @@ void QMutex::lock()
 */
 void QMutex::unlock()
 {
-    d->unlock();
+	d->unlock();
 }
 
 
@@ -180,7 +180,7 @@ void QMutex::unlock()
 */
 bool QMutex::locked()
 {
-    return d->locked();
+	return d->locked();
 }
 
 
@@ -191,34 +191,35 @@ bool QMutex::locked()
 // this is for the magic QThread::postEvent()
 class QThreadQtEvent
 {
-public:
-    QThreadQtEvent(QObject *r, QEvent *e)
-	: receiver(r), event(e)
-    { ; }
+      public:
+	QThreadQtEvent(QObject *r, QEvent *e) : receiver(r), event(e)
+	{
+		;
+	}
 
-    QObject *receiver;
-    QEvent *event;
+	QObject *receiver;
+	QEvent *event;
 };
 
 
 class QThreadPostEventPrivate : public QObject
 {
-    Q_OBJECT
-public:
-    QThreadPostEventPrivate();
+	Q_OBJECT
+      public:
+	QThreadPostEventPrivate();
 
-    QList<QThreadQtEvent> events;
-    QMutex eventmutex;
+	QList<QThreadQtEvent> events;
+	QMutex eventmutex;
 
-public slots:
-    void sendEvents();
+      public slots:
+	void sendEvents();
 };
 
 
 QThreadPostEventPrivate::QThreadPostEventPrivate()
 {
-    events.setAutoDelete( TRUE );
-    connect( qApp, SIGNAL( guiThreadAwake() ), this, SLOT( sendEvents() ) );
+	events.setAutoDelete(TRUE);
+	connect(qApp, SIGNAL(guiThreadAwake()), this, SLOT(sendEvents()));
 }
 
 
@@ -226,23 +227,23 @@ QThreadPostEventPrivate::QThreadPostEventPrivate()
 // application mutex is already locked
 void QThreadPostEventPrivate::sendEvents()
 {
-    eventmutex.lock();
+	eventmutex.lock();
 
-    QThreadQtEvent *qte;
-    for( qte = events.first(); qte != 0; qte = events.next() ) {
-	qApp->postEvent( qte->receiver, qte->event );
-    }
+	QThreadQtEvent *qte;
+	for (qte = events.first(); qte != 0; qte = events.next()) {
+		qApp->postEvent(qte->receiver, qte->event);
+	}
 
-    events.clear();
+	events.clear();
 
-    // ## let event compression take full effect
-    // qApp->sendPostedEvents();
+	// ## let event compression take full effect
+	// qApp->sendPostedEvents();
 
-    eventmutex.unlock();
+	eventmutex.unlock();
 }
 
 
-static QThreadPostEventPrivate * qthreadposteventprivate = 0;
+static QThreadPostEventPrivate *qthreadposteventprivate = 0;
 
 
 /**************************************************************************
@@ -310,11 +311,11 @@ static QThreadPostEventPrivate * qthreadposteventprivate = 0;
 */
 HANDLE QThread::currentThread()
 {
-#if defined(_OS_SOLARIS_)
-    return (HANDLE) thr_self();
-#else
-    return (HANDLE) pthread_self();
-#endif
+# if defined(_OS_SOLARIS_)
+	return (HANDLE)thr_self();
+# else
+	return (HANDLE)pthread_self();
+# endif
 }
 
 
@@ -329,15 +330,16 @@ HANDLE QThread::currentThread()
   Same as with \l QApplication::postEvent(), \a event must be allocated on the
   heap, as it is deleted when the event has been posted.
 */
-void QThread::postEvent( QObject * receiver, QEvent * event )
+void QThread::postEvent(QObject *receiver, QEvent *event)
 {
-    if( !qthreadposteventprivate )
-	qthreadposteventprivate = new QThreadPostEventPrivate();
+	if (!qthreadposteventprivate)
+		qthreadposteventprivate = new QThreadPostEventPrivate();
 
-    qthreadposteventprivate->eventmutex.lock();
-    qthreadposteventprivate->events.append( new QThreadQtEvent(receiver, event) );
-    qApp->wakeUpGuiThread();
-    qthreadposteventprivate->eventmutex.unlock();
+	qthreadposteventprivate->eventmutex.lock();
+	qthreadposteventprivate->events.append(
+		new QThreadQtEvent(receiver, event));
+	qApp->wakeUpGuiThread();
+	qthreadposteventprivate->eventmutex.unlock();
 }
 
 
@@ -345,9 +347,9 @@ void QThread::postEvent( QObject * receiver, QEvent * event )
   System independent sleep.  This causes the current thread to sleep for
   \a secs seconds.
 */
-void QThread::sleep( unsigned long secs )
+void QThread::sleep(unsigned long secs)
 {
-    ::sleep(secs);
+	::sleep(secs);
 }
 
 
@@ -355,9 +357,9 @@ void QThread::sleep( unsigned long secs )
   System independent sleep.  This causes the current thread to sleep for
   \a msecs milliseconds
 */
-void QThread::msleep( unsigned long msecs )
+void QThread::msleep(unsigned long msecs)
 {
-    QThread::usleep(msecs * 1000);
+	QThread::usleep(msecs * 1000);
 }
 
 
@@ -365,11 +367,11 @@ void QThread::msleep( unsigned long msecs )
   System independent sleep.  This causes the current thread to sleep for
   \a usecs microseconds
 */
-void QThread::usleep( unsigned long usecs )
+void QThread::usleep(unsigned long usecs)
 {
-    if ( usecs >= 1000000 )
-	::sleep( usecs / 1000000 );
-    ::usleep( usecs % 1000000 );
+	if (usecs >= 1000000)
+		::sleep(usecs / 1000000);
+	::usleep(usecs % 1000000);
 }
 
 
@@ -379,7 +381,7 @@ void QThread::usleep( unsigned long usecs )
 */
 QThread::QThread()
 {
-    d = new QThreadPrivate;
+	d = new QThreadPrivate;
 }
 
 
@@ -390,7 +392,7 @@ QThread::QThread()
 */
 QThread::~QThread()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -400,23 +402,23 @@ QThread::~QThread()
 */
 void QThread::exit()
 {
-    dictMutex->lock();
+	dictMutex->lock();
 
-    QThread *there = thrDict->find(QThread::currentThread());
-    if (there) {
-	there->d->running = FALSE;
-	there->d->finished = TRUE;
+	QThread *there = thrDict->find(QThread::currentThread());
+	if (there) {
+		there->d->running = FALSE;
+		there->d->finished = TRUE;
 
-	there->d->thread_done.wakeAll();
-    }
+		there->d->thread_done.wakeAll();
+	}
 
-    dictMutex->unlock();
+	dictMutex->unlock();
 
-#if defined(_OS_SOLARIS_)
-    thr_exit(0);
-#else
-    pthread_exit(0);
-#endif
+# if defined(_OS_SOLARIS_)
+	thr_exit(0);
+# else
+	pthread_exit(0);
+# endif
 }
 
 
@@ -436,10 +438,10 @@ void QThread::exit()
 */
 bool QThread::wait(unsigned long time)
 {
-    if (d->finished || ! d->running)
-	return TRUE;
+	if (d->finished || !d->running)
+		return TRUE;
 
-    return d->thread_done.wait(time);
+	return d->thread_done.wait(time);
 }
 
 
@@ -451,15 +453,15 @@ bool QThread::wait(unsigned long time)
 */
 void QThread::start()
 {
-    if (d->running) {
-#ifdef CHECK_RANGE
-	qWarning("QThread::start: thread already running");
-#endif
+	if (d->running) {
+# ifdef CHECK_RANGE
+		qWarning("QThread::start: thread already running");
+# endif
 
-	wait();
-    }
+		wait();
+	}
 
-    d->init(this);
+	d->init(this);
 }
 
 
@@ -468,7 +470,7 @@ void QThread::start()
 */
 bool QThread::finished() const
 {
-    return d->finished;
+	return d->finished;
 }
 
 
@@ -477,7 +479,7 @@ bool QThread::finished() const
 */
 bool QThread::running() const
 {
-    return d->running;
+	return d->running;
 }
 
 
@@ -583,7 +585,7 @@ bool QThread::running() const
 */
 QWaitCondition::QWaitCondition()
 {
-    d = new QWaitConditionPrivate;
+	d = new QWaitConditionPrivate;
 }
 
 
@@ -592,7 +594,7 @@ QWaitCondition::QWaitCondition()
 */
 QWaitCondition::~QWaitCondition()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -612,7 +614,7 @@ QWaitCondition::~QWaitCondition()
 */
 bool QWaitCondition::wait(unsigned long time)
 {
-    return d->wait(time);
+	return d->wait(time);
 }
 
 
@@ -639,7 +641,7 @@ bool QWaitCondition::wait(unsigned long time)
 */
 bool QWaitCondition::wait(QMutex *mutex, unsigned long time)
 {
-    return d->wait(mutex, time);
+	return d->wait(mutex, time);
 }
 
 
@@ -652,7 +654,7 @@ bool QWaitCondition::wait(QMutex *mutex, unsigned long time)
 */
 void QWaitCondition::wakeOne()
 {
-    d->wakeOne();
+	d->wakeOne();
 }
 
 
@@ -665,7 +667,7 @@ void QWaitCondition::wakeOne()
 */
 void QWaitCondition::wakeAll()
 {
-    d->wakeAll();
+	d->wakeAll();
 }
 
 
@@ -700,20 +702,20 @@ void QWaitCondition::wakeAll()
 */
 
 
-class QSemaphorePrivate {
-public:
-    QSemaphorePrivate(int);
-    ~QSemaphorePrivate();
+class QSemaphorePrivate
+{
+      public:
+	QSemaphorePrivate(int);
+	~QSemaphorePrivate();
 
-    QMutex mutex;
-    QWaitCondition cond;
+	QMutex mutex;
+	QWaitCondition cond;
 
-    int value, max;
+	int value, max;
 };
 
 
-QSemaphorePrivate::QSemaphorePrivate(int m)
-    : mutex(FALSE), value(0), max(m)
+QSemaphorePrivate::QSemaphorePrivate(int m) : mutex(FALSE), value(0), max(m)
 {
 }
 
@@ -729,7 +731,7 @@ QSemaphorePrivate::~QSemaphorePrivate()
 */
 QSemaphore::QSemaphore(int maxcount)
 {
-    d = new QSemaphorePrivate(maxcount);
+	d = new QSemaphorePrivate(maxcount);
 }
 
 
@@ -738,7 +740,7 @@ QSemaphore::QSemaphore(int maxcount)
 */
 QSemaphore::~QSemaphore()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -750,20 +752,21 @@ QSemaphore::~QSemaphore()
 */
 int QSemaphore::operator++(int)
 {
-    int ret;
+	int ret;
 
-    d->mutex.lock();
+	d->mutex.lock();
 
-    while (d->value >= d->max)
-	d->cond.wait(&(d->mutex));
+	while (d->value >= d->max)
+		d->cond.wait(&(d->mutex));
 
-    ++(d->value);
-    if (d->value > d->max) d->value = d->max;
-    ret = d->value;
+	++(d->value);
+	if (d->value > d->max)
+		d->value = d->max;
+	ret = d->value;
 
-    d->mutex.unlock();
+	d->mutex.unlock();
 
-    return ret;
+	return ret;
 }
 
 
@@ -775,18 +778,19 @@ int QSemaphore::operator++(int)
  */
 int QSemaphore::operator--(int)
 {
-    int ret;
+	int ret;
 
-    d->mutex.lock();
+	d->mutex.lock();
 
-    --(d->value);
-    if (d->value < 0) d->value = 0;
-    ret = d->value;
+	--(d->value);
+	if (d->value < 0)
+		d->value = 0;
+	ret = d->value;
 
-    d->cond.wakeAll();
-    d->mutex.unlock();
+	d->cond.wakeAll();
+	d->mutex.unlock();
 
-    return ret;
+	return ret;
 }
 
 
@@ -798,27 +802,28 @@ int QSemaphore::operator--(int)
 */
 int QSemaphore::operator+=(int n)
 {
-    int ret;
+	int ret;
 
-    d->mutex.lock();
+	d->mutex.lock();
 
-    while (d->value + n > d->max)
-	d->cond.wait(&(d->mutex));
+	while (d->value + n > d->max)
+		d->cond.wait(&(d->mutex));
 
-    d->value += n;
+	d->value += n;
 
-#ifdef CHECK_RANGE
-    if (d->value > d->max) {
-	qWarning("QSemaphore::operator+=: attempt to allocate more resources than available");
-	d->value = d->max;
-    }
-#endif
+# ifdef CHECK_RANGE
+	if (d->value > d->max) {
+		qWarning(
+			"QSemaphore::operator+=: attempt to allocate more resources than available");
+		d->value = d->max;
+	}
+# endif
 
-    ret = d->value;
+	ret = d->value;
 
-    d->mutex.unlock();
+	d->mutex.unlock();
 
-    return ret;
+	return ret;
 }
 
 
@@ -827,25 +832,26 @@ int QSemaphore::operator+=(int n)
  */
 int QSemaphore::operator-=(int n)
 {
-    int ret;
+	int ret;
 
-    d->mutex.lock();
+	d->mutex.lock();
 
-    d->value -= n;
+	d->value -= n;
 
-#ifdef CHECK_RANGE
-    if (d->value < 0) {
-	qWarning("QSemaphore::operator-=: attempt to deallocate more resources than taken");
-	d->value = 0;
-    }
-#endif
+# ifdef CHECK_RANGE
+	if (d->value < 0) {
+		qWarning(
+			"QSemaphore::operator-=: attempt to deallocate more resources than taken");
+		d->value = 0;
+	}
+# endif
 
-    ret = d->value;
+	ret = d->value;
 
-    d->cond.wakeOne();
-    d->mutex.unlock();
+	d->cond.wakeOne();
+	d->mutex.unlock();
 
-    return ret;
+	return ret;
 }
 
 
@@ -853,31 +859,33 @@ int QSemaphore::operator-=(int n)
   This function returns the number of accesses currently available to
   the semaphore.
  */
-int QSemaphore::available() const {
-    int ret;
+int QSemaphore::available() const
+{
+	int ret;
 
 	d->mutex.lock();
-    ret = d->max - d->value;
-    d->mutex.unlock();
+	ret = d->max - d->value;
+	d->mutex.unlock();
 
-    return ret;
+	return ret;
 }
 
 
 /*!
   This function returns the total number of accesses to the semaphore.
  */
-int QSemaphore::total() const {
-    int ret;
+int QSemaphore::total() const
+{
+	int ret;
 
-    d->mutex.lock();
-    ret = d->max;
-    d->mutex.unlock();
+	d->mutex.lock();
+	ret = d->max;
+	d->mutex.unlock();
 
-    return ret;
+	return ret;
 }
 
 
-#include "qthread_unix.moc"
+# include "qthread_unix.moc"
 
 #endif

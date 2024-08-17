@@ -17,18 +17,17 @@
 
 int main(int argc, char **argv)
 {
-    // Use an interesting font
-    QApplication::setFont(QFont("unifont", 16));
+	// Use an interesting font
+	QApplication::setFont(QFont("unifont", 16));
 
-    QApplication app(argc, argv);
+	QApplication app(argc, argv);
 
-    FontDisplayer m;
-    QSize sh = m.centralWidget()->sizeHint();
-    m.resize(sh.width(),
-             sh.height() + 3 * m.statusBar()->height());
-    app.setMainWidget(&m);
-    m.setCaption("Qt Example - QFD");
-    m.show();
+	FontDisplayer m;
+	QSize sh = m.centralWidget()->sizeHint();
+	m.resize(sh.width(), sh.height() + 3 * m.statusBar()->height());
+	app.setMainWidget(&m);
+	m.setCaption("Qt Example - QFD");
+	m.show();
 
-    return app.exec();
+	return app.exec();
 }

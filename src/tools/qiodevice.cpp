@@ -178,9 +178,9 @@
 
 QIODevice::QIODevice()
 {
-    ioMode = 0;					// initial mode
-    ioSt = IO_Ok;
-    ioIndex = 0;
+	ioMode = 0; // initial mode
+	ioSt = IO_Ok;
+	ioIndex = 0;
 }
 
 /*!
@@ -360,14 +360,14 @@ QIODevice::~QIODevice()
   Used by subclasses to set the device type.
 */
 
-void QIODevice::setType( int t )
+void QIODevice::setType(int t)
 {
 #if defined(CHECK_RANGE)
-    if ( (t & IO_TypeMask) != t )
-	qWarning( "QIODevice::setType: Specified type out of range" );
+	if ((t & IO_TypeMask) != t)
+		qWarning("QIODevice::setType: Specified type out of range");
 #endif
-    ioMode &= ~IO_TypeMask;			// reset type bits
-    ioMode |= t;
+	ioMode &= ~IO_TypeMask; // reset type bits
+	ioMode |= t;
 }
 
 /*!
@@ -375,14 +375,14 @@ void QIODevice::setType( int t )
   Used by subclasses to set the device mode.
 */
 
-void QIODevice::setMode( int m )
+void QIODevice::setMode(int m)
 {
 #if defined(CHECK_RANGE)
-    if ( (m & IO_ModeMask) != m )
-	qWarning( "QIODevice::setMode: Specified mode out of range" );
+	if ((m & IO_ModeMask) != m)
+		qWarning("QIODevice::setMode: Specified mode out of range");
 #endif
-    ioMode &= ~IO_ModeMask;			// reset mode bits
-    ioMode |= m;
+	ioMode &= ~IO_ModeMask; // reset mode bits
+	ioMode |= m;
 }
 
 /*!
@@ -390,14 +390,14 @@ void QIODevice::setMode( int m )
   Used by subclasses to set the device state.
 */
 
-void QIODevice::setState( int s )
+void QIODevice::setState(int s)
 {
 #if defined(CHECK_RANGE)
-    if ( ((uint)s & IO_StateMask) != (uint)s )
-	qWarning( "QIODevice::setState: Specified state out of range" );
+	if (((uint)s & IO_StateMask) != (uint)s)
+		qWarning("QIODevice::setState: Specified state out of range");
 #endif
-    ioMode &= ~IO_StateMask;			// reset state bits
-    ioMode |= (uint)s;
+	ioMode &= ~IO_StateMask; // reset state bits
+	ioMode |= (uint)s;
 }
 
 /*!
@@ -405,9 +405,9 @@ void QIODevice::setState( int s )
   Used by subclasses to set the device status (not state).
 */
 
-void QIODevice::setStatus( int s )
+void QIODevice::setStatus(int s)
 {
-    ioSt = s;
+	ioSt = s;
 }
 
 
@@ -425,10 +425,10 @@ void QIODevice::setStatus( int s )
   <li>\c IO_Append sets the file index to the end of the file.
   <li>\c IO_Truncate truncates the file.
   <li>\c IO_Translate enables carriage returns and linefeed translation
-  for text files under MS-DOS, Window, OS/2 and Macintosh.  On Unix systems 
-  this flag has no effect. Use with caution as it will also transform every linefeed
-  written to the file into a CRLF pair. This is likely to corrupt your file when
-  writing binary data to it. Cannot be combined with \c IO_Raw.
+  for text files under MS-DOS, Window, OS/2 and Macintosh.  On Unix systems
+  this flag has no effect. Use with caution as it will also transform every
+  linefeed written to the file into a CRLF pair. This is likely to corrupt your
+  file when writing binary data to it. Cannot be combined with \c IO_Raw.
   </ul>
 
   This virtual function must be reimplemented by all subclasses.
@@ -470,7 +470,7 @@ void QIODevice::setStatus( int s )
 
 int QIODevice::at() const
 {
-    return ioIndex;
+	return ioIndex;
 }
 
 /*!
@@ -478,16 +478,16 @@ int QIODevice::at() const
   \sa size()
 */
 
-bool QIODevice::at( int pos )
+bool QIODevice::at(int pos)
 {
 #if defined(CHECK_RANGE)
-    if ( (uint)pos > size() ) {
-	qWarning( "QIODevice::at: Index %d out of range", pos );
-	return FALSE;
-    }
+	if ((uint)pos > size()) {
+		qWarning("QIODevice::at: Index %d out of range", pos);
+		return FALSE;
+	}
 #endif
-    ioIndex = pos;
-    return TRUE;
+	ioIndex = pos;
+	return TRUE;
 }
 
 /*!
@@ -497,15 +497,15 @@ bool QIODevice::at( int pos )
 
 bool QIODevice::atEnd() const
 {
-    if ( isSequentialAccess() || isTranslated() ) {
-	QIODevice* that = (QIODevice*)this;
-	int c = that->getch();
-	bool result = c < 0;
-	that->ungetch(c);
-	return result;
-    } else {
-	return at() == (int)size();
-    }
+	if (isSequentialAccess() || isTranslated()) {
+		QIODevice *that = (QIODevice *)this;
+		int c = that->getch();
+		bool result = c < 0;
+		that->ungetch(c);
+		return result;
+	} else {
+		return at() == (int)size();
+	}
 }
 
 /*!
@@ -529,22 +529,22 @@ bool QIODevice::atEnd() const
   This convenience function returns all of the remaining data in the
   device.  Note that this only works for direct access devices, such
   as QFile.
-  
-  \sa isDirectAccess() 
+
+  \sa isDirectAccess()
 */
 QByteArray QIODevice::readAll()
 {
-    int n = size()-at();
-    QByteArray ba(size()-at());
-    char* c = ba.data();
-    while ( n ) {
-	int r = readBlock( c, n );
-	if ( r < 0 )
-	    return QByteArray();
-	n -= r;
-	c += r;
-    }
-    return ba;
+	int n = size() - at();
+	QByteArray ba(size() - at());
+	char *c = ba.data();
+	while (n) {
+		int r = readBlock(c, n);
+		if (r < 0)
+			return QByteArray();
+		n -= r;
+		c += r;
+	}
+	return ba;
 }
 
 /*!
@@ -561,9 +561,9 @@ QByteArray QIODevice::readAll()
   This convenience function is the same as calling
   writeBlock( data.data(), data.size() ).
 */
-int QIODevice::writeBlock( const QByteArray& data )
+int QIODevice::writeBlock(const QByteArray &data)
 {
-    return writeBlock( data.data(), data.size() );
+	return writeBlock(data.data(), data.size());
 }
 
 /*!
@@ -579,17 +579,17 @@ int QIODevice::writeBlock( const QByteArray& data )
   \sa readBlock(), QTextStream::readLine()
 */
 
-int QIODevice::readLine( char *data, uint maxlen )
+int QIODevice::readLine(char *data, uint maxlen)
 {
-    if ( maxlen == 0 )				// application bug?
-	return 0;
-    char *p = data;
-    while ( --maxlen && (readBlock(p,1)>0) ) {	// read one byte at a time
-	if ( *p++ == '\n' )			// end of line
-	    break;
-    }
-    *p++ = '\0';
-    return (int)((long)p - (long)data);
+	if (maxlen == 0) // application bug?
+		return 0;
+	char *p = data;
+	while (--maxlen && (readBlock(p, 1) > 0)) { // read one byte at a time
+		if (*p++ == '\n') // end of line
+			break;
+	}
+	*p++ = '\0';
+	return (int)((long)p - (long)data);
 }
 
 

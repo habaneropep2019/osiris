@@ -39,8 +39,8 @@
 #define QCLIPBOARD_H
 
 #ifndef QT_H
-#include "qwindowdefs.h"
-#include "qobject.h"
+# include "qwindowdefs.h"
+# include "qobject.h"
 #endif // QT_H
 
 #ifndef QT_NO_CLIPBOARD
@@ -49,58 +49,57 @@ class QMimeSource;
 
 class Q_EXPORT QClipboard : public QObject
 {
-    Q_OBJECT
-private:
-    QClipboard( QObject *parent=0, const char *name=0 );
-    ~QClipboard();
+	Q_OBJECT
+      private:
+	QClipboard(QObject *parent = 0, const char *name = 0);
+	~QClipboard();
 
-public:
+      public:
+	enum Mode { Clipboard, Selection };
 
-    enum Mode { Clipboard, Selection };
+	void clear(Mode mode = QClipboard::Clipboard);
 
-    void	clear(Mode mode = QClipboard::Clipboard);
+# if defined(_WS_X11_)
+	bool ownsSelection(Mode mode) const;
+# endif
 
-#if defined(_WS_X11_)
-    bool ownsSelection(Mode mode) const;
-#endif
-    
-#ifndef QT_NO_MIMECLIPBOARD
-    QMimeSource* data(Mode mode = Clipboard) const;
-    void  setData( QMimeSource*, Mode mode = Clipboard );
-#endif
-    QString     text(Mode mode = Clipboard) const;
-    QString     text(QCString& subtype, Mode mode = Clipboard) const;
-    void	setText( const QString &, Mode mode = Clipboard);
-#ifndef QT_NO_MIMECLIPBOARD
-    QImage	image() const;
-    QPixmap	pixmap() const;
-    void	setImage( const QImage & );
-    void	setPixmap( const QPixmap & );
-#endif
-signals:
-    void	dataChanged();
+# ifndef QT_NO_MIMECLIPBOARD
+	QMimeSource *data(Mode mode = Clipboard) const;
+	void setData(QMimeSource *, Mode mode = Clipboard);
+# endif
+	QString text(Mode mode = Clipboard) const;
+	QString text(QCString &subtype, Mode mode = Clipboard) const;
+	void setText(const QString &, Mode mode = Clipboard);
+# ifndef QT_NO_MIMECLIPBOARD
+	QImage image() const;
+	QPixmap pixmap() const;
+	void setImage(const QImage &);
+	void setPixmap(const QPixmap &);
+# endif
+      signals:
+	void dataChanged();
 
-private slots:
-    void	ownerDestroyed();
+      private slots:
+	void ownerDestroyed();
 
-protected:
-    void	connectNotify( const char * );
-    bool	event( QEvent * );
+      protected:
+	void connectNotify(const char *);
+	bool event(QEvent *);
 
-    friend class QApplication;
-    friend class QBaseApplication;
-    friend class QDragManager;
-    friend class QMimeSource;
+	friend class QApplication;
+	friend class QBaseApplication;
+	friend class QDragManager;
+	friend class QMimeSource;
 
-private:	// Disabled copy constructor and operator=
-#if defined(_WS_X11_)
-    void clobber();
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(_WS_X11_)
+	void clobber();
+# endif
 
-#if defined(Q_DISABLE_COPY)
-    QClipboard( const QClipboard & );
-    QClipboard &operator=( const QClipboard & );
-#endif
+# if defined(Q_DISABLE_COPY)
+	QClipboard(const QClipboard &);
+	QClipboard &operator=(const QClipboard &);
+# endif
 };
 
 #endif // QT_NO_CLIPBOARD

@@ -37,20 +37,21 @@
 #define QDROPSITE_H
 
 #ifndef QT_H
-#ifndef QT_H
-#include "qglobal.h"
-#endif // QT_H
+# ifndef QT_H
+#  include "qglobal.h"
+# endif // QT_H
 #endif
 
 
 class QWidget;
 
 
-class Q_EXPORT QDropSite {
-public:
-    QDropSite( QWidget* parent );
-    virtual ~QDropSite();
+class Q_EXPORT QDropSite
+{
+      public:
+	QDropSite(QWidget *parent);
+	virtual ~QDropSite();
 };
 
 
-#endif  // QDROPSITE_H
+#endif // QDROPSITE_H

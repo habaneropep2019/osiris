@@ -17,13 +17,13 @@
 
 class GearWidget : public QGLWidget
 {
-public:
-    GearWidget( QWidget *parent=0, const char *name=0 );
+      public:
+	GearWidget(QWidget *parent = 0, const char *name = 0);
 
-protected:
-    void initializeGL();
-    void resizeGL( int, int );
-    void paintGL();
+      protected:
+	void initializeGL();
+	void resizeGL(int, int);
+	void paintGL();
 };
 
 

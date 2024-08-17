@@ -86,11 +86,11 @@
 
 
 #if !defined(PATH_MAX)
-#if defined( MAXPATHLEN )
-#define PATH_MAX MAXPATHLEN
-#else
-#define PATH_MAX 1024
-#endif
+# if defined(MAXPATHLEN)
+#  define PATH_MAX MAXPATHLEN
+# else
+#  define PATH_MAX 1024
+# endif
 #endif
 
 
@@ -122,140 +122,139 @@
 
 #if defined(_CC_MSVC_) || defined(_CC_SYM_)
 
-# define STATBUF	struct _stat		// non-ANSI defs
-# define STATBUF4TSTAT	struct _stat		// non-ANSI defs
-# define STAT		::_stat
-# define FSTAT		::_fstat
-# define STAT_REG	_S_IFREG
-# define STAT_DIR	_S_IFDIR
-# define STAT_MASK	_S_IFMT
+# define STATBUF struct _stat // non-ANSI defs
+# define STATBUF4TSTAT struct _stat // non-ANSI defs
+# define STAT ::_stat
+# define FSTAT ::_fstat
+# define STAT_REG _S_IFREG
+# define STAT_DIR _S_IFDIR
+# define STAT_MASK _S_IFMT
 # if defined(_S_IFLNK)
-#  define STAT_LNK	_S_IFLNK
+#  define STAT_LNK _S_IFLNK
 # endif
-# define FILENO		_fileno
-# define OPEN		::_open
-# define CLOSE		::_close
-# define LSEEK		::_lseek
-# define READ		::_read
-# define WRITE		::_write
-# define ACCESS		::_access
-# define GETCWD		::_getcwd
-# define CHDIR		::_chdir
-# define MKDIR		::_mkdir
-# define RMDIR		::_rmdir
-# define OPEN_RDONLY	_O_RDONLY
-# define OPEN_WRONLY	_O_WRONLY
-# define OPEN_RDWR	_O_RDWR
-# define OPEN_CREAT	_O_CREAT
-# define OPEN_TRUNC	_O_TRUNC
-# define OPEN_APPEND	_O_APPEND
+# define FILENO _fileno
+# define OPEN ::_open
+# define CLOSE ::_close
+# define LSEEK ::_lseek
+# define READ ::_read
+# define WRITE ::_write
+# define ACCESS ::_access
+# define GETCWD ::_getcwd
+# define CHDIR ::_chdir
+# define MKDIR ::_mkdir
+# define RMDIR ::_rmdir
+# define OPEN_RDONLY _O_RDONLY
+# define OPEN_WRONLY _O_WRONLY
+# define OPEN_RDWR _O_RDWR
+# define OPEN_CREAT _O_CREAT
+# define OPEN_TRUNC _O_TRUNC
+# define OPEN_APPEND _O_APPEND
 # if defined(O_TEXT)
-#  define OPEN_TEXT	_O_TEXT
-#  define OPEN_BINARY	_O_BINARY
+#  define OPEN_TEXT _O_TEXT
+#  define OPEN_BINARY _O_BINARY
 # endif
 
 #elif defined(_CC_BOR_) && __BORLANDC__ >= 0x550
 
-# define STATBUF	struct stat		// non-ANSI defs
-# define STATBUF4TSTAT	struct _stat		// non-ANSI defs
-# define STAT		::stat
-# define FSTAT		::fstat
-# define STAT_REG	_S_IFREG
-# define STAT_DIR	_S_IFDIR
-# define STAT_MASK	_S_IFMT
+# define STATBUF struct stat // non-ANSI defs
+# define STATBUF4TSTAT struct _stat // non-ANSI defs
+# define STAT ::stat
+# define FSTAT ::fstat
+# define STAT_REG _S_IFREG
+# define STAT_DIR _S_IFDIR
+# define STAT_MASK _S_IFMT
 # if defined(_S_IFLNK)
-#  define STAT_LNK	_S_IFLNK
+#  define STAT_LNK _S_IFLNK
 # endif
-# define FILENO		_fileno
-# define OPEN		::open
-# define CLOSE		::_close
-# define LSEEK		::_lseek
-# define READ		::_read
-# define WRITE		::_write
-# define ACCESS		::_access
-# define GETCWD		::_getcwd
-# define CHDIR		::chdir
-# define MKDIR		::_mkdir
-# define RMDIR		::_rmdir
-# define OPEN_RDONLY	_O_RDONLY
-# define OPEN_WRONLY	_O_WRONLY
-# define OPEN_RDWR	_O_RDWR
-# define OPEN_CREAT	_O_CREAT
-# define OPEN_TRUNC	_O_TRUNC
-# define OPEN_APPEND	_O_APPEND
+# define FILENO _fileno
+# define OPEN ::open
+# define CLOSE ::_close
+# define LSEEK ::_lseek
+# define READ ::_read
+# define WRITE ::_write
+# define ACCESS ::_access
+# define GETCWD ::_getcwd
+# define CHDIR ::chdir
+# define MKDIR ::_mkdir
+# define RMDIR ::_rmdir
+# define OPEN_RDONLY _O_RDONLY
+# define OPEN_WRONLY _O_WRONLY
+# define OPEN_RDWR _O_RDWR
+# define OPEN_CREAT _O_CREAT
+# define OPEN_TRUNC _O_TRUNC
+# define OPEN_APPEND _O_APPEND
 # if defined(O_TEXT)
-#  define OPEN_TEXT	_O_TEXT
-#  define OPEN_BINARY	_O_BINARY
+#  define OPEN_TEXT _O_TEXT
+#  define OPEN_BINARY _O_BINARY
 # endif
 
-#else						// all other systems
+#else // all other systems
 
-# define STATBUF	struct stat
-# define STATBUF4TSTAT	struct stat
-# define STAT		::stat
-# define FSTAT		::fstat
-# define STAT_REG	S_IFREG
-# define STAT_DIR	S_IFDIR
-# define STAT_MASK	S_IFMT
+# define STATBUF struct stat
+# define STATBUF4TSTAT struct stat
+# define STAT ::stat
+# define FSTAT ::fstat
+# define STAT_REG S_IFREG
+# define STAT_DIR S_IFDIR
+# define STAT_MASK S_IFMT
 # if defined(S_IFLNK)
-#  define STAT_LNK	S_IFLNK
+#  define STAT_LNK S_IFLNK
 # endif
-# define FILENO		fileno
-# define OPEN		::open
-# define CLOSE		::close
-# define LSEEK		::lseek
-# define READ		::read
-# define WRITE		::write
-# define ACCESS		::access
+# define FILENO fileno
+# define OPEN ::open
+# define CLOSE ::close
+# define LSEEK ::lseek
+# define READ ::read
+# define WRITE ::write
+# define ACCESS ::access
 # if defined(_OS_OS2EMX_)
-#  define GETCWD	::_getcwd2
-#  define CHDIR		::_chdir2
+#  define GETCWD ::_getcwd2
+#  define CHDIR ::_chdir2
 # else
-#  define GETCWD	::getcwd
-#  define CHDIR		::chdir
+#  define GETCWD ::getcwd
+#  define CHDIR ::chdir
 # endif
-# define MKDIR		::mkdir
-# define RMDIR		::rmdir
-# define OPEN_RDONLY	O_RDONLY
-# define OPEN_WRONLY	O_WRONLY
-# define OPEN_RDWR	O_RDWR
-# define OPEN_CREAT	O_CREAT
-# define OPEN_TRUNC	O_TRUNC
-# define OPEN_APPEND	O_APPEND
+# define MKDIR ::mkdir
+# define RMDIR ::rmdir
+# define OPEN_RDONLY O_RDONLY
+# define OPEN_WRONLY O_WRONLY
+# define OPEN_RDWR O_RDWR
+# define OPEN_CREAT O_CREAT
+# define OPEN_TRUNC O_TRUNC
+# define OPEN_APPEND O_APPEND
 # if defined(O_TEXT)
-#  define OPEN_TEXT	O_TEXT
-#  define OPEN_BINARY	O_BINARY
+#  define OPEN_TEXT O_TEXT
+#  define OPEN_BINARY O_BINARY
 # endif
 #endif
 
 #if defined(_CC_MWERKS_)
-#undef mkdir
-#undef MKDIR
-#define MKDIR _mkdir
-#undef rmdir
-#undef RMDIR
-#define RMDIR _rmdir
+# undef mkdir
+# undef MKDIR
+# define MKDIR _mkdir
+# undef rmdir
+# undef RMDIR
+# define RMDIR _rmdir
 #endif
 
 
 #if defined(_OS_FATFS_)
-# define F_OK	0
-# define X_OK	1
-# define W_OK	2
-# define R_OK	4
+# define F_OK 0
+# define X_OK 1
+# define W_OK 2
+# define R_OK 4
 #endif
 
 #if defined(_OS_MAC_)
-# define F_OK	0
-# define X_OK	1
-# define W_OK	2
-# define R_OK	4
+# define F_OK 0
+# define X_OK 1
+# define W_OK 2
+# define R_OK 4
 #endif
 
-struct QFileInfoCache
-{
-    STATBUF st;
-    bool isSymLink;
+struct QFileInfoCache {
+	STATBUF st;
+	bool isSymLink;
 };
 
 #endif

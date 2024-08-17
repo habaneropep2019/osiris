@@ -11,15 +11,15 @@
 #include "richtext.h"
 #include <qapplication.h>
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    MyRichText richtext;
-    richtext.resize( 450, 350 );
-    richtext.setCaption( "Qt Example - Richtext" );
-    a.setMainWidget( &richtext );
-    richtext.show();
+	MyRichText richtext;
+	richtext.resize(450, 350);
+	richtext.setCaption("Qt Example - Richtext");
+	a.setMainWidget(&richtext);
+	richtext.show();
 
-    return a.exec();
+	return a.exec();
 }

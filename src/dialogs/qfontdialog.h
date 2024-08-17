@@ -52,85 +52,86 @@
 //  to be available in the future.
 //
 
-#ifndef QT_H
-#include "qdialog.h"
-#include "qfont.h"
-#endif // QT_H
+# ifndef QT_H
+#  include "qdialog.h"
+#  include "qfont.h"
+# endif // QT_H
 
-class  QListBox;
-class  QComboBox;
+class QListBox;
+class QComboBox;
 class QFontDialogPrivate;
 
 
-class Q_EXPORT QFontDialog: public QDialog
+class Q_EXPORT QFontDialog : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    static QFont getFont( bool *ok, const QFont &def,
-    			  QWidget *parent = 0, const char* name = 0);
+      public:
+	static QFont getFont(bool *ok, const QFont &def, QWidget *parent = 0,
+			     const char *name = 0);
 
-    static QFont getFont( bool *ok, QWidget *parent = 0, const char* name = 0);
+	static QFont getFont(bool *ok, QWidget *parent = 0,
+			     const char *name = 0);
 
-private:
-    QFontDialog( QWidget *parent=0, const char *name=0, bool modal=FALSE,
-		 WFlags f=0 );
-   ~QFontDialog();
+      private:
+	QFontDialog(QWidget *parent = 0, const char *name = 0,
+		    bool modal = FALSE, WFlags f = 0);
+	~QFontDialog();
 
-    QFont font() const;
-    void setFont( const QFont &font );
+	QFont font() const;
+	void setFont(const QFont &font);
 
-signals:
-    void fontSelected( const QFont &font );
-    void fontHighlighted( const QFont &font );
+      signals:
+	void fontSelected(const QFont &font);
+	void fontHighlighted(const QFont &font);
 
-protected:
-    bool eventFilter( QObject *, QEvent * );
+      protected:
+	bool eventFilter(QObject *, QEvent *);
 
-    QListBox * familyListBox() const;
-    virtual void updateFamilies();
+	QListBox *familyListBox() const;
+	virtual void updateFamilies();
 
-    QListBox * styleListBox() const;
-    virtual void updateStyles();
+	QListBox *styleListBox() const;
+	virtual void updateStyles();
 
-    QListBox * sizeListBox() const;
-    virtual void updateSizes();
+	QListBox *sizeListBox() const;
+	virtual void updateSizes();
 
-    QComboBox * scriptCombo() const;
-    virtual void updateScripts();
+	QComboBox *scriptCombo() const;
+	virtual void updateScripts();
 
-#if 0
+# if 0
     QString family() const;
     QString script() const;
     QString style() const;
     QString size() const;
-#endif
+# endif
 
-protected slots:
-    void sizeChanged( const QString &);
+      protected slots:
+	void sizeChanged(const QString &);
 
-private slots:
-    void familyHighlighted( const QString &);
-    void familyHighlighted( int );
-    void scriptHighlighted( const QString &);
-    void scriptHighlighted( int );
-    void styleHighlighted( const QString &);
-    void sizeHighlighted( const QString &);
-    void updateSample();
-    void emitSelectedFont();
+      private slots:
+	void familyHighlighted(const QString &);
+	void familyHighlighted(int);
+	void scriptHighlighted(const QString &);
+	void scriptHighlighted(int);
+	void styleHighlighted(const QString &);
+	void sizeHighlighted(const QString &);
+	void updateSample();
+	void emitSelectedFont();
 
-private:
-    static QFont getFont( bool *ok, const QFont *def,
-			  QWidget *parent = 0, const char* name = 0);
+      private:
+	static QFont getFont(bool *ok, const QFont *def, QWidget *parent = 0,
+			     const char *name = 0);
 
-    QFontDialogPrivate * d;
-    friend class QFontDialogPrivate;
+	QFontDialogPrivate *d;
+	friend class QFontDialogPrivate;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QFontDialog( const QFontDialog & );
-    QFontDialog& operator=( const QFontDialog & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QFontDialog(const QFontDialog &);
+	QFontDialog &operator=(const QFontDialog &);
+# endif
 };
 
 #endif

@@ -44,135 +44,177 @@
 // NOT REVISED
 
 // Error strings for the XML reader
-#define XMLERR_OK                         "no error occured"
-#define XMLERR_TAGMISMATCH                "tag mismatch"
-#define XMLERR_UNEXPECTEDEOF              "unexpected end of file"
-#define XMLERR_FINISHEDPARSINGWHILENOTEOF "parsing is finished but end of file is not reached"
-#define XMLERR_LETTEREXPECTED             "letter is expected"
-#define XMLERR_ERRORPARSINGELEMENT        "error while parsing element"
-#define XMLERR_ERRORPARSINGPROLOG         "error while parsing prolog"
-#define XMLERR_ERRORPARSINGMAINELEMENT    "error while parsing main element"
-#define XMLERR_ERRORPARSINGCONTENT        "error while parsing content"
-#define XMLERR_ERRORPARSINGNAME           "error while parsing name"
-#define XMLERR_ERRORPARSINGNMTOKEN        "error while parsing Nmtoken"
-#define XMLERR_ERRORPARSINGATTRIBUTE      "error while parsing attribute"
-#define XMLERR_ERRORPARSINGMISC           "error while parsing misc"
-#define XMLERR_ERRORPARSINGCHOICE         "error while parsing choice or seq"
-#define XMLERR_ERRORBYCONSUMER            "error triggered by consumer"
-#define XMLERR_UNEXPECTEDCHARACTER        "unexpected character"
-#define XMLERR_EQUALSIGNEXPECTED          "expected '=' but not found"
-#define XMLERR_QUOTATIONEXPECTED          "expected \" or ' but not found"
-#define XMLERR_ERRORPARSINGREFERENCE      "error while parsing reference"
-#define XMLERR_ERRORPARSINGPI             "error while parsing processing instruction"
-#define XMLERR_ERRORPARSINGATTLISTDECL    "error while parsing attribute list declaration"
-#define XMLERR_ERRORPARSINGATTTYPE        "error while parsing attribute type declaration"
-#define XMLERR_ERRORPARSINGATTVALUE       "error while parsing attribute value declaration"
-#define XMLERR_ERRORPARSINGELEMENTDECL    "error while parsing element declaration"
-#define XMLERR_ERRORPARSINGENTITYDECL     "error while parsing entity declaration"
-#define XMLERR_ERRORPARSINGNOTATIONDECL   "error while parsing notation declaration"
-#define XMLERR_ERRORPARSINGEXTERNALID     "error while parsing external id"
-#define XMLERR_ERRORPARSINGCOMMENT        "error while parsing comment"
-#define XMLERR_ERRORPARSINGENTITYVALUE    "error while parsing entity value declaration"
-#define XMLERR_CDSECTHEADEREXPECTED       "expected the header for a cdata section"
-#define XMLERR_MORETHANONEDOCTYPE         "more than one document type definition"
-#define XMLERR_ERRORPARSINGDOCTYPE        "error while parsing document type definition"
-#define XMLERR_INVALIDNAMEFORPI           "invalid name for processing instruction"
-#define XMLERR_VERSIONEXPECTED            "version expected while reading the XML declaration"
-#define XMLERR_EDECLORSDDECLEXPECTED      "EDecl or SDDecl expected while reading the XML declaration"
-#define XMLERR_SDDECLEXPECTED             "SDDecl expected while reading the XML declaration"
-#define XMLERR_WRONGVALUEFORSDECL         "wrong value for standalone declaration"
-#define XMLERR_UNPARSEDENTITYREFERENCE    "unparsed entity reference in wrong context"
-#define XMLERR_INTERNALGENERALENTITYINDTD "internal general entity reference not allowed in DTD"
-#define XMLERR_EXTERNALGENERALENTITYINDTD "external parsed general entity reference not allowed in DTD"
-#define XMLERR_EXTERNALGENERALENTITYINAV  "external parsed general entity reference not allowed in attribute value"
+# define XMLERR_OK "no error occured"
+# define XMLERR_TAGMISMATCH "tag mismatch"
+# define XMLERR_UNEXPECTEDEOF "unexpected end of file"
+# define XMLERR_FINISHEDPARSINGWHILENOTEOF \
+	 "parsing is finished but end of file is not reached"
+# define XMLERR_LETTEREXPECTED "letter is expected"
+# define XMLERR_ERRORPARSINGELEMENT "error while parsing element"
+# define XMLERR_ERRORPARSINGPROLOG "error while parsing prolog"
+# define XMLERR_ERRORPARSINGMAINELEMENT "error while parsing main element"
+# define XMLERR_ERRORPARSINGCONTENT "error while parsing content"
+# define XMLERR_ERRORPARSINGNAME "error while parsing name"
+# define XMLERR_ERRORPARSINGNMTOKEN "error while parsing Nmtoken"
+# define XMLERR_ERRORPARSINGATTRIBUTE "error while parsing attribute"
+# define XMLERR_ERRORPARSINGMISC "error while parsing misc"
+# define XMLERR_ERRORPARSINGCHOICE "error while parsing choice or seq"
+# define XMLERR_ERRORBYCONSUMER "error triggered by consumer"
+# define XMLERR_UNEXPECTEDCHARACTER "unexpected character"
+# define XMLERR_EQUALSIGNEXPECTED "expected '=' but not found"
+# define XMLERR_QUOTATIONEXPECTED "expected \" or ' but not found"
+# define XMLERR_ERRORPARSINGREFERENCE "error while parsing reference"
+# define XMLERR_ERRORPARSINGPI "error while parsing processing instruction"
+# define XMLERR_ERRORPARSINGATTLISTDECL \
+	 "error while parsing attribute list declaration"
+# define XMLERR_ERRORPARSINGATTTYPE \
+	 "error while parsing attribute type declaration"
+# define XMLERR_ERRORPARSINGATTVALUE \
+	 "error while parsing attribute value declaration"
+# define XMLERR_ERRORPARSINGELEMENTDECL \
+	 "error while parsing element declaration"
+# define XMLERR_ERRORPARSINGENTITYDECL "error while parsing entity declaration"
+# define XMLERR_ERRORPARSINGNOTATIONDECL \
+	 "error while parsing notation declaration"
+# define XMLERR_ERRORPARSINGEXTERNALID "error while parsing external id"
+# define XMLERR_ERRORPARSINGCOMMENT "error while parsing comment"
+# define XMLERR_ERRORPARSINGENTITYVALUE \
+	 "error while parsing entity value declaration"
+# define XMLERR_CDSECTHEADEREXPECTED "expected the header for a cdata section"
+# define XMLERR_MORETHANONEDOCTYPE "more than one document type definition"
+# define XMLERR_ERRORPARSINGDOCTYPE \
+	 "error while parsing document type definition"
+# define XMLERR_INVALIDNAMEFORPI "invalid name for processing instruction"
+# define XMLERR_VERSIONEXPECTED \
+	 "version expected while reading the XML declaration"
+# define XMLERR_EDECLORSDDECLEXPECTED \
+	 "EDecl or SDDecl expected while reading the XML declaration"
+# define XMLERR_SDDECLEXPECTED \
+	 "SDDecl expected while reading the XML declaration"
+# define XMLERR_WRONGVALUEFORSDECL "wrong value for standalone declaration"
+# define XMLERR_UNPARSEDENTITYREFERENCE \
+	 "unparsed entity reference in wrong context"
+# define XMLERR_INTERNALGENERALENTITYINDTD \
+	 "internal general entity reference not allowed in DTD"
+# define XMLERR_EXTERNALGENERALENTITYINDTD \
+	 "external parsed general entity reference not allowed in DTD"
+# define XMLERR_EXTERNALGENERALENTITYINAV \
+	 "external parsed general entity reference not allowed in attribute value"
 
 
 // the constants for the lookup table
-static const signed char cltWS      =  0; // white space
-static const signed char cltPer     =  1; // %
-static const signed char cltAmp     =  2; // &
-static const signed char cltGt      =  3; // >
-static const signed char cltLt      =  4; // <
-static const signed char cltSlash   =  5; // /
-static const signed char cltQm      =  6; // ?
-static const signed char cltEm      =  7; // !
-static const signed char cltDash    =  8; // -
-static const signed char cltCB      =  9; // ]
-static const signed char cltOB      = 10; // [
-static const signed char cltEq      = 11; // =
-static const signed char cltDq      = 12; // "
-static const signed char cltSq      = 13; // '
+static const signed char cltWS = 0; // white space
+static const signed char cltPer = 1; // %
+static const signed char cltAmp = 2; // &
+static const signed char cltGt = 3; // >
+static const signed char cltLt = 4; // <
+static const signed char cltSlash = 5; // /
+static const signed char cltQm = 6; // ?
+static const signed char cltEm = 7; // !
+static const signed char cltDash = 8; // -
+static const signed char cltCB = 9; // ]
+static const signed char cltOB = 10; // [
+static const signed char cltEq = 11; // =
+static const signed char cltDq = 12; // "
+static const signed char cltSq = 13; // '
 static const signed char cltUnknown = 14;
 
 // character lookup table
-static const signed char charLookupTable[256]={
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x00 - 0x07
-    cltUnknown, // 0x08
-    cltWS,      // 0x09 \t
-    cltWS,      // 0x0A \n
-    cltUnknown, // 0x0B
-    cltUnknown, // 0x0C
-    cltWS,      // 0x0D \r
-    cltUnknown, // 0x0E
-    cltUnknown, // 0x0F
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x17 - 0x16
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x18 - 0x1F
-    cltWS,      // 0x20 Space
-    cltEm,      // 0x21 !
-    cltDq,      // 0x22 "
-    cltUnknown, // 0x23
-    cltUnknown, // 0x24
-    cltPer,     // 0x25 %
-    cltAmp,     // 0x26 &
-    cltSq,      // 0x27 '
-    cltUnknown, // 0x28
-    cltUnknown, // 0x29
-    cltUnknown, // 0x2A
-    cltUnknown, // 0x2B
-    cltUnknown, // 0x2C
-    cltDash,    // 0x2D -
-    cltUnknown, // 0x2E
-    cltSlash,   // 0x2F /
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x30 - 0x37
-    cltUnknown, // 0x38
-    cltUnknown, // 0x39
-    cltUnknown, // 0x3A
-    cltUnknown, // 0x3B
-    cltLt,      // 0x3C <
-    cltEq,      // 0x3D =
-    cltGt,      // 0x3E >
-    cltQm,      // 0x3F ?
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x40 - 0x47
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x48 - 0x4F
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x50 - 0x57
-    cltUnknown, // 0x58
-    cltUnknown, // 0x59
-    cltUnknown, // 0x5A
-    cltOB,      // 0x5B [
-    cltUnknown, // 0x5C
-    cltCB,      // 0x5D ]
-    cltUnknown, // 0x5E
-    cltUnknown, // 0x5F
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x60 - 0x67
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x68 - 0x6F
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x70 - 0x77
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x78 - 0x7F
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x80 - 0x87
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x88 - 0x8F
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x90 - 0x97
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x98 - 0x9F
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xA0 - 0xA7
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xA8 - 0xAF
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xB0 - 0xB7
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xB8 - 0xBF
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xC0 - 0xC7
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xC8 - 0xCF
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xD0 - 0xD7
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xD8 - 0xDF
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xE0 - 0xE7
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xE8 - 0xEF
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xF0 - 0xF7
-    cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown, cltUnknown  // 0xF8 - 0xFF
+static const signed char charLookupTable[256] = {
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x00 - 0x07
+	cltUnknown, // 0x08
+	cltWS, // 0x09 \t
+	cltWS, // 0x0A \n
+	cltUnknown, // 0x0B
+	cltUnknown, // 0x0C
+	cltWS, // 0x0D \r
+	cltUnknown, // 0x0E
+	cltUnknown, // 0x0F
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x17 - 0x16
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x18 - 0x1F
+	cltWS, // 0x20 Space
+	cltEm, // 0x21 !
+	cltDq, // 0x22 "
+	cltUnknown, // 0x23
+	cltUnknown, // 0x24
+	cltPer, // 0x25 %
+	cltAmp, // 0x26 &
+	cltSq, // 0x27 '
+	cltUnknown, // 0x28
+	cltUnknown, // 0x29
+	cltUnknown, // 0x2A
+	cltUnknown, // 0x2B
+	cltUnknown, // 0x2C
+	cltDash, // 0x2D -
+	cltUnknown, // 0x2E
+	cltSlash, // 0x2F /
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x30 - 0x37
+	cltUnknown, // 0x38
+	cltUnknown, // 0x39
+	cltUnknown, // 0x3A
+	cltUnknown, // 0x3B
+	cltLt, // 0x3C <
+	cltEq, // 0x3D =
+	cltGt, // 0x3E >
+	cltQm, // 0x3F ?
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x40 - 0x47
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x48 - 0x4F
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x50 - 0x57
+	cltUnknown, // 0x58
+	cltUnknown, // 0x59
+	cltUnknown, // 0x5A
+	cltOB, // 0x5B [
+	cltUnknown, // 0x5C
+	cltCB, // 0x5D ]
+	cltUnknown, // 0x5E
+	cltUnknown, // 0x5F
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x60 - 0x67
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x68 - 0x6F
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x70 - 0x77
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x78 - 0x7F
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x80 - 0x87
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x88 - 0x8F
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x90 - 0x97
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0x98 - 0x9F
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xA0 - 0xA7
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xA8 - 0xAF
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xB0 - 0xB7
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xB8 - 0xBF
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xC0 - 0xC7
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xC8 - 0xCF
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xD0 - 0xD7
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xD8 - 0xDF
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xE0 - 0xE7
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xE8 - 0xEF
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown, // 0xF0 - 0xF7
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown,
+	cltUnknown, cltUnknown, cltUnknown, cltUnknown // 0xF8 - 0xFF
 };
 
 
@@ -195,12 +237,12 @@ class QXmlDefaultHandlerPrivate
 {
 };
 
-#if defined(Q_FULL_TEMPLATE_INSTANTIATION)
-bool operator==( const QMap<QString, QString>, const QMap<QString, QString> )
+# if defined(Q_FULL_TEMPLATE_INSTANTIATION)
+bool operator==(const QMap<QString, QString>, const QMap<QString, QString>)
 {
-    return FALSE;
+	return FALSE;
 }
-#endif
+# endif
 
 /*!
   \class QXmlParseException qxml.h
@@ -212,7 +254,8 @@ bool operator==( const QMap<QString, QString>, const QMap<QString, QString> )
   \sa QXmlErrorHandler
 */
 /*!
-  \fn QXmlParseException::QXmlParseException( const QString& name, int c, int l, const QString& p, const QString& s )
+  \fn QXmlParseException::QXmlParseException( const QString& name, int c, int l,
+  const QString& p, const QString& s )
 
   Constructs a parse exception with the error string \a name in the column
   \a c and line \a l for the public identifier \a p and the system identifier
@@ -223,35 +266,35 @@ bool operator==( const QMap<QString, QString>, const QMap<QString, QString> )
 */
 QString QXmlParseException::message() const
 {
-    return msg;
+	return msg;
 }
 /*!
   Returns the column number the error occured.
 */
 int QXmlParseException::columnNumber() const
 {
-    return column;
+	return column;
 }
 /*!
   Returns the line number the error occured.
 */
 int QXmlParseException::lineNumber() const
 {
-    return line;
+	return line;
 }
 /*!
   Returns the public identifier the error occured.
 */
 QString QXmlParseException::publicId() const
 {
-    return pub;
+	return pub;
 }
 /*!
   Returns the system identifier the error occured.
 */
 QString QXmlParseException::systemId() const
 {
-    return sys;
+	return sys;
 }
 
 
@@ -283,7 +326,7 @@ QString QXmlParseException::systemId() const
 */
 int QXmlLocator::columnNumber()
 {
-    return ( reader->columnNr == -1 ? -1 : reader->columnNr + 1 );
+	return (reader->columnNr == -1 ? -1 : reader->columnNr + 1);
 }
 /*!
     Gets the line number (starting with 1) or -1 if there is no line number
@@ -291,7 +334,7 @@ int QXmlLocator::columnNumber()
 */
 int QXmlLocator::lineNumber()
 {
-    return ( reader->lineNr == -1 ? -1 : reader->lineNr + 1 );
+	return (reader->lineNr == -1 ? -1 : reader->lineNr + 1);
 }
 
 
@@ -320,7 +363,7 @@ int QXmlLocator::lineNumber()
 */
 QXmlNamespaceSupport::QXmlNamespaceSupport()
 {
-    reset();
+	reset();
 }
 
 /*!
@@ -341,13 +384,13 @@ QXmlNamespaceSupport::~QXmlNamespaceSupport()
   asymmetry exists to make it easier to look up prefixes for attribute names,
   where the default prefix is not allowed.
 */
-void QXmlNamespaceSupport::setPrefix( const QString& pre, const QString& uri )
+void QXmlNamespaceSupport::setPrefix(const QString &pre, const QString &uri)
 {
-    if( pre.isNull() ) {
-	ns.insert( "", uri );
-    } else {
-	ns.insert( pre, uri );
-    }
+	if (pre.isNull()) {
+		ns.insert("", uri);
+	} else {
+		ns.insert(pre, uri);
+	}
 }
 
 /*!
@@ -360,42 +403,42 @@ void QXmlNamespaceSupport::setPrefix( const QString& pre, const QString& uri )
   Note: this will never return the empty (default) prefix; to check for a
   default prefix, use the uri() function with an argument of "".
 */
-QString QXmlNamespaceSupport::prefix( const QString& uri ) const
+QString QXmlNamespaceSupport::prefix(const QString &uri) const
 {
-    QMap<QString, QString>::ConstIterator itc, it = ns.begin();
-    while ( (itc=it) != ns.end() ) {
-	++it;
-	if ( itc.data() == uri && !itc.key().isEmpty() )
-	    return itc.key();
-    }
-    return "";
+	QMap<QString, QString>::ConstIterator itc, it = ns.begin();
+	while ((itc = it) != ns.end()) {
+		++it;
+		if (itc.data() == uri && !itc.key().isEmpty())
+			return itc.key();
+	}
+	return "";
 }
 
 /*!
   Looks up a prefix in the current context and returns the currently-mapped
   namespace URI. Use the empty string ("") for the default namespace.
 */
-QString QXmlNamespaceSupport::uri( const QString& prefix ) const
+QString QXmlNamespaceSupport::uri(const QString &prefix) const
 {
-    const QString& returi = ns[ prefix ];
-    return returi;
+	const QString &returi = ns[prefix];
+	return returi;
 }
 
 /*!
   Splits the name at the ':' and returns the prefix and the local name.
 */
-void QXmlNamespaceSupport::splitName( const QString& qname,
-	QString& prefix, QString& localname ) const
+void QXmlNamespaceSupport::splitName(const QString &qname, QString &prefix,
+				     QString &localname) const
 {
-    uint pos;
-    // search the ':'
-    for( pos=0; pos<qname.length(); pos++ ) {
-	if ( qname.at(pos) == ':' )
-	    break;
-    }
-    // and split
-    prefix = qname.left( pos );
-    localname = qname.mid( pos+1 );
+	uint pos;
+	// search the ':'
+	for (pos = 0; pos < qname.length(); pos++) {
+		if (qname.at(pos) == ':')
+			break;
+	}
+	// and split
+	prefix = qname.left(pos);
+	localname = qname.mid(pos + 1);
 }
 
 /*!
@@ -418,29 +461,28 @@ void QXmlNamespaceSupport::splitName( const QString& qname,
   unprefixed element name will received the default namespace (if any), while
   an unprefixed element name will not
 */
-void QXmlNamespaceSupport::processName( const QString& qname,
-	bool isAttribute,
-	QString& nsuri, QString& localname ) const
+void QXmlNamespaceSupport::processName(const QString &qname, bool isAttribute,
+				       QString &nsuri, QString &localname) const
 {
-    uint pos;
-    // search the ':'
-    for( pos=0; pos<qname.length(); pos++ ) {
-	if ( qname.at(pos) == ':' )
-	    break;
-    }
-    if ( pos < qname.length() ) {
-	// there was a ':'
-	nsuri = uri( qname.left( pos ) );
-	localname = qname.mid( pos+1 );
-    } else {
-	// there was no ':'
-	if ( isAttribute ) {
-	    nsuri = ""; // attributes don't take default namespace
-	} else {
-	    nsuri = uri( "" ); // get default namespace
+	uint pos;
+	// search the ':'
+	for (pos = 0; pos < qname.length(); pos++) {
+		if (qname.at(pos) == ':')
+			break;
 	}
-	localname = qname;
-    }
+	if (pos < qname.length()) {
+		// there was a ':'
+		nsuri = uri(qname.left(pos));
+		localname = qname.mid(pos + 1);
+	} else {
+		// there was no ':'
+		if (isAttribute) {
+			nsuri = ""; // attributes don't take default namespace
+		} else {
+			nsuri = uri(""); // get default namespace
+		}
+		localname = qname;
+	}
 }
 
 /*!
@@ -452,15 +494,15 @@ void QXmlNamespaceSupport::processName( const QString& qname,
 */
 QStringList QXmlNamespaceSupport::prefixes() const
 {
-    QStringList list;
+	QStringList list;
 
-    QMap<QString, QString>::ConstIterator itc, it = ns.begin();
-    while ( (itc=it) != ns.end() ) {
-	++it;
-	if ( !itc.key().isEmpty() )
-	    list.append( itc.key() );
-    }
-    return list;
+	QMap<QString, QString>::ConstIterator itc, it = ns.begin();
+	while ((itc = it) != ns.end()) {
+		++it;
+		if (!itc.key().isEmpty())
+			list.append(itc.key());
+	}
+	return list;
 }
 
 /*!
@@ -474,17 +516,17 @@ QStringList QXmlNamespaceSupport::prefixes() const
   check for the presence of a default namespace, use uri() with an
   argument of "".
 */
-QStringList QXmlNamespaceSupport::prefixes( const QString& uri ) const
+QStringList QXmlNamespaceSupport::prefixes(const QString &uri) const
 {
-    QStringList list;
+	QStringList list;
 
-    QMap<QString, QString>::ConstIterator itc, it = ns.begin();
-    while ( (itc=it) != ns.end() ) {
-	++it;
-	if ( itc.data() == uri && !itc.key().isEmpty() )
-	    list.append( itc.key() );
-    }
-    return list;
+	QMap<QString, QString>::ConstIterator itc, it = ns.begin();
+	while ((itc = it) != ns.end()) {
+		++it;
+		if (itc.data() == uri && !itc.key().isEmpty())
+			list.append(itc.key());
+	}
+	return list;
 }
 
 /*!
@@ -497,7 +539,7 @@ QStringList QXmlNamespaceSupport::prefixes( const QString& uri ) const
 */
 void QXmlNamespaceSupport::pushContext()
 {
-    nsStack.push( ns );
+	nsStack.push(ns);
 }
 
 /*!
@@ -509,8 +551,8 @@ void QXmlNamespaceSupport::pushContext()
 */
 void QXmlNamespaceSupport::popContext()
 {
-    if( !nsStack.isEmpty() )
-	ns = nsStack.pop2();
+	if (!nsStack.isEmpty())
+		ns = nsStack.pop2();
 }
 
 /*!
@@ -518,9 +560,10 @@ void QXmlNamespaceSupport::popContext()
 */
 void QXmlNamespaceSupport::reset()
 {
-    nsStack.clear();
-    ns.clear();
-    ns.insert( "xml", "http://www.w3.org/XML/1998/namespace" ); // the XML namespace
+	nsStack.clear();
+	ns.clear();
+	ns.insert("xml", "http://www.w3.org/XML/1998/namespace"); // the XML
+								  // namespace
 }
 
 
@@ -560,9 +603,9 @@ void QXmlNamespaceSupport::reset()
 
   See also the <a href="xml-sax.html#namespaces">namespace description</a>.
 */
-int QXmlAttributes::index( const QString& qName ) const
+int QXmlAttributes::index(const QString &qName) const
 {
-    return qnameList.findIndex( qName );
+	return qnameList.findIndex(qName);
 }
 
 /*!
@@ -576,14 +619,14 @@ int QXmlAttributes::index( const QString& qName ) const
 
   See also the <a href="xml-sax.html#namespaces">namespace description</a>.
 */
-int QXmlAttributes::index( const QString& uri, const QString& localPart ) const
+int QXmlAttributes::index(const QString &uri, const QString &localPart) const
 {
-    uint count = uriList.count();
-    for ( uint i=0; i<count; i++ ) {
-	if ( uriList[i] == uri && localnameList[i] == localPart )
-	    return i;
-    }
-    return -1;
+	uint count = uriList.count();
+	for (uint i = 0; i < count; i++) {
+		if (uriList[i] == uri && localnameList[i] == localPart)
+			return i;
+	}
+	return -1;
 }
 
 /*!
@@ -591,7 +634,7 @@ int QXmlAttributes::index( const QString& uri, const QString& localPart ) const
 */
 int QXmlAttributes::length() const
 {
-    return valueList.count();
+	return valueList.count();
 }
 
 /*!
@@ -599,9 +642,9 @@ int QXmlAttributes::length() const
 
   See also the <a href="xml-sax.html#namespaces">namespace description</a>.
 */
-QString QXmlAttributes::localName( int index ) const
+QString QXmlAttributes::localName(int index) const
 {
-    return localnameList[index];
+	return localnameList[index];
 }
 
 /*!
@@ -609,9 +652,9 @@ QString QXmlAttributes::localName( int index ) const
 
   See also the <a href="xml-sax.html#namespaces">namespace description</a>.
 */
-QString QXmlAttributes::qName( int index ) const
+QString QXmlAttributes::qName(int index) const
 {
-    return qnameList[index];
+	return qnameList[index];
 }
 
 /*!
@@ -619,9 +662,9 @@ QString QXmlAttributes::qName( int index ) const
 
   See also the <a href="xml-sax.html#namespaces">namespace description</a>.
 */
-QString QXmlAttributes::uri( int index ) const
+QString QXmlAttributes::uri(int index) const
 {
-    return uriList[index];
+	return uriList[index];
 }
 
 /*!
@@ -629,9 +672,9 @@ QString QXmlAttributes::uri( int index ) const
 
   At the moment only 'CDATA' is returned.
 */
-QString QXmlAttributes::type( int ) const
+QString QXmlAttributes::type(int) const
 {
-    return "CDATA";
+	return "CDATA";
 }
 
 /*!
@@ -639,9 +682,9 @@ QString QXmlAttributes::type( int ) const
 
   At the moment only 'CDATA' is returned.
 */
-QString QXmlAttributes::type( const QString& ) const
+QString QXmlAttributes::type(const QString &) const
 {
-    return "CDATA";
+	return "CDATA";
 }
 
 /*!
@@ -653,17 +696,17 @@ QString QXmlAttributes::type( const QString& ) const
 
   At the moment only 'CDATA' is returned.
 */
-QString QXmlAttributes::type( const QString&, const QString& ) const
+QString QXmlAttributes::type(const QString &, const QString &) const
 {
-    return "CDATA";
+	return "CDATA";
 }
 
 /*!
   Looks up an attribute's value by index (starting with 0).
 */
-QString QXmlAttributes::value( int index ) const
+QString QXmlAttributes::value(int index) const
 {
-    return valueList[index];
+	return valueList[index];
 }
 
 /*!
@@ -671,12 +714,12 @@ QString QXmlAttributes::value( int index ) const
 
   See also the <a href="xml-sax.html#namespaces">namespace description</a>.
 */
-QString QXmlAttributes::value( const QString& qName ) const
+QString QXmlAttributes::value(const QString &qName) const
 {
-    int i = index( qName );
-    if ( i == -1 )
-	return QString::null;
-    return valueList[ i ];
+	int i = index(qName);
+	if (i == -1)
+		return QString::null;
+	return valueList[i];
 }
 
 /*!
@@ -687,12 +730,13 @@ QString QXmlAttributes::value( const QString& qName ) const
 
   See also the <a href="xml-sax.html#namespaces">namespace description</a>.
 */
-QString QXmlAttributes::value( const QString& uri, const QString& localName ) const
+QString QXmlAttributes::value(const QString &uri,
+			      const QString &localName) const
 {
-    int i = index( uri, localName );
-    if ( i == -1 )
-	return QString::null;
-    return valueList[ i ];
+	int i = index(uri, localName);
+	if (i == -1)
+		return QString::null;
+	return valueList[i];
 }
 
 
@@ -714,52 +758,53 @@ QString QXmlAttributes::value( const QString& uri, const QString& localName ) co
 /*!
   Returns all the data this input source contains.
 */
-const QString& QXmlInputSource::data() const
+const QString &QXmlInputSource::data() const
 {
-    return input;
+	return input;
 }
 
 /*!
   Constructs a input source which contains no data.
 */
-QXmlInputSource::QXmlInputSource( )
+QXmlInputSource::QXmlInputSource()
 {
-    input = "";
+	input = "";
 }
 
 /*!
   Constructs a input source and get the data from the text stream.
 */
-QXmlInputSource::QXmlInputSource( QTextStream& stream )
+QXmlInputSource::QXmlInputSource(QTextStream &stream)
 {
-    QByteArray rawData;
-    if ( stream.device()->isDirectAccess() ) {
-	rawData = stream.device()->readAll();
-    } else {
-	int nread = 0;
-	const int bufsize = 512;
-	while ( !stream.device()->atEnd() ) {
-	    rawData.resize( nread + bufsize );
-	    nread += stream.device()->readBlock( rawData.data()+nread, bufsize );
+	QByteArray rawData;
+	if (stream.device()->isDirectAccess()) {
+		rawData = stream.device()->readAll();
+	} else {
+		int nread = 0;
+		const int bufsize = 512;
+		while (!stream.device()->atEnd()) {
+			rawData.resize(nread + bufsize);
+			nread += stream.device()->readBlock(
+				rawData.data() + nread, bufsize);
+		}
+		rawData.resize(nread);
 	}
-	rawData.resize( nread );
-    }
-    readInput( rawData );
+	readInput(rawData);
 }
 
 /*!
   Constructs a input source and get the data from a file. If the file cannot be
   read the input source is empty.
 */
-QXmlInputSource::QXmlInputSource( QFile& file )
+QXmlInputSource::QXmlInputSource(QFile &file)
 {
-    if ( !file.open(IO_ReadOnly) ) {
-	input = "";
-	return;
-    }
-    QByteArray rawData = file.readAll();
-    readInput( rawData );
-    file.close();
+	if (!file.open(IO_ReadOnly)) {
+		input = "";
+		return;
+	}
+	QByteArray rawData = file.readAll();
+	readInput(rawData);
+	file.close();
 }
 
 /*!
@@ -772,63 +817,63 @@ QXmlInputSource::~QXmlInputSource()
 /*!
   Sets the data of the input source to \a dat.
 */
-void QXmlInputSource::setData( const QString& dat )
+void QXmlInputSource::setData(const QString &dat)
 {
-    input = dat;
+	input = dat;
 }
 
 /*!
   Read the XML file from the byte array; try to recoginize the encoding.
 */
 // ### The input source should not do the encoding detection!
-void QXmlInputSource::readInput( QByteArray& rawData )
+void QXmlInputSource::readInput(QByteArray &rawData)
 {
-    QBuffer buf( rawData );
-    buf.open( IO_ReadOnly );
-    QTextStream *stream = new QTextStream( &buf );
-    QChar tmp;
-    // assume UTF8 or UTF16 at first
-    stream->setEncoding( QTextStream::UnicodeUTF8 );
-    input = "";
-    // read the first 5 characters
-    for ( int i=0; i<5; i++ ) {
-	*stream >> tmp;
-	input += tmp;
-    }
-    // starts the document with an XML declaration?
-    if ( input == "<?xml" ) {
-	// read the whole XML declaration
-	do {
-	    *stream >> tmp;
-	    input += tmp;
-	} while( tmp != '>' );
-	// and try to find out if there is an encoding
-	int pos = input.find( "encoding" );
-	if ( pos != -1 ) {
-	    QString encoding;
-	    do {
-		pos++;
-		if ( pos > (int)input.length() )
-		    goto finished;
-	    } while( input[pos] != '"' && input[pos] != '\'' );
-	    pos++;
-	    while( input[pos] != '"' && input[pos] != '\'' ) {
-		encoding += input[pos];
-		pos++;
-		if ( pos > (int)input.length() )
-		    goto finished;
-	    }
-	    delete stream;
-	    stream = new QTextStream( &buf );
-	    stream->setCodec( QTextCodec::codecForName( encoding ) );
-	    buf.reset();
-	    input = "";
+	QBuffer buf(rawData);
+	buf.open(IO_ReadOnly);
+	QTextStream *stream = new QTextStream(&buf);
+	QChar tmp;
+	// assume UTF8 or UTF16 at first
+	stream->setEncoding(QTextStream::UnicodeUTF8);
+	input = "";
+	// read the first 5 characters
+	for (int i = 0; i < 5; i++) {
+		*stream >> tmp;
+		input += tmp;
 	}
-    }
+	// starts the document with an XML declaration?
+	if (input == "<?xml") {
+		// read the whole XML declaration
+		do {
+			*stream >> tmp;
+			input += tmp;
+		} while (tmp != '>');
+		// and try to find out if there is an encoding
+		int pos = input.find("encoding");
+		if (pos != -1) {
+			QString encoding;
+			do {
+				pos++;
+				if (pos > (int)input.length())
+					goto finished;
+			} while (input[pos] != '"' && input[pos] != '\'');
+			pos++;
+			while (input[pos] != '"' && input[pos] != '\'') {
+				encoding += input[pos];
+				pos++;
+				if (pos > (int)input.length())
+					goto finished;
+			}
+			delete stream;
+			stream = new QTextStream(&buf);
+			stream->setCodec(QTextCodec::codecForName(encoding));
+			buf.reset();
+			input = "";
+		}
+	}
 finished:
-    input += stream->read();
-    delete stream;
-    buf.close();
+	input += stream->read();
+	delete stream;
+	buf.close();
 }
 
 
@@ -904,7 +949,8 @@ finished:
   \sa startDocument()
 */
 /*!
-  \fn bool QXmlContentHandler::startPrefixMapping( const QString& prefix, const QString& uri )
+  \fn bool QXmlContentHandler::startPrefixMapping( const QString& prefix, const
+  QString& uri )
 
   The reader calls this function to signal the begin of a prefix-URI
   namespace mapping scope. This information is not necessary for normal
@@ -942,7 +988,8 @@ finished:
   \sa startPrefixMapping()
 */
 /*!
-  \fn bool QXmlContentHandler::startElement( const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts )
+  \fn bool QXmlContentHandler::startElement( const QString& namespaceURI, const
+  QString& localName, const QString& qName, const QXmlAttributes& atts )
 
   The reader calls this function when he has parsed a start element tag.
 
@@ -973,7 +1020,8 @@ finished:
   \sa endElement()
 */
 /*!
-  \fn bool QXmlContentHandler::endElement( const QString& namespaceURI, const QString& localName, const QString& qName )
+  \fn bool QXmlContentHandler::endElement( const QString& namespaceURI, const
+  QString& localName, const QString& qName )
 
   The reader calls this function when he has parsed an end element tag.
 
@@ -1017,7 +1065,8 @@ finished:
   message that will be used for reporting the error.
 */
 /*!
-  \fn bool QXmlContentHandler::processingInstruction( const QString& target, const QString& data )
+  \fn bool QXmlContentHandler::processingInstruction( const QString& target,
+  const QString& data )
 
   The reader calls this function when he has parsed a processing
   instruction.
@@ -1126,7 +1175,8 @@ finished:
   QXmlLexicalHandler
 */
 /*!
-  \fn bool QXmlDTDHandler::notationDecl( const QString& name, const QString& publicId, const QString& systemId )
+  \fn bool QXmlDTDHandler::notationDecl( const QString& name, const QString&
+  publicId, const QString& systemId )
 
   The reader calls this function when he has parsed a notation
   declaration.
@@ -1139,7 +1189,8 @@ finished:
   message that will be used for reporting the error.
 */
 /*!
-  \fn bool QXmlDTDHandler::unparsedEntityDecl( const QString& name, const QString& publicId, const QString& systemId, const QString& notationName )
+  \fn bool QXmlDTDHandler::unparsedEntityDecl( const QString& name, const
+  QString& publicId, const QString& systemId, const QString& notationName )
 
   The reader calls this function when he finds an unparsed entity declaration.
 
@@ -1176,7 +1227,8 @@ finished:
   QXmlLexicalHandler
 */
 /*!
-  \fn bool QXmlEntityResolver::resolveEntity( const QString& publicId, const QString& systemId, QXmlInputSource* ret )
+  \fn bool QXmlEntityResolver::resolveEntity( const QString& publicId, const
+  QString& systemId, QXmlInputSource* ret )
 
   The reader will call this function before he opens any external entity,
   except the top-level document entity. The application may request the reader
@@ -1226,7 +1278,8 @@ finished:
   QXmlErrorHandler
 */
 /*!
-  \fn bool QXmlLexicalHandler::startDTD( const QString& name, const QString& publicId, const QString& systemId )
+  \fn bool QXmlLexicalHandler::startDTD( const QString& name, const QString&
+  publicId, const QString& systemId )
 
   The reader calls this function to report the start of a DTD declaration, if
   any.
@@ -1312,7 +1365,9 @@ finished:
   QXmlLexicalHandler
 */
 /*!
-  \fn bool QXmlDeclHandler::attributeDecl( const QString& eName, const QString& aName, const QString& type, const QString& valueDefault, const QString& value )
+  \fn bool QXmlDeclHandler::attributeDecl( const QString& eName, const QString&
+  aName, const QString& type, const QString& valueDefault, const QString& value
+  )
 
   The reader calls this function to report an attribute type declaration. Only
   the effective (first) declaration for an attribute will be reported.
@@ -1322,7 +1377,8 @@ finished:
   message that will be used for reporting the error.
 */
 /*!
-  \fn bool QXmlDeclHandler::internalEntityDecl( const QString& name, const QString& value )
+  \fn bool QXmlDeclHandler::internalEntityDecl( const QString& name, const
+  QString& value )
 
   The reader calls this function to report an internal entity declaration. Only
   the effective (first) declaration will be reported.
@@ -1332,7 +1388,8 @@ finished:
   message that will be used for reporting the error.
 */
 /*!
-  \fn bool QXmlDeclHandler::externalEntityDecl( const QString& name, const QString& publicId, const QString& systemId )
+  \fn bool QXmlDeclHandler::externalEntityDecl( const QString& name, const
+  QString& publicId, const QString& systemId )
 
   The reader calls this function to report a parsed external entity
   declaration. Only the effective (first) declaration for each entity will be
@@ -1381,7 +1438,7 @@ finished:
 /*!
   Does nothing.
 */
-void QXmlDefaultHandler::setDocumentLocator( QXmlLocator* )
+void QXmlDefaultHandler::setDocumentLocator(QXmlLocator *)
 {
 }
 
@@ -1390,7 +1447,7 @@ void QXmlDefaultHandler::setDocumentLocator( QXmlLocator* )
 */
 bool QXmlDefaultHandler::startDocument()
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
@@ -1398,129 +1455,128 @@ bool QXmlDefaultHandler::startDocument()
 */
 bool QXmlDefaultHandler::endDocument()
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::startPrefixMapping( const QString&, const QString& )
+bool QXmlDefaultHandler::startPrefixMapping(const QString &, const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::endPrefixMapping( const QString& )
+bool QXmlDefaultHandler::endPrefixMapping(const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::startElement( const QString&, const QString&,
-	const QString&, const QXmlAttributes& )
+bool QXmlDefaultHandler::startElement(const QString &, const QString &,
+				      const QString &, const QXmlAttributes &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::endElement( const QString&, const QString&,
-	const QString& )
+bool QXmlDefaultHandler::endElement(const QString &, const QString &,
+				    const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::characters( const QString& )
+bool QXmlDefaultHandler::characters(const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::ignorableWhitespace( const QString& )
+bool QXmlDefaultHandler::ignorableWhitespace(const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::processingInstruction( const QString&,
-	const QString& )
+bool QXmlDefaultHandler::processingInstruction(const QString &, const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::skippedEntity( const QString& )
+bool QXmlDefaultHandler::skippedEntity(const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::warning( const QXmlParseException& )
+bool QXmlDefaultHandler::warning(const QXmlParseException &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::error( const QXmlParseException& )
+bool QXmlDefaultHandler::error(const QXmlParseException &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::fatalError( const QXmlParseException& )
+bool QXmlDefaultHandler::fatalError(const QXmlParseException &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::notationDecl( const QString&, const QString&,
-	const QString& )
+bool QXmlDefaultHandler::notationDecl(const QString &, const QString &,
+				      const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::unparsedEntityDecl( const QString&, const QString&,
-	const QString&, const QString& )
+bool QXmlDefaultHandler::unparsedEntityDecl(const QString &, const QString &,
+					    const QString &, const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Always sets \a ret to 0, so that the reader will use the system identifier
   provided in the XML document.
 */
-bool QXmlDefaultHandler::resolveEntity( const QString&, const QString&,
-	QXmlInputSource* ret )
+bool QXmlDefaultHandler::resolveEntity(const QString &, const QString &,
+				       QXmlInputSource *ret)
 {
-/* ### This doesn't set anything to 0!
-    ret = 0;
-*/
-    return TRUE;
+	/* ### This doesn't set anything to 0!
+	    ret = 0;
+	*/
+	return TRUE;
 }
 
 /*!
@@ -1528,15 +1584,16 @@ bool QXmlDefaultHandler::resolveEntity( const QString&, const QString&,
 */
 QString QXmlDefaultHandler::errorString()
 {
-    return QString( XMLERR_ERRORBYCONSUMER );
+	return QString(XMLERR_ERRORBYCONSUMER);
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::startDTD( const QString&, const QString&, const QString& )
+bool QXmlDefaultHandler::startDTD(const QString &, const QString &,
+				  const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
@@ -1544,10 +1601,10 @@ bool QXmlDefaultHandler::startDTD( const QString&, const QString&, const QString
 */
 bool QXmlDefaultHandler::endDTD()
 {
-    return TRUE;
+	return TRUE;
 }
 
-#if 0
+# if 0
 /*!
   Does nothing.
 */
@@ -1563,14 +1620,14 @@ bool QXmlDefaultHandler::endEntity( const QString& )
 {
     return TRUE;
 }
-#endif
+# endif
 
 /*!
   Does nothing.
 */
 bool QXmlDefaultHandler::startCDATA()
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
@@ -1578,39 +1635,42 @@ bool QXmlDefaultHandler::startCDATA()
 */
 bool QXmlDefaultHandler::endCDATA()
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::comment( const QString& )
+bool QXmlDefaultHandler::comment(const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::attributeDecl( const QString&, const QString&, const QString&, const QString&, const QString& )
+bool QXmlDefaultHandler::attributeDecl(const QString &, const QString &,
+				       const QString &, const QString &,
+				       const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::internalEntityDecl( const QString&, const QString& )
+bool QXmlDefaultHandler::internalEntityDecl(const QString &, const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   Does nothing.
 */
-bool QXmlDefaultHandler::externalEntityDecl( const QString&, const QString&, const QString& )
+bool QXmlDefaultHandler::externalEntityDecl(const QString &, const QString &,
+					    const QString &)
 {
-    return TRUE;
+	return TRUE;
 }
 
 
@@ -1622,66 +1682,75 @@ bool QXmlDefaultHandler::externalEntityDecl( const QString&, const QString&, con
 
 class QXmlSimpleReaderPrivate
 {
-private:
-    // constructor
-    QXmlSimpleReaderPrivate()
-    { }
+      private:
+	// constructor
+	QXmlSimpleReaderPrivate()
+	{
+	}
 
 
-    // used for entity declarations
-    struct ExternParameterEntity
-    {
-	ExternParameterEntity( ) {}
-	ExternParameterEntity( const QString &p, const QString &s )
-	    : publicId(p), systemId(s) {}
-	QString publicId;
-	QString systemId;
-    };
-    struct ExternEntity
-    {
-	ExternEntity( ) {}
-	ExternEntity( const QString &p, const QString &s, const QString &n )
-	    : publicId(p), systemId(s), notation(n) {}
-	QString publicId;
-	QString systemId;
-	QString notation;
-    };
-    QMap<QString,ExternParameterEntity> externParameterEntities;
-    QMap<QString,QString> parameterEntities;
-    QMap<QString,ExternEntity> externEntities;
-    QMap<QString,QString> entities;
+	// used for entity declarations
+	struct ExternParameterEntity {
+		ExternParameterEntity()
+		{
+		}
+		ExternParameterEntity(const QString &p, const QString &s)
+			: publicId(p), systemId(s)
+		{
+		}
+		QString publicId;
+		QString systemId;
+	};
+	struct ExternEntity {
+		ExternEntity()
+		{
+		}
+		ExternEntity(const QString &p, const QString &s,
+			     const QString &n)
+			: publicId(p), systemId(s), notation(n)
+		{
+		}
+		QString publicId;
+		QString systemId;
+		QString notation;
+	};
+	QMap<QString, ExternParameterEntity> externParameterEntities;
+	QMap<QString, QString> parameterEntities;
+	QMap<QString, ExternEntity> externEntities;
+	QMap<QString, QString> entities;
 
-    // used for standalone declaration
-    enum Standalone { Yes, No, Unknown };
+	// used for standalone declaration
+	enum Standalone { Yes, No, Unknown };
 
-    QString doctype; // only used for the doctype
-    QString xmlVersion; // only used to store the version information
-    QString encoding; // only used to store the encoding
-    Standalone standalone; // used to store the value of the standalone declaration
+	QString doctype; // only used for the doctype
+	QString xmlVersion; // only used to store the version information
+	QString encoding; // only used to store the encoding
+	Standalone standalone; // used to store the value of the standalone
+			       // declaration
 
-    QString publicId; // used by parseExternalID() to store the public ID
-    QString systemId; // used by parseExternalID() to store the system ID
-    QString attDeclEName; // use by parseAttlistDecl()
-    QString attDeclAName; // use by parseAttlistDecl()
+	QString publicId; // used by parseExternalID() to store the public ID
+	QString systemId; // used by parseExternalID() to store the system ID
+	QString attDeclEName; // use by parseAttlistDecl()
+	QString attDeclAName; // use by parseAttlistDecl()
 
-    // flags for some features support
-    bool useNamespaces;
-    bool useNamespacePrefixes;
-    bool reportWhitespaceCharData;
-    bool reportEntities;
+	// flags for some features support
+	bool useNamespaces;
+	bool useNamespacePrefixes;
+	bool reportWhitespaceCharData;
+	bool reportEntities;
 
-    // used to build the attribute list
-    QXmlAttributes attList;
+	// used to build the attribute list
+	QXmlAttributes attList;
 
-    // helper classes
-    QXmlLocator *locator;
-    QXmlNamespaceSupport namespaceSupport;
+	// helper classes
+	QXmlLocator *locator;
+	QXmlNamespaceSupport namespaceSupport;
 
-    // error string
-    QString error;
+	// error string
+	QString error;
 
-    // friend declarations
-    friend class QXmlSimpleReader;
+	// friend declarations
+	friend class QXmlSimpleReader;
 };
 
 
@@ -1898,7 +1967,7 @@ private:
   <a href="xml-sax.html#quickStart">Quick start</a>.
 */
 
-//guaranteed not to be a characater
+// guaranteed not to be a characater
 const QChar QXmlSimpleReader::QEOF = QChar((ushort)0xffff);
 
 /*!
@@ -1906,21 +1975,21 @@ const QChar QXmlSimpleReader::QEOF = QChar((ushort)0xffff);
 */
 QXmlSimpleReader::QXmlSimpleReader()
 {
-    d = new QXmlSimpleReaderPrivate();
-    d->locator = new QXmlLocator( this );
+	d = new QXmlSimpleReaderPrivate();
+	d->locator = new QXmlLocator(this);
 
-    entityRes  = 0;
-    dtdHnd     = 0;
-    contentHnd = 0;
-    errorHnd   = 0;
-    lexicalHnd = 0;
-    declHnd    = 0;
+	entityRes = 0;
+	dtdHnd = 0;
+	contentHnd = 0;
+	errorHnd = 0;
+	lexicalHnd = 0;
+	declHnd = 0;
 
-    // default feature settings
-    d->useNamespaces = TRUE;
-    d->useNamespacePrefixes = FALSE;
-    d->reportWhitespaceCharData = TRUE;
-    d->reportEntities = FALSE;
+	// default feature settings
+	d->useNamespaces = TRUE;
+	d->useNamespacePrefixes = FALSE;
+	d->reportWhitespaceCharData = TRUE;
+	d->reportEntities = FALSE;
 }
 
 /*!
@@ -1928,8 +1997,8 @@ QXmlSimpleReader::QXmlSimpleReader()
 */
 QXmlSimpleReader::~QXmlSimpleReader()
 {
-    delete d->locator;
-    delete d;
+	delete d->locator;
+	delete d;
 }
 
 /*!
@@ -1937,24 +2006,26 @@ QXmlSimpleReader::~QXmlSimpleReader()
 
   \sa setFeature() hasFeature()
 */
-bool QXmlSimpleReader::feature( const QString& name, bool *ok ) const
+bool QXmlSimpleReader::feature(const QString &name, bool *ok) const
 {
-    if ( ok != 0 )
-	*ok = TRUE;
-    if        ( name == "http://xml.org/sax/features/namespaces" ) {
-	return d->useNamespaces;
-    } else if ( name == "http://xml.org/sax/features/namespace-prefixes" ) {
-	return d->useNamespacePrefixes;
-    } else if ( name == "http://trolltech.com/xml/features/report-whitespace-only-CharData" ) {
-	return d->reportWhitespaceCharData;
-    } else if ( name == "http://trolltech.com/xml/features/report-start-end-entity" ) {
-	return d->reportEntities;
-    } else {
-	qWarning( "Unknown feature " + name );
-	if ( ok != 0 )
-	    *ok = FALSE;
-    }
-    return FALSE;
+	if (ok != 0)
+		*ok = TRUE;
+	if (name == "http://xml.org/sax/features/namespaces") {
+		return d->useNamespaces;
+	} else if (name == "http://xml.org/sax/features/namespace-prefixes") {
+		return d->useNamespacePrefixes;
+	} else if (name ==
+		   "http://trolltech.com/xml/features/report-whitespace-only-CharData") {
+		return d->reportWhitespaceCharData;
+	} else if (name ==
+		   "http://trolltech.com/xml/features/report-start-end-entity") {
+		return d->reportEntities;
+	} else {
+		qWarning("Unknown feature " + name);
+		if (ok != 0)
+			*ok = FALSE;
+	}
+	return FALSE;
 }
 
 /*!
@@ -1975,19 +2046,21 @@ bool QXmlSimpleReader::feature( const QString& name, bool *ok ) const
 
   \sa feature() hasFeature()
 */
-void QXmlSimpleReader::setFeature( const QString& name, bool value )
+void QXmlSimpleReader::setFeature(const QString &name, bool value)
 {
-    if        ( name == "http://xml.org/sax/features/namespaces" ) {
-	d->useNamespaces = value;
-    } else if ( name == "http://xml.org/sax/features/namespace-prefixes" ) {
-	d->useNamespacePrefixes = value;
-    } else if ( name == "http://trolltech.com/xml/features/report-whitespace-only-CharData" ) {
-	d->reportWhitespaceCharData = value;
-    } else if ( name == "http://trolltech.com/xml/features/report-start-end-entity" ) {
-	d->reportEntities = value;
-    } else {
-	qWarning( "Unknown feature " + name );
-    }
+	if (name == "http://xml.org/sax/features/namespaces") {
+		d->useNamespaces = value;
+	} else if (name == "http://xml.org/sax/features/namespace-prefixes") {
+		d->useNamespacePrefixes = value;
+	} else if (name ==
+		   "http://trolltech.com/xml/features/report-whitespace-only-CharData") {
+		d->reportWhitespaceCharData = value;
+	} else if (name ==
+		   "http://trolltech.com/xml/features/report-start-end-entity") {
+		d->reportEntities = value;
+	} else {
+		qWarning("Unknown feature " + name);
+	}
 }
 
 /*!
@@ -1995,142 +2068,166 @@ void QXmlSimpleReader::setFeature( const QString& name, bool value )
 
   \sa setFeature() feature()
 */
-bool QXmlSimpleReader::hasFeature( const QString& name ) const
+bool QXmlSimpleReader::hasFeature(const QString &name) const
 {
-    if (    name == "http://xml.org/sax/features/namespaces" ||
+	if (name == "http://xml.org/sax/features/namespaces" ||
 	    name == "http://xml.org/sax/features/namespace-prefixes" ||
-	    name == "http://trolltech.com/xml/features/report-whitespace-only-CharData" ) {
-	return TRUE;
-    } else {
-	return FALSE;
-    }
+	    name == "http://trolltech.com/xml/features/report-whitespace-only-CharData") {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
 }
 
 /*!
   Returns 0 since this class does not support any properties.
 */
-void* QXmlSimpleReader::property( const QString&, bool *ok ) const
+void *QXmlSimpleReader::property(const QString &, bool *ok) const
 {
-    if ( ok != 0 )
-	*ok = FALSE;
-    return 0;
+	if (ok != 0)
+		*ok = FALSE;
+	return 0;
 }
 
 /*!
   Does nothing since this class does not support any properties.
 */
-void QXmlSimpleReader::setProperty( const QString&, void* )
+void QXmlSimpleReader::setProperty(const QString &, void *)
 {
 }
 
 /*!
   Returns FALSE since this class does not support any properties.
 */
-bool QXmlSimpleReader::hasProperty( const QString& ) const
+bool QXmlSimpleReader::hasProperty(const QString &) const
 {
-    return FALSE;
+	return FALSE;
 }
 
 /*! \reimp */
-void QXmlSimpleReader::setEntityResolver( QXmlEntityResolver* handler )
-{ entityRes = handler; }
-
-/*! \reimp */
-QXmlEntityResolver* QXmlSimpleReader::entityResolver() const
-{ return entityRes; }
-
-/*! \reimp */
-void QXmlSimpleReader::setDTDHandler( QXmlDTDHandler* handler )
-{ dtdHnd = handler; }
-
-/*! \reimp */
-QXmlDTDHandler* QXmlSimpleReader::DTDHandler() const
-{ return dtdHnd; }
-
-/*! \reimp */
-void QXmlSimpleReader::setContentHandler( QXmlContentHandler* handler )
-{ contentHnd = handler; }
-
-/*! \reimp */
-QXmlContentHandler* QXmlSimpleReader::contentHandler() const
-{ return contentHnd; }
-
-/*! \reimp */
-void QXmlSimpleReader::setErrorHandler( QXmlErrorHandler* handler )
-{ errorHnd = handler; }
-
-/*! \reimp */
-QXmlErrorHandler* QXmlSimpleReader::errorHandler() const
-{ return errorHnd; }
-
-/*! \reimp */
-void QXmlSimpleReader::setLexicalHandler( QXmlLexicalHandler* handler )
-{ lexicalHnd = handler; }
-
-/*! \reimp */
-QXmlLexicalHandler* QXmlSimpleReader::lexicalHandler() const
-{ return lexicalHnd; }
-
-/*! \reimp */
-void QXmlSimpleReader::setDeclHandler( QXmlDeclHandler* handler )
-{ declHnd = handler; }
-
-/*! \reimp */
-QXmlDeclHandler* QXmlSimpleReader::declHandler() const
-{ return declHnd; }
-
-
-
-/*! \reimp */
-bool QXmlSimpleReader::parse( const QXmlInputSource& input )
+void QXmlSimpleReader::setEntityResolver(QXmlEntityResolver *handler)
 {
-    init( input );
-    // call the handler
-    if ( contentHnd ) {
-	contentHnd->setDocumentLocator( d->locator );
-	if ( !contentHnd->startDocument() ) {
-	    d->error = contentHnd->errorString();
-	    goto parseError;
-	}
-    }
-    // parse prolog
-    if ( !parseProlog() ) {
-	d->error = XMLERR_ERRORPARSINGPROLOG;
-	goto parseError;
-    }
-    // parse element
-    if ( !parseElement() ) {
-	d->error = XMLERR_ERRORPARSINGMAINELEMENT;
-	goto parseError;
-    }
-    // parse Misc*
-    while ( !atEnd() ) {
-	if ( !parseMisc() ) {
-	    d->error = XMLERR_ERRORPARSINGMISC;
-	    goto parseError;
-	}
-    }
-    // is stack empty?
-    if ( !tags.isEmpty() ) {
-	d->error = XMLERR_UNEXPECTEDEOF;
-	goto parseError;
-    }
-    // call the handler
-    if ( contentHnd ) {
-	if ( !contentHnd->endDocument() ) {
-	    d->error = contentHnd->errorString();
-	    goto parseError;
-	}
-    }
+	entityRes = handler;
+}
 
-    return TRUE;
+/*! \reimp */
+QXmlEntityResolver *QXmlSimpleReader::entityResolver() const
+{
+	return entityRes;
+}
 
-    // error handling
+/*! \reimp */
+void QXmlSimpleReader::setDTDHandler(QXmlDTDHandler *handler)
+{
+	dtdHnd = handler;
+}
+
+/*! \reimp */
+QXmlDTDHandler *QXmlSimpleReader::DTDHandler() const
+{
+	return dtdHnd;
+}
+
+/*! \reimp */
+void QXmlSimpleReader::setContentHandler(QXmlContentHandler *handler)
+{
+	contentHnd = handler;
+}
+
+/*! \reimp */
+QXmlContentHandler *QXmlSimpleReader::contentHandler() const
+{
+	return contentHnd;
+}
+
+/*! \reimp */
+void QXmlSimpleReader::setErrorHandler(QXmlErrorHandler *handler)
+{
+	errorHnd = handler;
+}
+
+/*! \reimp */
+QXmlErrorHandler *QXmlSimpleReader::errorHandler() const
+{
+	return errorHnd;
+}
+
+/*! \reimp */
+void QXmlSimpleReader::setLexicalHandler(QXmlLexicalHandler *handler)
+{
+	lexicalHnd = handler;
+}
+
+/*! \reimp */
+QXmlLexicalHandler *QXmlSimpleReader::lexicalHandler() const
+{
+	return lexicalHnd;
+}
+
+/*! \reimp */
+void QXmlSimpleReader::setDeclHandler(QXmlDeclHandler *handler)
+{
+	declHnd = handler;
+}
+
+/*! \reimp */
+QXmlDeclHandler *QXmlSimpleReader::declHandler() const
+{
+	return declHnd;
+}
+
+
+
+/*! \reimp */
+bool QXmlSimpleReader::parse(const QXmlInputSource &input)
+{
+	init(input);
+	// call the handler
+	if (contentHnd) {
+		contentHnd->setDocumentLocator(d->locator);
+		if (!contentHnd->startDocument()) {
+			d->error = contentHnd->errorString();
+			goto parseError;
+		}
+	}
+	// parse prolog
+	if (!parseProlog()) {
+		d->error = XMLERR_ERRORPARSINGPROLOG;
+		goto parseError;
+	}
+	// parse element
+	if (!parseElement()) {
+		d->error = XMLERR_ERRORPARSINGMAINELEMENT;
+		goto parseError;
+	}
+	// parse Misc*
+	while (!atEnd()) {
+		if (!parseMisc()) {
+			d->error = XMLERR_ERRORPARSINGMISC;
+			goto parseError;
+		}
+	}
+	// is stack empty?
+	if (!tags.isEmpty()) {
+		d->error = XMLERR_UNEXPECTEDEOF;
+		goto parseError;
+	}
+	// call the handler
+	if (contentHnd) {
+		if (!contentHnd->endDocument()) {
+			d->error = contentHnd->errorString();
+			goto parseError;
+		}
+	}
+
+	return TRUE;
+
+	// error handling
 
 parseError:
-    reportParseError();
-    tags.clear();
-    return FALSE;
+	reportParseError();
+	tags.clear();
+	return FALSE;
 }
 
 /*!
@@ -2138,169 +2235,177 @@ parseError:
 */
 bool QXmlSimpleReader::parseProlog()
 {
-    bool xmldecl_possible = TRUE;
-    bool doctype_read = FALSE;
+	bool xmldecl_possible = TRUE;
+	bool doctype_read = FALSE;
 
-    const signed char Init             = 0;
-    const signed char EatWS            = 1; // eat white spaces
-    const signed char Lt               = 2; // '<' read
-    const signed char Em               = 3; // '!' read
-    const signed char DocType          = 4; // read doctype
-    const signed char Comment          = 5; // read comment
-    const signed char PI               = 6; // read PI
-    const signed char Done             = 7;
+	const signed char Init = 0;
+	const signed char EatWS = 1; // eat white spaces
+	const signed char Lt = 2; // '<' read
+	const signed char Em = 3; // '!' read
+	const signed char DocType = 4; // read doctype
+	const signed char Comment = 5; // read comment
+	const signed char PI = 6; // read PI
+	const signed char Done = 7;
 
-    const signed char InpWs            = 0;
-    const signed char InpLt            = 1; // <
-    const signed char InpQm            = 2; // ?
-    const signed char InpEm            = 3; // !
-    const signed char InpD             = 4; // D
-    const signed char InpDash          = 5; // -
-    const signed char InpUnknown       = 6;
+	const signed char InpWs = 0;
+	const signed char InpLt = 1; // <
+	const signed char InpQm = 2; // ?
+	const signed char InpEm = 3; // !
+	const signed char InpD = 4; // D
+	const signed char InpDash = 5; // -
+	const signed char InpUnknown = 6;
 
-    // use some kind of state machine for parsing
-    static signed char table[7][7] = {
-     /*  InpWs   InpLt  InpQm  InpEm  InpD      InpDash  InpUnknown */
-	{ EatWS,  Lt,    -1,    -1,    -1,       -1,       -1      }, // Init
-	{ -1,     Lt,    -1,    -1,    -1,       -1,       -1      }, // EatWS
-	{ -1,     -1,    PI,    Em,    Done,     -1,       Done    }, // Lt
-	{ -1,     -1,    -1,    -1,    DocType,  Comment,  -1      }, // Em
-	{ EatWS,  Lt,    -1,    -1,    -1,       -1,       -1      }, // DocType
-	{ EatWS,  Lt,    -1,    -1,    -1,       -1,       -1      }, // Comment
-	{ EatWS,  Lt,    -1,    -1,    -1,       -1,       -1      }  // PI
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[7][7] = {
+		/*  InpWs   InpLt  InpQm  InpEm  InpD      InpDash  InpUnknown
+		 */
+		{EatWS, Lt, -1, -1, -1, -1, -1}, // Init
+		{-1, Lt, -1, -1, -1, -1, -1}, // EatWS
+		{-1, -1, PI, Em, Done, -1, Done}, // Lt
+		{-1, -1, -1, -1, DocType, Comment, -1}, // Em
+		{EatWS, Lt, -1, -1, -1, -1, -1}, // DocType
+		{EatWS, Lt, -1, -1, -1, -1, -1}, // Comment
+		{EatWS, Lt, -1, -1, -1, -1, -1} // PI
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// read input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( is_S(c) ) {
-	    input = InpWs;
-	} else if ( c == '<' ) {
-	    input = InpLt;
-	} else if ( c == '?' ) {
-	    input = InpQm;
-	} else if ( c == '!' ) {
-	    input = InpEm;
-	} else if ( c == 'D' ) {
-	    input = InpD;
-	} else if ( c == '-' ) {
-	    input = InpDash;
-	} else {
-	    input = InpUnknown;
-	}
-	// get new state
-	state = table[state][input];
-
-	// in some cases do special actions depending on state
-	switch ( state ) {
-	    case EatWS:
-		// XML declaration only on first position possible
-		xmldecl_possible = FALSE;
-		// eat white spaces
-		eat_ws();
-		break;
-	    case Lt:
-		// next character
-		next();
-		break;
-	    case Em:
-		// XML declaration only on first position possible
-		xmldecl_possible = FALSE;
-		// next character
-		next();
-		break;
-	    case DocType:
-		parseOk = parseDoctype();
-		break;
-	    case Comment:
-		parseOk = parseComment();
-		break;
-	    case PI:
-		parseOk = parsePI( xmldecl_possible );
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case DocType:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGPROLOG;
-		    goto parseError;
-		}
-		if ( doctype_read ) {
-		    d->error = XMLERR_MORETHANONEDOCTYPE;
-		    goto parseError;
-		} else {
-		    doctype_read = FALSE;
-		}
-		break;
-	    case Comment:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGPROLOG;
-		    goto parseError;
-		}
-		if ( lexicalHnd ) {
-		    if ( !lexicalHnd->comment( string() ) ) {
-			d->error = lexicalHnd->errorString();
+	for (;;) {
+		// read input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
 			goto parseError;
-		    }
 		}
-		break;
-	    case PI:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGPROLOG;
-		    goto parseError;
+		if (is_S(c)) {
+			input = InpWs;
+		} else if (c == '<') {
+			input = InpLt;
+		} else if (c == '?') {
+			input = InpQm;
+		} else if (c == '!') {
+			input = InpEm;
+		} else if (c == 'D') {
+			input = InpD;
+		} else if (c == '-') {
+			input = InpDash;
+		} else {
+			input = InpUnknown;
 		}
-		// call the handler
-		if ( contentHnd ) {
-		    if ( xmldecl_possible && !d->xmlVersion.isEmpty() ) {
-			QString value( "version = '" );
-			value += d->xmlVersion;
-			value += "'";
-			if ( !d->encoding.isEmpty() ) {
-			    value += " encoding = '";
-			    value += d->encoding;
-			    value += "'";
-			}
-			if ( d->standalone == QXmlSimpleReaderPrivate::Yes ) {
-			    value += " standalone = 'yes'";
-			} else if ( d->standalone == QXmlSimpleReaderPrivate::No ) {
-			    value += " standalone = 'no'";
-			}
-			if ( !contentHnd->processingInstruction( "xml", value ) ) {
-			    d->error = contentHnd->errorString();
-			    goto parseError;
-			}
-		    } else {
-			if ( !contentHnd->processingInstruction( name(), string() ) ) {
-			    d->error = contentHnd->errorString();
-			    goto parseError;
-			}
-		    }
+		// get new state
+		state = table[state][input];
+
+		// in some cases do special actions depending on state
+		switch (state) {
+		case EatWS:
+			// XML declaration only on first position possible
+			xmldecl_possible = FALSE;
+			// eat white spaces
+			eat_ws();
+			break;
+		case Lt:
+			// next character
+			next();
+			break;
+		case Em:
+			// XML declaration only on first position possible
+			xmldecl_possible = FALSE;
+			// next character
+			next();
+			break;
+		case DocType:
+			parseOk = parseDoctype();
+			break;
+		case Comment:
+			parseOk = parseComment();
+			break;
+		case PI:
+			parseOk = parsePI(xmldecl_possible);
+			break;
 		}
-		// XML declaration only on first position possible
-		xmldecl_possible = FALSE;
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		d->error = XMLERR_ERRORPARSINGELEMENT;
-		goto parseError;
+		// no input is read after this
+		switch (state) {
+		case DocType:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGPROLOG;
+				goto parseError;
+			}
+			if (doctype_read) {
+				d->error = XMLERR_MORETHANONEDOCTYPE;
+				goto parseError;
+			} else {
+				doctype_read = FALSE;
+			}
+			break;
+		case Comment:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGPROLOG;
+				goto parseError;
+			}
+			if (lexicalHnd) {
+				if (!lexicalHnd->comment(string())) {
+					d->error = lexicalHnd->errorString();
+					goto parseError;
+				}
+			}
+			break;
+		case PI:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGPROLOG;
+				goto parseError;
+			}
+			// call the handler
+			if (contentHnd) {
+				if (xmldecl_possible &&
+				    !d->xmlVersion.isEmpty()) {
+					QString value("version = '");
+					value += d->xmlVersion;
+					value += "'";
+					if (!d->encoding.isEmpty()) {
+						value += " encoding = '";
+						value += d->encoding;
+						value += "'";
+					}
+					if (d->standalone ==
+					    QXmlSimpleReaderPrivate::Yes) {
+						value += " standalone = 'yes'";
+					} else if (d->standalone ==
+						   QXmlSimpleReaderPrivate::No) {
+						value += " standalone = 'no'";
+					}
+					if (!contentHnd->processingInstruction(
+						    "xml", value)) {
+						d->error =
+							contentHnd
+								->errorString();
+						goto parseError;
+					}
+				} else {
+					if (!contentHnd->processingInstruction(
+						    name(), string())) {
+						d->error =
+							contentHnd
+								->errorString();
+						goto parseError;
+					}
+				}
+			}
+			// XML declaration only on first position possible
+			xmldecl_possible = FALSE;
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			d->error = XMLERR_ERRORPARSINGELEMENT;
+			goto parseError;
+		}
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -2310,231 +2415,242 @@ parseError:
 */
 bool QXmlSimpleReader::parseElement()
 {
-    static QString uri, lname, prefix;
-    static bool t;
+	static QString uri, lname, prefix;
+	static bool t;
 
-    const signed char Init             =  0;
-    const signed char ReadName         =  1;
-    const signed char Ws1              =  2;
-    const signed char STagEnd          =  3;
-    const signed char STagEnd2         =  4;
-    const signed char ETagBegin        =  5;
-    const signed char ETagBegin2       =  6;
-    const signed char Ws2              =  7;
-    const signed char EmptyTag         =  8;
-    const signed char Attribute        =  9;
-    const signed char Ws3              = 10;
-    const signed char Done             = 11;
+	const signed char Init = 0;
+	const signed char ReadName = 1;
+	const signed char Ws1 = 2;
+	const signed char STagEnd = 3;
+	const signed char STagEnd2 = 4;
+	const signed char ETagBegin = 5;
+	const signed char ETagBegin2 = 6;
+	const signed char Ws2 = 7;
+	const signed char EmptyTag = 8;
+	const signed char Attribute = 9;
+	const signed char Ws3 = 10;
+	const signed char Done = 11;
 
-    const signed char InpWs            = 0; // whitespace
-    const signed char InpNameBe        = 1; // is_NameBeginning()
-    const signed char InpGt            = 2; // >
-    const signed char InpSlash         = 3; // /
-    const signed char InpUnknown       = 4;
+	const signed char InpWs = 0; // whitespace
+	const signed char InpNameBe = 1; // is_NameBeginning()
+	const signed char InpGt = 2; // >
+	const signed char InpSlash = 3; // /
+	const signed char InpUnknown = 4;
 
-    // use some kind of state machine for parsing
-    static signed char table[11][5] = {
-     /*  InpWs      InpNameBe    InpGt        InpSlash     InpUnknown */
-	{ -1,        ReadName,    -1,          -1,          -1        }, // Init
-	{ Ws1,       Attribute,   STagEnd,     EmptyTag,    -1        }, // ReadName
-	{ -1,        Attribute,   STagEnd,     EmptyTag,    -1        }, // Ws1
-	{ STagEnd2,  STagEnd2,    STagEnd2,    STagEnd2,    STagEnd2  }, // STagEnd
-	{ -1,        -1,          -1,          ETagBegin,   -1        }, // STagEnd2
-	{ -1,        ETagBegin2,  -1,          -1,          -1        }, // ETagBegin
-	{ Ws2,       -1,          Done,        -1,          -1        }, // ETagBegin2
-	{ -1,        -1,          Done,        -1,          -1        }, // Ws2
-	{ -1,        -1,          Done,        -1,          -1        }, // EmptyTag
-	{ Ws3,       Attribute,   STagEnd,     EmptyTag,    -1        }, // Attribute
-	{ -1,        Attribute,   STagEnd,     EmptyTag,    -1        }  // Ws3
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[11][5] = {
+		/*  InpWs      InpNameBe    InpGt        InpSlash     InpUnknown
+		 */
+		{-1, ReadName, -1, -1, -1}, // Init
+		{Ws1, Attribute, STagEnd, EmptyTag, -1}, // ReadName
+		{-1, Attribute, STagEnd, EmptyTag, -1}, // Ws1
+		{STagEnd2, STagEnd2, STagEnd2, STagEnd2, STagEnd2}, // STagEnd
+		{-1, -1, -1, ETagBegin, -1}, // STagEnd2
+		{-1, ETagBegin2, -1, -1, -1}, // ETagBegin
+		{Ws2, -1, Done, -1, -1}, // ETagBegin2
+		{-1, -1, Done, -1, -1}, // Ws2
+		{-1, -1, Done, -1, -1}, // EmptyTag
+		{Ws3, Attribute, STagEnd, EmptyTag, -1}, // Attribute
+		{-1, Attribute, STagEnd, EmptyTag, -1} // Ws3
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// read input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( is_S(c) ) {
-	    input = InpWs;
-	} else if ( is_NameBeginning(c) ) {
-	    input = InpNameBe;
-	} else if ( c == '>' ) {
-	    input = InpGt;
-	} else if ( c == '/' ) {
-	    input = InpSlash;
-	} else {
-	    input = InpUnknown;
-	}
-	// get new state
-//qDebug( "%d -%d(%c)-> %d", state, input, c.latin1(), table[state][input] );
-	state = table[state][input];
-
-	// in some cases do special actions depending on state
-	switch ( state ) {
-	    case ReadName:
-		parseOk = parseName();
-		break;
-	    case Ws1:
-	    case Ws2:
-	    case Ws3:
-		eat_ws();
-		break;
-	    case STagEnd:
-		// call the handler
-		if ( contentHnd ) {
-		    if ( d->useNamespaces ) {
-			d->namespaceSupport.processName( tags.top(), FALSE, uri, lname );
-			t = contentHnd->startElement( uri, lname, tags.top(), d->attList );
-		    } else {
-			t = contentHnd->startElement( "", "", tags.top(), d->attList );
-		    }
-		    if ( !t ) {
-			d->error = contentHnd->errorString();
+	for (;;) {
+		// read input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
 			goto parseError;
-		    }
 		}
-		next();
-		break;
-	    case STagEnd2:
-		parseOk = parseContent();
-		break;
-	    case ETagBegin:
-		next();
-		break;
-	    case ETagBegin2:
-		// get the name of the tag
-		parseOk = parseName();
-		break;
-	    case EmptyTag:
-		if  ( tags.isEmpty() ) {
-		    d->error = XMLERR_TAGMISMATCH;
-		    goto parseError;
+		if (is_S(c)) {
+			input = InpWs;
+		} else if (is_NameBeginning(c)) {
+			input = InpNameBe;
+		} else if (c == '>') {
+			input = InpGt;
+		} else if (c == '/') {
+			input = InpSlash;
+		} else {
+			input = InpUnknown;
 		}
-		if ( !parseElementEmptyTag( t, uri, lname ) )
-		    goto parseError;
-		// next character
-		next();
-		break;
-	    case Attribute:
-		// get name and value of attribute
-		parseOk = parseAttribute();
-		break;
-	    case Done:
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case ReadName:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
+		// get new state
+		// qDebug( "%d -%d(%c)-> %d", state, input, c.latin1(),
+		// table[state][input] );
+		state = table[state][input];
+
+		// in some cases do special actions depending on state
+		switch (state) {
+		case ReadName:
+			parseOk = parseName();
+			break;
+		case Ws1:
+		case Ws2:
+		case Ws3:
+			eat_ws();
+			break;
+		case STagEnd:
+			// call the handler
+			if (contentHnd) {
+				if (d->useNamespaces) {
+					d->namespaceSupport.processName(
+						tags.top(), FALSE, uri, lname);
+					t = contentHnd->startElement(
+						uri, lname, tags.top(),
+						d->attList);
+				} else {
+					t = contentHnd->startElement(
+						"", "", tags.top(), d->attList);
+				}
+				if (!t) {
+					d->error = contentHnd->errorString();
+					goto parseError;
+				}
+			}
+			next();
+			break;
+		case STagEnd2:
+			parseOk = parseContent();
+			break;
+		case ETagBegin:
+			next();
+			break;
+		case ETagBegin2:
+			// get the name of the tag
+			parseOk = parseName();
+			break;
+		case EmptyTag:
+			if (tags.isEmpty()) {
+				d->error = XMLERR_TAGMISMATCH;
+				goto parseError;
+			}
+			if (!parseElementEmptyTag(t, uri, lname))
+				goto parseError;
+			// next character
+			next();
+			break;
+		case Attribute:
+			// get name and value of attribute
+			parseOk = parseAttribute();
+			break;
+		case Done:
+			next();
+			break;
 		}
-		// store it on the stack
-		tags.push( name() );
-		// empty the attributes
-		d->attList.qnameList.clear();
-		d->attList.uriList.clear();
-		d->attList.localnameList.clear();
-		d->attList.valueList.clear();
-		// namespace support?
-		if ( d->useNamespaces ) {
-		    d->namespaceSupport.pushContext();
+		// no input is read after this
+		switch (state) {
+		case ReadName:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			// store it on the stack
+			tags.push(name());
+			// empty the attributes
+			d->attList.qnameList.clear();
+			d->attList.uriList.clear();
+			d->attList.localnameList.clear();
+			d->attList.valueList.clear();
+			// namespace support?
+			if (d->useNamespaces) {
+				d->namespaceSupport.pushContext();
+			}
+			break;
+		case STagEnd2:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGCONTENT;
+				goto parseError;
+			}
+			break;
+		case ETagBegin2:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			if (!parseElementETagBegin2())
+				goto parseError;
+			break;
+		case Attribute:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGATTRIBUTE;
+				goto parseError;
+			}
+			if (!parseElementAttribute(prefix, uri, lname))
+				goto parseError;
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			d->error = XMLERR_ERRORPARSINGELEMENT;
+			goto parseError;
 		}
-		break;
-	    case STagEnd2:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGCONTENT;
-		    goto parseError;
-		}
-		break;
-	    case ETagBegin2:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
-		}
-		if ( !parseElementETagBegin2() )
-		    goto parseError;
-		break;
-	    case Attribute:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGATTRIBUTE;
-		    goto parseError;
-		}
-		if ( !parseElementAttribute( prefix, uri, lname ) )
-		    goto parseError;
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		d->error = XMLERR_ERRORPARSINGELEMENT;
-		goto parseError;
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 /*!
   Helper to break down the size of the code in the case statement.
   Return FALSE on error, otherwise TRUE.
 */
-// ### Remove t argument in Qt 3.0 -- I don't need it. The same should be true for uri and lname.
-bool QXmlSimpleReader::parseElementEmptyTag( bool &, QString &uri, QString &lname )
+// ### Remove t argument in Qt 3.0 -- I don't need it. The same should be true
+// for uri and lname.
+bool QXmlSimpleReader::parseElementEmptyTag(bool &, QString &uri,
+					    QString &lname)
 {
-    // pop the stack and call the handler
-    if ( contentHnd ) {
-	if ( d->useNamespaces ) {
-	    // report startElement first...
-	    d->namespaceSupport.processName( tags.top(), FALSE, uri, lname );
-	    if ( !contentHnd->startElement( uri, lname, tags.top(), d->attList ) ) {
-		goto error;
-	    }
-	    // ... followed by endElement...
-	    if ( !contentHnd->endElement( uri, lname, tags.pop2() ) ) {
-		goto error;
-	    }
-	    // ... followed by endPrefixMapping
-	    QStringList prefixesBefore, prefixesAfter;
-	    if ( contentHnd ) {
-		prefixesBefore = d->namespaceSupport.prefixes();
-	    }
-	    d->namespaceSupport.popContext();
-	    // call the handler for prefix mapping
-	    prefixesAfter = d->namespaceSupport.prefixes();
-	    for ( QStringList::Iterator it = prefixesBefore.begin(); it != prefixesBefore.end(); ++it ) {
-		if ( prefixesAfter.contains(*it) == 0 ) {
-		    if ( !contentHnd->endPrefixMapping( *it ) ) {
-			goto error;
-		    }
+	// pop the stack and call the handler
+	if (contentHnd) {
+		if (d->useNamespaces) {
+			// report startElement first...
+			d->namespaceSupport.processName(tags.top(), FALSE, uri,
+							lname);
+			if (!contentHnd->startElement(uri, lname, tags.top(),
+						      d->attList)) {
+				goto error;
+			}
+			// ... followed by endElement...
+			if (!contentHnd->endElement(uri, lname, tags.pop2())) {
+				goto error;
+			}
+			// ... followed by endPrefixMapping
+			QStringList prefixesBefore, prefixesAfter;
+			if (contentHnd) {
+				prefixesBefore = d->namespaceSupport.prefixes();
+			}
+			d->namespaceSupport.popContext();
+			// call the handler for prefix mapping
+			prefixesAfter = d->namespaceSupport.prefixes();
+			for (QStringList::Iterator it = prefixesBefore.begin();
+			     it != prefixesBefore.end(); ++it) {
+				if (prefixesAfter.contains(*it) == 0) {
+					if (!contentHnd->endPrefixMapping(
+						    *it)) {
+						goto error;
+					}
+				}
+			}
+		} else {
+			// report startElement first...
+			if (!contentHnd->startElement("", "", tags.top(),
+						      d->attList)) {
+				goto error;
+			}
+			// ... followed by endElement
+			if (!contentHnd->endElement("", "", tags.pop2())) {
+				goto error;
+			}
 		}
-	    }
 	} else {
-	    // report startElement first...
-	    if ( !contentHnd->startElement( "", "", tags.top(), d->attList ) ) {
-		goto error;
-	    }
-	    // ... followed by endElement
-	    if ( !contentHnd->endElement( "","",tags.pop2() ) ) {
-		goto error;
-	    }
+		tags.pop2();
+		d->namespaceSupport.popContext();
 	}
-    } else {
-	tags.pop2();
-	d->namespaceSupport.popContext();
-    }
-    return TRUE;
+	return TRUE;
 error:
-    d->error = contentHnd->errorString();
-    return FALSE;
+	d->error = contentHnd->errorString();
+	return FALSE;
 }
 /*!
   Helper to break down the size of the code in the case statement.
@@ -2542,92 +2658,99 @@ error:
 */
 bool QXmlSimpleReader::parseElementETagBegin2()
 {
-
-    // pop the stack and compare it with the name
-    if ( tags.pop2() != name() ) {
-	d->error = XMLERR_TAGMISMATCH;
-	return FALSE;
-    }
-    // call the handler
-    if ( contentHnd ) {
-	if ( d->useNamespaces ) {
-	    QString uri, lname;
-	    d->namespaceSupport.processName( name(), FALSE, uri, lname );
-	    if ( !contentHnd->endElement( uri, lname, name() ) ) {
-		d->error = contentHnd->errorString();
+	// pop the stack and compare it with the name
+	if (tags.pop2() != name()) {
+		d->error = XMLERR_TAGMISMATCH;
 		return FALSE;
-	    }
-	} else {
-	    if ( !contentHnd->endElement("","",name()) ) {
-		d->error = contentHnd->errorString();
-		return FALSE;
-	    }
 	}
-    }
-    if ( d->useNamespaces ) {
-	QStringList prefixesBefore, prefixesAfter;
-	if ( contentHnd ) {
-	    prefixesBefore = d->namespaceSupport.prefixes();
-	}
-	d->namespaceSupport.popContext();
-	// call the handler for prefix mapping
-	if ( contentHnd ) {
-	    prefixesAfter = d->namespaceSupport.prefixes();
-	    for ( QStringList::Iterator it = prefixesBefore.begin(); it != prefixesBefore.end(); ++it ) {
-		if ( prefixesAfter.contains(*it) == 0 ) {
-		    if ( !contentHnd->endPrefixMapping( *it ) ) {
-			d->error = contentHnd->errorString();
-			return FALSE;
-		    }
+	// call the handler
+	if (contentHnd) {
+		if (d->useNamespaces) {
+			QString uri, lname;
+			d->namespaceSupport.processName(name(), FALSE, uri,
+							lname);
+			if (!contentHnd->endElement(uri, lname, name())) {
+				d->error = contentHnd->errorString();
+				return FALSE;
+			}
+		} else {
+			if (!contentHnd->endElement("", "", name())) {
+				d->error = contentHnd->errorString();
+				return FALSE;
+			}
 		}
-	    }
 	}
-    }
-    return TRUE;
+	if (d->useNamespaces) {
+		QStringList prefixesBefore, prefixesAfter;
+		if (contentHnd) {
+			prefixesBefore = d->namespaceSupport.prefixes();
+		}
+		d->namespaceSupport.popContext();
+		// call the handler for prefix mapping
+		if (contentHnd) {
+			prefixesAfter = d->namespaceSupport.prefixes();
+			for (QStringList::Iterator it = prefixesBefore.begin();
+			     it != prefixesBefore.end(); ++it) {
+				if (prefixesAfter.contains(*it) == 0) {
+					if (!contentHnd->endPrefixMapping(
+						    *it)) {
+						d->error =
+							contentHnd
+								->errorString();
+						return FALSE;
+					}
+				}
+			}
+		}
+	}
+	return TRUE;
 }
 /*!
   Helper to break down the size of the code in the case statement.
   Return FALSE on error, otherwise TRUE.
 */
 // ### Remove arguments in Qt 3.0? I think, I don't need them.
-bool QXmlSimpleReader::parseElementAttribute( QString &prefix, QString &uri, QString &lname )
+bool QXmlSimpleReader::parseElementAttribute(QString &prefix, QString &uri,
+					     QString &lname)
 {
-    // add the attribute to the list
-    if ( d->useNamespaces ) {
-	// is it a namespace declaration?
-	d->namespaceSupport.splitName( name(), prefix, lname );
-	if ( prefix == "xmlns" ) {
-	    // namespace declaration
-	    d->namespaceSupport.setPrefix( lname, string() );
-	    if ( d->useNamespacePrefixes ) {
-		d->attList.qnameList.append( name() );
-		d->attList.uriList.append( "" );
-		d->attList.localnameList.append( "" );
-		d->attList.valueList.append( string() );
-	    }
-	    // call the handler for prefix mapping
-	    if ( contentHnd ) {
-		if ( !contentHnd->startPrefixMapping( lname, string() ) ) {
-		    d->error = contentHnd->errorString();
-		    return FALSE;
+	// add the attribute to the list
+	if (d->useNamespaces) {
+		// is it a namespace declaration?
+		d->namespaceSupport.splitName(name(), prefix, lname);
+		if (prefix == "xmlns") {
+			// namespace declaration
+			d->namespaceSupport.setPrefix(lname, string());
+			if (d->useNamespacePrefixes) {
+				d->attList.qnameList.append(name());
+				d->attList.uriList.append("");
+				d->attList.localnameList.append("");
+				d->attList.valueList.append(string());
+			}
+			// call the handler for prefix mapping
+			if (contentHnd) {
+				if (!contentHnd->startPrefixMapping(lname,
+								    string())) {
+					d->error = contentHnd->errorString();
+					return FALSE;
+				}
+			}
+		} else {
+			// no namespace delcaration
+			d->namespaceSupport.processName(name(), TRUE, uri,
+							lname);
+			d->attList.qnameList.append(name());
+			d->attList.uriList.append(uri);
+			d->attList.localnameList.append(lname);
+			d->attList.valueList.append(string());
 		}
-	    }
 	} else {
-	    // no namespace delcaration
-	    d->namespaceSupport.processName( name(), TRUE, uri, lname );
-	    d->attList.qnameList.append( name() );
-	    d->attList.uriList.append( uri );
-	    d->attList.localnameList.append( lname );
-	    d->attList.valueList.append( string() );
+		// no namespace support
+		d->attList.qnameList.append(name());
+		d->attList.uriList.append("");
+		d->attList.localnameList.append("");
+		d->attList.valueList.append(string());
 	}
-    } else {
-	// no namespace support
-	d->attList.qnameList.append( name() );
-	d->attList.uriList.append( "" );
-	d->attList.localnameList.append( "" );
-	d->attList.valueList.append( string() );
-    }
-    return TRUE;
+	return TRUE;
 }
 
 /*!
@@ -2638,298 +2761,330 @@ bool QXmlSimpleReader::parseElementAttribute( QString &prefix, QString &uri, QSt
 */
 bool QXmlSimpleReader::parseContent()
 {
-    bool charDataRead = FALSE;
+	bool charDataRead = FALSE;
 
-    const signed char Init             =  0;
-    const signed char ChD              =  1; // CharData
-    const signed char ChD1             =  2; // CharData help state
-    const signed char ChD2             =  3; // CharData help state
-    const signed char Ref              =  4; // Reference
-    const signed char Lt               =  5; // '<' read
-    const signed char PI               =  6; // PI
-    const signed char Elem             =  7; // Element
-    const signed char Em               =  8; // '!' read
-    const signed char Com              =  9; // Comment
-    const signed char CDS              = 10; // CDSect
-    const signed char CDS1             = 11; // read a CDSect
-    const signed char CDS2             = 12; // read a CDSect (help state)
-    const signed char CDS3             = 13; // read a CDSect (help state)
-    const signed char Done             = 14; // finished reading content
+	const signed char Init = 0;
+	const signed char ChD = 1; // CharData
+	const signed char ChD1 = 2; // CharData help state
+	const signed char ChD2 = 3; // CharData help state
+	const signed char Ref = 4; // Reference
+	const signed char Lt = 5; // '<' read
+	const signed char PI = 6; // PI
+	const signed char Elem = 7; // Element
+	const signed char Em = 8; // '!' read
+	const signed char Com = 9; // Comment
+	const signed char CDS = 10; // CDSect
+	const signed char CDS1 = 11; // read a CDSect
+	const signed char CDS2 = 12; // read a CDSect (help state)
+	const signed char CDS3 = 13; // read a CDSect (help state)
+	const signed char Done = 14; // finished reading content
 
-    const signed char InpLt            = 0; // <
-    const signed char InpGt            = 1; // >
-    const signed char InpSlash         = 2; // /
-    const signed char InpQMark         = 3; // ?
-    const signed char InpEMark         = 4; // !
-    const signed char InpAmp           = 5; // &
-    const signed char InpDash          = 6; // -
-    const signed char InpOpenB         = 7; // [
-    const signed char InpCloseB        = 8; // ]
-    const signed char InpUnknown       = 9;
+	const signed char InpLt = 0; // <
+	const signed char InpGt = 1; // >
+	const signed char InpSlash = 2; // /
+	const signed char InpQMark = 3; // ?
+	const signed char InpEMark = 4; // !
+	const signed char InpAmp = 5; // &
+	const signed char InpDash = 6; // -
+	const signed char InpOpenB = 7; // [
+	const signed char InpCloseB = 8; // ]
+	const signed char InpUnknown = 9;
 
-    static signed char mapCLT2FSMChar[] = {
-	InpUnknown, // white space
-	InpUnknown, // %
-	InpAmp,     // &
-	InpGt,      // >
-	InpLt,      // <
-	InpSlash,   // /
-	InpQMark,   // ?
-	InpEMark,   // !
-	InpDash,    // -
-	InpCloseB,  // ]
-	InpOpenB,   // [
-	InpUnknown, // =
-	InpUnknown, // "
-	InpUnknown, // '
-	InpUnknown  // unknown
-    };
+	static signed char mapCLT2FSMChar[] = {
+		InpUnknown, // white space
+		InpUnknown, // %
+		InpAmp, // &
+		InpGt, // >
+		InpLt, // <
+		InpSlash, // /
+		InpQMark, // ?
+		InpEMark, // !
+		InpDash, // -
+		InpCloseB, // ]
+		InpOpenB, // [
+		InpUnknown, // =
+		InpUnknown, // "
+		InpUnknown, // '
+		InpUnknown // unknown
+	};
 
-    // use some kind of state machine for parsing
-    static signed char const table[14][10] = {
-     /*  InpLt  InpGt  InpSlash  InpQMark  InpEMark  InpAmp  InpDash  InpOpenB  InpCloseB  InpUnknown */
-	{ Lt,    ChD,   ChD,      ChD,      ChD,      Ref,    ChD,     ChD,      ChD1,      ChD  }, // Init
-	{ Lt,    ChD,   ChD,      ChD,      ChD,      Ref,    ChD,     ChD,      ChD1,      ChD  }, // ChD
-	{ Lt,    ChD,   ChD,      ChD,      ChD,      Ref,    ChD,     ChD,      ChD2,      ChD  }, // ChD1
-	{ Lt,    -1,    ChD,      ChD,      ChD,      Ref,    ChD,     ChD,      ChD2,      ChD  }, // ChD2
-	{ Lt,    ChD,   ChD,      ChD,      ChD,      Ref,    ChD,     ChD,      ChD,       ChD  }, // Ref (same as Init)
-	{ -1,    -1,    Done,     PI,       Em,       -1,     -1,      -1,       -1,        Elem }, // Lt
-	{ Lt,    ChD,   ChD,      ChD,      ChD,      Ref,    ChD,     ChD,      ChD,       ChD  }, // PI (same as Init)
-	{ Lt,    ChD,   ChD,      ChD,      ChD,      Ref,    ChD,     ChD,      ChD,       ChD  }, // Elem (same as Init)
-	{ -1,    -1,    -1,       -1,       -1,       -1,     Com,     CDS,      -1,        -1   }, // Em
-	{ Lt,    ChD,   ChD,      ChD,      ChD,      Ref,    ChD,     ChD,      ChD,       ChD  }, // Com (same as Init)
-	{ CDS1,  CDS1,  CDS1,     CDS1,     CDS1,     CDS1,   CDS1,    CDS1,     CDS2,      CDS1 }, // CDS
-	{ CDS1,  CDS1,  CDS1,     CDS1,     CDS1,     CDS1,   CDS1,    CDS1,     CDS2,      CDS1 }, // CDS1
-	{ CDS1,  CDS1,  CDS1,     CDS1,     CDS1,     CDS1,   CDS1,    CDS1,     CDS3,      CDS1 }, // CDS2
-	{ CDS1,  Init,  CDS1,     CDS1,     CDS1,     CDS1,   CDS1,    CDS1,     CDS3,      CDS1 }  // CDS3
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char const table[14][10] = {
+		/*  InpLt  InpGt  InpSlash  InpQMark  InpEMark  InpAmp  InpDash
+		   InpOpenB  InpCloseB  InpUnknown */
+		{Lt, ChD, ChD, ChD, ChD, Ref, ChD, ChD, ChD1, ChD}, // Init
+		{Lt, ChD, ChD, ChD, ChD, Ref, ChD, ChD, ChD1, ChD}, // ChD
+		{Lt, ChD, ChD, ChD, ChD, Ref, ChD, ChD, ChD2, ChD}, // ChD1
+		{Lt, -1, ChD, ChD, ChD, Ref, ChD, ChD, ChD2, ChD}, // ChD2
+		{Lt, ChD, ChD, ChD, ChD, Ref, ChD, ChD, ChD, ChD}, // Ref (same
+								   // as Init)
+		{-1, -1, Done, PI, Em, -1, -1, -1, -1, Elem}, // Lt
+		{Lt, ChD, ChD, ChD, ChD, Ref, ChD, ChD, ChD, ChD}, // PI (same
+								   // as Init)
+		{Lt, ChD, ChD, ChD, ChD, Ref, ChD, ChD, ChD, ChD}, // Elem (same
+								   // as Init)
+		{-1, -1, -1, -1, -1, -1, Com, CDS, -1, -1}, // Em
+		{Lt, ChD, ChD, ChD, ChD, Ref, ChD, ChD, ChD, ChD}, // Com (same
+								   // as Init)
+		{CDS1, CDS1, CDS1, CDS1, CDS1, CDS1, CDS1, CDS1, CDS2,
+		 CDS1}, // CDS
+		{CDS1, CDS1, CDS1, CDS1, CDS1, CDS1, CDS1, CDS1, CDS2,
+		 CDS1}, // CDS1
+		{CDS1, CDS1, CDS1, CDS1, CDS1, CDS1, CDS1, CDS1, CDS3,
+		 CDS1}, // CDS2
+		{CDS1, Init, CDS1, CDS1, CDS1, CDS1, CDS1, CDS1, CDS3,
+		 CDS1} // CDS3
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input (use lookup-table instead of nested ifs for performance
-	// reasons)
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if ( c.row() ) {
-	    input = InpUnknown;
-	} else {
-	    input = mapCLT2FSMChar[ charLookupTable[ c.cell() ] ];
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Init:
-		// next character
-		next();
-		break;
-	    case ChD:
-		// on first call: clear string
-		if ( !charDataRead ) {
-		    charDataRead = TRUE;
-		    stringClear();
+	for (;;) {
+		// get input (use lookup-table instead of nested ifs for
+		// performance reasons)
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
 		}
-		stringAddC();
-		next();
-		break;
-	    case ChD1:
-		// on first call: clear string
-		if ( !charDataRead ) {
-		    charDataRead = TRUE;
-		    stringClear();
-		}
-		stringAddC();
-		next();
-		break;
-	    case ChD2:
-		stringAddC();
-		next();
-		break;
-	    case Ref:
-		if ( !charDataRead) {
-		    // reference may be CharData; so clear string to be safe
-		    stringClear();
-		    parseOk = parseReference( charDataRead, InContent );
+		if (c.row()) {
+			input = InpUnknown;
 		} else {
-		    if ( d->reportEntities ) {
-			// this is undocumented so far; do this right in Qt 3.0
-			if ( contentHnd ) {
-			    if ( d->reportWhitespaceCharData || !string().simplifyWhiteSpace().isEmpty() ) {
-				if ( !contentHnd->characters( string() ) ) {
-				    d->error = contentHnd->errorString();
-				    goto parseError;
+			input = mapCLT2FSMChar[charLookupTable[c.cell()]];
+		}
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Init:
+			// next character
+			next();
+			break;
+		case ChD:
+			// on first call: clear string
+			if (!charDataRead) {
+				charDataRead = TRUE;
+				stringClear();
+			}
+			stringAddC();
+			next();
+			break;
+		case ChD1:
+			// on first call: clear string
+			if (!charDataRead) {
+				charDataRead = TRUE;
+				stringClear();
+			}
+			stringAddC();
+			next();
+			break;
+		case ChD2:
+			stringAddC();
+			next();
+			break;
+		case Ref:
+			if (!charDataRead) {
+				// reference may be CharData; so clear string to
+				// be safe
+				stringClear();
+				parseOk =
+					parseReference(charDataRead, InContent);
+			} else {
+				if (d->reportEntities) {
+					// this is undocumented so far; do this
+					// right in Qt 3.0
+					if (contentHnd) {
+						if (d->reportWhitespaceCharData ||
+						    !string().simplifyWhiteSpace()
+							     .isEmpty()) {
+							if (!contentHnd->characters(
+								    string())) {
+								d->error =
+									contentHnd
+										->errorString();
+								goto parseError;
+							}
+						}
+					}
+					stringClear();
 				}
-			    }
+				bool tmp;
+				parseOk = parseReference(tmp, InContent);
 			}
+			break;
+		case Lt:
+			// call the handler for CharData
+			if (contentHnd) {
+				if (charDataRead) {
+					if (d->reportWhitespaceCharData ||
+					    !string().simplifyWhiteSpace()
+						     .isEmpty()) {
+						if (!contentHnd->characters(
+							    string())) {
+							d->error =
+								contentHnd
+									->errorString();
+							goto parseError;
+						}
+					}
+				}
+			}
+			charDataRead = FALSE;
+			// next character
+			next();
+			break;
+		case PI:
+			parseOk = parsePI();
+			break;
+		case Elem:
+			parseOk = parseElement();
+			break;
+		case Em:
+			// next character
+			next();
+			break;
+		case Com:
+			parseOk = parseComment();
+			break;
+		case CDS:
+			parseOk = parseString("[CDATA[");
+			break;
+		case CDS1:
+			// read one character and add it
+			stringAddC();
+			next();
+			break;
+		case CDS2:
+			// skip ']'
+			next();
+			break;
+		case CDS3:
+			// skip ']'...
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case Ref:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGREFERENCE;
+				goto parseError;
+			}
+			break;
+		case PI:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGPI;
+				goto parseError;
+			}
+			// call the handler
+			if (contentHnd) {
+				if (!contentHnd->processingInstruction(
+					    name(), string())) {
+					d->error = contentHnd->errorString();
+					goto parseError;
+				}
+			}
+			break;
+		case Elem:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGELEMENT;
+				goto parseError;
+			}
+			break;
+		case Com:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGCOMMENT;
+				goto parseError;
+			}
+			if (lexicalHnd) {
+				if (!lexicalHnd->comment(string())) {
+					d->error = lexicalHnd->errorString();
+					goto parseError;
+				}
+			}
+			break;
+		case CDS:
+			if (!parseOk) {
+				d->error = XMLERR_CDSECTHEADEREXPECTED;
+				goto parseError;
+			}
+			// empty string
 			stringClear();
-		    }
-		    bool tmp;
-		    parseOk = parseReference( tmp, InContent );
-		}
-		break;
-	    case Lt:
-		// call the handler for CharData
-		if ( contentHnd ) {
-		    if ( charDataRead ) {
-			if ( d->reportWhitespaceCharData || !string().simplifyWhiteSpace().isEmpty() ) {
-			    if ( !contentHnd->characters( string() ) ) {
-				d->error = contentHnd->errorString();
-				goto parseError;
-			    }
+			break;
+		case CDS2:
+			if (c != ']') {
+				stringAddC(']');
 			}
-		    }
-		}
-		charDataRead = FALSE;
-		// next character
-		next();
-		break;
-	    case PI:
-		parseOk = parsePI();
-		break;
-	    case Elem:
-		parseOk = parseElement();
-		break;
-	    case Em:
-		// next character
-		next();
-		break;
-	    case Com:
-		parseOk = parseComment();
-		break;
-	    case CDS:
-		parseOk = parseString( "[CDATA[" );
-		break;
-	    case CDS1:
-		// read one character and add it
-		stringAddC();
-		next();
-		break;
-	    case CDS2:
-		// skip ']'
-		next();
-		break;
-	    case CDS3:
-		// skip ']'...
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Ref:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGREFERENCE;
-		    goto parseError;
-		}
-		break;
-	    case PI:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGPI;
-		    goto parseError;
-		}
-		// call the handler
-		if ( contentHnd ) {
-		    if ( !contentHnd->processingInstruction(name(),string()) ) {
-			d->error = contentHnd->errorString();
+			break;
+		case CDS3:
+			// test if this skipping was legal
+			if (c == '>') {
+				// the end of the CDSect
+				if (lexicalHnd) {
+					if (!lexicalHnd->startCDATA()) {
+						d->error =
+							lexicalHnd
+								->errorString();
+						goto parseError;
+					}
+				}
+				if (contentHnd) {
+					if (!contentHnd->characters(string())) {
+						d->error =
+							contentHnd
+								->errorString();
+						goto parseError;
+					}
+				}
+				if (lexicalHnd) {
+					if (!lexicalHnd->endCDATA()) {
+						d->error =
+							lexicalHnd
+								->errorString();
+						goto parseError;
+					}
+				}
+			} else if (c == ']') {
+				// three or more ']'
+				stringAddC(']');
+			} else {
+				// after ']]' comes another character
+				stringAddC(']');
+				stringAddC(']');
+			}
+			break;
+		case Done:
+			// call the handler for CharData
+			if (contentHnd) {
+				if (charDataRead) {
+					if (d->reportWhitespaceCharData ||
+					    !string().simplifyWhiteSpace()
+						     .isEmpty()) {
+						if (!contentHnd->characters(
+							    string())) {
+							d->error =
+								contentHnd
+									->errorString();
+							goto parseError;
+						}
+					}
+				}
+			}
+			// Done
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_ERRORPARSINGCONTENT;
 			goto parseError;
-		    }
 		}
-		break;
-	    case Elem:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGELEMENT;
-		    goto parseError;
-		}
-		break;
-	    case Com:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGCOMMENT;
-		    goto parseError;
-		}
-		if ( lexicalHnd ) {
-		    if ( !lexicalHnd->comment( string() ) ) {
-			d->error = lexicalHnd->errorString();
-			goto parseError;
-		    }
-		}
-		break;
-	    case CDS:
-		if( !parseOk ) {
-		    d->error = XMLERR_CDSECTHEADEREXPECTED;
-		    goto parseError;
-		}
-		// empty string
-		stringClear();
-		break;
-	    case CDS2:
-		if (c != ']') {
-		    stringAddC( ']' );
-		}
-		break;
-	    case CDS3:
-		// test if this skipping was legal
-		if        ( c == '>' ) {
-		    // the end of the CDSect
-		    if ( lexicalHnd ) {
-			if ( !lexicalHnd->startCDATA() ) {
-			    d->error = lexicalHnd->errorString();
-			    goto parseError;
-			}
-		    }
-		    if ( contentHnd ) {
-			if ( !contentHnd->characters( string() ) ) {
-			    d->error = contentHnd->errorString();
-			    goto parseError;
-			}
-		    }
-		    if ( lexicalHnd ) {
-			if ( !lexicalHnd->endCDATA() ) {
-			    d->error = lexicalHnd->errorString();
-			    goto parseError;
-			}
-		    }
-		} else if (c == ']') {
-		    // three or more ']'
-		    stringAddC( ']' );
-		} else {
-		    // after ']]' comes another character
-		    stringAddC( ']' );
-		    stringAddC( ']' );
-		}
-		break;
-	    case Done:
-		// call the handler for CharData
-		if ( contentHnd ) {
-		    if ( charDataRead ) {
-			if ( d->reportWhitespaceCharData || !string().simplifyWhiteSpace().isEmpty() ) {
-			    if ( !contentHnd->characters( string() ) ) {
-				d->error = contentHnd->errorString();
-				goto parseError;
-			    }
-			}
-		    }
-		}
-		// Done
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_ERRORPARSINGCONTENT;
-		goto parseError;
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -2937,111 +3092,110 @@ parseError:
 */
 bool QXmlSimpleReader::parseMisc()
 {
-    const signed char Init             = 0;
-    const signed char Lt               = 1; // '<' was read
-    const signed char Comment          = 2; // read comment
-    const signed char eatWS            = 3; // eat whitespaces
-    const signed char PI               = 4; // read PI
-    const signed char Comment2         = 5; // read comment
+	const signed char Init = 0;
+	const signed char Lt = 1; // '<' was read
+	const signed char Comment = 2; // read comment
+	const signed char eatWS = 3; // eat whitespaces
+	const signed char PI = 4; // read PI
+	const signed char Comment2 = 5; // read comment
 
-    const signed char InpWs            = 0; // S
-    const signed char InpLt            = 1; // <
-    const signed char InpQm            = 2; // ?
-    const signed char InpEm            = 3; // !
-    const signed char InpUnknown       = 4;
+	const signed char InpWs = 0; // S
+	const signed char InpLt = 1; // <
+	const signed char InpQm = 2; // ?
+	const signed char InpEm = 3; // !
+	const signed char InpUnknown = 4;
 
-    // use some kind of state machine for parsing
-    static signed char table[3][5] = {
-     /*  InpWs   InpLt  InpQm  InpEm     InpUnknown */
-	{ eatWS,  Lt,    -1,    -1,       -1        }, // Init
-	{ -1,     -1,    PI,    Comment,  -1        }, // Lt
-	{ -1,     -1,    -1,    -1,       Comment2  }  // Comment
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[3][5] = {
+		/*  InpWs   InpLt  InpQm  InpEm     InpUnknown */
+		{eatWS, Lt, -1, -1, -1}, // Init
+		{-1, -1, PI, Comment, -1}, // Lt
+		{-1, -1, -1, -1, Comment2} // Comment
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( is_S(c) ) {
-	    input = InpWs;
-	} else if ( c == '<' ) {
-	    input = InpLt;
-	} else if ( c == '?' ) {
-	    input = InpQm;
-	} else if ( c == '!' ) {
-	    input = InpEm;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case eatWS:
-		eat_ws();
-		break;
-	    case Lt:
-		next();
-		break;
-	    case PI:
-		parseOk = parsePI();
-		break;
-	    case Comment:
-		next();
-		break;
-	    case Comment2:
-		parseOk = parseComment();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case eatWS:
-		return TRUE;
-	    case PI:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGPI;
-		    goto parseError;
-		}
-		if ( contentHnd ) {
-		    if ( !contentHnd->processingInstruction(name(),string()) ) {
-			d->error = contentHnd->errorString();
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
 			goto parseError;
-		    }
 		}
-		return TRUE;
-	    case Comment2:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGCOMMENT;
-		    goto parseError;
+		if (is_S(c)) {
+			input = InpWs;
+		} else if (c == '<') {
+			input = InpLt;
+		} else if (c == '?') {
+			input = InpQm;
+		} else if (c == '!') {
+			input = InpEm;
+		} else {
+			input = InpUnknown;
 		}
-		if ( lexicalHnd ) {
-		    if ( !lexicalHnd->comment( string() ) ) {
-			d->error = lexicalHnd->errorString();
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case eatWS:
+			eat_ws();
+			break;
+		case Lt:
+			next();
+			break;
+		case PI:
+			parseOk = parsePI();
+			break;
+		case Comment:
+			next();
+			break;
+		case Comment2:
+			parseOk = parseComment();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case eatWS:
+			return TRUE;
+		case PI:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGPI;
+				goto parseError;
+			}
+			if (contentHnd) {
+				if (!contentHnd->processingInstruction(
+					    name(), string())) {
+					d->error = contentHnd->errorString();
+					goto parseError;
+				}
+			}
+			return TRUE;
+		case Comment2:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGCOMMENT;
+				goto parseError;
+			}
+			if (lexicalHnd) {
+				if (!lexicalHnd->comment(string())) {
+					d->error = lexicalHnd->errorString();
+					goto parseError;
+				}
+			}
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_UNEXPECTEDCHARACTER;
 			goto parseError;
-		    }
 		}
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_UNEXPECTEDCHARACTER;
-		goto parseError;
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -3055,217 +3209,218 @@ parseError:
   If this funktion was successful, the head-position is on the first
   character after the PI.
 */
-bool QXmlSimpleReader::parsePI( bool xmldecl )
+bool QXmlSimpleReader::parsePI(bool xmldecl)
 {
-    const signed char Init             =  0;
-    const signed char QmI              =  1; // ? was read
-    const signed char Name             =  2; // read Name
-    const signed char XMLDecl          =  3; // read XMLDecl
-    const signed char Ws1              =  4; // eat ws after "xml" of XMLDecl
-    const signed char PI               =  5; // read PI
-    const signed char Ws2              =  6; // eat ws after Name of PI
-    const signed char Version          =  7; // read versionInfo
-    const signed char Ws3              =  8; // eat ws after versionInfo
-    const signed char EorSD            =  9; // read EDecl or SDDecl
-    const signed char Ws4              = 10; // eat ws after EDecl or SDDecl
-    const signed char SD               = 11; // read SDDecl
-    const signed char Ws5              = 12; // eat ws after SDDecl
-    const signed char ADone            = 13; // almost done
-    const signed char Char             = 14; // Char was read
-    const signed char Qm               = 15; // Qm was read
-    const signed char Done             = 16; // finished reading content
+	const signed char Init = 0;
+	const signed char QmI = 1; // ? was read
+	const signed char Name = 2; // read Name
+	const signed char XMLDecl = 3; // read XMLDecl
+	const signed char Ws1 = 4; // eat ws after "xml" of XMLDecl
+	const signed char PI = 5; // read PI
+	const signed char Ws2 = 6; // eat ws after Name of PI
+	const signed char Version = 7; // read versionInfo
+	const signed char Ws3 = 8; // eat ws after versionInfo
+	const signed char EorSD = 9; // read EDecl or SDDecl
+	const signed char Ws4 = 10; // eat ws after EDecl or SDDecl
+	const signed char SD = 11; // read SDDecl
+	const signed char Ws5 = 12; // eat ws after SDDecl
+	const signed char ADone = 13; // almost done
+	const signed char Char = 14; // Char was read
+	const signed char Qm = 15; // Qm was read
+	const signed char Done = 16; // finished reading content
 
-    const signed char InpWs            = 0; // whitespace
-    const signed char InpNameBe        = 1; // is_nameBeginning()
-    const signed char InpGt            = 2; // >
-    const signed char InpQm            = 3; // ?
-    const signed char InpUnknown       = 4;
+	const signed char InpWs = 0; // whitespace
+	const signed char InpNameBe = 1; // is_nameBeginning()
+	const signed char InpGt = 2; // >
+	const signed char InpQm = 3; // ?
+	const signed char InpUnknown = 4;
 
-    // use some kind of state machine for parsing
-    static signed char table[16][5] = {
-     /*  InpWs,  InpNameBe  InpGt  InpQm   InpUnknown  */
-	{ -1,     -1,        -1,    QmI,    -1     }, // Init
-	{ -1,     Name,      -1,    -1,     -1     }, // QmI
-	{ -1,     -1,        -1,    -1,     -1     }, // Name (this state is left not through input)
-	{ Ws1,    -1,        -1,    -1,     -1     }, // XMLDecl
-	{ -1,     Version,   -1,    -1,     -1     }, // Ws1
-	{ Ws2,    -1,        -1,    Qm,     -1     }, // PI
-	{ Char,   Char,      Char,  Qm,     Char   }, // Ws2
-	{ Ws3,    -1,        -1,    ADone,  -1     }, // Version
-	{ -1,     EorSD,     -1,    ADone,  -1     }, // Ws3
-	{ Ws4,    -1,        -1,    ADone,  -1     }, // EorSD
-	{ -1,     SD,        -1,    ADone,  -1     }, // Ws4
-	{ Ws5,    -1,        -1,    ADone,  -1     }, // SD
-	{ -1,     -1,        -1,    ADone,  -1     }, // Ws5
-	{ -1,     -1,        Done,  -1,     -1     }, // ADone
-	{ Char,   Char,      Char,  Qm,     Char   }, // Char
-	{ Char,   Char,      Done,  Qm,     Char   }, // Qm
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[16][5] = {
+		/*  InpWs,  InpNameBe  InpGt  InpQm   InpUnknown  */
+		{-1, -1, -1, QmI, -1}, // Init
+		{-1, Name, -1, -1, -1}, // QmI
+		{-1, -1, -1, -1, -1}, // Name (this state is left not through
+				      // input)
+		{Ws1, -1, -1, -1, -1}, // XMLDecl
+		{-1, Version, -1, -1, -1}, // Ws1
+		{Ws2, -1, -1, Qm, -1}, // PI
+		{Char, Char, Char, Qm, Char}, // Ws2
+		{Ws3, -1, -1, ADone, -1}, // Version
+		{-1, EorSD, -1, ADone, -1}, // Ws3
+		{Ws4, -1, -1, ADone, -1}, // EorSD
+		{-1, SD, -1, ADone, -1}, // Ws4
+		{Ws5, -1, -1, ADone, -1}, // SD
+		{-1, -1, -1, ADone, -1}, // Ws5
+		{-1, -1, Done, -1, -1}, // ADone
+		{Char, Char, Char, Qm, Char}, // Char
+		{Char, Char, Done, Qm, Char}, // Qm
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( is_S(c) ) {
-	    input = InpWs;
-	} else if ( is_NameBeginning(c) ) {
-	    input = InpNameBe;
-	} else if ( c == '>' ) {
-	    input = InpGt;
-	} else if ( c == '?' ) {
-	    input = InpQm;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case QmI:
-		next();
-		break;
-	    case Name:
-		parseOk = parseName();
-		break;
-	    case Ws1:
-	    case Ws2:
-	    case Ws3:
-	    case Ws4:
-	    case Ws5:
-		eat_ws();
-		break;
-	    case Version:
-		parseOk = parseAttribute();
-		break;
-	    case EorSD:
-		parseOk = parseAttribute();
-		break;
-	    case SD:
-		// get the SDDecl (syntax like an attribute)
-		if ( d->standalone != QXmlSimpleReaderPrivate::Unknown ) {
-		    // already parsed the standalone declaration
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		parseOk = parseAttribute();
-		break;
-	    case ADone:
-		next();
-		break;
-	    case Char:
-		stringAddC();
-		next();
-		break;
-	    case Qm:
-		// skip the '?'
-		next();
-		break;
-	    case Done:
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Name:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
-		}
-		// test what name was read and determine the next state
-		// (not very beautiful, I admit)
-		if ( name().lower() == "xml" ) {
-		    if ( xmldecl && name()=="xml" ) {
-			state = XMLDecl;
-		    } else {
-			d->error = XMLERR_INVALIDNAMEFORPI;
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
 			goto parseError;
-		    }
+		}
+		if (is_S(c)) {
+			input = InpWs;
+		} else if (is_NameBeginning(c)) {
+			input = InpNameBe;
+		} else if (c == '>') {
+			input = InpGt;
+		} else if (c == '?') {
+			input = InpQm;
 		} else {
-		    state = PI;
-		    stringClear();
+			input = InpUnknown;
 		}
-		break;
-	    case Version:
-		// get version (syntax like an attribute)
-		if ( !parseOk ) {
-		    d->error = XMLERR_VERSIONEXPECTED;
-		    goto parseError;
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case QmI:
+			next();
+			break;
+		case Name:
+			parseOk = parseName();
+			break;
+		case Ws1:
+		case Ws2:
+		case Ws3:
+		case Ws4:
+		case Ws5:
+			eat_ws();
+			break;
+		case Version:
+			parseOk = parseAttribute();
+			break;
+		case EorSD:
+			parseOk = parseAttribute();
+			break;
+		case SD:
+			// get the SDDecl (syntax like an attribute)
+			if (d->standalone != QXmlSimpleReaderPrivate::Unknown) {
+				// already parsed the standalone declaration
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			parseOk = parseAttribute();
+			break;
+		case ADone:
+			next();
+			break;
+		case Char:
+			stringAddC();
+			next();
+			break;
+		case Qm:
+			// skip the '?'
+			next();
+			break;
+		case Done:
+			next();
+			break;
 		}
-		if ( name() != "version" ) {
-		    d->error = XMLERR_VERSIONEXPECTED;
-		    goto parseError;
-		}
-		d->xmlVersion = string();
-		break;
-	    case EorSD:
-		// get the EDecl or SDDecl (syntax like an attribute)
-		if ( !parseOk ) {
-		    d->error = XMLERR_EDECLORSDDECLEXPECTED;
-		    goto parseError;
-		}
-		if        ( name() == "standalone" ) {
-		    if ( string()=="yes" ) {
-			d->standalone = QXmlSimpleReaderPrivate::Yes;
-		    } else if ( string()=="no" ) {
-			d->standalone = QXmlSimpleReaderPrivate::No;
-		    } else {
-			d->error = XMLERR_WRONGVALUEFORSDECL;
+		// no input is read after this
+		switch (state) {
+		case Name:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			// test what name was read and determine the next state
+			// (not very beautiful, I admit)
+			if (name().lower() == "xml") {
+				if (xmldecl && name() == "xml") {
+					state = XMLDecl;
+				} else {
+					d->error = XMLERR_INVALIDNAMEFORPI;
+					goto parseError;
+				}
+			} else {
+				state = PI;
+				stringClear();
+			}
+			break;
+		case Version:
+			// get version (syntax like an attribute)
+			if (!parseOk) {
+				d->error = XMLERR_VERSIONEXPECTED;
+				goto parseError;
+			}
+			if (name() != "version") {
+				d->error = XMLERR_VERSIONEXPECTED;
+				goto parseError;
+			}
+			d->xmlVersion = string();
+			break;
+		case EorSD:
+			// get the EDecl or SDDecl (syntax like an attribute)
+			if (!parseOk) {
+				d->error = XMLERR_EDECLORSDDECLEXPECTED;
+				goto parseError;
+			}
+			if (name() == "standalone") {
+				if (string() == "yes") {
+					d->standalone =
+						QXmlSimpleReaderPrivate::Yes;
+				} else if (string() == "no") {
+					d->standalone =
+						QXmlSimpleReaderPrivate::No;
+				} else {
+					d->error = XMLERR_WRONGVALUEFORSDECL;
+					goto parseError;
+				}
+			} else if (name() == "encoding") {
+				d->encoding = string();
+			} else {
+				d->error = XMLERR_EDECLORSDDECLEXPECTED;
+				goto parseError;
+			}
+			break;
+		case SD:
+			if (!parseOk) {
+				d->error = XMLERR_SDDECLEXPECTED;
+				goto parseError;
+			}
+			if (name() != "standalone") {
+				d->error = XMLERR_SDDECLEXPECTED;
+				goto parseError;
+			}
+			if (string() == "yes") {
+				d->standalone = QXmlSimpleReaderPrivate::Yes;
+			} else if (string() == "no") {
+				d->standalone = QXmlSimpleReaderPrivate::No;
+			} else {
+				d->error = XMLERR_WRONGVALUEFORSDECL;
+				goto parseError;
+			}
+			break;
+		case Qm:
+			// test if the skipping was legal
+			if (c != '>') {
+				stringAddC('?');
+			}
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_UNEXPECTEDCHARACTER;
 			goto parseError;
-		    }
-		} else if ( name() == "encoding" ) {
-		    d->encoding = string();
-		} else {
-		    d->error = XMLERR_EDECLORSDDECLEXPECTED;
-		    goto parseError;
 		}
-		break;
-	    case SD:
-		if ( !parseOk ) {
-		    d->error = XMLERR_SDDECLEXPECTED;
-		    goto parseError;
-		}
-		if ( name() != "standalone" ) {
-		    d->error = XMLERR_SDDECLEXPECTED;
-		    goto parseError;
-		}
-		if ( string()=="yes" ) {
-		    d->standalone = QXmlSimpleReaderPrivate::Yes;
-		} else if ( string()=="no" ) {
-		    d->standalone = QXmlSimpleReaderPrivate::No;
-		} else {
-		    d->error = XMLERR_WRONGVALUEFORSDECL;
-		    goto parseError;
-		}
-		break;
-	    case Qm:
-		// test if the skipping was legal
-		if ( c != '>' ) {
-		    stringAddC( '?' );
-		}
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_UNEXPECTEDCHARACTER;
-		goto parseError;
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -3279,176 +3434,177 @@ parseError:
 */
 bool QXmlSimpleReader::parseDoctype()
 {
-    // some init-stuff
-    d->systemId = QString::null;
-    d->publicId = QString::null;
+	// some init-stuff
+	d->systemId = QString::null;
+	d->publicId = QString::null;
 
-    const signed char Init             =  0;
-    const signed char Doctype          =  1; // read the doctype
-    const signed char Ws1              =  2; // eat_ws
-    const signed char Doctype2         =  3; // read the doctype, part 2
-    const signed char Ws2              =  4; // eat_ws
-    const signed char Sys              =  5; // read SYSTEM
-    const signed char Ws3              =  6; // eat_ws
-    const signed char MP               =  7; // markupdecl or PEReference
-    const signed char PER              =  8; // PERReference
-    const signed char Mup              =  9; // markupdecl
-    const signed char Ws4              = 10; // eat_ws
-    const signed char MPE              = 11; // end of markupdecl or PEReference
-    const signed char Done             = 12;
+	const signed char Init = 0;
+	const signed char Doctype = 1; // read the doctype
+	const signed char Ws1 = 2; // eat_ws
+	const signed char Doctype2 = 3; // read the doctype, part 2
+	const signed char Ws2 = 4; // eat_ws
+	const signed char Sys = 5; // read SYSTEM
+	const signed char Ws3 = 6; // eat_ws
+	const signed char MP = 7; // markupdecl or PEReference
+	const signed char PER = 8; // PERReference
+	const signed char Mup = 9; // markupdecl
+	const signed char Ws4 = 10; // eat_ws
+	const signed char MPE = 11; // end of markupdecl or PEReference
+	const signed char Done = 12;
 
-    const signed char InpWs            = 0;
-    const signed char InpD             = 1; // 'D'
-    const signed char InpS             = 2; // 'S' or 'P'
-    const signed char InpOB            = 3; // [
-    const signed char InpCB            = 4; // ]
-    const signed char InpPer           = 5; // %
-    const signed char InpGt            = 6; // >
-    const signed char InpUnknown       = 7;
+	const signed char InpWs = 0;
+	const signed char InpD = 1; // 'D'
+	const signed char InpS = 2; // 'S' or 'P'
+	const signed char InpOB = 3; // [
+	const signed char InpCB = 4; // ]
+	const signed char InpPer = 5; // %
+	const signed char InpGt = 6; // >
+	const signed char InpUnknown = 7;
 
-    // use some kind of state machine for parsing
-    static signed char table[12][8] = {
-     /*  InpWs,  InpD       InpS       InpOB  InpCB  InpPer InpGt  InpUnknown */
-	{ -1,     Doctype,   -1,        -1,    -1,    -1,    -1,    -1        }, // Init
-	{ Ws1,    Doctype2,  Doctype2,  -1,    -1,    -1,    -1,    Doctype2  }, // Doctype
-	{ -1,     Doctype2,  Doctype2,  -1,    -1,    -1,    -1,    Doctype2  }, // Ws1
-	{ Ws2,    -1,        Sys,       MP,    -1,    -1,    Done,  -1        }, // Doctype2
-	{ -1,     -1,        Sys,       MP,    -1,    -1,    Done,  -1        }, // Ws2
-	{ Ws3,    -1,        -1,        MP,    -1,    -1,    Done,  -1        }, // Sys
-	{ -1,     -1,        -1,        MP,    -1,    -1,    Done,  -1        }, // Ws3
-	{ -1,     -1,        -1,        -1,    MPE,   PER,   -1,    Mup       }, // MP
-	{ Ws4,    -1,        -1,        -1,    MPE,   PER,   -1,    Mup       }, // PER
-	{ Ws4,    -1,        -1,        -1,    MPE,   PER,   -1,    Mup       }, // Mup
-	{ -1,     -1,        -1,        -1,    MPE,   PER,   -1,    Mup       }, // Ws4
-	{ -1,     -1,        -1,        -1,    -1,    -1,    Done,  -1        }  // MPE
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[12][8] = {
+		/*  InpWs,  InpD       InpS       InpOB  InpCB  InpPer InpGt
+		   InpUnknown */
+		{-1, Doctype, -1, -1, -1, -1, -1, -1}, // Init
+		{Ws1, Doctype2, Doctype2, -1, -1, -1, -1, Doctype2}, // Doctype
+		{-1, Doctype2, Doctype2, -1, -1, -1, -1, Doctype2}, // Ws1
+		{Ws2, -1, Sys, MP, -1, -1, Done, -1}, // Doctype2
+		{-1, -1, Sys, MP, -1, -1, Done, -1}, // Ws2
+		{Ws3, -1, -1, MP, -1, -1, Done, -1}, // Sys
+		{-1, -1, -1, MP, -1, -1, Done, -1}, // Ws3
+		{-1, -1, -1, -1, MPE, PER, -1, Mup}, // MP
+		{Ws4, -1, -1, -1, MPE, PER, -1, Mup}, // PER
+		{Ws4, -1, -1, -1, MPE, PER, -1, Mup}, // Mup
+		{-1, -1, -1, -1, MPE, PER, -1, Mup}, // Ws4
+		{-1, -1, -1, -1, -1, -1, Done, -1} // MPE
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( is_S(c) ) {
-	    input = InpWs;
-	} else if ( c == 'D' ) {
-	    input = InpD;
-	} else if ( c == 'S' ) {
-	    input = InpS;
-	} else if ( c == 'P' ) {
-	    input = InpS;
-	} else if ( c == '[' ) {
-	    input = InpOB;
-	} else if ( c == ']' ) {
-	    input = InpCB;
-	} else if ( c == '%' ) {
-	    input = InpPer;
-	} else if ( c == '>' ) {
-	    input = InpGt;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Doctype:
-		parseOk = parseString( "DOCTYPE" );
-		break;
-	    case Ws1:
-	    case Ws2:
-	    case Ws3:
-	    case Ws4:
-		eat_ws();
-		break;
-	    case Doctype2:
-		parseName();
-		break;
-	    case Sys:
-		parseOk = parseExternalID();
-		break;
-	    case MP:
-		next_eat_ws();
-		break;
-	    case PER:
-		parseOk = parsePEReference( InDTD );
-		break;
-	    case Mup:
-		parseOk = parseMarkupdecl();
-		break;
-	    case MPE:
-		next_eat_ws();
-		break;
-	    case Done:
-		if ( lexicalHnd ) {
-		    if ( !lexicalHnd->endDTD() ) {
-			d->error = lexicalHnd->errorString();
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
 			goto parseError;
-		    }
 		}
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Doctype:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGDOCTYPE;
-		    goto parseError;
+		if (is_S(c)) {
+			input = InpWs;
+		} else if (c == 'D') {
+			input = InpD;
+		} else if (c == 'S') {
+			input = InpS;
+		} else if (c == 'P') {
+			input = InpS;
+		} else if (c == '[') {
+			input = InpOB;
+		} else if (c == ']') {
+			input = InpCB;
+		} else if (c == '%') {
+			input = InpPer;
+		} else if (c == '>') {
+			input = InpGt;
+		} else {
+			input = InpUnknown;
 		}
-		if ( !is_S(c) ) {
-		    d->error = XMLERR_ERRORPARSINGDOCTYPE;
-		    goto parseError;
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Doctype:
+			parseOk = parseString("DOCTYPE");
+			break;
+		case Ws1:
+		case Ws2:
+		case Ws3:
+		case Ws4:
+			eat_ws();
+			break;
+		case Doctype2:
+			parseName();
+			break;
+		case Sys:
+			parseOk = parseExternalID();
+			break;
+		case MP:
+			next_eat_ws();
+			break;
+		case PER:
+			parseOk = parsePEReference(InDTD);
+			break;
+		case Mup:
+			parseOk = parseMarkupdecl();
+			break;
+		case MPE:
+			next_eat_ws();
+			break;
+		case Done:
+			if (lexicalHnd) {
+				if (!lexicalHnd->endDTD()) {
+					d->error = lexicalHnd->errorString();
+					goto parseError;
+				}
+			}
+			next();
+			break;
 		}
-		break;
-	    case Doctype2:
-		d->doctype = name();
-		if ( lexicalHnd ) {
-		    if ( !lexicalHnd->startDTD( d->doctype, d->publicId, d->systemId ) ) {
-			d->error = lexicalHnd->errorString();
+		// no input is read after this
+		switch (state) {
+		case Doctype:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGDOCTYPE;
+				goto parseError;
+			}
+			if (!is_S(c)) {
+				d->error = XMLERR_ERRORPARSINGDOCTYPE;
+				goto parseError;
+			}
+			break;
+		case Doctype2:
+			d->doctype = name();
+			if (lexicalHnd) {
+				if (!lexicalHnd->startDTD(d->doctype,
+							  d->publicId,
+							  d->systemId)) {
+					d->error = lexicalHnd->errorString();
+					goto parseError;
+				}
+			}
+			break;
+		case Sys:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGDOCTYPE;
+				goto parseError;
+			}
+			break;
+		case PER:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGDOCTYPE;
+				goto parseError;
+			}
+			break;
+		case Mup:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGDOCTYPE;
+				goto parseError;
+			}
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_ERRORPARSINGDOCTYPE;
 			goto parseError;
-		    }
 		}
-		break;
-	    case Sys:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGDOCTYPE;
-		    goto parseError;
-		}
-		break;
-	    case PER:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGDOCTYPE;
-		    goto parseError;
-		}
-		break;
-	    case Mup:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGDOCTYPE;
-		    goto parseError;
-		}
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_ERRORPARSINGDOCTYPE;
-		goto parseError;
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -3456,168 +3612,167 @@ parseError:
 
   If allowPublicID is TRUE parse ExternalID [75] or PublicID [83].
 */
-bool QXmlSimpleReader::parseExternalID( bool allowPublicID )
+bool QXmlSimpleReader::parseExternalID(bool allowPublicID)
 {
-    // some init-stuff
-    d->systemId = QString::null;
-    d->publicId = QString::null;
+	// some init-stuff
+	d->systemId = QString::null;
+	d->publicId = QString::null;
 
-    const signed char Init             =  0;
-    const signed char Sys              =  1; // parse 'SYSTEM'
-    const signed char SysWS            =  2; // parse the whitespace after 'SYSTEM'
-    const signed char SysSQ            =  3; // parse SystemLiteral with '
-    const signed char SysSQ2           =  4; // parse SystemLiteral with '
-    const signed char SysDQ            =  5; // parse SystemLiteral with "
-    const signed char SysDQ2           =  6; // parse SystemLiteral with "
-    const signed char Pub              =  7; // parse 'PUBLIC'
-    const signed char PubWS            =  8; // parse the whitespace after 'PUBLIC'
-    const signed char PubSQ            =  9; // parse PubidLiteral with '
-    const signed char PubSQ2           = 10; // parse PubidLiteral with '
-    const signed char PubDQ            = 11; // parse PubidLiteral with "
-    const signed char PubDQ2           = 12; // parse PubidLiteral with "
-    const signed char PubE             = 13; // finished parsing the PubidLiteral
-    const signed char PubWS2           = 14; // parse the whitespace after the PubidLiteral
-    const signed char PDone            = 15; // done if allowPublicID is TRUE
-    const signed char Done             = 16;
+	const signed char Init = 0;
+	const signed char Sys = 1; // parse 'SYSTEM'
+	const signed char SysWS = 2; // parse the whitespace after 'SYSTEM'
+	const signed char SysSQ = 3; // parse SystemLiteral with '
+	const signed char SysSQ2 = 4; // parse SystemLiteral with '
+	const signed char SysDQ = 5; // parse SystemLiteral with "
+	const signed char SysDQ2 = 6; // parse SystemLiteral with "
+	const signed char Pub = 7; // parse 'PUBLIC'
+	const signed char PubWS = 8; // parse the whitespace after 'PUBLIC'
+	const signed char PubSQ = 9; // parse PubidLiteral with '
+	const signed char PubSQ2 = 10; // parse PubidLiteral with '
+	const signed char PubDQ = 11; // parse PubidLiteral with "
+	const signed char PubDQ2 = 12; // parse PubidLiteral with "
+	const signed char PubE = 13; // finished parsing the PubidLiteral
+	const signed char PubWS2 = 14; // parse the whitespace after the
+				       // PubidLiteral
+	const signed char PDone = 15; // done if allowPublicID is TRUE
+	const signed char Done = 16;
 
-    const signed char InpSQ            = 0; // '
-    const signed char InpDQ            = 1; // "
-    const signed char InpS             = 2; // S
-    const signed char InpP             = 3; // P
-    const signed char InpWs            = 4; // white space
-    const signed char InpUnknown       = 5;
+	const signed char InpSQ = 0; // '
+	const signed char InpDQ = 1; // "
+	const signed char InpS = 2; // S
+	const signed char InpP = 3; // P
+	const signed char InpWs = 4; // white space
+	const signed char InpUnknown = 5;
 
-    // use some kind of state machine for parsing
-    static signed char table[15][6] = {
-     /*  InpSQ    InpDQ    InpS     InpP     InpWs     InpUnknown */
-	{ -1,      -1,      Sys,     Pub,     -1,       -1      }, // Init
-	{ -1,      -1,      -1,      -1,      SysWS,    -1      }, // Sys
-	{ SysSQ,   SysDQ,   -1,      -1,      -1,       -1      }, // SysWS
-	{ Done,    SysSQ2,  SysSQ2,  SysSQ2,  SysSQ2,   SysSQ2  }, // SysSQ
-	{ Done,    SysSQ2,  SysSQ2,  SysSQ2,  SysSQ2,   SysSQ2  }, // SysSQ2
-	{ SysDQ2,  Done,    SysDQ2,  SysDQ2,  SysDQ2,   SysDQ2  }, // SysDQ
-	{ SysDQ2,  Done,    SysDQ2,  SysDQ2,  SysDQ2,   SysDQ2  }, // SysDQ2
-	{ -1,      -1,      -1,      -1,      PubWS,    -1      }, // Pub
-	{ PubSQ,   PubDQ,   -1,      -1,      -1,       -1      }, // PubWS
-	{ PubE,    -1,      PubSQ2,  PubSQ2,  PubSQ2,   PubSQ2  }, // PubSQ
-	{ PubE,    -1,      PubSQ2,  PubSQ2,  PubSQ2,   PubSQ2  }, // PubSQ2
-	{ -1,      PubE,    PubDQ2,  PubDQ2,  PubDQ2,   PubDQ2  }, // PubDQ
-	{ -1,      PubE,    PubDQ2,  PubDQ2,  PubDQ2,   PubDQ2  }, // PubDQ2
-	{ PDone,   PDone,   PDone,   PDone,   PubWS2,   PDone   }, // PubE
-	{ SysSQ,   SysDQ,   PDone,   PDone,   PDone,    PDone   }  // PubWS2
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[15][6] = {
+		/*  InpSQ    InpDQ    InpS     InpP     InpWs     InpUnknown */
+		{-1, -1, Sys, Pub, -1, -1}, // Init
+		{-1, -1, -1, -1, SysWS, -1}, // Sys
+		{SysSQ, SysDQ, -1, -1, -1, -1}, // SysWS
+		{Done, SysSQ2, SysSQ2, SysSQ2, SysSQ2, SysSQ2}, // SysSQ
+		{Done, SysSQ2, SysSQ2, SysSQ2, SysSQ2, SysSQ2}, // SysSQ2
+		{SysDQ2, Done, SysDQ2, SysDQ2, SysDQ2, SysDQ2}, // SysDQ
+		{SysDQ2, Done, SysDQ2, SysDQ2, SysDQ2, SysDQ2}, // SysDQ2
+		{-1, -1, -1, -1, PubWS, -1}, // Pub
+		{PubSQ, PubDQ, -1, -1, -1, -1}, // PubWS
+		{PubE, -1, PubSQ2, PubSQ2, PubSQ2, PubSQ2}, // PubSQ
+		{PubE, -1, PubSQ2, PubSQ2, PubSQ2, PubSQ2}, // PubSQ2
+		{-1, PubE, PubDQ2, PubDQ2, PubDQ2, PubDQ2}, // PubDQ
+		{-1, PubE, PubDQ2, PubDQ2, PubDQ2, PubDQ2}, // PubDQ2
+		{PDone, PDone, PDone, PDone, PubWS2, PDone}, // PubE
+		{SysSQ, SysDQ, PDone, PDone, PDone, PDone} // PubWS2
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( is_S(c) ) {
-	    input = InpWs;
-	} else if ( c == '\'' ) {
-	    input = InpSQ;
-	} else if ( c == '"' ) {
-	    input = InpDQ;
-	} else if ( c == 'S' ) {
-	    input = InpS;
-	} else if ( c == 'P' ) {
-	    input = InpP;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Sys:
-		parseOk = parseString( "SYSTEM" );
-		break;
-	    case SysWS:
-		eat_ws();
-		break;
-	    case SysSQ:
-	    case SysDQ:
-		stringClear();
-		next();
-		break;
-	    case SysSQ2:
-	    case SysDQ2:
-		stringAddC();
-		next();
-		break;
-	    case Pub:
-		parseOk = parseString( "PUBLIC" );
-		break;
-	    case PubWS:
-		eat_ws();
-		break;
-	    case PubSQ:
-	    case PubDQ:
-		stringClear();
-		next();
-		break;
-	    case PubSQ2:
-	    case PubDQ2:
-		stringAddC();
-		next();
-		break;
-	    case PubE:
-		next();
-		break;
-	    case PubWS2:
-		d->publicId = string();
-		eat_ws();
-		break;
-	    case Done:
-		d->systemId = string();
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Sys:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
 		}
-		break;
-	    case Pub:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case PDone:
-		if ( allowPublicID ) {
-		    d->publicId = string();
-		    return TRUE;
+		if (is_S(c)) {
+			input = InpWs;
+		} else if (c == '\'') {
+			input = InpSQ;
+		} else if (c == '"') {
+			input = InpDQ;
+		} else if (c == 'S') {
+			input = InpS;
+		} else if (c == 'P') {
+			input = InpP;
 		} else {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
+			input = InpUnknown;
 		}
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_UNEXPECTEDCHARACTER;
-		goto parseError;
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Sys:
+			parseOk = parseString("SYSTEM");
+			break;
+		case SysWS:
+			eat_ws();
+			break;
+		case SysSQ:
+		case SysDQ:
+			stringClear();
+			next();
+			break;
+		case SysSQ2:
+		case SysDQ2:
+			stringAddC();
+			next();
+			break;
+		case Pub:
+			parseOk = parseString("PUBLIC");
+			break;
+		case PubWS:
+			eat_ws();
+			break;
+		case PubSQ:
+		case PubDQ:
+			stringClear();
+			next();
+			break;
+		case PubSQ2:
+		case PubDQ2:
+			stringAddC();
+			next();
+			break;
+		case PubE:
+			next();
+			break;
+		case PubWS2:
+			d->publicId = string();
+			eat_ws();
+			break;
+		case Done:
+			d->systemId = string();
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case Sys:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case Pub:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case PDone:
+			if (allowPublicID) {
+				d->publicId = string();
+				return TRUE;
+			} else {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_UNEXPECTEDCHARACTER;
+			goto parseError;
+		}
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -3625,266 +3780,275 @@ parseError:
 */
 bool QXmlSimpleReader::parseMarkupdecl()
 {
-    const signed char Init             = 0;
-    const signed char Lt               = 1; // < was read
-    const signed char Em               = 2; // ! was read
-    const signed char CE               = 3; // E was read
-    const signed char Qm               = 4; // ? was read
-    const signed char Dash             = 5; // - was read
-    const signed char CA               = 6; // A was read
-    const signed char CEL              = 7; // EL was read
-    const signed char CEN              = 8; // EN was read
-    const signed char CN               = 9; // N was read
-    const signed char Done             = 10;
+	const signed char Init = 0;
+	const signed char Lt = 1; // < was read
+	const signed char Em = 2; // ! was read
+	const signed char CE = 3; // E was read
+	const signed char Qm = 4; // ? was read
+	const signed char Dash = 5; // - was read
+	const signed char CA = 6; // A was read
+	const signed char CEL = 7; // EL was read
+	const signed char CEN = 8; // EN was read
+	const signed char CN = 9; // N was read
+	const signed char Done = 10;
 
-    const signed char InpLt            = 0; // <
-    const signed char InpQm            = 1; // ?
-    const signed char InpEm            = 2; // !
-    const signed char InpDash          = 3; // -
-    const signed char InpA             = 4; // A
-    const signed char InpE             = 5; // E
-    const signed char InpL             = 6; // L
-    const signed char InpN             = 7; // N
-    const signed char InpUnknown       = 8;
+	const signed char InpLt = 0; // <
+	const signed char InpQm = 1; // ?
+	const signed char InpEm = 2; // !
+	const signed char InpDash = 3; // -
+	const signed char InpA = 4; // A
+	const signed char InpE = 5; // E
+	const signed char InpL = 6; // L
+	const signed char InpN = 7; // N
+	const signed char InpUnknown = 8;
 
-    // use some kind of state machine for parsing
-    static signed char table[4][9] = {
-     /*  InpLt  InpQm  InpEm  InpDash  InpA   InpE   InpL   InpN   InpUnknown */
-	{ Lt,    -1,    -1,    -1,      -1,    -1,    -1,    -1,    -1     }, // Init
-	{ -1,    Qm,    Em,    -1,      -1,    -1,    -1,    -1,    -1     }, // Lt
-	{ -1,    -1,    -1,    Dash,    CA,    CE,    -1,    CN,    -1     }, // Em
-	{ -1,    -1,    -1,    -1,      -1,    -1,    CEL,   CEN,   -1     }  // CE
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[4][9] = {
+		/*  InpLt  InpQm  InpEm  InpDash  InpA   InpE   InpL   InpN
+		   InpUnknown */
+		{Lt, -1, -1, -1, -1, -1, -1, -1, -1}, // Init
+		{-1, Qm, Em, -1, -1, -1, -1, -1, -1}, // Lt
+		{-1, -1, -1, Dash, CA, CE, -1, CN, -1}, // Em
+		{-1, -1, -1, -1, -1, -1, CEL, CEN, -1} // CE
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( c == '<' ) {
-	    input = InpLt;
-	} else if ( c == '?' ) {
-	    input = InpQm;
-	} else if ( c == '!' ) {
-	    input = InpEm;
-	} else if ( c == '-' ) {
-	    input = InpDash;
-	} else if ( c == 'A' ) {
-	    input = InpA;
-	} else if ( c == 'E' ) {
-	    input = InpE;
-	} else if ( c == 'L' ) {
-	    input = InpL;
-	} else if ( c == 'N' ) {
-	    input = InpN;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Lt:
-		next();
-		break;
-	    case Em:
-		next();
-		break;
-	    case CE:
-		next();
-		break;
-	    case Qm:
-		parseOk = parsePI();
-		break;
-	    case Dash:
-		parseOk = parseComment();
-		break;
-	    case CA:
-		parseOk = parseAttlistDecl();
-		break;
-	    case CEL:
-		parseOk = parseElementDecl();
-		break;
-	    case CEN:
-		parseOk = parseEntityDecl();
-		break;
-	    case CN:
-		parseOk = parseNotationDecl();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Qm:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGPI;
-		    goto parseError;
-		}
-		if ( contentHnd ) {
-		    if ( !contentHnd->processingInstruction(name(),string()) ) {
-			d->error = contentHnd->errorString();
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
 			goto parseError;
-		    }
 		}
-		return TRUE;
-	    case Dash:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGCOMMENT;
-		    goto parseError;
+		if (c == '<') {
+			input = InpLt;
+		} else if (c == '?') {
+			input = InpQm;
+		} else if (c == '!') {
+			input = InpEm;
+		} else if (c == '-') {
+			input = InpDash;
+		} else if (c == 'A') {
+			input = InpA;
+		} else if (c == 'E') {
+			input = InpE;
+		} else if (c == 'L') {
+			input = InpL;
+		} else if (c == 'N') {
+			input = InpN;
+		} else {
+			input = InpUnknown;
 		}
-		if ( lexicalHnd ) {
-		    if ( !lexicalHnd->comment( string() ) ) {
-			d->error = lexicalHnd->errorString();
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Lt:
+			next();
+			break;
+		case Em:
+			next();
+			break;
+		case CE:
+			next();
+			break;
+		case Qm:
+			parseOk = parsePI();
+			break;
+		case Dash:
+			parseOk = parseComment();
+			break;
+		case CA:
+			parseOk = parseAttlistDecl();
+			break;
+		case CEL:
+			parseOk = parseElementDecl();
+			break;
+		case CEN:
+			parseOk = parseEntityDecl();
+			break;
+		case CN:
+			parseOk = parseNotationDecl();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case Qm:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGPI;
+				goto parseError;
+			}
+			if (contentHnd) {
+				if (!contentHnd->processingInstruction(
+					    name(), string())) {
+					d->error = contentHnd->errorString();
+					goto parseError;
+				}
+			}
+			return TRUE;
+		case Dash:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGCOMMENT;
+				goto parseError;
+			}
+			if (lexicalHnd) {
+				if (!lexicalHnd->comment(string())) {
+					d->error = lexicalHnd->errorString();
+					goto parseError;
+				}
+			}
+			return TRUE;
+		case CA:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGATTLISTDECL;
+				goto parseError;
+			}
+			return TRUE;
+		case CEL:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGELEMENTDECL;
+				goto parseError;
+			}
+			return TRUE;
+		case CEN:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGENTITYDECL;
+				goto parseError;
+			}
+			return TRUE;
+		case CN:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNOTATIONDECL;
+				goto parseError;
+			}
+			return TRUE;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_LETTEREXPECTED;
 			goto parseError;
-		    }
 		}
-		return TRUE;
-	    case CA:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGATTLISTDECL;
-		    goto parseError;
-		}
-		return TRUE;
-	    case CEL:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGELEMENTDECL;
-		    goto parseError;
-		}
-		return TRUE;
-	    case CEN:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGENTITYDECL;
-		    goto parseError;
-		}
-		return TRUE;
-	    case CN:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNOTATIONDECL;
-		    goto parseError;
-		}
-		return TRUE;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_LETTEREXPECTED;
-		goto parseError;
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
   Parse a PEReference [69]
 */
-bool QXmlSimpleReader::parsePEReference( EntityRecognitionContext context )
+bool QXmlSimpleReader::parsePEReference(EntityRecognitionContext context)
 {
-    const signed char Init             = 0;
-    const signed char Next             = 1;
-    const signed char Name             = 2;
-    const signed char Done             = 3;
+	const signed char Init = 0;
+	const signed char Next = 1;
+	const signed char Name = 2;
+	const signed char Done = 3;
 
-    const signed char InpSemi          = 0; // ;
-    const signed char InpPer           = 1; // %
-    const signed char InpUnknown       = 2;
+	const signed char InpSemi = 0; // ;
+	const signed char InpPer = 1; // %
+	const signed char InpUnknown = 2;
 
-    // use some kind of state machine for parsing
-    static signed char table[3][3] = {
-     /*  InpSemi  InpPer  InpUnknown */
-	{ -1,      Next,   -1    }, // Init
-	{ -1,      -1,     Name  }, // Next
-	{ Done,    -1,     -1    }  // Name
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[3][3] = {
+		/*  InpSemi  InpPer  InpUnknown */
+		{-1, Next, -1}, // Init
+		{-1, -1, Name}, // Next
+		{Done, -1, -1} // Name
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( c == ';' ) {
-	    input = InpSemi;
-	} else if ( c == '%' ) {
-	    input = InpPer;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Next:
-		next();
-		break;
-	    case Name:
-		parseOk = parseName( TRUE );
-		break;
-	    case Done:
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Name:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
 		}
-		if ( d->parameterEntities.find( ref() ) == d->parameterEntities.end() ) {
-		    // ### skip it???
-		    if ( contentHnd ) {
-			if ( !contentHnd->skippedEntity( QString("%") + ref() ) ) {
-			    d->error = contentHnd->errorString();
-			    goto parseError;
-			}
-		    }
+		if (c == ';') {
+			input = InpSemi;
+		} else if (c == '%') {
+			input = InpPer;
 		} else {
-		    if ( context == InEntityValue ) {
-			// Included in literal
-			xmlRef = d->parameterEntities.find( ref() )
-			    .data().replace( QRegExp("\""), "&quot;" ).replace( QRegExp("'"), "&apos;" )
-			    + xmlRef;
-		    } else if ( context == InDTD ) {
-			// Included as PE
-			xmlRef = QString(" ") +
-			    d->parameterEntities.find( ref() ).data() +
-			    QString(" ") + xmlRef;
-		    }
+			input = InpUnknown;
 		}
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_LETTEREXPECTED;
-		goto parseError;
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Next:
+			next();
+			break;
+		case Name:
+			parseOk = parseName(TRUE);
+			break;
+		case Done:
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case Name:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			if (d->parameterEntities.find(ref()) ==
+			    d->parameterEntities.end()) {
+				// ### skip it???
+				if (contentHnd) {
+					if (!contentHnd->skippedEntity(
+						    QString("%") + ref())) {
+						d->error =
+							contentHnd
+								->errorString();
+						goto parseError;
+					}
+				}
+			} else {
+				if (context == InEntityValue) {
+					// Included in literal
+					xmlRef =
+						d->parameterEntities.find(ref())
+							.data()
+							.replace(QRegExp("\""),
+								 "&quot;")
+							.replace(QRegExp("'"),
+								 "&apos;") +
+						xmlRef;
+				} else if (context == InDTD) {
+					// Included as PE
+					xmlRef =
+						QString(" ") +
+						d->parameterEntities.find(ref())
+							.data() +
+						QString(" ") + xmlRef;
+				}
+			}
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_LETTEREXPECTED;
+			goto parseError;
+		}
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -3895,199 +4059,205 @@ parseError:
 */
 bool QXmlSimpleReader::parseAttlistDecl()
 {
-    const signed char Init             =  0;
-    const signed char Attlist          =  1; // parse the string "ATTLIST"
-    const signed char Ws               =  2; // whitespace read
-    const signed char Name             =  3; // parse name
-    const signed char Ws1              =  4; // whitespace read
-    const signed char Attdef           =  5; // parse the AttDef
-    const signed char Ws2              =  6; // whitespace read
-    const signed char Atttype          =  7; // parse the AttType
-    const signed char Ws3              =  8; // whitespace read
-    const signed char DDecH            =  9; // DefaultDecl with #
-    const signed char DefReq           = 10; // parse the string "REQUIRED"
-    const signed char DefImp           = 11; // parse the string "IMPLIED"
-    const signed char DefFix           = 12; // parse the string "FIXED"
-    const signed char Attval           = 13; // parse the AttValue
-    const signed char Ws4              = 14; // whitespace read
-    const signed char Done             = 15;
+	const signed char Init = 0;
+	const signed char Attlist = 1; // parse the string "ATTLIST"
+	const signed char Ws = 2; // whitespace read
+	const signed char Name = 3; // parse name
+	const signed char Ws1 = 4; // whitespace read
+	const signed char Attdef = 5; // parse the AttDef
+	const signed char Ws2 = 6; // whitespace read
+	const signed char Atttype = 7; // parse the AttType
+	const signed char Ws3 = 8; // whitespace read
+	const signed char DDecH = 9; // DefaultDecl with #
+	const signed char DefReq = 10; // parse the string "REQUIRED"
+	const signed char DefImp = 11; // parse the string "IMPLIED"
+	const signed char DefFix = 12; // parse the string "FIXED"
+	const signed char Attval = 13; // parse the AttValue
+	const signed char Ws4 = 14; // whitespace read
+	const signed char Done = 15;
 
-    const signed char InpWs            = 0; // white space
-    const signed char InpGt            = 1; // >
-    const signed char InpHash          = 2; // #
-    const signed char InpA             = 3; // A
-    const signed char InpI             = 4; // I
-    const signed char InpF             = 5; // F
-    const signed char InpR             = 6; // R
-    const signed char InpUnknown       = 7;
+	const signed char InpWs = 0; // white space
+	const signed char InpGt = 1; // >
+	const signed char InpHash = 2; // #
+	const signed char InpA = 3; // A
+	const signed char InpI = 4; // I
+	const signed char InpF = 5; // F
+	const signed char InpR = 6; // R
+	const signed char InpUnknown = 7;
 
-    // use some kind of state machine for parsing
-    static signed char table[15][8] = {
-     /*  InpWs    InpGt    InpHash  InpA      InpI     InpF     InpR     InpUnknown */
-	{ -1,      -1,      -1,      Attlist,  -1,      -1,      -1,      -1      }, // Init
-	{ Ws,      -1,      -1,      -1,       -1,      -1,      -1,      -1      }, // Attlist
-	{ -1,      -1,      -1,      Name,     Name,    Name,    Name,    Name    }, // Ws
-	{ Ws1,     Done,    Attdef,  Attdef,   Attdef,  Attdef,  Attdef,  Attdef  }, // Name
-	{ -1,      Done,    Attdef,  Attdef,   Attdef,  Attdef,  Attdef,  Attdef  }, // Ws1
-	{ Ws2,     -1,      -1,      -1,       -1,      -1,      -1,      -1      }, // Attdef
-	{ -1,      Atttype, Atttype, Atttype,  Atttype, Atttype, Atttype, Atttype }, // Ws2
-	{ Ws3,     -1,      -1,      -1,       -1,      -1,      -1,      -1      }, // Attype
-	{ -1,      Attval,  DDecH,   Attval,   Attval,  Attval,  Attval,  Attval  }, // Ws3
-	{ -1,      -1,      -1,      -1,       DefImp,  DefFix,  DefReq,  -1      }, // DDecH
-	{ Ws4,     Ws4,     -1,      -1,       -1,      -1,      -1,      -1      }, // DefReq
-	{ Ws4,     Ws4,     -1,      -1,       -1,      -1,      -1,      -1      }, // DefImp
-	{ Ws3,     -1,      -1,      -1,       -1,      -1,      -1,      -1      }, // DefFix
-	{ Ws4,     Ws4,     -1,      -1,       -1,      -1,      -1,      -1      }, // Attval
-	{ -1,      Done,    Attdef,  Attdef,   Attdef,  Attdef,  Attdef,  Attdef  }  // Ws4
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[15][8] = {
+		/*  InpWs    InpGt    InpHash  InpA      InpI     InpF     InpR
+		   InpUnknown */
+		{-1, -1, -1, Attlist, -1, -1, -1, -1}, // Init
+		{Ws, -1, -1, -1, -1, -1, -1, -1}, // Attlist
+		{-1, -1, -1, Name, Name, Name, Name, Name}, // Ws
+		{Ws1, Done, Attdef, Attdef, Attdef, Attdef, Attdef,
+		 Attdef}, // Name
+		{-1, Done, Attdef, Attdef, Attdef, Attdef, Attdef,
+		 Attdef}, // Ws1
+		{Ws2, -1, -1, -1, -1, -1, -1, -1}, // Attdef
+		{-1, Atttype, Atttype, Atttype, Atttype, Atttype, Atttype,
+		 Atttype}, // Ws2
+		{Ws3, -1, -1, -1, -1, -1, -1, -1}, // Attype
+		{-1, Attval, DDecH, Attval, Attval, Attval, Attval,
+		 Attval}, // Ws3
+		{-1, -1, -1, -1, DefImp, DefFix, DefReq, -1}, // DDecH
+		{Ws4, Ws4, -1, -1, -1, -1, -1, -1}, // DefReq
+		{Ws4, Ws4, -1, -1, -1, -1, -1, -1}, // DefImp
+		{Ws3, -1, -1, -1, -1, -1, -1, -1}, // DefFix
+		{Ws4, Ws4, -1, -1, -1, -1, -1, -1}, // Attval
+		{-1, Done, Attdef, Attdef, Attdef, Attdef, Attdef,
+		 Attdef} // Ws4
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( is_S(c) ) {
-	    input = InpWs;
-	} else if ( c == '>' ) {
-	    input = InpGt;
-	} else if ( c == '#' ) {
-	    input = InpHash;
-	} else if ( c == 'A' ) {
-	    input = InpA;
-	} else if ( c == 'I' ) {
-	    input = InpI;
-	} else if ( c == 'F' ) {
-	    input = InpF;
-	} else if ( c == 'R' ) {
-	    input = InpR;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Attlist:
-		parseOk = parseString( "ATTLIST" );
-		break;
-	    case Ws:
-	    case Ws1:
-	    case Ws2:
-	    case Ws3:
-		eat_ws();
-		break;
-	    case Name:
-		parseOk = parseName();
-		break;
-	    case Attdef:
-		parseOk = parseName();
-		break;
-	    case Atttype:
-		parseOk = parseAttType();
-		break;
-	    case DDecH:
-		next();
-		break;
-	    case DefReq:
-		parseOk = parseString( "REQUIRED" );
-		break;
-	    case DefImp:
-		parseOk = parseString( "IMPLIED" );
-		break;
-	    case DefFix:
-		parseOk = parseString( "FIXED" );
-		break;
-	    case Attval:
-		parseOk = parseAttValue();
-		break;
-	    case Ws4:
-		if ( declHnd ) {
-		    // TODO: not all values are computed yet...
-		    if ( !declHnd->attributeDecl( d->attDeclEName, d->attDeclAName, "", "", "" ) ) {
-			d->error = declHnd->errorString();
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
 			goto parseError;
-		    }
 		}
-		eat_ws();
-		break;
-	    case Done:
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Attlist:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
+		if (is_S(c)) {
+			input = InpWs;
+		} else if (c == '>') {
+			input = InpGt;
+		} else if (c == '#') {
+			input = InpHash;
+		} else if (c == 'A') {
+			input = InpA;
+		} else if (c == 'I') {
+			input = InpI;
+		} else if (c == 'F') {
+			input = InpF;
+		} else if (c == 'R') {
+			input = InpR;
+		} else {
+			input = InpUnknown;
 		}
-		break;
-	    case Name:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Attlist:
+			parseOk = parseString("ATTLIST");
+			break;
+		case Ws:
+		case Ws1:
+		case Ws2:
+		case Ws3:
+			eat_ws();
+			break;
+		case Name:
+			parseOk = parseName();
+			break;
+		case Attdef:
+			parseOk = parseName();
+			break;
+		case Atttype:
+			parseOk = parseAttType();
+			break;
+		case DDecH:
+			next();
+			break;
+		case DefReq:
+			parseOk = parseString("REQUIRED");
+			break;
+		case DefImp:
+			parseOk = parseString("IMPLIED");
+			break;
+		case DefFix:
+			parseOk = parseString("FIXED");
+			break;
+		case Attval:
+			parseOk = parseAttValue();
+			break;
+		case Ws4:
+			if (declHnd) {
+				// TODO: not all values are computed yet...
+				if (!declHnd->attributeDecl(d->attDeclEName,
+							    d->attDeclAName, "",
+							    "", "")) {
+					d->error = declHnd->errorString();
+					goto parseError;
+				}
+			}
+			eat_ws();
+			break;
+		case Done:
+			next();
+			break;
 		}
-		d->attDeclEName = name();
-		break;
-	    case Attdef:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
+		// no input is read after this
+		switch (state) {
+		case Attlist:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case Name:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			d->attDeclEName = name();
+			break;
+		case Attdef:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			d->attDeclAName = name();
+			break;
+		case Atttype:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGATTTYPE;
+				goto parseError;
+			}
+			break;
+		case DefReq:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case DefImp:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case DefFix:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case Attval:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGATTVALUE;
+				goto parseError;
+			}
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_LETTEREXPECTED;
+			goto parseError;
 		}
-		d->attDeclAName = name();
-		break;
-	    case Atttype:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGATTTYPE;
-		    goto parseError;
-		}
-		break;
-	    case DefReq:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case DefImp:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case DefFix:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case Attval:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGATTVALUE;
-		    goto parseError;
-		}
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_LETTEREXPECTED;
-		goto parseError;
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -4095,243 +4265,260 @@ parseError:
 */
 bool QXmlSimpleReader::parseAttType()
 {
-    const signed char Init             =  0;
-    const signed char ST               =  1; // StringType
-    const signed char TTI              =  2; // TokenizedType starting with 'I'
-    const signed char TTI2             =  3; // TokenizedType helpstate
-    const signed char TTI3             =  4; // TokenizedType helpstate
-    const signed char TTE              =  5; // TokenizedType starting with 'E'
-    const signed char TTEY             =  6; // TokenizedType starting with 'ENTITY'
-    const signed char TTEI             =  7; // TokenizedType starting with 'ENTITI'
-    const signed char N                =  8; // N read (TokenizedType or Notation)
-    const signed char TTNM             =  9; // TokenizedType starting with 'NM'
-    const signed char TTNM2            = 10; // TokenizedType helpstate
-    const signed char NO               = 11; // Notation
-    const signed char NO2              = 12; // Notation helpstate
-    const signed char NO3              = 13; // Notation helpstate
-    const signed char NOName           = 14; // Notation, read name
-    const signed char NO4              = 15; // Notation helpstate
-    const signed char EN               = 16; // Enumeration
-    const signed char ENNmt            = 17; // Enumeration, read Nmtoken
-    const signed char EN2              = 18; // Enumeration helpstate
-    const signed char ADone            = 19; // almost done (make next and accept)
-    const signed char Done             = 20;
+	const signed char Init = 0;
+	const signed char ST = 1; // StringType
+	const signed char TTI = 2; // TokenizedType starting with 'I'
+	const signed char TTI2 = 3; // TokenizedType helpstate
+	const signed char TTI3 = 4; // TokenizedType helpstate
+	const signed char TTE = 5; // TokenizedType starting with 'E'
+	const signed char TTEY = 6; // TokenizedType starting with 'ENTITY'
+	const signed char TTEI = 7; // TokenizedType starting with 'ENTITI'
+	const signed char N = 8; // N read (TokenizedType or Notation)
+	const signed char TTNM = 9; // TokenizedType starting with 'NM'
+	const signed char TTNM2 = 10; // TokenizedType helpstate
+	const signed char NO = 11; // Notation
+	const signed char NO2 = 12; // Notation helpstate
+	const signed char NO3 = 13; // Notation helpstate
+	const signed char NOName = 14; // Notation, read name
+	const signed char NO4 = 15; // Notation helpstate
+	const signed char EN = 16; // Enumeration
+	const signed char ENNmt = 17; // Enumeration, read Nmtoken
+	const signed char EN2 = 18; // Enumeration helpstate
+	const signed char ADone = 19; // almost done (make next and accept)
+	const signed char Done = 20;
 
-    const signed char InpWs            =  0; // whitespace
-    const signed char InpOp            =  1; // (
-    const signed char InpCp            =  2; // )
-    const signed char InpPipe          =  3; // |
-    const signed char InpC             =  4; // C
-    const signed char InpE             =  5; // E
-    const signed char InpI             =  6; // I
-    const signed char InpM             =  7; // M
-    const signed char InpN             =  8; // N
-    const signed char InpO             =  9; // O
-    const signed char InpR             = 10; // R
-    const signed char InpS             = 11; // S
-    const signed char InpY             = 12; // Y
-    const signed char InpUnknown       = 13;
+	const signed char InpWs = 0; // whitespace
+	const signed char InpOp = 1; // (
+	const signed char InpCp = 2; // )
+	const signed char InpPipe = 3; // |
+	const signed char InpC = 4; // C
+	const signed char InpE = 5; // E
+	const signed char InpI = 6; // I
+	const signed char InpM = 7; // M
+	const signed char InpN = 8; // N
+	const signed char InpO = 9; // O
+	const signed char InpR = 10; // R
+	const signed char InpS = 11; // S
+	const signed char InpY = 12; // Y
+	const signed char InpUnknown = 13;
 
-    // use some kind of state machine for parsing
-    static signed char table[19][14] = {
-     /*  InpWs    InpOp    InpCp    InpPipe  InpC     InpE     InpI     InpM     InpN     InpO     InpR     InpS     InpY     InpUnknown */
-	{ -1,      EN,      -1,      -1,      ST,      TTE,     TTI,     -1,      N,       -1,      -1,      -1,      -1,      -1     }, // Init
-	{ Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done   }, // ST
-	{ Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    TTI2,    Done,    Done,    Done   }, // TTI
-	{ Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    TTI3,    Done,    Done   }, // TTI2
-	{ Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done   }, // TTI3
-	{ -1,      -1,      -1,      -1,      -1,      -1,      TTEI,    -1,      -1,      -1,      -1,      -1,      TTEY,    -1     }, // TTE
-	{ Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done   }, // TTEY
-	{ Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done   }, // TTEI
-	{ -1,      -1,      -1,      -1,      -1,      -1,      -1,      TTNM,    -1,      NO,      -1,      -1,      -1,      -1     }, // N
-	{ Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    TTNM2,   Done,    Done   }, // TTNM
-	{ Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done,    Done   }, // TTNM2
-	{ NO2,     -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1     }, // NO
-	{ -1,      NO3,     -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1     }, // NO2
-	{ NOName,  NOName,  NOName,  NOName,  NOName,  NOName,  NOName,  NOName,  NOName,  NOName,  NOName,  NOName,  NOName,  NOName }, // NO3
-	{ NO4,     -1,      ADone,   NO3,     -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1     }, // NOName
-	{ -1,      -1,      ADone,   NO3,     -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1     }, // NO4
-	{ -1,      -1,      ENNmt,   -1,      ENNmt,   ENNmt,   ENNmt,   ENNmt,   ENNmt,   ENNmt,   ENNmt,   ENNmt,   ENNmt,   ENNmt  }, // EN
-	{ EN2,     -1,      ADone,   EN,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1     }, // ENNmt
-	{ -1,      -1,      ADone,   EN,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1     }  // EN2
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[19][14] = {
+		/*  InpWs    InpOp    InpCp    InpPipe  InpC     InpE     InpI
+		   InpM     InpN     InpO     InpR     InpS     InpY InpUnknown
+		 */
+		{-1, EN, -1, -1, ST, TTE, TTI, -1, N, -1, -1, -1, -1,
+		 -1}, // Init
+		{Done, Done, Done, Done, Done, Done, Done, Done, Done, Done,
+		 Done, Done, Done, Done}, // ST
+		{Done, Done, Done, Done, Done, Done, Done, Done, Done, Done,
+		 TTI2, Done, Done, Done}, // TTI
+		{Done, Done, Done, Done, Done, Done, Done, Done, Done, Done,
+		 Done, TTI3, Done, Done}, // TTI2
+		{Done, Done, Done, Done, Done, Done, Done, Done, Done, Done,
+		 Done, Done, Done, Done}, // TTI3
+		{-1, -1, -1, -1, -1, -1, TTEI, -1, -1, -1, -1, -1, TTEY,
+		 -1}, // TTE
+		{Done, Done, Done, Done, Done, Done, Done, Done, Done, Done,
+		 Done, Done, Done, Done}, // TTEY
+		{Done, Done, Done, Done, Done, Done, Done, Done, Done, Done,
+		 Done, Done, Done, Done}, // TTEI
+		{-1, -1, -1, -1, -1, -1, -1, TTNM, -1, NO, -1, -1, -1, -1}, // N
+		{Done, Done, Done, Done, Done, Done, Done, Done, Done, Done,
+		 Done, TTNM2, Done, Done}, // TTNM
+		{Done, Done, Done, Done, Done, Done, Done, Done, Done, Done,
+		 Done, Done, Done, Done}, // TTNM2
+		{NO2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // NO
+		{-1, NO3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		 -1}, // NO2
+		{NOName, NOName, NOName, NOName, NOName, NOName, NOName, NOName,
+		 NOName, NOName, NOName, NOName, NOName, NOName}, // NO3
+		{NO4, -1, ADone, NO3, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		 -1}, // NOName
+		{-1, -1, ADone, NO3, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		 -1}, // NO4
+		{-1, -1, ENNmt, -1, ENNmt, ENNmt, ENNmt, ENNmt, ENNmt, ENNmt,
+		 ENNmt, ENNmt, ENNmt, ENNmt}, // EN
+		{EN2, -1, ADone, EN, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		 -1}, // ENNmt
+		{-1, -1, ADone, EN, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		 -1} // EN2
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
+		}
+		if (is_S(c)) {
+			input = InpWs;
+		} else if (c == '(') {
+			input = InpOp;
+		} else if (c == ')') {
+			input = InpCp;
+		} else if (c == '|') {
+			input = InpPipe;
+		} else if (c == 'C') {
+			input = InpC;
+		} else if (c == 'E') {
+			input = InpE;
+		} else if (c == 'I') {
+			input = InpI;
+		} else if (c == 'M') {
+			input = InpM;
+		} else if (c == 'N') {
+			input = InpN;
+		} else if (c == 'O') {
+			input = InpO;
+		} else if (c == 'R') {
+			input = InpR;
+		} else if (c == 'S') {
+			input = InpS;
+		} else if (c == 'Y') {
+			input = InpY;
+		} else {
+			input = InpUnknown;
+		}
 
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case ST:
+			parseOk = parseString("CDATA");
+			break;
+		case TTI:
+			parseOk = parseString("ID");
+			break;
+		case TTI2:
+			parseOk = parseString("REF");
+			break;
+		case TTI3:
+			next(); // S
+			break;
+		case TTE:
+			parseOk = parseString("ENTIT");
+			break;
+		case TTEY:
+			next(); // Y
+			break;
+		case TTEI:
+			parseOk = parseString("IES");
+			break;
+		case N:
+			next(); // N
+			break;
+		case TTNM:
+			parseOk = parseString("MTOKEN");
+			break;
+		case TTNM2:
+			next(); // S
+			break;
+		case NO:
+			parseOk = parseString("OTATION");
+			break;
+		case NO2:
+			eat_ws();
+			break;
+		case NO3:
+			next_eat_ws();
+			break;
+		case NOName:
+			parseOk = parseName();
+			break;
+		case NO4:
+			eat_ws();
+			break;
+		case EN:
+			next_eat_ws();
+			break;
+		case ENNmt:
+			parseOk = parseNmtoken();
+			break;
+		case EN2:
+			eat_ws();
+			break;
+		case ADone:
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case ST:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case TTI:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case TTI2:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case TTE:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case TTEI:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case TTNM:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case NO:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case NOName:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			break;
+		case ENNmt:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNMTOKEN;
+				goto parseError;
+			}
+			break;
+		case ADone:
+			return TRUE;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_LETTEREXPECTED;
+			goto parseError;
+		}
 	}
-	if        ( is_S(c) ) {
-	    input = InpWs;
-	} else if ( c == '(' ) {
-	    input = InpOp;
-	} else if ( c == ')' ) {
-	    input = InpCp;
-	} else if ( c == '|' ) {
-	    input = InpPipe;
-	} else if ( c == 'C' ) {
-	    input = InpC;
-	} else if ( c == 'E' ) {
-	    input = InpE;
-	} else if ( c == 'I' ) {
-	    input = InpI;
-	} else if ( c == 'M' ) {
-	    input = InpM;
-	} else if ( c == 'N' ) {
-	    input = InpN;
-	} else if ( c == 'O' ) {
-	    input = InpO;
-	} else if ( c == 'R' ) {
-	    input = InpR;
-	} else if ( c == 'S' ) {
-	    input = InpS;
-	} else if ( c == 'Y' ) {
-	    input = InpY;
-	} else {
-	    input = InpUnknown;
-	}
 
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case ST:
-		parseOk = parseString( "CDATA" );
-		break;
-	    case TTI:
-		parseOk = parseString( "ID" );
-		break;
-	    case TTI2:
-		parseOk = parseString( "REF" );
-		break;
-	    case TTI3:
-		next(); // S
-		break;
-	    case TTE:
-		parseOk = parseString( "ENTIT" );
-		break;
-	    case TTEY:
-		next(); // Y
-		break;
-	    case TTEI:
-		parseOk = parseString( "IES" );
-		break;
-	    case N:
-		next(); // N
-		break;
-	    case TTNM:
-		parseOk = parseString( "MTOKEN" );
-		break;
-	    case TTNM2:
-		next(); // S
-		break;
-	    case NO:
-		parseOk = parseString( "OTATION" );
-		break;
-	    case NO2:
-		eat_ws();
-		break;
-	    case NO3:
-		next_eat_ws();
-		break;
-	    case NOName:
-		parseOk = parseName();
-		break;
-	    case NO4:
-		eat_ws();
-		break;
-	    case EN:
-		next_eat_ws();
-		break;
-	    case ENNmt:
-		parseOk = parseNmtoken();
-		break;
-	    case EN2:
-		eat_ws();
-		break;
-	    case ADone:
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case ST:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case TTI:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case TTI2:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case TTE:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case TTEI:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case TTNM:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case NO:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case NOName:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
-		}
-		break;
-	    case ENNmt:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNMTOKEN;
-		    goto parseError;
-		}
-		break;
-	    case ADone:
-		return TRUE;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_LETTEREXPECTED;
-		goto parseError;
-	}
-
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -4345,104 +4532,102 @@ parseError:
 */
 bool QXmlSimpleReader::parseAttValue()
 {
-    bool tmp;
+	bool tmp;
 
-    const signed char Init             = 0;
-    const signed char Dq               = 1; // double quotes were read
-    const signed char DqRef            = 2; // read references in double quotes
-    const signed char DqC              = 3; // signed character read in double quotes
-    const signed char Sq               = 4; // single quotes were read
-    const signed char SqRef            = 5; // read references in single quotes
-    const signed char SqC              = 6; // signed character read in single quotes
-    const signed char Done             = 7;
+	const signed char Init = 0;
+	const signed char Dq = 1; // double quotes were read
+	const signed char DqRef = 2; // read references in double quotes
+	const signed char DqC = 3; // signed character read in double quotes
+	const signed char Sq = 4; // single quotes were read
+	const signed char SqRef = 5; // read references in single quotes
+	const signed char SqC = 6; // signed character read in single quotes
+	const signed char Done = 7;
 
-    const signed char InpDq            = 0; // "
-    const signed char InpSq            = 1; // '
-    const signed char InpAmp           = 2; // &
-    const signed char InpLt            = 3; // <
-    const signed char InpUnknown       = 4;
+	const signed char InpDq = 0; // "
+	const signed char InpSq = 1; // '
+	const signed char InpAmp = 2; // &
+	const signed char InpLt = 3; // <
+	const signed char InpUnknown = 4;
 
-    // use some kind of state machine for parsing
-    static signed char table[7][5] = {
-     /*  InpDq  InpSq  InpAmp  InpLt InpUnknown */
-	{ Dq,    Sq,    -1,     -1,   -1    }, // Init
-	{ Done,  DqC,   DqRef,  -1,   DqC   }, // Dq
-	{ Done,  DqC,   DqRef,  -1,   DqC   }, // DqRef
-	{ Done,  DqC,   DqRef,  -1,   DqC   }, // DqC
-	{ SqC,   Done,  SqRef,  -1,   SqC   }, // Sq
-	{ SqC,   Done,  SqRef,  -1,   SqC   }, // SqRef
-	{ SqC,   Done,  SqRef,  -1,   SqC   }  // SqRef
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[7][5] = {
+		/*  InpDq  InpSq  InpAmp  InpLt InpUnknown */
+		{Dq, Sq, -1, -1, -1}, // Init
+		{Done, DqC, DqRef, -1, DqC}, // Dq
+		{Done, DqC, DqRef, -1, DqC}, // DqRef
+		{Done, DqC, DqRef, -1, DqC}, // DqC
+		{SqC, Done, SqRef, -1, SqC}, // Sq
+		{SqC, Done, SqRef, -1, SqC}, // SqRef
+		{SqC, Done, SqRef, -1, SqC} // SqRef
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( c == '"' ) {
-	    input = InpDq;
-	} else if ( c == '\'' ) {
-	    input = InpSq;
-	} else if ( c == '&' ) {
-	    input = InpAmp;
-	} else if ( c == '<' ) {
-	    input = InpLt;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Dq:
-	    case Sq:
-		stringClear();
-		next();
-		break;
-	    case DqRef:
-	    case SqRef:
-		parseOk = parseReference( tmp, InAttributeValue );
-		break;
-	    case DqC:
-	    case SqC:
-		stringAddC();
-		next();
-		break;
-	    case Done:
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case DqRef:
-	    case SqRef:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGREFERENCE;
-		    goto parseError;
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
 		}
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_UNEXPECTEDCHARACTER;
-		goto parseError;
+		if (c == '"') {
+			input = InpDq;
+		} else if (c == '\'') {
+			input = InpSq;
+		} else if (c == '&') {
+			input = InpAmp;
+		} else if (c == '<') {
+			input = InpLt;
+		} else {
+			input = InpUnknown;
+		}
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Dq:
+		case Sq:
+			stringClear();
+			next();
+			break;
+		case DqRef:
+		case SqRef:
+			parseOk = parseReference(tmp, InAttributeValue);
+			break;
+		case DqC:
+		case SqC:
+			stringAddC();
+			next();
+			break;
+		case Done:
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case DqRef:
+		case SqRef:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGREFERENCE;
+				goto parseError;
+			}
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_UNEXPECTEDCHARACTER;
+			goto parseError;
+		}
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -4453,219 +4638,228 @@ parseError:
 */
 bool QXmlSimpleReader::parseElementDecl()
 {
-    const signed char Init             =  0;
-    const signed char Elem             =  1; // parse the beginning string
-    const signed char Ws1              =  2; // whitespace required
-    const signed char Nam              =  3; // parse Name
-    const signed char Ws2              =  4; // whitespace required
-    const signed char Empty            =  5; // read EMPTY
-    const signed char Any              =  6; // read ANY
-    const signed char Cont             =  7; // read contentspec (except ANY or EMPTY)
-    const signed char Mix              =  8; // read Mixed
-    const signed char Mix2             =  9; //
-    const signed char Mix3             = 10; //
-    const signed char MixN1            = 11; //
-    const signed char MixN2            = 12; //
-    const signed char MixN3            = 13; //
-    const signed char MixN4            = 14; //
-    const signed char Cp               = 15; // parse cp
-    const signed char Cp2              = 16; //
-    const signed char WsD              = 17; // eat whitespace before Done
-    const signed char Done             = 18;
+	const signed char Init = 0;
+	const signed char Elem = 1; // parse the beginning string
+	const signed char Ws1 = 2; // whitespace required
+	const signed char Nam = 3; // parse Name
+	const signed char Ws2 = 4; // whitespace required
+	const signed char Empty = 5; // read EMPTY
+	const signed char Any = 6; // read ANY
+	const signed char Cont = 7; // read contentspec (except ANY or EMPTY)
+	const signed char Mix = 8; // read Mixed
+	const signed char Mix2 = 9; //
+	const signed char Mix3 = 10; //
+	const signed char MixN1 = 11; //
+	const signed char MixN2 = 12; //
+	const signed char MixN3 = 13; //
+	const signed char MixN4 = 14; //
+	const signed char Cp = 15; // parse cp
+	const signed char Cp2 = 16; //
+	const signed char WsD = 17; // eat whitespace before Done
+	const signed char Done = 18;
 
-    const signed char InpWs            =  0;
-    const signed char InpGt            =  1; // >
-    const signed char InpPipe          =  2; // |
-    const signed char InpOp            =  3; // (
-    const signed char InpCp            =  4; // )
-    const signed char InpHash          =  5; // #
-    const signed char InpQm            =  6; // ?
-    const signed char InpAst           =  7; // *
-    const signed char InpPlus          =  8; // +
-    const signed char InpA             =  9; // A
-    const signed char InpE             = 10; // E
-    const signed char InpL             = 11; // L
-    const signed char InpUnknown       = 12;
+	const signed char InpWs = 0;
+	const signed char InpGt = 1; // >
+	const signed char InpPipe = 2; // |
+	const signed char InpOp = 3; // (
+	const signed char InpCp = 4; // )
+	const signed char InpHash = 5; // #
+	const signed char InpQm = 6; // ?
+	const signed char InpAst = 7; // *
+	const signed char InpPlus = 8; // +
+	const signed char InpA = 9; // A
+	const signed char InpE = 10; // E
+	const signed char InpL = 11; // L
+	const signed char InpUnknown = 12;
 
-    // use some kind of state machine for parsing
-    static signed char table[18][13] = {
-     /*  InpWs   InpGt  InpPipe  InpOp  InpCp   InpHash  InpQm  InpAst  InpPlus  InpA    InpE    InpL    InpUnknown */
-	{ -1,     -1,    -1,      -1,    -1,     -1,      -1,    -1,     -1,      -1,     -1,     Elem,   -1     }, // Init
-	{ Ws1,    -1,    -1,      -1,    -1,     -1,      -1,    -1,     -1,      -1,     -1,     -1,     -1     }, // Elem
-	{ -1,     -1,    -1,      -1,    -1,     -1,      -1,    -1,     -1,      Nam,    Nam,    Nam,    Nam    }, // Ws1
-	{ Ws2,    -1,    -1,      -1,    -1,     -1,      -1,    -1,     -1,      -1,     -1,     -1,     -1     }, // Nam
-	{ -1,     -1,    -1,      Cont,  -1,     -1,      -1,    -1,     -1,      Any,    Empty,  -1,     -1     }, // Ws2
-	{ WsD,    Done,  -1,      -1,    -1,     -1,      -1,    -1,     -1,      -1,     -1,     -1,     -1     }, // Empty
-	{ WsD,    Done,  -1,      -1,    -1,     -1,      -1,    -1,     -1,      -1,     -1,     -1,     -1     }, // Any
-	{ -1,     -1,    -1,      Cp,    Cp,     Mix,     -1,    -1,     -1,      Cp,     Cp,     Cp,     Cp     }, // Cont
-	{ Mix2,   -1,    MixN1,   -1,    Mix3,   -1,      -1,    -1,     -1,      -1,     -1,     -1,     -1     }, // Mix
-	{ -1,     -1,    MixN1,   -1,    Mix3,   -1,      -1,    -1,     -1,      -1,     -1,     -1,     -1     }, // Mix2
-	{ WsD,    Done,  -1,      -1,    -1,     -1,      -1,    WsD,    -1,      -1,     -1,     -1,     -1     }, // Mix3
-	{ -1,     -1,    -1,      -1,    -1,     -1,      -1,    -1,     -1,      MixN2,  MixN2,  MixN2,  MixN2  }, // MixN1
-	{ MixN3,  -1,    MixN1,   -1,    MixN4,  -1,      -1,    -1,     -1,      -1,     -1,     -1,     -1     }, // MixN2
-	{ -1,     -1,    MixN1,   -1,    MixN4,  -1,      -1,    -1,     -1,      -1,     -1,     -1,     -1     }, // MixN3
-	{ -1,     -1,    -1,      -1,    -1,     -1,      -1,    WsD,    -1,      -1,     -1,     -1,     -1     }, // MixN4
-	{ WsD,    Done,  -1,      -1,    -1,     -1,      Cp2,   Cp2,    Cp2,     -1,     -1,     -1,     -1     }, // Cp
-	{ WsD,    Done,  -1,      -1,    -1,     -1,      -1,    -1,     -1,      -1,     -1,     -1,     -1     }, // Cp2
-	{ -1,     Done,  -1,      -1,    -1,     -1,      -1,    -1,     -1,      -1,     -1,     -1,     -1     }  // WsD
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[18][13] = {
+		/*  InpWs   InpGt  InpPipe  InpOp  InpCp   InpHash  InpQm InpAst
+		   InpPlus  InpA    InpE    InpL    InpUnknown */
+		{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, Elem, -1}, // Init
+		{Ws1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // Elem
+		{-1, -1, -1, -1, -1, -1, -1, -1, -1, Nam, Nam, Nam, Nam}, // Ws1
+		{Ws2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // Nam
+		{-1, -1, -1, Cont, -1, -1, -1, -1, -1, Any, Empty, -1,
+		 -1}, // Ws2
+		{WsD, Done, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		 -1}, // Empty
+		{WsD, Done, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // Any
+		{-1, -1, -1, Cp, Cp, Mix, -1, -1, -1, Cp, Cp, Cp, Cp}, // Cont
+		{Mix2, -1, MixN1, -1, Mix3, -1, -1, -1, -1, -1, -1, -1,
+		 -1}, // Mix
+		{-1, -1, MixN1, -1, Mix3, -1, -1, -1, -1, -1, -1, -1,
+		 -1}, // Mix2
+		{WsD, Done, -1, -1, -1, -1, -1, WsD, -1, -1, -1, -1,
+		 -1}, // Mix3
+		{-1, -1, -1, -1, -1, -1, -1, -1, -1, MixN2, MixN2, MixN2,
+		 MixN2}, // MixN1
+		{MixN3, -1, MixN1, -1, MixN4, -1, -1, -1, -1, -1, -1, -1,
+		 -1}, // MixN2
+		{-1, -1, MixN1, -1, MixN4, -1, -1, -1, -1, -1, -1, -1,
+		 -1}, // MixN3
+		{-1, -1, -1, -1, -1, -1, -1, WsD, -1, -1, -1, -1, -1}, // MixN4
+		{WsD, Done, -1, -1, -1, -1, Cp2, Cp2, Cp2, -1, -1, -1,
+		 -1}, // Cp
+		{WsD, Done, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // Cp2
+		{-1, Done, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1} // WsD
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
+	for (;;) {
+		// read input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
+		}
+		if (is_S(c)) {
+			input = InpWs;
+		} else if (c == '>') {
+			input = InpGt;
+		} else if (c == '|') {
+			input = InpPipe;
+		} else if (c == '(') {
+			input = InpOp;
+		} else if (c == ')') {
+			input = InpCp;
+		} else if (c == '#') {
+			input = InpHash;
+		} else if (c == '?') {
+			input = InpQm;
+		} else if (c == '*') {
+			input = InpAst;
+		} else if (c == '+') {
+			input = InpPlus;
+		} else if (c == 'A') {
+			input = InpA;
+		} else if (c == 'E') {
+			input = InpE;
+		} else if (c == 'L') {
+			input = InpL;
+		} else {
+			input = InpUnknown;
+		}
+		// get new state
+		// qDebug( "%d -%d(%c)-> %d", state, input, c.latin1(),
+		// table[state][input] );
+		state = table[state][input];
 
-	// read input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
+		// in some cases do special actions depending on state
+		switch (state) {
+		case Elem:
+			parseOk = parseString("LEMENT");
+			break;
+		case Ws1:
+			eat_ws();
+			break;
+		case Nam:
+			parseOk = parseName();
+			break;
+		case Ws2:
+			eat_ws();
+			break;
+		case Empty:
+			parseOk = parseString("EMPTY");
+			break;
+		case Any:
+			parseOk = parseString("ANY");
+			break;
+		case Cont:
+			next_eat_ws();
+			break;
+		case Mix:
+			parseOk = parseString("#PCDATA");
+			break;
+		case Mix2:
+			eat_ws();
+			break;
+		case Mix3:
+			next();
+			break;
+		case MixN1:
+			next_eat_ws();
+			break;
+		case MixN2:
+			parseOk = parseName();
+			break;
+		case MixN3:
+			eat_ws();
+			break;
+		case MixN4:
+			next();
+			break;
+		case Cp:
+			parseOk = parseChoiceSeq();
+			break;
+		case Cp2:
+			next();
+			break;
+		case WsD:
+			next_eat_ws();
+			break;
+		case Done:
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case Elem:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case Nam:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			break;
+		case Empty:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case Any:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case Mix:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case MixN2:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			break;
+		case Cp:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGCHOICE;
+				goto parseError;
+			}
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			d->error = XMLERR_UNEXPECTEDCHARACTER;
+			goto parseError;
+		}
 	}
-	if        ( is_S(c) ) {
-	    input = InpWs;
-	} else if ( c == '>' ) {
-	    input = InpGt;
-	} else if ( c == '|' ) {
-	    input = InpPipe;
-	} else if ( c == '(' ) {
-	    input = InpOp;
-	} else if ( c == ')' ) {
-	    input = InpCp;
-	} else if ( c == '#' ) {
-	    input = InpHash;
-	} else if ( c == '?' ) {
-	    input = InpQm;
-	} else if ( c == '*' ) {
-	    input = InpAst;
-	} else if ( c == '+' ) {
-	    input = InpPlus;
-	} else if ( c == 'A' ) {
-	    input = InpA;
-	} else if ( c == 'E' ) {
-	    input = InpE;
-	} else if ( c == 'L' ) {
-	    input = InpL;
-	} else {
-	    input = InpUnknown;
-	}
-	// get new state
-//qDebug( "%d -%d(%c)-> %d", state, input, c.latin1(), table[state][input] );
-	state = table[state][input];
 
-	// in some cases do special actions depending on state
-	switch ( state ) {
-	    case Elem:
-		parseOk = parseString( "LEMENT" );
-		break;
-	    case Ws1:
-		eat_ws();
-		break;
-	    case Nam:
-		parseOk = parseName();
-		break;
-	    case Ws2:
-		eat_ws();
-		break;
-	    case Empty:
-		parseOk = parseString( "EMPTY" );
-		break;
-	    case Any:
-		parseOk = parseString( "ANY" );
-		break;
-	    case Cont:
-		next_eat_ws();
-		break;
-	    case Mix:
-		parseOk = parseString( "#PCDATA" );
-		break;
-	    case Mix2:
-		eat_ws();
-		break;
-	    case Mix3:
-		next();
-		break;
-	    case MixN1:
-		next_eat_ws();
-		break;
-	    case MixN2:
-		parseOk = parseName();
-		break;
-	    case MixN3:
-		eat_ws();
-		break;
-	    case MixN4:
-		next();
-		break;
-	    case Cp:
-		parseOk = parseChoiceSeq();
-		break;
-	    case Cp2:
-		next();
-		break;
-	    case WsD:
-		next_eat_ws();
-		break;
-	    case Done:
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Elem:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case Nam:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
-		}
-		break;
-	    case Empty:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case Any:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case Mix:
-		if( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case MixN2:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
-		}
-		break;
-	    case Cp:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGCHOICE;
-		    goto parseError;
-		}
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		d->error = XMLERR_UNEXPECTEDCHARACTER;
-		goto parseError;
-	}
-
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -4676,121 +4870,120 @@ parseError:
 */
 bool QXmlSimpleReader::parseNotationDecl()
 {
-    const signed char Init             = 0;
-    const signed char Not              = 1; // read NOTATION
-    const signed char Ws1              = 2; // eat whitespaces
-    const signed char Nam              = 3; // read Name
-    const signed char Ws2              = 4; // eat whitespaces
-    const signed char ExtID            = 5; // parse ExternalID
-    const signed char Ws3              = 6; // eat whitespaces
-    const signed char Done             = 7;
+	const signed char Init = 0;
+	const signed char Not = 1; // read NOTATION
+	const signed char Ws1 = 2; // eat whitespaces
+	const signed char Nam = 3; // read Name
+	const signed char Ws2 = 4; // eat whitespaces
+	const signed char ExtID = 5; // parse ExternalID
+	const signed char Ws3 = 6; // eat whitespaces
+	const signed char Done = 7;
 
-    const signed char InpWs            = 0;
-    const signed char InpGt            = 1; // >
-    const signed char InpN             = 2; // N
-    const signed char InpUnknown       = 3;
+	const signed char InpWs = 0;
+	const signed char InpGt = 1; // >
+	const signed char InpN = 2; // N
+	const signed char InpUnknown = 3;
 
-    // use some kind of state machine for parsing
-    static signed char table[7][4] = {
-     /*  InpWs   InpGt  InpN    InpUnknown */
-	{ -1,     -1,    Not,    -1     }, // Init
-	{ Ws1,    -1,    -1,     -1     }, // Not
-	{ -1,     -1,    Nam,    Nam    }, // Ws1
-	{ Ws2,    Done,  -1,     -1     }, // Nam
-	{ -1,     Done,  ExtID,  ExtID  }, // Ws2
-	{ Ws3,    Done,  -1,     -1     }, // ExtID
-	{ -1,     Done,  -1,     -1     }  // Ws3
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[7][4] = {
+		/*  InpWs   InpGt  InpN    InpUnknown */
+		{-1, -1, Not, -1}, // Init
+		{Ws1, -1, -1, -1}, // Not
+		{-1, -1, Nam, Nam}, // Ws1
+		{Ws2, Done, -1, -1}, // Nam
+		{-1, Done, ExtID, ExtID}, // Ws2
+		{Ws3, Done, -1, -1}, // ExtID
+		{-1, Done, -1, -1} // Ws3
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( is_S(c) ) {
-	    input = InpWs;
-	} else if ( c == '>' ) {
-	    input = InpGt;
-	} else if ( c == 'N' ) {
-	    input = InpN;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Not:
-		parseOk = parseString( "NOTATION" );
-		break;
-	    case Ws1:
-		eat_ws();
-		break;
-	    case Nam:
-		parseOk = parseName();
-		break;
-	    case Ws2:
-		eat_ws();
-		break;
-	    case ExtID:
-		parseOk = parseExternalID( TRUE );
-		break;
-	    case Ws3:
-		eat_ws();
-		break;
-	    case Done:
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Not:
-		if ( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case Nam:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
-		}
-		break;
-	    case ExtID:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGEXTERNALID;
-		    goto parseError;
-		}
-		// call the handler
-		if ( dtdHnd ) {
-		    if ( !dtdHnd->notationDecl( name(), d->publicId, d->systemId ) ) {
-			d->error = dtdHnd->errorString();
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
 			goto parseError;
-		    }
 		}
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_UNEXPECTEDCHARACTER;
-		goto parseError;
+		if (is_S(c)) {
+			input = InpWs;
+		} else if (c == '>') {
+			input = InpGt;
+		} else if (c == 'N') {
+			input = InpN;
+		} else {
+			input = InpUnknown;
+		}
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Not:
+			parseOk = parseString("NOTATION");
+			break;
+		case Ws1:
+			eat_ws();
+			break;
+		case Nam:
+			parseOk = parseName();
+			break;
+		case Ws2:
+			eat_ws();
+			break;
+		case ExtID:
+			parseOk = parseExternalID(TRUE);
+			break;
+		case Ws3:
+			eat_ws();
+			break;
+		case Done:
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case Not:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case Nam:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			break;
+		case ExtID:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGEXTERNALID;
+				goto parseError;
+			}
+			// call the handler
+			if (dtdHnd) {
+				if (!dtdHnd->notationDecl(name(), d->publicId,
+							  d->systemId)) {
+					d->error = dtdHnd->errorString();
+					goto parseError;
+				}
+			}
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_UNEXPECTEDCHARACTER;
+			goto parseError;
+		}
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -4801,118 +4994,118 @@ parseError:
 */
 bool QXmlSimpleReader::parseChoiceSeq()
 {
-    const signed char Init             = 0;
-    const signed char Ws1              = 1; // eat whitespace
-    const signed char CS               = 2; // choice or set
-    const signed char Ws2              = 3; // eat whitespace
-    const signed char More             = 4; // more cp to read
-    const signed char Name             = 5; // read name
-    const signed char Done             = 6; //
+	const signed char Init = 0;
+	const signed char Ws1 = 1; // eat whitespace
+	const signed char CS = 2; // choice or set
+	const signed char Ws2 = 3; // eat whitespace
+	const signed char More = 4; // more cp to read
+	const signed char Name = 5; // read name
+	const signed char Done = 6; //
 
-    const signed char InpWs            = 0; // S
-    const signed char InpOp            = 1; // (
-    const signed char InpCp            = 2; // )
-    const signed char InpQm            = 3; // ?
-    const signed char InpAst           = 4; // *
-    const signed char InpPlus          = 5; // +
-    const signed char InpPipe          = 6; // |
-    const signed char InpComm          = 7; // ,
-    const signed char InpUnknown       = 8;
+	const signed char InpWs = 0; // S
+	const signed char InpOp = 1; // (
+	const signed char InpCp = 2; // )
+	const signed char InpQm = 3; // ?
+	const signed char InpAst = 4; // *
+	const signed char InpPlus = 5; // +
+	const signed char InpPipe = 6; // |
+	const signed char InpComm = 7; // ,
+	const signed char InpUnknown = 8;
 
-    // use some kind of state machine for parsing
-    static signed char table[6][9] = {
-     /*  InpWs   InpOp  InpCp  InpQm  InpAst  InpPlus  InpPipe  InpComm  InpUnknown */
-	{ -1,     Ws1,   -1,    -1,    -1,     -1,      -1,      -1,      Name  }, // Init
-	{ -1,     CS,    -1,    -1,    -1,     -1,      -1,      -1,      CS    }, // Ws1
-	{ Ws2,    -1,    Done,  Ws2,   Ws2,    Ws2,     More,    More,    -1    }, // CS
-	{ -1,     -1,    Done,  -1,    -1,     -1,      More,    More,    -1    }, // Ws2
-	{ -1,     Ws1,   -1,    -1,    -1,     -1,      -1,      -1,      Name  }, // More (same as Init)
-	{ Ws2,    -1,    Done,  Ws2,   Ws2,    Ws2,     More,    More,    -1    }  // Name (same as CS)
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[6][9] = {
+		/*  InpWs   InpOp  InpCp  InpQm  InpAst  InpPlus  InpPipe
+		   InpComm  InpUnknown */
+		{-1, Ws1, -1, -1, -1, -1, -1, -1, Name}, // Init
+		{-1, CS, -1, -1, -1, -1, -1, -1, CS}, // Ws1
+		{Ws2, -1, Done, Ws2, Ws2, Ws2, More, More, -1}, // CS
+		{-1, -1, Done, -1, -1, -1, More, More, -1}, // Ws2
+		{-1, Ws1, -1, -1, -1, -1, -1, -1, Name}, // More (same as Init)
+		{Ws2, -1, Done, Ws2, Ws2, Ws2, More, More, -1} // Name (same as
+							       // CS)
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( is_S(c) ) {
-	    input = InpWs;
-	} else if ( c == '(' ) {
-	    input = InpOp;
-	} else if ( c == ')' ) {
-	    input = InpCp;
-	} else if ( c == '?' ) {
-	    input = InpQm;
-	} else if ( c == '*' ) {
-	    input = InpAst;
-	} else if ( c == '+' ) {
-	    input = InpPlus;
-	} else if ( c == '|' ) {
-	    input = InpPipe;
-	} else if ( c == ',' ) {
-	    input = InpComm;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Ws1:
-		next_eat_ws();
-		break;
-	    case CS:
-		parseOk = parseChoiceSeq();
-		break;
-	    case Ws2:
-		next_eat_ws();
-		break;
-	    case More:
-		next_eat_ws();
-		break;
-	    case Name:
-		parseOk = parseName();
-		break;
-	    case Done:
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case CS:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGCHOICE;
-		    goto parseError;
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
 		}
-		break;
-	    case Name:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
+		if (is_S(c)) {
+			input = InpWs;
+		} else if (c == '(') {
+			input = InpOp;
+		} else if (c == ')') {
+			input = InpCp;
+		} else if (c == '?') {
+			input = InpQm;
+		} else if (c == '*') {
+			input = InpAst;
+		} else if (c == '+') {
+			input = InpPlus;
+		} else if (c == '|') {
+			input = InpPipe;
+		} else if (c == ',') {
+			input = InpComm;
+		} else {
+			input = InpUnknown;
 		}
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_UNEXPECTEDCHARACTER;
-		goto parseError;
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Ws1:
+			next_eat_ws();
+			break;
+		case CS:
+			parseOk = parseChoiceSeq();
+			break;
+		case Ws2:
+			next_eat_ws();
+			break;
+		case More:
+			next_eat_ws();
+			break;
+		case Name:
+			parseOk = parseName();
+			break;
+		case Done:
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case CS:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGCHOICE;
+				goto parseError;
+			}
+			break;
+		case Name:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_UNEXPECTEDCHARACTER;
+			goto parseError;
+		}
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -4923,262 +5116,287 @@ parseError:
 */
 bool QXmlSimpleReader::parseEntityDecl()
 {
-    const signed char Init             =  0;
-    const signed char Ent              =  1; // parse "ENTITY"
-    const signed char Ws1              =  2; // white space read
-    const signed char Name             =  3; // parse name
-    const signed char Ws2              =  4; // white space read
-    const signed char EValue           =  5; // parse entity value
-    const signed char ExtID            =  6; // parse ExternalID
-    const signed char Ws3              =  7; // white space read
-    const signed char Ndata            =  8; // parse "NDATA"
-    const signed char Ws4              =  9; // white space read
-    const signed char NNam             = 10; // parse name
-    const signed char PEDec            = 11; // parse PEDecl
-    const signed char Ws6              = 12; // white space read
-    const signed char PENam            = 13; // parse name
-    const signed char Ws7              = 14; // white space read
-    const signed char PEVal            = 15; // parse entity value
-    const signed char PEEID            = 16; // parse ExternalID
-    const signed char WsE              = 17; // white space read
-    const signed char EDDone           = 19; // done, but also report an external, unparsed entity decl
-    const signed char Done             = 18;
+	const signed char Init = 0;
+	const signed char Ent = 1; // parse "ENTITY"
+	const signed char Ws1 = 2; // white space read
+	const signed char Name = 3; // parse name
+	const signed char Ws2 = 4; // white space read
+	const signed char EValue = 5; // parse entity value
+	const signed char ExtID = 6; // parse ExternalID
+	const signed char Ws3 = 7; // white space read
+	const signed char Ndata = 8; // parse "NDATA"
+	const signed char Ws4 = 9; // white space read
+	const signed char NNam = 10; // parse name
+	const signed char PEDec = 11; // parse PEDecl
+	const signed char Ws6 = 12; // white space read
+	const signed char PENam = 13; // parse name
+	const signed char Ws7 = 14; // white space read
+	const signed char PEVal = 15; // parse entity value
+	const signed char PEEID = 16; // parse ExternalID
+	const signed char WsE = 17; // white space read
+	const signed char EDDone = 19; // done, but also report an external,
+				       // unparsed entity decl
+	const signed char Done = 18;
 
-    const signed char InpWs            = 0; // white space
-    const signed char InpPer           = 1; // %
-    const signed char InpQuot          = 2; // " or '
-    const signed char InpGt            = 3; // >
-    const signed char InpN             = 4; // N
-    const signed char InpUnknown       = 5;
+	const signed char InpWs = 0; // white space
+	const signed char InpPer = 1; // %
+	const signed char InpQuot = 2; // " or '
+	const signed char InpGt = 3; // >
+	const signed char InpN = 4; // N
+	const signed char InpUnknown = 5;
 
-    // use some kind of state machine for parsing
-    static signed char table[18][6] = {
-     /*  InpWs  InpPer  InpQuot  InpGt  InpN    InpUnknown */
-	{ -1,    -1,     -1,      -1,    Ent,    -1      }, // Init
-	{ Ws1,   -1,     -1,      -1,    -1,     -1      }, // Ent
-	{ -1,    PEDec,  -1,      -1,    Name,   Name    }, // Ws1
-	{ Ws2,   -1,     -1,      -1,    -1,     -1      }, // Name
-	{ -1,    -1,     EValue,  -1,    -1,     ExtID   }, // Ws2
-	{ WsE,   -1,     -1,      Done,  -1,     -1      }, // EValue
-	{ Ws3,   -1,     -1,      EDDone,-1,     -1      }, // ExtID
-	{ -1,    -1,     -1,      EDDone,Ndata,  -1      }, // Ws3
-	{ Ws4,   -1,     -1,      -1,    -1,     -1      }, // Ndata
-	{ -1,    -1,     -1,      -1,    NNam,   NNam    }, // Ws4
-	{ WsE,   -1,     -1,      Done,  -1,     -1      }, // NNam
-	{ Ws6,   -1,     -1,      -1,    -1,     -1      }, // PEDec
-	{ -1,    -1,     -1,      -1,    PENam,  PENam   }, // Ws6
-	{ Ws7,   -1,     -1,      -1,    -1,     -1      }, // PENam
-	{ -1,    -1,     PEVal,   -1,    -1,     PEEID   }, // Ws7
-	{ WsE,   -1,     -1,      Done,  -1,     -1      }, // PEVal
-	{ WsE,   -1,     -1,      Done,  -1,     -1      }, // PEEID
-	{ -1,    -1,     -1,      Done,  -1,     -1      }  // WsE
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[18][6] = {
+		/*  InpWs  InpPer  InpQuot  InpGt  InpN    InpUnknown */
+		{-1, -1, -1, -1, Ent, -1}, // Init
+		{Ws1, -1, -1, -1, -1, -1}, // Ent
+		{-1, PEDec, -1, -1, Name, Name}, // Ws1
+		{Ws2, -1, -1, -1, -1, -1}, // Name
+		{-1, -1, EValue, -1, -1, ExtID}, // Ws2
+		{WsE, -1, -1, Done, -1, -1}, // EValue
+		{Ws3, -1, -1, EDDone, -1, -1}, // ExtID
+		{-1, -1, -1, EDDone, Ndata, -1}, // Ws3
+		{Ws4, -1, -1, -1, -1, -1}, // Ndata
+		{-1, -1, -1, -1, NNam, NNam}, // Ws4
+		{WsE, -1, -1, Done, -1, -1}, // NNam
+		{Ws6, -1, -1, -1, -1, -1}, // PEDec
+		{-1, -1, -1, -1, PENam, PENam}, // Ws6
+		{Ws7, -1, -1, -1, -1, -1}, // PENam
+		{-1, -1, PEVal, -1, -1, PEEID}, // Ws7
+		{WsE, -1, -1, Done, -1, -1}, // PEVal
+		{WsE, -1, -1, Done, -1, -1}, // PEEID
+		{-1, -1, -1, Done, -1, -1} // WsE
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
+		}
+		if (is_S(c)) {
+			input = InpWs;
+		} else if (c == '%') {
+			input = InpPer;
+		} else if (c == '"' || c == '\'') {
+			input = InpQuot;
+		} else if (c == '>') {
+			input = InpGt;
+		} else if (c == 'N') {
+			input = InpN;
+		} else {
+			input = InpUnknown;
+		}
 
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Ent:
+			parseOk = parseString("NTITY");
+			break;
+		case Ws1:
+			eat_ws();
+			break;
+		case Name:
+			parseOk = parseName();
+			break;
+		case Ws2:
+			eat_ws();
+			break;
+		case EValue:
+			parseOk = parseEntityValue();
+			break;
+		case ExtID:
+			parseOk = parseExternalID();
+			break;
+		case Ws3:
+			eat_ws();
+			break;
+		case Ndata:
+			parseOk = parseString("NDATA");
+			break;
+		case Ws4:
+			eat_ws();
+			break;
+		case NNam:
+			parseOk = parseName(TRUE);
+			break;
+		case PEDec:
+			next();
+			break;
+		case Ws6:
+			eat_ws();
+			break;
+		case PENam:
+			parseOk = parseName();
+			break;
+		case Ws7:
+			eat_ws();
+			break;
+		case PEVal:
+			parseOk = parseEntityValue();
+			break;
+		case PEEID:
+			parseOk = parseExternalID();
+			break;
+		case WsE:
+			eat_ws();
+			break;
+		case EDDone:
+			next();
+			break;
+		case Done:
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case Ent:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case Name:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			break;
+		case EValue:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGENTITYVALUE;
+				goto parseError;
+			}
+			if (!entityExist(name())) {
+				d->entities.insert(name(), string());
+				if (declHnd) {
+					if (!declHnd->internalEntityDecl(
+						    name(), string())) {
+						d->error =
+							declHnd->errorString();
+						goto parseError;
+					}
+				}
+			}
+			break;
+		case ExtID:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGEXTERNALID;
+				goto parseError;
+			}
+			break;
+		case Ndata:
+			if (!parseOk) {
+				d->error = XMLERR_UNEXPECTEDCHARACTER;
+				goto parseError;
+			}
+			break;
+		case NNam:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			if (!entityExist(name())) {
+				d->externEntities.insert(
+					name(),
+					QXmlSimpleReaderPrivate::ExternEntity(
+						d->publicId, d->systemId,
+						ref()));
+				if (dtdHnd) {
+					if (!dtdHnd->unparsedEntityDecl(
+						    name(), d->publicId,
+						    d->systemId, ref())) {
+						d->error =
+							declHnd->errorString();
+						goto parseError;
+					}
+				}
+			}
+			break;
+		case PENam:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			break;
+		case PEVal:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGENTITYVALUE;
+				goto parseError;
+			}
+			if (!entityExist(name())) {
+				d->parameterEntities.insert(name(), string());
+				if (declHnd) {
+					if (!declHnd->internalEntityDecl(
+						    QString("%") + name(),
+						    string())) {
+						d->error =
+							declHnd->errorString();
+						goto parseError;
+					}
+				}
+			}
+			break;
+		case PEEID:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGEXTERNALID;
+				goto parseError;
+			}
+			if (!entityExist(name())) {
+				d->externParameterEntities.insert(
+					name(), QXmlSimpleReaderPrivate::
+							ExternParameterEntity(
+								d->publicId,
+								d->systemId));
+				if (declHnd) {
+					if (!declHnd->externalEntityDecl(
+						    QString("%") + name(),
+						    d->publicId, d->systemId)) {
+						d->error =
+							declHnd->errorString();
+						goto parseError;
+					}
+				}
+			}
+			break;
+		case EDDone:
+			if (!entityExist(name())) {
+				d->externEntities.insert(
+					name(),
+					QXmlSimpleReaderPrivate::ExternEntity(
+						d->publicId, d->systemId,
+						QString::null));
+				if (declHnd) {
+					if (!declHnd->externalEntityDecl(
+						    name(), d->publicId,
+						    d->systemId)) {
+						d->error =
+							declHnd->errorString();
+						goto parseError;
+					}
+				}
+			}
+			return TRUE;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_LETTEREXPECTED;
+			goto parseError;
+		}
 	}
-	if        ( is_S(c) ) {
-	    input = InpWs;
-	} else if ( c == '%' ) {
-	    input = InpPer;
-	} else if ( c == '"' || c == '\'' ) {
-	    input = InpQuot;
-	} else if ( c == '>' ) {
-	    input = InpGt;
-	} else if ( c == 'N' ) {
-	    input = InpN;
-	} else {
-	    input = InpUnknown;
-	}
 
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Ent:
-		parseOk = parseString( "NTITY" );
-		break;
-	    case Ws1:
-		eat_ws();
-		break;
-	    case Name:
-		parseOk = parseName();
-		break;
-	    case Ws2:
-		eat_ws();
-		break;
-	    case EValue:
-		parseOk = parseEntityValue();
-		break;
-	    case ExtID:
-		parseOk = parseExternalID();
-		break;
-	    case Ws3:
-		eat_ws();
-		break;
-	    case Ndata:
-		parseOk = parseString( "NDATA" );
-		break;
-	    case Ws4:
-		eat_ws();
-		break;
-	    case NNam:
-		parseOk = parseName( TRUE );
-		break;
-	    case PEDec:
-		next();
-		break;
-	    case Ws6:
-		eat_ws();
-		break;
-	    case PENam:
-		parseOk = parseName();
-		break;
-	    case Ws7:
-		eat_ws();
-		break;
-	    case PEVal:
-		parseOk = parseEntityValue();
-		break;
-	    case PEEID:
-		parseOk = parseExternalID();
-		break;
-	    case WsE:
-		eat_ws();
-		break;
-	    case EDDone:
-		next();
-		break;
-	    case Done:
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Ent:
-		if ( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case Name:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
-		}
-		break;
-	    case EValue:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGENTITYVALUE;
-		    goto parseError;
-		}
-		if (  !entityExist( name() ) ) {
-		    d->entities.insert( name(), string() );
-		    if ( declHnd ) {
-			if ( !declHnd->internalEntityDecl( name(), string() ) ) {
-			    d->error = declHnd->errorString();
-			    goto parseError;
-			}
-		    }
-		}
-		break;
-	    case ExtID:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGEXTERNALID;
-		    goto parseError;
-		}
-		break;
-	    case Ndata:
-		if ( !parseOk ) {
-		    d->error = XMLERR_UNEXPECTEDCHARACTER;
-		    goto parseError;
-		}
-		break;
-	    case NNam:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
-		}
-		if (  !entityExist( name() ) ) {
-		    d->externEntities.insert( name(), QXmlSimpleReaderPrivate::ExternEntity( d->publicId, d->systemId, ref() ) );
-		    if ( dtdHnd ) {
-			if ( !dtdHnd->unparsedEntityDecl( name(), d->publicId, d->systemId, ref() ) ) {
-			    d->error = declHnd->errorString();
-			    goto parseError;
-			}
-		    }
-		}
-		break;
-	    case PENam:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
-		}
-		break;
-	    case PEVal:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGENTITYVALUE;
-		    goto parseError;
-		}
-		if (  !entityExist( name() ) ) {
-		    d->parameterEntities.insert( name(), string() );
-		    if ( declHnd ) {
-			if ( !declHnd->internalEntityDecl( QString("%")+name(), string() ) ) {
-			    d->error = declHnd->errorString();
-			    goto parseError;
-			}
-		    }
-		}
-		break;
-	    case PEEID:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGEXTERNALID;
-		    goto parseError;
-		}
-		if (  !entityExist( name() ) ) {
-		    d->externParameterEntities.insert( name(), QXmlSimpleReaderPrivate::ExternParameterEntity( d->publicId, d->systemId ) );
-		    if ( declHnd ) {
-			if ( !declHnd->externalEntityDecl( QString("%")+name(), d->publicId, d->systemId ) ) {
-			    d->error = declHnd->errorString();
-			    goto parseError;
-			}
-		    }
-		}
-		break;
-	    case EDDone:
-		if (  !entityExist( name() ) ) {
-		    d->externEntities.insert( name(), QXmlSimpleReaderPrivate::ExternEntity( d->publicId, d->systemId, QString::null ) );
-		    if ( declHnd ) {
-			if ( !declHnd->externalEntityDecl( name(), d->publicId, d->systemId ) ) {
-			    d->error = declHnd->errorString();
-			    goto parseError;
-			}
-		    }
-		}
-		return TRUE;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_LETTEREXPECTED;
-		goto parseError;
-	}
-
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -5186,119 +5404,117 @@ parseError:
 */
 bool QXmlSimpleReader::parseEntityValue()
 {
-    bool tmp;
+	bool tmp;
 
-    const signed char Init             = 0;
-    const signed char Dq               = 1; // EntityValue is double quoted
-    const signed char DqC              = 2; // signed character
-    const signed char DqPER            = 3; // PERefence
-    const signed char DqRef            = 4; // Reference
-    const signed char Sq               = 5; // EntityValue is double quoted
-    const signed char SqC              = 6; // signed character
-    const signed char SqPER            = 7; // PERefence
-    const signed char SqRef            = 8; // Reference
-    const signed char Done             = 9;
+	const signed char Init = 0;
+	const signed char Dq = 1; // EntityValue is double quoted
+	const signed char DqC = 2; // signed character
+	const signed char DqPER = 3; // PERefence
+	const signed char DqRef = 4; // Reference
+	const signed char Sq = 5; // EntityValue is double quoted
+	const signed char SqC = 6; // signed character
+	const signed char SqPER = 7; // PERefence
+	const signed char SqRef = 8; // Reference
+	const signed char Done = 9;
 
-    const signed char InpDq            = 0; // "
-    const signed char InpSq            = 1; // '
-    const signed char InpAmp           = 2; // &
-    const signed char InpPer           = 3; // %
-    const signed char InpUnknown       = 4;
+	const signed char InpDq = 0; // "
+	const signed char InpSq = 1; // '
+	const signed char InpAmp = 2; // &
+	const signed char InpPer = 3; // %
+	const signed char InpUnknown = 4;
 
-    // use some kind of state machine for parsing
-    static signed char table[9][5] = {
-     /*  InpDq  InpSq  InpAmp  InpPer  InpUnknown */
-	{ Dq,    Sq,    -1,     -1,     -1    }, // Init
-	{ Done,  DqC,   DqRef,  DqPER,  DqC   }, // Dq
-	{ Done,  DqC,   DqRef,  DqPER,  DqC   }, // DqC
-	{ Done,  DqC,   DqRef,  DqPER,  DqC   }, // DqPER
-	{ Done,  DqC,   DqRef,  DqPER,  DqC   }, // DqRef
-	{ SqC,   Done,  SqRef,  SqPER,  SqC   }, // Sq
-	{ SqC,   Done,  SqRef,  SqPER,  SqC   }, // SqC
-	{ SqC,   Done,  SqRef,  SqPER,  SqC   }, // SqPER
-	{ SqC,   Done,  SqRef,  SqPER,  SqC   }  // SqRef
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[9][5] = {
+		/*  InpDq  InpSq  InpAmp  InpPer  InpUnknown */
+		{Dq, Sq, -1, -1, -1}, // Init
+		{Done, DqC, DqRef, DqPER, DqC}, // Dq
+		{Done, DqC, DqRef, DqPER, DqC}, // DqC
+		{Done, DqC, DqRef, DqPER, DqC}, // DqPER
+		{Done, DqC, DqRef, DqPER, DqC}, // DqRef
+		{SqC, Done, SqRef, SqPER, SqC}, // Sq
+		{SqC, Done, SqRef, SqPER, SqC}, // SqC
+		{SqC, Done, SqRef, SqPER, SqC}, // SqPER
+		{SqC, Done, SqRef, SqPER, SqC} // SqRef
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( c == '"' ) {
-	    input = InpDq;
-	} else if ( c == '\'' ) {
-	    input = InpSq;
-	} else if ( c == '&' ) {
-	    input = InpAmp;
-	} else if ( c == '%' ) {
-	    input = InpPer;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Dq:
-	    case Sq:
-		stringClear();
-		next();
-		break;
-	    case DqC:
-	    case SqC:
-		stringAddC();
-		next();
-		break;
-	    case DqPER:
-	    case SqPER:
-		parseOk = parsePEReference( InEntityValue );
-		break;
-	    case DqRef:
-	    case SqRef:
-		parseOk = parseReference( tmp, InEntityValue );
-		break;
-	    case Done:
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case DqPER:
-	    case SqPER:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGDOCTYPE;
-		    goto parseError;
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
 		}
-		break;
-	    case DqRef:
-	    case SqRef:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGREFERENCE;
-		    goto parseError;
+		if (c == '"') {
+			input = InpDq;
+		} else if (c == '\'') {
+			input = InpSq;
+		} else if (c == '&') {
+			input = InpAmp;
+		} else if (c == '%') {
+			input = InpPer;
+		} else {
+			input = InpUnknown;
 		}
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_LETTEREXPECTED;
-		goto parseError;
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Dq:
+		case Sq:
+			stringClear();
+			next();
+			break;
+		case DqC:
+		case SqC:
+			stringAddC();
+			next();
+			break;
+		case DqPER:
+		case SqPER:
+			parseOk = parsePEReference(InEntityValue);
+			break;
+		case DqRef:
+		case SqRef:
+			parseOk = parseReference(tmp, InEntityValue);
+			break;
+		case Done:
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case DqPER:
+		case SqPER:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGDOCTYPE;
+				goto parseError;
+			}
+			break;
+		case DqRef:
+		case SqRef:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGREFERENCE;
+				goto parseError;
+			}
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_LETTEREXPECTED;
+			goto parseError;
+		}
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -5312,97 +5528,95 @@ parseError:
 */
 bool QXmlSimpleReader::parseComment()
 {
-    const signed char Init             = 0;
-    const signed char Dash1            = 1; // the first dash was read
-    const signed char Dash2            = 2; // the second dash was read
-    const signed char Com              = 3; // read comment
-    const signed char Com2             = 4; // read comment (help state)
-    const signed char ComE             = 5; // finished reading comment
-    const signed char Done             = 6;
+	const signed char Init = 0;
+	const signed char Dash1 = 1; // the first dash was read
+	const signed char Dash2 = 2; // the second dash was read
+	const signed char Com = 3; // read comment
+	const signed char Com2 = 4; // read comment (help state)
+	const signed char ComE = 5; // finished reading comment
+	const signed char Done = 6;
 
-    const signed char InpDash          = 0; // -
-    const signed char InpGt            = 1; // >
-    const signed char InpUnknown       = 2;
+	const signed char InpDash = 0; // -
+	const signed char InpGt = 1; // >
+	const signed char InpUnknown = 2;
 
-    // use some kind of state machine for parsing
-    static signed char table[6][3] = {
-     /*  InpDash  InpGt  InpUnknown */
-	{ Dash1,   -1,    -1  }, // Init
-	{ Dash2,   -1,    -1  }, // Dash1
-	{ Com2,    Com,   Com }, // Dash2
-	{ Com2,    Com,   Com }, // Com
-	{ ComE,    Com,   Com }, // Com2
-	{ -1,      Done,  -1  }  // ComE
-    };
-    signed char state = Init;
-    signed char input;
+	// use some kind of state machine for parsing
+	static signed char table[6][3] = {
+		/*  InpDash  InpGt  InpUnknown */
+		{Dash1, -1, -1}, // Init
+		{Dash2, -1, -1}, // Dash1
+		{Com2, Com, Com}, // Dash2
+		{Com2, Com, Com}, // Com
+		{ComE, Com, Com}, // Com2
+		{-1, Done, -1} // ComE
+	};
+	signed char state = Init;
+	signed char input;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( c == '-' ) {
-	    input = InpDash;
-	} else if ( c == '>' ) {
-	    input = InpGt;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Dash1:
-		next();
-		break;
-	    case Dash2:
-		next();
-		break;
-	    case Com:
-		stringAddC();
-		next();
-		break;
-	    case Com2:
-		next();
-		break;
-	    case ComE:
-		next();
-		break;
-	    case Done:
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Dash2:
-		stringClear();
-		break;
-	    case Com2:
-		// if next character is not a dash than don't skip it
-		if ( c != '-' ) {
-		    stringAddC( '-' );
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
 		}
-		break;
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_ERRORPARSINGCOMMENT;
-		goto parseError;
+		if (c == '-') {
+			input = InpDash;
+		} else if (c == '>') {
+			input = InpGt;
+		} else {
+			input = InpUnknown;
+		}
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Dash1:
+			next();
+			break;
+		case Dash2:
+			next();
+			break;
+		case Com:
+			stringAddC();
+			next();
+			break;
+		case Com2:
+			next();
+			break;
+		case ComE:
+			next();
+			break;
+		case Done:
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case Dash2:
+			stringClear();
+			break;
+		case Com2:
+			// if next character is not a dash than don't skip it
+			if (c != '-') {
+				stringAddC('-');
+			}
+			break;
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_ERRORPARSINGCOMMENT;
+			goto parseError;
+		}
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -5417,177 +5631,173 @@ parseError:
 */
 bool QXmlSimpleReader::parseAttribute()
 {
-    const signed char Init             = 0;
-    const signed char PName            = 1; // parse name
-    const signed char Ws               = 2; // eat ws
-    const signed char Eq               = 3; // the '=' was read
-    const signed char Quotes           = 4; // " or ' were read
+	const signed char Init = 0;
+	const signed char PName = 1; // parse name
+	const signed char Ws = 2; // eat ws
+	const signed char Eq = 3; // the '=' was read
+	const signed char Quotes = 4; // " or ' were read
 
-    const signed char InpNameBe        = 0;
-    const signed char InpEq            = 1; // =
-    const signed char InpDq            = 2; // "
-    const signed char InpSq            = 3; // '
-    const signed char InpUnknown       = 4;
+	const signed char InpNameBe = 0;
+	const signed char InpEq = 1; // =
+	const signed char InpDq = 2; // "
+	const signed char InpSq = 3; // '
+	const signed char InpUnknown = 4;
 
-    // use some kind of state machine for parsing
-    static signed char table[4][5] = {
-     /*  InpNameBe  InpEq  InpDq    InpSq    InpUnknown */
-	{ PName,     -1,    -1,      -1,      -1    }, // Init
-	{ -1,        Eq,    -1,      -1,      Ws    }, // PName
-	{ -1,        Eq,    -1,      -1,      -1    }, // Ws
-	{ -1,        -1,    Quotes,  Quotes,  -1    }  // Eq
-    };
-    signed char state = Init;
-    signed char input;
-    bool parseOk = TRUE;
+	// use some kind of state machine for parsing
+	static signed char table[4][5] = {
+		/*  InpNameBe  InpEq  InpDq    InpSq    InpUnknown */
+		{PName, -1, -1, -1, -1}, // Init
+		{-1, Eq, -1, -1, Ws}, // PName
+		{-1, Eq, -1, -1, -1}, // Ws
+		{-1, -1, Quotes, Quotes, -1} // Eq
+	};
+	signed char state = Init;
+	signed char input;
+	bool parseOk = TRUE;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( is_NameBeginning(c) ) {
-	    input = InpNameBe;
-	} else if ( c == '=' ) {
-	    input = InpEq;
-	} else if ( c == '"' ) {
-	    input = InpDq;
-	} else if ( c == '\'' ) {
-	    input = InpSq;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case PName:
-		parseOk = parseName();
-		break;
-	    case Ws:
-		eat_ws();
-		break;
-	    case Eq:
-		next_eat_ws();
-		break;
-	    case Quotes:
-		parseOk = parseAttValue();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case PName:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGNAME;
-		    goto parseError;
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
 		}
-		break;
-	    case Quotes:
-		if ( !parseOk ) {
-		    d->error = XMLERR_ERRORPARSINGATTVALUE;
-		    goto parseError;
+		if (is_NameBeginning(c)) {
+			input = InpNameBe;
+		} else if (c == '=') {
+			input = InpEq;
+		} else if (c == '"') {
+			input = InpDq;
+		} else if (c == '\'') {
+			input = InpSq;
+		} else {
+			input = InpUnknown;
 		}
-		// Done
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_UNEXPECTEDCHARACTER;
-		goto parseError;
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case PName:
+			parseOk = parseName();
+			break;
+		case Ws:
+			eat_ws();
+			break;
+		case Eq:
+			next_eat_ws();
+			break;
+		case Quotes:
+			parseOk = parseAttValue();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case PName:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGNAME;
+				goto parseError;
+			}
+			break;
+		case Quotes:
+			if (!parseOk) {
+				d->error = XMLERR_ERRORPARSINGATTVALUE;
+				goto parseError;
+			}
+			// Done
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_UNEXPECTEDCHARACTER;
+			goto parseError;
+		}
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
   Parse a Name [5] and store the name in name or ref (if useRef is TRUE).
 */
-bool QXmlSimpleReader::parseName( bool useRef )
+bool QXmlSimpleReader::parseName(bool useRef)
 {
-    const signed char Init             = 0;
-    const signed char Name1            = 1; // parse first signed character of the name
-    const signed char Name             = 2; // parse name
-    const signed char Done             = 3;
+	const signed char Init = 0;
+	const signed char Name1 = 1; // parse first signed character of the name
+	const signed char Name = 2; // parse name
+	const signed char Done = 3;
 
-    const signed char InpNameBe        = 0; // name beginning signed characters
-    const signed char InpNameCh        = 1; // NameChar without InpNameBe
-    const signed char InpUnknown       = 2;
+	const signed char InpNameBe = 0; // name beginning signed characters
+	const signed char InpNameCh = 1; // NameChar without InpNameBe
+	const signed char InpUnknown = 2;
 
-    // use some kind of state machine for parsing
-    static signed char table[3][3] = {
-     /*  InpNameBe  InpNameCh  InpUnknown */
-	{ Name1,     -1,        -1    }, // Init
-	{ Name,      Name,      Done  }, // Name1
-	{ Name,      Name,      Done  }  // Name
-    };
-    signed char state = Init;
-    signed char input;
+	// use some kind of state machine for parsing
+	static signed char table[3][3] = {
+		/*  InpNameBe  InpNameCh  InpUnknown */
+		{Name1, -1, -1}, // Init
+		{Name, Name, Done}, // Name1
+		{Name, Name, Done} // Name
+	};
+	signed char state = Init;
+	signed char input;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( is_NameBeginning(c) ) {
-	    input = InpNameBe;
-	} else if ( is_NameChar(c) ) {
-	    input = InpNameCh;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case Name1:
-		if ( useRef ) {
-		    refClear();
-		    refAddC();
-		} else {
-		    nameClear();
-		    nameAddC();
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
 		}
-		next();
-		break;
-	    case Name:
-		if ( useRef ) {
-		    refAddC();
+		if (is_NameBeginning(c)) {
+			input = InpNameBe;
+		} else if (is_NameChar(c)) {
+			input = InpNameCh;
 		} else {
-		    nameAddC();
+			input = InpUnknown;
 		}
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_LETTEREXPECTED;
-		goto parseError;
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case Name1:
+			if (useRef) {
+				refClear();
+				refAddC();
+			} else {
+				nameClear();
+				nameAddC();
+			}
+			next();
+			break;
+		case Name:
+			if (useRef) {
+				refAddC();
+			} else {
+				nameAddC();
+			}
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_LETTEREXPECTED;
+			goto parseError;
+		}
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -5595,69 +5805,67 @@ parseError:
 */
 bool QXmlSimpleReader::parseNmtoken()
 {
-    const signed char Init             = 0;
-    const signed char NameF            = 1;
-    const signed char Name             = 2;
-    const signed char Done             = 3;
+	const signed char Init = 0;
+	const signed char NameF = 1;
+	const signed char Name = 2;
+	const signed char Done = 3;
 
-    const signed char InpNameCh        = 0; // NameChar without InpNameBe
-    const signed char InpUnknown       = 1;
+	const signed char InpNameCh = 0; // NameChar without InpNameBe
+	const signed char InpUnknown = 1;
 
-    // use some kind of state machine for parsing
-    static signed char table[3][2] = {
-     /*  InpNameCh  InpUnknown */
-	{ NameF,     -1    }, // Init
-	{ Name,      Done  }, // NameF
-	{ Name,      Done  }  // Name
-    };
-    signed char state = Init;
-    signed char input;
+	// use some kind of state machine for parsing
+	static signed char table[3][2] = {
+		/*  InpNameCh  InpUnknown */
+		{NameF, -1}, // Init
+		{Name, Done}, // NameF
+		{Name, Done} // Name
+	};
+	signed char state = Init;
+	signed char input;
 
-    for (;;) {
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
+		}
+		if (is_NameChar(c)) {
+			input = InpNameCh;
+		} else {
+			input = InpUnknown;
+		}
 
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case NameF:
+			nameClear();
+			nameAddC();
+			next();
+			break;
+		case Name:
+			nameAddC();
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case Done:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_LETTEREXPECTED;
+			goto parseError;
+		}
 	}
-	if ( is_NameChar(c) ) {
-	    input = InpNameCh;
-	} else {
-	    input = InpUnknown;
-	}
 
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case NameF:
-		nameClear();
-		nameAddC();
-		next();
-		break;
-	    case Name:
-		nameAddC();
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case Done:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_LETTEREXPECTED;
-		goto parseError;
-	}
-
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
@@ -5671,303 +5879,338 @@ parseError:
   charachter(s) which the reference mapped to are inserted at the reference
   position. The head stands on the first character of the replacement).
 */
-bool QXmlSimpleReader::parseReference( bool &charDataRead, EntityRecognitionContext context )
+bool QXmlSimpleReader::parseReference(bool &charDataRead,
+				      EntityRecognitionContext context)
 {
-    // temporary variables
-    uint tmp;
-    bool ok;
+	// temporary variables
+	uint tmp;
+	bool ok;
 
-    const signed char Init             =  0;
-    const signed char SRef             =  1; // start of a reference
-    const signed char ChRef            =  2; // parse CharRef
-    const signed char ChDec            =  3; // parse CharRef decimal
-    const signed char ChHexS           =  4; // start CharRef hexadecimal
-    const signed char ChHex            =  5; // parse CharRef hexadecimal
-    const signed char Name             =  6; // parse name
-    const signed char DoneD            =  7; // done CharRef decimal
-    const signed char DoneH            =  8; // done CharRef hexadecimal
-    const signed char DoneN            =  9; // done EntityRef
+	const signed char Init = 0;
+	const signed char SRef = 1; // start of a reference
+	const signed char ChRef = 2; // parse CharRef
+	const signed char ChDec = 3; // parse CharRef decimal
+	const signed char ChHexS = 4; // start CharRef hexadecimal
+	const signed char ChHex = 5; // parse CharRef hexadecimal
+	const signed char Name = 6; // parse name
+	const signed char DoneD = 7; // done CharRef decimal
+	const signed char DoneH = 8; // done CharRef hexadecimal
+	const signed char DoneN = 9; // done EntityRef
 
-    const signed char InpAmp           = 0; // &
-    const signed char InpSemi          = 1; // ;
-    const signed char InpHash          = 2; // #
-    const signed char InpX             = 3; // x
-    const signed char InpNum           = 4; // 0-9
-    const signed char InpHex           = 5; // a-f A-F
-    const signed char InpUnknown       = 6;
+	const signed char InpAmp = 0; // &
+	const signed char InpSemi = 1; // ;
+	const signed char InpHash = 2; // #
+	const signed char InpX = 3; // x
+	const signed char InpNum = 4; // 0-9
+	const signed char InpHex = 5; // a-f A-F
+	const signed char InpUnknown = 6;
 
-    // use some kind of state machine for parsing
-    static signed char table[8][7] = {
-     /*  InpAmp  InpSemi  InpHash  InpX     InpNum  InpHex  InpUnknown */
-	{ SRef,   -1,      -1,      -1,      -1,     -1,     -1    }, // Init
-	{ -1,     -1,      ChRef,   Name,    Name,   Name,   Name  }, // SRef
-	{ -1,     -1,      -1,      ChHexS,  ChDec,  -1,     -1    }, // ChRef
-	{ -1,     DoneD,   -1,      -1,      ChDec,  -1,     -1    }, // ChDec
-	{ -1,     -1,      -1,      -1,      ChHex,  ChHex,  -1    }, // ChHexS
-	{ -1,     DoneH,   -1,      -1,      ChHex,  ChHex,  -1    }, // ChHex
-	{ -1,     DoneN,   -1,      -1,      -1,     -1,     -1    }  // Name
-    };
-    signed char state = Init;
-    signed char input;
+	// use some kind of state machine for parsing
+	static signed char table[8][7] = {
+		/*  InpAmp  InpSemi  InpHash  InpX     InpNum  InpHex InpUnknown
+		 */
+		{SRef, -1, -1, -1, -1, -1, -1}, // Init
+		{-1, -1, ChRef, Name, Name, Name, Name}, // SRef
+		{-1, -1, -1, ChHexS, ChDec, -1, -1}, // ChRef
+		{-1, DoneD, -1, -1, ChDec, -1, -1}, // ChDec
+		{-1, -1, -1, -1, ChHex, ChHex, -1}, // ChHexS
+		{-1, DoneH, -1, -1, ChHex, ChHex, -1}, // ChHex
+		{-1, DoneN, -1, -1, -1, -1, -1} // Name
+	};
+	signed char state = Init;
+	signed char input;
 
-    for (;;) {
-
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
-	}
-	if        ( c.row() ) {
-	    input = InpUnknown;
-	} else if ( c.cell() == '&' ) {
-	    input = InpAmp;
-	} else if ( c.cell() == ';' ) {
-	    input = InpSemi;
-	} else if ( c.cell() == '#' ) {
-	    input = InpHash;
-	} else if ( c.cell() == 'x' ) {
-	    input = InpX;
-	} else if ( '0' <= c.cell() && c.cell() <= '9' ) {
-	    input = InpNum;
-	} else if ( 'a' <= c.cell() && c.cell() <= 'f' ) {
-	    input = InpHex;
-	} else if ( 'A' <= c.cell() && c.cell() <= 'F' ) {
-	    input = InpHex;
-	} else {
-	    input = InpUnknown;
-	}
-
-	// set state according to input
-	state = table[state][input];
-
-	// do some actions according to state
-	switch ( state ) {
-	    case SRef:
-		refClear();
-		next();
-		break;
-	    case ChRef:
-		next();
-		break;
-	    case ChDec:
-		refAddC();
-		next();
-		break;
-	    case ChHexS:
-		next();
-		break;
-	    case ChHex:
-		refAddC();
-		next();
-		break;
-	    case Name:
-		// read the name into the ref
-		parseName( TRUE );
-		break;
-	    case DoneD:
-		tmp = ref().toUInt( &ok, 10 );
-		if ( ok ) {
-		    stringAddC( QChar(tmp) );
-		} else {
-		    d->error = XMLERR_ERRORPARSINGREFERENCE;
-		    goto parseError;
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
 		}
-		charDataRead = TRUE;
-		next();
-		break;
-	    case DoneH:
-		tmp = ref().toUInt( &ok, 16 );
-		if ( ok ) {
-		    stringAddC( QChar(tmp) );
+		if (c.row()) {
+			input = InpUnknown;
+		} else if (c.cell() == '&') {
+			input = InpAmp;
+		} else if (c.cell() == ';') {
+			input = InpSemi;
+		} else if (c.cell() == '#') {
+			input = InpHash;
+		} else if (c.cell() == 'x') {
+			input = InpX;
+		} else if ('0' <= c.cell() && c.cell() <= '9') {
+			input = InpNum;
+		} else if ('a' <= c.cell() && c.cell() <= 'f') {
+			input = InpHex;
+		} else if ('A' <= c.cell() && c.cell() <= 'F') {
+			input = InpHex;
 		} else {
-		    d->error = XMLERR_ERRORPARSINGREFERENCE;
-		    goto parseError;
+			input = InpUnknown;
 		}
-		charDataRead = TRUE;
-		next();
-		break;
-	    case DoneN:
-		if ( !processReference( charDataRead, context ) )
-		    goto parseError;
-		next();
-		break;
-	}
-	// no input is read after this
-	switch ( state ) {
-	    case DoneD:
-		return TRUE;
-	    case DoneH:
-		return TRUE;
-	    case DoneN:
-		return TRUE;
-	    case -1:
-		// Error
-		d->error = XMLERR_ERRORPARSINGREFERENCE;
-		goto parseError;
+
+		// set state according to input
+		state = table[state][input];
+
+		// do some actions according to state
+		switch (state) {
+		case SRef:
+			refClear();
+			next();
+			break;
+		case ChRef:
+			next();
+			break;
+		case ChDec:
+			refAddC();
+			next();
+			break;
+		case ChHexS:
+			next();
+			break;
+		case ChHex:
+			refAddC();
+			next();
+			break;
+		case Name:
+			// read the name into the ref
+			parseName(TRUE);
+			break;
+		case DoneD:
+			tmp = ref().toUInt(&ok, 10);
+			if (ok) {
+				stringAddC(QChar(tmp));
+			} else {
+				d->error = XMLERR_ERRORPARSINGREFERENCE;
+				goto parseError;
+			}
+			charDataRead = TRUE;
+			next();
+			break;
+		case DoneH:
+			tmp = ref().toUInt(&ok, 16);
+			if (ok) {
+				stringAddC(QChar(tmp));
+			} else {
+				d->error = XMLERR_ERRORPARSINGREFERENCE;
+				goto parseError;
+			}
+			charDataRead = TRUE;
+			next();
+			break;
+		case DoneN:
+			if (!processReference(charDataRead, context))
+				goto parseError;
+			next();
+			break;
+		}
+		// no input is read after this
+		switch (state) {
+		case DoneD:
+			return TRUE;
+		case DoneH:
+			return TRUE;
+		case DoneN:
+			return TRUE;
+		case -1:
+			// Error
+			d->error = XMLERR_ERRORPARSINGREFERENCE;
+			goto parseError;
+		}
 	}
 
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 /*!
   Helper function for parseReference()
 */
-bool QXmlSimpleReader::processReference( bool &charDataRead, EntityRecognitionContext context )
+bool QXmlSimpleReader::processReference(bool &charDataRead,
+					EntityRecognitionContext context)
 {
-    QString reference = ref();
-    if ( reference == "amp" ) {
-	if ( context == InEntityValue ) {
-	    // Bypassed
-	    stringAddC( '&' ); stringAddC( 'a' ); stringAddC( 'm' ); stringAddC( 'p' ); stringAddC( ';' );
-	} else {
-	    // Included or Included in literal
-	    stringAddC( '&' );
-	}
-	charDataRead = TRUE;
-    } else if ( reference == "lt" ) {
-	if ( context == InEntityValue ) {
-	    // Bypassed
-	    stringAddC( '&' ); stringAddC( 'l' ); stringAddC( 't' ); stringAddC( ';' );
-	} else {
-	    // Included or Included in literal
-	    stringAddC( '<' );
-	}
-	charDataRead = TRUE;
-    } else if ( reference == "gt" ) {
-	if ( context == InEntityValue ) {
-	    // Bypassed
-	    stringAddC( '&' ); stringAddC( 'g' ); stringAddC( 't' ); stringAddC( ';' );
-	} else {
-	    // Included or Included in literal
-	    stringAddC( '>' );
-	}
-	charDataRead = TRUE;
-    } else if ( reference == "apos" ) {
-	if ( context == InEntityValue ) {
-	    // Bypassed
-	    stringAddC( '&' ); stringAddC( 'a' ); stringAddC( 'p' ); stringAddC( 'o' ); stringAddC( 's' ); stringAddC( ';' );
-	} else {
-	    // Included or Included in literal
-	    stringAddC( '\'' );
-	}
-	charDataRead = TRUE;
-    } else if ( reference == "quot" ) {
-	if ( context == InEntityValue ) {
-	    // Bypassed
-	    stringAddC( '&' ); stringAddC( 'q' ); stringAddC( 'u' ); stringAddC( 'o' ); stringAddC( 't' ); stringAddC( ';' );
-	} else {
-	    // Included or Included in literal
-	    stringAddC( '"' );
-	}
-	charDataRead = TRUE;
-    } else {
-	QMap<QString,QString>::Iterator it;
-	it = d->entities.find( reference );
-	if ( it != d->entities.end() ) {
-	    // "Internal General"
-	    switch ( context ) {
-		case InContent:
-		    // Included
-		    xmlRef = it.data() + xmlRef;
-		    charDataRead = FALSE;
-		    break;
-		case InAttributeValue:
-		    // Included in literal
-		    xmlRef = it.data().replace( QRegExp("\""), "&quot;" ).replace( QRegExp("'"), "&apos;" )
-			+ xmlRef;
-		    charDataRead = FALSE;
-		    break;
-		case InEntityValue:
-		    {
+	QString reference = ref();
+	if (reference == "amp") {
+		if (context == InEntityValue) {
 			// Bypassed
-			stringAddC( '&' );
-			for ( int i=0; i<(int)reference.length(); i++ ) {
-			    stringAddC( reference[i] );
-			}
-			stringAddC( ';');
-			charDataRead = TRUE;
-		    }
-		    break;
-		case InDTD:
-		    // Forbidden
-		    d->error = XMLERR_INTERNALGENERALENTITYINDTD;
-		    charDataRead = FALSE;
-		    break;
-	    }
-	} else {
-	    QMap<QString,QXmlSimpleReaderPrivate::ExternEntity>::Iterator itExtern;
-	    itExtern = d->externEntities.find( reference );
-	    if ( itExtern == d->externEntities.end() ) {
-		// entity not declared
-		// ### check this case for conformance
-		if ( context == InEntityValue ) {
-		    // Bypassed
-		    stringAddC( '&' );
-		    for ( int i=0; i<(int)reference.length(); i++ ) {
-			stringAddC( reference[i] );
-		    }
-		    stringAddC( ';');
-		    charDataRead = TRUE;
+			stringAddC('&');
+			stringAddC('a');
+			stringAddC('m');
+			stringAddC('p');
+			stringAddC(';');
 		} else {
-		    if ( contentHnd ) {
-			if ( !contentHnd->skippedEntity( reference ) ) {
-			    d->error = contentHnd->errorString();
-			    return FALSE; // error
-			}
-		    }
+			// Included or Included in literal
+			stringAddC('&');
 		}
-	    } else if ( (*itExtern).notation.isNull() ) {
-		// "External Parsed General"
-		switch ( context ) {
-		    case InContent:
-			// Included if validating
-			if ( contentHnd ) {
-			    if ( !contentHnd->skippedEntity( reference ) ) {
-				d->error = contentHnd->errorString();
+		charDataRead = TRUE;
+	} else if (reference == "lt") {
+		if (context == InEntityValue) {
+			// Bypassed
+			stringAddC('&');
+			stringAddC('l');
+			stringAddC('t');
+			stringAddC(';');
+		} else {
+			// Included or Included in literal
+			stringAddC('<');
+		}
+		charDataRead = TRUE;
+	} else if (reference == "gt") {
+		if (context == InEntityValue) {
+			// Bypassed
+			stringAddC('&');
+			stringAddC('g');
+			stringAddC('t');
+			stringAddC(';');
+		} else {
+			// Included or Included in literal
+			stringAddC('>');
+		}
+		charDataRead = TRUE;
+	} else if (reference == "apos") {
+		if (context == InEntityValue) {
+			// Bypassed
+			stringAddC('&');
+			stringAddC('a');
+			stringAddC('p');
+			stringAddC('o');
+			stringAddC('s');
+			stringAddC(';');
+		} else {
+			// Included or Included in literal
+			stringAddC('\'');
+		}
+		charDataRead = TRUE;
+	} else if (reference == "quot") {
+		if (context == InEntityValue) {
+			// Bypassed
+			stringAddC('&');
+			stringAddC('q');
+			stringAddC('u');
+			stringAddC('o');
+			stringAddC('t');
+			stringAddC(';');
+		} else {
+			// Included or Included in literal
+			stringAddC('"');
+		}
+		charDataRead = TRUE;
+	} else {
+		QMap<QString, QString>::Iterator it;
+		it = d->entities.find(reference);
+		if (it != d->entities.end()) {
+			// "Internal General"
+			switch (context) {
+			case InContent:
+				// Included
+				xmlRef = it.data() + xmlRef;
+				charDataRead = FALSE;
+				break;
+			case InAttributeValue:
+				// Included in literal
+				xmlRef = it.data()
+						 .replace(QRegExp("\""),
+							  "&quot;")
+						 .replace(QRegExp("'"),
+							  "&apos;") +
+					 xmlRef;
+				charDataRead = FALSE;
+				break;
+			case InEntityValue: {
+				// Bypassed
+				stringAddC('&');
+				for (int i = 0; i < (int)reference.length();
+				     i++) {
+					stringAddC(reference[i]);
+				}
+				stringAddC(';');
+				charDataRead = TRUE;
+			} break;
+			case InDTD:
+				// Forbidden
+				d->error = XMLERR_INTERNALGENERALENTITYINDTD;
+				charDataRead = FALSE;
+				break;
+			}
+		} else {
+			QMap<QString,
+			     QXmlSimpleReaderPrivate::ExternEntity>::Iterator
+				itExtern;
+			itExtern = d->externEntities.find(reference);
+			if (itExtern == d->externEntities.end()) {
+				// entity not declared
+				// ### check this case for conformance
+				if (context == InEntityValue) {
+					// Bypassed
+					stringAddC('&');
+					for (int i = 0;
+					     i < (int)reference.length(); i++) {
+						stringAddC(reference[i]);
+					}
+					stringAddC(';');
+					charDataRead = TRUE;
+				} else {
+					if (contentHnd) {
+						if (!contentHnd->skippedEntity(
+							    reference)) {
+							d->error =
+								contentHnd
+									->errorString();
+							return FALSE; // error
+						}
+					}
+				}
+			} else if ((*itExtern).notation.isNull()) {
+				// "External Parsed General"
+				switch (context) {
+				case InContent:
+					// Included if validating
+					if (contentHnd) {
+						if (!contentHnd->skippedEntity(
+							    reference)) {
+							d->error =
+								contentHnd
+									->errorString();
+							return FALSE; // error
+						}
+					}
+					charDataRead = FALSE;
+					break;
+				case InAttributeValue:
+					// Forbidden
+					d->error =
+						XMLERR_EXTERNALGENERALENTITYINAV;
+					charDataRead = FALSE;
+					break;
+				case InEntityValue: {
+					// Bypassed
+					stringAddC('&');
+					for (int i = 0;
+					     i < (int)reference.length(); i++) {
+						stringAddC(reference[i]);
+					}
+					stringAddC(';');
+					charDataRead = TRUE;
+				} break;
+				case InDTD:
+					// Forbidden
+					d->error =
+						XMLERR_EXTERNALGENERALENTITYINDTD;
+					charDataRead = FALSE;
+					break;
+				}
+			} else {
+				// "Unparsed"
+				// ### notify for "Occurs as Attribute Value"
+				// missing (but this is no refence, anyway)
+				// Forbidden
+				d->error = XMLERR_UNPARSEDENTITYREFERENCE;
+				charDataRead = FALSE;
 				return FALSE; // error
-			    }
 			}
-			charDataRead = FALSE;
-			break;
-		    case InAttributeValue:
-			// Forbidden
-			d->error = XMLERR_EXTERNALGENERALENTITYINAV;
-			charDataRead = FALSE;
-			break;
-		    case InEntityValue:
-			{
-			    // Bypassed
-			    stringAddC( '&' );
-			    for ( int i=0; i<(int)reference.length(); i++ ) {
-				stringAddC( reference[i] );
-			    }
-			    stringAddC( ';');
-			    charDataRead = TRUE;
-			}
-			break;
-		    case InDTD:
-			// Forbidden
-			d->error = XMLERR_EXTERNALGENERALENTITYINDTD;
-			charDataRead = FALSE;
-			break;
 		}
-	    } else {
-		// "Unparsed"
-		// ### notify for "Occurs as Attribute Value" missing (but this is no refence, anyway)
-		// Forbidden
-		d->error = XMLERR_UNPARSEDENTITYREFERENCE;
-		charDataRead = FALSE;
-		return FALSE; // error
-	    }
 	}
-    }
-    return TRUE; // no error
+	return TRUE; // no error
 }
 
 
@@ -5977,101 +6220,103 @@ bool QXmlSimpleReader::processReference( bool &charDataRead, EntityRecognitionCo
   After the string was successfully parsed, the head is on the first
   character after the string.
 */
-bool QXmlSimpleReader::parseString( const QString& s )
+bool QXmlSimpleReader::parseString(const QString &s)
 {
-    signed char Done                   = s.length();
+	signed char Done = s.length();
 
-    const signed char InpCharExpected  = 0; // the character that was expected
-    const signed char InpUnknown       = 1;
+	const signed char InpCharExpected = 0; // the character that was
+					       // expected
+	const signed char InpUnknown = 1;
 
-    signed char state = 0; // state in this function is the position in the string s
-    signed char input;
+	signed char state = 0; // state in this function is the position in the
+			       // string s
+	signed char input;
 
-    for (;;) {
+	for (;;) {
+		// get input
+		if (atEnd()) {
+			d->error = XMLERR_UNEXPECTEDEOF;
+			goto parseError;
+		}
+		if (c == s[(int)state]) {
+			input = InpCharExpected;
+		} else {
+			input = InpUnknown;
+		}
 
-	// get input
-	if ( atEnd() ) {
-	    d->error = XMLERR_UNEXPECTEDEOF;
-	    goto parseError;
+		// set state according to input
+		if (input == InpCharExpected) {
+			state++;
+		} else {
+			// Error
+			d->error = XMLERR_UNEXPECTEDCHARACTER;
+			goto parseError;
+		}
+
+		// do some actions according to state
+		next();
+		// no input is read after this
+		if (state == Done) {
+			return TRUE;
+		}
 	}
-	if ( c == s[(int)state] ) {
-	    input = InpCharExpected;
-	} else {
-	    input = InpUnknown;
-	}
 
-	// set state according to input
-	if ( input == InpCharExpected ) {
-	    state++;
-	} else {
-	    // Error
-	    d->error = XMLERR_UNEXPECTEDCHARACTER;
-	    goto parseError;
-	}
-
-	// do some actions according to state
-	next();
-	// no input is read after this
-	if ( state == Done ) {
-	    return TRUE;
-	}
-
-    }
-
-    return TRUE;
+	return TRUE;
 
 parseError:
-    reportParseError();
-    return FALSE;
+	reportParseError();
+	return FALSE;
 }
 
 
 /*!
   Inits the data values.
 */
-void QXmlSimpleReader::init( const QXmlInputSource& i )
+void QXmlSimpleReader::init(const QXmlInputSource &i)
 {
-    xml = i.data();
-    xmlLength = xml.length();
-    xmlRef = "";
+	xml = i.data();
+	xmlLength = xml.length();
+	xmlRef = "";
 
-    d->externParameterEntities.clear();
-    d->parameterEntities.clear();
-    d->externEntities.clear();
-    d->entities.clear();
+	d->externParameterEntities.clear();
+	d->parameterEntities.clear();
+	d->externEntities.clear();
+	d->entities.clear();
 
-    tags.clear();
+	tags.clear();
 
-    d->doctype = "";
-    d->xmlVersion = "";
-    d->encoding = "";
-    d->standalone = QXmlSimpleReaderPrivate::Unknown;
+	d->doctype = "";
+	d->xmlVersion = "";
+	d->encoding = "";
+	d->standalone = QXmlSimpleReaderPrivate::Unknown;
 
-    lineNr = 0;
-    columnNr = -1;
-    pos = 0;
-    next();
-    d->error = XMLERR_OK;
+	lineNr = 0;
+	columnNr = -1;
+	pos = 0;
+	next();
+	d->error = XMLERR_OK;
 }
 
 /*!
   Returns TRUE if a entity with the name \a e exists,
   otherwise returns FALSE.
 */
-bool QXmlSimpleReader::entityExist( const QString& e ) const
+bool QXmlSimpleReader::entityExist(const QString &e) const
 {
-    if (  d->parameterEntities.find(e) == d->parameterEntities.end() &&
-	    d->externParameterEntities.find(e) == d->externParameterEntities.end() ) {
-	return FALSE;
-    } else {
-	return TRUE;
-    }
+	if (d->parameterEntities.find(e) == d->parameterEntities.end() &&
+	    d->externParameterEntities.find(e) ==
+		    d->externParameterEntities.end()) {
+		return FALSE;
+	} else {
+		return TRUE;
+	}
 }
 
 void QXmlSimpleReader::reportParseError()
 {
-    if ( errorHnd )
-	errorHnd->fatalError( QXmlParseException( d->error, columnNr+1, lineNr+1 ) );
+	if (errorHnd)
+		errorHnd->fatalError(
+			QXmlParseException(d->error, columnNr + 1, lineNr + 1));
 }
 
-#endif //QT_NO_XML
+#endif // QT_NO_XML

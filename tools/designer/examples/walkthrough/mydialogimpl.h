@@ -10,10 +10,9 @@
 
 class MyDialogImpl : public MyDialog
 {
-public:
-    MyDialogImpl();
-    
-public slots:
-    void upClicked();
-    
+      public:
+	MyDialogImpl();
+
+      public slots:
+	void upClicked();
 };

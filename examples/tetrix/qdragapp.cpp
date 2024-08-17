@@ -88,10 +88,8 @@ bool QDragger::notify(QObject *o, QEvent *e)
 {
 	if (!o->isWidgetType() || o == menu)
 		return FALSE;
-	switch (e->type())
-	{
-	case QEvent::MouseMove:
-	{
+	switch (e->type()) {
+	case QEvent::MouseMove: {
 		QMouseEvent *tmp = (QMouseEvent *)e;
 		if (killingDrop)
 			return killDropEvent(tmp);
@@ -103,8 +101,7 @@ bool QDragger::notify(QObject *o, QEvent *e)
 	}
 	case QEvent::MouseButtonPress:
 	case QEvent::MouseButtonRelease:
-	case QEvent::MouseButtonDblClick:
-	{
+	case QEvent::MouseButtonDblClick: {
 		QMouseEvent *tmp = (QMouseEvent *)e;
 		if (killingDrop)
 			return killDropEvent(tmp);
@@ -112,8 +109,7 @@ bool QDragger::notify(QObject *o, QEvent *e)
 			return sendChildEvent(tmp);
 		if (tmp->button() == QMouseEvent::RightButton)
 			return dragEvent((QWidget *)o, tmp);
-	}
-	break;
+	} break;
 	default:
 		break;
 	}
@@ -125,8 +121,7 @@ bool QDragger::isParentToDragged(QWidget *w)
 	QIntDictIterator<DraggedInfo> iter(draggedDict);
 
 	DraggedInfo *tmp;
-	while ((tmp = iter.current()))
-	{
+	while ((tmp = iter.current())) {
 		++iter;
 		if (tmp->mother == w)
 			return TRUE;
@@ -141,8 +136,7 @@ bool QDragger::noWidgets(QWidget *w)
 		return TRUE;
 	QObjectListIt iter(*l);
 	QObject *tmp;
-	while ((tmp = iter.current()))
-	{
+	while ((tmp = iter.current())) {
 		++iter;
 		if (tmp->isWidgetType())
 			return FALSE;
@@ -157,11 +151,9 @@ void QDragger::sendAllChildrenHome(QWidget *w)
 		return;
 	QObjectListIt iter(*l);
 	QObject *tmp;
-	while ((tmp = iter.current()))
-	{
+	while ((tmp = iter.current())) {
 		++iter;
-		if (tmp->isWidgetType())
-		{
+		if (tmp->isWidgetType()) {
 			sendAllChildrenHome((QWidget *)tmp);
 			DraggedInfo *di = draggedDict.find((long)tmp);
 			if (di)
@@ -172,21 +164,17 @@ void QDragger::sendAllChildrenHome(QWidget *w)
 
 bool QDragger::dragEvent(QWidget *w, QMouseEvent *e)
 {
-	switch (e->type())
-	{
+	switch (e->type()) {
 	case QEvent::MouseButtonDblClick:
-	case QEvent::MouseButtonPress:
-	{
-		if (!noWidgets(w) ||		// has widget children
-			isParentToDragged(w) || // has had widget children
-			w->parentWidget() == 0)
-		{ // is top level window
+	case QEvent::MouseButtonPress: {
+		if (!noWidgets(w) || // has widget children
+		    isParentToDragged(w) || // has had widget children
+		    w->parentWidget() == 0) { // is top level window
 			hostWidget = w;
 			menu->popup(w->mapToGlobal(e->pos()));
 			return TRUE;
 		}
-		if (!draggedDict.find((long)w))
-		{
+		if (!draggedDict.find((long)w)) {
 			DraggedInfo *tmp = new DraggedInfo;
 			tmp->w = w;
 			tmp->mother = w->parentWidget();
@@ -206,17 +194,13 @@ bool QDragger::dragEvent(QWidget *w, QMouseEvent *e)
 		return TRUE;
 	}
 	case QEvent::MouseButtonRelease:
-	case QEvent::MouseMove:
-	{
-		if (dragInfo.w != 0)
-		{
+	case QEvent::MouseMove: {
+		if (dragInfo.w != 0) {
 			QPoint p = QCursor::pos() - clickOffset;
 			dragInfo.w->move(p);
 			if (e->type() == QEvent::MouseMove)
 				return TRUE;
-		}
-		else
-		{
+		} else {
 			return FALSE;
 		}
 		if (!dragInfo.w)
@@ -229,18 +213,14 @@ bool QDragger::dragEvent(QWidget *w, QMouseEvent *e)
 		QWidget *target = cursorWidget(&pos);
 		pos = pos - clickOffset;
 		QPoint p;
-		if (!target)
-		{
-			target = openDropWindow(QRect(pos, w->size()),
-									FALSE);
+		if (!target) {
+			target = openDropWindow(QRect(pos, w->size()), FALSE);
 			p = QPoint(0, 0);
-		}
-		else
+		} else
 			p = target->mapFromGlobal(pos);
 		w->reparent(target, 0, p, TRUE);
 		DropInfo *tmp = dropDict.find((long)dragInfo.mother);
-		if (tmp)
-		{
+		if (tmp) {
 			if (!tmp->userOpened && noWidgets(tmp->w))
 				dropDict.remove((long)tmp->w);
 		}
@@ -255,19 +235,16 @@ bool QDragger::dragEvent(QWidget *w, QMouseEvent *e)
 
 bool QDragger::killDropEvent(QMouseEvent *e)
 {
-	switch (e->type())
-	{
+	switch (e->type()) {
 	case QEvent::MouseButtonDblClick:
 	case QEvent::MouseButtonPress:
 		clickedWidget = cursorWidget();
 		return TRUE;
 	case QEvent::MouseButtonRelease:
 		hostWidget->releaseMouse();
-		if (clickedWidget)
-		{
+		if (clickedWidget) {
 			DropInfo *tmp = dropDict.find((long)clickedWidget);
-			if (tmp)
-			{
+			if (tmp) {
 				killDropWindow(tmp);
 				dropDict.remove((long)tmp->w);
 			}
@@ -284,24 +261,22 @@ bool QDragger::killDropEvent(QMouseEvent *e)
 
 bool QDragger::sendChildEvent(QMouseEvent *e)
 {
-	switch (e->type())
-	{
+	switch (e->type()) {
 	case QEvent::MouseButtonDblClick:
 	case QEvent::MouseButtonPress:
 		clickedWidget = cursorWidget();
 		return TRUE;
 	case QEvent::MouseButtonRelease:
 		hostWidget->releaseMouse();
-		if (clickedWidget)
-		{
-			DraggedInfo *tmp = draggedDict.find((long)clickedWidget);
-			if (tmp)
-			{
+		if (clickedWidget) {
+			DraggedInfo *tmp =
+				draggedDict.find((long)clickedWidget);
+			if (tmp) {
 				QWidget *parent = tmp->w->parentWidget();
 				sendChildHome(tmp);
 				DropInfo *dri = dropDict.find((long)parent);
-				if (dri && noWidgets(dri->w) && !dri->userOpened)
-				{
+				if (dri && noWidgets(dri->w) &&
+				    !dri->userOpened) {
 					killDropWindow(dri);
 					dropDict.remove((long)dri);
 				}
@@ -352,13 +327,10 @@ QWidget *QDragger::openDropWindow(const QRect &r, bool user)
 {
 	DropInfo *tmp = new DropInfo;
 	DropWindow *w = new DropWindow;
-	if (user)
-	{
+	if (user) {
 		tmp->userOpened = TRUE;
 		w->setCaption("Drop window");
-	}
-	else
-	{
+	} else {
 		tmp->userOpened = FALSE;
 		w->setCaption("Auto drop window");
 	}
@@ -383,14 +355,11 @@ void QDragger::killDropWindow(DropInfo *di)
 		return;
 	QObjectListIt iter(*l);
 	QObject *tmp;
-	while ((tmp = iter.current()))
-	{
+	while ((tmp = iter.current())) {
 		++iter;
-		if (tmp->isWidgetType())
-		{
+		if (tmp->isWidgetType()) {
 			DraggedInfo *dri = draggedDict.find((long)tmp);
-			if (dri)
-			{
+			if (dri) {
 				sendChildHome(dri);
 				draggedDict.remove((long)tmp);
 			}
@@ -409,11 +378,9 @@ void QDragger::killAllDropWindows(bool autoOnly)
 	QIntDictIterator<DropInfo> iter(dropDict);
 
 	DropInfo *tmp;
-	while ((tmp = iter.current()))
-	{
+	while ((tmp = iter.current())) {
 		++iter;
-		if (!autoOnly || !tmp->userOpened)
-		{
+		if (!autoOnly || !tmp->userOpened) {
 			killDropWindow(tmp);
 			dropDict.remove((long)tmp->w);
 		}
@@ -436,8 +403,7 @@ void QDragger::sendAllChildrenHome()
 	QIntDictIterator<DraggedInfo> iter(draggedDict);
 
 	DraggedInfo *tmp;
-	while ((tmp = iter.current()))
-	{
+	while ((tmp = iter.current())) {
 		++iter;
 		sendChildHome(tmp);
 		draggedDict.remove((long)tmp->w);

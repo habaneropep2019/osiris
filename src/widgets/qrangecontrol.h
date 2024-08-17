@@ -39,7 +39,7 @@
 #define QRANGECONTROL_H
 
 #ifndef QT_H
-#include "qglobal.h"
+# include "qglobal.h"
 #endif // QT_H
 
 #ifndef QT_NO_RANGECONTROL
@@ -50,70 +50,82 @@ class QRangeControlPrivate;
 
 class Q_EXPORT QRangeControl
 {
-public:
-    QRangeControl();
-    QRangeControl( int minValue, int maxValue,
-		   int lineStep, int pageStep, int value );
+      public:
+	QRangeControl();
+	QRangeControl(int minValue, int maxValue, int lineStep, int pageStep,
+		      int value);
 
-    int		value()		const;
-    void	setValue( int );
-    void	addPage();
-    void	subtractPage();
-    void	addLine();
-    void	subtractLine();
+	int value() const;
+	void setValue(int);
+	void addPage();
+	void subtractPage();
+	void addLine();
+	void subtractLine();
 
-    int		minValue()	const;
-    int		maxValue()	const;
-    void	setRange( int minValue, int maxValue );
+	int minValue() const;
+	int maxValue() const;
+	void setRange(int minValue, int maxValue);
 
-    int		lineStep()	const;
-    int		pageStep()	const;
-    void	setSteps( int line, int page );
+	int lineStep() const;
+	int pageStep() const;
+	void setSteps(int line, int page);
 
-    int		bound( int ) const;
+	int bound(int) const;
 
-protected:
-    int		positionFromValue( int val, int space ) const;
-    int		valueFromPosition( int pos, int space ) const;
-    void	directSetValue( int val );
-    int		prevValue()	const;
+      protected:
+	int positionFromValue(int val, int space) const;
+	int valueFromPosition(int pos, int space) const;
+	void directSetValue(int val);
+	int prevValue() const;
 
-    virtual void valueChange();
-    virtual void rangeChange();
-    virtual void stepChange();
+	virtual void valueChange();
+	virtual void rangeChange();
+	virtual void stepChange();
 
-private:
-    int		minVal, maxVal;
-    int		line, page;
-    int		val, prevVal;
+      private:
+	int minVal, maxVal;
+	int line, page;
+	int val, prevVal;
 
-    QRangeControlPrivate * d;
+	QRangeControlPrivate *d;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QRangeControl( const QRangeControl & );
-    QRangeControl &operator=( const QRangeControl & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QRangeControl(const QRangeControl &);
+	QRangeControl &operator=(const QRangeControl &);
+# endif
 };
 
 
 inline int QRangeControl::value() const
-{ return val; }
+{
+	return val;
+}
 
 inline int QRangeControl::prevValue() const
-{ return prevVal; }
+{
+	return prevVal;
+}
 
 inline int QRangeControl::minValue() const
-{ return minVal; }
+{
+	return minVal;
+}
 
 inline int QRangeControl::maxValue() const
-{ return maxVal; }
+{
+	return maxVal;
+}
 
 inline int QRangeControl::lineStep() const
-{ return line; }
+{
+	return line;
+}
 
 inline int QRangeControl::pageStep() const
-{ return page; }
+{
+	return page;
+}
 
 
 #endif // QT_NO_RANGECONTROL

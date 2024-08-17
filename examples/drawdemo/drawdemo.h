@@ -17,25 +17,25 @@
 
 class DrawView : public QWidget
 {
-    Q_OBJECT
-public:
-    DrawView();
-    ~DrawView();
-public slots:
-    void updateIt(int);
-    void printIt();
+	Q_OBJECT
+      public:
+	DrawView();
+	~DrawView();
+      public slots:
+	void updateIt(int);
+	void printIt();
 
-protected:
-    void drawIt(QPainter *);
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
+      protected:
+	void drawIt(QPainter *);
+	void paintEvent(QPaintEvent *);
+	void resizeEvent(QResizeEvent *);
 
-private:
-    QPrinter *printer;
-    QButtonGroup *bgroup;
-    QPushButton *print;
-    int drawindex;
-    int maxindex;
+      private:
+	QPrinter *printer;
+	QButtonGroup *bgroup;
+	QPushButton *print;
+	int drawindex;
+	int maxindex;
 };
 
 #endif

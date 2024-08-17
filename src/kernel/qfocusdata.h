@@ -39,26 +39,34 @@
 #define QFOCUSDATA_H
 
 #ifndef QT_H
-#include "qwidgetlist.h"
+# include "qwidgetlist.h"
 #endif // QT_H
 
 
-class Q_EXPORT QFocusData {
-public:
-    QWidget* focusWidget() const { return it.current(); }
+class Q_EXPORT QFocusData
+{
+      public:
+	QWidget *focusWidget() const
+	{
+		return it.current();
+	}
 
-    // List-iteration
-    QWidget* home();
-    QWidget* next();
-    QWidget* prev();
-    int count() const { return focusWidgets.count(); }
+	// List-iteration
+	QWidget *home();
+	QWidget *next();
+	QWidget *prev();
+	int count() const
+	{
+		return focusWidgets.count();
+	}
 
-private:
-    friend class QWidget;
-    QFocusData()
-	: it(focusWidgets) {}
-    QWidgetList	  focusWidgets;
-    QWidgetListIt it;
+      private:
+	friend class QWidget;
+	QFocusData() : it(focusWidgets)
+	{
+	}
+	QWidgetList focusWidgets;
+	QWidgetListIt it;
 };
 
 

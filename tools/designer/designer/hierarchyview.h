@@ -38,94 +38,94 @@ class QWizard;
 
 class HierarchyItem : public QListViewItem
 {
-public:
-    HierarchyItem( QListViewItem *parent, const QString &txt1, const QString &txt2 );
-    HierarchyItem( QListView *parent, const QString &txt1, const QString &txt2 );
+      public:
+	HierarchyItem(QListViewItem *parent, const QString &txt1,
+		      const QString &txt2);
+	HierarchyItem(QListView *parent, const QString &txt1,
+		      const QString &txt2);
 
-    void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );
-    void updateBackColor();
+	void paintCell(QPainter *p, const QColorGroup &cg, int column,
+		       int width, int align);
+	void updateBackColor();
 
-    void setWidget( QWidget *w );
-    QWidget *widget() const;
+	void setWidget(QWidget *w);
+	QWidget *widget() const;
 
-private:
-    QColor backgroundColor();
-    QColor backColor;
-    QWidget *wid;
-
+      private:
+	QColor backgroundColor();
+	QColor backColor;
+	QWidget *wid;
 };
 
 class HierarchyList : public QListView
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    HierarchyList( QWidget *parent, HierarchyView *view );
+      public:
+	HierarchyList(QWidget *parent, HierarchyView *view);
 
-    void setup();
-    void setCurrent( QWidget *w );
-    void setOpen( QListViewItem *i, bool b );
-    void changeNameOf( QWidget *w, const QString &name );
+	void setup();
+	void setCurrent(QWidget *w);
+	void setOpen(QListViewItem *i, bool b);
+	void changeNameOf(QWidget *w, const QString &name);
 
-protected:
-    void keyPressEvent( QKeyEvent *e );
-    void keyReleaseEvent( QKeyEvent *e );
-    void viewportMousePressEvent( QMouseEvent *e );
-    void viewportMouseReleaseEvent( QMouseEvent *e );
+      protected:
+	void keyPressEvent(QKeyEvent *e);
+	void keyReleaseEvent(QKeyEvent *e);
+	void viewportMousePressEvent(QMouseEvent *e);
+	void viewportMouseReleaseEvent(QMouseEvent *e);
 
-public slots:
-    void addTabPage();
-    void removeTabPage();
+      public slots:
+	void addTabPage();
+	void removeTabPage();
 
-private:
-    void resizeEvent( QResizeEvent *e );
-    void insertObject( QObject *o, QListViewItem *parent );
-    QWidget *findWidget( QListViewItem *i );
-    QListViewItem *findItem( QWidget *w );
-    QWidget *current() const;
+      private:
+	void resizeEvent(QResizeEvent *e);
+	void insertObject(QObject *o, QListViewItem *parent);
+	QWidget *findWidget(QListViewItem *i);
+	QListViewItem *findItem(QWidget *w);
+	QWidget *current() const;
 
-private slots:
-    void updateHeader();
-    void objectClicked( QListViewItem *i );
-    void showRMBMenu( QListViewItem *, const QPoint & );
+      private slots:
+	void updateHeader();
+	void objectClicked(QListViewItem *i);
+	void showRMBMenu(QListViewItem *, const QPoint &);
 
-private:
-    HierarchyView *hierarchyView;
-    QPopupMenu *normalMenu, *tabWidgetMenu;
-    bool deselect;
-
+      private:
+	HierarchyView *hierarchyView;
+	QPopupMenu *normalMenu, *tabWidgetMenu;
+	bool deselect;
 };
 
 class HierarchyView : public QVBox
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    HierarchyView( QWidget *parent );
+      public:
+	HierarchyView(QWidget *parent);
 
-    void setFormWindow( FormWindow *fw, QWidget *w );
-    FormWindow *formWindow() const;
+	void setFormWindow(FormWindow *fw, QWidget *w);
+	FormWindow *formWindow() const;
 
-    void widgetInserted( QWidget *w );
-    void widgetRemoved( QWidget *w );
-    void widgetsInserted( const QWidgetList &l );
-    void widgetsRemoved( const QWidgetList &l );
-    void namePropertyChanged( QWidget *w, const QVariant &old );
-    void tabsChanged( QTabWidget *w );
-    void pagesChanged( QWizard *w );
-    void rebuild();
-    void closed( FormWindow *fw );
+	void widgetInserted(QWidget *w);
+	void widgetRemoved(QWidget *w);
+	void widgetsInserted(const QWidgetList &l);
+	void widgetsRemoved(const QWidgetList &l);
+	void namePropertyChanged(QWidget *w, const QVariant &old);
+	void tabsChanged(QTabWidget *w);
+	void pagesChanged(QWizard *w);
+	void rebuild();
+	void closed(FormWindow *fw);
 
-protected:
-    void closeEvent( QCloseEvent *e );
+      protected:
+	void closeEvent(QCloseEvent *e);
 
-signals:
-    void hidden();
+      signals:
+	void hidden();
 
-private:
-    FormWindow *formwindow;
-    HierarchyList *listview;
-
+      private:
+	FormWindow *formwindow;
+	HierarchyList *listview;
 };
 
 

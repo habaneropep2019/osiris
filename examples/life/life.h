@@ -16,43 +16,49 @@
 
 class LifeWidget : public QFrame
 {
-    Q_OBJECT
-public:
-    LifeWidget( int s = 10, QWidget *parent = 0, const char *name = 0 );
+	Q_OBJECT
+      public:
+	LifeWidget(int s = 10, QWidget *parent = 0, const char *name = 0);
 
-    void	setPoint( int i, int j );
+	void setPoint(int i, int j);
 
-    int		maxCol() { return maxi; }
-    int		maxRow() { return maxj; }
+	int maxCol()
+	{
+		return maxi;
+	}
+	int maxRow()
+	{
+		return maxj;
+	}
 
-public slots:
-    void	nextGeneration();
-    void	clear();
+      public slots:
+	void nextGeneration();
+	void clear();
 
-protected:
-    virtual void paintEvent( QPaintEvent * );
-    virtual void mouseMoveEvent( QMouseEvent * );
-    virtual void mousePressEvent( QMouseEvent * );
-    virtual void resizeEvent( QResizeEvent * );
-    void	 mouseHandle( const QPoint &pos );
+      protected:
+	virtual void paintEvent(QPaintEvent *);
+	virtual void mouseMoveEvent(QMouseEvent *);
+	virtual void mousePressEvent(QMouseEvent *);
+	virtual void resizeEvent(QResizeEvent *);
+	void mouseHandle(const QPoint &pos);
 
-private:
-    enum { MAXSIZE = 50, MINSIZE = 10, BORDER = 5 };
+      private:
+	enum { MAXSIZE = 50, MINSIZE = 10, BORDER = 5 };
 
-    bool	cells[2][MAXSIZE + 2][MAXSIZE + 2];
-    int		current;
-    int		maxi, maxj;
+	bool cells[2][MAXSIZE + 2][MAXSIZE + 2];
+	int current;
+	int maxi, maxj;
 
-    int pos2index( int x )
-    {
-	return ( x - BORDER ) / SCALE + 1;
-    }
-    int index2pos( int i )
-    {
-	return	( i - 1 ) * SCALE + BORDER;
-    }
+	int pos2index(int x)
+	{
+		return (x - BORDER) / SCALE + 1;
+	}
+	int index2pos(int i)
+	{
+		return (i - 1) * SCALE + BORDER;
+	}
 
-    int SCALE;
+	int SCALE;
 };
 
 

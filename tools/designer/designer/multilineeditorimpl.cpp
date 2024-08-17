@@ -26,70 +26,73 @@
 #include <qmultilineedit.h>
 #include <qpushbutton.h>
 
-MultiLineEditor::MultiLineEditor( QWidget *parent, QWidget *editWidget, FormWindow *fw )
-    : MultiLineEditorBase( parent, 0, TRUE ), formwindow( fw )
+MultiLineEditor::MultiLineEditor(QWidget *parent, QWidget *editWidget,
+				 FormWindow *fw)
+	: MultiLineEditorBase(parent, 0, TRUE), formwindow(fw)
 {
-    connect( buttonHelp, SIGNAL( clicked() ), MainWindow::self, SLOT( showDialogHelp() ) );
-    mlined = (QMultiLineEdit*)editWidget;
-    preview->setAlignment( mlined->alignment() );
-    preview->setEchoMode( mlined->echoMode() );
-    preview->setMaxLength( mlined->maxLength() );
-    preview->setMaxLineLength( mlined->maxLineLength() );
-    preview->setMaxLines( mlined->maxLines() );
-    preview->setHMargin( mlined->hMargin() );
-    preview->setWordWrap( mlined->wordWrap() );
-    preview->setWrapColumnOrWidth( mlined->wrapColumnOrWidth() );
-    preview->setWrapPolicy( mlined->wrapPolicy() );
-    preview->setText( mlined->text() );
-    preview->setFocus();
-    preview->selectAll();
+	connect(buttonHelp, SIGNAL(clicked()), MainWindow::self,
+		SLOT(showDialogHelp()));
+	mlined = (QMultiLineEdit *)editWidget;
+	preview->setAlignment(mlined->alignment());
+	preview->setEchoMode(mlined->echoMode());
+	preview->setMaxLength(mlined->maxLength());
+	preview->setMaxLineLength(mlined->maxLineLength());
+	preview->setMaxLines(mlined->maxLines());
+	preview->setHMargin(mlined->hMargin());
+	preview->setWordWrap(mlined->wordWrap());
+	preview->setWrapColumnOrWidth(mlined->wrapColumnOrWidth());
+	preview->setWrapPolicy(mlined->wrapPolicy());
+	preview->setText(mlined->text());
+	preview->setFocus();
+	preview->selectAll();
 }
 
 void MultiLineEditor::okClicked()
 {
-    applyClicked();
-    accept();
+	applyClicked();
+	accept();
 }
 
 void MultiLineEditor::applyClicked()
 {
-    PopulateMultiLineEditCommand *cmd = new PopulateMultiLineEditCommand( tr( "Set text of '%1'" ).arg( mlined->name() ),
-									  formwindow, mlined, preview->text() );
-    cmd->execute();
-    formwindow->commandHistory()->addCommand( cmd );
-    preview->setFocus();
+	PopulateMultiLineEditCommand *cmd = new PopulateMultiLineEditCommand(
+		tr("Set text of '%1'").arg(mlined->name()), formwindow, mlined,
+		preview->text());
+	cmd->execute();
+	formwindow->commandHistory()->addCommand(cmd);
+	preview->setFocus();
 }
 
 
-TextEditor::TextEditor( QWidget *parent, const QString &text )
-    : MultiLineEditorBase( parent, 0, TRUE )
+TextEditor::TextEditor(QWidget *parent, const QString &text)
+	: MultiLineEditorBase(parent, 0, TRUE)
 {
-    buttonApply->hide();
-    setCaption( tr( "Text" ) );
-    preview->setText( text );
-    preview->setFocus();
-    preview->selectAll();
+	buttonApply->hide();
+	setCaption(tr("Text"));
+	preview->setText(text);
+	preview->setFocus();
+	preview->selectAll();
 }
 
-QString TextEditor::getText( QWidget *parent, const QString &text )
+QString TextEditor::getText(QWidget *parent, const QString &text)
 {
-    TextEditor dlg( parent, text );
-    if ( dlg.exec() == QDialog::Accepted ) {
-	QString txt = dlg.preview->text();
-	int i = txt.length() - 1;
-	while ( i >= 0 &&
-		( txt[ i ] == '\n' || txt[ i ] == ' ' || txt[ i ] == '\t' || txt[ i ].isSpace() ) ) {
-	    txt.remove( i, 1 );
-	    i--;
+	TextEditor dlg(parent, text);
+	if (dlg.exec() == QDialog::Accepted) {
+		QString txt = dlg.preview->text();
+		int i = txt.length() - 1;
+		while (i >= 0 && (txt[i] == '\n' || txt[i] == ' ' ||
+				  txt[i] == '\t' || txt[i].isSpace())) {
+			txt.remove(i, 1);
+			i--;
+		}
+		return txt;
 	}
-	return txt;
-    }
-    return QString::null;
+	return QString::null;
 }
 
 void TextEditor::okClicked()
 {
-    accept();
+	accept();
 }
 
 void TextEditor::applyClicked()

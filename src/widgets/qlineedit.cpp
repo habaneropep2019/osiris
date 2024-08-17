@@ -37,76 +37,83 @@
 
 #include "qlineedit.h"
 #ifndef QT_NO_LINEEDIT
-#include "qpainter.h"
-#include "qdrawutil.h"
-#include "qfontmetrics.h"
-#include "qpixmap.h"
-#include "qclipboard.h"
-#include "qapplication.h"
-#include "qvalidator.h"
-#include "qdragobject.h"
-#include "qtimer.h"
-#include "qpopupmenu.h"
-#include "qstringlist.h"
-#include "qguardedptr.h"
-#include <ctype.h>
+# include "qpainter.h"
+# include "qdrawutil.h"
+# include "qfontmetrics.h"
+# include "qpixmap.h"
+# include "qclipboard.h"
+# include "qapplication.h"
+# include "qvalidator.h"
+# include "qdragobject.h"
+# include "qtimer.h"
+# include "qpopupmenu.h"
+# include "qstringlist.h"
+# include "qguardedptr.h"
+# include <ctype.h>
 
-struct QLineEditUndoItem
-{
-    QLineEditUndoItem(){pos=0;};
-    QLineEditUndoItem( const QString& s, int p )
-	: str(s),pos(p){}
-#if defined(Q_FULL_TEMPLATE_INSTANTIATION)
-    bool operator==( const QLineEditUndoItem& ) const { return FALSE; }
-#endif
-    QString str;
-    int pos;
+struct QLineEditUndoItem {
+	QLineEditUndoItem()
+	{
+		pos = 0;
+	};
+	QLineEditUndoItem(const QString &s, int p) : str(s), pos(p)
+	{
+	}
+# if defined(Q_FULL_TEMPLATE_INSTANTIATION)
+	bool operator==(const QLineEditUndoItem &) const
+	{
+		return FALSE;
+	}
+# endif
+	QString str;
+	int pos;
 };
 
 enum {
-    IdUndo,
-    IdRedo,
-#ifndef QT_NO_CLIPBOARD
-    IdCut,
-    IdCopy,
-    IdPaste,
-#endif
-    IdClear,
-    IdSelectAll
+	IdUndo,
+	IdRedo,
+# ifndef QT_NO_CLIPBOARD
+	IdCut,
+	IdCopy,
+	IdPaste,
+# endif
+	IdClear,
+	IdSelectAll
 };
 
 struct QLineEditPrivate {
-    QLineEditPrivate( QLineEdit * l ):
-	frame(TRUE), mode(QLineEdit::Normal),
-	readonly(FALSE), validator( 0 ),
-	pm(0), pmDirty( TRUE ),
-	blinkTimer( l, "QLineEdit blink timer" ),
-	dragTimer( l, "QLineEdit drag timer" ),
-	dndTimer( l, "DnD Timer" ),
-	inDoubleClick( FALSE ), offsetDirty( FALSE ),
-	undo(TRUE), needundo( FALSE ), ignoreUndoWithDel( FALSE ),
-	mousePressed( FALSE ), dnd_primed( FALSE ), passwordChar( '*' ) {}
+	QLineEditPrivate(QLineEdit *l)
+		: frame(TRUE), mode(QLineEdit::Normal), readonly(FALSE),
+		  validator(0), pm(0), pmDirty(TRUE),
+		  blinkTimer(l, "QLineEdit blink timer"),
+		  dragTimer(l, "QLineEdit drag timer"),
+		  dndTimer(l, "DnD Timer"), inDoubleClick(FALSE),
+		  offsetDirty(FALSE), undo(TRUE), needundo(FALSE),
+		  ignoreUndoWithDel(FALSE), mousePressed(FALSE),
+		  dnd_primed(FALSE), passwordChar('*')
+	{
+	}
 
-    bool frame;
-    QLineEdit::EchoMode mode;
-    bool readonly;
-    const QValidator * validator;
-    QPixmap * pm;
-    bool pmDirty;
-    QTimer blinkTimer;
-    QTimer dragTimer, dndTimer;
-    QRect cursorRepaintRect;
-    bool inDoubleClick;
-    bool offsetDirty;
-    QValueList<QLineEditUndoItem> undoList;
-    QValueList<QLineEditUndoItem> redoList;
-    bool undo;
-    bool needundo;
-    bool ignoreUndoWithDel;
-    bool mousePressed;
-    QPoint dnd_startpos;
-    bool dnd_primed;
-    QChar passwordChar;
+	bool frame;
+	QLineEdit::EchoMode mode;
+	bool readonly;
+	const QValidator *validator;
+	QPixmap *pm;
+	bool pmDirty;
+	QTimer blinkTimer;
+	QTimer dragTimer, dndTimer;
+	QRect cursorRepaintRect;
+	bool inDoubleClick;
+	bool offsetDirty;
+	QValueList<QLineEditUndoItem> undoList;
+	QValueList<QLineEditUndoItem> redoList;
+	bool undo;
+	bool needundo;
+	bool ignoreUndoWithDel;
+	bool mousePressed;
+	QPoint dnd_startpos;
+	bool dnd_primed;
+	QChar passwordChar;
 };
 
 
@@ -172,7 +179,7 @@ struct QLineEditPrivate {
 */
 
 
-static const int scrollTime = 40;		// mark text scroll time
+static const int scrollTime = 40; // mark text scroll time
 
 
 /*!
@@ -185,10 +192,10 @@ static const int scrollTime = 40;		// mark text scroll time
   \sa setText(), setMaxLength()
 */
 
-QLineEdit::QLineEdit( QWidget *parent, const char *name )
-    : QWidget( parent, name, WRepaintNoErase )
+QLineEdit::QLineEdit(QWidget *parent, const char *name)
+	: QWidget(parent, name, WRepaintNoErase)
 {
-    init();
+	init();
 }
 
 
@@ -203,12 +210,11 @@ QLineEdit::QLineEdit( QWidget *parent, const char *name )
   \sa text(), setMaxLength()
 */
 
-QLineEdit::QLineEdit( const QString & contents,
-		      QWidget *parent, const char *name )
-    : QWidget( parent, name )
+QLineEdit::QLineEdit(const QString &contents, QWidget *parent, const char *name)
+	: QWidget(parent, name)
 {
-    init();
-    setText( contents );
+	init();
+	setText(contents);
 }
 
 
@@ -218,9 +224,9 @@ QLineEdit::QLineEdit( const QString & contents,
 
 QLineEdit::~QLineEdit()
 {
-    if ( d->pm )
-	delete d->pm;
-    delete d;
+	if (d->pm)
+		delete d->pm;
+	delete d;
 }
 
 
@@ -228,36 +234,33 @@ QLineEdit::~QLineEdit()
 
 void QLineEdit::init()
 {
-    d = new QLineEditPrivate( this );
-    connect( &d->blinkTimer, SIGNAL(timeout()),
-	     this, SLOT(blinkSlot()) );
-#ifndef QT_NO_DRAGANDDROP
-    connect( &d->dragTimer, SIGNAL(timeout()),
-	     this, SLOT(dragScrollSlot()) );
-    connect( &d->dndTimer, SIGNAL(timeout()),
-	     this, SLOT(doDrag()) );
-#endif
-    cursorPos = 0;
-    offset = 0;
-    maxLen = 32767;
-    cursorOn = TRUE;
-    markAnchor = 0;
-    markDrag = 0;
-    dragScrolling = FALSE;
-    scrollingLeft = FALSE;
-    tbuf = QString::fromLatin1("");
-    setFocusPolicy( StrongFocus );
-#ifndef QT_NO_CURSOR
-    setCursor( ibeamCursor );
-#endif
-    setBackgroundMode( PaletteBase );
-    setKeyCompression( TRUE );
-    alignmentFlag = Qt::AlignLeft;
-    setAcceptDrops( TRUE );
-    //   Specifies that this widget can use more, but is able to survive on
-    //   less, horizontal space; and is fixed vertically.
-    setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
-    ed = FALSE;
+	d = new QLineEditPrivate(this);
+	connect(&d->blinkTimer, SIGNAL(timeout()), this, SLOT(blinkSlot()));
+# ifndef QT_NO_DRAGANDDROP
+	connect(&d->dragTimer, SIGNAL(timeout()), this, SLOT(dragScrollSlot()));
+	connect(&d->dndTimer, SIGNAL(timeout()), this, SLOT(doDrag()));
+# endif
+	cursorPos = 0;
+	offset = 0;
+	maxLen = 32767;
+	cursorOn = TRUE;
+	markAnchor = 0;
+	markDrag = 0;
+	dragScrolling = FALSE;
+	scrollingLeft = FALSE;
+	tbuf = QString::fromLatin1("");
+	setFocusPolicy(StrongFocus);
+# ifndef QT_NO_CURSOR
+	setCursor(ibeamCursor);
+# endif
+	setBackgroundMode(PaletteBase);
+	setKeyCompression(TRUE);
+	alignmentFlag = Qt::AlignLeft;
+	setAcceptDrops(TRUE);
+	//   Specifies that this widget can use more, but is able to survive on
+	//   less, horizontal space; and is fixed vertically.
+	setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+	ed = FALSE;
 }
 
 
@@ -270,31 +273,31 @@ void QLineEdit::init()
   \sa text()
 */
 
-void QLineEdit::setText( const QString &text )
+void QLineEdit::setText(const QString &text)
 {
-    QString oldText( tbuf );
-    tbuf = text;
-    if ( (int)tbuf.length() > maxLen )
-	tbuf.truncate( maxLen );
-    offset    = 0;
-    cursorPos = 0;
-    markAnchor = 0;
-    markDrag = 0;
-    end( FALSE );
-#ifndef QT_NO_VALIDATOR
-    if ( validator() )
-	(void)validator()->validate( tbuf, cursorPos );
-#endif
-    d->pmDirty = TRUE;
+	QString oldText(tbuf);
+	tbuf = text;
+	if ((int)tbuf.length() > maxLen)
+		tbuf.truncate(maxLen);
+	offset = 0;
+	cursorPos = 0;
+	markAnchor = 0;
+	markDrag = 0;
+	end(FALSE);
+# ifndef QT_NO_VALIDATOR
+	if (validator())
+		(void)validator()->validate(tbuf, cursorPos);
+# endif
+	d->pmDirty = TRUE;
 
-    update();
-    if ( d->undo ) {
-	d->undoList.clear();
-	d->redoList.clear();
-	d->needundo = TRUE;
-     }
-    if ( oldText != tbuf )
-	emit textChanged( tbuf );
+	update();
+	if (d->undo) {
+		d->undoList.clear();
+		d->redoList.clear();
+		d->needundo = TRUE;
+	}
+	if (oldText != tbuf)
+		emit textChanged(tbuf);
 }
 
 
@@ -307,8 +310,8 @@ void QLineEdit::setText( const QString &text )
 
 void QLineEdit::selectAll()
 {
-    setSelection( 0, tbuf.length() );
-    end( TRUE );
+	setSelection(0, tbuf.length());
+	end(TRUE);
 }
 
 
@@ -320,7 +323,7 @@ void QLineEdit::selectAll()
 
 void QLineEdit::deselect()
 {
-    setSelection( cursorPos, 0 );
+	setSelection(cursorPos, 0);
 }
 
 
@@ -331,7 +334,7 @@ void QLineEdit::deselect()
 
 QString QLineEdit::text() const
 {
-    return tbuf;
+	return tbuf;
 }
 
 
@@ -345,20 +348,20 @@ the same as text(), but can be e.g. "*****" if EchoMode is Password or
 
 QString QLineEdit::displayText() const
 {
-    QString res;
+	QString res;
 
-    switch( echoMode() ) {
-    case Normal:
-	res = tbuf;
-	break;
-    case NoEcho:
-	res = QString::fromLatin1("");
-	break;
-    case Password:
-	res.fill( d->passwordChar, tbuf.length() );
-	break;
-    }
-    return res;
+	switch (echoMode()) {
+	case Normal:
+		res = tbuf;
+		break;
+	case NoEcho:
+		res = QString::fromLatin1("");
+		break;
+	case Password:
+		res.fill(d->passwordChar, tbuf.length());
+		break;
+	}
+	return res;
 }
 
 
@@ -372,7 +375,7 @@ QString QLineEdit::displayText() const
 
 bool QLineEdit::hasMarkedText() const
 {
-    return markAnchor != markDrag;
+	return markAnchor != markDrag;
 }
 
 /*!
@@ -384,7 +387,7 @@ bool QLineEdit::hasMarkedText() const
 
 QString QLineEdit::markedText() const
 {
-    return tbuf.mid( minMark(), maxMark() - minMark() );
+	return tbuf.mid(minMark(), maxMark() - minMark());
 }
 
 /*!
@@ -394,7 +397,7 @@ QString QLineEdit::markedText() const
 
 int QLineEdit::maxLength() const
 {
-    return maxLen;
+	return maxLen;
 }
 
 /*!
@@ -404,18 +407,18 @@ int QLineEdit::maxLength() const
   string is shown. \sa maxLength().
 */
 
-void QLineEdit::setMaxLength( int m )
+void QLineEdit::setMaxLength(int m)
 {
-    maxLen = m;
-    markAnchor = 0;
-    markDrag = 0;
-    if ( (int)tbuf.length() > maxLen ) {
-	tbuf.truncate( maxLen );
-	d->pmDirty = TRUE;
-    }
-    setCursorPosition( 0 );
-    if ( d->pmDirty )
-	update();
+	maxLen = m;
+	markAnchor = 0;
+	markDrag = 0;
+	if ((int)tbuf.length() > maxLen) {
+		tbuf.truncate(maxLen);
+		d->pmDirty = TRUE;
+	}
+	setCursorPosition(0);
+	if (d->pmDirty)
+		update();
 }
 
 /*!
@@ -464,491 +467,508 @@ void QLineEdit::setMaxLength( int m )
   All other keys with valid ASCII codes insert themselves into the line.
 */
 
-void QLineEdit::keyPressEvent( QKeyEvent *e )
+void QLineEdit::keyPressEvent(QKeyEvent *e)
 {
-    if ( e->key() == Key_Enter || e->key() == Key_Return ) {
-#ifdef QT_NO_VALIDATOR
-	emit returnPressed();
-	e->ignore();
-#else
-	const QValidator * v = validator();
-	if ( !v || v->validate( tbuf, cursorPos ) == QValidator::Acceptable ) {
-	    emit returnPressed();
-	    e->ignore();
-	}
-	else if ( v ) {
-	    QString old( tbuf );
-	    v->fixup( tbuf );
-	    if ( old != tbuf ) {
-		d->pmDirty = TRUE;
-		if ( cursorPos > (int)tbuf.length() )
-		    cursorPos = tbuf.length();
-		update();
-	    }
-	    if ( v->validate( tbuf, cursorPos ) == QValidator::Acceptable )
+	if (e->key() == Key_Enter || e->key() == Key_Return) {
+# ifdef QT_NO_VALIDATOR
 		emit returnPressed();
-	    e->ignore();
-	}
-#endif
-	return;
-    }
-    if ( !d->readonly ) {
-	QString t = e->text();
-	if ( !t.isEmpty() && (!e->ascii() || e->ascii()>=32) &&
-	     e->key() != Key_Delete &&
-	     e->key() != Key_Backspace ) {
-	    insert( t );
-	    return;
-	}
-    }
-    bool needundo = d->needundo;
-    d->needundo = TRUE;
-    bool ignoreUndoWithDel = d->ignoreUndoWithDel;
-    d->ignoreUndoWithDel = FALSE;
-    int unknown = 0;
-    if ( e->state() & ControlButton ) {
-	switch ( e->key() ) {
-	case Key_A:
-	    home( e->state() & ShiftButton );
-	    break;
-	case Key_B:
-	    cursorLeft( e->state() & ShiftButton );
-	    break;
-#ifndef QT_NO_CLIPBOARD
-	case Key_C:
-	    copy();
-	    break;
-#endif
-	case Key_D:
-	    if ( !d->readonly ) {
-		d->ignoreUndoWithDel = ignoreUndoWithDel;
-		del();
-	    }
-	    break;
-	case Key_E:
-	    end( e->state() & ShiftButton );
-	    break;
-	case Key_F:
-	    cursorRight( e->state() & ShiftButton );
-	    break;
-	case Key_H:
-	    if ( !d->readonly ) {
-		d->ignoreUndoWithDel = ignoreUndoWithDel;
-		backspace();
-	    }
-	    break;
-	case Key_K:
-	    if ( !d->readonly && cursorPos < (int)tbuf.length() ) {
-		QString t( tbuf );
-		if ( d->undoList.isEmpty() || d->undoList.last().str != tbuf ) {
-		    d->undoList += QLineEditUndoItem(tbuf, cursorPos );
-		    d->redoList.clear();
+		e->ignore();
+# else
+		const QValidator *v = validator();
+		if (!v ||
+		    v->validate(tbuf, cursorPos) == QValidator::Acceptable) {
+			emit returnPressed();
+			e->ignore();
+		} else if (v) {
+			QString old(tbuf);
+			v->fixup(tbuf);
+			if (old != tbuf) {
+				d->pmDirty = TRUE;
+				if (cursorPos > (int)tbuf.length())
+					cursorPos = tbuf.length();
+				update();
+			}
+			if (v->validate(tbuf, cursorPos) ==
+			    QValidator::Acceptable)
+				emit returnPressed();
+			e->ignore();
 		}
-		t.truncate( cursorPos );
-		validateAndSet( t, cursorPos, cursorPos, cursorPos );
-	    }
-	    break;
-#ifndef QT_NO_CLIPBOARD
-	case Key_V:
-	    if ( !d->readonly )
-		insert( QApplication::clipboard()->text() );
-	    break;
-	case Key_X:
-	    if ( !d->readonly && hasMarkedText() && echoMode() == Normal ) {
-		copy();
-		del();
-	    }
-	    break;
-#if defined (_WS_WIN_)
-	case Key_Insert:
-	    copy();
-	    break;
-#endif
-#endif
-	case Key_Right:
-	    cursorWordForward( e->state() & ShiftButton );
-	    break;
-	case Key_Left:
-	    cursorWordBackward( e->state() & ShiftButton );
-	    break;
-	case Key_Z:
-	    if ( !d->readonly )
-		undoInternal();
-	    break;
-	case Key_Y:
-	    if ( !d->readonly )
-		redoInternal();
-	    break;
-	default:
-	    unknown++;
+# endif
+		return;
 	}
-    } else {
-	switch ( e->key() ) {
-	case Key_Left:
-	    cursorLeft( e->state() & ShiftButton );
-	    break;
-	case Key_Right:
-	    cursorRight( e->state() & ShiftButton );
-	    break;
-	case Key_Backspace:
-	    if ( !d->readonly ) {
-		d->ignoreUndoWithDel = ignoreUndoWithDel;
-		backspace();
-	    }
-	    break;
-	case Key_Home:
-	    home( e->state() & ShiftButton );
-	    break;
-	case Key_End:
-	    end( e->state() & ShiftButton );
-	    break;
-	case Key_Delete:
-	    if ( !d->readonly ) {
-#if defined (_WS_WIN_)
-		if ( e->state() & ShiftButton ) {
-		    cut();
-		    break;
+	if (!d->readonly) {
+		QString t = e->text();
+		if (!t.isEmpty() && (!e->ascii() || e->ascii() >= 32) &&
+		    e->key() != Key_Delete && e->key() != Key_Backspace) {
+			insert(t);
+			return;
 		}
-#endif
-		d->ignoreUndoWithDel = ignoreUndoWithDel;
-		del();
-	    }
-	    break;
-#if defined (_WS_WIN_)
-	case Key_Insert:
-	    if ( !d->readonly && e->state() & ShiftButton )
-		paste();
-	    else
-		unknown++;
-	    break;
-#endif
-	case Key_F14: // Undo key on Sun keyboards
-	    if ( !d->readonly )
-		undoInternal();
-	    break;
-#ifndef QT_NO_CLIPBOARD
-	case Key_F16: // Copy key on Sun keyboards
-	    copy();
-	    break;
-	case Key_F18: // Paste key on Sun keyboards
-	    if ( !d->readonly )
-		insert( QApplication::clipboard()->text() );
-	    break;
-	case Key_F20: // Cut key on Sun keyboards
-	    if ( !d->readonly && hasMarkedText() && echoMode() == Normal ) {
-		copy();
-		del();
-	    }
-	    break;
-#endif
-	default:
-	    unknown++;
 	}
-    }
+	bool needundo = d->needundo;
+	d->needundo = TRUE;
+	bool ignoreUndoWithDel = d->ignoreUndoWithDel;
+	d->ignoreUndoWithDel = FALSE;
+	int unknown = 0;
+	if (e->state() & ControlButton) {
+		switch (e->key()) {
+		case Key_A:
+			home(e->state() & ShiftButton);
+			break;
+		case Key_B:
+			cursorLeft(e->state() & ShiftButton);
+			break;
+# ifndef QT_NO_CLIPBOARD
+		case Key_C:
+			copy();
+			break;
+# endif
+		case Key_D:
+			if (!d->readonly) {
+				d->ignoreUndoWithDel = ignoreUndoWithDel;
+				del();
+			}
+			break;
+		case Key_E:
+			end(e->state() & ShiftButton);
+			break;
+		case Key_F:
+			cursorRight(e->state() & ShiftButton);
+			break;
+		case Key_H:
+			if (!d->readonly) {
+				d->ignoreUndoWithDel = ignoreUndoWithDel;
+				backspace();
+			}
+			break;
+		case Key_K:
+			if (!d->readonly && cursorPos < (int)tbuf.length()) {
+				QString t(tbuf);
+				if (d->undoList.isEmpty() ||
+				    d->undoList.last().str != tbuf) {
+					d->undoList += QLineEditUndoItem(
+						tbuf, cursorPos);
+					d->redoList.clear();
+				}
+				t.truncate(cursorPos);
+				validateAndSet(t, cursorPos, cursorPos,
+					       cursorPos);
+			}
+			break;
+# ifndef QT_NO_CLIPBOARD
+		case Key_V:
+			if (!d->readonly)
+				insert(QApplication::clipboard()->text());
+			break;
+		case Key_X:
+			if (!d->readonly && hasMarkedText() &&
+			    echoMode() == Normal) {
+				copy();
+				del();
+			}
+			break;
+#  if defined(_WS_WIN_)
+		case Key_Insert:
+			copy();
+			break;
+#  endif
+# endif
+		case Key_Right:
+			cursorWordForward(e->state() & ShiftButton);
+			break;
+		case Key_Left:
+			cursorWordBackward(e->state() & ShiftButton);
+			break;
+		case Key_Z:
+			if (!d->readonly)
+				undoInternal();
+			break;
+		case Key_Y:
+			if (!d->readonly)
+				redoInternal();
+			break;
+		default:
+			unknown++;
+		}
+	} else {
+		switch (e->key()) {
+		case Key_Left:
+			cursorLeft(e->state() & ShiftButton);
+			break;
+		case Key_Right:
+			cursorRight(e->state() & ShiftButton);
+			break;
+		case Key_Backspace:
+			if (!d->readonly) {
+				d->ignoreUndoWithDel = ignoreUndoWithDel;
+				backspace();
+			}
+			break;
+		case Key_Home:
+			home(e->state() & ShiftButton);
+			break;
+		case Key_End:
+			end(e->state() & ShiftButton);
+			break;
+		case Key_Delete:
+			if (!d->readonly) {
+# if defined(_WS_WIN_)
+				if (e->state() & ShiftButton) {
+					cut();
+					break;
+				}
+# endif
+				d->ignoreUndoWithDel = ignoreUndoWithDel;
+				del();
+			}
+			break;
+# if defined(_WS_WIN_)
+		case Key_Insert:
+			if (!d->readonly && e->state() & ShiftButton)
+				paste();
+			else
+				unknown++;
+			break;
+# endif
+		case Key_F14: // Undo key on Sun keyboards
+			if (!d->readonly)
+				undoInternal();
+			break;
+# ifndef QT_NO_CLIPBOARD
+		case Key_F16: // Copy key on Sun keyboards
+			copy();
+			break;
+		case Key_F18: // Paste key on Sun keyboards
+			if (!d->readonly)
+				insert(QApplication::clipboard()->text());
+			break;
+		case Key_F20: // Cut key on Sun keyboards
+			if (!d->readonly && hasMarkedText() &&
+			    echoMode() == Normal) {
+				copy();
+				del();
+			}
+			break;
+# endif
+		default:
+			unknown++;
+		}
+	}
 
-    if ( unknown ) {				// unknown key
-	d->needundo = needundo;
-	e->ignore();
-	return;
-    }
+	if (unknown) { // unknown key
+		d->needundo = needundo;
+		e->ignore();
+		return;
+	}
 }
 
 
 /*!\reimp
-*/
+ */
 
-void QLineEdit::focusInEvent( QFocusEvent * e)
+void QLineEdit::focusInEvent(QFocusEvent *e)
 {
-    d->pmDirty = TRUE;
-    cursorOn = FALSE;
-    blinkOn();
-    if ( e->reason() == QFocusEvent::Tab )
-	selectAll();
-    d->pmDirty = TRUE;
-    repaint( FALSE );
+	d->pmDirty = TRUE;
+	cursorOn = FALSE;
+	blinkOn();
+	if (e->reason() == QFocusEvent::Tab)
+		selectAll();
+	d->pmDirty = TRUE;
+	repaint(FALSE);
 }
 
 
 /*!\reimp
-*/
+ */
 
-void QLineEdit::focusOutEvent( QFocusEvent * e )
+void QLineEdit::focusOutEvent(QFocusEvent *e)
 {
-    if ( e->reason() != QFocusEvent::ActiveWindow
-	 && e->reason() != QFocusEvent::Popup )
-	deselect();
-    d->dragTimer.stop();
-    if ( cursorOn )
-	blinkSlot();
-    d->pmDirty = TRUE;
-    repaint( FALSE );
+	if (e->reason() != QFocusEvent::ActiveWindow &&
+	    e->reason() != QFocusEvent::Popup)
+		deselect();
+	d->dragTimer.stop();
+	if (cursorOn)
+		blinkSlot();
+	d->pmDirty = TRUE;
+	repaint(FALSE);
 }
 
 /*!\reimp
-*/
-void QLineEdit::leaveEvent( QEvent * )
+ */
+void QLineEdit::leaveEvent(QEvent *)
 {
 }
 
 
 /*!\reimp
-*/
+ */
 
-void QLineEdit::paintEvent( QPaintEvent *e )
+void QLineEdit::paintEvent(QPaintEvent *e)
 {
-    if ( d->offsetDirty )
-	updateOffset();
-    if ( !d->pm || d->pmDirty ) {
-	makePixmap();
-	if ( d->pm->isNull() ) {
-	    delete d->pm;
-	    d->pm = 0;
-	    return;
+	if (d->offsetDirty)
+		updateOffset();
+	if (!d->pm || d->pmDirty) {
+		makePixmap();
+		if (d->pm->isNull()) {
+			delete d->pm;
+			d->pm = 0;
+			return;
+		}
+
+		QPainter p(d->pm, this);
+
+		const QColorGroup &g = colorGroup();
+		QBrush bg = g.brush((isEnabled()) ? QColorGroup::Base :
+						    QColorGroup::Background);
+		QFontMetrics fm = fontMetrics();
+		int markBegin = minMark();
+		int markEnd = maxMark();
+
+		p.fillRect(0, 0, width(), height(), bg);
+
+		QString display = displayText();
+		QString before = display.mid(0, markBegin);
+		QString marked = display.mid(markBegin, markEnd - markBegin);
+		QString after = display.mid(markEnd, display.length());
+
+		int y = (d->pm->height() + fm.height()) / 2 - fm.descent() - 1;
+
+		int x = offset + 2;
+		int w;
+
+		w = fm.width(before);
+		if (x < d->pm->width() && x + w >= 0) {
+			p.setPen(g.text());
+			p.drawText(x, y, before);
+		}
+		x += w;
+
+		w = fm.width(marked);
+		if (x < d->pm->width() && x + w >= 0) {
+			p.fillRect(x, y - fm.ascent() - 1, w, fm.height() + 2,
+				   g.brush(QColorGroup::Highlight));
+			p.setPen(g.highlightedText());
+			p.drawText(x, y, marked);
+		}
+		x += w;
+
+		w = fm.width(after);
+		if (x < d->pm->width() && x + w >= 0) {
+			p.setPen(g.text());
+			p.drawText(x, y, after);
+		}
+		// ... x += w;
+
+		p.setPen(g.text());
+
+		d->cursorRepaintRect.setTop(y + frameW() - fm.ascent());
+		d->cursorRepaintRect.setHeight(fm.height());
+		d->pmDirty = FALSE;
 	}
 
-	QPainter p( d->pm, this );
+	QPainter p(this);
 
-	const QColorGroup & g = colorGroup();
-	QBrush bg = g.brush((isEnabled()) ? QColorGroup::Base :
-			    QColorGroup::Background);
-	QFontMetrics fm = fontMetrics();
-	int markBegin = minMark();
-	int markEnd = maxMark();
-
-	p.fillRect( 0, 0, width(), height(), bg );
-
-	QString display = displayText();
-	QString before = display.mid( 0, markBegin );
-	QString marked = display.mid( markBegin, markEnd - markBegin );
-	QString after = display.mid( markEnd, display.length() );
-
-	int y = (d->pm->height() + fm.height())/2 - fm.descent() - 1 ;
-
-	int x = offset + 2;
-	int w;
-
-	w = fm.width( before );
-	if ( x < d->pm->width() && x + w >= 0 ) {
-	    p.setPen( g.text() );
-	    p.drawText( x, y, before );
+	if (frame()) {
+		style().drawPanel(&p, 0, 0, width(), height(), colorGroup(),
+				  TRUE, style().defaultFrameWidth());
+		p.drawPixmap(frameW(), frameW(), *d->pm);
+	} else {
+		p.drawPixmap(0, 0, *d->pm);
 	}
-	x += w;
 
-	w = fm.width( marked );
-	if ( x < d->pm->width() && x + w >= 0 ) {
-	    p.fillRect( x, y-fm.ascent()-1, w, fm.height()+2,
-			g.brush( QColorGroup::Highlight ) );
-	    p.setPen( g.highlightedText() );
-	    p.drawText( x, y, marked );
+	if (hasFocus()) {
+		d->cursorRepaintRect =
+			QRect(offset + frameW() +
+				      fontMetrics().width(
+					      displayText().left(cursorPos)),
+			      d->cursorRepaintRect.top(), 5,
+			      d->cursorRepaintRect.height());
+
+		int curYTop = d->cursorRepaintRect.y();
+		int curYBot = d->cursorRepaintRect.bottom();
+		int curXPos = d->cursorRepaintRect.x() + 2;
+		if (!d->readonly && cursorOn &&
+		    d->cursorRepaintRect.intersects(e->rect())) {
+			p.setPen(colorGroup().text());
+			p.drawLine(curXPos, curYTop, curXPos, curYBot);
+			if (style() != WindowsStyle) {
+				p.drawLine(curXPos - 2, curYTop, curXPos + 2,
+					   curYTop);
+				p.drawLine(curXPos - 2, curYBot, curXPos + 2,
+					   curYBot);
+			}
+		}
+		// Now is the optimal time to set this - all the
+		// repaint-minimization then also reduces the number of calls to
+		// setMicroFocusHint().
+		setMicroFocusHint(curXPos, curYTop, 1, curYBot - curYTop + 1);
+	} else {
+		delete d->pm;
+		d->pm = 0;
 	}
-	x += w;
+}
 
-	w = fm.width( after );
-	if ( x < d->pm->width() && x + w >= 0 ) {
-	    p.setPen( g.text() );
-	    p.drawText( x, y, after );
-	}
-	// ... x += w;
 
-	p.setPen( g.text() );
+/*!\reimp
+ */
 
-	d->cursorRepaintRect.setTop( y + frameW() - fm.ascent() );
-	d->cursorRepaintRect.setHeight( fm.height() );
-	d->pmDirty = FALSE;
-    }
-
-    QPainter p( this );
-
-    if ( frame() ) {
-	style().drawPanel( &p, 0, 0, width(), height(), colorGroup(),
-			   TRUE, style().defaultFrameWidth() );
-	p.drawPixmap( frameW(), frameW(), *d->pm );
-    } else {
-	p.drawPixmap( 0, 0, *d->pm );
-    }
-
-    if ( hasFocus() ) {
-	d->cursorRepaintRect
-	    = QRect( offset + frameW() +
-		     fontMetrics().width( displayText().left( cursorPos ) ),
-		     d->cursorRepaintRect.top(),
-		     5, d->cursorRepaintRect.height() );
-
-	int curYTop = d->cursorRepaintRect.y();
-	int curYBot = d->cursorRepaintRect.bottom();
-	int curXPos = d->cursorRepaintRect.x() + 2;
-	if ( !d->readonly && cursorOn &&
-	     d->cursorRepaintRect.intersects( e->rect() ) ) {
-	    p.setPen( colorGroup().text() );
-	    p.drawLine( curXPos, curYTop, curXPos, curYBot );
-	    if ( style() != WindowsStyle ) {
-		p.drawLine( curXPos - 2, curYTop, curXPos + 2, curYTop );
-		p.drawLine( curXPos - 2, curYBot, curXPos + 2, curYBot );
-	    }
-	}
-	// Now is the optimal time to set this - all the repaint-minimization
-	// then also reduces the number of calls to setMicroFocusHint().
-	setMicroFocusHint( curXPos, curYTop, 1, curYBot-curYTop+1 );
-    } else {
+void QLineEdit::resizeEvent(QResizeEvent *)
+{
 	delete d->pm;
 	d->pm = 0;
-    }
-
-}
-
-
-/*!\reimp
-*/
-
-void QLineEdit::resizeEvent( QResizeEvent * )
-{
-    delete d->pm;
-    d->pm = 0;
-    offset = 0;
-    updateOffset();
+	offset = 0;
+	updateOffset();
 }
 
 
 /*! \reimp
-*/
-bool QLineEdit::event( QEvent * e )
+ */
+bool QLineEdit::event(QEvent *e)
 {
-    if ( e->type() == QEvent::AccelOverride && !d->readonly ) {
-	QKeyEvent* ke = (QKeyEvent*) e;
-	if ( ke->state() == NoButton ) {
-	    if ( ke->key() < Key_Escape ) {
-		ke->accept();
-	    } else {
-		switch ( ke->key() ) {
-  		case Key_Delete:
-  		case Key_Home:
-  		case Key_End:
-  		case Key_Backspace:
-  		    ke->accept();
- 		default:
-  		    break;
-  		}
-	    }
-	} else if ( ke->state() & ControlButton ) {
-	    switch ( ke->key() ) {
-// Those are too frequently used for application functionality
-/*	    case Key_A:	
-	    case Key_B:
-	    case Key_D:
-	    case Key_E:
-	    case Key_F:
-	    case Key_H:
-	    case Key_K:
-*/
-	    case Key_C:
-	    case Key_V:
-	    case Key_X:	    
-	    case Key_Y:
-	    case Key_Z:	    
-	    case Key_Left:
-	    case Key_Right:
-#if defined (_WS_WIN_)
-	    case Key_Insert:
-#endif
-		ke->accept();
-	    default:
-		break;
-	    }
+	if (e->type() == QEvent::AccelOverride && !d->readonly) {
+		QKeyEvent *ke = (QKeyEvent *)e;
+		if (ke->state() == NoButton) {
+			if (ke->key() < Key_Escape) {
+				ke->accept();
+			} else {
+				switch (ke->key()) {
+				case Key_Delete:
+				case Key_Home:
+				case Key_End:
+				case Key_Backspace:
+					ke->accept();
+				default:
+					break;
+				}
+			}
+		} else if (ke->state() & ControlButton) {
+			switch (ke->key()) {
+				// Those are too frequently used for application
+				// functionality
+				/*	    case Key_A:
+					    case Key_B:
+					    case Key_D:
+					    case Key_E:
+					    case Key_F:
+					    case Key_H:
+					    case Key_K:
+				*/
+			case Key_C:
+			case Key_V:
+			case Key_X:
+			case Key_Y:
+			case Key_Z:
+			case Key_Left:
+			case Key_Right:
+# if defined(_WS_WIN_)
+			case Key_Insert:
+# endif
+				ke->accept();
+			default:
+				break;
+			}
+		}
 	}
-    }
-    return QWidget::event( e );
+	return QWidget::event(e);
 }
 
 
 /*! \reimp
-*/
-void QLineEdit::mousePressEvent( QMouseEvent *e )
+ */
+void QLineEdit::mousePressEvent(QMouseEvent *e)
 {
-    d->dnd_startpos = e->pos();
-    d->dnd_primed = FALSE;
-#ifndef QT_NO_POPUPMENU
-    if ( e->button() == RightButton ) {
-	QGuardedPtr<QPopupMenu> popup = new QPopupMenu( this );
-	int id[ 7 ];
-	id[ IdUndo ] = popup->insertItem( tr( "Undo" ) );
-	id[ IdRedo ] = popup->insertItem( tr( "Redo" ) );
-	popup->insertSeparator();
-#ifndef QT_NO_CLIPBOARD
-	id[ IdCut ] = popup->insertItem( tr( "Cut" ) );
-	id[ IdCopy ] = popup->insertItem( tr( "Copy" ) );
-	id[ IdPaste ] = popup->insertItem( tr( "Paste" ) );
-#endif
-	id[ IdClear ] = popup->insertItem( tr( "Clear" ) );
-	popup->insertSeparator();
-	id[ IdSelectAll ] = popup->insertItem( tr( "Select All" ) );
-	popup->setItemEnabled( id[ IdUndo ],
-				  !this->d->readonly && !this->d->undoList.isEmpty() );
-	popup->setItemEnabled( id[ IdRedo ],
-				  !this->d->readonly && !this->d->redoList.isEmpty() );
-#ifndef QT_NO_CLIPBOARD
-	popup->setItemEnabled( id[ IdCut ],
-				  !this->d->readonly && !this->d->readonly && hasMarkedText() );
-	popup->setItemEnabled( id[ IdCopy ], hasMarkedText() );
-	popup->setItemEnabled( id[ IdPaste ],
-				  !this->d->readonly
-				  && (bool)QApplication::clipboard()->text().length() );
-#endif
-	popup->setItemEnabled( id[ IdClear ],
-				  !this->d->readonly && (bool)text().length() );
-	int allSelected = minMark() == 0 && maxMark() == (int)text().length();
-	popup->setItemEnabled( id[ IdSelectAll ],
-				  (bool)text().length() && !allSelected );
+	d->dnd_startpos = e->pos();
+	d->dnd_primed = FALSE;
+# ifndef QT_NO_POPUPMENU
+	if (e->button() == RightButton) {
+		QGuardedPtr<QPopupMenu> popup = new QPopupMenu(this);
+		int id[7];
+		id[IdUndo] = popup->insertItem(tr("Undo"));
+		id[IdRedo] = popup->insertItem(tr("Redo"));
+		popup->insertSeparator();
+#  ifndef QT_NO_CLIPBOARD
+		id[IdCut] = popup->insertItem(tr("Cut"));
+		id[IdCopy] = popup->insertItem(tr("Copy"));
+		id[IdPaste] = popup->insertItem(tr("Paste"));
+#  endif
+		id[IdClear] = popup->insertItem(tr("Clear"));
+		popup->insertSeparator();
+		id[IdSelectAll] = popup->insertItem(tr("Select All"));
+		popup->setItemEnabled(id[IdUndo],
+				      !this->d->readonly &&
+					      !this->d->undoList.isEmpty());
+		popup->setItemEnabled(id[IdRedo],
+				      !this->d->readonly &&
+					      !this->d->redoList.isEmpty());
+#  ifndef QT_NO_CLIPBOARD
+		popup->setItemEnabled(id[IdCut], !this->d->readonly &&
+							 !this->d->readonly &&
+							 hasMarkedText());
+		popup->setItemEnabled(id[IdCopy], hasMarkedText());
+		popup->setItemEnabled(id[IdPaste],
+				      !this->d->readonly &&
+					      (bool)QApplication::clipboard()
+						      ->text()
+						      .length());
+#  endif
+		popup->setItemEnabled(id[IdClear],
+				      !this->d->readonly &&
+					      (bool)text().length());
+		int allSelected = minMark() == 0 &&
+				  maxMark() == (int)text().length();
+		popup->setItemEnabled(id[IdSelectAll],
+				      (bool)text().length() && !allSelected);
 
-	int r = popup->exec( e->globalPos() );
-	delete (QPopupMenu *) popup;
+		int r = popup->exec(e->globalPos());
+		delete (QPopupMenu *)popup;
 
-	if ( r == id[ IdUndo ] )
-	    undoInternal();
-	else if ( r == id[ IdRedo ] )
-	    redoInternal();
-#ifndef QT_NO_CLIPBOARD
-	else if ( r == id[ IdCut ] )
-	    cut();
-	else if ( r == id[ IdCopy ] )
-	    copy();
-	else if ( r == id[ IdPaste ] )
-	    paste();
-#endif
-	else if ( r == id[ IdClear ] )
-	    clear();
-	else if ( r == id[ IdSelectAll ] )
-	    selectAll();
-	return;
-    }
-#endif //QT_NO_POPUPMENU
-    d->inDoubleClick = FALSE;
-    int newCP = xPosToCursorPos( e->pos().x() );
-    int m1 = minMark();
-    int m2 = maxMark();
-#ifndef QT_NO_DRAGANDDROP
-    if ( hasMarkedText() && echoMode() == Normal && !( e->state() & ShiftButton ) &&
-	 e->button() == LeftButton && m1 < newCP && m2 > newCP ) {
-	d->dndTimer.start( QApplication::startDragTime(), TRUE );
-	d->dnd_primed = TRUE;
-	return;
-    }
-#endif
+		if (r == id[IdUndo])
+			undoInternal();
+		else if (r == id[IdRedo])
+			redoInternal();
+#  ifndef QT_NO_CLIPBOARD
+		else if (r == id[IdCut])
+			cut();
+		else if (r == id[IdCopy])
+			copy();
+		else if (r == id[IdPaste])
+			paste();
+#  endif
+		else if (r == id[IdClear])
+			clear();
+		else if (r == id[IdSelectAll])
+			selectAll();
+		return;
+	}
+# endif // QT_NO_POPUPMENU
+	d->inDoubleClick = FALSE;
+	int newCP = xPosToCursorPos(e->pos().x());
+	int m1 = minMark();
+	int m2 = maxMark();
+# ifndef QT_NO_DRAGANDDROP
+	if (hasMarkedText() && echoMode() == Normal &&
+	    !(e->state() & ShiftButton) && e->button() == LeftButton &&
+	    m1 < newCP && m2 > newCP) {
+		d->dndTimer.start(QApplication::startDragTime(), TRUE);
+		d->dnd_primed = TRUE;
+		return;
+	}
+# endif
 
-    m1 = QMIN( m1, cursorPos );
-    m2 = QMAX( m2, cursorPos );
-    dragScrolling = FALSE;
-    if ( e->state() & ShiftButton ) {
-	newMark( newCP, FALSE );
-    } else {
-	markDrag = newCP;
-	markAnchor = newCP;
-	newMark( newCP, FALSE );
-    }
-    repaintArea( m1, m2 );
-    d->mousePressed = TRUE;
+	m1 = QMIN(m1, cursorPos);
+	m2 = QMAX(m2, cursorPos);
+	dragScrolling = FALSE;
+	if (e->state() & ShiftButton) {
+		newMark(newCP, FALSE);
+	} else {
+		markDrag = newCP;
+		markAnchor = newCP;
+		newMark(newCP, FALSE);
+	}
+	repaintArea(m1, m2);
+	d->mousePressed = TRUE;
 }
 
-#ifndef QT_NO_DRAGANDDROP
+# ifndef QT_NO_DRAGANDDROP
 
 /*
   \internal
@@ -956,118 +976,119 @@ void QLineEdit::mousePressEvent( QMouseEvent *e )
 
 void QLineEdit::doDrag()
 {
-    d->dnd_primed = FALSE;
-    QTextDrag *tdo = new QTextDrag( markedText(), this );
-    tdo->drag();
+	d->dnd_primed = FALSE;
+	QTextDrag *tdo = new QTextDrag(markedText(), this);
+	tdo->drag();
 }
 
-#endif // QT_NO_DRAGANDDROP
+# endif // QT_NO_DRAGANDDROP
 
 /*!\reimp
-*/
-void QLineEdit::mouseMoveEvent( QMouseEvent *e )
+ */
+void QLineEdit::mouseMoveEvent(QMouseEvent *e)
 {
-#ifndef QT_NO_DRAGANDDROP
-    if ( d->dndTimer.isActive() ) {
-	d->dndTimer.stop();
-	return;
-    }
-
-    if ( d->dnd_primed ) {
-	if ( ( d->dnd_startpos - e->pos() ).manhattanLength() > QApplication::startDragDistance() )
-	    doDrag();
-	return;
-    }
-#endif
-
-    if ( !(e->state() & LeftButton) )
-	return;
-
-    int margin = frame() ? frameW()*2 : 2;
-
-    if ( e->pos().x() < margin || e->pos().x() > width() - margin ) {
-	if ( !dragScrolling ) {
-	    dragScrolling = TRUE;
-	    scrollingLeft = e->pos().x() < margin;
-	    if ( scrollingLeft )
-		newMark( xPosToCursorPos( 0 ), FALSE );
-	    else
-		newMark( xPosToCursorPos( width() ), FALSE );
-	    d->dragTimer.start( scrollTime );
+# ifndef QT_NO_DRAGANDDROP
+	if (d->dndTimer.isActive()) {
+		d->dndTimer.stop();
+		return;
 	}
-    } else {
+
+	if (d->dnd_primed) {
+		if ((d->dnd_startpos - e->pos()).manhattanLength() >
+		    QApplication::startDragDistance())
+			doDrag();
+		return;
+	}
+# endif
+
+	if (!(e->state() & LeftButton))
+		return;
+
+	int margin = frame() ? frameW() * 2 : 2;
+
+	if (e->pos().x() < margin || e->pos().x() > width() - margin) {
+		if (!dragScrolling) {
+			dragScrolling = TRUE;
+			scrollingLeft = e->pos().x() < margin;
+			if (scrollingLeft)
+				newMark(xPosToCursorPos(0), FALSE);
+			else
+				newMark(xPosToCursorPos(width()), FALSE);
+			d->dragTimer.start(scrollTime);
+		}
+	} else {
+		dragScrolling = FALSE;
+		int mousePos = xPosToCursorPos(e->pos().x());
+		int m1 = markDrag;
+		newMark(mousePos, FALSE);
+		repaintArea(m1, mousePos);
+	}
+}
+
+/*!\reimp
+ */
+void QLineEdit::mouseReleaseEvent(QMouseEvent *e)
+{
 	dragScrolling = FALSE;
-	int mousePos = xPosToCursorPos( e->pos().x() );
+	d->dnd_primed = FALSE;
+	if (d->dndTimer.isActive()) {
+		d->dndTimer.stop();
+		int ncp = xPosToCursorPos(e->pos().x());
+		setSelection(ncp, 0);
+		setCursorPosition(ncp);
+		return;
+	}
+	if (d->inDoubleClick) {
+		d->inDoubleClick = FALSE;
+		return;
+	}
+
+	if (!d->mousePressed)
+		return;
+	d->mousePressed = FALSE;
+
+# ifndef QT_NO_CLIPBOARD
+#  if defined(_WS_X11_)
+	copy(QClipboard::Mode::Selection);
+#  endif
+
+	if (!d->readonly && e->button() == MidButton) {
+#  if defined(_WS_X11_)
+		insert(QApplication::clipboard()->text(
+			QClipboard::Mode::Selection));
+#  else
+		if (style() == MotifStyle)
+			insert(QApplication::clipboard()->text());
+#  endif
+		return;
+	}
+# endif
+
+	if (e->button() != LeftButton)
+		return;
+
+	int margin = frame() ? frameW() * 2 : 2;
+	if (!QRect(margin, margin, width() - 2 * margin, height() - 2 * margin)
+		     .contains(e->pos()))
+		return;
+
+	int mousePos = xPosToCursorPos(e->pos().x());
 	int m1 = markDrag;
-	newMark( mousePos, FALSE );
-	repaintArea( m1, mousePos );
-    }
-}
-
-/*!\reimp
-*/
-void QLineEdit::mouseReleaseEvent( QMouseEvent * e )
-{
-    dragScrolling = FALSE;
-    d->dnd_primed = FALSE;
-    if ( d->dndTimer.isActive() ) {
-	d->dndTimer.stop();
-	int ncp = xPosToCursorPos( e->pos().x() );
-	setSelection( ncp, 0 );
-	setCursorPosition( ncp );
-	return;
-    }
-    if ( d->inDoubleClick ) {
-	d->inDoubleClick = FALSE;
-	return;
-    }
-
-    if ( !d->mousePressed )
-	return;
-    d->mousePressed = FALSE;
-
-#ifndef QT_NO_CLIPBOARD
-#if defined(_WS_X11_)
-    copy(QClipboard::Mode::Selection);
-#endif
-
-    if ( !d->readonly && e->button() == MidButton ) {
-#if defined(_WS_X11_)
-	insert( QApplication::clipboard()->text(QClipboard::Mode::Selection) );
-#else
-	if ( style() == MotifStyle )
-	    insert( QApplication::clipboard()->text() );
-#endif
-	return;
-    }
-#endif
-
-    if ( e->button() != LeftButton )
-	return;
-
-    int margin = frame() ? frameW()*2 : 2;
-    if ( !QRect( margin, margin,
-		 width() - 2*margin,
-		 height() - 2*margin ).contains( e->pos() ) )
-	return;
-
-    int mousePos = xPosToCursorPos( e->pos().x() );
-    int m1 = markDrag;
-    newMark( mousePos, FALSE );
-    repaintArea( m1, mousePos );
+	newMark(mousePos, FALSE);
+	repaintArea(m1, mousePos);
 }
 
 
 /*!\reimp
-*/
-void QLineEdit::mouseDoubleClickEvent( QMouseEvent * )
+ */
+void QLineEdit::mouseDoubleClickEvent(QMouseEvent *)
 {
-    d->inDoubleClick = TRUE;
-    dragScrolling = FALSE;
-    if ( echoMode() == Password )
-	selectAll();
-    else
-	markWord( cursorPos );
+	d->inDoubleClick = TRUE;
+	dragScrolling = FALSE;
+	if (echoMode() == Password)
+		selectAll();
+	else
+		markWord(cursorPos);
 }
 
 /*!
@@ -1075,9 +1096,9 @@ void QLineEdit::mouseDoubleClickEvent( QMouseEvent * )
   \sa cursorRight()
 */
 
-void QLineEdit::cursorLeft( bool mark, int steps )
+void QLineEdit::cursorLeft(bool mark, int steps)
 {
-    cursorRight( mark, -steps );
+	cursorRight(mark, -steps);
 }
 
 /*!
@@ -1085,21 +1106,21 @@ void QLineEdit::cursorLeft( bool mark, int steps )
   \sa cursorLeft()
 */
 
-void QLineEdit::cursorRight( bool mark, int steps )
+void QLineEdit::cursorRight(bool mark, int steps)
 {
-    int cp = cursorPos + steps;
-    cp = QMAX( cp, 0 );
-    cp = QMIN( cp, (int)tbuf.length() );
-    if ( cp == cursorPos ) {
-	if ( !mark )
-	    deselect();
-    } else if ( mark ) {
-	newMark( cp );
-	blinkOn();
-    } else {
-	setCursorPosition( cp );
-	setSelection( cp, 0 );
-    }
+	int cp = cursorPos + steps;
+	cp = QMAX(cp, 0);
+	cp = QMIN(cp, (int)tbuf.length());
+	if (cp == cursorPos) {
+		if (!mark)
+			deselect();
+	} else if (mark) {
+		newMark(cp);
+		blinkOn();
+	} else {
+		setCursorPosition(cp);
+		setSelection(cp, 0);
+	}
 }
 
 /*!
@@ -1111,18 +1132,20 @@ void QLineEdit::cursorRight( bool mark, int steps )
 
 void QLineEdit::backspace()
 {
-    if ( hasMarkedText() ) {
-	del();
-    } else if ( cursorPos > 0 ) {
-	if ( d->undo && d->needundo && !d->ignoreUndoWithDel ) {
-	    if ( d->undoList.isEmpty() || d->undoList.last().str != tbuf ) {
-		d->undoList += QLineEditUndoItem(tbuf, cursorPos );
-		d->redoList.clear();
-	    }
+	if (hasMarkedText()) {
+		del();
+	} else if (cursorPos > 0) {
+		if (d->undo && d->needundo && !d->ignoreUndoWithDel) {
+			if (d->undoList.isEmpty() ||
+			    d->undoList.last().str != tbuf) {
+				d->undoList +=
+					QLineEditUndoItem(tbuf, cursorPos);
+				d->redoList.clear();
+			}
+		}
+		cursorLeft(FALSE);
+		del();
 	}
-	cursorLeft( FALSE );
-	del();
-    }
 }
 
 /*!
@@ -1134,22 +1157,23 @@ void QLineEdit::backspace()
 
 void QLineEdit::del()
 {
-    QString test( tbuf);
-    d->ignoreUndoWithDel = TRUE;
-    if ( d->undo && ( (d->needundo && !d->ignoreUndoWithDel) || hasMarkedText() ) ) {
-	if ( d->undoList.isEmpty() || d->undoList.last().str != tbuf ) {
-	    d->undoList += QLineEditUndoItem(tbuf, cursorPos );
-	    d->redoList.clear();
+	QString test(tbuf);
+	d->ignoreUndoWithDel = TRUE;
+	if (d->undo &&
+	    ((d->needundo && !d->ignoreUndoWithDel) || hasMarkedText())) {
+		if (d->undoList.isEmpty() || d->undoList.last().str != tbuf) {
+			d->undoList += QLineEditUndoItem(tbuf, cursorPos);
+			d->redoList.clear();
+		}
 	}
-    }
 
-    if ( hasMarkedText() ) {
-	test.remove( minMark(), maxMark() - minMark() );
-	validateAndSet( test, minMark(), minMark(), minMark() );
-    } else if ( cursorPos != (int)tbuf.length() ) {
-	test.remove( cursorPos, 1 );
-	validateAndSet( test, cursorPos, 0, 0 );
-    }
+	if (hasMarkedText()) {
+		test.remove(minMark(), maxMark() - minMark());
+		validateAndSet(test, minMark(), minMark(), minMark());
+	} else if (cursorPos != (int)tbuf.length()) {
+		test.remove(cursorPos, 1);
+		validateAndSet(test, cursorPos, 0, 0);
+	}
 }
 
 /*!
@@ -1158,9 +1182,9 @@ void QLineEdit::del()
   be unmarked if the cursor is moved.  \sa end()
 */
 
-void QLineEdit::home( bool mark )
+void QLineEdit::home(bool mark)
 {
-    cursorRight( mark, -cursorPos );
+	cursorRight(mark, -cursorPos);
 }
 
 /*!
@@ -1170,54 +1194,54 @@ void QLineEdit::home( bool mark )
   \sa home()
 */
 
-void QLineEdit::end( bool mark )
+void QLineEdit::end(bool mark)
 {
-    cursorRight( mark, tbuf.length()-cursorPos );
+	cursorRight(mark, tbuf.length() - cursorPos);
 }
 
 
-void QLineEdit::newMark( int pos, bool c )
+void QLineEdit::newMark(int pos, bool c)
 {
-    if ( markDrag != pos || cursorPos != pos )
-	d->pmDirty = TRUE;
-    markDrag = pos;
-    setCursorPosition( pos );
-#ifndef QT_NO_CLIPBOARD
-#if defined(_WS_X11_)
-    if ( c )
-	copy(QClipboard::Mode::Selection);
-#endif
-#endif
+	if (markDrag != pos || cursorPos != pos)
+		d->pmDirty = TRUE;
+	markDrag = pos;
+	setCursorPosition(pos);
+# ifndef QT_NO_CLIPBOARD
+#  if defined(_WS_X11_)
+	if (c)
+		copy(QClipboard::Mode::Selection);
+#  endif
+# endif
 }
 
 
-void QLineEdit::markWord( int pos )
+void QLineEdit::markWord(int pos)
 {
-    int i = pos - 1;
-    while ( i >= 0 && tbuf[i].isPrint() && !tbuf[i].isSpace() )
-	i--;
-    i++;
-    int newAnchor = i;
-
-    i = pos;
-    while ( tbuf[i].isPrint() && !tbuf[i].isSpace() )
+	int i = pos - 1;
+	while (i >= 0 && tbuf[i].isPrint() && !tbuf[i].isSpace())
+		i--;
 	i++;
-    if ( style() != MotifStyle ) {
-	while( tbuf[i].isSpace() )
-	    i++;
-	setCursorPosition( i );
-    }
-    int newDrag = i;
-    setSelection( newAnchor, newDrag - newAnchor );
+	int newAnchor = i;
 
-#ifndef QT_NO_CLIPBOARD
-#if defined(_WS_X11_)
-    copy(QClipboard::Mode::Selection);
-#endif
-#endif
+	i = pos;
+	while (tbuf[i].isPrint() && !tbuf[i].isSpace())
+		i++;
+	if (style() != MotifStyle) {
+		while (tbuf[i].isSpace())
+			i++;
+		setCursorPosition(i);
+	}
+	int newDrag = i;
+	setSelection(newAnchor, newDrag - newAnchor);
+
+# ifndef QT_NO_CLIPBOARD
+#  if defined(_WS_X11_)
+	copy(QClipboard::Mode::Selection);
+#  endif
+# endif
 }
 
-#ifndef QT_NO_CLIPBOARD
+# ifndef QT_NO_CLIPBOARD
 
 /*! Copies the marked text to the clipboard, if there is any and
   if echoMode() is Normal.
@@ -1227,13 +1251,14 @@ void QLineEdit::markWord( int pos )
 
 void QLineEdit::copy(QClipboard::Mode mode) const
 {
-    QString t = markedText();
-    if ( !t.isEmpty() && echoMode() == Normal ) {
-	disconnect( QApplication::clipboard(), SIGNAL(dataChanged()), this, 0);
-	QApplication::clipboard()->setText( t, mode );
-	connect( QApplication::clipboard(), SIGNAL(dataChanged()),
-		 this, SLOT(clipboardChanged()) );
-    }
+	QString t = markedText();
+	if (!t.isEmpty() && echoMode() == Normal) {
+		disconnect(QApplication::clipboard(), SIGNAL(dataChanged()),
+			   this, 0);
+		QApplication::clipboard()->setText(t, mode);
+		connect(QApplication::clipboard(), SIGNAL(dataChanged()), this,
+			SLOT(clipboardChanged()));
+	}
 }
 
 /*!
@@ -1248,7 +1273,7 @@ void QLineEdit::copy(QClipboard::Mode mode) const
 
 void QLineEdit::paste(QClipboard::Mode mode)
 {
-    insert( QApplication::clipboard()->text(mode) );
+	insert(QApplication::clipboard()->text(mode));
 }
 
 /*!
@@ -1263,31 +1288,30 @@ void QLineEdit::paste(QClipboard::Mode mode)
 
 void QLineEdit::cut()
 {
-    QString t = markedText();
-    if ( !t.isEmpty() ) {
-	copy();
-	del();
-    }
+	QString t = markedText();
+	if (!t.isEmpty()) {
+		copy();
+		del();
+	}
 }
 
-#endif
+# endif
 
 /*!
   Sets the alignment of the line edit. Possible Values are Qt::AlignLeft,
   Qt::AlignRight and Qt::Align(H)Center - see Qt::AlignmentFlags.
   \sa alignment()
 */
-void QLineEdit::setAlignment( int flag ){
-    if ( flag == alignmentFlag )
-	return;
-    if ( flag == Qt::AlignRight ||
-	 flag == Qt::AlignCenter ||
-	 flag == Qt::AlignHCenter ||
-	 flag == Qt::AlignLeft ) {
-	alignmentFlag = flag;
-	updateOffset();
-	update();
-    }
+void QLineEdit::setAlignment(int flag)
+{
+	if (flag == alignmentFlag)
+		return;
+	if (flag == Qt::AlignRight || flag == Qt::AlignCenter ||
+	    flag == Qt::AlignHCenter || flag == Qt::AlignLeft) {
+		alignmentFlag = flag;
+		updateOffset();
+		update();
+	}
 }
 
 /*!
@@ -1299,7 +1323,7 @@ void QLineEdit::setAlignment( int flag ){
 
 int QLineEdit::alignment() const
 {
-    return alignmentFlag;
+	return alignmentFlag;
 }
 
 /*!
@@ -1309,31 +1333,31 @@ int QLineEdit::alignment() const
 
 void QLineEdit::clipboardChanged()
 {
-#if defined(_WS_X11_)
-    disconnect( QApplication::clipboard(), SIGNAL(dataChanged()),
-		this, SLOT(clipboardChanged()) );
-    deselect();
-#endif
+# if defined(_WS_X11_)
+	disconnect(QApplication::clipboard(), SIGNAL(dataChanged()), this,
+		   SLOT(clipboardChanged()));
+	deselect();
+# endif
 }
 
 
 
 int QLineEdit::lastCharVisible() const
 {
-    int tDispWidth = width() - (frameW()*2 + 4);
-    return xPosToCursorPos( tDispWidth );
+	int tDispWidth = width() - (frameW() * 2 + 4);
+	return xPosToCursorPos(tDispWidth);
 }
 
 
 int QLineEdit::minMark() const
 {
-    return markAnchor < markDrag ? markAnchor : markDrag;
+	return markAnchor < markDrag ? markAnchor : markDrag;
 }
 
 
 int QLineEdit::maxMark() const
 {
-    return markAnchor > markDrag ? markAnchor : markDrag;
+	return markAnchor > markDrag ? markAnchor : markDrag;
 }
 
 
@@ -1347,15 +1371,15 @@ int QLineEdit::maxMark() const
   \sa frame()
 */
 
-void QLineEdit::setFrame( bool enable )
+void QLineEdit::setFrame(bool enable)
 {
-    if ( d->frame == enable )
-	return;
+	if (d->frame == enable)
+		return;
 
-    d->frame = enable;
-    d->pmDirty = TRUE;
-    updateOffset();
-    update();
+	d->frame = enable;
+	d->pmDirty = TRUE;
+	updateOffset();
+	update();
 }
 
 
@@ -1369,12 +1393,12 @@ void QLineEdit::setFrame( bool enable )
 
 bool QLineEdit::frame() const
 {
-    return d ? d->frame : TRUE;
+	return d ? d->frame : TRUE;
 }
 
 int QLineEdit::frameW() const
 {
-    return frame() ? style().defaultFrameWidth() : 0;
+	return frame() ? style().defaultFrameWidth() : 0;
 }
 
 /*!  Sets the echo mode of the line edit widget.
@@ -1396,15 +1420,15 @@ int QLineEdit::frameW() const
   \sa echoMode() EchoMode displayText()
 */
 
-void QLineEdit::setEchoMode( EchoMode mode )
+void QLineEdit::setEchoMode(EchoMode mode)
 {
-    if ( d->mode == mode )
-	return;
+	if (d->mode == mode)
+		return;
 
-    d->mode = mode;
-    d->pmDirty = TRUE;
-    updateOffset();
-    update();
+	d->mode = mode;
+	d->pmDirty = TRUE;
+	updateOffset();
+	update();
 }
 
 
@@ -1416,7 +1440,7 @@ void QLineEdit::setEchoMode( EchoMode mode )
 
 QLineEdit::EchoMode QLineEdit::echoMode() const
 {
-    return d->mode;
+	return d->mode;
 }
 
 /*!
@@ -1426,9 +1450,9 @@ QLineEdit::EchoMode QLineEdit::echoMode() const
 
   \sa setEnabled(), isReadOnly()
 */
-void QLineEdit::setReadOnly( bool enable )
+void QLineEdit::setReadOnly(bool enable)
 {
-    d->readonly = enable;
+	d->readonly = enable;
 }
 
 /*!
@@ -1437,7 +1461,7 @@ void QLineEdit::setReadOnly( bool enable )
 */
 bool QLineEdit::isReadOnly() const
 {
-    return d->readonly;
+	return d->readonly;
 }
 
 
@@ -1449,18 +1473,20 @@ bool QLineEdit::isReadOnly() const
 */
 QSize QLineEdit::sizeHint() const
 {
-    constPolish();
-    QFontMetrics fm( font() );
-    int h = fm.height();
-    int w = fm.width( 'x' ) * 17; // "some"
-    if ( frame() ) {
-	h += 4 + frameW()*2;
-	if ( style() == WindowsStyle && h < 26 )
-	    h = 22;
-	return QSize( w + 4 + frameW()*2, h ).expandedTo( QApplication::globalStrut() );
-    } else {
-	return QSize( w + 4, h + 4 ).expandedTo( QApplication::globalStrut() );
-    }
+	constPolish();
+	QFontMetrics fm(font());
+	int h = fm.height();
+	int w = fm.width('x') * 17; // "some"
+	if (frame()) {
+		h += 4 + frameW() * 2;
+		if (style() == WindowsStyle && h < 26)
+			h = 22;
+		return QSize(w + 4 + frameW() * 2, h)
+			.expandedTo(QApplication::globalStrut());
+	} else {
+		return QSize(w + 4, h + 4)
+			.expandedTo(QApplication::globalStrut());
+	}
 }
 
 
@@ -1473,28 +1499,28 @@ QSize QLineEdit::sizeHint() const
 
 QSize QLineEdit::minimumSizeHint() const
 {
-    constPolish();
-    QFontMetrics fm( font() );
-    int h = fm.height();
-    int w = fm.maxWidth();
-    if ( frame() ) {
-	h += 4 + frameW()*2;
-	if ( style() == WindowsStyle && h < 26 )
-	    h = 22;
-	return QSize( w + 4 + frameW()*2, h );
-    } else {
-	return QSize( w + 4, h + 4 );
-    }
+	constPolish();
+	QFontMetrics fm(font());
+	int h = fm.height();
+	int w = fm.maxWidth();
+	if (frame()) {
+		h += 4 + frameW() * 2;
+		if (style() == WindowsStyle && h < 26)
+			h = 22;
+		return QSize(w + 4 + frameW() * 2, h);
+	} else {
+		return QSize(w + 4, h + 4);
+	}
 }
 
 
 
 /*!\reimp
-*/
+ */
 QSizePolicy QLineEdit::sizePolicy() const
 {
-    //### removeme 3.0
-    return QWidget::sizePolicy();
+	// ### removeme 3.0
+	return QWidget::sizePolicy();
 }
 
 
@@ -1508,9 +1534,9 @@ QSizePolicy QLineEdit::sizePolicy() const
   \sa validator() QValidator
 */
 
-void QLineEdit::setValidator( const QValidator * v )
+void QLineEdit::setValidator(const QValidator *v)
 {
-    d->validator = v;
+	d->validator = v;
 }
 
 /*!
@@ -1520,9 +1546,9 @@ void QLineEdit::setValidator( const QValidator * v )
   \sa setValidator()
 */
 
-const QValidator * QLineEdit::validator() const
+const QValidator *QLineEdit::validator() const
 {
-    return d ? d->validator : 0;
+	return d ? d->validator : 0;
 }
 
 
@@ -1530,61 +1556,62 @@ const QValidator * QLineEdit::validator() const
 
 void QLineEdit::clearValidator()
 {
-    setValidator( 0 );
+	setValidator(0);
 }
 
-#ifndef QT_NO_DRAGANDDROP
+# ifndef QT_NO_DRAGANDDROP
 
 /*! \reimp
-*/
-void QLineEdit::dragEnterEvent( QDragEnterEvent *e )
+ */
+void QLineEdit::dragEnterEvent(QDragEnterEvent *e)
 {
-    if ( !d->readonly && QTextDrag::canDecode(e) )
-	e->accept( rect() );
+	if (!d->readonly && QTextDrag::canDecode(e))
+		e->accept(rect());
 }
 
 
 /*!\reimp
-*/
-void QLineEdit::dropEvent( QDropEvent *e )
+ */
+void QLineEdit::dropEvent(QDropEvent *e)
 {
-    QString str;
-    QCString plain = "plain";
+	QString str;
+	QCString plain = "plain";
 
-    // try text/plain
-    bool decoded = QTextDrag::decode(e, str, plain);
-    // otherwise we'll accept any kind of text (like text/uri-list)
-    if (! decoded) decoded = QTextDrag::decode(e, str);
+	// try text/plain
+	bool decoded = QTextDrag::decode(e, str, plain);
+	// otherwise we'll accept any kind of text (like text/uri-list)
+	if (!decoded)
+		decoded = QTextDrag::decode(e, str);
 
-    if ( !d->readonly && decoded) {
-	if ( e->source() == this && hasMarkedText() )
-	    del();
-	if ( !hasMarkedText() )
-	    setCursorPosition( xPosToCursorPos(e->pos().x()) );
-	insert( str );
-	e->accept();
-    } else {
-	e->ignore();
-    }
+	if (!d->readonly && decoded) {
+		if (e->source() == this && hasMarkedText())
+			del();
+		if (!hasMarkedText())
+			setCursorPosition(xPosToCursorPos(e->pos().x()));
+		insert(str);
+		e->accept();
+	} else {
+		e->ignore();
+	}
 }
 
-#endif // QT_NO_DRAGANDDROP
+# endif // QT_NO_DRAGANDDROP
 
 /*!  This private slot handles cursor blinking. */
 
 void QLineEdit::blinkSlot()
 {
-    if ( hasFocus() || cursorOn ) {
-	cursorOn = !cursorOn;
-	if ( d->pm && !d->pmDirty && d->cursorRepaintRect.isValid() )
-	    repaint( d->cursorRepaintRect, FALSE );
+	if (hasFocus() || cursorOn) {
+		cursorOn = !cursorOn;
+		if (d->pm && !d->pmDirty && d->cursorRepaintRect.isValid())
+			repaint(d->cursorRepaintRect, FALSE);
+		else
+			repaint(FALSE);
+	}
+	if (hasFocus())
+		d->blinkTimer.start(QApplication::cursorFlashTime() / 2, TRUE);
 	else
-	    repaint( FALSE );
-    }
-    if ( hasFocus() )
-	d->blinkTimer.start( QApplication::cursorFlashTime()/2, TRUE );
-    else
-	d->blinkTimer.stop();
+		d->blinkTimer.stop();
 }
 
 
@@ -1592,12 +1619,12 @@ void QLineEdit::blinkSlot()
 
 void QLineEdit::dragScrollSlot()
 {
-    if ( !hasFocus() || !dragScrolling )
-	d->dragTimer.stop();
-    else if ( scrollingLeft )
-	cursorLeft( TRUE );
-    else
-	cursorRight( TRUE );
+	if (!hasFocus() || !dragScrolling)
+		d->dragTimer.stop();
+	else if (scrollingLeft)
+		cursorLeft(TRUE);
+	else
+		cursorRight(TRUE);
 }
 
 
@@ -1612,58 +1639,57 @@ void QLineEdit::dragScrollSlot()
   Repaints and emits textChanged() if appropriate.
 */
 
-bool QLineEdit::validateAndSet( const QString &newText, int newPos,
-				int newMarkAnchor, int newMarkDrag )
+bool QLineEdit::validateAndSet(const QString &newText, int newPos,
+			       int newMarkAnchor, int newMarkDrag)
 {
-    QString t( newText );
-    for ( uint i=0; i<t.length(); i++ ) {
-	if ( t[(int)i] < ' ' )  // unprintable/linefeed becomes space
-	    t[(int)i] = ' ';
-    }
-    t.truncate( maxLength() );
-#ifndef QT_NO_VALIDATOR
-    const QValidator * v = validator();
+	QString t(newText);
+	for (uint i = 0; i < t.length(); i++) {
+		if (t[(int)i] < ' ') // unprintable/linefeed becomes space
+			t[(int)i] = ' ';
+	}
+	t.truncate(maxLength());
+# ifndef QT_NO_VALIDATOR
+	const QValidator *v = validator();
 
-    if ( v && v->validate( t, newPos ) == QValidator::Invalid &&
-	 v->validate( tbuf, cursorPos ) != QValidator::Invalid ) {
-	return FALSE;
-    }
-#endif
-    bool tc = ( t != tbuf );
+	if (v && v->validate(t, newPos) == QValidator::Invalid &&
+	    v->validate(tbuf, cursorPos) != QValidator::Invalid) {
+		return FALSE;
+	}
+# endif
+	bool tc = (t != tbuf);
 
-    // okay, it succeeded
-    if ( newMarkDrag != markDrag ||
-	 newMarkAnchor != markAnchor ||
-	 newPos != cursorPos ||
-	 tc ) {
-	int minP = QMIN( cursorPos, minMark() );
-	int maxP = QMAX( cursorPos, maxMark() );
+	// okay, it succeeded
+	if (newMarkDrag != markDrag || newMarkAnchor != markAnchor ||
+	    newPos != cursorPos || tc) {
+		int minP = QMIN(cursorPos, minMark());
+		int maxP = QMAX(cursorPos, maxMark());
 
-	cursorPos = newPos;
-	markAnchor = newMarkAnchor;
-	markDrag = newMarkDrag;
+		cursorPos = newPos;
+		markAnchor = newMarkAnchor;
+		markDrag = newMarkDrag;
 
-	minP = QMIN( minP, QMIN( cursorPos, minMark() ) );
-	int i = 0;
-	while( i < minP && t[i] == tbuf[i] )
-	    i++;
-	minP = i;
+		minP = QMIN(minP, QMIN(cursorPos, minMark()));
+		int i = 0;
+		while (i < minP && t[i] == tbuf[i])
+			i++;
+		minP = i;
 
-	maxP = QMAX( maxP, QMAX( cursorPos, maxMark() ) );
-	if ( fontMetrics().width( t ) < fontMetrics().width( tbuf ) )
-	    maxP = t.length();
-	tbuf = t;
+		maxP = QMAX(maxP, QMAX(cursorPos, maxMark()));
+		if (fontMetrics().width(t) < fontMetrics().width(tbuf))
+			maxP = t.length();
+		tbuf = t;
 
-	if ( cursorPos < (int)text().length() && maxP < (int)text().length() )
-	    maxP = text().length();
+		if (cursorPos < (int)text().length() &&
+		    maxP < (int)text().length())
+			maxP = text().length();
 
-	repaintArea( minP, maxP );
-    }
-    if ( tc ) {
-	ed = TRUE;
-	emit textChanged( tbuf );
-    }
-    return TRUE;
+		repaintArea(minP, maxP);
+	}
+	if (tc) {
+		ed = TRUE;
+		emit textChanged(tbuf);
+	}
+	return TRUE;
 }
 
 
@@ -1673,91 +1699,91 @@ bool QLineEdit::validateAndSet( const QString &newText, int newPos,
 
 */
 
-void QLineEdit::insert( const QString &newText )
+void QLineEdit::insert(const QString &newText)
 {
-    QString t( newText );
-    if ( t.isEmpty() && !hasMarkedText() )
-	return;
+	QString t(newText);
+	if (t.isEmpty() && !hasMarkedText())
+		return;
 
-    for ( int i=0; i<(int)t.length(); i++ )
-	if ( t[i] < ' ' )  // unprintable/linefeed becomes space
-	    t[i] = ' ';
+	for (int i = 0; i < (int)t.length(); i++)
+		if (t[i] < ' ') // unprintable/linefeed becomes space
+			t[i] = ' ';
 
-    QString test( tbuf );
-    int cp = cursorPos;
-    if ( d->undo && ( d->needundo || hasMarkedText() ) ) {
-	if ( d->undoList.isEmpty() || d->undoList.last().str != tbuf ) {
-	    d->undoList += QLineEditUndoItem(tbuf, cursorPos );
-	    d->redoList.clear();
-	    d->needundo = FALSE;
+	QString test(tbuf);
+	int cp = cursorPos;
+	if (d->undo && (d->needundo || hasMarkedText())) {
+		if (d->undoList.isEmpty() || d->undoList.last().str != tbuf) {
+			d->undoList += QLineEditUndoItem(tbuf, cursorPos);
+			d->redoList.clear();
+			d->needundo = FALSE;
+		}
 	}
-    }
-    if ( hasMarkedText() ) {
-	test.remove( minMark(), maxMark() - minMark() );
-	cp = minMark();
-    }
-    test.insert( cp, t );
-    int ncp = QMIN( cp+t.length(), (uint)maxLength() );
-    blinkOn();
-    validateAndSet( test, ncp, ncp, ncp );
+	if (hasMarkedText()) {
+		test.remove(minMark(), maxMark() - minMark());
+		cp = minMark();
+	}
+	test.insert(cp, t);
+	int ncp = QMIN(cp + t.length(), (uint)maxLength());
+	blinkOn();
+	validateAndSet(test, ncp, ncp, ncp);
 }
 
 
 /*!  Repaints all characters from \a from to \a to.  If cursorPos is
   between from and to, ensures that cursorPos is visible.  */
 
-void QLineEdit::repaintArea( int from, int to )
+void QLineEdit::repaintArea(int from, int to)
 {
-    QString buf = displayText();
+	QString buf = displayText();
 
-    int a, b;
-    if ( from < to ) {
-	a = from;
-	b = to;
-    } else {
-	a = to;
-	b = from;
-    }
+	int a, b;
+	if (from < to) {
+		a = from;
+		b = to;
+	} else {
+		a = to;
+		b = from;
+	}
 
-    d->pmDirty = TRUE;
-    int old = offset;
-    if ( d->offsetDirty || cursorPos >= a && cursorPos <= b )
-	updateOffset();
-    if ( !d->pmDirty ) {
-	return;
-    } else if ( old != offset ) {
-	repaint( FALSE );
-	return;
-    }
+	d->pmDirty = TRUE;
+	int old = offset;
+	if (d->offsetDirty || cursorPos >= a && cursorPos <= b)
+		updateOffset();
+	if (!d->pmDirty) {
+		return;
+	} else if (old != offset) {
+		repaint(FALSE);
+		return;
+	}
 
-    QFontMetrics fm = fontMetrics();
-    int x = fm.width( buf.left( a ) ) + offset - 2 + frameW();
-    QRect r( x, 0, fm.width( buf.mid( a, b-a ) ) + 5, height() );
-    r = r.intersect( rect() );
-    if ( !r.isValid() )
-	return;
-    if ( b >= (int)buf.length() )
-	r.setRight( width() );
-    repaint( r, FALSE );
+	QFontMetrics fm = fontMetrics();
+	int x = fm.width(buf.left(a)) + offset - 2 + frameW();
+	QRect r(x, 0, fm.width(buf.mid(a, b - a)) + 5, height());
+	r = r.intersect(rect());
+	if (!r.isValid())
+		return;
+	if (b >= (int)buf.length())
+		r.setRight(width());
+	repaint(r, FALSE);
 }
 
 
 /*!  \reimp */
 
-void QLineEdit::setEnabled( bool e )
+void QLineEdit::setEnabled(bool e)
 {
-    d->pmDirty = TRUE;
-    QWidget::setEnabled( e );
+	d->pmDirty = TRUE;
+	QWidget::setEnabled(e);
 }
 
 
 /*! \reimp */
 
-void QLineEdit::setFont( const QFont & f )
+void QLineEdit::setFont(const QFont &f)
 {
-    d->pmDirty     = TRUE;
-    d->offsetDirty = TRUE;
-    QWidget::setFont( f );
+	d->pmDirty = TRUE;
+	d->offsetDirty = TRUE;
+	QWidget::setFont(f);
 }
 
 
@@ -1767,41 +1793,41 @@ void QLineEdit::setFont( const QFont & f )
 
 void QLineEdit::clear()
 {
-    setText( QString::fromLatin1("") );
+	setText(QString::fromLatin1(""));
 }
 
 
 /*!  Sets the marked area of this line edit to start at \a start and
   be \a length characters long. */
 
-void QLineEdit::setSelection( int start, int length )
+void QLineEdit::setSelection(int start, int length)
 {
-    int b, e;
-    b = QMIN( markAnchor, markDrag );
-    e = QMAX( markAnchor, markDrag );
-    b = QMIN( b, start );
-    e = QMAX( e, start + length );
-    markAnchor = start;
-    markDrag = start + length;
-    repaintArea( b, e );
+	int b, e;
+	b = QMIN(markAnchor, markDrag);
+	e = QMAX(markAnchor, markDrag);
+	b = QMIN(b, start);
+	e = QMAX(e, start + length);
+	markAnchor = start;
+	markDrag = start + length;
+	repaintArea(b, e);
 }
 
 
 /*!  Sets the cursor position for this line edit to \a newPos and
   repaints accordingly.  \sa cursorPosition() */
 
-void QLineEdit::setCursorPosition( int newPos )
+void QLineEdit::setCursorPosition(int newPos)
 {
-    if ( newPos == cursorPos )
-	return;
-    newPos = QMIN( newPos, (int)tbuf.length() );
-    newPos = QMAX( newPos, 0 );
-    int b, e;
-    b = QMIN( newPos, cursorPos );
-    e = QMAX( newPos, cursorPos );
-    cursorPos = newPos;
-    blinkOn();
-    repaintArea( b, e );
+	if (newPos == cursorPos)
+		return;
+	newPos = QMIN(newPos, (int)tbuf.length());
+	newPos = QMAX(newPos, 0);
+	int b, e;
+	b = QMIN(newPos, cursorPos);
+	e = QMAX(newPos, cursorPos);
+	cursorPos = newPos;
+	blinkOn();
+	repaintArea(b, e);
 }
 
 
@@ -1810,16 +1836,16 @@ void QLineEdit::setCursorPosition( int newPos )
 
 int QLineEdit::cursorPosition() const
 {
-    return cursorPos;
+	return cursorPos;
 }
 
 
 /*! \reimp */
 
-void QLineEdit::setPalette( const QPalette & p )
+void QLineEdit::setPalette(const QPalette &p)
 {
-    d->pmDirty = TRUE;
-    QWidget::setPalette( p );
+	d->pmDirty = TRUE;
+	QWidget::setPalette(p);
 }
 
 
@@ -1836,9 +1862,9 @@ started editing the line edit.
 \sa edited()
 */
 
-void QLineEdit::setEdited( bool on )
+void QLineEdit::setEdited(bool on)
 {
-    ed = on;
+	ed = on;
 }
 
 
@@ -1853,7 +1879,7 @@ setEdited( TRUE ) has been called.
 
 bool QLineEdit::edited() const
 {
-    return ed;
+	return ed;
 }
 
 /*!
@@ -1861,14 +1887,14 @@ bool QLineEdit::edited() const
   is marked.
   \sa cursorWordBackward()
 */
-void QLineEdit::cursorWordForward( bool mark )
+void QLineEdit::cursorWordForward(bool mark)
 {
-    int i = cursorPos;
-    while ( i < (int) tbuf.length() && !tbuf[i].isSpace() )
-	++i;
-    while ( i < (int) tbuf.length() && tbuf[i].isSpace() )
-	++i;
-    cursorRight( mark, i - cursorPos );
+	int i = cursorPos;
+	while (i < (int)tbuf.length() && !tbuf[i].isSpace())
+		++i;
+	while (i < (int)tbuf.length() && tbuf[i].isSpace())
+		++i;
+	cursorRight(mark, i - cursorPos);
 }
 
 
@@ -1877,62 +1903,63 @@ void QLineEdit::cursorWordForward( bool mark )
   is marked.
   \sa cursorWordForward()
 */
-void QLineEdit::cursorWordBackward( bool mark )
+void QLineEdit::cursorWordBackward(bool mark)
 {
-    int i = cursorPos;
-    while ( i > 0 && tbuf[i-1].isSpace() )
-	--i;
-    while ( i > 0 && !tbuf[i-1].isSpace() )
-	--i;
-    cursorLeft( mark, cursorPos - i );
+	int i = cursorPos;
+	while (i > 0 && tbuf[i - 1].isSpace())
+		--i;
+	while (i > 0 && !tbuf[i - 1].isSpace())
+		--i;
+	cursorLeft(mark, cursorPos - i);
 }
 
 
 void QLineEdit::updateOffset()
 { // must not call repaint() - paintEvent() calls this
-    if ( !isVisible() ) {
-	d->offsetDirty = TRUE;
-	return;
-    }
-    d->offsetDirty = FALSE;
-    makePixmap();
-    QFontMetrics fm = fontMetrics();
-    int textWidth = fm.width( displayText() )+4;
-    int w = d->pm->width();
-    int old = offset;
-
-    if ( textWidth > w ) {
-	// may need to scroll.
-	QString dt = displayText();
-	dt += QString::fromLatin1( "  " );
-	dt = dt.left( cursorPos + 2 );
-	if ( cursorPos < 3 )
-	    offset = 0;
-	else if ( fm.width( dt.left( cursorPos - 2 ) ) + offset < 0 )
-	    offset = -fm.width( dt.left( cursorPos - 2 ) );
-	else if ( fm.width( dt ) + offset > w )
-	    offset = w - fm.width( dt );
-    } else {
-	if ( textWidth < 5 ) {
-	    // nothing is to be drawn.  okay.
-	    textWidth = QMIN( 5, w );
+	if (!isVisible()) {
+		d->offsetDirty = TRUE;
+		return;
 	}
-	if ( alignmentFlag == Qt::AlignRight ) {
-	    // right-aligned text, space for all of it
-	    offset = w - textWidth;
-	} else if ( alignmentFlag == Qt::AlignCenter || alignmentFlag == Qt::AlignHCenter ) {
-	    // center-aligned text, space for all of it
-	    offset = (w - textWidth)/2;
+	d->offsetDirty = FALSE;
+	makePixmap();
+	QFontMetrics fm = fontMetrics();
+	int textWidth = fm.width(displayText()) + 4;
+	int w = d->pm->width();
+	int old = offset;
+
+	if (textWidth > w) {
+		// may need to scroll.
+		QString dt = displayText();
+		dt += QString::fromLatin1("  ");
+		dt = dt.left(cursorPos + 2);
+		if (cursorPos < 3)
+			offset = 0;
+		else if (fm.width(dt.left(cursorPos - 2)) + offset < 0)
+			offset = -fm.width(dt.left(cursorPos - 2));
+		else if (fm.width(dt) + offset > w)
+			offset = w - fm.width(dt);
 	} else {
-	    // default: left-aligned, space for all of it
-	    offset = 0;
+		if (textWidth < 5) {
+			// nothing is to be drawn.  okay.
+			textWidth = QMIN(5, w);
+		}
+		if (alignmentFlag == Qt::AlignRight) {
+			// right-aligned text, space for all of it
+			offset = w - textWidth;
+		} else if (alignmentFlag == Qt::AlignCenter ||
+			   alignmentFlag == Qt::AlignHCenter) {
+			// center-aligned text, space for all of it
+			offset = (w - textWidth) / 2;
+		} else {
+			// default: left-aligned, space for all of it
+			offset = 0;
+		}
 	}
-    }
 
-    if ( old == offset && !d->pmDirty )
-	return;
+	if (old == offset && !d->pmDirty)
+		return;
 
-    d->pmDirty = TRUE;
+	d->pmDirty = TRUE;
 }
 
 
@@ -1940,23 +1967,23 @@ void QLineEdit::updateOffset()
   closest.
 */
 
-int QLineEdit::xPosToCursorPos( int goalx ) const
+int QLineEdit::xPosToCursorPos(int goalx) const
 {
-    int x1, x2;
-    x1 = offset;
-    int i = 0;
-    QFontMetrics fm = fontMetrics();
-    QString s = displayText();
-    goalx -= (frameW() + 2);
+	int x1, x2;
+	x1 = offset;
+	int i = 0;
+	QFontMetrics fm = fontMetrics();
+	QString s = displayText();
+	goalx -= (frameW() + 2);
 
-    while( i < (int) s.length() ) {
-	x2 = x1 + fm.width( s[i] );
-	if ( QABS( x1 - goalx ) < QABS( x2 - goalx ) )
-	    return i;
-	i++;
-	x1 = x2;
-    }
-    return i;
+	while (i < (int)s.length()) {
+		x2 = x1 + fm.width(s[i]);
+		if (QABS(x1 - goalx) < QABS(x2 - goalx))
+			return i;
+		i++;
+		x1 = x2;
+	}
+	return i;
 }
 
 
@@ -1964,81 +1991,82 @@ int QLineEdit::xPosToCursorPos( int goalx ) const
 
 void QLineEdit::blinkOn()
 {
-    if ( !hasFocus() )
-	return;
+	if (!hasFocus())
+		return;
 
-    d->blinkTimer.start( cursorOn?QApplication::cursorFlashTime() / 2 : 0, TRUE );
-    blinkSlot();
+	d->blinkTimer.start(cursorOn ? QApplication::cursorFlashTime() / 2 : 0,
+			    TRUE);
+	blinkSlot();
 }
 
 
 void QLineEdit::makePixmap() const
 {
-    if ( d->pm )
-	return;
+	if (d->pm)
+		return;
 
-    QSize s( width() - frameW()*2, height() - frameW()*2 );
-    if ( s.width() < 0 )
-	s.setWidth( 0 );
-    if ( s.height() < 0 )
-	s.setHeight( 0 );
-    d->pm = new QPixmap( s );
-    d->pmDirty = TRUE;
+	QSize s(width() - frameW() * 2, height() - frameW() * 2);
+	if (s.width() < 0)
+		s.setWidth(0);
+	if (s.height() < 0)
+		s.setHeight(0);
+	d->pm = new QPixmap(s);
+	d->pmDirty = TRUE;
 }
 
 
 void QLineEdit::undoInternal()
 {
-    if ( d->undoList.isEmpty() )
-	return;
-    d->undo = FALSE;
+	if (d->undoList.isEmpty())
+		return;
+	d->undo = FALSE;
 
-    d->redoList += QLineEditUndoItem(tbuf, cursorPos );
-    setText( d->undoList.last().str );
-    setCursorPosition( d->undoList.last().pos );
-    markAnchor = cursorPos;
-    d->undoList.remove( d->undoList.fromLast() );
-    if ( d->undoList.count() > 10 )
-	d->undoList.remove( d->undoList.begin() );
-    d->undo = TRUE;
-    d->needundo = TRUE;
+	d->redoList += QLineEditUndoItem(tbuf, cursorPos);
+	setText(d->undoList.last().str);
+	setCursorPosition(d->undoList.last().pos);
+	markAnchor = cursorPos;
+	d->undoList.remove(d->undoList.fromLast());
+	if (d->undoList.count() > 10)
+		d->undoList.remove(d->undoList.begin());
+	d->undo = TRUE;
+	d->needundo = TRUE;
 }
 
 void QLineEdit::redoInternal()
 {
-    if ( d->redoList.isEmpty() )
-	return;
-    d->undo = FALSE;
-    d->undoList += QLineEditUndoItem(tbuf, cursorPos );
-    setText( d->redoList.last().str );
-    setCursorPosition( d->redoList.last().pos );
-    markAnchor = cursorPos;
-    d->redoList.remove( d->redoList.fromLast() );
-    d->undo = TRUE;
-    d->needundo = TRUE;
+	if (d->redoList.isEmpty())
+		return;
+	d->undo = FALSE;
+	d->undoList += QLineEditUndoItem(tbuf, cursorPos);
+	setText(d->redoList.last().str);
+	setCursorPosition(d->redoList.last().pos);
+	markAnchor = cursorPos;
+	d->redoList.remove(d->redoList.fromLast());
+	d->undo = TRUE;
+	d->needundo = TRUE;
 }
 #endif
 
 
 #if defined(Q_INCOMPATIBLE_3_0_ADDONS)
-bool QLineEdit::getSelection( int *start, int *end )
+bool QLineEdit::getSelection(int *start, int *end)
 {
-    if( !hasMarkedText() )
-	return false;
+	if (!hasMarkedText())
+		return false;
 
-    *start = minMark();
-    *end = maxMark();
-    return true;
+	*start = minMark();
+	*end = maxMark();
+	return true;
 }
 
-void QLineEdit::setPasswordChar( QChar c )
+void QLineEdit::setPasswordChar(QChar c)
 {
-    d->passwordChar = c;
+	d->passwordChar = c;
 }
 
 QChar QLineEdit::passwordChar() const
 {
-    return d->passwordChar;
+	return d->passwordChar;
 }
 
 #endif

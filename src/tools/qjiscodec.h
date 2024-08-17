@@ -68,29 +68,30 @@
 #define QJISCODEC_H
 
 #ifndef QT_H
-#include "qtextcodec.h"
-#include "qjpunicode.h"
+# include "qtextcodec.h"
+# include "qjpunicode.h"
 #endif // QT_H
 
 #ifndef QT_NO_CODECS
 
-class Q_EXPORT QJisCodec : public QTextCodec {
-public:
-    virtual int mibEnum() const;
-    const char* name() const;
+class Q_EXPORT QJisCodec : public QTextCodec
+{
+      public:
+	virtual int mibEnum() const;
+	const char *name() const;
 
-    QTextDecoder* makeDecoder() const;
+	QTextDecoder *makeDecoder() const;
 
-    QCString fromUnicode(const QString& uc, int& len_in_out) const;
-    QString toUnicode(const char* chars, int len) const;
+	QCString fromUnicode(const QString &uc, int &len_in_out) const;
+	QString toUnicode(const char *chars, int len) const;
 
-    int heuristicContentMatch(const char* chars, int len) const;
-    int heuristicNameMatch(const char* hint) const;
+	int heuristicContentMatch(const char *chars, int len) const;
+	int heuristicNameMatch(const char *hint) const;
 
-    QJisCodec();
+	QJisCodec();
 
-protected:
-    const QJpUnicodeConv * const conv;
+      protected:
+	const QJpUnicodeConv *const conv;
 };
 
 #endif

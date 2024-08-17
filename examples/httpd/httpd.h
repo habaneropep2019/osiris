@@ -12,17 +12,17 @@
 
 class HttpDaemon : public QServerSocket
 {
-    Q_OBJECT
-public:
-    HttpDaemon(QObject *parent = 0);
-    void newConnection(int socket);
+	Q_OBJECT
+      public:
+	HttpDaemon(QObject *parent = 0);
+	void newConnection(int socket);
 
-signals:
-    void newConnect();
-    void endConnect();
-    void wroteToClient();
+      signals:
+	void newConnect();
+	void endConnect();
+	void wroteToClient();
 
-private slots:
-    void readClient();
-    void discardClient();
+      private slots:
+	void readClient();
+	void discardClient();
 };

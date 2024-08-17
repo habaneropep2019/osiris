@@ -43,11 +43,11 @@
 **********************************************************************/
 
 #ifndef QT_H
-#include <qfeatures.h>
+# include <qfeatures.h>
 #endif // QT_H
 
 #ifndef QT_BUILTIN_GIF_READER
-#define QT_BUILTIN_GIF_READER  0
+# define QT_BUILTIN_GIF_READER 0
 #endif
 
 bool qt_builtin_gif_reader();

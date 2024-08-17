@@ -39,17 +39,17 @@
 
 #ifndef QT_NO_TABDIALOG
 
-#include "qobjectlist.h"
-#include "qobjectdict.h"
-#include "qtabbar.h"
-#include "qtabwidget.h"
-#include "qpushbutton.h"
-#include "qpainter.h"
-#include "qpixmap.h"
-#include "qapplication.h"
-#include "qtabwidget.h"
-#include "qwidgetstack.h"
-#include "qlayout.h"
+# include "qobjectlist.h"
+# include "qobjectdict.h"
+# include "qtabbar.h"
+# include "qtabwidget.h"
+# include "qpushbutton.h"
+# include "qpainter.h"
+# include "qpixmap.h"
+# include "qapplication.h"
+# include "qtabwidget.h"
+# include "qwidgetstack.h"
+# include "qlayout.h"
 
 // NOT REVISED
 /*!
@@ -197,50 +197,46 @@
 
 // add comments about delete, ok and apply
 
-struct QTabPrivate
-{
-    QTabPrivate();
+struct QTabPrivate {
+	QTabPrivate();
 
-    QTabWidget* tw;
+	QTabWidget *tw;
 
-    QPushButton * ok;
-    QPushButton * cb;
-    QPushButton * db;
-    QPushButton * hb;
-    QPushButton * ab;
+	QPushButton *ok;
+	QPushButton *cb;
+	QPushButton *db;
+	QPushButton *hb;
+	QPushButton *ab;
 
-    QBoxLayout * tll;
+	QBoxLayout *tll;
 };
 
-QTabPrivate::QTabPrivate()
-	: tw(0),
-	  ok(0), cb(0), db(0), hb(0), ab(0),
-	  tll(0)
-{ }
+QTabPrivate::QTabPrivate() : tw(0), ok(0), cb(0), db(0), hb(0), ab(0), tll(0)
+{
+}
 
 /*!
   Constructs a QTabDialog with only an Ok button.
 */
 
-QTabDialog::QTabDialog( QWidget *parent, const char *name, bool modal,
-			WFlags f )
-    : QDialog( parent, name, modal, f )
+QTabDialog::QTabDialog(QWidget *parent, const char *name, bool modal, WFlags f)
+	: QDialog(parent, name, modal, f)
 {
-    d = new QTabPrivate;
-    CHECK_PTR( d );
+	d = new QTabPrivate;
+	CHECK_PTR(d);
 
-    d->tw = new QTabWidget( this, "tab widget" );
-    connect ( d->tw, SIGNAL ( selected( const QString& ) ), this, SIGNAL( selected( const QString& ) ) );
-    connect ( d->tw, SIGNAL ( currentChanged( QWidget* ) ), this, SIGNAL( currentChanged( QWidget* ) ) );
+	d->tw = new QTabWidget(this, "tab widget");
+	connect(d->tw, SIGNAL(selected(const QString &)), this,
+		SIGNAL(selected(const QString &)));
+	connect(d->tw, SIGNAL(currentChanged(QWidget *)), this,
+		SIGNAL(currentChanged(QWidget *)));
 
-    d->ok = new QPushButton( this, "ok" );
-    CHECK_PTR( d->ok );
-    d->ok->setText( tr("OK") );
-    d->ok->setDefault( TRUE );
-    connect( d->ok, SIGNAL(clicked()),
-	     this, SIGNAL(applyButtonPressed()) );
-    connect( d->ok, SIGNAL(clicked()),
-	     this, SLOT(accept()) );
+	d->ok = new QPushButton(this, "ok");
+	CHECK_PTR(d->ok);
+	d->ok->setText(tr("OK"));
+	d->ok->setDefault(TRUE);
+	connect(d->ok, SIGNAL(clicked()), this, SIGNAL(applyButtonPressed()));
+	connect(d->ok, SIGNAL(clicked()), this, SLOT(accept()));
 }
 
 
@@ -250,7 +246,7 @@ QTabDialog::QTabDialog( QWidget *parent, const char *name, bool modal,
 
 QTabDialog::~QTabDialog()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -262,10 +258,10 @@ QTabDialog::~QTabDialog()
   size of the old and new fonts.
 */
 
-void QTabDialog::setFont( const QFont & font )
+void QTabDialog::setFont(const QFont &font)
 {
-    QDialog::setFont( font );
-    setSizes();
+	QDialog::setFont(font);
+	setSizes();
 }
 
 
@@ -290,7 +286,7 @@ void QTabDialog::setFont( const QFont & font )
 
 bool QTabDialog::hasDefaultButton() const
 {
-     return d->db != 0;
+	return d->db != 0;
 }
 
 
@@ -303,7 +299,7 @@ bool QTabDialog::hasDefaultButton() const
 
 bool QTabDialog::hasHelpButton() const
 {
-     return d->hb != 0;
+	return d->hb != 0;
 }
 
 
@@ -330,7 +326,7 @@ bool QTabDialog::hasHelpButton() const
 
 bool QTabDialog::hasCancelButton() const
 {
-     return d->cb != 0;
+	return d->cb != 0;
 }
 
 
@@ -367,7 +363,7 @@ bool QTabDialog::hasCancelButton() const
 
 bool QTabDialog::hasApplyButton() const
 {
-    return d->ab != 0;
+	return d->ab != 0;
 }
 
 
@@ -380,7 +376,7 @@ bool QTabDialog::hasApplyButton() const
 
 bool QTabDialog::hasOkButton() const
 {
-    return d->ok != 0;
+	return d->ok != 0;
 }
 
 
@@ -402,18 +398,18 @@ bool QTabDialog::hasOkButton() const
 
 
 /*!\reimp
-*/
+ */
 void QTabDialog::show()
 {
-    //   Reimplemented in order to delay show()'ing of every page
-    //   except the initially visible one, and in order to emit the
-    //   aboutToShow() signal.
-    if ( topLevelWidget() == this )
-	d->tw->setFocus();
-    emit aboutToShow();
-    setSizes();
-    setUpLayout();
-    QDialog::show();
+	//   Reimplemented in order to delay show()'ing of every page
+	//   except the initially visible one, and in order to emit the
+	//   aboutToShow() signal.
+	if (topLevelWidget() == this)
+		d->tw->setFocus();
+	emit aboutToShow();
+	setSizes();
+	setUpLayout();
+	QDialog::show();
 }
 
 
@@ -421,9 +417,9 @@ void QTabDialog::show()
   Ensures that the selected tab's page is visible and appropriately sized.
 */
 
-void QTabDialog::showTab( int i )
+void QTabDialog::showTab(int i)
 {
-    d->tw->showTab( i );
+	d->tw->showTab(i);
 }
 
 
@@ -451,9 +447,9 @@ void QTabDialog::showTab( int i )
   user will be confused.
 */
 
-void QTabDialog::addTab( QWidget * child, const QString &label )
+void QTabDialog::addTab(QWidget *child, const QString &label)
 {
-    d->tw->addTab( child, label );
+	d->tw->addTab(child, label);
 }
 
 
@@ -464,9 +460,10 @@ void QTabDialog::addTab( QWidget * child, const QString &label )
   This function is the same as addTab() but with an additional
   iconset.
  */
-void QTabDialog::addTab( QWidget *child, const QIconSet& iconset, const QString &label)
+void QTabDialog::addTab(QWidget *child, const QIconSet &iconset,
+			const QString &label)
 {
-    d->tw->addTab( child, iconset, label );
+	d->tw->addTab(child, iconset, label);
 }
 
 /*!
@@ -475,9 +472,9 @@ void QTabDialog::addTab( QWidget *child, const QIconSet& iconset, const QString 
   QTabBar subclass with an overridden QTabBar::paint() routine for a
   subclass of QTab.
 */
-void QTabDialog::addTab( QWidget * child, QTab* tab )
+void QTabDialog::addTab(QWidget *child, QTab *tab)
 {
-    d->tw->addTab( child, tab );
+	d->tw->addTab(child, tab);
 }
 
 /*!
@@ -507,9 +504,9 @@ void QTabDialog::addTab( QWidget * child, QTab* tab )
   user will be confused.
 */
 
-void QTabDialog::insertTab( QWidget * child, const QString &label, int index )
+void QTabDialog::insertTab(QWidget *child, const QString &label, int index)
 {
-    d->tw->insertTab( child, label, index );
+	d->tw->insertTab(child, label, index);
 }
 
 
@@ -519,9 +516,10 @@ void QTabDialog::insertTab( QWidget * child, const QString &label, int index )
   This function is the same as insertTab() but with an additional
   iconset.
  */
-void QTabDialog::insertTab( QWidget *child, const QIconSet& iconset, const QString &label, int index)
+void QTabDialog::insertTab(QWidget *child, const QIconSet &iconset,
+			   const QString &label, int index)
 {
-    d->tw->insertTab( child, iconset, label, index );
+	d->tw->insertTab(child, iconset, label, index);
 }
 
 /*!
@@ -530,9 +528,9 @@ void QTabDialog::insertTab( QWidget *child, const QIconSet& iconset, const QStri
   QTabBar subclass with an overridden QTabBar::paint() routine for a
   subclass of QTab.
 */
-void QTabDialog::insertTab( QWidget * child, QTab* tab, int index )
+void QTabDialog::insertTab(QWidget *child, QTab *tab, int index)
 {
-    d->tw->insertTab( child, tab, index );
+	d->tw->insertTab(child, tab, index);
 }
 
 /*!
@@ -541,19 +539,19 @@ void QTabDialog::insertTab( QWidget * child, QTab* tab, int index )
   or the behavior is undefined.
   \sa tabBar()
 */
-void QTabDialog::setTabBar( QTabBar* tb )
+void QTabDialog::setTabBar(QTabBar *tb)
 {
-    d->tw->setTabBar( tb );
-    setUpLayout();
+	d->tw->setTabBar(tb);
+	setUpLayout();
 }
 
 /*!
   Returns the currently set QTabBar.
   \sa setTabBar()
 */
-QTabBar* QTabDialog::tabBar() const
+QTabBar *QTabDialog::tabBar() const
 {
-    return d->tw->tabBar();
+	return d->tw->tabBar();
 }
 
 /*!  Ensures that \a w is shown.  This is useful mainly for accelerators.
@@ -564,9 +562,9 @@ QTabBar* QTabDialog::tabBar() const
   \sa QTabBar::setCurrentTab()
 */
 
-void QTabDialog::showPage( QWidget * w )
+void QTabDialog::showPage(QWidget *w)
 {
-    d->tw->showPage( w );
+	d->tw->showPage(w);
 }
 
 
@@ -580,24 +578,24 @@ void QTabDialog::showPage( QWidget * w )
   \sa setTabEnabled(), QWidget::isEnabled()
 */
 
-bool QTabDialog::isTabEnabled( const char* name ) const
+bool QTabDialog::isTabEnabled(const char *name) const
 {
-    if ( !name )
-	return FALSE;
-    QObjectList * l
-	= ((QTabDialog *)this)->queryList( "QWidget", name, FALSE, TRUE );
-    if ( l && l->first() ) {
-	QWidget * w;
-	while( l->current() ) {
-	    while( l->current() && !l->current()->isWidgetType() )
-		l->next();
-	    w = (QWidget *)(l->current());
-	    if ( w ) {
-		return d->tw->isTabEnabled( w );
-	    }
+	if (!name)
+		return FALSE;
+	QObjectList *l =
+		((QTabDialog *)this)->queryList("QWidget", name, FALSE, TRUE);
+	if (l && l->first()) {
+		QWidget *w;
+		while (l->current()) {
+			while (l->current() && !l->current()->isWidgetType())
+				l->next();
+			w = (QWidget *)(l->current());
+			if (w) {
+				return d->tw->isTabEnabled(w);
+			}
+		}
 	}
-    }
-    return FALSE;
+	return FALSE;
 }
 
 
@@ -620,21 +618,21 @@ bool QTabDialog::isTabEnabled( const char* name ) const
   \sa isTabEnabled(), QWidget::setEnabled()
 */
 
-void QTabDialog::setTabEnabled( const char* name, bool enable )
+void QTabDialog::setTabEnabled(const char *name, bool enable)
 {
-    if ( !name )
-	return;
-    QObjectList * l
-	= ((QTabDialog *)this)->queryList( "QWidget", name, FALSE, TRUE );
-    if ( l && l->first() ) {
-	QObjectListIt it(*l);
-	QObject *o;
-	while( (o = it.current()) ) {
-	    ++it;
-	    if( o->isWidgetType() )
-		d->tw->setTabEnabled( (QWidget*)o, enable );
+	if (!name)
+		return;
+	QObjectList *l =
+		((QTabDialog *)this)->queryList("QWidget", name, FALSE, TRUE);
+	if (l && l->first()) {
+		QObjectListIt it(*l);
+		QObject *o;
+		while ((o = it.current())) {
+			++it;
+			if (o->isWidgetType())
+				d->tw->setTabEnabled((QWidget *)o, enable);
+		}
 	}
-    }
 }
 
 
@@ -662,9 +660,9 @@ void QTabDialog::setTabEnabled( const char* name, bool enable )
   \sa setTabEnabled(), QWidget::isEnabled()
 */
 
-bool QTabDialog::isTabEnabled( QWidget* w ) const
+bool QTabDialog::isTabEnabled(QWidget *w) const
 {
-    return d->tw->isTabEnabled( w );
+	return d->tw->isTabEnabled(w);
 }
 
 /*!
@@ -681,9 +679,9 @@ bool QTabDialog::isTabEnabled( QWidget* w ) const
   \sa isTabEnabled(), QWidget::setEnabled()
 */
 
-void QTabDialog::setTabEnabled( QWidget* w, bool enable)
+void QTabDialog::setTabEnabled(QWidget *w, bool enable)
 {
-    d->tw->setTabEnabled( w, enable );
+	d->tw->setTabEnabled(w, enable);
 }
 
 
@@ -698,23 +696,23 @@ void QTabDialog::setTabEnabled( QWidget* w, bool enable)
 
   \sa setCancelButton() setDefaultButton() applyButtonPressed()
 */
-void QTabDialog::setApplyButton( const QString &text )
+void QTabDialog::setApplyButton(const QString &text)
 {
-    if ( !text && d->ab ) {
-        delete d->ab;
-        d->ab = 0;
-        setSizes();
-    } else {
-        if ( !d->ab ) {
-            d->ab = new QPushButton( this, "apply settings" );
-            connect( d->ab, SIGNAL(clicked()),
-                     this, SIGNAL(applyButtonPressed()) );
-            setUpLayout();
-        }
-        d->ab->setText( text );
-        setSizes();
-        //d->ab->show();
-    }
+	if (!text && d->ab) {
+		delete d->ab;
+		d->ab = 0;
+		setSizes();
+	} else {
+		if (!d->ab) {
+			d->ab = new QPushButton(this, "apply settings");
+			connect(d->ab, SIGNAL(clicked()), this,
+				SIGNAL(applyButtonPressed()));
+			setUpLayout();
+		}
+		d->ab->setText(text);
+		setSizes();
+		// d->ab->show();
+	}
 }
 
 /*!
@@ -723,7 +721,7 @@ void QTabDialog::setApplyButton( const QString &text )
  */
 void QTabDialog::setApplyButton()
 {
-    setApplyButton( tr("Apply") );
+	setApplyButton(tr("Apply"));
 }
 
 
@@ -740,23 +738,23 @@ void QTabDialog::setApplyButton()
   \sa setApplyButton() setCancelButton() helpButtonPressed()
 */
 
-void QTabDialog::setHelpButton( const QString &text )
+void QTabDialog::setHelpButton(const QString &text)
 {
-    if ( !text ) {
-        delete d->hb;
-        d->hb = 0;
-        setSizes();
-    } else {
-        if ( !d->hb ) {
-            d->hb = new QPushButton( this, "give help" );
-            connect( d->hb, SIGNAL(clicked()),
-                     this, SIGNAL(helpButtonPressed()) );
-            setUpLayout();
-        }
-        d->hb->setText( text );
-        setSizes();
-        //d->hb->show();
-    }
+	if (!text) {
+		delete d->hb;
+		d->hb = 0;
+		setSizes();
+	} else {
+		if (!d->hb) {
+			d->hb = new QPushButton(this, "give help");
+			connect(d->hb, SIGNAL(clicked()), this,
+				SIGNAL(helpButtonPressed()));
+			setUpLayout();
+		}
+		d->hb->setText(text);
+		setSizes();
+		// d->hb->show();
+	}
 }
 
 
@@ -766,7 +764,7 @@ void QTabDialog::setHelpButton( const QString &text )
  */
 void QTabDialog::setHelpButton()
 {
-    setHelpButton( tr("Help") );
+	setHelpButton(tr("Help"));
 }
 
 /*!
@@ -785,23 +783,23 @@ void QTabDialog::setHelpButton()
   \sa setApplyButton() setCancelButton() defaultButtonPressed()
 */
 
-void QTabDialog::setDefaultButton( const QString &text )
+void QTabDialog::setDefaultButton(const QString &text)
 {
-    if ( !text ) {
-        delete d->db;
-        d->db = 0;
-        setSizes();
-    } else {
-        if ( !d->db ) {
-            d->db = new QPushButton( this, "back to default" );
-            connect( d->db, SIGNAL(clicked()),
-                     this, SIGNAL(defaultButtonPressed()) );
-            setUpLayout();
-        }
-        d->db->setText( text );
-        setSizes();
-        //d->db->show();
-    }
+	if (!text) {
+		delete d->db;
+		d->db = 0;
+		setSizes();
+	} else {
+		if (!d->db) {
+			d->db = new QPushButton(this, "back to default");
+			connect(d->db, SIGNAL(clicked()), this,
+				SIGNAL(defaultButtonPressed()));
+			setUpLayout();
+		}
+		d->db->setText(text);
+		setSizes();
+		// d->db->show();
+	}
 }
 
 
@@ -811,7 +809,7 @@ void QTabDialog::setDefaultButton( const QString &text )
  */
 void QTabDialog::setDefaultButton()
 {
-    setDefaultButton( tr("Defaults") );
+	setDefaultButton(tr("Defaults"));
 }
 
 /*!
@@ -832,25 +830,24 @@ void QTabDialog::setDefaultButton()
   \sa setApplyButton() setDefaultButton() cancelButtonPressed()
 */
 
-void QTabDialog::setCancelButton( const QString &text )
+void QTabDialog::setCancelButton(const QString &text)
 {
-    if ( !text ) {
-        delete d->cb;
-        d->cb = 0;
-        setSizes();
-    } else {
-        if ( !d->cb ) {
-            d->cb = new QPushButton( this, "cancel dialog" );
-            connect( d->cb, SIGNAL(clicked()),
-                     this, SIGNAL(cancelButtonPressed()) );
-            connect( d->cb, SIGNAL(clicked()),
-                     this, SLOT(reject()) );
-            setUpLayout();
-        }
-        d->cb->setText( text );
-        setSizes();
-        //d->cb->show();
-    }
+	if (!text) {
+		delete d->cb;
+		d->cb = 0;
+		setSizes();
+	} else {
+		if (!d->cb) {
+			d->cb = new QPushButton(this, "cancel dialog");
+			connect(d->cb, SIGNAL(clicked()), this,
+				SIGNAL(cancelButtonPressed()));
+			connect(d->cb, SIGNAL(clicked()), this, SLOT(reject()));
+			setUpLayout();
+		}
+		d->cb->setText(text);
+		setSizes();
+		// d->cb->show();
+	}
 }
 
 
@@ -861,7 +858,7 @@ void QTabDialog::setCancelButton( const QString &text )
 
 void QTabDialog::setCancelButton()
 {
-    setCancelButton( tr("Cancel") );
+	setCancelButton(tr("Cancel"));
 }
 
 
@@ -872,62 +869,62 @@ void QTabDialog::setCancelButton()
 
 void QTabDialog::setUpLayout()
 {
-    // the next four are probably the same, really?
-    const int topMargin = 6;
-    const int leftMargin = 6;
-    const int rightMargin = 6;
-    const int bottomMargin = 6;
-    const int betweenButtonsMargin = 7;
-    const int aboveButtonsMargin = 8;
+	// the next four are probably the same, really?
+	const int topMargin = 6;
+	const int leftMargin = 6;
+	const int rightMargin = 6;
+	const int bottomMargin = 6;
+	const int betweenButtonsMargin = 7;
+	const int aboveButtonsMargin = 8;
 
-    delete d->tll;
-    d->tll = new QBoxLayout( this, QBoxLayout::Down );
+	delete d->tll;
+	d->tll = new QBoxLayout(this, QBoxLayout::Down);
 
-    // top margin
-    d->tll->addSpacing( topMargin );
+	// top margin
+	d->tll->addSpacing(topMargin);
 
-    QBoxLayout * tmp = new QBoxLayout( QBoxLayout::LeftToRight );
-     d->tll->addLayout( tmp, 1 );
-     tmp->addSpacing( leftMargin );
-     tmp->addWidget( d->tw, 1);
-     tmp->addSpacing( rightMargin + 2 );
+	QBoxLayout *tmp = new QBoxLayout(QBoxLayout::LeftToRight);
+	d->tll->addLayout(tmp, 1);
+	tmp->addSpacing(leftMargin);
+	tmp->addWidget(d->tw, 1);
+	tmp->addSpacing(rightMargin + 2);
 
-    d->tll->addSpacing( aboveButtonsMargin + 2 );
-    QBoxLayout * buttonRow = new QBoxLayout( QBoxLayout::RightToLeft );
-    d->tll->addLayout( buttonRow, 0 );
-    d->tll->addSpacing( bottomMargin );
+	d->tll->addSpacing(aboveButtonsMargin + 2);
+	QBoxLayout *buttonRow = new QBoxLayout(QBoxLayout::RightToLeft);
+	d->tll->addLayout(buttonRow, 0);
+	d->tll->addSpacing(bottomMargin);
 
-    buttonRow->addSpacing( rightMargin );
-    if ( d->cb ) {
-	buttonRow->addWidget( d->cb, 0 );
-	buttonRow->addSpacing( betweenButtonsMargin );
-    }
+	buttonRow->addSpacing(rightMargin);
+	if (d->cb) {
+		buttonRow->addWidget(d->cb, 0);
+		buttonRow->addSpacing(betweenButtonsMargin);
+	}
 
-    if ( d->ab ) {
-	buttonRow->addWidget( d->ab, 0 );
-	buttonRow->addSpacing( betweenButtonsMargin );
-    }
+	if (d->ab) {
+		buttonRow->addWidget(d->ab, 0);
+		buttonRow->addSpacing(betweenButtonsMargin);
+	}
 
-    if ( d->db ) {
-	buttonRow->addWidget( d->db, 0 );
-	buttonRow->addSpacing( betweenButtonsMargin );
-    }
+	if (d->db) {
+		buttonRow->addWidget(d->db, 0);
+		buttonRow->addSpacing(betweenButtonsMargin);
+	}
 
-    if ( d->hb ) {
-	buttonRow->addWidget( d->hb, 0 );
-	buttonRow->addSpacing( betweenButtonsMargin );
-    }
+	if (d->hb) {
+		buttonRow->addWidget(d->hb, 0);
+		buttonRow->addSpacing(betweenButtonsMargin);
+	}
 
-    if ( d->ok ) {
-	buttonRow->addWidget( d->ok, 0 );
-	buttonRow->addSpacing( betweenButtonsMargin );
-    }
+	if (d->ok) {
+		buttonRow->addWidget(d->ok, 0);
+		buttonRow->addSpacing(betweenButtonsMargin);
+	}
 
-    // add one custom widget here
-    buttonRow->addStretch( 1 );
-    // add another custom widget here
+	// add one custom widget here
+	buttonRow->addStretch(1);
+	// add another custom widget here
 
-    d->tll->activate();
+	d->tll->activate();
 }
 
 
@@ -938,103 +935,103 @@ void QTabDialog::setUpLayout()
 
 void QTabDialog::setSizes()
 {
-    // compute largest button size
-    QSize s( 0, 0 );
-    int bw = s.width();
-    int bh = s.height();
+	// compute largest button size
+	QSize s(0, 0);
+	int bw = s.width();
+	int bh = s.height();
 
-    if ( d->ok ) {
-	s = d->ok->sizeHint();
-	if ( s.width() > bw )
-	    bw = s.width();
-	if ( s.height() > bh )
-	    bh = s.height();
-    }
+	if (d->ok) {
+		s = d->ok->sizeHint();
+		if (s.width() > bw)
+			bw = s.width();
+		if (s.height() > bh)
+			bh = s.height();
+	}
 
-    if ( d->ab ) {
-	s = d->ab->sizeHint();
-	if ( s.width() > bw )
-	    bw = s.width();
-	if ( s.height() > bh )
-	    bh = s.height();
-    }
+	if (d->ab) {
+		s = d->ab->sizeHint();
+		if (s.width() > bw)
+			bw = s.width();
+		if (s.height() > bh)
+			bh = s.height();
+	}
 
-    if ( d->db ) {
-	s = d->db->sizeHint();
-	if ( s.width() > bw )
-	    bw = s.width();
-	if ( s.height() > bh )
-	    bh = s.height();
-    }
+	if (d->db) {
+		s = d->db->sizeHint();
+		if (s.width() > bw)
+			bw = s.width();
+		if (s.height() > bh)
+			bh = s.height();
+	}
 
-    if ( d->hb ) {
-	s = d->hb->sizeHint();
-	if ( s.width() > bw )
-	    bw = s.width();
-	if ( s.height() > bh )
-	    bh = s.height();
-    }
+	if (d->hb) {
+		s = d->hb->sizeHint();
+		if (s.width() > bw)
+			bw = s.width();
+		if (s.height() > bh)
+			bh = s.height();
+	}
 
-    if ( d->cb ) {
-	s = d->cb->sizeHint();
-	if ( s.width() > bw )
-	    bw = s.width();
-	if ( s.height() > bh )
-	    bh = s.height();
-    }
+	if (d->cb) {
+		s = d->cb->sizeHint();
+		if (s.width() > bw)
+			bw = s.width();
+		if (s.height() > bh)
+			bh = s.height();
+	}
 
-    if ( style() == WindowsStyle && bw < 75 )
-	bw = 75;
+	if (style() == WindowsStyle && bw < 75)
+		bw = 75;
 
-    // and set all the buttons to that size
-    if ( d->ok )
-	d->ok->setFixedSize( bw, bh );
-    if ( d->ab )
-	d->ab->setFixedSize( bw, bh );
-    if ( d->db )
-	d->db->setFixedSize( bw, bh );
-    if ( d->hb )
-	d->hb->setFixedSize( bw, bh );
-    if ( d->cb )
-	d->cb->setFixedSize( bw, bh );
+	// and set all the buttons to that size
+	if (d->ok)
+		d->ok->setFixedSize(bw, bh);
+	if (d->ab)
+		d->ab->setFixedSize(bw, bh);
+	if (d->db)
+		d->db->setFixedSize(bw, bh);
+	if (d->hb)
+		d->hb->setFixedSize(bw, bh);
+	if (d->cb)
+		d->cb->setFixedSize(bw, bh);
 
-    // fiddle the tab chain so the buttons are in their natural order
-    QWidget * w = d->ok;
+	// fiddle the tab chain so the buttons are in their natural order
+	QWidget *w = d->ok;
 
-    if ( d->hb ) {
-	if ( w )
-	    setTabOrder( w, d->hb );
-	w = d->hb;
-    }
-    if ( d->db ) {
-	if ( w )
-	    setTabOrder( w, d->db );
-	w = d->db;
-    }
-    if ( d->ab ) {
-	if ( w )
-	    setTabOrder( w, d->ab );
-	w = d->ab;
-    }
-    if ( d->cb ) {
-	if ( w )
-	    setTabOrder( w, d->cb );
-	w = d->cb;
-    }
-    setTabOrder( w, d->tw );
+	if (d->hb) {
+		if (w)
+			setTabOrder(w, d->hb);
+		w = d->hb;
+	}
+	if (d->db) {
+		if (w)
+			setTabOrder(w, d->db);
+		w = d->db;
+	}
+	if (d->ab) {
+		if (w)
+			setTabOrder(w, d->ab);
+		w = d->ab;
+	}
+	if (d->cb) {
+		if (w)
+			setTabOrder(w, d->cb);
+		w = d->cb;
+	}
+	setTabOrder(w, d->tw);
 }
 
 /*!\reimp
-*/
-void QTabDialog::resizeEvent( QResizeEvent * e )
+ */
+void QTabDialog::resizeEvent(QResizeEvent *e)
 {
-    QDialog::resizeEvent( e );
+	QDialog::resizeEvent(e);
 }
 
 
 /*!\reimp
-*/
-void QTabDialog::paintEvent( QPaintEvent * )
+ */
+void QTabDialog::paintEvent(QPaintEvent *)
 {
 }
 
@@ -1053,23 +1050,23 @@ void QTabDialog::paintEvent( QPaintEvent * )
   \sa setCancelButton() setDefaultButton() applyButtonPressed()
 */
 
-void QTabDialog::setOkButton( const QString &text )
+void QTabDialog::setOkButton(const QString &text)
 {
-    if ( !text ) {
-        delete d->ok;
-        d->ok = 0;
-        setSizes();
-    } else {
-        if ( !d->ok ) {
-            d->ok = new QPushButton( this, "ok" );
-            connect( d->ok, SIGNAL(clicked()),
-                     this, SIGNAL(applyButtonPressed()) );
-            setUpLayout();
-        }
-        d->ok->setText( text );
-        setSizes();
-        //d->ok->show();
-    }
+	if (!text) {
+		delete d->ok;
+		d->ok = 0;
+		setSizes();
+	} else {
+		if (!d->ok) {
+			d->ok = new QPushButton(this, "ok");
+			connect(d->ok, SIGNAL(clicked()), this,
+				SIGNAL(applyButtonPressed()));
+			setUpLayout();
+		}
+		d->ok->setText(text);
+		setSizes();
+		// d->ok->show();
+	}
 }
 /*!
   Adds an OK to the dialog.  The button's text is set to
@@ -1078,38 +1075,38 @@ void QTabDialog::setOkButton( const QString &text )
 
 void QTabDialog::setOkButton()
 {
-    setOkButton( tr("OK") );
+	setOkButton(tr("OK"));
 }
 
 
 /*!
   Old version of setOkButton(), provided for backward compatibility.
  */
-void QTabDialog::setOKButton( const QString &text )
+void QTabDialog::setOKButton(const QString &text)
 {
-    // Ugle workaround for original "OK" default argument
-    QString newText( text );
-    if ( text.isNull() )
-	newText = QString::fromLatin1( "OK" );
-    setOkButton( newText );
+	// Ugle workaround for original "OK" default argument
+	QString newText(text);
+	if (text.isNull())
+		newText = QString::fromLatin1("OK");
+	setOkButton(newText);
 }
 
 
 /*!  Returns the text in the tab for page \a w.
-*/
+ */
 
-QString QTabDialog::tabLabel( QWidget * w )
+QString QTabDialog::tabLabel(QWidget *w)
 {
-    return d->tw->tabLabel( w );
-}	
+	return d->tw->tabLabel(w);
+}
 
 
 /*!  \reimp
-*/
-void QTabDialog::styleChange( QStyle& s )
+ */
+void QTabDialog::styleChange(QStyle &s)
 {
-    QDialog::styleChange( s );
-    setSizes();
+	QDialog::styleChange(s);
+	setSizes();
 }
 
 
@@ -1118,34 +1115,35 @@ tab dialog.  The tab dialog does its best to make sure that this value
 is never 0, but if you try hard enough it can be.
 */
 
-QWidget * QTabDialog::currentPage() const
+QWidget *QTabDialog::currentPage() const
 {
-    return d->tw->currentPage();
+	return d->tw->currentPage();
 }
 
 /*!
   Defines a new \a label for the tab of page \a w
  */
-void QTabDialog::changeTab( QWidget *w, const QString &label)
+void QTabDialog::changeTab(QWidget *w, const QString &label)
 {
-    d->tw->changeTab( w, label );
+	d->tw->changeTab(w, label);
 }
 
 /*!
   Defines a new \a iconset and a new \a label for the tab of page \a w
  */
-void QTabDialog::changeTab( QWidget *w, const QIconSet& iconset, const QString &label)
+void QTabDialog::changeTab(QWidget *w, const QIconSet &iconset,
+			   const QString &label)
 {
-    d->tw->changeTab( w, iconset, label );
+	d->tw->changeTab(w, iconset, label);
 }
 
 /*! Removes page \a w from this stack of widgets.  Does not
   delete \a w.
   \sa showPage(), QTabWidget::removePage(), QWidgetStack::removeWidget()
 */
-void QTabDialog::removePage( QWidget * w )
+void QTabDialog::removePage(QWidget *w)
 {
-    d->tw->removePage( w );
+	d->tw->removePage(w);
 }
 
 #endif

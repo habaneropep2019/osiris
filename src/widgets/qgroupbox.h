@@ -39,7 +39,7 @@
 #define QGROUPBOX_H
 
 #ifndef QT_H
-#include "qframe.h"
+# include "qframe.h"
 #endif // QT_H
 
 #ifndef QT_NO_GROUPBOX
@@ -53,77 +53,87 @@ class QSpacerItem;
 
 class Q_EXPORT QGroupBox : public QFrame
 {
-    Q_OBJECT
-    Q_PROPERTY( QString title READ title WRITE setTitle )
-    Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
-    Q_PROPERTY( Orientation orientation READ orientation WRITE setOrientation DESIGNABLE false )
-    Q_PROPERTY( int columns READ columns WRITE setColumns DESIGNABLE false )
-	
-public:
-    QGroupBox( QWidget *parent=0, const char *name=0 );
-    QGroupBox( const QString &title,
-	       QWidget *parent=0, const char* name=0 );
-    QGroupBox( int columns, Orientation o,
-	       QWidget *parent=0, const char *name=0 );
-    QGroupBox( int columns, Orientation o, const QString &title,
-	       QWidget *parent=0, const char* name=0 );
+	Q_OBJECT
+	Q_PROPERTY(QString title READ title WRITE setTitle)
+	Q_PROPERTY(Alignment alignment READ alignment WRITE setAlignment)
+	Q_PROPERTY(Orientation orientation READ orientation WRITE setOrientation
+			   DESIGNABLE false)
+	Q_PROPERTY(int columns READ columns WRITE setColumns DESIGNABLE false)
 
-    virtual void setColumnLayout(int columns, Orientation o);
+      public:
+	QGroupBox(QWidget *parent = 0, const char *name = 0);
+	QGroupBox(const QString &title, QWidget *parent = 0,
+		  const char *name = 0);
+	QGroupBox(int columns, Orientation o, QWidget *parent = 0,
+		  const char *name = 0);
+	QGroupBox(int columns, Orientation o, const QString &title,
+		  QWidget *parent = 0, const char *name = 0);
 
-    QString title() const { return str; }
-    virtual void setTitle( const QString &);
+	virtual void setColumnLayout(int columns, Orientation o);
 
-    int alignment() const { return align; }
-    virtual void setAlignment( int );
+	QString title() const
+	{
+		return str;
+	}
+	virtual void setTitle(const QString &);
 
-    int columns() const;
-    void setColumns( int );
+	int alignment() const
+	{
+		return align;
+	}
+	virtual void setAlignment(int);
 
-    Orientation orientation() const { return dir; }
-    void setOrientation( Orientation );
+	int columns() const;
+	void setColumns(int);
 
-    void addSpace( int );
-    QSize sizeHint() const;
+	Orientation orientation() const
+	{
+		return dir;
+	}
+	void setOrientation(Orientation);
 
-protected:
-    bool event( QEvent * );
-    void childEvent( QChildEvent * );
-    void resizeEvent( QResizeEvent * );
-    void paintEvent( QPaintEvent * );
-    void focusInEvent( QFocusEvent * );
-    void updateMask();
-    void fontChange( const QFont & );
+	void addSpace(int);
+	QSize sizeHint() const;
 
-private slots:
-    void fixFocus();
+      protected:
+	bool event(QEvent *);
+	void childEvent(QChildEvent *);
+	void resizeEvent(QResizeEvent *);
+	void paintEvent(QPaintEvent *);
+	void focusInEvent(QFocusEvent *);
+	void updateMask();
+	void fontChange(const QFont &);
 
-private:
-    void skip();
-    void init();
-    void calculateFrame();
-    void insertWid( QWidget* );
-    void setTextSpacer();
+      private slots:
+	void fixFocus();
 
-    QString str;
-    int align;
-    int lenvisible;
-#ifndef QT_NO_ACCEL
-    QAccel * accel;
-#endif
-    QGroupBoxPrivate * d;
+      private:
+	void skip();
+	void init();
+	void calculateFrame();
+	void insertWid(QWidget *);
+	void setTextSpacer();
 
-    QVBoxLayout *vbox;
-    QGridLayout *grid;
-    int row;
-    int col;
-    int nRows, nCols;
-    Orientation dir;
+	QString str;
+	int align;
+	int lenvisible;
+# ifndef QT_NO_ACCEL
+	QAccel *accel;
+# endif
+	QGroupBoxPrivate *d;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QGroupBox( const QGroupBox & );
-    QGroupBox &operator=( const QGroupBox & );
-#endif
+	QVBoxLayout *vbox;
+	QGridLayout *grid;
+	int row;
+	int col;
+	int nRows, nCols;
+	Orientation dir;
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QGroupBox(const QGroupBox &);
+	QGroupBox &operator=(const QGroupBox &);
+# endif
 };
 
 

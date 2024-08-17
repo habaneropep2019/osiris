@@ -36,30 +36,32 @@
 #define QHBOX_H
 
 #ifndef QT_H
-#include "qwidget.h"
+# include "qwidget.h"
 #endif // QT_H
 
 #ifndef QT_NO_HBOX
 
-#include "qframe.h"
+# include "qframe.h"
 
 class QBoxLayout;
 
 class Q_EXPORT QHBox : public QFrame
 {
-    Q_OBJECT
-public:
-    QHBox( QWidget *parent=0, const char *name=0, WFlags f=0,  bool allowLines=TRUE  );
-    void setSpacing( int );
-    bool setStretchFactor( QWidget*, int stretch );
-    QSize sizeHint() const;
+	Q_OBJECT
+      public:
+	QHBox(QWidget *parent = 0, const char *name = 0, WFlags f = 0,
+	      bool allowLines = TRUE);
+	void setSpacing(int);
+	bool setStretchFactor(QWidget *, int stretch);
+	QSize sizeHint() const;
 
-protected:
-    QHBox( bool horizontal, QWidget *parent=0, const char *name=0, WFlags f=0,  bool allowLines=TRUE  );
-    void frameChanged();
+      protected:
+	QHBox(bool horizontal, QWidget *parent = 0, const char *name = 0,
+	      WFlags f = 0, bool allowLines = TRUE);
+	void frameChanged();
 
-private:
-    QBoxLayout *lay;
+      private:
+	QBoxLayout *lay;
 };
 
 #endif // QT_NO_HBOX

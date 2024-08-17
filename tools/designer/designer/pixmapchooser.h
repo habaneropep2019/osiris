@@ -26,56 +26,53 @@
 
 class FormWindow;
 
-class PixmapView : public QScrollView,
-		   public QFilePreview
+class PixmapView : public QScrollView, public QFilePreview
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    PixmapView( QWidget *parent );
-    void setPixmap( const QPixmap &pix );
-    void drawContents( QPainter *p, int, int, int, int );
-    void previewUrl( const QUrl &u );
+      public:
+	PixmapView(QWidget *parent);
+	void setPixmap(const QPixmap &pix);
+	void drawContents(QPainter *p, int, int, int, int);
+	void previewUrl(const QUrl &u);
 
-private:
-    QPixmap pixmap;
-
+      private:
+	QPixmap pixmap;
 };
 
 class ImageIconProvider : public QFileIconProvider
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    ImageIconProvider( QWidget *parent = 0, const char *name = 0 );
-    ~ImageIconProvider();
+      public:
+	ImageIconProvider(QWidget *parent = 0, const char *name = 0);
+	~ImageIconProvider();
 
-    const QPixmap *pixmap( const QFileInfo &fi );
+	const QPixmap *pixmap(const QFileInfo &fi);
 
-private:
-    QStrList fmts;
-    QPixmap imagepm;
-
+      private:
+	QStrList fmts;
+	QPixmap imagepm;
 };
 
-QPixmap qChoosePixmap( QWidget *parent, FormWindow *fw = 0, const QPixmap &old = QPixmap() );
+QPixmap qChoosePixmap(QWidget *parent, FormWindow *fw = 0,
+		      const QPixmap &old = QPixmap());
 
 class PixmapChooser
 {
-public:
-    enum Size { Mini, Small, Large, NoSize, Disabled };
+      public:
+	enum Size { Mini, Small, Large, NoSize, Disabled };
 
-    PixmapChooser();
-    QString pixmapPath( Size size ) const;
+	PixmapChooser();
+	QString pixmapPath(Size size) const;
 
-    static QPixmap loadPixmap( const QString &name, Size size = Small );
+	static QPixmap loadPixmap(const QString &name, Size size = Small);
 
-private:
-    QString smallPixDir;
-    QString largePixDir;
-    QString miniPixDir;
-    QString noSizePixDir;
-
+      private:
+	QString smallPixDir;
+	QString largePixDir;
+	QString miniPixDir;
+	QString noSizePixDir;
 };
 
 

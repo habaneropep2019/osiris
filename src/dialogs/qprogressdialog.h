@@ -39,10 +39,10 @@
 #define QPROGRESSDIALOG_H
 
 #ifndef QT_H
-#include "qsemimodal.h"
-#include "qpushbutton.h"
-#include "qlabel.h"
-#include "qprogressbar.h"
+# include "qsemimodal.h"
+# include "qpushbutton.h"
+# include "qlabel.h"
+# include "qprogressbar.h"
 #endif // QT_H
 
 #ifndef QT_NO_PROGRESSDIALOG
@@ -52,79 +52,81 @@ class QTimer;
 
 class Q_EXPORT QProgressDialog : public QSemiModal
 {
-    Q_OBJECT
-    Q_PROPERTY( bool wasCancelled READ wasCancelled )
-    Q_PROPERTY( int totalSteps READ totalSteps WRITE setTotalSteps )
-    Q_PROPERTY( int progress READ progress WRITE setProgress )
-    Q_PROPERTY( bool autoReset READ autoReset WRITE setAutoReset )
-    Q_PROPERTY( bool autoClose READ autoClose WRITE setAutoClose )
-    Q_PROPERTY( QString labelText READ labelText WRITE setLabelText )
-	
-public:
-    QProgressDialog( QWidget *parent=0, const char *name=0, bool modal=FALSE,
-		     WFlags f=0 );
-    QProgressDialog( const QString& labelText, const QString &cancelButtonText,
-		     int totalSteps, QWidget *parent=0, const char *name=0,
-		     bool modal=FALSE, WFlags f=0 );
-   ~QProgressDialog();
+	Q_OBJECT
+	Q_PROPERTY(bool wasCancelled READ wasCancelled)
+	Q_PROPERTY(int totalSteps READ totalSteps WRITE setTotalSteps)
+	Q_PROPERTY(int progress READ progress WRITE setProgress)
+	Q_PROPERTY(bool autoReset READ autoReset WRITE setAutoReset)
+	Q_PROPERTY(bool autoClose READ autoClose WRITE setAutoClose)
+	Q_PROPERTY(QString labelText READ labelText WRITE setLabelText)
 
-    void	setLabel( QLabel * );
-    void	setCancelButton( QPushButton * );
-    void	setBar( QProgressBar * );
+      public:
+	QProgressDialog(QWidget *parent = 0, const char *name = 0,
+			bool modal = FALSE, WFlags f = 0);
+	QProgressDialog(const QString &labelText,
+			const QString &cancelButtonText, int totalSteps,
+			QWidget *parent = 0, const char *name = 0,
+			bool modal = FALSE, WFlags f = 0);
+	~QProgressDialog();
 
-    bool	wasCancelled() const;
+	void setLabel(QLabel *);
+	void setCancelButton(QPushButton *);
+	void setBar(QProgressBar *);
 
-    int		totalSteps() const;
-    int		progress()   const;
+	bool wasCancelled() const;
 
-    QSize	sizeHint() const;
+	int totalSteps() const;
+	int progress() const;
 
-    QString     labelText() const;
+	QSize sizeHint() const;
 
-    void setAutoReset( bool b );
-    bool autoReset() const;
-    void setAutoClose( bool b );
-    bool autoClose() const;
+	QString labelText() const;
 
-public slots:
-    void	cancel();
-    void	reset();
-    void	setTotalSteps( int totalSteps );
-    void	setProgress( int progress );
-    void	setLabelText( const QString &);
-    void	setCancelButtonText( const QString &);
+	void setAutoReset(bool b);
+	bool autoReset() const;
+	void setAutoClose(bool b);
+	bool autoClose() const;
 
-    void	setMinimumDuration( int ms );
-public:
-    int		minimumDuration() const;
+      public slots:
+	void cancel();
+	void reset();
+	void setTotalSteps(int totalSteps);
+	void setProgress(int progress);
+	void setLabelText(const QString &);
+	void setCancelButtonText(const QString &);
 
-signals:
-    void	cancelled();
+	void setMinimumDuration(int ms);
 
-protected:
-    void	resizeEvent( QResizeEvent * );
-    void	closeEvent( QCloseEvent * );
-    void	styleChange( QStyle& );
-    void	showEvent( QShowEvent *e );
+      public:
+	int minimumDuration() const;
 
-protected slots:
-    void	forceShow();
-    
-private:
-    void	   init( QWidget *creator, const QString& lbl, const QString &canc,
-		         int totstps);
-    void	   center();
-    void	   layout();
-    QLabel	  *label()  const;
-    QProgressBar  *bar()    const;
-    QProgressData *d;
-    QTimer	  *forceTimer;
+      signals:
+	void cancelled();
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QProgressDialog( const QProgressDialog & );
-    QProgressDialog &operator=( const QProgressDialog & );
-#endif
+      protected:
+	void resizeEvent(QResizeEvent *);
+	void closeEvent(QCloseEvent *);
+	void styleChange(QStyle &);
+	void showEvent(QShowEvent *e);
+
+      protected slots:
+	void forceShow();
+
+      private:
+	void init(QWidget *creator, const QString &lbl, const QString &canc,
+		  int totstps);
+	void center();
+	void layout();
+	QLabel *label() const;
+	QProgressBar *bar() const;
+	QProgressData *d;
+	QTimer *forceTimer;
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QProgressDialog(const QProgressDialog &);
+	QProgressDialog &operator=(const QProgressDialog &);
+# endif
 };
 
 #endif // QT_NO_PROGRESSDIALOG

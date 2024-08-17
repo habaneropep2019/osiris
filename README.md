@@ -160,3 +160,7 @@ Credits to the following are due because they have either contributed directly t
 - Helio Chissini de Castro
 - The Trinity Desktop Environment project
 - Keith Chambers
+
+## Development
+
+Osiris now enforces a code style similar to what is used for the Linux Kernel and git-scm. This is styled in `.clang-format`. A script `recurs_clang-format.sh` is provided and should be run prior to every commit.

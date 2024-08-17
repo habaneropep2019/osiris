@@ -11,7 +11,7 @@
 #include "semaphores.h"
 
 #if defined(QT_NO_THREAD)
-#error Thread support not enabled.
+# error Thread support not enabled.
 #endif
 
 extern QSemaphore *yellowSem;
@@ -19,18 +19,18 @@ extern QSemaphore *greenSem;
 
 int main(int argc, char **argv)
 {
-    QApplication app(argc, argv);
-    yellowSem = new QSemaphore(1);
-    greenSem = new QSemaphore(1);
+	QApplication app(argc, argv);
+	yellowSem = new QSemaphore(1);
+	greenSem = new QSemaphore(1);
 
-    SemaphoreExample se;
-    app.setMainWidget(&se);
-    se.show();
+	SemaphoreExample se;
+	app.setMainWidget(&se);
+	se.show();
 
-    int r = app.exec();
+	int r = app.exec();
 
-    delete yellowSem;
-    delete greenSem;
+	delete yellowSem;
+	delete greenSem;
 
-    return r;
+	return r;
 }

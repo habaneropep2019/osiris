@@ -39,60 +39,66 @@
 #define QBUFFER_H
 
 #ifndef QT_H
-#include "qiodevice.h"
-#include "qstring.h"
+# include "qiodevice.h"
+# include "qstring.h"
 #endif // QT_H
 
 
 class Q_EXPORT QBuffer : public QIODevice
 {
-public:
-    QBuffer();
-    QBuffer( QByteArray );
-   ~QBuffer();
+      public:
+	QBuffer();
+	QBuffer(QByteArray);
+	~QBuffer();
 
-    QByteArray buffer() const;
-    bool  setBuffer( QByteArray );
+	QByteArray buffer() const;
+	bool setBuffer(QByteArray);
 
-    bool  open( int );
-    void  close();
-    void  flush();
+	bool open(int);
+	void close();
+	void flush();
 
-    uint  size() const;
-    int	  at()	 const;
-    bool  at( int );
+	uint size() const;
+	int at() const;
+	bool at(int);
 
-    int	  readBlock( char *p, uint );
-    int	  writeBlock( const char *p, uint );
-    int	  readLine( char *p, uint );
+	int readBlock(char *p, uint);
+	int writeBlock(const char *p, uint);
+	int readLine(char *p, uint);
 
-    int	  getch();
-    int	  putch( int );
-    int	  ungetch( int );
+	int getch();
+	int putch(int);
+	int ungetch(int);
 
-protected:
-    QByteArray a;
+      protected:
+	QByteArray a;
 
-private:
-    uint  a_len;
-    uint  a_inc;
+      private:
+	uint a_len;
+	uint a_inc;
 
-private:	// Disabled copy constructor and operator=
+      private: // Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
-    QBuffer( const QBuffer & );
-    QBuffer &operator=( const QBuffer & );
+	QBuffer(const QBuffer &);
+	QBuffer &operator=(const QBuffer &);
 #endif
 };
 
 
 inline QByteArray QBuffer::buffer() const
-{ return a; }
+{
+	return a;
+}
 
 inline uint QBuffer::size() const
-{ return a.size(); }
+{
+	return a.size();
+}
 
 inline int QBuffer::at() const
-{ return ioIndex; }
+{
+	return ioIndex;
+}
 
 
 #endif // QBUFFER_H

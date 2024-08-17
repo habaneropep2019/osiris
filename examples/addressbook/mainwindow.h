@@ -18,32 +18,31 @@ class QToolBar;
 class QPopupMenu;
 class ABCentralWidget;
 
-class ABMainWindow: public QMainWindow
+class ABMainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    ABMainWindow();
-    ~ABMainWindow();
+      public:
+	ABMainWindow();
+	~ABMainWindow();
 
-protected slots:
-    void fileNew();
-    void fileOpen();
-    void fileSave();
-    void fileSaveAs();
-    void filePrint();
-    void closeWindow();
+      protected slots:
+	void fileNew();
+	void fileOpen();
+	void fileSave();
+	void fileSaveAs();
+	void filePrint();
+	void closeWindow();
 
-protected:
-    void setupMenuBar();
-    void setupFileTools();
-    void setupStatusBar();
-    void setupCentralWidget();
+      protected:
+	void setupMenuBar();
+	void setupFileTools();
+	void setupStatusBar();
+	void setupCentralWidget();
 
-    QToolBar *fileTools;
-    QString filename;
-    ABCentralWidget *view;
-
+	QToolBar *fileTools;
+	QString filename;
+	ABCentralWidget *view;
 };
 
 

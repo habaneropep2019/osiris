@@ -15,28 +15,27 @@
 #include <stdlib.h>
 
 
-int main( int argc, char ** argv )
+int main(int argc, char **argv)
 {
-    QApplication::setColorSpec( QApplication::ManyColor );
-    QApplication a(argc, argv);
+	QApplication::setColorSpec(QApplication::ManyColor);
+	QApplication a(argc, argv);
 
-    QString home;
-    if (argc > 1)
-        home = argv[1];
-    else
-        home = QString(getenv("OSIRISDIR")) + "/doc/html/index.html";
+	QString home;
+	if (argc > 1)
+		home = argv[1];
+	else
+		home = QString(getenv("OSIRISDIR")) + "/doc/html/index.html";
 
-    
-    HelpWindow *help = new HelpWindow(home, ".", 0, "help viewer");
-    help->setCaption("Qt Example - Helpviewer");
-    if ( QApplication::desktop()->width() > 400
-	 && QApplication::desktop()->height() > 500 )
-	help->show();
-    else
-	help->showMaximized();
 
-    QObject::connect( &a, SIGNAL(lastWindowClosed()),
-                      &a, SLOT(quit()) );
+	HelpWindow *help = new HelpWindow(home, ".", 0, "help viewer");
+	help->setCaption("Qt Example - Helpviewer");
+	if (QApplication::desktop()->width() > 400 &&
+	    QApplication::desktop()->height() > 500)
+		help->show();
+	else
+		help->showMaximized();
 
-    return a.exec();
+	QObject::connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
+
+	return a.exec();
 }

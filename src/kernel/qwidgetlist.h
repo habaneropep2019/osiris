@@ -39,8 +39,8 @@
 #define QWIDGETLIST_H
 
 #ifndef QT_H
-#include "qwidget.h"
-#include "qlist.h"
+# include "qwidget.h"
+# include "qlist.h"
 #endif // QT_H
 
 
@@ -52,20 +52,33 @@ template class Q_EXPORT QListIterator<QWidget>;
 
 class Q_EXPORT QWidgetList : public QList<QWidget>
 {
-public:
-    QWidgetList() : QList<QWidget>() {}
-    QWidgetList( const QWidgetList &list ) : QList<QWidget>(list) {}
-   ~QWidgetList() { clear(); }
-    QWidgetList &operator=(const QWidgetList &list)
-	{ return (QWidgetList&)QList<QWidget>::operator=(list); }
+      public:
+	QWidgetList() : QList<QWidget>()
+	{
+	}
+	QWidgetList(const QWidgetList &list) : QList<QWidget>(list)
+	{
+	}
+	~QWidgetList()
+	{
+		clear();
+	}
+	QWidgetList &operator=(const QWidgetList &list)
+	{
+		return (QWidgetList &)QList<QWidget>::operator=(list);
+	}
 };
 
 class Q_EXPORT QWidgetListIt : public QListIterator<QWidget>
 {
-public:
-    QWidgetListIt( const QWidgetList &l ) : QListIterator<QWidget>(l) {}
-    QWidgetListIt &operator=(const QWidgetListIt &i)
-	{ return (QWidgetListIt&)QListIterator<QWidget>::operator=(i); }
+      public:
+	QWidgetListIt(const QWidgetList &l) : QListIterator<QWidget>(l)
+	{
+	}
+	QWidgetListIt &operator=(const QWidgetListIt &i)
+	{
+		return (QWidgetListIt &)QListIterator<QWidget>::operator=(i);
+	}
 };
 
 

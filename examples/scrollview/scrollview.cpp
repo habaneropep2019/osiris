@@ -15,22 +15,15 @@ BigShrinker::BigShrinker(QWidget *parent) : QFrame(parent)
 	setFrameStyle(QFrame::Box | QFrame::Sunken);
 	int h = 35;
 	int b = 0;
-	for (int y = 0; y < 2000 - h; y += h + 10)
-	{
-		if (y == 0)
-		{
+	for (int y = 0; y < 2000 - h; y += h + 10) {
+		if (y == 0) {
 			QButton *q = new QPushButton("Quit", this);
 			connect(q, SIGNAL(clicked()), qApp, SLOT(quit()));
-		}
-		else
-		{
+		} else {
 			QString str;
-			if (b > 0)
-			{
+			if (b > 0) {
 				str.sprintf("Button %d", b++);
-			}
-			else
-			{
+			} else {
 				str = "I'm shrinking!";
 				++b;
 			}
@@ -58,8 +51,8 @@ void BigShrinker::mouseReleaseEvent(QMouseEvent *e)
 	emit clicked(e->x(), e->y());
 }
 
-BigMatrix::BigMatrix(QWidget *parent) : QScrollView(parent, "matrix", WNorthWestGravity),
-										bg("bg.ppm")
+BigMatrix::BigMatrix(QWidget *parent)
+	: QScrollView(parent, "matrix", WNorthWestGravity), bg("bg.ppm")
 {
 	bg.load("bg.ppm");
 	resizeContents(400000, 300000);
@@ -85,8 +78,7 @@ void BigMatrix::viewportMouseReleaseEvent(QMouseEvent *)
 
 void BigMatrix::viewportMouseMoveEvent(QMouseEvent *e)
 {
-	if (dragging)
-	{
+	if (dragging) {
 		int mx, my;
 		viewportToContents(e->x(), e->y(), mx, my);
 		int cx = childX(dragging);
@@ -103,26 +95,21 @@ void BigMatrix::viewportMouseMoveEvent(QMouseEvent *e)
 void BigMatrix::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
 	// The Background
-	if (!bg.isNull())
-	{
+	if (!bg.isNull()) {
 		int rowheight = bg.height();
 		int toprow = cy / rowheight;
 		int bottomrow = (cy + ch + rowheight - 1) / rowheight;
 		int colwidth = bg.width();
 		int leftcol = cx / colwidth;
 		int rightcol = (cx + cw + colwidth - 1) / colwidth;
-		for (int r = toprow; r <= bottomrow; r++)
-		{
+		for (int r = toprow; r <= bottomrow; r++) {
 			int py = r * rowheight;
-			for (int c = leftcol; c <= rightcol; c++)
-			{
+			for (int c = leftcol; c <= rightcol; c++) {
 				int px = c * colwidth;
 				p->drawPixmap(px, py, bg);
 			}
 		}
-	}
-	else
-	{
+	} else {
 		p->fillRect(cx, cy, cw, ch, QColor(240, 222, 208));
 	}
 
@@ -136,11 +123,9 @@ void BigMatrix::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 		int leftcol = cx / colwidth;
 		int rightcol = (cx + cw + colwidth - 1) / colwidth;
 		QString str;
-		for (int r = toprow; r <= bottomrow; r++)
-		{
+		for (int r = toprow; r <= bottomrow; r++) {
 			int py = r * rowheight;
-			for (int c = leftcol; c <= rightcol; c++)
-			{
+			for (int c = leftcol; c <= rightcol; c++) {
 				int px = c * colwidth;
 				str.sprintf("%d,%d", c, r);
 				p->drawText(px + 3, py + fm.ascent(), str);
@@ -148,34 +133,38 @@ void BigMatrix::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 		}
 
 		// The Big Hint
-		if (leftcol < 10 && toprow < 5)
-		{
+		if (leftcol < 10 && toprow < 5) {
 			p->setFont(QFont("Charter", 30));
 			p->setPen(red);
 			QString text;
-			text.sprintf("HINT:  Look at %d,%d", 215000 / colwidth, 115000 / rowheight);
+			text.sprintf("HINT:  Look at %d,%d", 215000 / colwidth,
+				     115000 / rowheight);
 			p->drawText(100, 50, text);
 		}
 	}
 
 	// The Big X
 	{
-		if (cx + cw > 200000 && cy + ch > 100000 && cx < 230000 && cy < 130000)
-		{
-			// Note that some X server cannot even handle co-ordinates
-			// beyond about 4000, so you might not see this.
+		if (cx + cw > 200000 && cy + ch > 100000 && cx < 230000 &&
+		    cy < 130000) {
+			// Note that some X server cannot even handle
+			// co-ordinates beyond about 4000, so you might not see
+			// this.
 			p->drawLine(200000, 100000, 229999, 129999);
 			p->drawLine(229999, 100000, 200000, 129999);
 
 			// X marks the spot!
 			p->setFont(QFont("Charter", 100));
 			p->setPen(blue);
-			p->drawText(215000 - 500, 115000 - 100, 1000, 200, AlignCenter, "YOU WIN!!!!!");
+			p->drawText(215000 - 500, 115000 - 100, 1000, 200,
+				    AlignCenter, "YOU WIN!!!!!");
 		}
 	}
 }
 
-ScrollViewExample::ScrollViewExample(int technique, QWidget *parent, const char *name) : QWidget(parent, name)
+ScrollViewExample::ScrollViewExample(int technique, QWidget *parent,
+				     const char *name)
+	: QWidget(parent, name)
 {
 	QMenuBar *menubar = new QMenuBar(this);
 	CHECK_PTR(menubar);
@@ -189,8 +178,8 @@ ScrollViewExample::ScrollViewExample(int technique, QWidget *parent, const char 
 	CHECK_PTR(vp_options);
 	vp_options->setCheckable(TRUE);
 	menubar->insertItem("&ScrollView", vp_options);
-	connect(vp_options, SIGNAL(activated(int)),
-			this, SLOT(doVPMenuItem(int)));
+	connect(vp_options, SIGNAL(activated(int)), this,
+		SLOT(doVPMenuItem(int)));
 
 	vauto_id = vp_options->insertItem("Vertical Auto");
 	vaoff_id = vp_options->insertItem("Vertical AlwaysOff");
@@ -202,24 +191,21 @@ ScrollViewExample::ScrollViewExample(int technique, QWidget *parent, const char 
 	vp_options->insertSeparator();
 	corn_id = vp_options->insertItem("cornerWidget");
 
-	if (technique == 1)
-	{
+	if (technique == 1) {
 		vp = new QScrollView(this);
 		BigShrinker *bs = new BigShrinker(0); //(vp->viewport());
 		vp->addChild(bs);
 		bs->setAcceptDrops(TRUE);
-		QObject::connect(bs, SIGNAL(clicked(int, int)),
-						 vp, SLOT(center(int, int)));
-	}
-	else
-	{
+		QObject::connect(bs, SIGNAL(clicked(int, int)), vp,
+				 SLOT(center(int, int)));
+	} else {
 		vp = new BigMatrix(this);
 		if (technique == 3)
 			vp->enableClipper(TRUE);
 		srand(1);
-		for (int i = 0; i < 30; i++)
-		{
-			QMultiLineEdit *l = new QMultiLineEdit(vp->viewport(), "First");
+		for (int i = 0; i < 30; i++) {
+			QMultiLineEdit *l =
+				new QMultiLineEdit(vp->viewport(), "First");
 			l->setText("Drag out more of these.");
 			l->resize(100, 100);
 			vp->addChild(l, rand() % 800, rand() % 10000);
@@ -231,8 +217,8 @@ ScrollViewExample::ScrollViewExample(int technique, QWidget *parent, const char 
 	CHECK_PTR(f_options);
 	f_options->setCheckable(TRUE);
 	menubar->insertItem("&Frame", f_options);
-	connect(f_options, SIGNAL(activated(int)),
-			this, SLOT(doFMenuItem(int)));
+	connect(f_options, SIGNAL(activated(int)), this,
+		SLOT(doFMenuItem(int)));
 
 	f_options->insertItem("No frame", style_id);
 	f_options->insertItem("Box", style_id | QFrame::Box);
@@ -247,39 +233,36 @@ ScrollViewExample::ScrollViewExample(int technique, QWidget *parent, const char 
 	lw_options = new QPopupMenu;
 	CHECK_PTR(lw_options);
 	lw_options->setCheckable(TRUE);
-	for (int lw = 1; lw <= max_lw; lw++)
-	{
+	for (int lw = 1; lw <= max_lw; lw++) {
 		QString str;
 		str.sprintf("%d pixels", lw);
 		lw_options->insertItem(str, lw_id | lw);
 	}
 	f_options->insertItem("Line width", lw_options);
-	connect(lw_options, SIGNAL(activated(int)),
-			this, SLOT(doFMenuItem(int)));
+	connect(lw_options, SIGNAL(activated(int)), this,
+		SLOT(doFMenuItem(int)));
 	mlw_options = new QPopupMenu;
 	CHECK_PTR(mlw_options);
 	mlw_options->setCheckable(TRUE);
-	for (int mlw = 0; mlw <= max_mlw; mlw++)
-	{
+	for (int mlw = 0; mlw <= max_mlw; mlw++) {
 		QString str;
 		str.sprintf("%d pixels", mlw);
 		mlw_options->insertItem(str, mlw_id | mlw);
 	}
 	f_options->insertItem("Midline width", mlw_options);
-	connect(mlw_options, SIGNAL(activated(int)),
-			this, SLOT(doFMenuItem(int)));
+	connect(mlw_options, SIGNAL(activated(int)), this,
+		SLOT(doFMenuItem(int)));
 	mw_options = new QPopupMenu;
 	CHECK_PTR(mw_options);
 	mw_options->setCheckable(TRUE);
-	for (int mw = 0; mw <= max_mw; mw++)
-	{
+	for (int mw = 0; mw <= max_mw; mw++) {
 		QString str;
 		str.sprintf("%d pixels", mw);
 		mw_options->insertItem(str, mw_id | mw);
 	}
 	f_options->insertItem("Margin width", mw_options);
-	connect(mw_options, SIGNAL(activated(int)),
-			this, SLOT(doFMenuItem(int)));
+	connect(mw_options, SIGNAL(activated(int)), this,
+		SLOT(doFMenuItem(int)));
 
 	setVPMenuItems();
 	setFMenuItems();
@@ -296,37 +279,22 @@ ScrollViewExample::ScrollViewExample(int technique, QWidget *parent, const char 
 
 void ScrollViewExample::doVPMenuItem(int id)
 {
-	if (id == vauto_id)
-	{
+	if (id == vauto_id) {
 		vp->setVScrollBarMode(QScrollView::Auto);
-	}
-	else if (id == vaoff_id)
-	{
+	} else if (id == vaoff_id) {
 		vp->setVScrollBarMode(QScrollView::AlwaysOff);
-	}
-	else if (id == vaon_id)
-	{
+	} else if (id == vaon_id) {
 		vp->setVScrollBarMode(QScrollView::AlwaysOn);
-	}
-	else if (id == hauto_id)
-	{
+	} else if (id == hauto_id) {
 		vp->setHScrollBarMode(QScrollView::Auto);
-	}
-	else if (id == haoff_id)
-	{
+	} else if (id == haoff_id) {
 		vp->setHScrollBarMode(QScrollView::AlwaysOff);
-	}
-	else if (id == haon_id)
-	{
+	} else if (id == haon_id) {
 		vp->setHScrollBarMode(QScrollView::AlwaysOn);
-	}
-	else if (id == corn_id)
-	{
+	} else if (id == corn_id) {
 		bool corn = !vp->cornerWidget();
 		vp->setCornerWidget(corn ? corner : 0);
-	}
-	else
-	{
+	} else {
 		return; // Not for us to process.
 	}
 	setVPMenuItems();
@@ -349,36 +317,26 @@ void ScrollViewExample::setVPMenuItems()
 
 void ScrollViewExample::doFMenuItem(int id)
 {
-	if (id & style_id)
-	{
+	if (id & style_id) {
 		int sty;
 
-		if (id == style_id)
-		{
+		if (id == style_id) {
 			sty = 0;
-		}
-		else if (id & QFrame::MShape)
-		{
+		} else if (id & QFrame::MShape) {
 			sty = vp->frameStyle() & QFrame::MShadow;
-			sty = (sty ? sty : QFrame::Plain) | (id & QFrame::MShape);
-		}
-		else
-		{
+			sty = (sty ? sty : QFrame::Plain) |
+			      (id & QFrame::MShape);
+		} else {
 			sty = vp->frameStyle() & QFrame::MShape;
-			sty = (sty ? sty : QFrame::Box) | (id & QFrame::MShadow);
+			sty = (sty ? sty : QFrame::Box) |
+			      (id & QFrame::MShadow);
 		}
 		vp->setFrameStyle(sty);
-	}
-	else if (id & lw_id)
-	{
+	} else if (id & lw_id) {
 		vp->setLineWidth(id & ~lw_id);
-	}
-	else if (id & mlw_id)
-	{
+	} else if (id & mlw_id) {
 		vp->setMidLineWidth(id & ~mlw_id);
-	}
-	else
-	{
+	} else {
 		vp->setMargin(id & ~mw_id);
 	}
 
@@ -392,22 +350,23 @@ void ScrollViewExample::setFMenuItems()
 
 	f_options->setItemChecked(style_id, !sty);
 
-	for (int i = 1; i <= f_laststyle; i++)
-	{
+	for (int i = 1; i <= f_laststyle; i++) {
 		int id = f_options->idAt(i);
 		if (id & QFrame::MShape)
-			f_options->setItemChecked(id,
-									  ((id & QFrame::MShape) == (sty & QFrame::MShape)));
+			f_options->setItemChecked(id, ((id & QFrame::MShape) ==
+						       (sty & QFrame::MShape)));
 		else
 			f_options->setItemChecked(id,
-									  ((id & QFrame::MShadow) == (sty & QFrame::MShadow)));
+						  ((id & QFrame::MShadow) ==
+						   (sty & QFrame::MShadow)));
 	}
 
 	for (int lw = 1; lw <= max_lw; lw++)
 		lw_options->setItemChecked(lw_id | lw, vp->lineWidth() == lw);
 
 	for (int mlw = 0; mlw <= max_mlw; mlw++)
-		mlw_options->setItemChecked(mlw_id | mlw, vp->midLineWidth() == mlw);
+		mlw_options->setItemChecked(mlw_id | mlw,
+					    vp->midLineWidth() == mlw);
 
 	for (int mw = 0; mw <= max_mw; mw++)
 		mw_options->setItemChecked(mw_id | mw, vp->margin() == mw);

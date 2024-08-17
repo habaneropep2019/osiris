@@ -39,53 +39,75 @@
 #define QREGEXP_H
 
 #ifndef QT_H
-#include "qstring.h"
+# include "qstring.h"
 #endif // QT_H
 
 
 class Q_EXPORT QRegExp
 {
-public:
-    QRegExp();
-    QRegExp( const QString &, bool caseSensitive=TRUE, bool wildcard=FALSE );
-    QRegExp( const QRegExp & );
-   ~QRegExp();
-    QRegExp    &operator=( const QRegExp & );
-    QRegExp    &operator=( const QString &pattern );
+      public:
+	QRegExp();
+	QRegExp(const QString &, bool caseSensitive = TRUE,
+		bool wildcard = FALSE);
+	QRegExp(const QRegExp &);
+	~QRegExp();
+	QRegExp &operator=(const QRegExp &);
+	QRegExp &operator=(const QString &pattern);
 
-    bool	operator==( const QRegExp & )  const;
-    bool	operator!=( const QRegExp &r ) const
-					{ return !(this->operator==(r)); }
+	bool operator==(const QRegExp &) const;
+	bool operator!=(const QRegExp &r) const
+	{
+		return !(this->operator==(r));
+	}
 
-    bool	isEmpty()	const	{ return rxdata == 0; }
-    bool	isValid()	const	{ return error == 0; }
+	bool isEmpty() const
+	{
+		return rxdata == 0;
+	}
+	bool isValid() const
+	{
+		return error == 0;
+	}
 
-    bool	caseSensitive() const	{ return cs; }
-    void	setCaseSensitive( bool );
+	bool caseSensitive() const
+	{
+		return cs;
+	}
+	void setCaseSensitive(bool);
 
-    bool	wildcard()	const	{ return wc; }
-    void	setWildcard( bool );
+	bool wildcard() const
+	{
+		return wc;
+	}
+	void setWildcard(bool);
 
-    QString	pattern()	const	{ return rxstring; }
-    // ### in Qt 3.0, provide a real implementation
-    void	setPattern( const QString& pattern )
-					{ operator=( pattern ); }
+	QString pattern() const
+	{
+		return rxstring;
+	}
+	// ### in Qt 3.0, provide a real implementation
+	void setPattern(const QString &pattern)
+	{
+		operator=(pattern);
+	}
 
-    int		match( const QString &str, int index=0, int *len=0,
-		       bool indexIsStart = TRUE ) const;
-    int		find( const QString& str, int index )
-					{ return match( str, index ); }
+	int match(const QString &str, int index = 0, int *len = 0,
+		  bool indexIsStart = TRUE) const;
+	int find(const QString &str, int index)
+	{
+		return match(str, index);
+	}
 
-protected:
-    void	compile();
-    const QChar *matchstr( uint *, const QChar *, uint, const QChar * ) const;
+      protected:
+	void compile();
+	const QChar *matchstr(uint *, const QChar *, uint, const QChar *) const;
 
-private:
-    QString	rxstring;			// regular expression pattern
-    uint	*rxdata;			// compiled regexp pattern
-    int		error;				// error status
-    bool	cs;				// case sensitive
-    bool	wc;				// wildcard
+      private:
+	QString rxstring; // regular expression pattern
+	uint *rxdata; // compiled regexp pattern
+	int error; // error status
+	bool cs; // case sensitive
+	bool wc; // wildcard
 };
 
 

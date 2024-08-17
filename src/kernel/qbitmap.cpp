@@ -80,7 +80,7 @@
 
 QBitmap::QBitmap()
 {
-    data->bitmap = TRUE;
+	data->bitmap = TRUE;
 }
 
 
@@ -98,13 +98,12 @@ QBitmap::QBitmap()
   \sa QPixmap::setOptimization(), QPixmap::setDefaultOptimization()
 */
 
-QBitmap::QBitmap( int w, int h, bool clear,
-		  QPixmap::Optimization optimization )
-    : QPixmap( w, h, 1, optimization )
+QBitmap::QBitmap(int w, int h, bool clear, QPixmap::Optimization optimization)
+	: QPixmap(w, h, 1, optimization)
 {
-    data->bitmap = TRUE;
-    if ( clear )
-	fill( Qt::color0 );
+	data->bitmap = TRUE;
+	if (clear)
+		fill(Qt::color0);
 }
 
 
@@ -112,13 +111,13 @@ QBitmap::QBitmap( int w, int h, bool clear,
   \overload
 */
 
-QBitmap::QBitmap( const QSize &size, bool clear,
-		  QPixmap::Optimization optimization )
-    : QPixmap( size, 1, optimization )
+QBitmap::QBitmap(const QSize &size, bool clear,
+		 QPixmap::Optimization optimization)
+	: QPixmap(size, 1, optimization)
 {
-    data->bitmap = TRUE;
-    if ( clear )
-	fill( Qt::color0 );
+	data->bitmap = TRUE;
+	if (clear)
+		fill(Qt::color0);
 }
 
 
@@ -137,10 +136,10 @@ QBitmap::QBitmap( const QSize &size, bool clear,
   \endcode
 */
 
-QBitmap::QBitmap( int w, int h, const uchar *bits, bool isXbitmap )
-    : QPixmap( w, h, bits, isXbitmap )
+QBitmap::QBitmap(int w, int h, const uchar *bits, bool isXbitmap)
+	: QPixmap(w, h, bits, isXbitmap)
 {
-    data->bitmap = TRUE;
+	data->bitmap = TRUE;
 }
 
 
@@ -148,10 +147,10 @@ QBitmap::QBitmap( int w, int h, const uchar *bits, bool isXbitmap )
   \overload
 */
 
-QBitmap::QBitmap( const QSize &size, const uchar *bits, bool isXbitmap )
-    : QPixmap( size.width(), size.height(), bits, isXbitmap )
+QBitmap::QBitmap(const QSize &size, const uchar *bits, bool isXbitmap)
+	: QPixmap(size.width(), size.height(), bits, isXbitmap)
 {
-    data->bitmap = TRUE;
+	data->bitmap = TRUE;
 }
 
 
@@ -159,8 +158,7 @@ QBitmap::QBitmap( const QSize &size, const uchar *bits, bool isXbitmap )
   Constructs a bitmap which is a copy of \a bitmap.
 */
 
-QBitmap::QBitmap( const QBitmap &bitmap )
-    : QPixmap( bitmap )
+QBitmap::QBitmap(const QBitmap &bitmap) : QPixmap(bitmap)
 {
 }
 
@@ -176,11 +174,11 @@ QBitmap::QBitmap( const QBitmap &bitmap )
   QPixmap::save(), QPixmap::imageFormat()
 */
 
-QBitmap::QBitmap( const QString& fileName, const char *format )
-    : QPixmap() // Will set bitmap to null bitmap, explicit call for clarity
+QBitmap::QBitmap(const QString &fileName, const char *format)
+	: QPixmap() // Will set bitmap to null bitmap, explicit call for clarity
 {
-    data->bitmap = TRUE;
-    load( fileName, format, Mono );
+	data->bitmap = TRUE;
+	load(fileName, format, Mono);
 }
 
 
@@ -189,13 +187,13 @@ QBitmap::QBitmap( const QString& fileName, const char *format )
   bitmap.
 */
 
-QBitmap &QBitmap::operator=( const QBitmap &bitmap )
+QBitmap &QBitmap::operator=(const QBitmap &bitmap)
 {
-    QPixmap::operator=(bitmap);
+	QPixmap::operator=(bitmap);
 #if defined(CHECK_STATE)
-    ASSERT( data->bitmap );
+	ASSERT(data->bitmap);
 #endif
-    return *this;
+	return *this;
 }
 
 
@@ -207,25 +205,26 @@ QBitmap &QBitmap::operator=( const QBitmap &bitmap )
   QPixmap::depth() greater than 1.
 */
 
-QBitmap &QBitmap::operator=( const QPixmap &pixmap )
+QBitmap &QBitmap::operator=(const QPixmap &pixmap)
 {
-    if ( pixmap.isNull() ) {			// a null pixmap
-	QBitmap bm( 0, 0, FALSE, pixmap.optimization() );
-	QBitmap::operator=(bm);
-    } else if ( pixmap.depth() == 1 ) {		// 1-bit pixmap
-	if ( pixmap.isQBitmap() ) {		// another QBitmap
-	    QPixmap::operator=(pixmap);		// shallow assignment
-	} else {				// not a QBitmap, but 1-bit
-	    QBitmap bm( pixmap.size(), FALSE, pixmap.optimization() );
-	    bitBlt( &bm, 0,0, &pixmap, 0,0,pixmap.width(),pixmap.height() );
-	    QBitmap::operator=(bm);
+	if (pixmap.isNull()) { // a null pixmap
+		QBitmap bm(0, 0, FALSE, pixmap.optimization());
+		QBitmap::operator=(bm);
+	} else if (pixmap.depth() == 1) { // 1-bit pixmap
+		if (pixmap.isQBitmap()) { // another QBitmap
+			QPixmap::operator=(pixmap); // shallow assignment
+		} else { // not a QBitmap, but 1-bit
+			QBitmap bm(pixmap.size(), FALSE, pixmap.optimization());
+			bitBlt(&bm, 0, 0, &pixmap, 0, 0, pixmap.width(),
+			       pixmap.height());
+			QBitmap::operator=(bm);
+		}
+	} else { // n-bit depth pixmap
+		QImage image;
+		image = pixmap; // convert pixmap to image
+		*this = image; // will dither image
 	}
-    } else {					// n-bit depth pixmap
-	QImage image;
-	image = pixmap;				// convert pixmap to image
-	*this = image;				// will dither image
-    }
-    return *this;
+	return *this;
 }
 
 
@@ -237,10 +236,10 @@ QBitmap &QBitmap::operator=( const QPixmap &pixmap )
   QImage::depth()  greater than 1.
 */
 
-QBitmap &QBitmap::operator=( const QImage &image )
+QBitmap &QBitmap::operator=(const QImage &image)
 {
-    convertFromImage( image );
-    return *this;
+	convertFromImage(image);
+	return *this;
 }
 
 
@@ -254,18 +253,15 @@ QBitmap &QBitmap::operator=( const QImage &image )
   \sa QPixmap::xForm()
 */
 
-QBitmap QBitmap::xForm( const QWMatrix &matrix ) const
+QBitmap QBitmap::xForm(const QWMatrix &matrix) const
 {
-    QPixmap pm = QPixmap::xForm( matrix );
-    QBitmap bm;
-    // Here we fake the pixmap to think it's a QBitmap. With this trick,
-    // the QBitmap::operator=(const QPixmap&) will just refer the
-    // pm.data and we do not need to perform a bitBlt.
-    pm.data->bitmap = TRUE;
-    bm = pm;
-    return bm;
+	QPixmap pm = QPixmap::xForm(matrix);
+	QBitmap bm;
+	// Here we fake the pixmap to think it's a QBitmap. With this trick,
+	// the QBitmap::operator=(const QPixmap&) will just refer the
+	// pm.data and we do not need to perform a bitBlt.
+	pm.data->bitmap = TRUE;
+	bm = pm;
+	return bm;
 }
 #endif // QT_NO_PIXMAP_TRANSFORMATION
-
-
-

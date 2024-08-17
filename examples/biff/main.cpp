@@ -12,11 +12,11 @@
 #include "biff.h"
 
 
-int main( int argc, char ** argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
-    Biff b;
-    a.setMainWidget( &b );
-    b.show();
-    return a.exec();
+	QApplication a(argc, argv);
+	Biff b;
+	a.setMainWidget(&b);
+	b.show();
+	return a.exec();
 }

@@ -39,7 +39,7 @@
 #define QBUTTONGROUP_H
 
 #ifndef QT_H
-#include "qgroupbox.h"
+# include "qgroupbox.h"
 #endif // QT_H
 
 #ifndef QT_NO_BUTTONGROUP
@@ -51,60 +51,64 @@ class QButtonList;
 
 class Q_EXPORT QButtonGroup : public QGroupBox
 {
-    Q_OBJECT
-    Q_PROPERTY( bool exclusive READ isExclusive WRITE setExclusive )
-    Q_PROPERTY( bool radioButtonExclusive READ isRadioButtonExclusive WRITE setRadioButtonExclusive )
-	
-public:
-    QButtonGroup( QWidget *parent=0, const char *name=0 );
-    QButtonGroup( const QString &title,
-		  QWidget *parent=0, const char* name=0 );
-    QButtonGroup( int columns, Orientation o,
-		  QWidget *parent=0, const char *name=0 );
-    QButtonGroup( int columns, Orientation o, const QString &title,
-		  QWidget *parent=0, const char* name=0 );
-   ~QButtonGroup();
+	Q_OBJECT
+	Q_PROPERTY(bool exclusive READ isExclusive WRITE setExclusive)
+	Q_PROPERTY(bool radioButtonExclusive READ isRadioButtonExclusive WRITE
+			   setRadioButtonExclusive)
 
-    bool	isExclusive() const;
-    bool	isRadioButtonExclusive() const { return radio_excl; }
-    virtual void setExclusive( bool );
-    virtual void setRadioButtonExclusive( bool );
+      public:
+	QButtonGroup(QWidget *parent = 0, const char *name = 0);
+	QButtonGroup(const QString &title, QWidget *parent = 0,
+		     const char *name = 0);
+	QButtonGroup(int columns, Orientation o, QWidget *parent = 0,
+		     const char *name = 0);
+	QButtonGroup(int columns, Orientation o, const QString &title,
+		     QWidget *parent = 0, const char *name = 0);
+	~QButtonGroup();
 
-public:
-    int		insert( QButton *, int id=-1 );
-    void	remove( QButton * );
-    QButton    *find( int id ) const;
-    int		id( QButton * ) const;
-    int		count() const;
+	bool isExclusive() const;
+	bool isRadioButtonExclusive() const
+	{
+		return radio_excl;
+	}
+	virtual void setExclusive(bool);
+	virtual void setRadioButtonExclusive(bool);
 
-    virtual void setButton( int id );
+      public:
+	int insert(QButton *, int id = -1);
+	void remove(QButton *);
+	QButton *find(int id) const;
+	int id(QButton *) const;
+	int count() const;
 
-    virtual void moveFocus( int );
+	virtual void setButton(int id);
 
-    QButton    *selected();
+	virtual void moveFocus(int);
 
-signals:
-    void	pressed( int id );
-    void	released( int id );
-    void	clicked( int id );
+	QButton *selected();
 
-protected slots:
-    void	buttonPressed();
-    void	buttonReleased();
-    void	buttonClicked();
-    void	buttonToggled( bool on );
+      signals:
+	void pressed(int id);
+	void released(int id);
+	void clicked(int id);
 
-private:
-    void	init();
-    bool	excl_grp;
-    bool	radio_excl;
-    QButtonList *buttons;
+      protected slots:
+	void buttonPressed();
+	void buttonReleased();
+	void buttonClicked();
+	void buttonToggled(bool on);
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QButtonGroup( const QButtonGroup & );
-    QButtonGroup &operator=( const QButtonGroup & );
-#endif
+      private:
+	void init();
+	bool excl_grp;
+	bool radio_excl;
+	QButtonList *buttons;
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QButtonGroup(const QButtonGroup &);
+	QButtonGroup &operator=(const QButtonGroup &);
+# endif
 };
 
 

@@ -11,15 +11,15 @@
 
 class ListenDND : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    ListenDND(QWidget *w);
+      public:
+	ListenDND(QWidget *w);
 
-public slots:
-    void dropped(QDropEvent *mime);
-    void moved();
+      public slots:
+	void dropped(QDropEvent *mime);
+	void moved();
 
-protected:
-    QWidget *view;
+      protected:
+	QWidget *view;
 };

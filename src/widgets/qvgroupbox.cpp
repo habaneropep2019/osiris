@@ -56,8 +56,8 @@
 
   The \e parent and \e name arguments are passed to the QWidget constructor.
 */
-QVGroupBox::QVGroupBox( QWidget *parent, const char *name )
-    : QGroupBox( 1, Horizontal /* sic! */, parent, name )
+QVGroupBox::QVGroupBox(QWidget *parent, const char *name)
+	: QGroupBox(1, Horizontal /* sic! */, parent, name)
 {
 }
 
@@ -67,9 +67,8 @@ QVGroupBox::QVGroupBox( QWidget *parent, const char *name )
   The \e parent and \e name arguments are passed to the QWidget constructor.
 */
 
-QVGroupBox::QVGroupBox( const QString &title, QWidget *parent,
-			    const char *name )
-    : QGroupBox( 1, Horizontal /* sic! */, title, parent, name )
+QVGroupBox::QVGroupBox(const QString &title, QWidget *parent, const char *name)
+	: QGroupBox(1, Horizontal /* sic! */, title, parent, name)
 {
 }
 

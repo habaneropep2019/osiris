@@ -16,19 +16,21 @@
 
 class Hello : public QWidget
 {
-    Q_OBJECT
-public:
-    Hello( const char *text, QWidget *parent=0, const char *name=0 );
-signals:
-    void clicked();
-protected:
-    void mouseReleaseEvent( QMouseEvent * );
-    void paintEvent( QPaintEvent * );
-private slots:
-    void animate();
-private:
-    QString t;
-    int     b;
+	Q_OBJECT
+      public:
+	Hello(const char *text, QWidget *parent = 0, const char *name = 0);
+      signals:
+	void clicked();
+
+      protected:
+	void mouseReleaseEvent(QMouseEvent *);
+	void paintEvent(QPaintEvent *);
+      private slots:
+	void animate();
+
+      private:
+	QString t;
+	int b;
 };
 
 #endif

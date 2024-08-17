@@ -41,9 +41,9 @@
 class QTimer;
 
 #ifndef QT_H
-#include "qwidget.h"
-#include "qrangecontrol.h"
-#include "qdrawutil.h" // REMOVE THIS IN 3.0
+# include "qwidget.h"
+# include "qrangecontrol.h"
+# include "qdrawutil.h" // REMOVE THIS IN 3.0
 #endif // QT_H
 
 #ifndef QT_NO_SCROLLBAR
@@ -51,136 +51,135 @@ class QTimer;
 
 class Q_EXPORT QScrollBar : public QWidget, public QRangeControl
 {
-    Q_OBJECT
-    Q_PROPERTY( int minValue READ minValue WRITE setMinValue )
-    Q_PROPERTY( int maxValue READ maxValue WRITE setMaxValue )
-    Q_PROPERTY( int lineStep READ lineStep WRITE setLineStep )
-    Q_PROPERTY( int pageStep READ pageStep WRITE setPageStep )
-    Q_PROPERTY( int value READ value WRITE setValue )
-    Q_PROPERTY( bool tracking READ tracking WRITE setTracking )
-    Q_PROPERTY( bool draggingSlider READ draggingSlider )
-    Q_PROPERTY( Orientation orientation READ orientation WRITE setOrientation )
-	
-public:
-    QScrollBar( QWidget *parent, const char *name=0 );
-    QScrollBar( Orientation, QWidget *parent, const char *name=0 );
-    QScrollBar( int minValue, int maxValue, int LineStep, int PageStep,
-		int value, Orientation,
-		QWidget *parent, const char *name=0 );
+	Q_OBJECT
+	Q_PROPERTY(int minValue READ minValue WRITE setMinValue)
+	Q_PROPERTY(int maxValue READ maxValue WRITE setMaxValue)
+	Q_PROPERTY(int lineStep READ lineStep WRITE setLineStep)
+	Q_PROPERTY(int pageStep READ pageStep WRITE setPageStep)
+	Q_PROPERTY(int value READ value WRITE setValue)
+	Q_PROPERTY(bool tracking READ tracking WRITE setTracking)
+	Q_PROPERTY(bool draggingSlider READ draggingSlider)
+	Q_PROPERTY(Orientation orientation READ orientation WRITE setOrientation)
 
-    virtual void setOrientation( Orientation );
-    Orientation orientation() const;
-    virtual void setTracking( bool enable );
-    bool	tracking() const;
-    bool	draggingSlider() const;
+      public:
+	QScrollBar(QWidget *parent, const char *name = 0);
+	QScrollBar(Orientation, QWidget *parent, const char *name = 0);
+	QScrollBar(int minValue, int maxValue, int LineStep, int PageStep,
+		   int value, Orientation, QWidget *parent,
+		   const char *name = 0);
 
-    virtual void setPalette( const QPalette & );
-    QSize	sizeHint() const;
-    QSizePolicy sizePolicy() const;
+	virtual void setOrientation(Orientation);
+	Orientation orientation() const;
+	virtual void setTracking(bool enable);
+	bool tracking() const;
+	bool draggingSlider() const;
 
-    int	 minValue() const;
-    int	 maxValue() const;
-    void setMinValue( int );
-    void setMaxValue( int );
-    int	 lineStep() const;
-    int	 pageStep() const;
-    void setLineStep( int );
-    void setPageStep( int );
-    int  value() const;
-    void setValue( int );
+	virtual void setPalette(const QPalette &);
+	QSize sizeHint() const;
+	QSizePolicy sizePolicy() const;
 
-signals:
-    void	valueChanged( int value );
-    void	sliderPressed();
-    void	sliderMoved( int value );
-    void	sliderReleased();
-    void	nextLine();
-    void	prevLine();
-    void	nextPage();
-    void	prevPage();
+	int minValue() const;
+	int maxValue() const;
+	void setMinValue(int);
+	void setMaxValue(int);
+	int lineStep() const;
+	int pageStep() const;
+	void setLineStep(int);
+	void setPageStep(int);
+	int value() const;
+	void setValue(int);
 
-protected:
-    void 	wheelEvent( QWheelEvent * );
-    void	keyPressEvent( QKeyEvent * );
-    void	resizeEvent( QResizeEvent * );
-    void	paintEvent( QPaintEvent * );
+      signals:
+	void valueChanged(int value);
+	void sliderPressed();
+	void sliderMoved(int value);
+	void sliderReleased();
+	void nextLine();
+	void prevLine();
+	void nextPage();
+	void prevPage();
 
-    void	mousePressEvent( QMouseEvent * );
-    void	mouseReleaseEvent( QMouseEvent * );
-    void	mouseMoveEvent( QMouseEvent * );
+      protected:
+	void wheelEvent(QWheelEvent *);
+	void keyPressEvent(QKeyEvent *);
+	void resizeEvent(QResizeEvent *);
+	void paintEvent(QPaintEvent *);
 
-    void	valueChange();
-    void	stepChange();
-    void	rangeChange();
+	void mousePressEvent(QMouseEvent *);
+	void mouseReleaseEvent(QMouseEvent *);
+	void mouseMoveEvent(QMouseEvent *);
 
-    int		sliderStart() const;
-    QRect	sliderRect() const;
+	void valueChange();
+	void stepChange();
+	void rangeChange();
 
-    void styleChange( QStyle& );
+	int sliderStart() const;
+	QRect sliderRect() const;
 
-private slots:
-    void doAutoRepeat();
+	void styleChange(QStyle &);
 
-private:
-    void init();
-    void positionSliderFromValue();
-    int calculateValueFromSlider() const;
+      private slots:
+	void doAutoRepeat();
 
-    void sliderMinMax( int &, int & )		const;
-    void metrics( int &, int &, int &, int& )	const;
+      private:
+	void init();
+	void positionSliderFromValue();
+	int calculateValueFromSlider() const;
 
-    void startAutoRepeat();
-    void stopAutoRepeat();
+	void sliderMinMax(int &, int &) const;
+	void metrics(int &, int &, int &, int &) const;
 
-    QStyle::ScrollControl pointOver( const QPoint &p ) const;
+	void startAutoRepeat();
+	void stopAutoRepeat();
 
-    int rangeValueToSliderPos( int val ) const;
-    int sliderPosToRangeValue( int  val ) const;
+	QStyle::ScrollControl pointOver(const QPoint &p) const;
 
-    void action( QStyle::ScrollControl control );
+	int rangeValueToSliderPos(int val) const;
+	int sliderPosToRangeValue(int val) const;
 
-    void drawControls( uint controls, uint activeControl ) const;
-    void drawControls( uint controls, uint activeControl,
-				QPainter *p ) const;
-    
-    uint pressedControl	 : 8;
-    uint track		 : 1;
-    uint clickedAt	 : 1;
-    uint orient		 : 1;
+	void action(QStyle::ScrollControl control);
 
-    int slidePrevVal;
-    QCOORD sliderPos;
-    QCOORD clickOffset;
+	void drawControls(uint controls, uint activeControl) const;
+	void drawControls(uint controls, uint activeControl, QPainter *p) const;
 
-    QTimer * repeater;
-    void * d;
+	uint pressedControl:8;
+	uint track:1;
+	uint clickedAt:1;
+	uint orient:1;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QScrollBar( const QScrollBar & );
-    QScrollBar &operator=( const QScrollBar & );
-#endif
+	int slidePrevVal;
+	QCOORD sliderPos;
+	QCOORD clickOffset;
+
+	QTimer *repeater;
+	void *d;
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QScrollBar(const QScrollBar &);
+	QScrollBar &operator=(const QScrollBar &);
+# endif
 };
 
 
-inline void QScrollBar::setTracking( bool t )
+inline void QScrollBar::setTracking(bool t)
 {
-    track = t;
+	track = t;
 }
 
 inline bool QScrollBar::tracking() const
 {
-    return track;
+	return track;
 }
 
 inline QScrollBar::Orientation QScrollBar::orientation() const
 {
-    return (Orientation)orient;
+	return (Orientation)orient;
 }
 
 inline int QScrollBar::sliderStart() const
 {
-    return sliderPos;
+	return sliderPos;
 }
 
 

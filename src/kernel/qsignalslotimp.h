@@ -39,9 +39,9 @@
 #define QSIGNALSLOTIMP_H
 
 #ifndef QT_H
-#include "qconnection.h"
-#include "qlist.h"
-#include "qasciidict.h"
+# include "qconnection.h"
+# include "qlist.h"
+# include "qasciidict.h"
 #endif // QT_H
 
 
@@ -53,20 +53,35 @@ template class Q_EXPORT QListIterator<QConnection>;
 
 class Q_EXPORT QConnectionList : public QList<QConnection>
 {
-public:
-    QConnectionList() : QList<QConnection>() {}
-    QConnectionList( const QConnectionList &list ) : QList<QConnection>(list) {}
-   ~QConnectionList() { clear(); }
-    QConnectionList &operator=(const QConnectionList &list)
-	{ return (QConnectionList&)QList<QConnection>::operator=(list); }
+      public:
+	QConnectionList() : QList<QConnection>()
+	{
+	}
+	QConnectionList(const QConnectionList &list) : QList<QConnection>(list)
+	{
+	}
+	~QConnectionList()
+	{
+		clear();
+	}
+	QConnectionList &operator=(const QConnectionList &list)
+	{
+		return (QConnectionList &)QList<QConnection>::operator=(list);
+	}
 };
 
 class Q_EXPORT QConnectionListIt : public QListIterator<QConnection>
 {
-public:
-    QConnectionListIt( const QConnectionList &l ) : QListIterator<QConnection>(l) {}
-    QConnectionListIt &operator=(const QConnectionListIt &i)
-	{ return (QConnectionListIt&)QListIterator<QConnection>::operator=(i); }
+      public:
+	QConnectionListIt(const QConnectionList &l)
+		: QListIterator<QConnection>(l)
+	{
+	}
+	QConnectionListIt &operator=(const QConnectionListIt &i)
+	{
+		return (QConnectionListIt &)
+			QListIterator<QConnection>::operator=(i);
+	}
 };
 
 
@@ -78,23 +93,37 @@ template class Q_EXPORT QAsciiDictIterator<QConnectionList>;
 
 class Q_EXPORT QSignalDict : public QAsciiDict<QConnectionList>
 {
-public:
-    QSignalDict(int size=17,bool cs=TRUE,bool ck=TRUE)
-	: QAsciiDict<QConnectionList>(size,cs,ck) {}
-    QSignalDict( const QSignalDict &dict )
-	: QAsciiDict<QConnectionList>(dict) {}
-   ~QSignalDict() { clear(); }
-    QSignalDict &operator=(const QSignalDict &dict)
-	{ return (QSignalDict&)QAsciiDict<QConnectionList>::operator=(dict); }
+      public:
+	QSignalDict(int size = 17, bool cs = TRUE, bool ck = TRUE)
+		: QAsciiDict<QConnectionList>(size, cs, ck)
+	{
+	}
+	QSignalDict(const QSignalDict &dict) : QAsciiDict<QConnectionList>(dict)
+	{
+	}
+	~QSignalDict()
+	{
+		clear();
+	}
+	QSignalDict &operator=(const QSignalDict &dict)
+	{
+		return (QSignalDict &)QAsciiDict<QConnectionList>::operator=(
+			dict);
+	}
 };
 
 class Q_EXPORT QSignalDictIt : public QAsciiDictIterator<QConnectionList>
 {
-public:
-    QSignalDictIt( const QSignalDict &d )
-	: QAsciiDictIterator<QConnectionList>(d) {}
-    QSignalDictIt &operator=(const QSignalDictIt &i)
-	{ return (QSignalDictIt&)QAsciiDictIterator<QConnectionList>::operator=(i); }
+      public:
+	QSignalDictIt(const QSignalDict &d)
+		: QAsciiDictIterator<QConnectionList>(d)
+	{
+	}
+	QSignalDictIt &operator=(const QSignalDictIt &i)
+	{
+		return (QSignalDictIt &)
+			QAsciiDictIterator<QConnectionList>::operator=(i);
+	}
 };
 
 

@@ -39,7 +39,7 @@
 #define QTHREAD_H
 
 #ifndef QT_H
-#include <qwindowdefs.h>
+# include <qwindowdefs.h>
 #endif // QT_H
 
 #if defined(QT_THREAD_SUPPORT)
@@ -52,115 +52,116 @@ const int Q_MUTEX_RECURSIVE = 1;
 
 class Q_EXPORT QMutex : public Qt
 {
-    friend class QWaitCondition;
-    friend class QWaitConditionPrivate;
+	friend class QWaitCondition;
+	friend class QWaitConditionPrivate;
 
-public:
-    QMutex(bool recursive = FALSE);
-    virtual ~QMutex();
+      public:
+	QMutex(bool recursive = FALSE);
+	virtual ~QMutex();
 
-    void lock();
-    void unlock();
-    bool locked();
+	void lock();
+	void unlock();
+	bool locked();
 
-private:
-    QMutexPrivate * d;
+      private:
+	QMutexPrivate *d;
 
-#if defined(Q_DISABLE_COPY)
-    QMutex( const QMutex & );
-    QMutex &operator=( const QMutex & );
-#endif
+# if defined(Q_DISABLE_COPY)
+	QMutex(const QMutex &);
+	QMutex &operator=(const QMutex &);
+# endif
 };
 
 class QThreadPrivate;
 
 class Q_EXPORT QThread : public Qt
 {
-    friend class QThreadPrivate;
-public:
-    static HANDLE currentThread();
-    static void postEvent( QObject *,QEvent * );
+	friend class QThreadPrivate;
 
-    static void exit();
+      public:
+	static HANDLE currentThread();
+	static void postEvent(QObject *, QEvent *);
 
-    QThread();
-    virtual ~QThread();
+	static void exit();
 
-    // default argument causes thread to block indefinately
-    bool wait( unsigned long time = ULONG_MAX );
+	QThread();
+	virtual ~QThread();
 
-    void start();
+	// default argument causes thread to block indefinately
+	bool wait(unsigned long time = ULONG_MAX);
 
-    bool finished() const;
-    bool running() const;
+	void start();
+
+	bool finished() const;
+	bool running() const;
 
 
-protected:
-    virtual void run() = 0;
+      protected:
+	virtual void run() = 0;
 
-    static void sleep( unsigned long );
-    static void msleep( unsigned long );
-    static void usleep( unsigned long );
+	static void sleep(unsigned long);
+	static void msleep(unsigned long);
+	static void usleep(unsigned long);
 
-private:
-    QThreadPrivate * d;
+      private:
+	QThreadPrivate *d;
 
-#if defined(Q_DISABLE_COPY)
-    QThread( const QThread & );
-    QThread &operator=( const QThread & );
-#endif
+# if defined(Q_DISABLE_COPY)
+	QThread(const QThread &);
+	QThread &operator=(const QThread &);
+# endif
 };
 
 class QWaitConditionPrivate;
 
 class Q_EXPORT QWaitCondition : public Qt
 {
-public:
-    QWaitCondition();
-    virtual ~QWaitCondition();
+      public:
+	QWaitCondition();
+	virtual ~QWaitCondition();
 
-    // default argument causes thread to block indefinately
-    bool wait( unsigned long time = ULONG_MAX );
-    bool wait( QMutex *mutex, unsigned long time = ULONG_MAX );
+	// default argument causes thread to block indefinately
+	bool wait(unsigned long time = ULONG_MAX);
+	bool wait(QMutex *mutex, unsigned long time = ULONG_MAX);
 
-    void wakeOne();
-    void wakeAll();
+	void wakeOne();
+	void wakeAll();
 
-private:
-    QWaitConditionPrivate * d;
+      private:
+	QWaitConditionPrivate *d;
 
-#if defined(Q_DISABLE_COPY)
-    QWaitCondition( const QWaitCondition & );
-    QWaitCondition &operator=( const QWaitCondition & );
-#endif
+# if defined(Q_DISABLE_COPY)
+	QWaitCondition(const QWaitCondition &);
+	QWaitCondition &operator=(const QWaitCondition &);
+# endif
 };
 
 class QSemaphorePrivate;
 
 class Q_EXPORT QSemaphore : public Qt
 {
-public:
-    QSemaphore( int );
-    virtual ~QSemaphore();
+      public:
+	QSemaphore(int);
+	virtual ~QSemaphore();
 
-    int available() const;
-    int total() const;
+	int available() const;
+	int total() const;
 
-    // postfix operators
-    int operator++(int);
-    int operator--(int);
+	// postfix operators
+	int operator++(int);
+	int operator--(int);
 
-    int operator+=(int);
-    int operator-=(int);
+	int operator+=(int);
+	int operator-=(int);
 
 
-private:
-    QSemaphorePrivate *d;
+      private:
+	QSemaphorePrivate *d;
 
-#if defined(Q_DISABLE_COPY)
-    QSemaphore(const QSemaphore &);
-    QSemaphore &operator=(const QSemaphore &);
-#endif
+# if defined(Q_DISABLE_COPY)
+	QSemaphore(const QSemaphore &);
+	QSemaphore &operator=(const QSemaphore &);
+# endif
 };
 
 #endif

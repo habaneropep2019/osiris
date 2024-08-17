@@ -12,8 +12,8 @@
 
   \sa show
 */
-TrayIcon::TrayIcon( QObject *parent, const char *name )
-: QObject(parent, name), pop(0), d(0)
+TrayIcon::TrayIcon(QObject *parent, const char *name)
+	: QObject(parent, name), pop(0), d(0)
 {
 }
 
@@ -24,8 +24,9 @@ TrayIcon::TrayIcon( QObject *parent, const char *name )
 
   \sa show
 */
-TrayIcon::TrayIcon( const QPixmap &icon, const QString &tooltip, QPopupMenu *popup, QObject *parent, const char *name )
-: QObject(parent, name), pop(popup), pm(icon), tip(tooltip), d(0)
+TrayIcon::TrayIcon(const QPixmap &icon, const QString &tooltip,
+		   QPopupMenu *popup, QObject *parent, const char *name)
+	: QObject(parent, name), pop(popup), pm(icon), tip(tooltip), d(0)
 {
 }
 
@@ -34,16 +35,16 @@ TrayIcon::TrayIcon( const QPixmap &icon, const QString &tooltip, QPopupMenu *pop
 */
 TrayIcon::~TrayIcon()
 {
-    sysRemove();
+	sysRemove();
 }
 
 /*!
   Sets the context menu to \a popup. The context menu will pop up when the
   user clicks the system tray entry with the right mouse button.
 */
-void TrayIcon::setPopup( QPopupMenu* popup )
+void TrayIcon::setPopup(QPopupMenu *popup)
 {
-    pop = popup;
+	pop = popup;
 }
 
 /*!
@@ -51,41 +52,42 @@ void TrayIcon::setPopup( QPopupMenu* popup )
 
   \sa setPopup
 */
-QPopupMenu* TrayIcon::popup() const
+QPopupMenu *TrayIcon::popup() const
 {
-    return pop;
+	return pop;
 }
 
 /*!
   \property TrayIcon::icon
   \brief the system tray icon.
 */
-void TrayIcon::setIcon( const QPixmap &icon )
+void TrayIcon::setIcon(const QPixmap &icon)
 {
-    pm = icon;
-    sysUpdateIcon();
+	pm = icon;
+	sysUpdateIcon();
 }
 
 QPixmap TrayIcon::icon() const
 {
-    return pm;
+	return pm;
 }
 
 /*!
   \property TrayIcon::toolTip
   \brief the tooltip for the system tray entry
-  
-  On some systems, the tooltip's length is limited and will be truncated as necessary.
+
+  On some systems, the tooltip's length is limited and will be truncated as
+  necessary.
 */
-void TrayIcon::setToolTip( const QString &tooltip )
+void TrayIcon::setToolTip(const QString &tooltip)
 {
-    tip = tooltip;
-    sysUpdateToolTip();
+	tip = tooltip;
+	sysUpdateToolTip();
 }
 
 QString TrayIcon::toolTip() const
 {
-    return tip;
+	return tip;
 }
 
 /*!
@@ -95,7 +97,7 @@ QString TrayIcon::toolTip() const
 */
 void TrayIcon::show()
 {
-    sysInstall();
+	sysInstall();
 }
 
 /*!
@@ -103,44 +105,45 @@ void TrayIcon::show()
 */
 void TrayIcon::hide()
 {
-    sysRemove();
+	sysRemove();
 }
 
 /*!
   \reimp
 */
-bool TrayIcon::event( QEvent *e )
+bool TrayIcon::event(QEvent *e)
 {
-    switch ( e->type() ) {
-    case QEvent::MouseMove:
-	mouseMoveEvent( (QMouseEvent*)e );
-	break;
+	switch (e->type()) {
+	case QEvent::MouseMove:
+		mouseMoveEvent((QMouseEvent *)e);
+		break;
 
-    case QEvent::MouseButtonPress:
-	mousePressEvent( (QMouseEvent*)e );
-	break;
+	case QEvent::MouseButtonPress:
+		mousePressEvent((QMouseEvent *)e);
+		break;
 
-    case QEvent::MouseButtonRelease:
-	mouseReleaseEvent( (QMouseEvent*)e );
-	break;
+	case QEvent::MouseButtonRelease:
+		mouseReleaseEvent((QMouseEvent *)e);
+		break;
 
-    case QEvent::MouseButtonDblClick:
-	mouseDoubleClickEvent( (QMouseEvent*)e );
-	break;
-    default:
-	return QObject::event( e );
-    }
+	case QEvent::MouseButtonDblClick:
+		mouseDoubleClickEvent((QMouseEvent *)e);
+		break;
+	default:
+		return QObject::event(e);
+	}
 
-    return TRUE;
+	return TRUE;
 }
 
 /*!
   This event handler can be reimplemented in a subclass to receive
   mouse move events for the system tray entry.
 
-  \sa mousePressEvent(), mouseReleaseEvent(), mouseDoubleClickEvent(),  QMouseEvent
+  \sa mousePressEvent(), mouseReleaseEvent(), mouseDoubleClickEvent(),
+  QMouseEvent
 */
-void TrayIcon::mouseMoveEvent( QMouseEvent *e )
+void TrayIcon::mouseMoveEvent(QMouseEvent *e)
 {
 }
 
@@ -151,7 +154,7 @@ void TrayIcon::mouseMoveEvent( QMouseEvent *e )
   \sa mouseReleaseEvent(), mouseDoubleClickEvent(),
   mouseMoveEvent(), QMouseEvent
 */
-void TrayIcon::mousePressEvent( QMouseEvent *e )
+void TrayIcon::mousePressEvent(QMouseEvent *e)
 {
 }
 
@@ -165,24 +168,24 @@ void TrayIcon::mousePressEvent( QMouseEvent *e )
   \sa setPopup(), mousePressEvent(), mouseDoubleClickEvent(),
   mouseMoveEvent(), QMouseEvent
 */
-void TrayIcon::mouseReleaseEvent( QMouseEvent *e )
+void TrayIcon::mouseReleaseEvent(QMouseEvent *e)
 {
-    switch ( e->button() ) {
-    case RightButton:
-	if ( pop ) {
-	    // Necessary to make keyboard focus
-	    // and menu closing work on Windows.
-	    pop->setActiveWindow();
-	    pop->popup( e->globalPos() );
-	    pop->setActiveWindow();
+	switch (e->button()) {
+	case RightButton:
+		if (pop) {
+			// Necessary to make keyboard focus
+			// and menu closing work on Windows.
+			pop->setActiveWindow();
+			pop->popup(e->globalPos());
+			pop->setActiveWindow();
+		}
+		break;
+	case LeftButton:
+		emit clicked(e->globalPos());
+		break;
+	default:
+		break;
 	}
-	break;
-    case LeftButton:
-	emit clicked( e->globalPos() );
-	break;
-    default:
-	break;
-    }
 }
 
 /*!
@@ -195,10 +198,10 @@ void TrayIcon::mouseReleaseEvent( QMouseEvent *e )
   \sa mousePressEvent(), mouseReleaseEvent(),
   mouseMoveEvent(), QMouseEvent
 */
-void TrayIcon::mouseDoubleClickEvent( QMouseEvent *e )
+void TrayIcon::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    if ( e->button() == LeftButton )
-	emit doubleClicked( e->globalPos() );
+	if (e->button() == LeftButton)
+		emit doubleClicked(e->globalPos());
 }
 
 /*!

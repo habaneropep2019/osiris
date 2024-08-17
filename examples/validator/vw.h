@@ -15,26 +15,27 @@
 #include <qstring.h>
 #include <qwidget.h>
 
-class VW: public QWidget {
-    Q_OBJECT
-public:
-    VW( QWidget * parent = 0, const char * name = 0 );
-    ~VW();
+class VW : public QWidget
+{
+	Q_OBJECT
+      public:
+	VW(QWidget *parent = 0, const char *name = 0);
+	~VW();
 
-private slots:
-    void modelSelected( const QString& );
-    void motorSelected( int );
-    void yearSelected( int );
+      private slots:
+	void modelSelected(const QString &);
+	void motorSelected(int);
+	void yearSelected(int);
 
-signals:
-    void validSelectionMade( const QString& );
+      signals:
+	void validSelectionMade(const QString &);
 
-private:
-    void computeSelection();
+      private:
+	void computeSelection();
 
-    QString currentModel;
-    int currentMotorSize;
-    int currentYear;
+	QString currentModel;
+	int currentMotorSize;
+	int currentYear;
 };
 
 

@@ -39,9 +39,9 @@
 #define QSIMPLERICHTEXT_H
 
 #ifndef QT_H
-#include "qnamespace.h"
-#include "qstring.h"
-#include "qregion.h"
+# include "qnamespace.h"
+# include "qstring.h"
+# include "qregion.h"
 #endif // QT_H
 
 #ifndef QT_NO_RICHTEXT
@@ -56,36 +56,39 @@ class QSimpleRichTextData;
 
 class Q_EXPORT QSimpleRichText
 {
-public:
-    QSimpleRichText( const QString& text, const QFont& fnt,
-		     const QString& context = QString::null, const QStyleSheet* sheet = 0);
-    QSimpleRichText( const QString& text, const QFont& fnt,
-		     const QString& context,  const QStyleSheet* sheet, 
-		     const QMimeSourceFactory* factory, int verticalBreak = -1,
-		     const QColor& linkColor = Qt::blue, bool linkUnderline = TRUE );
-    ~QSimpleRichText();
+      public:
+	QSimpleRichText(const QString &text, const QFont &fnt,
+			const QString &context = QString::null,
+			const QStyleSheet *sheet = 0);
+	QSimpleRichText(const QString &text, const QFont &fnt,
+			const QString &context, const QStyleSheet *sheet,
+			const QMimeSourceFactory *factory,
+			int verticalBreak = -1,
+			const QColor &linkColor = Qt::blue,
+			bool linkUnderline = TRUE);
+	~QSimpleRichText();
 
-    void setWidth( int );
-    void setWidth( QPainter*, int );
-    int width() const;
-    int widthUsed() const;
-    int height() const;
-    void adjustSize();
+	void setWidth(int);
+	void setWidth(QPainter *, int);
+	int width() const;
+	int widthUsed() const;
+	int height() const;
+	void adjustSize();
 
-    void draw( QPainter*,  int x, int y, const QRegion& clipRegion,
-	       const QPalette& pal, const QBrush* paper = 0) const;
+	void draw(QPainter *, int x, int y, const QRegion &clipRegion,
+		  const QPalette &pal, const QBrush *paper = 0) const;
 
-    void draw( QPainter*,  int x, int y, const QRegion& clipRegion,
-	       const QColorGroup& cg, const QBrush* paper = 0) const;
+	void draw(QPainter *, int x, int y, const QRegion &clipRegion,
+		  const QColorGroup &cg, const QBrush *paper = 0) const;
 
-    QString context() const;
-    QString anchorAt( const QPoint& pos ) const;
-    QString anchor( QPainter* p, const QPoint& pos ); // remove in 3.0
-    
-    bool inText( const QPoint& pos ) const;
+	QString context() const;
+	QString anchorAt(const QPoint &pos) const;
+	QString anchor(QPainter *p, const QPoint &pos); // remove in 3.0
 
-private:
-    QSimpleRichTextData* d;
+	bool inText(const QPoint &pos) const;
+
+      private:
+	QSimpleRichTextData *d;
 };
 
 #endif // QT_NO_RICHTEXT

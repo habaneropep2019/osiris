@@ -25,24 +25,18 @@
 
 class NewForm : public NewFormBase
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    enum Form {
-	Widget,
-	Dialog,
-	Wizard,
-	Custom
-    };
+      public:
+	enum Form { Widget, Dialog, Wizard, Custom };
 
-    NewForm( QWidget *parent, const QString &tPath );
+	NewForm(QWidget *parent, const QString &tPath);
 
-    Form formType() const;
-    QString templateFile() const;
+	Form formType() const;
+	QString templateFile() const;
 
-private:
-    QString templPath;
-    
+      private:
+	QString templPath;
 };
 
 #endif

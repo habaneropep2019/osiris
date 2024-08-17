@@ -30,58 +30,62 @@ class FormWindow;
 
 class StyledButton : public QButton
 {
-    Q_OBJECT
+	Q_OBJECT
 
-    Q_PROPERTY( QColor color READ color WRITE setColor )
-    Q_PROPERTY( QPixmap pixmap READ pixmap WRITE setPixmap )
-    Q_PROPERTY( EditorType editor READ editor WRITE setEditor )
-    Q_PROPERTY( bool scale READ scale WRITE setScale )
+	Q_PROPERTY(QColor color READ color WRITE setColor)
+	Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap)
+	Q_PROPERTY(EditorType editor READ editor WRITE setEditor)
+	Q_PROPERTY(bool scale READ scale WRITE setScale)
 
-    Q_ENUMS( EditorType )
+	Q_ENUMS(EditorType)
 
-public:
-    enum EditorType { ColorEditor, PixmapEditor };
+      public:
+	enum EditorType { ColorEditor, PixmapEditor };
 
-    StyledButton( QWidget* parent = 0, const char* name = 0 );
-    StyledButton( const QBrush& b, QWidget* parent = 0, const char* name = 0, WFlags f = 0 );
-    ~StyledButton();
+	StyledButton(QWidget *parent = 0, const char *name = 0);
+	StyledButton(const QBrush &b, QWidget *parent = 0, const char *name = 0,
+		     WFlags f = 0);
+	~StyledButton();
 
-    void setEditor( EditorType );
-    EditorType editor() const;
+	void setEditor(EditorType);
+	EditorType editor() const;
 
-    void setColor( const QColor& );
-    void setPixmap( const QPixmap& );
+	void setColor(const QColor &);
+	void setPixmap(const QPixmap &);
 
-    QPixmap* pixmap() const;
-    QColor color() const;
+	QPixmap *pixmap() const;
+	QColor color() const;
 
-    void setScale( bool );
-    bool scale() const;
+	void setScale(bool);
+	bool scale() const;
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+	QSize sizeHint() const;
+	QSize minimumSizeHint() const;
 
-    void setFormWindow( FormWindow *fw ) { formWindow = fw; }
-    
-public slots:
-    virtual void onEditor();
+	void setFormWindow(FormWindow *fw)
+	{
+		formWindow = fw;
+	}
 
-signals:
-    void changed();
+      public slots:
+	virtual void onEditor();
 
-protected:
-    void drawButton( QPainter* );
-    void drawButtonLabel( QPainter* );
-    void resizeEvent( QResizeEvent* );
-    void scalePixmap();
+      signals:
+	void changed();
 
-private:
-    QPixmap* pix;
-    QPixmap* spix;  // the pixmap scaled down to fit into the button
-    QColor col;
-    EditorType edit;
-    bool s;
-    FormWindow *formWindow;
+      protected:
+	void drawButton(QPainter *);
+	void drawButtonLabel(QPainter *);
+	void resizeEvent(QResizeEvent *);
+	void scalePixmap();
+
+      private:
+	QPixmap *pix;
+	QPixmap *spix; // the pixmap scaled down to fit into the button
+	QColor col;
+	EditorType edit;
+	bool s;
+	FormWindow *formWindow;
 };
 
-#endif //STYLEDBUTTON_H
+#endif // STYLEDBUTTON_H

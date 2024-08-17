@@ -39,9 +39,9 @@
 #define QCURSOR_H
 
 #ifndef QT_H
-#include "qpoint.h"
-#include "qshared.h"
-#include "qnamespace.h"
+# include "qpoint.h"
+# include "qshared.h"
+# include "qnamespace.h"
 #endif // QT_H
 
 /*
@@ -51,12 +51,13 @@
 
 class Q_EXPORT QCursor
 {
-public:
-    static QPoint pos();
-    static void	  setPos( int x, int y );
-    static void	  setPos( const QPoint & );
-private:
-    QCursor();
+      public:
+	static QPoint pos();
+	static void setPos(int x, int y);
+	static void setPos(const QPoint &);
+
+      private:
+	QCursor();
 };
 
 #endif // QT_NO_CURSOR
@@ -68,47 +69,46 @@ struct QCursorData;
 
 class Q_EXPORT QCursor
 {
-public:
-    QCursor();					// create default arrow cursor
-    QCursor( int shape );
-    QCursor( const QBitmap &bitmap, const QBitmap &mask,
-	     int hotX=-1, int hotY=-1 );
-    QCursor( const QPixmap &pixmap,
-	     int hotX=-1, int hotY=-1 );
-    QCursor( const QCursor & );
-   ~QCursor();
-    QCursor &operator=( const QCursor & );
+      public:
+	QCursor(); // create default arrow cursor
+	QCursor(int shape);
+	QCursor(const QBitmap &bitmap, const QBitmap &mask, int hotX = -1,
+		int hotY = -1);
+	QCursor(const QPixmap &pixmap, int hotX = -1, int hotY = -1);
+	QCursor(const QCursor &);
+	~QCursor();
+	QCursor &operator=(const QCursor &);
 
-    int		  shape()   const;
-    void	  setShape( int );
+	int shape() const;
+	void setShape(int);
 
-    const QBitmap *bitmap() const;
-    const QBitmap *mask()   const;
-    QPoint	  hotSpot() const;
+	const QBitmap *bitmap() const;
+	const QBitmap *mask() const;
+	QPoint hotSpot() const;
 
-#if defined(_WS_WIN_)
-    HCURSOR	  handle()  const;
-#elif defined(_WS_X11_)
-    HANDLE	  handle()  const;
-#elif defined(_WS_MAC_)
-    void * handle() const;
-#elif defined(_WS_QWS_)
-    HANDLE	  handle()  const;
-#endif
+# if defined(_WS_WIN_)
+	HCURSOR handle() const;
+# elif defined(_WS_X11_)
+	HANDLE handle() const;
+# elif defined(_WS_MAC_)
+	void *handle() const;
+# elif defined(_WS_QWS_)
+	HANDLE handle() const;
+# endif
 
-    static QPoint pos();
-    static void	  setPos( int x, int y );
-    static void	  setPos( const QPoint & );
+	static QPoint pos();
+	static void setPos(int x, int y);
+	static void setPos(const QPoint &);
 
-    static void	  initialize();
-    static void	  cleanup();
+	static void initialize();
+	static void cleanup();
 
-private:
-    void	  setBitmap( const QBitmap &bitmap, const QBitmap &mask,
-				 int hotX, int hotY );
-    void	  update() const;
-    QCursorData	 *data;
-    QCursor	 *find_cur(int);
+      private:
+	void setBitmap(const QBitmap &bitmap, const QBitmap &mask, int hotX,
+		       int hotY);
+	void update() const;
+	QCursorData *data;
+	QCursor *find_cur(int);
 };
 
 
@@ -119,25 +119,39 @@ private:
 
 // ############ Should be moved to QNamespace in 3.0!!!!!!
 enum QCursorShape {
-    ArrowCursor, UpArrowCursor, CrossCursor, WaitCursor, IbeamCursor,
-    SizeVerCursor, SizeHorCursor, SizeBDiagCursor, SizeFDiagCursor,
-    SizeAllCursor, BlankCursor, SplitVCursor, SplitHCursor, PointingHandCursor,
-    ForbiddenCursor, LastCursor = ForbiddenCursor, BitmapCursor=24 };
+	ArrowCursor,
+	UpArrowCursor,
+	CrossCursor,
+	WaitCursor,
+	IbeamCursor,
+	SizeVerCursor,
+	SizeHorCursor,
+	SizeBDiagCursor,
+	SizeFDiagCursor,
+	SizeAllCursor,
+	BlankCursor,
+	SplitVCursor,
+	SplitHCursor,
+	PointingHandCursor,
+	ForbiddenCursor,
+	LastCursor = ForbiddenCursor,
+	BitmapCursor = 24
+};
 
 
 /*****************************************************************************
   QCursor stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
-Q_EXPORT QDataStream &operator<<( QDataStream &, const QCursor & );
-Q_EXPORT QDataStream &operator>>( QDataStream &, QCursor & );
-#endif
+# ifndef QT_NO_DATASTREAM
+Q_EXPORT QDataStream &operator<<(QDataStream &, const QCursor &);
+Q_EXPORT QDataStream &operator>>(QDataStream &, QCursor &);
+# endif
 #endif // QT_NO_CURSOR
 
 
-inline void QCursor::setPos( const QPoint &p )
+inline void QCursor::setPos(const QPoint &p)
 {
-    setPos( p.x(), p.y() );
+	setPos(p.x(), p.y());
 }
 
 #endif // QCURSOR_H

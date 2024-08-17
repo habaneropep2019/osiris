@@ -107,46 +107,46 @@ QMetaObject *QSignal::metaObj = 0;
 
 
 #if OSIRIS_VERSION >= 300
-#error "Move to QSignal body"
+# error "Move to QSignal body"
 #endif
 
-class QSignalPrivate {
-public:
-    QSignalPrivate() :
-	val(0)
-    {
-    }
-    int val;
+class QSignalPrivate
+{
+      public:
+	QSignalPrivate() : val(0)
+	{
+	}
+	int val;
 };
 
-static QPtrDict<QSignalPrivate>* d_ptr = 0;
+static QPtrDict<QSignalPrivate> *d_ptr = 0;
 static void cleanup_d_ptr()
 {
-    delete d_ptr;
-    d_ptr = 0;
+	delete d_ptr;
+	d_ptr = 0;
 }
-static QSignalPrivate* d( const QSignal* that )
+static QSignalPrivate *d(const QSignal *that)
 {
-    if ( !d_ptr ) {
-	d_ptr = new QPtrDict<QSignalPrivate>;
-	d_ptr->setAutoDelete( TRUE );
-	qAddPostRoutine( cleanup_d_ptr );
-    }
-    QSignalPrivate* ret = d_ptr->find( (void*) that );
-    if ( ! ret ) {
-	ret = new QSignalPrivate;
-	d_ptr->replace( (void*) that, ret );
-    }
-    return ret;
+	if (!d_ptr) {
+		d_ptr = new QPtrDict<QSignalPrivate>;
+		d_ptr->setAutoDelete(TRUE);
+		qAddPostRoutine(cleanup_d_ptr);
+	}
+	QSignalPrivate *ret = d_ptr->find((void *)that);
+	if (!ret) {
+		ret = new QSignalPrivate;
+		d_ptr->replace((void *)that, ret);
+	}
+	return ret;
 }
-static void delete_d( const QSignal* that )
+static void delete_d(const QSignal *that)
 {
-    if ( d_ptr )
-	d_ptr->remove( (void*) that );
+	if (d_ptr)
+		d_ptr->remove((void *)that);
 }
-static bool has_d( const QSignal* that )
+static bool has_d(const QSignal *that)
 {
-    return d_ptr && d_ptr->find( (void*) that);
+	return d_ptr && d_ptr->find((void *)that);
 }
 
 
@@ -157,12 +157,11 @@ static bool has_d( const QSignal* that )
   These arguments are passed directly to QObject.
 */
 
-QSignal::QSignal( QObject *parent, const char *name )
-    : QObject( parent, name )
+QSignal::QSignal(QObject *parent, const char *name) : QObject(parent, name)
 {
-    if ( !metaObj )				// will create object dict
-	initMetaObject();
-    isSignal = TRUE;
+	if (!metaObj) // will create object dict
+		initMetaObject();
+	isSignal = TRUE;
 }
 
 /*!
@@ -171,7 +170,7 @@ QSignal::QSignal( QObject *parent, const char *name )
 */
 QSignal::~QSignal()
 {
-    delete_d(this);
+	delete_d(this);
 }
 
 
@@ -195,7 +194,7 @@ QSignal::~QSignal()
 
 const char *QSignal::className() const
 {
-    return "QSignal";
+	return "QSignal";
 }
 
 
@@ -204,10 +203,10 @@ const char *QSignal::className() const
   \sa disconnect(), QObject::connect()
 */
 
-bool QSignal::connect( const QObject *receiver, const char *member )
+bool QSignal::connect(const QObject *receiver, const char *member)
 {
-    return QObject::connect( (QObject *)this, SIGNAL(x(int)),
-			     receiver, member );
+	return QObject::connect((QObject *)this, SIGNAL(x(int)), receiver,
+				member);
 }
 
 /*!
@@ -215,10 +214,10 @@ bool QSignal::connect( const QObject *receiver, const char *member )
   \sa connect(), QObject::disconnect()
 */
 
-bool QSignal::disconnect( const QObject *receiver, const char *member )
+bool QSignal::disconnect(const QObject *receiver, const char *member)
 {
-    return QObject::disconnect( (QObject *)this, SIGNAL(x(int)),
-				receiver, member );
+	return QObject::disconnect((QObject *)this, SIGNAL(x(int)), receiver,
+				   member);
 }
 
 
@@ -247,21 +246,21 @@ bool QSignal::disconnect( const QObject *receiver, const char *member )
 
   \sa isBlocked()
 */
-void  QSignal::activate()
+void QSignal::activate()
 {
-    if ( has_d(this) )
-	activate_signal("x(int)", d(this)->val );
-    else
-	activate_signal("x(int)", 0 );
+	if (has_d(this))
+		activate_signal("x(int)", d(this)->val);
+	else
+		activate_signal("x(int)", 0);
 }
 
 
 /*!
   Sets the signal's parameter to \a value
  */
-void QSignal::setParameter( int value )
+void QSignal::setParameter(int value)
 {
-    d(this)->val = value;
+	d(this)->val = value;
 }
 
 /*!
@@ -269,42 +268,40 @@ void QSignal::setParameter( int value )
  */
 int QSignal::parameter() const
 {
-    if ( has_d(this) )
-	return d(this)->val;
-    else
-	return 0;
+	if (has_d(this))
+		return d(this)->val;
+	else
+		return 0;
 }
 
-void QSignal::dummy(int)				// just for the meta object
-{						//   should never be called
+void QSignal::dummy(int) // just for the meta object
+{ //   should never be called
 #if defined(CHECK_STATE)
-    qWarning( "QSignal: Internal error" );
+	qWarning("QSignal: Internal error");
 #endif
 }
 
-void QSignal::initMetaObject()			// initialize meta object
+void QSignal::initMetaObject() // initialize meta object
 {
-    if ( metaObj )
-	return;
-    if ( qstrcmp(QObject::className(), "QObject") != 0 )
-	badSuperclassWarning("QWidget","QObject");
-    (void)staticMetaObject();
+	if (metaObj)
+		return;
+	if (qstrcmp(QObject::className(), "QObject") != 0)
+		badSuperclassWarning("QWidget", "QObject");
+	(void)staticMetaObject();
 }
 
-QMetaObject* QSignal::staticMetaObject()
+QMetaObject *QSignal::staticMetaObject()
 {
-    if ( metaObj )
-	return metaObj;
-    (void)QObject::staticMetaObject();
+	if (metaObj)
+		return metaObj;
+	(void)QObject::staticMetaObject();
 
-    typedef void(QSignal::*m2_t0)(int);
-    m2_t0 v2_0 =  &QSignal::dummy;
-    QMetaData *signal_tbl = QMetaObject::new_metadata(1);
-    signal_tbl[0].name = "x(int)";
-    signal_tbl[0].ptr = *((QMember*)&v2_0);
-    metaObj = QMetaObject::new_metaobject(
-	"QSignal", "QObject",
-	0, 0,
-	signal_tbl, 1 );
-    return metaObj;
+	typedef void (QSignal::*m2_t0)(int);
+	m2_t0 v2_0 = &QSignal::dummy;
+	QMetaData *signal_tbl = QMetaObject::new_metadata(1);
+	signal_tbl[0].name = "x(int)";
+	signal_tbl[0].ptr = *((QMember *)&v2_0);
+	metaObj = QMetaObject::new_metaobject("QSignal", "QObject", 0, 0,
+					      signal_tbl, 1);
+	return metaObj;
 }

@@ -54,21 +54,21 @@
 /*!
   \internal
 */
-QConnection::QConnection( const QObject *object, QMember member,
-			  const char *memberName )
+QConnection::QConnection(const QObject *object, QMember member,
+			 const char *memberName)
 {
-    obj = (QObject *)object;
-    mbr = member;
-    mbr_name = memberName;
-    nargs = 0;
-    if ( strstr(memberName,"()") == 0 ) {
-	const char *p = memberName;
-	nargs++;
-	while ( *p ) {
-	    if ( *p++ == ',' )
+	obj = (QObject *)object;
+	mbr = member;
+	mbr_name = memberName;
+	nargs = 0;
+	if (strstr(memberName, "()") == 0) {
+		const char *p = memberName;
 		nargs++;
+		while (*p) {
+			if (*p++ == ',')
+				nargs++;
+		}
 	}
-    }
 }
 
 /*!
