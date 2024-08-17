@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# (C) Copyright 2024 Alec Bloss. Licensed under the GNU GPL version 2.0.
+
 # SPDX-License-Identifier: GPL-2.0
 
 cpps="$(find . -type f -name "*.cpp")"
