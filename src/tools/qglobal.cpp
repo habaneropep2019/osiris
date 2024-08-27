@@ -54,7 +54,7 @@
 
 const char *qVersion()
 {
-    return OSIRIS_VERSION_STR;
+	return OSIRIS_VERSION_STR;
 }
 
 /*!
@@ -65,7 +65,7 @@ const char *qVersion()
 
 const char *oVersion()
 {
-    return OSIRIS_VERSION_STR;
+	return OSIRIS_VERSION_STR;
 }
 
 
@@ -74,7 +74,7 @@ const char *oVersion()
  *****************************************************************************/
 
 static bool si_alreadyDone = FALSE;
-static int  si_wordSize;
+static int si_wordSize;
 static bool si_bigEndian;
 
 /*!
@@ -89,69 +89,69 @@ static bool si_bigEndian;
   (i.e. different endianness for 16 bit and 32 bit integers).
 */
 
-bool qSysInfo( int *wordSize, bool *bigEndian )
+bool qSysInfo(int *wordSize, bool *bigEndian)
 {
 #if defined(CHECK_NULL)
-    ASSERT( wordSize != 0 );
-    ASSERT( bigEndian != 0 );
+	ASSERT(wordSize != 0);
+	ASSERT(bigEndian != 0);
 #endif
 
-    if ( si_alreadyDone ) {			// run it only once
-	*wordSize  = si_wordSize;
-	*bigEndian = si_bigEndian;
+	if (si_alreadyDone) { // run it only once
+		*wordSize = si_wordSize;
+		*bigEndian = si_bigEndian;
+		return TRUE;
+	}
+	si_alreadyDone = TRUE;
+
+	si_wordSize = 0;
+	uint n = (uint)(~0);
+	while (n) { // detect word size
+		si_wordSize++;
+		n /= 2;
+	}
+	*wordSize = si_wordSize;
+
+	if (*wordSize != 64 && *wordSize != 32 && *wordSize != 16) { // word
+								     // size:
+								     // 16, 32
+								     // or 64
+#if defined(CHECK_RANGE)
+		qFatal("qSysInfo: Unsupported system word size %d", *wordSize);
+#endif
+		return FALSE;
+	}
+	if (sizeof(Q_INT8) != 1 || sizeof(Q_INT16) != 2 ||
+	    sizeof(Q_INT32) != 4 || sizeof(float) != 4 || sizeof(double) != 8) {
+#if defined(CHECK_RANGE)
+		qFatal("qSysInfo: Unsupported system data type size");
+#endif
+		return FALSE;
+	}
+
+	bool be16, be32; // determine byte ordering
+	short ns = 0x1234;
+	int nl = 0x12345678;
+
+	unsigned char *p = (unsigned char *)(&ns); // 16-bit integer
+	be16 = *p == 0x12;
+
+	p = (unsigned char *)(&nl); // 32-bit integer
+	if (p[0] == 0x12 && p[1] == 0x34 && p[2] == 0x56 && p[3] == 0x78)
+		be32 = TRUE;
+	else if (p[0] == 0x78 && p[1] == 0x56 && p[2] == 0x34 && p[3] == 0x12)
+		be32 = FALSE;
+	else
+		be32 = !be16;
+
+	if (be16 != be32) { // strange machine!
+#if defined(CHECK_RANGE)
+		qFatal("qSysInfo: Inconsistent system byte order");
+#endif
+		return FALSE;
+	}
+
+	*bigEndian = si_bigEndian = be32;
 	return TRUE;
-    }
-    si_alreadyDone = TRUE;
-
-    si_wordSize = 0;
-    uint n = (uint)(~0);
-    while ( n ) {				// detect word size
-	si_wordSize++;
-	n /= 2;
-    }
-    *wordSize = si_wordSize;
-
-    if ( *wordSize != 64 &&
-	 *wordSize != 32 &&
-	 *wordSize != 16 ) {			// word size: 16, 32 or 64
-#if defined(CHECK_RANGE)
-	qFatal( "qSysInfo: Unsupported system word size %d", *wordSize );
-#endif
-	return FALSE;
-    }
-    if ( sizeof(Q_INT8) != 1 || sizeof(Q_INT16) != 2 || sizeof(Q_INT32) != 4 ||
-	 sizeof(float) != 4 || sizeof(double) != 8 ) {
-#if defined(CHECK_RANGE)
-	qFatal( "qSysInfo: Unsupported system data type size" );
-#endif
-	return FALSE;
-    }
-
-    bool  be16, be32;				// determine byte ordering
-    short ns = 0x1234;
-    int	  nl = 0x12345678;
-
-    unsigned char *p = (unsigned char *)(&ns);	// 16-bit integer
-    be16 = *p == 0x12;
-
-    p = (unsigned char *)(&nl);			// 32-bit integer
-    if ( p[0] == 0x12 && p[1] == 0x34 && p[2] == 0x56 && p[3] == 0x78 )
-	be32 = TRUE;
-    else
-    if ( p[0] == 0x78 && p[1] == 0x56 && p[2] == 0x34 && p[3] == 0x12 )
-	be32 = FALSE;
-    else
-	be32 = !be16;
-
-    if ( be16 != be32 ) {			// strange machine!
-#if defined(CHECK_RANGE)
-	qFatal( "qSysInfo: Inconsistent system byte order" );
-#endif
-	return FALSE;
-    }
-
-    *bigEndian = si_bigEndian = be32;
-    return TRUE;
 }
 
 
@@ -244,256 +244,256 @@ bool qSysInfo( int *wordSize, bool *bigEndian )
 */
 
 
-static msg_handler handler = 0;			// pointer to debug handler
+static msg_handler handler = 0; // pointer to debug handler
 
 
 #ifdef _OS_MAC_
 
-static FILE * mac_debug=0;
+static FILE *mac_debug = 0;
 
-void qDebug( const char *msg, ... )
+void qDebug(const char *msg, ...)
 {
-    mac_debug=fopen( "debug.txt", "a+" );
-    if(mac_debug) {
-	char buf[8196];
-	va_list ap;
-	va_start( ap, msg );			// use variable arg list
-	if ( handler ) {
-	    vsprintf( buf, msg, ap );
-	    va_end( ap );
-	    (*handler)( QtDebugMsg, buf );
+	mac_debug = fopen("debug.txt", "a+");
+	if (mac_debug) {
+		char buf[8196];
+		va_list ap;
+		va_start(ap, msg); // use variable arg list
+		if (handler) {
+			vsprintf(buf, msg, ap);
+			va_end(ap);
+			(*handler)(QtDebugMsg, buf);
+		} else {
+			vfprintf(mac_debug, msg, ap);
+			va_end(ap);
+			fprintf(mac_debug, "\n"); // add newline
+			fflush(mac_debug);
+		}
+		fclose(mac_debug);
 	} else {
-	    vfprintf( mac_debug, msg, ap );
-	    va_end( ap );
-	    fprintf( mac_debug, "\n" );		// add newline
-	    fflush( mac_debug );
+		exit(0);
 	}
-	fclose(mac_debug);
-    } else {
+}
+
+// copied... this looks really bad.
+void debug(const char *msg, ...)
+{
+	mac_debug = fopen("debug.txt", "a+");
+	if (mac_debug) {
+		char buf[8196];
+		va_list ap;
+		va_start(ap, msg); // use variable arg list
+		if (handler) {
+			vsprintf(buf, msg, ap);
+			va_end(ap);
+			(*handler)(QtDebugMsg, buf);
+		} else {
+			vfprintf(mac_debug, msg, ap);
+			va_end(ap);
+			fprintf(mac_debug, "\n"); // add newline
+			fflush(mac_debug);
+		}
+		fclose(mac_debug);
+	}
+}
+
+void qWarning(const char *msg, ...)
+{
+	mac_debug = fopen("debug.txt", "a+");
+	if (mac_debug) {
+		char buf[8196];
+		va_list ap;
+		va_start(ap, msg); // use variable arg list
+		if (handler) {
+			vsprintf(buf, msg, ap);
+			va_end(ap);
+			(*handler)(QtDebugMsg, buf);
+		} else {
+			vfprintf(mac_debug, msg, ap);
+			va_end(ap);
+			fprintf(mac_debug, "\n"); // add newline
+			fflush(mac_debug);
+		}
+		fclose(mac_debug);
+	}
+}
+
+// copied... this looks really bad.
+void warning(const char *msg, ...)
+{
+	mac_debug = fopen("debug.txt", "a+");
+	if (mac_debug) {
+		char buf[8196];
+		va_list ap;
+		va_start(ap, msg); // use variable arg list
+		if (handler) {
+			vsprintf(buf, msg, ap);
+			va_end(ap);
+			(*handler)(QtDebugMsg, buf);
+		} else {
+			vfprintf(mac_debug, msg, ap);
+			va_end(ap);
+			fprintf(mac_debug, "\n"); // add newline
+			fflush(mac_debug);
+		}
+		fclose(mac_debug);
+	}
+}
+
+void qFatal(const char *msg, ...)
+{
+	mac_debug = fopen("debug.txt", "a+");
+	if (mac_debug) {
+		char buf[8196];
+		va_list ap;
+		va_start(ap, msg); // use variable arg list
+		if (handler) {
+			vsprintf(buf, msg, ap);
+			va_end(ap);
+			(*handler)(QtDebugMsg, buf);
+		} else {
+			vfprintf(mac_debug, msg, ap);
+			va_end(ap);
+			fprintf(mac_debug, "\n"); // add newline
+			fflush(mac_debug);
+		}
+		fclose(mac_debug);
+	}
 	exit(0);
-    }
 }
 
 // copied... this looks really bad.
-void debug( const char *msg, ... )
+void fatal(const char *msg, ...)
 {
-    mac_debug=fopen( "debug.txt", "a+" );
-    if(mac_debug) {
-	char buf[8196];
-	va_list ap;
-	va_start( ap, msg );			// use variable arg list
-	if ( handler ) {
-	    vsprintf( buf, msg, ap );
-	    va_end( ap );
-	    (*handler)( QtDebugMsg, buf );
-	} else {
-	    vfprintf( mac_debug, msg, ap );
-	    va_end( ap );
-	    fprintf( mac_debug, "\n" );		// add newline
-	    fflush( mac_debug );
+	mac_debug = fopen("debug.txt", "a+");
+	if (mac_debug) {
+		char buf[8196];
+		va_list ap;
+		va_start(ap, msg); // use variable arg list
+		if (handler) {
+			vsprintf(buf, msg, ap);
+			va_end(ap);
+			(*handler)(QtDebugMsg, buf);
+		} else {
+			vfprintf(mac_debug, msg, ap);
+			va_end(ap);
+			fprintf(mac_debug, "\n"); // add newline
+			fflush(mac_debug);
+		}
+		fclose(mac_debug);
 	}
-	fclose(mac_debug);
-    }
-}
-
-void qWarning( const char *msg, ... )
-{
-    mac_debug=fopen( "debug.txt", "a+" );
-    if(mac_debug) {
-	char buf[8196];
-	va_list ap;
-	va_start( ap, msg );			// use variable arg list
-	if ( handler ) {
-	    vsprintf( buf, msg, ap );
-	    va_end( ap );
-	    (*handler)( QtDebugMsg, buf );
-	} else {
-	    vfprintf( mac_debug, msg, ap );
-	    va_end( ap );
-	    fprintf( mac_debug, "\n" );		// add newline
-	    fflush( mac_debug );
-	}
-	fclose(mac_debug);
-    }
-}
-
-// copied... this looks really bad.
-void warning( const char *msg, ... )
-{
-    mac_debug=fopen( "debug.txt", "a+" );
-    if(mac_debug) {
-	char buf[8196];
-	va_list ap;
-	va_start( ap, msg );			// use variable arg list
-	if ( handler ) {
-	    vsprintf( buf, msg, ap );
-	    va_end( ap );
-	    (*handler)( QtDebugMsg, buf );
-	} else {
-	    vfprintf( mac_debug, msg, ap );
-	    va_end( ap );
-	    fprintf( mac_debug, "\n" );		// add newline
-	    fflush( mac_debug );
-	}
-	fclose(mac_debug);
-    }
-}
-
-void qFatal( const char *msg, ... )
-{
-    mac_debug=fopen( "debug.txt", "a+");
-    if(mac_debug) {
-	char buf[8196];
-	va_list ap;
-	va_start( ap, msg );			// use variable arg list
-	if ( handler ) {
-	    vsprintf( buf, msg, ap );
-	    va_end( ap );
-	    (*handler)( QtDebugMsg, buf );
-	} else {
-	    vfprintf( mac_debug, msg, ap );
-	    va_end( ap );
-	    fprintf( mac_debug, "\n" );		// add newline
-	    fflush( mac_debug );
-	}
-	fclose(mac_debug);
-    }
-    exit(0);
-}
-
-// copied... this looks really bad.
-void fatal( const char *msg, ... )
-{
-    mac_debug=fopen( "debug.txt", "a+" );
-    if(mac_debug) {
-	char buf[8196];
-	va_list ap;
-	va_start( ap, msg );			// use variable arg list
-	if ( handler ) {
-	    vsprintf( buf, msg, ap );
-	    va_end( ap );
-	    (*handler)( QtDebugMsg, buf );
-	} else {
-	    vfprintf( mac_debug, msg, ap );
-	    va_end( ap );
-	    fprintf( mac_debug, "\n" );		// add newline
-	    fflush( mac_debug );
-	}
-	fclose(mac_debug);
-    }
-    exit(0);
+	exit(0);
 }
 
 #else
 
-void qDebug( const char *msg, ... )
+void qDebug(const char *msg, ...)
 {
-    char buf[8196];
-    va_list ap;
-    va_start( ap, msg );			// use variable arg list
-    if ( handler ) {
-	vsprintf( buf, msg, ap );		// ### vsnprintf would be great here
-	va_end( ap );
-	(*handler)( QtDebugMsg, buf );
-    } else {
-	vfprintf( stderr, msg, ap );
-	va_end( ap );
-	fprintf( stderr, "\n" );		// add newline
-    }
+	char buf[8196];
+	va_list ap;
+	va_start(ap, msg); // use variable arg list
+	if (handler) {
+		vsprintf(buf, msg, ap); // ### vsnprintf would be great here
+		va_end(ap);
+		(*handler)(QtDebugMsg, buf);
+	} else {
+		vfprintf(stderr, msg, ap);
+		va_end(ap);
+		fprintf(stderr, "\n"); // add newline
+	}
 }
 
 // copied... this looks really bad.
-void debug( const char *msg, ... )
+void debug(const char *msg, ...)
 {
-    char buf[8196];
-    va_list ap;
-    va_start( ap, msg );			// use variable arg list
-    if ( handler ) {
-	vsprintf( buf, msg, ap );
-	va_end( ap );
-	(*handler)( QtDebugMsg, buf );
-    } else {
-	vfprintf( stderr, msg, ap );
-	va_end( ap );
-	fprintf( stderr, "\n" );		// add newline
-    }
+	char buf[8196];
+	va_list ap;
+	va_start(ap, msg); // use variable arg list
+	if (handler) {
+		vsprintf(buf, msg, ap);
+		va_end(ap);
+		(*handler)(QtDebugMsg, buf);
+	} else {
+		vfprintf(stderr, msg, ap);
+		va_end(ap);
+		fprintf(stderr, "\n"); // add newline
+	}
 }
 
-void qWarning( const char *msg, ... )
+void qWarning(const char *msg, ...)
 {
-    char buf[8196];
-    va_list ap;
-    va_start( ap, msg );			// use variable arg list
-    if ( handler ) {
-	vsprintf( buf, msg, ap );
-	va_end( ap );
-	(*handler)( QtWarningMsg, buf );
-    } else {
-	vfprintf( stderr, msg, ap );
-	va_end( ap );
-	fprintf( stderr, "\n" );		// add newline
-    }
+	char buf[8196];
+	va_list ap;
+	va_start(ap, msg); // use variable arg list
+	if (handler) {
+		vsprintf(buf, msg, ap);
+		va_end(ap);
+		(*handler)(QtWarningMsg, buf);
+	} else {
+		vfprintf(stderr, msg, ap);
+		va_end(ap);
+		fprintf(stderr, "\n"); // add newline
+	}
 }
 
 
 // again, copied
-void warning( const char *msg, ... )
+void warning(const char *msg, ...)
 {
-    char buf[8196];
-    va_list ap;
-    va_start( ap, msg );			// use variable arg list
-    if ( handler ) {
-	vsprintf( buf, msg, ap );
-	va_end( ap );
-	(*handler)( QtWarningMsg, buf );
-    } else {
-	vfprintf( stderr, msg, ap );
-	va_end( ap );
-	fprintf( stderr, "\n" );		// add newline
-    }
+	char buf[8196];
+	va_list ap;
+	va_start(ap, msg); // use variable arg list
+	if (handler) {
+		vsprintf(buf, msg, ap);
+		va_end(ap);
+		(*handler)(QtWarningMsg, buf);
+	} else {
+		vfprintf(stderr, msg, ap);
+		va_end(ap);
+		fprintf(stderr, "\n"); // add newline
+	}
 }
 
-void qFatal( const char *msg, ... )
+void qFatal(const char *msg, ...)
 {
-    char buf[8196];
-    va_list ap;
-    va_start( ap, msg );			// use variable arg list
-    if ( handler ) {
-	vsprintf( buf, msg, ap );
-	va_end( ap );
-	(*handler)( QtFatalMsg, buf );
-    } else {
-	vfprintf( stderr, msg, ap );
-	va_end( ap );
-	fprintf( stderr, "\n" );		// add newline
-#if defined(_OS_UNIX_) && defined(DEBUG)
-	abort();				// trap; generates core dump
-#else
-	exit( 1 );				// goodbye cruel world
-#endif
-    }
+	char buf[8196];
+	va_list ap;
+	va_start(ap, msg); // use variable arg list
+	if (handler) {
+		vsprintf(buf, msg, ap);
+		va_end(ap);
+		(*handler)(QtFatalMsg, buf);
+	} else {
+		vfprintf(stderr, msg, ap);
+		va_end(ap);
+		fprintf(stderr, "\n"); // add newline
+# if defined(_OS_UNIX_) && defined(DEBUG)
+		abort(); // trap; generates core dump
+# else
+		exit(1); // goodbye cruel world
+# endif
+	}
 }
 
 // yet again, copied
-void fatal( const char *msg, ... )
+void fatal(const char *msg, ...)
 {
-    char buf[8196];
-    va_list ap;
-    va_start( ap, msg );			// use variable arg list
-    if ( handler ) {
-	vsprintf( buf, msg, ap );
-	va_end( ap );
-	(*handler)( QtFatalMsg, buf );
-    } else {
-	vfprintf( stderr, msg, ap );
-	va_end( ap );
-	fprintf( stderr, "\n" );		// add newline
-#if defined(_OS_UNIX_) && defined(DEBUG)
-	abort();				// trap; generates core dump
-#else
-	exit( 1 );				// goodbye cruel world
-#endif
-    }
+	char buf[8196];
+	va_list ap;
+	va_start(ap, msg); // use variable arg list
+	if (handler) {
+		vsprintf(buf, msg, ap);
+		va_end(ap);
+		(*handler)(QtFatalMsg, buf);
+	} else {
+		vfprintf(stderr, msg, ap);
+		va_end(ap);
+		fprintf(stderr, "\n"); // add newline
+# if defined(_OS_UNIX_) && defined(DEBUG)
+		abort(); // trap; generates core dump
+# else
+		exit(1); // goodbye cruel world
+# endif
+	}
 }
 
 #endif
@@ -559,76 +559,75 @@ void fatal( const char *msg, ... )
 // The CHECK_PTR macro calls this function to check if an allocation went ok.
 //
 
-bool qt_check_pointer( bool c, const char *n, int l )
+bool qt_check_pointer(bool c, const char *n, int l)
 {
-    if ( c )
-	qFatal( "In file %s, line %d: Out of memory", n, l );
-    return TRUE;
+	if (c)
+		qFatal("In file %s, line %d: Out of memory", n, l);
+	return TRUE;
 }
 
 
-static bool firstObsoleteWarning(const char *obj, const char *oldfunc )
+static bool firstObsoleteWarning(const char *obj, const char *oldfunc)
 {
-    static QAsciiDict<int> *obsoleteDict = 0;
-    if ( !obsoleteDict ) {			// first time func is called
-	obsoleteDict = new QAsciiDict<int>;
+	static QAsciiDict<int> *obsoleteDict = 0;
+	if (!obsoleteDict) { // first time func is called
+		obsoleteDict = new QAsciiDict<int>;
 #if defined(DEBUG)
-	qDebug(
-      "You are using obsolete functions in the Qt library. Call the function\n"
-      "qSuppressObsoleteWarnings() to suppress obsolete warnings.\n"
-	     );
+		qDebug("You are using obsolete functions in the Qt library. Call the function\n"
+		       "qSuppressObsoleteWarnings() to suppress obsolete warnings.\n");
 #endif
-    }
-    QCString s( obj );
-    s += "::";
-    s += oldfunc;
-    if ( obsoleteDict->find(s.data()) == 0 ) {
-	obsoleteDict->insert( s.data(), (int*)1 );	// anything different from 0
-	return TRUE;
-    }
-    return FALSE;
+	}
+	QCString s(obj);
+	s += "::";
+	s += oldfunc;
+	if (obsoleteDict->find(s.data()) == 0) {
+		obsoleteDict->insert(s.data(), (int *)1); // anything different
+							  // from 0
+		return TRUE;
+	}
+	return FALSE;
 }
 
 static bool suppressObsolete = FALSE;
 
-void qSuppressObsoleteWarnings( bool suppress )
+void qSuppressObsoleteWarnings(bool suppress)
 {
-    suppressObsolete = suppress;
+	suppressObsolete = suppress;
 }
 
-void qObsolete(	 const char *obj, const char *oldfunc, const char *newfunc )
+void qObsolete(const char *obj, const char *oldfunc, const char *newfunc)
 {
-    if ( suppressObsolete )
-	return;
-    if ( !firstObsoleteWarning(obj, oldfunc) )
-	return;
-    if ( obj )
-	qDebug( "%s::%s: This function is obsolete, use %s instead.",
-	       obj, oldfunc, newfunc );
-    else
-	qDebug( "%s: This function is obsolete, use %s instead.",
-	       oldfunc, newfunc );
+	if (suppressObsolete)
+		return;
+	if (!firstObsoleteWarning(obj, oldfunc))
+		return;
+	if (obj)
+		qDebug("%s::%s: This function is obsolete, use %s instead.",
+		       obj, oldfunc, newfunc);
+	else
+		qDebug("%s: This function is obsolete, use %s instead.",
+		       oldfunc, newfunc);
 }
 
-void qObsolete(	 const char *obj, const char *oldfunc )
+void qObsolete(const char *obj, const char *oldfunc)
 {
-    if ( suppressObsolete )
-	return;
-    if ( !firstObsoleteWarning(obj, oldfunc) )
-	return;
-    if ( obj )
-	qDebug( "%s::%s: This function is obsolete.", obj, oldfunc );
-    else
-	qDebug( "%s: This function is obsolete.", oldfunc );
+	if (suppressObsolete)
+		return;
+	if (!firstObsoleteWarning(obj, oldfunc))
+		return;
+	if (obj)
+		qDebug("%s::%s: This function is obsolete.", obj, oldfunc);
+	else
+		qDebug("%s: This function is obsolete.", oldfunc);
 }
 
-void qObsolete(	 const char *message )
+void qObsolete(const char *message)
 {
-    if ( suppressObsolete )
-	return;
-    if ( !firstObsoleteWarning( "Qt", message) )
-	return;
-    qDebug( "%s", message );
+	if (suppressObsolete)
+		return;
+	if (!firstObsoleteWarning("Qt", message))
+		return;
+	qDebug("%s", message);
 }
 
 
@@ -685,14 +684,14 @@ void qObsolete(	 const char *message )
   \sa qDebug(), qWarning(), qFatal(), \link debug.html Debugging\endlink
 */
 
-msg_handler qInstallMsgHandler( msg_handler h )
+msg_handler qInstallMsgHandler(msg_handler h)
 {
-    msg_handler old = handler;
-    handler = h;
-    return old;
+	msg_handler old = handler;
+	handler = h;
+	return old;
 }
 
 
 #ifdef _WS_WIN_
-bool qt_winunicode=FALSE;
+bool qt_winunicode = FALSE;
 #endif

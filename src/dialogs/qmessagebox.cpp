@@ -39,13 +39,13 @@
 
 #ifndef QT_NO_MESSAGEBOX
 
-#include "qlabel.h"
-#include "qpushbutton.h"
-#include "qimage.h"
-#include "qapplication.h"
-#if defined QT_NON_COMMERCIAL
-#include "qnc_win.h"
-#endif
+# include "qlabel.h"
+# include "qpushbutton.h"
+# include "qimage.h"
+# include "qapplication.h"
+# if defined QT_NON_COMMERCIAL
+#  include "qnc_win.h"
+# endif
 
 // Message box icons, from page 210 of the Windows style guide.
 
@@ -54,199 +54,197 @@
 // using but a lot of people still use, is left out.
 
 /* XPM */
-static const char * const information_xpm[]={
-"32 32 5 1",
-". c None",
-"c c #000000",
-"* c #999999",
-"a c #ffffff",
-"b c #0000ff",
-"...........********.............",
-"........***aaaaaaaa***..........",
-"......**aaaaaaaaaaaaaa**........",
-".....*aaaaaaaaaaaaaaaaaa*.......",
-"....*aaaaaaaabbbbaaaaaaaac......",
-"...*aaaaaaaabbbbbbaaaaaaaac.....",
-"..*aaaaaaaaabbbbbbaaaaaaaaac....",
-".*aaaaaaaaaaabbbbaaaaaaaaaaac...",
-".*aaaaaaaaaaaaaaaaaaaaaaaaaac*..",
-"*aaaaaaaaaaaaaaaaaaaaaaaaaaaac*.",
-"*aaaaaaaaaabbbbbbbaaaaaaaaaaac*.",
-"*aaaaaaaaaaaabbbbbaaaaaaaaaaac**",
-"*aaaaaaaaaaaabbbbbaaaaaaaaaaac**",
-"*aaaaaaaaaaaabbbbbaaaaaaaaaaac**",
-"*aaaaaaaaaaaabbbbbaaaaaaaaaaac**",
-"*aaaaaaaaaaaabbbbbaaaaaaaaaaac**",
-".*aaaaaaaaaaabbbbbaaaaaaaaaac***",
-".*aaaaaaaaaaabbbbbaaaaaaaaaac***",
-"..*aaaaaaaaaabbbbbaaaaaaaaac***.",
-"...caaaaaaabbbbbbbbbaaaaaac****.",
-"....caaaaaaaaaaaaaaaaaaaac****..",
-".....caaaaaaaaaaaaaaaaaac****...",
-"......ccaaaaaaaaaaaaaacc****....",
-".......*cccaaaaaaaaccc*****.....",
-"........***cccaaaac*******......",
-"..........****caaac*****........",
-".............*caaac**...........",
-"...............caac**...........",
-"................cac**...........",
-".................cc**...........",
-"..................***...........",
-"...................**..........."};
+static const char *const information_xpm[] = {
+	"32 32 5 1",
+	". c None",
+	"c c #000000",
+	"* c #999999",
+	"a c #ffffff",
+	"b c #0000ff",
+	"...........********.............",
+	"........***aaaaaaaa***..........",
+	"......**aaaaaaaaaaaaaa**........",
+	".....*aaaaaaaaaaaaaaaaaa*.......",
+	"....*aaaaaaaabbbbaaaaaaaac......",
+	"...*aaaaaaaabbbbbbaaaaaaaac.....",
+	"..*aaaaaaaaabbbbbbaaaaaaaaac....",
+	".*aaaaaaaaaaabbbbaaaaaaaaaaac...",
+	".*aaaaaaaaaaaaaaaaaaaaaaaaaac*..",
+	"*aaaaaaaaaaaaaaaaaaaaaaaaaaaac*.",
+	"*aaaaaaaaaabbbbbbbaaaaaaaaaaac*.",
+	"*aaaaaaaaaaaabbbbbaaaaaaaaaaac**",
+	"*aaaaaaaaaaaabbbbbaaaaaaaaaaac**",
+	"*aaaaaaaaaaaabbbbbaaaaaaaaaaac**",
+	"*aaaaaaaaaaaabbbbbaaaaaaaaaaac**",
+	"*aaaaaaaaaaaabbbbbaaaaaaaaaaac**",
+	".*aaaaaaaaaaabbbbbaaaaaaaaaac***",
+	".*aaaaaaaaaaabbbbbaaaaaaaaaac***",
+	"..*aaaaaaaaaabbbbbaaaaaaaaac***.",
+	"...caaaaaaabbbbbbbbbaaaaaac****.",
+	"....caaaaaaaaaaaaaaaaaaaac****..",
+	".....caaaaaaaaaaaaaaaaaac****...",
+	"......ccaaaaaaaaaaaaaacc****....",
+	".......*cccaaaaaaaaccc*****.....",
+	"........***cccaaaac*******......",
+	"..........****caaac*****........",
+	".............*caaac**...........",
+	"...............caac**...........",
+	"................cac**...........",
+	".................cc**...........",
+	"..................***...........",
+	"...................**..........."};
 /* XPM */
-static const char* const warning_xpm[]={
-"32 32 4 1",
-". c None",
-"a c #ffff00",
-"* c #000000",
-"b c #999999",
-".............***................",
-"............*aaa*...............",
-"...........*aaaaa*b.............",
-"...........*aaaaa*bb............",
-"..........*aaaaaaa*bb...........",
-"..........*aaaaaaa*bb...........",
-".........*aaaaaaaaa*bb..........",
-".........*aaaaaaaaa*bb..........",
-"........*aaaaaaaaaaa*bb.........",
-"........*aaaa***aaaa*bb.........",
-".......*aaaa*****aaaa*bb........",
-".......*aaaa*****aaaa*bb........",
-"......*aaaaa*****aaaaa*bb.......",
-"......*aaaaa*****aaaaa*bb.......",
-".....*aaaaaa*****aaaaaa*bb......",
-".....*aaaaaa*****aaaaaa*bb......",
-"....*aaaaaaaa***aaaaaaaa*bb.....",
-"....*aaaaaaaa***aaaaaaaa*bb.....",
-"...*aaaaaaaaa***aaaaaaaaa*bb....",
-"...*aaaaaaaaaa*aaaaaaaaaa*bb....",
-"..*aaaaaaaaaaa*aaaaaaaaaaa*bb...",
-"..*aaaaaaaaaaaaaaaaaaaaaaa*bb...",
-".*aaaaaaaaaaaa**aaaaaaaaaaa*bb..",
-".*aaaaaaaaaaa****aaaaaaaaaa*bb..",
-"*aaaaaaaaaaaa****aaaaaaaaaaa*bb.",
-"*aaaaaaaaaaaaa**aaaaaaaaaaaa*bb.",
-"*aaaaaaaaaaaaaaaaaaaaaaaaaaa*bbb",
-"*aaaaaaaaaaaaaaaaaaaaaaaaaaa*bbb",
-".*aaaaaaaaaaaaaaaaaaaaaaaaa*bbbb",
-"..*************************bbbbb",
-"....bbbbbbbbbbbbbbbbbbbbbbbbbbb.",
-".....bbbbbbbbbbbbbbbbbbbbbbbbb.."};
+static const char *const warning_xpm[] = {"32 32 4 1",
+					  ". c None",
+					  "a c #ffff00",
+					  "* c #000000",
+					  "b c #999999",
+					  ".............***................",
+					  "............*aaa*...............",
+					  "...........*aaaaa*b.............",
+					  "...........*aaaaa*bb............",
+					  "..........*aaaaaaa*bb...........",
+					  "..........*aaaaaaa*bb...........",
+					  ".........*aaaaaaaaa*bb..........",
+					  ".........*aaaaaaaaa*bb..........",
+					  "........*aaaaaaaaaaa*bb.........",
+					  "........*aaaa***aaaa*bb.........",
+					  ".......*aaaa*****aaaa*bb........",
+					  ".......*aaaa*****aaaa*bb........",
+					  "......*aaaaa*****aaaaa*bb.......",
+					  "......*aaaaa*****aaaaa*bb.......",
+					  ".....*aaaaaa*****aaaaaa*bb......",
+					  ".....*aaaaaa*****aaaaaa*bb......",
+					  "....*aaaaaaaa***aaaaaaaa*bb.....",
+					  "....*aaaaaaaa***aaaaaaaa*bb.....",
+					  "...*aaaaaaaaa***aaaaaaaaa*bb....",
+					  "...*aaaaaaaaaa*aaaaaaaaaa*bb....",
+					  "..*aaaaaaaaaaa*aaaaaaaaaaa*bb...",
+					  "..*aaaaaaaaaaaaaaaaaaaaaaa*bb...",
+					  ".*aaaaaaaaaaaa**aaaaaaaaaaa*bb..",
+					  ".*aaaaaaaaaaa****aaaaaaaaaa*bb..",
+					  "*aaaaaaaaaaaa****aaaaaaaaaaa*bb.",
+					  "*aaaaaaaaaaaaa**aaaaaaaaaaaa*bb.",
+					  "*aaaaaaaaaaaaaaaaaaaaaaaaaaa*bbb",
+					  "*aaaaaaaaaaaaaaaaaaaaaaaaaaa*bbb",
+					  ".*aaaaaaaaaaaaaaaaaaaaaaaaa*bbbb",
+					  "..*************************bbbbb",
+					  "....bbbbbbbbbbbbbbbbbbbbbbbbbbb.",
+					  ".....bbbbbbbbbbbbbbbbbbbbbbbbb.."};
 /* XPM */
-static const char* const critical_xpm[]={
-"32 32 4 1",
-". c None",
-"a c #999999",
-"* c #ff0000",
-"b c #ffffff",
-"...........********.............",
-".........************...........",
-".......****************.........",
-"......******************........",
-".....********************a......",
-"....**********************a.....",
-"...************************a....",
-"..*******b**********b*******a...",
-"..******bbb********bbb******a...",
-".******bbbbb******bbbbb******a..",
-".*******bbbbb****bbbbb*******a..",
-"*********bbbbb**bbbbb*********a.",
-"**********bbbbbbbbbb**********a.",
-"***********bbbbbbbb***********aa",
-"************bbbbbb************aa",
-"************bbbbbb************aa",
-"***********bbbbbbbb***********aa",
-"**********bbbbbbbbbb**********aa",
-"*********bbbbb**bbbbb*********aa",
-".*******bbbbb****bbbbb*******aa.",
-".******bbbbb******bbbbb******aa.",
-"..******bbb********bbb******aaa.",
-"..*******b**********b*******aa..",
-"...************************aaa..",
-"....**********************aaa...",
-"....a********************aaa....",
-".....a******************aaa.....",
-"......a****************aaa......",
-".......aa************aaaa.......",
-".........aa********aaaaa........",
-"...........aaaaaaaaaaa..........",
-".............aaaaaaa............"};
+static const char *const critical_xpm[] = {"32 32 4 1",
+					   ". c None",
+					   "a c #999999",
+					   "* c #ff0000",
+					   "b c #ffffff",
+					   "...........********.............",
+					   ".........************...........",
+					   ".......****************.........",
+					   "......******************........",
+					   ".....********************a......",
+					   "....**********************a.....",
+					   "...************************a....",
+					   "..*******b**********b*******a...",
+					   "..******bbb********bbb******a...",
+					   ".******bbbbb******bbbbb******a..",
+					   ".*******bbbbb****bbbbb*******a..",
+					   "*********bbbbb**bbbbb*********a.",
+					   "**********bbbbbbbbbb**********a.",
+					   "***********bbbbbbbb***********aa",
+					   "************bbbbbb************aa",
+					   "************bbbbbb************aa",
+					   "***********bbbbbbbb***********aa",
+					   "**********bbbbbbbbbb**********aa",
+					   "*********bbbbb**bbbbb*********aa",
+					   ".*******bbbbb****bbbbb*******aa.",
+					   ".******bbbbb******bbbbb******aa.",
+					   "..******bbb********bbb******aaa.",
+					   "..*******b**********b*******aa..",
+					   "...************************aaa..",
+					   "....**********************aaa...",
+					   "....a********************aaa....",
+					   ".....a******************aaa.....",
+					   "......a****************aaa......",
+					   ".......aa************aaaa.......",
+					   ".........aa********aaaaa........",
+					   "...........aaaaaaaaaaa..........",
+					   ".............aaaaaaa............"};
 
 
 // the Qt logo, for aboutQt
 /* XPM */
-static const char * const qtlogo_xpm[] = {
-/* width height ncolors chars_per_pixel */
-"50 50 17 1",
-/* colors */
-"  c #000000",
-". c #495808",
-"X c #2A3304",
-"o c #242B04",
-"O c #030401",
-"+ c #9EC011",
-"@ c #93B310",
-"# c #748E0C",
-"$ c #A2C511",
-"% c #8BA90E",
-"& c #99BA10",
-"* c #060701",
-"= c #181D02",
-"- c #212804",
-"; c #61770A",
-": c #0B0D01",
-"/ c None",
-/* pixels */
-"/$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$/",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$+++$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$@;.o=::=o.;@$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$+#X*         **X#+$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$#oO*         O  **o#+$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$&.* OO              O*.&$$$$$$$$$$$$$",
-"$$$$$$$$$$$$@XOO            * OO    X&$$$$$$$$$$$$",
-"$$$$$$$$$$$@XO OO  O  **:::OOO OOO   X@$$$$$$$$$$$",
-"$$$$$$$$$$&XO      O-;#@++@%.oOO      X&$$$$$$$$$$",
-"$$$$$$$$$$.O  :  *-#+$$$$$$$$+#- : O O*.$$$$$$$$$$",
-"$$$$$$$$$#*OO  O*.&$$$$$$$$$$$$+.OOOO **#$$$$$$$$$",
-"$$$$$$$$+-OO O *;$$$$$$$$$$$&$$$$;*     o+$$$$$$$$",
-"$$$$$$$$#O*  O .+$$$$$$$$$$@X;$$$+.O    *#$$$$$$$$",
-"$$$$$$$$X*    -&$$$$$$$$$$@- :;$$$&-    OX$$$$$$$$",
-"$$$$$$$@*O  *O#$$$$$$$$$$@oOO**;$$$#    O*%$$$$$$$",
-"$$$$$$$;     -+$$$$$$$$$@o O OO ;+$$-O   *;$$$$$$$",
-"$$$$$$$.     ;$$$$$$$$$@-OO OO  X&$$;O    .$$$$$$$",
-"$$$$$$$o    *#$$$$$$$$@o  O O O-@$$$#O   *o$$$$$$$",
-"$$$$$$+=    *@$$$$$$$@o* OO   -@$$$$&:    =$$$$$$$",
-"$$$$$$+:    :+$$$$$$@-      *-@$$$$$$:    :+$$$$$$",
-"$$$$$$+:    :+$$$$$@o* O    *-@$$$$$$:    :+$$$$$$",
-"$$$$$$$=    :@$$$$@o*OOO      -@$$$$@:    =+$$$$$$",
-"$$$$$$$-    O%$$$@o* O O    O O-@$$$#*   OX$$$$$$$",
-"$$$$$$$. O *O;$$&o O*O* *O      -@$$;    O.$$$$$$$",
-"$$$$$$$;*   Oo+$$;O*O:OO--      Oo@+=    *;$$$$$$$",
-"$$$$$$$@*  O O#$$$;*OOOo@@-O     Oo;O*  **@$$$$$$$",
-"$$$$$$$$X* OOO-+$$$;O o@$$@-    O O     OX$$$$$$$$",
-"$$$$$$$$#*  * O.$$$$;X@$$$$@-O O        O#$$$$$$$$",
-"$$$$$$$$+oO O OO.+$$+&$$$$$$@-O         o+$$$$$$$$",
-"$$$$$$$$$#*    **.&$$$$$$$$$$@o      OO:#$$$$$$$$$",
-"$$$$$$$$$+.   O* O-#+$$$$$$$$+;O    OOO:@$$$$$$$$$",
-"$$$$$$$$$$&X  *O    -;#@++@#;=O    O    -@$$$$$$$$",
-"$$$$$$$$$$$&X O     O*O::::O      OO    Oo@$$$$$$$",
-"$$$$$$$$$$$$@XOO                  OO    O*X+$$$$$$",
-"$$$$$$$$$$$$$&.*       **  O      ::    *:#$$$$$$$",
-"$$$$$$$$$$$$$$$#o*OO       O    Oo#@-OOO=#$$$$$$$$",
-"$$$$$$$$$$$$$$$$+#X:* *     O**X#+$$@-*:#$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$%;.o=::=o.#@$$$$$$@X#$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$+++$$$$$$$$$$$+$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-"/$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$/",
+static const char *const qtlogo_xpm[] = {
+	/* width height ncolors chars_per_pixel */
+	"50 50 17 1",
+	/* colors */
+	"  c #000000",
+	". c #495808",
+	"X c #2A3304",
+	"o c #242B04",
+	"O c #030401",
+	"+ c #9EC011",
+	"@ c #93B310",
+	"# c #748E0C",
+	"$ c #A2C511",
+	"% c #8BA90E",
+	"& c #99BA10",
+	"* c #060701",
+	"= c #181D02",
+	"- c #212804",
+	"; c #61770A",
+	": c #0B0D01",
+	"/ c None",
+	/* pixels */
+	"/$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$/",
+	"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$$$$$+++$$$$$$$$$$$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$@;.o=::=o.;@$$$$$$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$+#X*         **X#+$$$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$#oO*         O  **o#+$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$&.* OO              O*.&$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$@XOO            * OO    X&$$$$$$$$$$$$",
+	"$$$$$$$$$$$@XO OO  O  **:::OOO OOO   X@$$$$$$$$$$$",
+	"$$$$$$$$$$&XO      O-;#@++@%.oOO      X&$$$$$$$$$$",
+	"$$$$$$$$$$.O  :  *-#+$$$$$$$$+#- : O O*.$$$$$$$$$$",
+	"$$$$$$$$$#*OO  O*.&$$$$$$$$$$$$+.OOOO **#$$$$$$$$$",
+	"$$$$$$$$+-OO O *;$$$$$$$$$$$&$$$$;*     o+$$$$$$$$",
+	"$$$$$$$$#O*  O .+$$$$$$$$$$@X;$$$+.O    *#$$$$$$$$",
+	"$$$$$$$$X*    -&$$$$$$$$$$@- :;$$$&-    OX$$$$$$$$",
+	"$$$$$$$@*O  *O#$$$$$$$$$$@oOO**;$$$#    O*%$$$$$$$",
+	"$$$$$$$;     -+$$$$$$$$$@o O OO ;+$$-O   *;$$$$$$$",
+	"$$$$$$$.     ;$$$$$$$$$@-OO OO  X&$$;O    .$$$$$$$",
+	"$$$$$$$o    *#$$$$$$$$@o  O O O-@$$$#O   *o$$$$$$$",
+	"$$$$$$+=    *@$$$$$$$@o* OO   -@$$$$&:    =$$$$$$$",
+	"$$$$$$+:    :+$$$$$$@-      *-@$$$$$$:    :+$$$$$$",
+	"$$$$$$+:    :+$$$$$@o* O    *-@$$$$$$:    :+$$$$$$",
+	"$$$$$$$=    :@$$$$@o*OOO      -@$$$$@:    =+$$$$$$",
+	"$$$$$$$-    O%$$$@o* O O    O O-@$$$#*   OX$$$$$$$",
+	"$$$$$$$. O *O;$$&o O*O* *O      -@$$;    O.$$$$$$$",
+	"$$$$$$$;*   Oo+$$;O*O:OO--      Oo@+=    *;$$$$$$$",
+	"$$$$$$$@*  O O#$$$;*OOOo@@-O     Oo;O*  **@$$$$$$$",
+	"$$$$$$$$X* OOO-+$$$;O o@$$@-    O O     OX$$$$$$$$",
+	"$$$$$$$$#*  * O.$$$$;X@$$$$@-O O        O#$$$$$$$$",
+	"$$$$$$$$+oO O OO.+$$+&$$$$$$@-O         o+$$$$$$$$",
+	"$$$$$$$$$#*    **.&$$$$$$$$$$@o      OO:#$$$$$$$$$",
+	"$$$$$$$$$+.   O* O-#+$$$$$$$$+;O    OOO:@$$$$$$$$$",
+	"$$$$$$$$$$&X  *O    -;#@++@#;=O    O    -@$$$$$$$$",
+	"$$$$$$$$$$$&X O     O*O::::O      OO    Oo@$$$$$$$",
+	"$$$$$$$$$$$$@XOO                  OO    O*X+$$$$$$",
+	"$$$$$$$$$$$$$&.*       **  O      ::    *:#$$$$$$$",
+	"$$$$$$$$$$$$$$$#o*OO       O    Oo#@-OOO=#$$$$$$$$",
+	"$$$$$$$$$$$$$$$$+#X:* *     O**X#+$$@-*:#$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$%;.o=::=o.#@$$$$$$@X#$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$$$$$$+++$$$$$$$$$$$+$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+	"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+	"/$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$/",
 };
 
 
@@ -285,7 +283,7 @@ well without:
 
 \code
   QMessageBox::information( this, "Application name",
-                            "Unable to find the user preferences file.\n"
+			    "Unable to find the user preferences file.\n"
 			    "The factory default will be used instead." );
 \endcode
 
@@ -294,11 +292,11 @@ errors which can't be easily fixed:
 
 \code
   switch( QMessageBox::warning( this, "Application name",
-                                "Could not connect to the <mumble> server.\n"
-      			  "This program can't function correctly "
-      			  "without the server.\n\n",
-      			  "Try again", "Quit", 0,
-      			  0, 1 );
+				"Could not connect to the <mumble> server.\n"
+			  "This program can't function correctly "
+			  "without the server.\n\n",
+			  "Try again", "Quit", 0,
+			  0, 1 );
   case 0: // Try again or Enter
       // try again
       break;
@@ -328,7 +326,7 @@ errors which can't be easily fixed:
 
   \code
     QMessageBox::information( this, "Application name here",
-                              "Unable to find the file \"index.html\".\n"
+			      "Unable to find the file \"index.html\".\n"
 			      "The factory default will be used instead." );
   \endcode
 
@@ -345,19 +343,19 @@ errors which can't be easily fixed:
 
   \code
     switch( QMessageBox::information( this, "Application name here",
-                                      "The document contains unsaved work\n"
-                                      "Do you want to save it before exiting?",
-			              "&Save", "&Don't Save", "&Cancel",
-                                      0,      // Enter == button 0
+				      "The document contains unsaved work\n"
+				      "Do you want to save it before exiting?",
+				      "&Save", "&Don't Save", "&Cancel",
+				      0,      // Enter == button 0
 				      2 ) ) { // Escape == button 2
     case 0: // Save clicked, Alt-S or Enter pressed.
-        // save
+	// save
 	break;
     case 1: // Don't Save clicked or Alt-D pressed
-        // don't save but exit
+	// don't save but exit
 	break;
     case 2: // Cancel clicked, Alt-C or Escape pressed
-        // don't exit
+	// don't exit
 	break;
     }
   \endcode
@@ -372,17 +370,17 @@ errors which can't be easily fixed:
 
   \code
     switch( QMessageBox::warning( this, "Application name here",
-                                  "Could not save the the user preferences,\n"
+				  "Could not save the the user preferences,\n"
 				  "because the disk is full.  You can delete\n"
 				  "some files and press Retry, or you can\n"
 				  "abort the Save Preferences operation.",
 				  QMessageBox::Retry | QMessageBox::Default,
 				  QMessageBox::Abort | QMessageBox::Escape )) {
     case QMessageBox::Retry: // Retry or Enter
-        // try again
+	// try again
 	break;
     case QMessageBox::Abort: // Abort or Cancel
-        // abort
+	// abort
 	break;
     }
   \endcode
@@ -393,7 +391,7 @@ errors which can't be easily fixed:
 
   \code
     QMessageBox::critical( 0, "Application name here",
-                           QString("An internal error occurred. Please ") +
+			   QString("An internal error occurred. Please ") +
 			   "call technical support at 123456789 and report\n"+
 			   "these numbers:\n\n" + errorDetails +
 			   "\n\n<Application> will now exit." );
@@ -404,7 +402,7 @@ errors which can't be easily fixed:
 
   \code
      QMessageBox::about( this, "About <Application>",
-                         "<Application> is a <one-paragraph blurb>\n\n"
+			 "<Application> is a <one-paragraph blurb>\n\n"
 			 "Copyright 1951-1997 Such-and-such.  "
 			 "<License words here.>\n\n"
 			 "For technical support, call 123456789 or see\n"
@@ -427,10 +425,10 @@ errors which can't be easily fixed:
     mb.setButtonText( QMessageBox::Yes, "Save" );
     mb.setButtonText( QMessageBox::No, "Don't Save" );
     switch( mb.exec() ) {
-        case QMessageBox::Yes:
+	case QMessageBox::Yes:
 	    // save and exit
 	    break;
-        case QMessageBox::No:
+	case QMessageBox::No:
 	    // exit without saving
 	    break;
 	case QMessageBox::Cancel:
@@ -499,19 +497,18 @@ errors which can't be easily fixed:
 
 
 struct QMBData {
-    QMBData(QMessageBox* parent) :
-	iconLabel( parent, "icon" )
-    {
-    }
+	QMBData(QMessageBox *parent) : iconLabel(parent, "icon")
+	{
+	}
 
-    int			numButtons;		// number of buttons
-    QMessageBox::Icon	icon;			// message box icon
-    QLabel		iconLabel;		// label holding any icon
-    int			button[3];		// button types
-    int			defButton;		// default button (index)
-    int			escButton;		// escape button (index)
-    QSize		buttonSize;		// button size
-    QPushButton	       *pb[3];			// buttons
+	int numButtons; // number of buttons
+	QMessageBox::Icon icon; // message box icon
+	QLabel iconLabel; // label holding any icon
+	int button[3]; // button types
+	int defButton; // default button (index)
+	int escButton; // escape button (index)
+	QSize buttonSize; // button size
+	QPushButton *pb[3]; // buttons
 };
 
 static const int LastButton = QMessageBox::Ignore;
@@ -520,17 +517,15 @@ static const int LastButton = QMessageBox::Ignore;
   NOTE: The table of button texts correspond to the button enum.
 */
 
-static const char *mb_texts[] = {
-    0,
-    QT_TRANSLATE_NOOP("QMessageBox","OK"),
-    QT_TRANSLATE_NOOP("QMessageBox","Cancel"),
-    QT_TRANSLATE_NOOP("QMessageBox","Yes"),
-    QT_TRANSLATE_NOOP("QMessageBox","No"),
-    QT_TRANSLATE_NOOP("QMessageBox","Abort"),
-    QT_TRANSLATE_NOOP("QMessageBox","Retry"),
-    QT_TRANSLATE_NOOP("QMessageBox","Ignore"),
-    0
-};
+static const char *mb_texts[] = {0,
+				 QT_TRANSLATE_NOOP("QMessageBox", "OK"),
+				 QT_TRANSLATE_NOOP("QMessageBox", "Cancel"),
+				 QT_TRANSLATE_NOOP("QMessageBox", "Yes"),
+				 QT_TRANSLATE_NOOP("QMessageBox", "No"),
+				 QT_TRANSLATE_NOOP("QMessageBox", "Abort"),
+				 QT_TRANSLATE_NOOP("QMessageBox", "Retry"),
+				 QT_TRANSLATE_NOOP("QMessageBox", "Ignore"),
+				 0};
 
 
 /*!
@@ -543,15 +538,18 @@ static const char *mb_texts[] = {
   The \e parent and \e name arguments are passed to the QDialog constructor.
 */
 
-QMessageBox::QMessageBox( QWidget *parent, const char *name )
-    : QDialog( parent, name, TRUE, WStyle_Customize | WStyle_DialogBorder | WStyle_Title | WStyle_SysMenu )
+QMessageBox::QMessageBox(QWidget *parent, const char *name)
+	: QDialog(parent, name, TRUE,
+		  WStyle_Customize | WStyle_DialogBorder | WStyle_Title |
+			  WStyle_SysMenu)
 {
-    if ( parent && parent->icon() && !parent->icon()->isNull() )
-	QDialog::setIcon( *parent->icon() );
-    else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
-	QDialog::setIcon( *qApp->mainWidget()->icon() );
+	if (parent && parent->icon() && !parent->icon()->isNull())
+		QDialog::setIcon(*parent->icon());
+	else if (qApp->mainWidget() && qApp->mainWidget()->icon() &&
+		 !qApp->mainWidget()->icon()->isNull())
+		QDialog::setIcon(*qApp->mainWidget()->icon());
 
-    init( Ok, 0, 0 );
+	init(Ok, 0, 0);
 }
 
 
@@ -597,7 +595,7 @@ QMessageBox::QMessageBox( QWidget *parent, const char *name )
 		    QMessageBox::Yes | QMessageBox::Default,
 		    QMessageBox::No | QMessageBox::Escape );
     if ( mb.exec() == QMessageBox::No )
-        // try again
+	// try again
   \endcode
 
   If \a parent is 0, then the message box becomes an application-global
@@ -613,22 +611,23 @@ QMessageBox::QMessageBox( QWidget *parent, const char *name )
   \sa setCaption(), setText(), setIcon()
 */
 
-QMessageBox::QMessageBox( const QString& caption,
-			  const QString &text, Icon icon,
-			  int button0, int button1, int button2,
-			  QWidget *parent, const char *name,
-			  bool modal, WFlags f )
-    : QDialog( parent, name, modal, f | WStyle_Customize | WStyle_DialogBorder | WStyle_Title | WStyle_SysMenu )
+QMessageBox::QMessageBox(const QString &caption, const QString &text, Icon icon,
+			 int button0, int button1, int button2, QWidget *parent,
+			 const char *name, bool modal, WFlags f)
+	: QDialog(parent, name, modal,
+		  f | WStyle_Customize | WStyle_DialogBorder | WStyle_Title |
+			  WStyle_SysMenu)
 {
-    if ( parent && parent->icon() && !parent->icon()->isNull() )
-	QDialog::setIcon( *parent->icon() );
-    else if ( qApp->mainWidget() && qApp->mainWidget()->icon() && !qApp->mainWidget()->icon()->isNull() )
-	QDialog::setIcon( *qApp->mainWidget()->icon() );
+	if (parent && parent->icon() && !parent->icon()->isNull())
+		QDialog::setIcon(*parent->icon());
+	else if (qApp->mainWidget() && qApp->mainWidget()->icon() &&
+		 !qApp->mainWidget()->icon()->isNull())
+		QDialog::setIcon(*qApp->mainWidget()->icon());
 
-    init( button0, button1, button2 );
-    setCaption( caption );
-    setText( text );
-    setIcon( icon );
+	init(button0, button1, button2);
+	setCaption(caption);
+	setText(text);
+	setIcon(icon);
 }
 
 
@@ -638,165 +637,172 @@ QMessageBox::QMessageBox( const QString& caption,
 
 QMessageBox::~QMessageBox()
 {
-    delete mbd;
+	delete mbd;
 }
 
-static QString * translatedTextAboutQt = 0;
+static QString *translatedTextAboutQt = 0;
 
-void QMessageBox::init( int button0, int button1, int button2 )
+void QMessageBox::init(int button0, int button1, int button2)
 {
-    if ( !translatedTextAboutQt ) {
-	translatedTextAboutQt = new QString;
+	if (!translatedTextAboutQt) {
+		translatedTextAboutQt = new QString;
 
-#if defined(QT_NON_COMMERCIAL)
-    QT_NC_MSGBOX
-#else
-	*translatedTextAboutQt
-	    = tr( "<h3>About Osiris</h3>"
-		  "<p>This program uses Osiris version 2.4.1, a multiplatform C++ "
-		  "GUI toolkit based on Qt 2.3.2 from Trolltech. "
-		  "Osiris runs on *nix systems using the X11 windowing system.</p>"
-		  "<p>See <tt>https://centre.libranext.com/libranext/osiris/</tt> for more "
-		  "information.</p>" );
-#endif
+# if defined(QT_NON_COMMERCIAL)
+		QT_NC_MSGBOX
+# else
+		*translatedTextAboutQt = tr(
+			"<h3>About Osiris</h3>"
+			"<p>This program uses Osiris version 2.4.2, a multiplatform C++ "
+			"GUI toolkit based on Qt 2.3.2 from Trolltech. "
+			"Osiris runs on *nix systems using the X11 windowing system.</p>"
+			"<p>See <tt>https://centre.libranext.com/libranext/osiris/</tt> for more "
+			"information.</p>");
+# endif
 
-#ifdef QT_NO_RICHTEXT
-	QString plain;
-	bool on=TRUE;
-	for (int i=0; i<translatedTextAboutQt->length(); i++) {
-	    char ch = translatedTextAboutQt->at(i).latin1();
-	    switch ( ch ) {
-	     case '<': on=FALSE; break;
-	     case '>': on=TRUE; break;
-	     default:
-		if ( on )
-		    plain += translatedTextAboutQt->at(i);
-		else if ( ch == 'p' || ch == '3' )
-		    plain += '\n';
-	    }
+# ifdef QT_NO_RICHTEXT
+		QString plain;
+		bool on = TRUE;
+		for (int i = 0; i < translatedTextAboutQt->length(); i++) {
+			char ch = translatedTextAboutQt->at(i).latin1();
+			switch (ch) {
+			case '<':
+				on = FALSE;
+				break;
+			case '>':
+				on = TRUE;
+				break;
+			default:
+				if (on)
+					plain += translatedTextAboutQt->at(i);
+				else if (ch == 'p' || ch == '3')
+					plain += '\n';
+			}
+		}
+		*translatedTextAboutQt = plain;
+# endif
 	}
-	*translatedTextAboutQt = plain;
-#endif
-    }
-    label = new QLabel( this, "text" );
-    CHECK_PTR( label );
+	label = new QLabel(this, "text");
+	CHECK_PTR(label);
 
-#ifdef QT_NO_RICHTEXT
-    label->setAlignment( AlignLeft|WordBreak );
-#else
-    label->setAlignment( AlignLeft );
-#endif
+# ifdef QT_NO_RICHTEXT
+	label->setAlignment(AlignLeft | WordBreak);
+# else
+	label->setAlignment(AlignLeft);
+# endif
 
-    if ( (button2 && !button1) || (button1 && !button0) ) {
-#if defined(CHECK_RANGE)
-	qWarning( "QMessageBox: Inconsistent button parameters" );
-#endif
-	button0 = button1 = button2 = 0;
-    }
-    mbd = new QMBData(this);
-    CHECK_PTR( mbd );
-    mbd->numButtons = 0;
-    mbd->button[0] = button0;
-    mbd->button[1] = button1;
-    mbd->button[2] = button2;
-    mbd->defButton = -1;
-    mbd->escButton = -1;
-    int i;
-    for ( i=0; i<3; i++ ) {
-	int b = mbd->button[i];
-	if ( (b & Default) ) {
-	    if ( mbd->defButton >= 0 ) {
-#if defined(CHECK_RANGE)
-		qWarning( "QMessageBox: There can be at most one "
-			   "default button" );
-#endif
-	    } else {
-		mbd->defButton = i;
-	    }
+	if ((button2 && !button1) || (button1 && !button0)) {
+# if defined(CHECK_RANGE)
+		qWarning("QMessageBox: Inconsistent button parameters");
+# endif
+		button0 = button1 = button2 = 0;
 	}
-	if ( (b & Escape) ) {
-	    if ( mbd->escButton >= 0 ) {
-#if defined(CHECK_RANGE)
-		qWarning( "QMessageBox: There can be at most one "
-			   "escape button" );
-#endif
-	    } else {
-		mbd->escButton = i;
-	    }
+	mbd = new QMBData(this);
+	CHECK_PTR(mbd);
+	mbd->numButtons = 0;
+	mbd->button[0] = button0;
+	mbd->button[1] = button1;
+	mbd->button[2] = button2;
+	mbd->defButton = -1;
+	mbd->escButton = -1;
+	int i;
+	for (i = 0; i < 3; i++) {
+		int b = mbd->button[i];
+		if ((b & Default)) {
+			if (mbd->defButton >= 0) {
+# if defined(CHECK_RANGE)
+				qWarning(
+					"QMessageBox: There can be at most one "
+					"default button");
+# endif
+			} else {
+				mbd->defButton = i;
+			}
+		}
+		if ((b & Escape)) {
+			if (mbd->escButton >= 0) {
+# if defined(CHECK_RANGE)
+				qWarning(
+					"QMessageBox: There can be at most one "
+					"escape button");
+# endif
+			} else {
+				mbd->escButton = i;
+			}
+		}
+		b &= ButtonMask;
+		if (b == 0) {
+			if (i == 0) // no buttons, add an Ok button
+				b = Ok;
+		} else if (b < 0 || b > LastButton) {
+# if defined(CHECK_RANGE)
+			qWarning("QMessageBox: Invalid button specifier");
+# endif
+			b = Ok;
+		} else {
+			if (i > 0 && mbd->button[i - 1] == 0) {
+# if defined(CHECK_RANGE)
+				qWarning(
+					"QMessageBox: Inconsistent button parameters; "
+					"button %d defined but not button %d",
+					i + 1, i);
+# endif
+				b = 0;
+			}
+		}
+		mbd->button[i] = b;
+		if (b)
+			mbd->numButtons++;
 	}
-	b &= ButtonMask;
-	if ( b == 0 ) {
-	    if ( i == 0 )			// no buttons, add an Ok button
-		b = Ok;
-	} else if ( b < 0 || b > LastButton ) {
-#if defined(CHECK_RANGE)
-	    qWarning( "QMessageBox: Invalid button specifier" );
-#endif
-	    b = Ok;
-	} else {
-	    if ( i > 0 && mbd->button[i-1] == 0 ) {
-#if defined(CHECK_RANGE)
-		qWarning( "QMessageBox: Inconsistent button parameters; "
-			   "button %d defined but not button %d",
-			   i+1, i );
-#endif
-		b = 0;
-	    }
+	for (i = 0; i < 3; i++) {
+		if (i >= mbd->numButtons) {
+			mbd->pb[i] = 0;
+		} else {
+			QCString buttonName;
+			buttonName.sprintf("button%d", i + 1);
+			mbd->pb[i] = new QPushButton(
+				tr(mb_texts[mbd->button[i]]), this, buttonName);
+			if (mbd->defButton == i) {
+				mbd->pb[i]->setDefault(TRUE);
+				mbd->pb[i]->setFocus();
+			}
+			mbd->pb[i]->setAutoDefault(TRUE);
+			mbd->pb[i]->setFocusPolicy(QWidget::StrongFocus);
+			connect(mbd->pb[i], SIGNAL(clicked()),
+				SLOT(buttonClicked()));
+		}
 	}
-	mbd->button[i] = b;
-	if ( b )
-	    mbd->numButtons++;
-    }
-    for ( i=0; i<3; i++ ) {
-	if ( i >= mbd->numButtons ) {
-	    mbd->pb[i] = 0;
-	} else {
-	    QCString buttonName;
-	    buttonName.sprintf( "button%d", i+1 );
-	    mbd->pb[i] = new QPushButton(
-		tr(mb_texts[mbd->button[i]]),
-	        this, buttonName );
-	    if ( mbd->defButton == i ) {
-		mbd->pb[i]->setDefault( TRUE );
-		mbd->pb[i]->setFocus();
-	    }
-	    mbd->pb[i]->setAutoDefault( TRUE );
-	    mbd->pb[i]->setFocusPolicy( QWidget::StrongFocus );
-	    connect( mbd->pb[i], SIGNAL(clicked()), SLOT(buttonClicked()) );
-	}
-    }
-    resizeButtons();
-    reserved1 = reserved2 = 0;
-    setFontPropagation( SameFont );
-    setPalettePropagation( SamePalette );
+	resizeButtons();
+	reserved1 = reserved2 = 0;
+	setFontPropagation(SameFont);
+	setPalettePropagation(SamePalette);
 }
 
 
-int QMessageBox::indexOf( int button ) const
+int QMessageBox::indexOf(int button) const
 {
-    int index = -1;
-    for ( int i=0; i<mbd->numButtons; i++ ) {
-	if ( mbd->button[i] == button ) {
-	    index = i;
-	    break;
+	int index = -1;
+	for (int i = 0; i < mbd->numButtons; i++) {
+		if (mbd->button[i] == button) {
+			index = i;
+			break;
+		}
 	}
-    }
-    return index;
+	return index;
 }
 
 
 void QMessageBox::resizeButtons()
 {
-    int i;
-    QSize maxSize( style() == MotifStyle ? 0 : 75, 0 );
-    for ( i=0; i<mbd->numButtons; i++ ) {
-	QSize s = mbd->pb[i]->sizeHint();
-	maxSize.setWidth(  QMAX(maxSize.width(), s.width()) );
-	maxSize.setHeight( QMAX(maxSize.height(),s.height()) );
-    }
-    mbd->buttonSize = maxSize;
-    for ( i=0; i<mbd->numButtons; i++ )
-	mbd->pb[i]->resize( maxSize );
+	int i;
+	QSize maxSize(style() == MotifStyle ? 0 : 75, 0);
+	for (i = 0; i < mbd->numButtons; i++) {
+		QSize s = mbd->pb[i]->sizeHint();
+		maxSize.setWidth(QMAX(maxSize.width(), s.width()));
+		maxSize.setHeight(QMAX(maxSize.height(), s.height()));
+	}
+	mbd->buttonSize = maxSize;
+	for (i = 0; i < mbd->numButtons; i++)
+		mbd->pb[i]->resize(maxSize);
 }
 
 
@@ -809,7 +815,7 @@ void QMessageBox::resizeButtons()
 
 QString QMessageBox::text() const
 {
-    return label->text();
+	return label->text();
 }
 
 /*!
@@ -823,9 +829,9 @@ QString QMessageBox::text() const
   \sa text(), setTextFormat()
 */
 
-void QMessageBox::setText( const QString &text )
+void QMessageBox::setText(const QString &text)
 {
-    label->setText( text );
+	label->setText(text);
 }
 
 /*!
@@ -836,7 +842,7 @@ void QMessageBox::setText( const QString &text )
 
 QMessageBox::Icon QMessageBox::icon() const
 {
-    return mbd->icon;
+	return mbd->icon;
 }
 
 
@@ -856,11 +862,12 @@ QMessageBox::Icon QMessageBox::icon() const
 
   \sa icon(), setIconPixmap(), iconPixmap()
 */
-//#### Bad API (see QWidget::setIcon). Should be setMessageIcon in 3.0 (same for setIconPixmap and friends)
-void QMessageBox::setIcon( Icon icon )
+// #### Bad API (see QWidget::setIcon). Should be setMessageIcon in 3.0 (same
+// for setIconPixmap and friends)
+void QMessageBox::setIcon(Icon icon)
 {
-    setIconPixmap( standardIcon(icon, style()) );
-    mbd->icon = icon;
+	setIconPixmap(standardIcon(icon, style()));
+	mbd->icon = icon;
 }
 
 /*!
@@ -868,51 +875,51 @@ void QMessageBox::setIcon( Icon icon )
   allows the pixmaps to be used in more complex message boxes.
 */
 
-QPixmap QMessageBox::standardIcon( Icon icon, GUIStyle style )
+QPixmap QMessageBox::standardIcon(Icon icon, GUIStyle style)
 {
-    const char * const * xpm_data;
-    switch ( icon ) {
-    case Information:
-	xpm_data = information_xpm;
-	break;
-    case Warning:
-	xpm_data = warning_xpm;
-	break;
-    case Critical:
-	xpm_data = critical_xpm;
-	break;
-    default:
-	xpm_data = 0;
-    }
-    QPixmap pm;
-    if ( xpm_data ) {
-	QImage image( (const char **) xpm_data);
-	if ( style == MotifStyle ) {
-	    // All that color looks ugly in Motif
-	    QColorGroup g = QApplication::palette().normal();
-	    switch ( icon ) {
-	    case Information:
-		image.setColor( 2, 0xff000000 | g.dark().rgb() );
-		image.setColor( 3, 0xff000000 | g.base().rgb() );
-		image.setColor( 4, 0xff000000 | g.text().rgb() );
+	const char *const *xpm_data;
+	switch (icon) {
+	case Information:
+		xpm_data = information_xpm;
 		break;
-	    case Warning:
-		image.setColor( 1, 0xff000000 | g.base().rgb() );
-		image.setColor( 2, 0xff000000 | g.text().rgb() );
-		image.setColor( 3, 0xff000000 | g.dark().rgb() );
+	case Warning:
+		xpm_data = warning_xpm;
 		break;
-	    case Critical:
-		image.setColor( 1, 0xff000000 | g.dark().rgb() );
-		image.setColor( 2, 0xff000000 | g.text().rgb() );
-		image.setColor( 3, 0xff000000 | g.base().rgb() );
-	        break;
-	    default:
-		break; // Can't happen
-	    }
+	case Critical:
+		xpm_data = critical_xpm;
+		break;
+	default:
+		xpm_data = 0;
 	}
-	pm.convertFromImage(image);
-    }
-    return pm;
+	QPixmap pm;
+	if (xpm_data) {
+		QImage image((const char **)xpm_data);
+		if (style == MotifStyle) {
+			// All that color looks ugly in Motif
+			QColorGroup g = QApplication::palette().normal();
+			switch (icon) {
+			case Information:
+				image.setColor(2, 0xff000000 | g.dark().rgb());
+				image.setColor(3, 0xff000000 | g.base().rgb());
+				image.setColor(4, 0xff000000 | g.text().rgb());
+				break;
+			case Warning:
+				image.setColor(1, 0xff000000 | g.base().rgb());
+				image.setColor(2, 0xff000000 | g.text().rgb());
+				image.setColor(3, 0xff000000 | g.dark().rgb());
+				break;
+			case Critical:
+				image.setColor(1, 0xff000000 | g.dark().rgb());
+				image.setColor(2, 0xff000000 | g.text().rgb());
+				image.setColor(3, 0xff000000 | g.base().rgb());
+				break;
+			default:
+				break; // Can't happen
+			}
+		}
+		pm.convertFromImage(image);
+	}
+	return pm;
 }
 
 
@@ -931,7 +938,7 @@ QPixmap QMessageBox::standardIcon( Icon icon, GUIStyle style )
 
 const QPixmap *QMessageBox::iconPixmap() const
 {
-    return mbd->iconLabel.pixmap();
+	return mbd->iconLabel.pixmap();
 }
 
 /*!
@@ -942,10 +949,10 @@ const QPixmap *QMessageBox::iconPixmap() const
   \sa iconPixmap(), setIcon()
 */
 
-void QMessageBox::setIconPixmap( const QPixmap &pixmap )
+void QMessageBox::setIconPixmap(const QPixmap &pixmap)
 {
-    mbd->iconLabel.setPixmap(pixmap);
-    mbd->icon = NoIcon;
+	mbd->iconLabel.setPixmap(pixmap);
+	mbd->icon = NoIcon;
 }
 
 
@@ -956,12 +963,11 @@ void QMessageBox::setIconPixmap( const QPixmap &pixmap )
   \sa setButtonText()
 */
 
-QString QMessageBox::buttonText( int button ) const
+QString QMessageBox::buttonText(int button) const
 {
-    int index = indexOf(button);
-    return index >= 0 && mbd->pb[index]
-	    ? mbd->pb[index]->text()
-	    : QString::null;
+	int index = indexOf(button);
+	return index >= 0 && mbd->pb[index] ? mbd->pb[index]->text() :
+					      QString::null;
 }
 
 
@@ -973,13 +979,13 @@ QString QMessageBox::buttonText( int button ) const
   \sa buttonText()
 */
 
-void QMessageBox::setButtonText( int button, const QString &text )
+void QMessageBox::setButtonText(int button, const QString &text)
 {
-    int index = indexOf(button);
-    if ( index >= 0 && mbd->pb[index] ) {
-	mbd->pb[index]->setText( text );
-	resizeButtons();
-    }
+	int index = indexOf(button);
+	if (index >= 0 && mbd->pb[index]) {
+		mbd->pb[index]->setText(text);
+		resizeButtons();
+	}
 }
 
 
@@ -989,13 +995,13 @@ void QMessageBox::setButtonText( int button, const QString &text )
 
 void QMessageBox::buttonClicked()
 {
-    int reply = 0;
-    const QObject *s = sender();
-    for ( int i=0; i<mbd->numButtons; i++ ) {
-	if ( mbd->pb[i] == s )
-	    reply = mbd->button[i];
-    }
-    done( reply );
+	int reply = 0;
+	const QObject *s = sender();
+	for (int i = 0; i < mbd->numButtons; i++) {
+		if (mbd->pb[i] == s)
+			reply = mbd->button[i];
+	}
+	done(reply);
 }
 
 
@@ -1008,104 +1014,108 @@ void QMessageBox::buttonClicked()
 */
 void QMessageBox::adjustSize()
 {
-    if ( !testWState(WState_Polished) )
-	polish();
-    resizeButtons();
-    label->adjustSize();
-    QSize labelSize( label->size() );
-    int n  = mbd->numButtons;
-    int bw = mbd->buttonSize.width();
-    int bh = mbd->buttonSize.height();
-    int border = bh/2 - style().buttonDefaultIndicatorWidth();
-    if ( border <= 0 )
-	border = 10;
-    int btn_spacing = 7;
-    if ( style() == MotifStyle )
-	btn_spacing = border;
-    int buttons = mbd->numButtons * bw + (n-1) * btn_spacing;
-    int h = bh;
-    if ( labelSize.height() )
-	h += labelSize.height() + 3*border;
-    else
-	h += 2*border;
-    int lmargin = 0;
-    if ( mbd->iconLabel.pixmap() && mbd->iconLabel.pixmap()->width() )  {
-	mbd->iconLabel.adjustSize();
-	lmargin += mbd->iconLabel.width() + border;
-	if ( h < mbd->iconLabel.height() + 3*border + bh )
-	    h = mbd->iconLabel.height() + 3*border + bh;
-    }
-    int w = QMAX( buttons, labelSize.width() + lmargin ) + 2*border;
-
-#if defined(_WS_QWS_)
-    // who commited QMessagebox? It really should use Layout. This way
-    // we do not even have a proper minimum size we could take into
-    // acount. ####
-    extern QRect qt_maxWindowRect;
-    QSize s( w, h );
-    s = s.boundedTo( qt_maxWindowRect.size() );
-    if ( s.width() < w && label->sizePolicy().hasHeightForWidth() ) {
-	resize( s );
-	QApplication::sendPostedEvents( this, QEvent::Resize );
-	s.rheight() += label->heightForWidth( label->width() ) - label->height();
-	s = s.boundedTo( qt_maxWindowRect.size() );
-    }
-    resize( s );
-#else
-    resize( w, h );
-#endif
-    setMinimumSize( size() );
-}
-
-
-/*!\reimp
-*/
-void QMessageBox::resizeEvent( QResizeEvent * )
-{
-    int i;
-    int n  = mbd->numButtons;
-    int bw = mbd->buttonSize.width();
-    int bh = mbd->buttonSize.height();
-    int border = bh/2 - style().buttonDefaultIndicatorWidth();
-    if ( border <= 0 )
-	border = 10;
-    int btn_spacing = 7;
-    if ( style() == MotifStyle )
-	btn_spacing = border;
-    int lmargin = 0;
-    mbd->iconLabel.adjustSize();
-    mbd->iconLabel.move( border, border );
-    if ( mbd->iconLabel.pixmap() && mbd->iconLabel.pixmap()->width() )
-	lmargin += mbd->iconLabel.width() + border;
-    label->setGeometry( lmargin+border,
-			border,
-			width() - lmargin -2*border,
-			height() - 3*border - bh );
-    int extra_space = (width() - bw*n - 2*border - (n-1)*btn_spacing);
-    if ( style() == MotifStyle )
-	for ( i=0; i<n; i++ )
-	    mbd->pb[i]->move( border + i*bw + i*btn_spacing + extra_space*(i+1)/(n+1),
-			      height() - border - bh );
-    else
-	for ( i=0; i<n; i++ )
-	    mbd->pb[i]->move( border + i*bw + extra_space/2 + i*btn_spacing,
-			      height() - border - bh );
-}
-
-
-/*!\reimp
-*/
-void QMessageBox::keyPressEvent( QKeyEvent *e )
-{
-    if ( e->key() == Key_Escape ) {
-	if ( mbd->escButton >= 0 ) {
-	    QPushButton *pb = mbd->pb[mbd->escButton];
-	    pb->animateClick();
-	    e->accept();
-	    return;
+	if (!testWState(WState_Polished))
+		polish();
+	resizeButtons();
+	label->adjustSize();
+	QSize labelSize(label->size());
+	int n = mbd->numButtons;
+	int bw = mbd->buttonSize.width();
+	int bh = mbd->buttonSize.height();
+	int border = bh / 2 - style().buttonDefaultIndicatorWidth();
+	if (border <= 0)
+		border = 10;
+	int btn_spacing = 7;
+	if (style() == MotifStyle)
+		btn_spacing = border;
+	int buttons = mbd->numButtons * bw + (n - 1) * btn_spacing;
+	int h = bh;
+	if (labelSize.height())
+		h += labelSize.height() + 3 * border;
+	else
+		h += 2 * border;
+	int lmargin = 0;
+	if (mbd->iconLabel.pixmap() && mbd->iconLabel.pixmap()->width()) {
+		mbd->iconLabel.adjustSize();
+		lmargin += mbd->iconLabel.width() + border;
+		if (h < mbd->iconLabel.height() + 3 * border + bh)
+			h = mbd->iconLabel.height() + 3 * border + bh;
 	}
-    }
-    QDialog::keyPressEvent( e );
+	int w = QMAX(buttons, labelSize.width() + lmargin) + 2 * border;
+
+# if defined(_WS_QWS_)
+	// who commited QMessagebox? It really should use Layout. This way
+	// we do not even have a proper minimum size we could take into
+	// acount. ####
+	extern QRect qt_maxWindowRect;
+	QSize s(w, h);
+	s = s.boundedTo(qt_maxWindowRect.size());
+	if (s.width() < w && label->sizePolicy().hasHeightForWidth()) {
+		resize(s);
+		QApplication::sendPostedEvents(this, QEvent::Resize);
+		s.rheight() +=
+			label->heightForWidth(label->width()) - label->height();
+		s = s.boundedTo(qt_maxWindowRect.size());
+	}
+	resize(s);
+# else
+	resize(w, h);
+# endif
+	setMinimumSize(size());
+}
+
+
+/*!\reimp
+ */
+void QMessageBox::resizeEvent(QResizeEvent *)
+{
+	int i;
+	int n = mbd->numButtons;
+	int bw = mbd->buttonSize.width();
+	int bh = mbd->buttonSize.height();
+	int border = bh / 2 - style().buttonDefaultIndicatorWidth();
+	if (border <= 0)
+		border = 10;
+	int btn_spacing = 7;
+	if (style() == MotifStyle)
+		btn_spacing = border;
+	int lmargin = 0;
+	mbd->iconLabel.adjustSize();
+	mbd->iconLabel.move(border, border);
+	if (mbd->iconLabel.pixmap() && mbd->iconLabel.pixmap()->width())
+		lmargin += mbd->iconLabel.width() + border;
+	label->setGeometry(lmargin + border, border,
+			   width() - lmargin - 2 * border,
+			   height() - 3 * border - bh);
+	int extra_space =
+		(width() - bw * n - 2 * border - (n - 1) * btn_spacing);
+	if (style() == MotifStyle)
+		for (i = 0; i < n; i++)
+			mbd->pb[i]->move(border + i * bw + i * btn_spacing +
+						 extra_space * (i + 1) /
+							 (n + 1),
+					 height() - border - bh);
+	else
+		for (i = 0; i < n; i++)
+			mbd->pb[i]->move(border + i * bw + extra_space / 2 +
+						 i * btn_spacing,
+					 height() - border - bh);
+}
+
+
+/*!\reimp
+ */
+void QMessageBox::keyPressEvent(QKeyEvent *e)
+{
+	if (e->key() == Key_Escape) {
+		if (mbd->escButton >= 0) {
+			QPushButton *pb = mbd->pb[mbd->escButton];
+			pb->animateClick();
+			e->accept();
+			return;
+		}
+	}
+	QDialog::keyPressEvent(e);
 }
 
 
@@ -1121,15 +1131,13 @@ void QMessageBox::keyPressEvent( QKeyEvent *e )
   information(), warning() or critical() instead.
 */
 
-int QMessageBox::message( const QString &caption,
-			  const QString& text,
-			  const QString& buttonText,
-			  QWidget    *parent,
-			  const char * )
+int QMessageBox::message(const QString &caption, const QString &text,
+			 const QString &buttonText, QWidget *parent,
+			 const char *)
 {
-    return QMessageBox::information( parent, caption, text,
-				     buttonText.isEmpty()
-				     ? tr("OK") : buttonText ) == 0;
+	return QMessageBox::information(parent, caption, text,
+					buttonText.isEmpty() ? tr("OK") :
+							       buttonText) == 0;
 }
 
 
@@ -1142,16 +1150,15 @@ int QMessageBox::message( const QString &caption,
   information(), warning() or critical() instead.
 */
 
-bool QMessageBox::query( const QString &caption,
-			 const QString& text,
-			 const QString& yesButtonText,
-			 const QString& noButtonText,
-			 QWidget *parent, const char * )
+bool QMessageBox::query(const QString &caption, const QString &text,
+			const QString &yesButtonText,
+			const QString &noButtonText, QWidget *parent,
+			const char *)
 {
-    return QMessageBox::information( parent, caption, text,
-				     yesButtonText.isEmpty()
-				     ? tr("OK") : yesButtonText,
-				     noButtonText ) == 0;
+	return QMessageBox::information(parent, caption, text,
+					yesButtonText.isEmpty() ? tr("OK") :
+								  yesButtonText,
+					noButtonText) == 0;
 }
 
 
@@ -1166,17 +1173,17 @@ bool QMessageBox::query( const QString &caption,
   \sa warning(), critical()
 */
 
-int QMessageBox::information( QWidget *parent,
-			      const QString& caption, const QString& text,
-			      int button0, int button1, int button2 )
+int QMessageBox::information(QWidget *parent, const QString &caption,
+			     const QString &text, int button0, int button1,
+			     int button2)
 {
-    QMessageBox *mb = new QMessageBox( caption, text, Information,
-				       button0, button1, button2,
-				       parent, "information" );
-    CHECK_PTR( mb );
-    int reply = mb->exec();
-    delete mb;
-    return reply;
+	QMessageBox *mb = new QMessageBox(caption, text, Information, button0,
+					  button1, button2, parent,
+					  "information");
+	CHECK_PTR(mb);
+	int reply = mb->exec();
+	delete mb;
+	return reply;
 }
 
 
@@ -1191,17 +1198,16 @@ int QMessageBox::information( QWidget *parent,
   \sa information(), critical()
 */
 
-int QMessageBox::warning( QWidget *parent,
-			  const QString& caption, const QString& text,
-			  int button0, int button1, int button2 )
+int QMessageBox::warning(QWidget *parent, const QString &caption,
+			 const QString &text, int button0, int button1,
+			 int button2)
 {
-    QMessageBox *mb = new QMessageBox( caption, text, Warning,
-				       button0, button1, button2,
-				       parent, "warning" );
-    CHECK_PTR( mb );
-    int reply = mb->exec();
-    delete mb;
-    return reply;
+	QMessageBox *mb = new QMessageBox(caption, text, Warning, button0,
+					  button1, button2, parent, "warning");
+	CHECK_PTR(mb);
+	int reply = mb->exec();
+	delete mb;
+	return reply;
 }
 
 
@@ -1216,17 +1222,16 @@ int QMessageBox::warning( QWidget *parent,
   \sa information(), warning()
 */
 
-int QMessageBox::critical( QWidget *parent,
-			   const QString& caption, const QString& text,
-			   int button0, int button1, int button2 )
+int QMessageBox::critical(QWidget *parent, const QString &caption,
+			  const QString &text, int button0, int button1,
+			  int button2)
 {
-    QMessageBox *mb = new QMessageBox( caption, text, Critical,
-				       button0, button1, button2,
-				       parent, "critical" );
-    CHECK_PTR( mb );
-    int reply = mb->exec();
-    delete mb;
-    return reply;
+	QMessageBox *mb = new QMessageBox(caption, text, Critical, button0,
+					  button1, button2, parent, "critical");
+	CHECK_PTR(mb);
+	int reply = mb->exec();
+	delete mb;
+	return reply;
 }
 
 
@@ -1246,83 +1251,79 @@ int QMessageBox::critical( QWidget *parent,
   \sa QWidget::icon() QApplication::mainWidget()
 */
 
-void QMessageBox::about( QWidget *parent, const QString &caption,
-			 const QString& text )
+void QMessageBox::about(QWidget *parent, const QString &caption,
+			const QString &text)
 {
-    QMessageBox *mb = new QMessageBox( caption, text,
-				       Information,
-				       Ok + Default, 0, 0,
-				       parent, "simple about box" );
-    CHECK_PTR( mb );
-    QPixmap i;
-    if ( parent && parent->icon())
-	i = *(parent->icon());
-    if ( i.isNull() && parent &&
-	 parent->topLevelWidget()->icon() )
-	i = *(parent->topLevelWidget()->icon());
-    if ( i.isNull() && qApp && qApp->mainWidget() &&
-	 qApp->mainWidget()->icon() )
-	i = *(qApp->mainWidget()->icon());
-    if ( !i.isNull() )
-	mb->setIconPixmap( i );
-    mb->exec();
-    delete mb;
+	QMessageBox *mb = new QMessageBox(caption, text, Information,
+					  Ok + Default, 0, 0, parent,
+					  "simple about box");
+	CHECK_PTR(mb);
+	QPixmap i;
+	if (parent && parent->icon())
+		i = *(parent->icon());
+	if (i.isNull() && parent && parent->topLevelWidget()->icon())
+		i = *(parent->topLevelWidget()->icon());
+	if (i.isNull() && qApp && qApp->mainWidget() &&
+	    qApp->mainWidget()->icon())
+		i = *(qApp->mainWidget()->icon());
+	if (!i.isNull())
+		mb->setIconPixmap(i);
+	mb->exec();
+	delete mb;
 }
 
 
 /*! \reimp
-*/
+ */
 
-void QMessageBox::styleChanged( QStyle& )
+void QMessageBox::styleChanged(QStyle &)
 {
-    if ( mbd->icon != NoIcon ) {
-	// Reload icon for new style
-	setIcon( mbd->icon );
-    }
+	if (mbd->icon != NoIcon) {
+		// Reload icon for new style
+		setIcon(mbd->icon);
+	}
 }
 
 
-static int textBox( QWidget *parent, QMessageBox::Icon severity,
-		    const QString& caption, const QString& text,
-		    const QString& button0Text,
-		    const QString& button1Text,
-		    const QString& button2Text,
-		    int defaultButtonNumber,
-		    int escapeButtonNumber )
+static int textBox(QWidget *parent, QMessageBox::Icon severity,
+		   const QString &caption, const QString &text,
+		   const QString &button0Text, const QString &button1Text,
+		   const QString &button2Text, int defaultButtonNumber,
+		   int escapeButtonNumber)
 {
-    int b[3];
-    b[0] = 1;
-    b[1] = button1Text.isEmpty() ? 0 : 2;
-    b[2] = button2Text.isEmpty() ? 0 : 3;
+	int b[3];
+	b[0] = 1;
+	b[1] = button1Text.isEmpty() ? 0 : 2;
+	b[2] = button2Text.isEmpty() ? 0 : 3;
 
-    int i;
-    for( i=0; i<3; i++ ) {
-	if ( b[i] && defaultButtonNumber == i )
-	    b[i] += QMessageBox::Default;
-	if ( b[i] && escapeButtonNumber == i )
-	    b[i] += QMessageBox::Escape;
-    }
+	int i;
+	for (i = 0; i < 3; i++) {
+		if (b[i] && defaultButtonNumber == i)
+			b[i] += QMessageBox::Default;
+		if (b[i] && escapeButtonNumber == i)
+			b[i] += QMessageBox::Escape;
+	}
 
-    QMessageBox *mb = new QMessageBox( caption, text, severity,
-				       b[0], b[1], b[2],
-				       parent, "information" );
-    CHECK_PTR( mb );
-    if ( button0Text.isEmpty() )
-	mb->setButtonText( 1, QMessageBox::tr(mb_texts[QMessageBox::Ok]) );
-    else
-	mb->setButtonText( 1, button0Text );
-    if ( b[1] )
-	mb->setButtonText( 2, button1Text );
-    if ( b[2] )
-	mb->setButtonText( 3, button2Text );
+	QMessageBox *mb = new QMessageBox(caption, text, severity, b[0], b[1],
+					  b[2], parent, "information");
+	CHECK_PTR(mb);
+	if (button0Text.isEmpty())
+		mb->setButtonText(1,
+				  QMessageBox::tr(mb_texts[QMessageBox::Ok]));
+	else
+		mb->setButtonText(1, button0Text);
+	if (b[1])
+		mb->setButtonText(2, button1Text);
+	if (b[2])
+		mb->setButtonText(3, button2Text);
 
-#ifndef QT_NO_CURSOR
-    mb->setCursor( Qt::arrowCursor );
-#endif
-    int reply = mb->exec();
+# ifndef QT_NO_CURSOR
+	mb->setCursor(Qt::arrowCursor);
+# endif
+	int reply = mb->exec();
 
-    delete mb;
-    return reply-1;
+	delete mb;
+	return reply - 1;
 }
 
 
@@ -1350,17 +1351,15 @@ static int textBox( QWidget *parent, QMessageBox::Icon severity,
   \sa warning(), critical()
 */
 
-int QMessageBox::information( QWidget *parent, const QString &caption,
-			      const QString& text,
-			      const QString& button0Text,
-			      const QString& button1Text,
-			      const QString& button2Text,
-			      int defaultButtonNumber,
-			      int escapeButtonNumber )
+int QMessageBox::information(QWidget *parent, const QString &caption,
+			     const QString &text, const QString &button0Text,
+			     const QString &button1Text,
+			     const QString &button2Text,
+			     int defaultButtonNumber, int escapeButtonNumber)
 {
-    return textBox( parent, Information, caption, text,
-		    button0Text, button1Text, button2Text,
-		    defaultButtonNumber, escapeButtonNumber );
+	return textBox(parent, Information, caption, text, button0Text,
+		       button1Text, button2Text, defaultButtonNumber,
+		       escapeButtonNumber);
 }
 
 
@@ -1388,17 +1387,13 @@ int QMessageBox::information( QWidget *parent, const QString &caption,
   \sa information(), critical()
 */
 
-int QMessageBox::warning( QWidget *parent, const QString &caption,
-				 const QString& text,
-				 const QString& button0Text,
-				 const QString& button1Text,
-				 const QString& button2Text,
-				 int defaultButtonNumber,
-				 int escapeButtonNumber )
+int QMessageBox::warning(QWidget *parent, const QString &caption,
+			 const QString &text, const QString &button0Text,
+			 const QString &button1Text, const QString &button2Text,
+			 int defaultButtonNumber, int escapeButtonNumber)
 {
-    return textBox( parent, Warning, caption, text,
-		    button0Text, button1Text, button2Text,
-		    defaultButtonNumber, escapeButtonNumber );
+	return textBox(parent, Warning, caption, text, button0Text, button1Text,
+		       button2Text, defaultButtonNumber, escapeButtonNumber);
 }
 
 
@@ -1426,17 +1421,15 @@ int QMessageBox::warning( QWidget *parent, const QString &caption,
   \sa information() warning()
 */
 
-int QMessageBox::critical( QWidget *parent, const QString &caption,
-				  const QString& text,
-				  const QString& button0Text,
-				  const QString& button1Text,
-				  const QString& button2Text,
-				  int defaultButtonNumber,
-				  int escapeButtonNumber )
+int QMessageBox::critical(QWidget *parent, const QString &caption,
+			  const QString &text, const QString &button0Text,
+			  const QString &button1Text,
+			  const QString &button2Text, int defaultButtonNumber,
+			  int escapeButtonNumber)
 {
-    return textBox( parent, Critical, caption, text,
-		    button0Text, button1Text, button2Text,
-		    defaultButtonNumber, escapeButtonNumber );
+	return textBox(parent, Critical, caption, text, button0Text,
+		       button1Text, button2Text, defaultButtonNumber,
+		       escapeButtonNumber);
 }
 
 
@@ -1449,50 +1442,50 @@ int QMessageBox::critical( QWidget *parent, const QString &caption,
   example.
 */
 
-void QMessageBox::aboutQt( QWidget *parent, const QString &caption )
+void QMessageBox::aboutQt(QWidget *parent, const QString &caption)
 {
-    QString c = caption;
-    if ( c.isNull() )
-	c = "About Qt";
-    QMessageBox *mb = new QMessageBox( parent, "about qt" );
-    mb->setCaption( caption.isNull()?QString::fromLatin1("About Qt"):caption );
-    mb->setText( *translatedTextAboutQt );
-    QPixmap pm;
-    QImage logo( (const char **)qtlogo_xpm);
-    if ( qGray(mb->palette().active().text().rgb()) >
-         qGray(mb->palette().active().base().rgb()) )
-    {
-	// light on dark, adjust some colors
-	logo.setColor( 0,0xFFffffff);
-	logo.setColor( 1,0xFF666666);
-	logo.setColor( 2,0xFFcccc66);
-	logo.setColor( 4,0xFFcccccc);
-	logo.setColor( 6,0xFFffff66);
-	logo.setColor( 7,0xFF999999);
-	logo.setColor( 8,0xFF3333FF);
-	logo.setColor( 9,0xFFffff33);
-	logo.setColor(11,0xFFcccc99);
-    }
-    if ( pm.convertFromImage( logo ) )
-	mb->setIconPixmap( pm );
-    mb->setButtonText( 0, tr("OK") );
-    if ( mb->mbd && mb->mbd->pb[0] ) {
-	mb->mbd->pb[0]->setAutoDefault( TRUE );
-	mb->mbd->pb[0]->setFocusPolicy( QWidget::StrongFocus );
-	mb->mbd->pb[0]->setDefault( TRUE );
-	mb->mbd->pb[0]->setFocus();
-    }
-    mb->exec();
+	QString c = caption;
+	if (c.isNull())
+		c = "About Qt";
+	QMessageBox *mb = new QMessageBox(parent, "about qt");
+	mb->setCaption(caption.isNull() ? QString::fromLatin1("About Qt") :
+					  caption);
+	mb->setText(*translatedTextAboutQt);
+	QPixmap pm;
+	QImage logo((const char **)qtlogo_xpm);
+	if (qGray(mb->palette().active().text().rgb()) >
+	    qGray(mb->palette().active().base().rgb())) {
+		// light on dark, adjust some colors
+		logo.setColor(0, 0xFFffffff);
+		logo.setColor(1, 0xFF666666);
+		logo.setColor(2, 0xFFcccc66);
+		logo.setColor(4, 0xFFcccccc);
+		logo.setColor(6, 0xFFffff66);
+		logo.setColor(7, 0xFF999999);
+		logo.setColor(8, 0xFF3333FF);
+		logo.setColor(9, 0xFFffff33);
+		logo.setColor(11, 0xFFcccc99);
+	}
+	if (pm.convertFromImage(logo))
+		mb->setIconPixmap(pm);
+	mb->setButtonText(0, tr("OK"));
+	if (mb->mbd && mb->mbd->pb[0]) {
+		mb->mbd->pb[0]->setAutoDefault(TRUE);
+		mb->mbd->pb[0]->setFocusPolicy(QWidget::StrongFocus);
+		mb->mbd->pb[0]->setDefault(TRUE);
+		mb->mbd->pb[0]->setFocus();
+	}
+	mb->exec();
 }
 
 /*!
   \reimp
 */
 
-void QMessageBox::setIcon( const QPixmap &pix )
+void QMessageBox::setIcon(const QPixmap &pix)
 {
-    //reimplemented to avoid compiler warning.
-    QDialog::setIcon( pix );
+	// reimplemented to avoid compiler warning.
+	QDialog::setIcon(pix);
 }
 
 
@@ -1504,7 +1497,7 @@ void QMessageBox::setIcon( const QPixmap &pix )
 
 Qt::TextFormat QMessageBox::textFormat() const
 {
-    return label->textFormat();
+	return label->textFormat();
 }
 
 /*!
@@ -1516,9 +1509,9 @@ Qt::TextFormat QMessageBox::textFormat() const
   \sa textFormat(), setText()
 */
 
-void QMessageBox::setTextFormat( Qt::TextFormat format )
+void QMessageBox::setTextFormat(Qt::TextFormat format)
 {
-    label->setTextFormat( format );
+	label->setTextFormat(format);
 }
 
 

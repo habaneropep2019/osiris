@@ -28,8 +28,8 @@
 #define CONNECT_TOOL 32001
 #define ORDER_TOOL 32002
 
-int size_type_to_int( QSizePolicy::SizeType t );
-QString size_type_to_string( QSizePolicy::SizeType t );
-QSizePolicy::SizeType int_to_size_type( int i );
+int size_type_to_int(QSizePolicy::SizeType t);
+QString size_type_to_string(QSizePolicy::SizeType t);
+QSizePolicy::SizeType int_to_size_type(int i);
 
 #endif

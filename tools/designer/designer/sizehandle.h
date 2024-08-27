@@ -32,60 +32,69 @@ class QPaintEvent;
 
 class SizeHandle : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    enum Direction { LeftTop, Top, RightTop, Right, RightBottom, Bottom, LeftBottom, Left };
+      public:
+	enum Direction {
+		LeftTop,
+		Top,
+		RightTop,
+		Right,
+		RightBottom,
+		Bottom,
+		LeftBottom,
+		Left
+	};
 
-    SizeHandle( FormWindow *parent, Direction d, WidgetSelection *s );
-    void setWidget( QWidget *w );
-    void setActive( bool a );
-    void updateCursor();
+	SizeHandle(FormWindow *parent, Direction d, WidgetSelection *s);
+	void setWidget(QWidget *w);
+	void setActive(bool a);
+	void updateCursor();
 
-    void setEnabled( bool ) {}
+	void setEnabled(bool)
+	{
+	}
 
-protected:
-    void paintEvent( QPaintEvent *e );
-    void mousePressEvent( QMouseEvent *e );
-    void mouseMoveEvent( QMouseEvent *e );
-    void mouseReleaseEvent( QMouseEvent *e );
+      protected:
+	void paintEvent(QPaintEvent *e);
+	void mousePressEvent(QMouseEvent *e);
+	void mouseMoveEvent(QMouseEvent *e);
+	void mouseReleaseEvent(QMouseEvent *e);
 
-private:
-    void trySetGeometry( QWidget *w, int x, int y, int width, int height );
-    void tryResize( QWidget *w, int width, int height );
+      private:
+	void trySetGeometry(QWidget *w, int x, int y, int width, int height);
+	void tryResize(QWidget *w, int width, int height);
 
-private:
-    QWidget *widget;
-    Direction dir;
-    QPoint oldPressPos;
-    FormWindow *formWindow;
-    WidgetSelection *sel;
-    QRect geom, origGeom;
-    bool active;
-
+      private:
+	QWidget *widget;
+	Direction dir;
+	QPoint oldPressPos;
+	FormWindow *formWindow;
+	WidgetSelection *sel;
+	QRect geom, origGeom;
+	bool active;
 };
 
 class WidgetSelection
 {
-public:
-    WidgetSelection( FormWindow *parent, QPtrDict<WidgetSelection> *selDict );
+      public:
+	WidgetSelection(FormWindow *parent, QPtrDict<WidgetSelection> *selDict);
 
-    void setWidget( QWidget *w, bool updateDict = TRUE );
-    bool isUsed() const;
+	void setWidget(QWidget *w, bool updateDict = TRUE);
+	bool isUsed() const;
 
-    void updateGeometry();
-    void hide();
-    void show();
-    void update();
-    
-    QWidget *widget() const;
+	void updateGeometry();
+	void hide();
+	void show();
+	void update();
 
-protected:
-    QIntDict<SizeHandle> handles;
-    QWidget *wid;
-    FormWindow *formWindow;
-    QPtrDict<WidgetSelection> *selectionDict;
+	QWidget *widget() const;
 
+      protected:
+	QIntDict<SizeHandle> handles;
+	QWidget *wid;
+	FormWindow *formWindow;
+	QPtrDict<WidgetSelection> *selectionDict;
 };
 
 #endif

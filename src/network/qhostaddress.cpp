@@ -42,38 +42,38 @@
 #ifndef QT_NO_NETWORK
 class QHostAddressPrivate
 {
-public:
-    QHostAddressPrivate( Q_UINT32 a_=0 ) : a(a_), isIp4(TRUE)
-    {
-    }
-    QHostAddressPrivate( Q_UINT8 *a_ );
-    ~QHostAddressPrivate()
-    {
-    }
-
-    QHostAddressPrivate & operator=( const QHostAddressPrivate &from )
-    {
-	a = from.a;
-	isIp4 = from.isIp4;
-	for ( int i=0; i<16; i++ ) {
-	    a6[i] = from.a6[i];
+      public:
+	QHostAddressPrivate(Q_UINT32 a_ = 0) : a(a_), isIp4(TRUE)
+	{
 	}
-	return *this;
-    }
+	QHostAddressPrivate(Q_UINT8 *a_);
+	~QHostAddressPrivate()
+	{
+	}
 
-private:
-    Q_UINT32 a;     // ip 4 address
-    Q_UINT8 a6[16]; // ip 6 address
-    bool isIp4;
+	QHostAddressPrivate &operator=(const QHostAddressPrivate &from)
+	{
+		a = from.a;
+		isIp4 = from.isIp4;
+		for (int i = 0; i < 16; i++) {
+			a6[i] = from.a6[i];
+		}
+		return *this;
+	}
 
-    friend class QHostAddress;
+      private:
+	Q_UINT32 a; // ip 4 address
+	Q_UINT8 a6[16]; // ip 6 address
+	bool isIp4;
+
+	friend class QHostAddress;
 };
 
-QHostAddressPrivate::QHostAddressPrivate( Q_UINT8 *a_ ) : a(0), isIp4(FALSE)
+QHostAddressPrivate::QHostAddressPrivate(Q_UINT8 *a_) : a(0), isIp4(FALSE)
 {
-    for ( int i=0; i<16; i++ ) {
-	a6[i] = a_[i];
-    }
+	for (int i = 0; i < 16; i++) {
+		a6[i] = a_[i];
+	}
 }
 
 /*!
@@ -96,8 +96,7 @@ QHostAddressPrivate::QHostAddressPrivate( Q_UINT8 *a_ ) : a(0), isIp4(FALSE)
 /*!
   Creates a socket address object with the IP address 0.0.0.0.
 */
-QHostAddress::QHostAddress()
-    : d( new QHostAddressPrivate )
+QHostAddress::QHostAddress() : d(new QHostAddressPrivate)
 {
 }
 
@@ -105,8 +104,8 @@ QHostAddress::QHostAddress()
 /*!
   Creates a socket address object with a specified IPv4 address.
 */
-QHostAddress::QHostAddress( Q_UINT32 ip4Addr )
-    : d( new QHostAddressPrivate( ip4Addr ) )
+QHostAddress::QHostAddress(Q_UINT32 ip4Addr)
+	: d(new QHostAddressPrivate(ip4Addr))
 {
 }
 
@@ -117,8 +116,8 @@ QHostAddress::QHostAddress( Q_UINT32 ip4Addr )
   \a ip6Addr must be a 16 byte array in network byte order (high-order byte
   first)
 */
-QHostAddress::QHostAddress( Q_UINT8 *ip6Addr )
-    : d( new QHostAddressPrivate( ip6Addr ) )
+QHostAddress::QHostAddress(Q_UINT8 *ip6Addr)
+	: d(new QHostAddressPrivate(ip6Addr))
 {
 }
 
@@ -126,10 +125,10 @@ QHostAddress::QHostAddress( Q_UINT8 *ip6Addr )
 /*!
   Creates a copy of \a address.
 */
-QHostAddress::QHostAddress( const QHostAddress &address )
-    : d( new QHostAddressPrivate )
+QHostAddress::QHostAddress(const QHostAddress &address)
+	: d(new QHostAddressPrivate)
 {
-    *d = *(address.d);
+	*d = *(address.d);
 }
 
 
@@ -138,7 +137,7 @@ QHostAddress::QHostAddress( const QHostAddress &address )
 */
 QHostAddress::~QHostAddress()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -146,20 +145,20 @@ QHostAddress::~QHostAddress()
   Assigns another socket address object \a address to this object and
   returns a reference to this object.
 */
-QHostAddress & QHostAddress::operator=( const QHostAddress & address )
+QHostAddress &QHostAddress::operator=(const QHostAddress &address)
 {
-    *d = *(address.d);
-    return *this;
+	*d = *(address.d);
+	return *this;
 }
 
 
 /*!
   Set a IPv4 address specified by \a ip4Addr.
 */
-void QHostAddress::setAddress( Q_UINT32 ip4Addr )
+void QHostAddress::setAddress(Q_UINT32 ip4Addr)
 {
-    delete d;
-    d = new QHostAddressPrivate( ip4Addr );
+	delete d;
+	d = new QHostAddressPrivate(ip4Addr);
 }
 
 
@@ -169,13 +168,13 @@ void QHostAddress::setAddress( Q_UINT32 ip4Addr )
   \a ip6Addr must be a 16 byte array in network byte order (high-order byte
   first)
 */
-void QHostAddress::setAddress( Q_UINT8 *ip6Addr )
+void QHostAddress::setAddress(Q_UINT8 *ip6Addr)
 {
-    delete d;
-    d = new QHostAddressPrivate( ip6Addr );
+	delete d;
+	d = new QHostAddressPrivate(ip6Addr);
 }
 
-#ifndef QT_NO_STRINGLIST
+# ifndef QT_NO_STRINGLIST
 /*!
   Sets the IPv4 or IPv6 address specified by the string representation
   \a address (e.g. "127.0.0.1").
@@ -183,31 +182,31 @@ void QHostAddress::setAddress( Q_UINT8 *ip6Addr )
   If this function is not able to parse the address it will return FALSE and
   the address is not changed.
 */
-bool QHostAddress::setAddress( const QString& address )
+bool QHostAddress::setAddress(const QString &address)
 {
-    QString a = address.simplifyWhiteSpace();
+	QString a = address.simplifyWhiteSpace();
 
-    // try ipv4
-    QStringList ipv4 = QStringList::split( ".", a, FALSE );
-    if ( ipv4.count() == 4 ) {
-	Q_UINT32 maybe = 0;
-	int i = 0;
-	bool ok = TRUE;
-	while( ok && i < 4 ) {
-	    uint byteValue = ipv4[i].toUInt( &ok );
-	    if ( byteValue > 255 )
-		ok = FALSE;
-	    if ( ok )
-		maybe = maybe * 256 + byteValue;
-	    i++;
+	// try ipv4
+	QStringList ipv4 = QStringList::split(".", a, FALSE);
+	if (ipv4.count() == 4) {
+		Q_UINT32 maybe = 0;
+		int i = 0;
+		bool ok = TRUE;
+		while (ok && i < 4) {
+			uint byteValue = ipv4[i].toUInt(&ok);
+			if (byteValue > 255)
+				ok = FALSE;
+			if (ok)
+				maybe = maybe * 256 + byteValue;
+			i++;
+		}
+		if (ok) {
+			setAddress(maybe);
+			return TRUE;
+		}
 	}
-	if ( ok ) {
-	    setAddress( maybe );
-	    return TRUE;
-	}
-    }
 
-#if 0
+#  if 0
     // ### add ipv6 support???
     // try ipv6
     QStringList ipv6 = QStringList::split( ":", a, TRUE );
@@ -257,18 +256,18 @@ bool QHostAddress::setAddress( const QString& address )
 	setAddress( maybe );
 	return TRUE;
     }
-#endif
+#  endif
 
-    return FALSE;
+	return FALSE;
 }
-#endif
+# endif
 
 /*!
   Return true if the host address represents a IPv4 address.
 */
 bool QHostAddress::isIp4Addr() const
 {
-    return d->isIp4;
+	return d->isIp4;
 }
 
 
@@ -284,7 +283,7 @@ bool QHostAddress::isIp4Addr() const
 */
 Q_UINT32 QHostAddress::ip4Addr() const
 {
-    return d->a;
+	return d->a;
 }
 
 
@@ -298,24 +297,23 @@ Q_UINT32 QHostAddress::ip4Addr() const
 */
 QString QHostAddress::toString() const
 {
-    if ( d->isIp4 ) {
-	Q_UINT32 i = ip4Addr();
-	QString s;
-	s.sprintf( "%d.%d.%d.%d", (i>>24) & 0xff, (i>>16) & 0xff,
-		(i >> 8) & 0xff, i & 0xff );
-	return s;
-    } else {
-	Q_UINT16 ugle[8];
-	for ( int i=0; i<8; i++ ) {
-	    ugle[i] = ( (Q_UINT16)( d->a6[2*i] ) << 8 ) |
-		( (Q_UINT16)( d->a6[2*i+1] ) );
+	if (d->isIp4) {
+		Q_UINT32 i = ip4Addr();
+		QString s;
+		s.sprintf("%d.%d.%d.%d", (i >> 24) & 0xff, (i >> 16) & 0xff,
+			  (i >> 8) & 0xff, i & 0xff);
+		return s;
+	} else {
+		Q_UINT16 ugle[8];
+		for (int i = 0; i < 8; i++) {
+			ugle[i] = ((Q_UINT16)(d->a6[2 * i]) << 8) |
+				  ((Q_UINT16)(d->a6[2 * i + 1]));
+		}
+		QString s;
+		s.sprintf("%x:%x:%x:%x:%x:%x:%x:%x", ugle[0], ugle[1], ugle[2],
+			  ugle[3], ugle[4], ugle[5], ugle[6], ugle[7]);
+		return s;
 	}
-	QString s;
-	s.sprintf( "%x:%x:%x:%x:%x:%x:%x:%x",
-		ugle[0], ugle[1], ugle[2], ugle[3],
-		ugle[4], ugle[5], ugle[6], ugle[7] );
-	return s;
-    }
 }
 
 
@@ -323,8 +321,8 @@ QString QHostAddress::toString() const
   Returns TRUE if this socket address is identical to \a other, or FALSE
   if they are different.
 */
-bool QHostAddress::operator==( const QHostAddress & other ) const
+bool QHostAddress::operator==(const QHostAddress &other) const
 {
-    return  d->a == other.d->a;
+	return d->a == other.d->a;
 }
-#endif //QT_NO_NETWORK
+#endif // QT_NO_NETWORK

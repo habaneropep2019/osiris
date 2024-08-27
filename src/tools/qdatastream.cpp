@@ -38,10 +38,10 @@
 #include "qdatastream.h"
 
 #ifndef QT_NO_DATASTREAM
-#include "qbuffer.h"
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
+# include "qbuffer.h"
+# include <stdio.h>
+# include <ctype.h>
+# include <stdlib.h>
 
 // REVISED: warwick
 /*!
@@ -169,16 +169,18 @@
   QDataStream member functions
  *****************************************************************************/
 
-#if defined(CHECK_STATE)
-#undef  CHECK_STREAM_PRECOND
-#define CHECK_STREAM_PRECOND  if ( !dev ) {				\
-				qWarning( "QDataStream: No device" );	\
-				return *this; }
-#else
-#define CHECK_STREAM_PRECOND
-#endif
+# if defined(CHECK_STATE)
+#  undef CHECK_STREAM_PRECOND
+#  define CHECK_STREAM_PRECOND                        \
+	  if (!dev) {                                 \
+		  qWarning("QDataStream: No device"); \
+		  return *this;                       \
+	  }
+# else
+#  define CHECK_STREAM_PRECOND
+# endif
 
-static int  systemWordSize = 0;
+static int systemWordSize = 0;
 static bool systemBigEndian;
 
 static const int DefaultStreamVersion = 3;
@@ -194,14 +196,14 @@ static const int DefaultStreamVersion = 3;
 
 QDataStream::QDataStream()
 {
-    if ( systemWordSize == 0 )			// get system features
-	qSysInfo( &systemWordSize, &systemBigEndian );
-    dev	      = 0;				// no device set
-    owndev    = FALSE;
-    byteorder = BigEndian;			// default byte order
-    printable = FALSE;
-    ver	      = DefaultStreamVersion;
-    noswap    = systemBigEndian;
+	if (systemWordSize == 0) // get system features
+		qSysInfo(&systemWordSize, &systemBigEndian);
+	dev = 0; // no device set
+	owndev = FALSE;
+	byteorder = BigEndian; // default byte order
+	printable = FALSE;
+	ver = DefaultStreamVersion;
+	noswap = systemBigEndian;
 }
 
 /*!
@@ -210,16 +212,16 @@ QDataStream::QDataStream()
   \sa setDevice(), device()
 */
 
-QDataStream::QDataStream( QIODevice *d )
+QDataStream::QDataStream(QIODevice *d)
 {
-    if ( systemWordSize == 0 )			// get system features
-	qSysInfo( &systemWordSize, &systemBigEndian );
-    dev	      = d;				// set device
-    owndev    = FALSE;
-    byteorder = BigEndian;			// default byte order
-    printable = FALSE;
-    ver	      = DefaultStreamVersion;
-    noswap    = systemBigEndian;
+	if (systemWordSize == 0) // get system features
+		qSysInfo(&systemWordSize, &systemBigEndian);
+	dev = d; // set device
+	owndev = FALSE;
+	byteorder = BigEndian; // default byte order
+	printable = FALSE;
+	ver = DefaultStreamVersion;
+	noswap = systemBigEndian;
 }
 
 /*!
@@ -239,17 +241,17 @@ QDataStream::QDataStream( QIODevice *d )
   The QArray::setRawData() function is not for the inexperienced.
 */
 
-QDataStream::QDataStream( QByteArray a, int mode )
+QDataStream::QDataStream(QByteArray a, int mode)
 {
-    if ( systemWordSize == 0 )			// get system features
-	qSysInfo( &systemWordSize, &systemBigEndian );
-    dev	      = new QBuffer( a );		// create device
-    ((QBuffer *)dev)->open( mode );		// open device
-    owndev    = TRUE;
-    byteorder = BigEndian;			// default byte order
-    printable = FALSE;
-    ver	      = DefaultStreamVersion;
-    noswap    = systemBigEndian;
+	if (systemWordSize == 0) // get system features
+		qSysInfo(&systemWordSize, &systemBigEndian);
+	dev = new QBuffer(a); // create device
+	((QBuffer *)dev)->open(mode); // open device
+	owndev = TRUE;
+	byteorder = BigEndian; // default byte order
+	printable = FALSE;
+	ver = DefaultStreamVersion;
+	noswap = systemBigEndian;
 }
 
 /*!
@@ -261,8 +263,8 @@ QDataStream::QDataStream( QByteArray a, int mode )
 
 QDataStream::~QDataStream()
 {
-    if ( owndev )
-	delete dev;
+	if (owndev)
+		delete dev;
 }
 
 
@@ -278,13 +280,13 @@ QDataStream::~QDataStream()
   \sa device(), unsetDevice()
 */
 
-void QDataStream::setDevice(QIODevice *d )
+void QDataStream::setDevice(QIODevice *d)
 {
-    if ( owndev ) {
-	delete dev;
-	owndev = FALSE;
-    }
-    dev = d;
+	if (owndev) {
+		delete dev;
+		owndev = FALSE;
+	}
+	dev = d;
 }
 
 /*!
@@ -294,7 +296,7 @@ void QDataStream::setDevice(QIODevice *d )
 
 void QDataStream::unsetDevice()
 {
-    setDevice( 0 );
+	setDevice(0);
 }
 
 
@@ -342,13 +344,13 @@ void QDataStream::unsetDevice()
   \sa byteOrder()
 */
 
-void QDataStream::setByteOrder( int bo )
+void QDataStream::setByteOrder(int bo)
 {
-    byteorder = bo;
-    if ( systemBigEndian )
-	noswap = byteorder == BigEndian;
-    else
-	noswap = byteorder == LittleEndian;
+	byteorder = bo;
+	if (systemBigEndian)
+		noswap = byteorder == BigEndian;
+	else
+		noswap = byteorder == LittleEndian;
 }
 
 
@@ -401,18 +403,18 @@ void QDataStream::setByteOrder( int bo )
  *****************************************************************************/
 
 
-static Q_INT32 read_int_ascii( QDataStream *s )
+static Q_INT32 read_int_ascii(QDataStream *s)
 {
-    register int n = 0;
-    char buf[40];
-    for (;;) {
-	buf[n] = s->device()->getch();
-	if ( buf[n] == '\n' || n > 38 )		// $-terminator
-	    break;
-	n++;
-    }
-    buf[n] = '\0';
-    return atol( buf );
+	register int n = 0;
+	char buf[40];
+	for (;;) {
+		buf[n] = s->device()->getch();
+		if (buf[n] == '\n' || n > 38) // $-terminator
+			break;
+		n++;
+	}
+	buf[n] = '\0';
+	return atol(buf);
 }
 
 
@@ -426,20 +428,21 @@ static Q_INT32 read_int_ascii( QDataStream *s )
   Reads a signed byte from the stream.
 */
 
-QDataStream &QDataStream::operator>>( Q_INT8 &i )
+QDataStream &QDataStream::operator>>(Q_INT8 &i)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// printable data
-	i = (Q_INT8)dev->getch();
-	if ( i == '\\' ) {			// read octal code
-	    char buf[4];
-	    dev->readBlock( buf, 3 );
-	    i = (buf[2] & 0x07)+((buf[1] & 0x07) << 3)+((buf[0] & 0x07) << 6);
+	CHECK_STREAM_PRECOND
+	if (printable) { // printable data
+		i = (Q_INT8)dev->getch();
+		if (i == '\\') { // read octal code
+			char buf[4];
+			dev->readBlock(buf, 3);
+			i = (buf[2] & 0x07) + ((buf[1] & 0x07) << 3) +
+			    ((buf[0] & 0x07) << 6);
+		}
+	} else { // data or text
+		i = (Q_INT8)dev->getch();
 	}
-    } else {					// data or text
-	i = (Q_INT8)dev->getch();
-    }
-    return *this;
+	return *this;
 }
 
 
@@ -454,21 +457,21 @@ QDataStream &QDataStream::operator>>( Q_INT8 &i )
   the stream.
 */
 
-QDataStream &QDataStream::operator>>( Q_INT16 &i )
+QDataStream &QDataStream::operator>>(Q_INT16 &i)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// printable data
-	i = (Q_INT16)read_int_ascii( this );
-    } else if ( noswap ) {			// no conversion needed
-	dev->readBlock( (char *)&i, sizeof(Q_INT16) );
-    } else {					// swap bytes
-	register uchar *p = (uchar *)(&i);
-	char b[2];
-	dev->readBlock( b, 2 );
-	*p++ = b[1];
-	*p   = b[0];
-    }
-    return *this;
+	CHECK_STREAM_PRECOND
+	if (printable) { // printable data
+		i = (Q_INT16)read_int_ascii(this);
+	} else if (noswap) { // no conversion needed
+		dev->readBlock((char *)&i, sizeof(Q_INT16));
+	} else { // swap bytes
+		register uchar *p = (uchar *)(&i);
+		char b[2];
+		dev->readBlock(b, 2);
+		*p++ = b[1];
+		*p = b[0];
+	}
+	return *this;
 }
 
 
@@ -483,23 +486,23 @@ QDataStream &QDataStream::operator>>( Q_INT16 &i )
   the stream.
 */
 
-QDataStream &QDataStream::operator>>( Q_INT32 &i )
+QDataStream &QDataStream::operator>>(Q_INT32 &i)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// printable data
-	i = read_int_ascii( this );
-    } else if ( noswap ) {			// no conversion needed
-	dev->readBlock( (char *)&i, sizeof(Q_INT32) );
-    } else {					// swap bytes
-	register uchar *p = (uchar *)(&i);
-	char b[4];
-	dev->readBlock( b, 4 );
-	*p++ = b[3];
-	*p++ = b[2];
-	*p++ = b[1];
-	*p   = b[0];
-    }
-    return *this;
+	CHECK_STREAM_PRECOND
+	if (printable) { // printable data
+		i = read_int_ascii(this);
+	} else if (noswap) { // no conversion needed
+		dev->readBlock((char *)&i, sizeof(Q_INT32));
+	} else { // swap bytes
+		register uchar *p = (uchar *)(&i);
+		char b[4];
+		dev->readBlock(b, 4);
+		*p++ = b[3];
+		*p++ = b[2];
+		*p++ = b[1];
+		*p = b[0];
+	}
+	return *this;
 }
 
 /*!
@@ -513,43 +516,43 @@ QDataStream &QDataStream::operator>>( Q_INT32 &i )
   the stream, or uses the Q_UINT32 operator if 64 bit is not available.
 */
 
-QDataStream &QDataStream::operator>>( Q_INT64 &i )
+QDataStream &QDataStream::operator>>(Q_INT64 &i)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// printable data
-	i = read_int_ascii( this );
-    } else if ( noswap ) {			// no conversion needed
-	dev->readBlock( (char *)&i, sizeof(Q_INT64) );
-    } else {					// swap bytes
-	uchar *p = (uchar *)(&i);
-	char b[sizeof(Q_INT64)];
-	dev->readBlock( b, sizeof(Q_INT64) );
-	if ( sizeof(Q_INT64) == 8 ) {
-	    *p++ = b[7];
-	    *p++ = b[6];
-	    *p++ = b[5];
-	    *p++ = b[4];
+	CHECK_STREAM_PRECOND
+	if (printable) { // printable data
+		i = read_int_ascii(this);
+	} else if (noswap) { // no conversion needed
+		dev->readBlock((char *)&i, sizeof(Q_INT64));
+	} else { // swap bytes
+		uchar *p = (uchar *)(&i);
+		char b[sizeof(Q_INT64)];
+		dev->readBlock(b, sizeof(Q_INT64));
+		if (sizeof(Q_INT64) == 8) {
+			*p++ = b[7];
+			*p++ = b[6];
+			*p++ = b[5];
+			*p++ = b[4];
+		}
+		*p++ = b[3];
+		*p++ = b[2];
+		*p++ = b[1];
+		*p = b[0];
 	}
-	*p++ = b[3];
-	*p++ = b[2];
-	*p++ = b[1];
-	*p   = b[0];
-    }
-    return *this;
+	return *this;
 }
 
-static double read_double_ascii( QDataStream *s )
+static double read_double_ascii(QDataStream *s)
 {
-    register int n = 0;
-    char buf[80];
-    for (;;) {
-	buf[n] = s->device()->getch();
-	if ( buf[n] == '\n' || n > 78 )		// $-terminator
-	    break;
-	n++;
-    }
-    buf[n] = '\0';
-    return atof( buf );
+	register int n = 0;
+	char buf[80];
+	for (;;) {
+		buf[n] = s->device()->getch();
+		if (buf[n] == '\n' || n > 78) // $-terminator
+			break;
+		n++;
+	}
+	buf[n] = '\0';
+	return atof(buf);
 }
 
 
@@ -558,23 +561,23 @@ static double read_double_ascii( QDataStream *s )
   IEEE754 format. Returns a reference to the stream.
 */
 
-QDataStream &QDataStream::operator>>( float &f )
+QDataStream &QDataStream::operator>>(float &f)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// printable data
-	f = (float)read_double_ascii( this );
-    } else if ( noswap ) {			// no conversion needed
-	dev->readBlock( (char *)&f, sizeof(float) );
-    } else {					// swap bytes
-	register uchar *p = (uchar *)(&f);
-	char b[4];
-	dev->readBlock( b, 4 );
-	*p++ = b[3];
-	*p++ = b[2];
-	*p++ = b[1];
-	*p   = b[0];
-    }
-    return *this;
+	CHECK_STREAM_PRECOND
+	if (printable) { // printable data
+		f = (float)read_double_ascii(this);
+	} else if (noswap) { // no conversion needed
+		dev->readBlock((char *)&f, sizeof(float));
+	} else { // swap bytes
+		register uchar *p = (uchar *)(&f);
+		char b[4];
+		dev->readBlock(b, 4);
+		*p++ = b[3];
+		*p++ = b[2];
+		*p++ = b[1];
+		*p = b[0];
+	}
+	return *this;
 }
 
 
@@ -583,27 +586,27 @@ QDataStream &QDataStream::operator>>( float &f )
   IEEE754 format. Returns a reference to the stream.
 */
 
-QDataStream &QDataStream::operator>>( double &f )
+QDataStream &QDataStream::operator>>(double &f)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// printable data
-	f = read_double_ascii( this );
-    } else if ( noswap ) {			// no conversion needed
-	dev->readBlock( (char *)&f, sizeof(double) );
-    } else {					// swap bytes
-	register uchar *p = (uchar *)(&f);
-	char b[8];
-	dev->readBlock( b, 8 );
-	*p++ = b[7];
-	*p++ = b[6];
-	*p++ = b[5];
-	*p++ = b[4];
-	*p++ = b[3];
-	*p++ = b[2];
-	*p++ = b[1];
-	*p   = b[0];
-    }
-    return *this;
+	CHECK_STREAM_PRECOND
+	if (printable) { // printable data
+		f = read_double_ascii(this);
+	} else if (noswap) { // no conversion needed
+		dev->readBlock((char *)&f, sizeof(double));
+	} else { // swap bytes
+		register uchar *p = (uchar *)(&f);
+		char b[8];
+		dev->readBlock(b, 8);
+		*p++ = b[7];
+		*p++ = b[6];
+		*p++ = b[5];
+		*p++ = b[4];
+		*p++ = b[3];
+		*p++ = b[2];
+		*p++ = b[1];
+		*p = b[0];
+	}
+	return *this;
 }
 
 
@@ -615,10 +618,10 @@ QDataStream &QDataStream::operator>>( double &f )
   eventually call delete[] on the value.
 */
 
-QDataStream &QDataStream::operator>>( char *&s )
+QDataStream &QDataStream::operator>>(char *&s)
 {
-    uint len = 0;
-    return readBytes( s, len );
+	uint len = 0;
+	return readBytes(s, len);
 }
 
 
@@ -638,22 +641,22 @@ QDataStream &QDataStream::operator>>( char *&s )
   \sa readRawBytes(), writeBytes()
 */
 
-QDataStream &QDataStream::readBytes( char *&s, uint &l )
+QDataStream &QDataStream::readBytes(char *&s, uint &l)
 {
-    CHECK_STREAM_PRECOND
-    Q_UINT32 len;
-    *this >> len;				// first read length spec
-    l = (uint)len;
-    if ( len == 0 || eof() ) {
-	s = 0;
-	return *this;
-    } else {
-	s = new char[len];			// create char array
-	CHECK_PTR( s );
-	if ( !s )				// no memory
-	    return *this;
-	return readRawBytes( s, (uint)len );
-    }
+	CHECK_STREAM_PRECOND
+	Q_UINT32 len;
+	*this >> len; // first read length spec
+	l = (uint)len;
+	if (len == 0 || eof()) {
+		s = 0;
+		return *this;
+	} else {
+		s = new char[len]; // create char array
+		CHECK_PTR(s);
+		if (!s) // no memory
+			return *this;
+		return readRawBytes(s, (uint)len);
+	}
 }
 
 
@@ -666,17 +669,17 @@ QDataStream &QDataStream::readBytes( char *&s, uint &l )
   \sa readBytes(), QIODevice::readBlock(), writeRawBytes()
 */
 
-QDataStream &QDataStream::readRawBytes( char *s, uint len )
+QDataStream &QDataStream::readRawBytes(char *s, uint len)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// printable data
-	register Q_INT8 *p = (Q_INT8*)s;
-	while ( len-- )
-	    *this >> *p++;
-    } else {					// read data char array
-	dev->readBlock( s, len );
-    }
-    return *this;
+	CHECK_STREAM_PRECOND
+	if (printable) { // printable data
+		register Q_INT8 *p = (Q_INT8 *)s;
+		while (len--)
+			*this >> *p++;
+	} else { // read data char array
+		dev->readBlock(s, len);
+	}
+	return *this;
 }
 
 
@@ -695,21 +698,21 @@ QDataStream &QDataStream::readRawBytes( char *s, uint len )
   Writes a signed byte to the stream.
 */
 
-QDataStream &QDataStream::operator<<( Q_INT8 i )
+QDataStream &QDataStream::operator<<(Q_INT8 i)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable && (i == '\\' || !isprint(i)) ) {
-	char buf[6];				// write octal code
-	buf[0] = '\\';
-	buf[1] = '0' + ((i >> 6) & 0x07);
-	buf[2] = '0' + ((i >> 3) & 0x07);
-	buf[3] = '0' + (i & 0x07);
-	buf[4] = '\0';
-	dev->writeBlock( buf, 4 );
-    } else {
-	dev->putch( i );
-    }
-    return *this;
+	CHECK_STREAM_PRECOND
+	if (printable && (i == '\\' || !isprint(i))) {
+		char buf[6]; // write octal code
+		buf[0] = '\\';
+		buf[1] = '0' + ((i >> 6) & 0x07);
+		buf[2] = '0' + ((i >> 3) & 0x07);
+		buf[3] = '0' + (i & 0x07);
+		buf[4] = '\0';
+		dev->writeBlock(buf, 4);
+	} else {
+		dev->putch(i);
+	}
+	return *this;
 }
 
 
@@ -724,23 +727,23 @@ QDataStream &QDataStream::operator<<( Q_INT8 i )
   the stream.
 */
 
-QDataStream &QDataStream::operator<<( Q_INT16 i )
+QDataStream &QDataStream::operator<<(Q_INT16 i)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// printable data
-	char buf[16];
-	sprintf( buf, "%d\n", i );
-	dev->writeBlock( buf, strlen(buf) );
-    } else if ( noswap ) {			// no conversion needed
-	dev->writeBlock( (char *)&i, sizeof(Q_INT16) );
-    } else {					// swap bytes
-	register uchar *p = (uchar *)(&i);
-	char b[2];
-	b[1] = *p++;
-	b[0] = *p;
-	dev->writeBlock( b, 2 );
-    }
-    return *this;
+	CHECK_STREAM_PRECOND
+	if (printable) { // printable data
+		char buf[16];
+		sprintf(buf, "%d\n", i);
+		dev->writeBlock(buf, strlen(buf));
+	} else if (noswap) { // no conversion needed
+		dev->writeBlock((char *)&i, sizeof(Q_INT16));
+	} else { // swap bytes
+		register uchar *p = (uchar *)(&i);
+		char b[2];
+		b[1] = *p++;
+		b[0] = *p;
+		dev->writeBlock(b, 2);
+	}
+	return *this;
 }
 
 
@@ -755,25 +758,25 @@ QDataStream &QDataStream::operator<<( Q_INT16 i )
   the stream.
 */
 
-QDataStream &QDataStream::operator<<( Q_INT32 i )
+QDataStream &QDataStream::operator<<(Q_INT32 i)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// printable data
-	char buf[16];
-	sprintf( buf, "%d\n", i );
-	dev->writeBlock( buf, strlen(buf) );
-    } else if ( noswap ) {			// no conversion needed
-	dev->writeBlock( (char *)&i, sizeof(Q_INT32) );
-    } else {					// swap bytes
-	register uchar *p = (uchar *)(&i);
-	char b[4];
-	b[3] = *p++;
-	b[2] = *p++;
-	b[1] = *p++;
-	b[0] = *p;
-	dev->writeBlock( b, 4 );
-    }
-    return *this;
+	CHECK_STREAM_PRECOND
+	if (printable) { // printable data
+		char buf[16];
+		sprintf(buf, "%d\n", i);
+		dev->writeBlock(buf, strlen(buf));
+	} else if (noswap) { // no conversion needed
+		dev->writeBlock((char *)&i, sizeof(Q_INT32));
+	} else { // swap bytes
+		register uchar *p = (uchar *)(&i);
+		char b[4];
+		b[3] = *p++;
+		b[2] = *p++;
+		b[1] = *p++;
+		b[0] = *p;
+		dev->writeBlock(b, 4);
+	}
+	return *this;
 }
 
 /*!
@@ -787,31 +790,31 @@ QDataStream &QDataStream::operator<<( Q_INT32 i )
   the stream, or calls the Q_INT32-operator if 64 bit is not available.
 */
 
-QDataStream &QDataStream::operator<<( Q_INT64 i )
+QDataStream &QDataStream::operator<<(Q_INT64 i)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// printable data
-	char buf[20];
-	sprintf( buf, "%ld\n", i );
-	dev->writeBlock( buf, strlen(buf) );
-    } else if ( noswap ) {			// no conversion needed
-	dev->writeBlock( (char *)&i, sizeof(Q_INT64) );
-    } else {					// swap bytes
-	uchar *p = (uchar *)(&i);
-	char b[sizeof(Q_INT64)];
-	if ( sizeof(Q_INT64) == 8 ) {
-	    b[7] = *p++;
-	    b[6] = *p++;
-	    b[5] = *p++;
-	    b[4] = *p++;
+	CHECK_STREAM_PRECOND
+	if (printable) { // printable data
+		char buf[20];
+		sprintf(buf, "%ld\n", i);
+		dev->writeBlock(buf, strlen(buf));
+	} else if (noswap) { // no conversion needed
+		dev->writeBlock((char *)&i, sizeof(Q_INT64));
+	} else { // swap bytes
+		uchar *p = (uchar *)(&i);
+		char b[sizeof(Q_INT64)];
+		if (sizeof(Q_INT64) == 8) {
+			b[7] = *p++;
+			b[6] = *p++;
+			b[5] = *p++;
+			b[4] = *p++;
+		}
+		b[3] = *p++;
+		b[2] = *p++;
+		b[1] = *p++;
+		b[0] = *p;
+		dev->writeBlock(b, sizeof(Q_INT64));
 	}
-	b[3] = *p++;
-	b[2] = *p++;
-	b[1] = *p++;
-	b[0] = *p;
-	dev->writeBlock( b, sizeof(Q_INT64) );
-    }
-    return *this;
+	return *this;
 }
 
 /*!
@@ -833,28 +836,28 @@ QDataStream &QDataStream::operator<<( Q_INT64 i )
   IEEE754 format.  Returns a reference to the stream.
 */
 
-QDataStream &QDataStream::operator<<( float f )
+QDataStream &QDataStream::operator<<(float f)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// printable data
-	char buf[32];
-	sprintf( buf, "%g\n", (double)f );
-	dev->writeBlock( buf, strlen(buf) );
-    } else {
-	float g = f;				// fixes float-on-stack problem
-	if ( noswap ) {				// no conversion needed
-	    dev->writeBlock( (char *)&g, sizeof(float) );
-	} else {				// swap bytes
-	    register uchar *p = (uchar *)(&g);
-	    char b[4];
-	    b[3] = *p++;
-	    b[2] = *p++;
-	    b[1] = *p++;
-	    b[0] = *p;
-	    dev->writeBlock( b, 4 );
+	CHECK_STREAM_PRECOND
+	if (printable) { // printable data
+		char buf[32];
+		sprintf(buf, "%g\n", (double)f);
+		dev->writeBlock(buf, strlen(buf));
+	} else {
+		float g = f; // fixes float-on-stack problem
+		if (noswap) { // no conversion needed
+			dev->writeBlock((char *)&g, sizeof(float));
+		} else { // swap bytes
+			register uchar *p = (uchar *)(&g);
+			char b[4];
+			b[3] = *p++;
+			b[2] = *p++;
+			b[1] = *p++;
+			b[0] = *p;
+			dev->writeBlock(b, 4);
+		}
 	}
-    }
-    return *this;
+	return *this;
 }
 
 
@@ -863,29 +866,29 @@ QDataStream &QDataStream::operator<<( float f )
   IEEE754 format.  Returns a reference to the stream.
 */
 
-QDataStream &QDataStream::operator<<( double f )
+QDataStream &QDataStream::operator<<(double f)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// printable data
-	char buf[32];
-	sprintf( buf, "%g\n", f );
-	dev->writeBlock( buf, strlen(buf) );
-    } else if ( noswap ) {			// no conversion needed
-	dev->writeBlock( (char *)&f, sizeof(double) );
-    } else {					// swap bytes
-	register uchar *p = (uchar *)(&f);
-	char b[8];
-	b[7] = *p++;
-	b[6] = *p++;
-	b[5] = *p++;
-	b[4] = *p++;
-	b[3] = *p++;
-	b[2] = *p++;
-	b[1] = *p++;
-	b[0] = *p;
-	dev->writeBlock( b, 8 );
-    }
-    return *this;
+	CHECK_STREAM_PRECOND
+	if (printable) { // printable data
+		char buf[32];
+		sprintf(buf, "%g\n", f);
+		dev->writeBlock(buf, strlen(buf));
+	} else if (noswap) { // no conversion needed
+		dev->writeBlock((char *)&f, sizeof(double));
+	} else { // swap bytes
+		register uchar *p = (uchar *)(&f);
+		char b[8];
+		b[7] = *p++;
+		b[6] = *p++;
+		b[5] = *p++;
+		b[4] = *p++;
+		b[3] = *p++;
+		b[2] = *p++;
+		b[1] = *p++;
+		b[0] = *p;
+		dev->writeBlock(b, 8);
+	}
+	return *this;
 }
 
 
@@ -896,15 +899,15 @@ QDataStream &QDataStream::operator<<( double f )
   The string is serialized using writeBytes().
 */
 
-QDataStream &QDataStream::operator<<( const char *s )
+QDataStream &QDataStream::operator<<(const char *s)
 {
-    if ( !s ) {
-	*this << (Q_UINT32)0;
-	return *this;
-    }
-    uint len = qstrlen( s ) + 1;			// also write null terminator
-    *this << (Q_UINT32)len;			// write length specifier
-    return writeRawBytes( s, len );
+	if (!s) {
+		*this << (Q_UINT32)0;
+		return *this;
+	}
+	uint len = qstrlen(s) + 1; // also write null terminator
+	*this << (Q_UINT32)len; // write length specifier
+	return writeRawBytes(s, len);
 }
 
 
@@ -920,11 +923,11 @@ QDataStream &QDataStream::operator<<( const char *s )
 
 QDataStream &QDataStream::writeBytes(const char *s, uint len)
 {
-    CHECK_STREAM_PRECOND
-    *this << (Q_UINT32)len;			// write length specifier
-    if ( len )
-	writeRawBytes( s, len );
-    return *this;
+	CHECK_STREAM_PRECOND
+	*this << (Q_UINT32)len; // write length specifier
+	if (len)
+		writeRawBytes(s, len);
+	return *this;
 }
 
 
@@ -935,17 +938,17 @@ QDataStream &QDataStream::writeBytes(const char *s, uint len)
   \sa writeBytes(), QIODevice::writeBlock(), readRawBytes()
 */
 
-QDataStream &QDataStream::writeRawBytes( const char *s, uint len )
+QDataStream &QDataStream::writeRawBytes(const char *s, uint len)
 {
-    CHECK_STREAM_PRECOND
-    if ( printable ) {				// write printable
-	register char *p = (char *)s;
-	while ( len-- )
-	    *this << *p++;
-    } else {					// write data char array
-	dev->writeBlock( s, len );
-    }
-    return *this;
+	CHECK_STREAM_PRECOND
+	if (printable) { // write printable
+		register char *p = (char *)s;
+		while (len--)
+			*this << *p++;
+	} else { // write data char array
+		dev->writeBlock(s, len);
+	}
+	return *this;
 }
 
 #endif // QT_NO_DATASTREAM

@@ -37,36 +37,36 @@
 #define QWHATSTHIS_H
 
 #ifndef QT_H
-#include "qobject.h"
+# include "qobject.h"
 #endif // QT_H
 
 #ifndef QT_NO_WHATSTHIS
 
-#include "qcursor.h"
+# include "qcursor.h"
 
 class QToolButton;
 class QPopupMenu;
 class QStyleSheet;
 
-class Q_EXPORT QWhatsThis: public Qt
+class Q_EXPORT QWhatsThis : public Qt
 {
-public:
-    QWhatsThis( QWidget *);
-    virtual ~QWhatsThis();
+      public:
+	QWhatsThis(QWidget *);
+	virtual ~QWhatsThis();
 
-    virtual QString text( const QPoint & );
+	virtual QString text(const QPoint &);
 
-    // the common static functions
-    static void add( QWidget *, const QString &);
-    static void remove( QWidget * );
-    static QString textFor( QWidget *, const QPoint & pos = QPoint() );
+	// the common static functions
+	static void add(QWidget *, const QString &);
+	static void remove(QWidget *);
+	static QString textFor(QWidget *, const QPoint &pos = QPoint());
 
-    static QToolButton * whatsThisButton( QWidget * parent );
+	static QToolButton *whatsThisButton(QWidget *parent);
 
-    static void enterWhatsThisMode();
-    static bool inWhatsThisMode();
-    static void leaveWhatsThisMode( const QString& = QString::null, const QPoint& pos = QCursor::pos() );
-
+	static void enterWhatsThisMode();
+	static bool inWhatsThisMode();
+	static void leaveWhatsThisMode(const QString & = QString::null,
+				       const QPoint &pos = QCursor::pos());
 };
 
 #endif // QT_NO_WHATSTHIS

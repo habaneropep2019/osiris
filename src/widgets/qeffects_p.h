@@ -39,25 +39,26 @@
 #define QEFFECTS_H
 
 #ifndef QT_H
-#include "qnamespace.h"
+# include "qnamespace.h"
 #endif // QT_H
 
 #ifndef QT_NO_EFFECTS
 class QWidget;
 
-struct QEffects
-{
-    enum Direction {
-	LeftScroll	= 0x0001,
-	RightScroll	= 0x0002,
-	UpScroll	= 0x0004,
-	DownScroll	= 0x0008
-    };
+struct QEffects {
+	enum Direction {
+		LeftScroll = 0x0001,
+		RightScroll = 0x0002,
+		UpScroll = 0x0004,
+		DownScroll = 0x0008
+	};
 
-    typedef uint DirFlags;
+	typedef uint DirFlags;
 };
 
-extern void Q_EXPORT qScrollEffect( QWidget*, QEffects::DirFlags dir = QEffects::DownScroll, int time = -1 );
-extern void Q_EXPORT qFadeEffect( QWidget*, int time = -1 );
+extern void Q_EXPORT qScrollEffect(QWidget *,
+				   QEffects::DirFlags dir = QEffects::DownScroll,
+				   int time = -1);
+extern void Q_EXPORT qFadeEffect(QWidget *, int time = -1);
 #endif // QT_NO_EFFECTS
 #endif // QEFFECTS_H

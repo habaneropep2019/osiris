@@ -36,61 +36,59 @@
 **********************************************************************/
 #include "qstyle.h"
 #ifndef QT_NO_STYLE
-#include "qapplication.h"
-#include "qpainter.h"
-#include "qdrawutil.h" // for now
-#include "qpixmap.h" // for now
-#include "qpalette.h" // for now
-#include "qwidget.h"
-#include "qimage.h"
-#include "qwidget.h"
-#include "qptrdict.h" //binary compatibility
+# include "qapplication.h"
+# include "qpainter.h"
+# include "qdrawutil.h" // for now
+# include "qpixmap.h" // for now
+# include "qpalette.h" // for now
+# include "qwidget.h"
+# include "qimage.h"
+# include "qwidget.h"
+# include "qptrdict.h" //binary compatibility
 
 
-#include <limits.h>
+# include <limits.h>
 
 
 class QStylePrivate
 {
-public:
-    QStylePrivate()
-	:sbextent(16,16),
-	 button_default_indicator_width(0),
-	 button_margin( 6 ),
-	 slider_thickness(16)
-    {
-    }
+      public:
+	QStylePrivate()
+		: sbextent(16, 16), button_default_indicator_width(0),
+		  button_margin(6), slider_thickness(16)
+	{
+	}
 
-    QSize sbextent;
-    int button_default_indicator_width;
-    int button_margin;
-    int slider_thickness;
+	QSize sbextent;
+	int button_default_indicator_width;
+	int button_margin;
+	int slider_thickness;
 };
 
 static QPtrDict<QStylePrivate> *d_ptr = 0;
 static void cleanup_d_ptr()
 {
-    delete d_ptr;
-    d_ptr = 0;
+	delete d_ptr;
+	d_ptr = 0;
 }
-static QStylePrivate* d( const QStyle* foo )
+static QStylePrivate *d(const QStyle *foo)
 {
-    if ( !d_ptr ) {
-	d_ptr = new QPtrDict<QStylePrivate>;
-	d_ptr->setAutoDelete( TRUE );
-	qAddPostRoutine( cleanup_d_ptr );
-    }
-    QStylePrivate* ret = d_ptr->find( (void*)foo );
-    if ( ! ret ) {
-	ret = new QStylePrivate;
-	d_ptr->replace( (void*) foo, ret );
-    }
-    return ret;
+	if (!d_ptr) {
+		d_ptr = new QPtrDict<QStylePrivate>;
+		d_ptr->setAutoDelete(TRUE);
+		qAddPostRoutine(cleanup_d_ptr);
+	}
+	QStylePrivate *ret = d_ptr->find((void *)foo);
+	if (!ret) {
+		ret = new QStylePrivate;
+		d_ptr->replace((void *)foo, ret);
+	}
+	return ret;
 }
-static void delete_d( const QStyle* foo )
+static void delete_d(const QStyle *foo)
 {
-    if ( d_ptr )
-	d_ptr->remove( (void*) foo );
+	if (d_ptr)
+		d_ptr->remove((void *)foo);
 }
 
 
@@ -144,12 +142,13 @@ QStyle::QStyle(GUIStyle s) : gs(s)
   Constructs a QStyle that provides the style most appropriate for
   the operating system - WindowsStyle for Windows, MotifStyle for Unix.
 */
-QStyle::QStyle() :
-#ifdef _WS_X11_
-    gs(MotifStyle)
-#else
-    gs(WindowsStyle)
-#endif
+QStyle::QStyle()
+	:
+# ifdef _WS_X11_
+	  gs(MotifStyle)
+# else
+	  gs(WindowsStyle)
+# endif
 {
 }
 
@@ -158,7 +157,7 @@ QStyle::QStyle() :
 */
 QStyle::~QStyle()
 {
-    delete_d( this );
+	delete_d(this);
 }
 
 /*!
@@ -189,7 +188,7 @@ QStyle::~QStyle()
 
   \sa unPolish(QWidget*)
 */
-void QStyle::polish( QWidget*)
+void QStyle::polish(QWidget *)
 {
 }
 
@@ -203,7 +202,7 @@ void QStyle::polish( QWidget*)
 
   \sa polish(QWidget*)
 */
-void QStyle::unPolish( QWidget*)
+void QStyle::unPolish(QWidget *)
 {
 }
 
@@ -213,7 +212,7 @@ void QStyle::unPolish( QWidget*)
 
   \sa unPolish(QApplication*)
  */
-void QStyle::polish( QApplication*)
+void QStyle::polish(QApplication *)
 {
 }
 
@@ -222,7 +221,7 @@ void QStyle::polish( QApplication*)
 
   \sa polish(QApplication*)
  */
-void QStyle::unPolish( QApplication*)
+void QStyle::unPolish(QApplication *)
 {
 }
 
@@ -233,7 +232,7 @@ void QStyle::unPolish( QApplication*)
 
   \sa QPalette, QApplication::setPalette()
  */
-void QStyle::polish( QPalette&)
+void QStyle::polish(QPalette &)
 {
 }
 
@@ -242,58 +241,53 @@ void QStyle::polish( QPalette&)
   Returns the appropriate area within a rectangle in which to
   draw text or a pixmap.
 */
-QRect
-QStyle::itemRect( QPainter *p, int x, int y, int w, int h,
-		int flags, bool enabled,
-		const QPixmap *pixmap, const QString& text, int len )
+QRect QStyle::itemRect(QPainter *p, int x, int y, int w, int h, int flags,
+		       bool enabled, const QPixmap *pixmap, const QString &text,
+		       int len)
 {
-    return qItemRect( p, gs, x, y, w, h, flags, enabled, pixmap, text, len );
+	return qItemRect(p, gs, x, y, w, h, flags, enabled, pixmap, text, len);
 }
 
 /*!
   Draw text or a pixmap in an area.
 */
-void
-QStyle::drawItem( QPainter *p, int x, int y, int w, int h,
-		int flags, const QColorGroup &g, bool enabled,
-		const QPixmap *pixmap, const QString& text, int len, const QColor* penColor )
+void QStyle::drawItem(QPainter *p, int x, int y, int w, int h, int flags,
+		      const QColorGroup &g, bool enabled, const QPixmap *pixmap,
+		      const QString &text, int len, const QColor *penColor)
 {
-    qDrawItem( p, gs, x, y, w, h, flags, g, enabled, pixmap, text, len, penColor );
+	qDrawItem(p, gs, x, y, w, h, flags, g, enabled, pixmap, text, len,
+		  penColor);
 }
 
 
 /*!
   Draws a line to separate parts of the visual interface.
 */
-void
-QStyle::drawSeparator( QPainter *p, int x1, int y1, int x2, int y2,
-		 const QColorGroup &g, bool sunken,
-		 int lineWidth, int midLineWidth )
+void QStyle::drawSeparator(QPainter *p, int x1, int y1, int x2, int y2,
+			   const QColorGroup &g, bool sunken, int lineWidth,
+			   int midLineWidth)
 {
-    qDrawShadeLine( p, x1, y1, x2, y2, g, sunken, lineWidth, midLineWidth );
+	qDrawShadeLine(p, x1, y1, x2, y2, g, sunken, lineWidth, midLineWidth);
 }
 
 /*!
   Draws a simple rectangle to separate parts of the visual interface.
 */
-void
-QStyle::drawRect( QPainter *p, int x, int y, int w, int h,
-		const QColor &c, int lineWidth,
-		const QBrush *fill )
+void QStyle::drawRect(QPainter *p, int x, int y, int w, int h, const QColor &c,
+		      int lineWidth, const QBrush *fill)
 {
-    qDrawPlainRect( p, x, y, w, h, c, lineWidth, fill );
+	qDrawPlainRect(p, x, y, w, h, c, lineWidth, fill);
 }
 
 /*!
-  Draws an emphasized rectangle to strongly separate parts of the visual interface.
+  Draws an emphasized rectangle to strongly separate parts of the visual
+  interface.
 */
-void
-QStyle::drawRectStrong( QPainter *p, int x, int y, int w, int h,
-		 const QColorGroup &g, bool sunken,
-		 int lineWidth, int midLineWidth,
-		 const QBrush *fill )
+void QStyle::drawRectStrong(QPainter *p, int x, int y, int w, int h,
+			    const QColorGroup &g, bool sunken, int lineWidth,
+			    int midLineWidth, const QBrush *fill)
 {
-    qDrawShadeRect( p, x, y, w, h, g, sunken, lineWidth, midLineWidth, fill );
+	qDrawShadeRect(p, x, y, w, h, g, sunken, lineWidth, midLineWidth, fill);
 }
 
 /*!
@@ -321,9 +315,10 @@ QStyle::drawRectStrong( QPainter *p, int x, int y, int w, int h,
 
   \sa drawBevelButton()
 */
-QRect QStyle::bevelButtonRect( int x, int y, int w, int h){
-    int fw = defaultFrameWidth();
-    return QRect(x+fw, y+fw, w-2*fw, h-2*fw);
+QRect QStyle::bevelButtonRect(int x, int y, int w, int h)
+{
+	int fw = defaultFrameWidth();
+	return QRect(x + fw, y + fw, w - 2 * fw, h - 2 * fw);
 }
 
 
@@ -333,10 +328,11 @@ QRect QStyle::bevelButtonRect( int x, int y, int w, int h){
   The default implementation calls drawBevelButton()
   \sa drawBevelButton()
 */
-void QStyle::drawToolButton( QPainter *p, int x, int y, int w, int h,
-			     const QColorGroup &g, bool sunken, const QBrush* fill)
+void QStyle::drawToolButton(QPainter *p, int x, int y, int w, int h,
+			    const QColorGroup &g, bool sunken,
+			    const QBrush *fill)
 {
-    drawBevelButton(p, x, y, w, h, g, sunken, fill);
+	drawBevelButton(p, x, y, w, h, g, sunken, fill);
 }
 
 /*!
@@ -348,8 +344,9 @@ void QStyle::drawToolButton( QPainter *p, int x, int y, int w, int h,
 
   \sa drawToolButton()
 */
-QRect QStyle::toolButtonRect( int x, int y, int w, int h){
-    return bevelButtonRect( x, y, w, h );
+QRect QStyle::toolButtonRect(int x, int y, int w, int h)
+{
+	return bevelButtonRect(x, y, w, h);
 }
 
 
@@ -361,9 +358,10 @@ QRect QStyle::toolButtonRect( int x, int y, int w, int h){
 
   \sa drawButton()
 */
-QRect QStyle::buttonRect( int x, int y, int w, int h){
-    int fw = defaultFrameWidth();
-    return QRect(x+fw, y+fw, w-2*fw, h-2*fw);
+QRect QStyle::buttonRect(int x, int y, int w, int h)
+{
+	int fw = defaultFrameWidth();
+	return QRect(x + fw, y + fw, w - 2 * fw, h - 2 * fw);
 }
 
 /*!
@@ -372,15 +370,15 @@ QRect QStyle::buttonRect( int x, int y, int w, int h){
 
   \sa drawButtonMask()
 */
-void QStyle::drawButtonMask( QPainter * p, int x, int y, int w, int h )
+void QStyle::drawButtonMask(QPainter *p, int x, int y, int w, int h)
 {
-    QPen oldPen = p->pen();
-    QBrush oldBrush = p->brush();
+	QPen oldPen = p->pen();
+	QBrush oldBrush = p->brush();
 
-    p->fillRect( x, y, w, h, QBrush(color1) );
+	p->fillRect(x, y, w, h, QBrush(color1));
 
-    p->setBrush( oldBrush );
-    p->setPen( oldPen );
+	p->setBrush(oldBrush);
+	p->setPen(oldPen);
 }
 
 /*!
@@ -400,16 +398,17 @@ void QStyle::drawButtonMask( QPainter * p, int x, int y, int w, int h )
   indicator, but it may also be smaller when you think about rounded
   buttons.
 */
-QRect QStyle::comboButtonRect( int x, int y, int w, int h)
+QRect QStyle::comboButtonRect(int x, int y, int w, int h)
 {
-    return buttonRect(x+3, y+3, w-6-21, h-6);
+	return buttonRect(x + 3, y + 3, w - 6 - 21, h - 6);
 }
 
 /*! \fn QRect QStyle::comboButtonFocusRect( int x, int y, int w, int h)
   Returns the rectangle used to draw the the focus rectangle in a combo box.
 */
 
-/*! \fn void QStyle::drawComboButtonMask( QPainter *p, int x, int y, int w, int h)
+/*! \fn void QStyle::drawComboButtonMask( QPainter *p, int x, int y, int w, int
+  h)
 
   Draw the mask of a combo box button. Useful if a rounded buttons
   needs to be transparent because the style uses a fancy background
@@ -464,83 +463,85 @@ QRect QStyle::comboButtonRect( int x, int y, int w, int h)
 /*!
   Draws a panel to separate parts of the visual interface.
 */
-void
-QStyle::drawPanel( QPainter *p, int x, int y, int w, int h,
-		const QColorGroup &g, bool sunken,
-		int lineWidth, const QBrush* fill)
+void QStyle::drawPanel(QPainter *p, int x, int y, int w, int h,
+		       const QColorGroup &g, bool sunken, int lineWidth,
+		       const QBrush *fill)
 {
-	if ( w == 0 || h == 0 )
-	return;
-#if defined(CHECK_RANGE)
-    ASSERT( w > 0 && h > 0 && lineWidth >= 0 );
-#endif
-    QPen oldPen = p->pen();			// save pen
-    QPointArray a( 4*lineWidth );
-    if ( sunken )
-	p->setPen( g.dark() );
-    else
-	p->setPen( g.light() );
-    int x1, y1, x2, y2;
-    int i;
-    int n = 0;
-    x1 = x;
-    y1 = y2 = y;
-    x2 = x+w-2;
-    for ( i=0; i<lineWidth; i++ ) {		// top shadow
-	a.setPoint( n++, x1, y1++ );
-	a.setPoint( n++, x2--, y2++ );
-    }
-    x2 = x1;
-    y1 = y+h-2;
-    for ( i=0; i<lineWidth; i++ ) {		// left shadow
-	a.setPoint( n++, x1++, y1 );
-	a.setPoint( n++, x2++, y2-- );
-    }
-    p->drawLineSegments( a );
-    n = 0;
-    if ( sunken )
-	p->setPen( g.light() );
-    else
-	p->setPen( g.dark() );
-    x1 = x;
-    y1 = y2 = y+h-1;
-    x2 = x+w-1;
-    for ( i=0; i<lineWidth; i++ ) {		// bottom shadow
-	a.setPoint( n++, x1++, y1-- );
-	a.setPoint( n++, x2, y2-- );
-    }
-    x1 = x2;
-    y1 = y;
-    y2 = y+h-lineWidth-1;
-    for ( i=0; i<lineWidth; i++ ) {		// right shadow
-	a.setPoint( n++, x1--, y1++ );
-	a.setPoint( n++, x2--, y2 );
-    }
-    p->drawLineSegments( a );
-    if ( fill ) {				// fill with fill color
-	QBrush oldBrush = p->brush();
-	p->setPen( NoPen );
-	p->setBrush( *fill );
-	p->drawRect( x+lineWidth, y+lineWidth, w-lineWidth*2, h-lineWidth*2 );
-	p->setBrush( oldBrush );
-    }
-    p->setPen( oldPen );			// restore pen
+	if (w == 0 || h == 0)
+		return;
+# if defined(CHECK_RANGE)
+	ASSERT(w > 0 && h > 0 && lineWidth >= 0);
+# endif
+	QPen oldPen = p->pen(); // save pen
+	QPointArray a(4 * lineWidth);
+	if (sunken)
+		p->setPen(g.dark());
+	else
+		p->setPen(g.light());
+	int x1, y1, x2, y2;
+	int i;
+	int n = 0;
+	x1 = x;
+	y1 = y2 = y;
+	x2 = x + w - 2;
+	for (i = 0; i < lineWidth; i++) { // top shadow
+		a.setPoint(n++, x1, y1++);
+		a.setPoint(n++, x2--, y2++);
+	}
+	x2 = x1;
+	y1 = y + h - 2;
+	for (i = 0; i < lineWidth; i++) { // left shadow
+		a.setPoint(n++, x1++, y1);
+		a.setPoint(n++, x2++, y2--);
+	}
+	p->drawLineSegments(a);
+	n = 0;
+	if (sunken)
+		p->setPen(g.light());
+	else
+		p->setPen(g.dark());
+	x1 = x;
+	y1 = y2 = y + h - 1;
+	x2 = x + w - 1;
+	for (i = 0; i < lineWidth; i++) { // bottom shadow
+		a.setPoint(n++, x1++, y1--);
+		a.setPoint(n++, x2, y2--);
+	}
+	x1 = x2;
+	y1 = y;
+	y2 = y + h - lineWidth - 1;
+	for (i = 0; i < lineWidth; i++) { // right shadow
+		a.setPoint(n++, x1--, y1++);
+		a.setPoint(n++, x2--, y2);
+	}
+	p->drawLineSegments(a);
+	if (fill) { // fill with fill color
+		QBrush oldBrush = p->brush();
+		p->setPen(NoPen);
+		p->setBrush(*fill);
+		p->drawRect(x + lineWidth, y + lineWidth, w - lineWidth * 2,
+			    h - lineWidth * 2);
+		p->setBrush(oldBrush);
+	}
+	p->setPen(oldPen); // restore pen
 }
 
 
 /*!
   Draws a panel suitable as frame for popup windows.
 */
-void QStyle::drawPopupPanel( QPainter *p, int x, int y, int w, int h,
-		     const QColorGroup &cg, int lineWidth,
-		     const QBrush *fill )
+void QStyle::drawPopupPanel(QPainter *p, int x, int y, int w, int h,
+			    const QColorGroup &cg, int lineWidth,
+			    const QBrush *fill)
 {
-    drawPanel( p, x, y, w, h, cg, FALSE, lineWidth, fill );
+	drawPanel(p, x, y, w, h, cg, FALSE, lineWidth, fill);
 }
 
 /*!
-  \fn void QStyle::drawArrow( QPainter *p, Qt::ArrowType type, bool down, int x, int y, int w, int h, const QColorGroup &g, bool enabled, const QBrush *fill)
-  Draws an arrow to indicate direction. Used for example in scrollbars and spin-boxes.
+  \fn void QStyle::drawArrow( QPainter *p, Qt::ArrowType type, bool down, int x,
+  int y, int w, int h, const QColorGroup &g, bool enabled, const QBrush *fill)
+  Draws an arrow to indicate direction. Used for example in scrollbars and
+  spin-boxes.
 */
 
 /*!
@@ -550,19 +551,19 @@ void QStyle::drawPopupPanel( QPainter *p, int x, int y, int w, int h,
 
 
 /*!
-  \fn void QStyle::drawExclusiveIndicator( QPainter* , int x, int y, int w, int h,
-		const QColorGroup &, bool on, bool down, bool enabled )
-  Draws a mark indicating the state of an exclusive choice.
+  \fn void QStyle::drawExclusiveIndicator( QPainter* , int x, int y, int w, int
+  h, const QColorGroup &, bool on, bool down, bool enabled ) Draws a mark
+  indicating the state of an exclusive choice.
 */
 
 
 /*!
   Draws the mask of a mark indicating the state of an exclusive choice
 */
-void
-QStyle::drawExclusiveIndicatorMask( QPainter *p, int x, int y, int w, int h, bool /* on */)
+void QStyle::drawExclusiveIndicatorMask(QPainter *p, int x, int y, int w, int h,
+					bool /* on */)
 {
-    p->fillRect(x, y, w, h, color1);
+	p->fillRect(x, y, w, h, color1);
 }
 
 /*!
@@ -572,23 +573,24 @@ QStyle::drawExclusiveIndicatorMask( QPainter *p, int x, int y, int w, int h, boo
 
 
 /*!
-  \fn void QStyle::drawIndicator( QPainter* , int , int , int , int , const QColorGroup &,
-		       int state , bool , bool  )
-  Draws a mark indicating the state of a choice.
+  \fn void QStyle::drawIndicator( QPainter* , int , int , int , int , const
+  QColorGroup &, int state , bool , bool  ) Draws a mark indicating the state of
+  a choice.
 */
 
 /*!
   Draws the mask of a mark indicating the state of a choice.
 */
-void
-QStyle::drawIndicatorMask( QPainter *p, int x, int y, int w, int h, int /*state*/ )
+void QStyle::drawIndicatorMask(QPainter *p, int x, int y, int w, int h,
+			       int /*state*/)
 {
-    p->fillRect(x, y, w, h, color1);
+	p->fillRect(x, y, w, h, color1);
 }
 
 /*!
   \fn void QStyle::drawFocusRect( QPainter* p,
-		const QRect& r, const QColorGroup &g , const QColor*, bool atBorder)
+		const QRect& r, const QColorGroup &g , const QColor*, bool
+  atBorder)
 
   Draws a mark indicating keyboard focus is on \a r. \a atBorder
   indicates whether the focus rectangle is at the border of an item
@@ -598,18 +600,21 @@ QStyle::drawIndicatorMask( QPainter *p, int x, int y, int w, int h, int /*state*
 */
 
 
-/* \fn void QStyle::tabbarMetrics( const QTabBar* t, int& hframe, int& vframe, int& overlap)
+/* \fn void QStyle::tabbarMetrics( const QTabBar* t, int& hframe, int& vframe,
+  int& overlap)
 
   TODO
  */
 
-/* \fn void QStyle::drawTab( QPainter* p,  const  QTabBar* tb, QTab* t , bool selected )
+/* \fn void QStyle::drawTab( QPainter* p,  const  QTabBar* tb, QTab* t , bool
+   selected )
 
    TODO
 
 */
 
-/* \fn void QStyle::drawTabMask( QPainter* p,  const  QTabBar* tb , QTab* t, bool selected )
+/* \fn void QStyle::drawTabMask( QPainter* p,  const  QTabBar* tb , QTab* t,
+bool selected )
 
 TODO
 
@@ -617,7 +622,8 @@ TODO
 
 /*!
 
-  \fn void QStyle::scrollBarMetrics( const QScrollBar*, int &, int &, int &, int& )
+  \fn void QStyle::scrollBarMetrics( const QScrollBar*, int &, int &, int &,
+  int& )
 
   Returns the metrics of the passed scrollbar: sliderMin, sliderMax,
   sliderLength and buttonDim.
@@ -625,15 +631,16 @@ TODO
 */
 
 
-/*! \fn QStyle::ScrollControl QStyle::scrollBarPointOver( const QScrollBar* sb, int sliderStart, const QPoint& p)
+/*! \fn QStyle::ScrollControl QStyle::scrollBarPointOver( const QScrollBar* sb,
+  int sliderStart, const QPoint& p)
 
   Returns the scrollbar control under the passed point.
  */
 
 /*!
 
-  \fn  void QStyle::drawScrollBarControls( QPainter*,  const QScrollBar*, int sliderStart, uint controls,
-  uint activeControl )
+  \fn  void QStyle::drawScrollBarControls( QPainter*,  const QScrollBar*, int
+  sliderStart, uint controls, uint activeControl )
 
   Draws the given scrollbar.  Used internally by QScrollbar.
 
@@ -654,8 +661,8 @@ TODO
 
 /*!
   \fn void QStyle::drawSlider( QPainter *p, int x, int y, int w, int h,
-			     const QColorGroup &g, Orientation, bool tickAbove, bool tickBelow)
-  Draws a slider.
+			     const QColorGroup &g, Orientation, bool tickAbove,
+  bool tickBelow) Draws a slider.
 
 */
 
@@ -726,13 +733,14 @@ Draws a checkmark suitable for checkboxes and checkable menu items.
 */
 /*!  \fn void QStyle::polishPopupMenu( QPopupMenu* p)
 
-    Polishes the popup menu \a p according to the GUI style. This is usually means
-    setting the mouse tracking ( QPopupMenu::setMouseTracking() ) and whether
-    the menu is checkable by default ( QPopupMenu::setCheckable() ).
+    Polishes the popup menu \a p according to the GUI style. This is usually
+   means setting the mouse tracking ( QPopupMenu::setMouseTracking() ) and
+   whether the menu is checkable by default ( QPopupMenu::setCheckable() ).
  */
 
 
-/*! \fn int QStyle::extraPopupMenuItemWidth( bool checkable, int maxpmw, QMenuItem* mi, const QFontMetrics& fm )
+/*! \fn int QStyle::extraPopupMenuItemWidth( bool checkable, int maxpmw,
+  QMenuItem* mi, const QFontMetrics& fm )
 
   Returns the extra width of a menu item \a mi, that means all extra
   pixels besides the space the menu item text requires. \a checkable
@@ -750,16 +758,17 @@ Draws a checkmark suitable for checkboxes and checkable menu items.
   \a fm defines the font metrics used to draw the popup menu.
  */
 
-/*! \fn int QStyle::popupMenuItemHeight( bool checkable, QMenuItem* mi, const QFontMetrics& fm  )
+/*! \fn int QStyle::popupMenuItemHeight( bool checkable, QMenuItem* mi, const
+  QFontMetrics& fm  )
 
   Returns the height of the menu item \a mi. \a checkable defines,
   whether the menu has a check column, \a fm defines the font metrics
   used to draw the label.
  */
 
-/*! \fn void QStyle::drawPopupMenuItem( QPainter* p, bool checkable, int maxpmw, int tab, QMenuItem* mi,
-				    const QPalette& pal,
-				    bool act, bool enabled, int x, int y, int w, int h);
+/*! \fn void QStyle::drawPopupMenuItem( QPainter* p, bool checkable, int maxpmw,
+ int tab, QMenuItem* mi, const QPalette& pal, bool act, bool enabled, int x, int
+ y, int w, int h);
 
  Draws the menu item \a mi using the painter \a p. The painter is
  preset to the right font. \a maxpmw is the
@@ -786,43 +795,46 @@ Draws a checkmark suitable for checkboxes and checkable menu items.
 */
 QSize QStyle::scrollBarExtent()
 {
-    return d(this)->sbextent.expandedTo( QApplication::globalStrut() );
+	return d(this)->sbextent.expandedTo(QApplication::globalStrut());
 }
 
 /*!
-  Returns the extent (height or width depending on the orientation) which a toolbar
-  handle has.
+  Returns the extent (height or width depending on the orientation) which a
+  toolbar handle has.
 
-  WARNING: Because of binary compatibility this method is NOT virtual, so reimplementing
-  it in Qt 2.x doesn't make sense. In the next major release this method will become virtual!
+  WARNING: Because of binary compatibility this method is NOT virtual, so
+  reimplementing it in Qt 2.x doesn't make sense. In the next major release this
+  method will become virtual!
 */
 
 int QStyle::toolBarHandleExtent() const
 {
-    if ( guiStyle() == Qt::MotifStyle )
-	return 9;
-    return 11;
+	if (guiStyle() == Qt::MotifStyle)
+		return 9;
+	return 11;
 }
 
 /*!\obsolete
  */
 int QStyle::toolBarHandleExtend() const
 {
-    return toolBarHandleExtent();
+	return toolBarHandleExtent();
 }
 
 /*! \fn void QStyle::drawToolBarHandle( QPainter *p, const QRect &r,
-                                        Qt::Orientation orientation,
-				        bool highlight, const QColorGroup &cg,
+					Qt::Orientation orientation,
+					bool highlight, const QColorGroup &cg,
 					bool drawBorder )
-				
-  Draws the handle for the toolbar using the painter \a p with the toolbar coordinates
-  \a r. \a orientation gives the orientation of the toolbar, and the handle is drawn
-  \a highlighted if \a highlight is TRUE, else not. \a cg is the QColorGroup of the toolbar and
-  if \a drawBorder is TRUE a border around the handle may be drawn.
 
-  WARNING: Because of binary compatibility this method is NOT virtual, so reimplementing
-  it in Qt 2.x doesn't make sense. In the next major release this method will become virtual!
+  Draws the handle for the toolbar using the painter \a p with the toolbar
+  coordinates \a r. \a orientation gives the orientation of the toolbar, and the
+  handle is drawn \a highlighted if \a highlight is TRUE, else not. \a cg is the
+  QColorGroup of the toolbar and if \a drawBorder is TRUE a border around the
+  handle may be drawn.
+
+  WARNING: Because of binary compatibility this method is NOT virtual, so
+  reimplementing it in Qt 2.x doesn't make sense. In the next major release this
+  method will become virtual!
 */
 
 
@@ -835,10 +847,11 @@ int QStyle::toolBarHandleExtend() const
   In a future version of the Qt library, this function will be removed
   and subclasses will be able to reimplement scrollBarExtent().
 */
-//### TODO: pick up desktop settings on Windows
-void QStyle::setScrollBarExtent( int width, int height )
+// ### TODO: pick up desktop settings on Windows
+void QStyle::setScrollBarExtent(int width, int height)
 {
-    d(this)->sbextent = QSize( width, height ).expandedTo( QApplication::globalStrut() );
+	d(this)->sbextent =
+		QSize(width, height).expandedTo(QApplication::globalStrut());
 }
 
 
@@ -851,7 +864,7 @@ void QStyle::setScrollBarExtent( int width, int height )
 */
 int QStyle::buttonDefaultIndicatorWidth() const
 {
-    return d(this)->button_default_indicator_width;
+	return d(this)->button_default_indicator_width;
 }
 
 /*!
@@ -860,10 +873,10 @@ int QStyle::buttonDefaultIndicatorWidth() const
   In a future version of the Qt library, this function will be removed
   and subclasses will be able to reimplement buttonDefaultIndicatorWidth()
 */
-//### TODO: pick up desktop settings on Windows
-void QStyle::setButtonDefaultIndicatorWidth( int w )
+// ### TODO: pick up desktop settings on Windows
+void QStyle::setButtonDefaultIndicatorWidth(int w)
 {
-    d(this)->button_default_indicator_width = w;
+	d(this)->button_default_indicator_width = w;
 }
 
 
@@ -887,9 +900,9 @@ void QStyle::setButtonDefaultIndicatorWidth( int w )
   Returns the width of the menu button indicator for a given button
   height \a h.
  */
-int QStyle::menuButtonIndicatorWidth( int h )
+int QStyle::menuButtonIndicatorWidth(int h)
 {
-    return QMAX( 12, (h-4)/3 );
+	return QMAX(12, (h - 4) / 3);
 }
 
 /*! \fn void QStyle::drawMenuBarItem( QPainter* p, int x, int y, int w, int h,
@@ -914,7 +927,7 @@ int QStyle::menuButtonIndicatorWidth( int h )
 */
 int QStyle::buttonMargin() const
 {
-    return d(this)->button_margin;
+	return d(this)->button_margin;
 }
 
 /*!
@@ -923,9 +936,9 @@ int QStyle::buttonMargin() const
   In a future version of the Qt library, this function may be removed
   and subclasses will be able to reimplement buttonMargin().
 */
-void QStyle::setButtonMargin( int m )
+void QStyle::setButtonMargin(int m)
 {
-    d(this)->button_margin = m;
+	d(this)->button_margin = m;
 }
 
 /*!
@@ -935,7 +948,7 @@ void QStyle::setButtonMargin( int m )
 */
 int QStyle::sliderThickness() const
 {
-    return d(this)->slider_thickness;
+	return d(this)->slider_thickness;
 }
 
 /*!
@@ -946,7 +959,7 @@ int QStyle::sliderThickness() const
 */
 void QStyle::setSliderThickness(int t)
 {
-    d(this)->slider_thickness = t;
+	d(this)->slider_thickness = t;
 }
 
 #endif // QT_NO_STYLE

@@ -14,14 +14,14 @@
 #include <qapplication.h>
 
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    FileMainWindow mw;
-    mw.resize( 680, 480 );
-    a.setMainWidget( &mw );
-    mw.fileView()->setDirectory( "/" );
-    mw.show();
-    return a.exec();
+	FileMainWindow mw;
+	mw.resize(680, 480);
+	a.setMainWidget(&mw);
+	mw.fileView()->setDirectory("/");
+	mw.show();
+	return a.exec();
 }

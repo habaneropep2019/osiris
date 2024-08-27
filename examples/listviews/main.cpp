@@ -11,15 +11,15 @@
 #include "listviews.h"
 #include <qapplication.h>
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    ListViews listViews;
-    listViews.resize( 640, 480 );
-    listViews.setCaption( "Qt Example - Listview" );
-    a.setMainWidget( &listViews );
-    listViews.show();
+	ListViews listViews;
+	listViews.resize(640, 480);
+	listViews.setCaption("Qt Example - Listview");
+	a.setMainWidget(&listViews);
+	listViews.show();
 
-    return a.exec();
+	return a.exec();
 }

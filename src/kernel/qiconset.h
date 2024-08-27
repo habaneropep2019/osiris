@@ -39,7 +39,7 @@
 #define QICONSET_H
 
 #ifndef QT_H
-#include "qpixmap.h"
+# include "qpixmap.h"
 #endif // QT_H
 
 #ifndef QT_NO_ICONSET
@@ -48,34 +48,34 @@ struct QIconSetPrivate;
 
 class Q_EXPORT QIconSet
 {
-public:
-    enum Size { Automatic, Small, Large };
+      public:
+	enum Size { Automatic, Small, Large };
 
-    enum Mode { Normal, Disabled, Active };
+	enum Mode { Normal, Disabled, Active };
 
-    QIconSet();
-    QIconSet( const QPixmap &, Size = Automatic );
-    QIconSet( const QPixmap &smallPix, const QPixmap &largePix );
-    QIconSet( const QIconSet & );
-    virtual ~QIconSet();
+	QIconSet();
+	QIconSet(const QPixmap &, Size = Automatic);
+	QIconSet(const QPixmap &smallPix, const QPixmap &largePix);
+	QIconSet(const QIconSet &);
+	virtual ~QIconSet();
 
-    void reset( const QPixmap &, Size );
+	void reset(const QPixmap &, Size);
 
-    virtual void setPixmap( const QPixmap &, Size, Mode = Normal );
-    virtual void setPixmap( const QString &, Size, Mode = Normal );
-    QPixmap pixmap( Size, Mode ) const;
-    QPixmap pixmap( Size s, bool enabled ) const;
-    QPixmap pixmap() const;
-    bool isGenerated( Size, Mode ) const;
+	virtual void setPixmap(const QPixmap &, Size, Mode = Normal);
+	virtual void setPixmap(const QString &, Size, Mode = Normal);
+	QPixmap pixmap(Size, Mode) const;
+	QPixmap pixmap(Size s, bool enabled) const;
+	QPixmap pixmap() const;
+	bool isGenerated(Size, Mode) const;
 
-    bool isNull() const;
+	bool isNull() const;
 
-    void detach();
+	void detach();
 
-    QIconSet &operator=( const QIconSet & );
+	QIconSet &operator=(const QIconSet &);
 
-private:
-    QIconSetPrivate * d;
+      private:
+	QIconSetPrivate *d;
 };
 
 #endif // QT_NO_ICONSET

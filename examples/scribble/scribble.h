@@ -27,62 +27,68 @@ class QSpinBox;
 
 class Canvas : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    Canvas( QWidget *parent = 0, const char *name = 0 );
+      public:
+	Canvas(QWidget *parent = 0, const char *name = 0);
 
-    void setPenColor( const QColor &c )
-    { pen.setColor( c ); }
+	void setPenColor(const QColor &c)
+	{
+		pen.setColor(c);
+	}
 
-    void setPenWidth( int w )
-    { pen.setWidth( w ); }
+	void setPenWidth(int w)
+	{
+		pen.setWidth(w);
+	}
 
-    QColor penColor()
-    { return pen.color(); }
+	QColor penColor()
+	{
+		return pen.color();
+	}
 
-    int penWidth()
-    { return pen.width(); }
+	int penWidth()
+	{
+		return pen.width();
+	}
 
-    void save( const QString &filename, const QString &format );
+	void save(const QString &filename, const QString &format);
 
-    void clearScreen();
+	void clearScreen();
 
-protected:
-    void mousePressEvent( QMouseEvent *e );
-    void mouseReleaseEvent( QMouseEvent *e );
-    void mouseMoveEvent( QMouseEvent *e );
-    void resizeEvent( QResizeEvent *e );
-    void paintEvent( QPaintEvent *e );
+      protected:
+	void mousePressEvent(QMouseEvent *e);
+	void mouseReleaseEvent(QMouseEvent *e);
+	void mouseMoveEvent(QMouseEvent *e);
+	void resizeEvent(QResizeEvent *e);
+	void paintEvent(QPaintEvent *e);
 
-    QPen pen;
-    QPointArray polyline;
+	QPen pen;
+	QPointArray polyline;
 
-    bool mousePressed;
+	bool mousePressed;
 
-    QPixmap buffer;
-
+	QPixmap buffer;
 };
 
 class Scribble : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    Scribble( QWidget *parent = 0, const char *name = 0 );
+      public:
+	Scribble(QWidget *parent = 0, const char *name = 0);
 
-protected:
-    Canvas* canvas;
+      protected:
+	Canvas *canvas;
 
-    QSpinBox *bPWidth;
-    QToolButton *bPColor, *bSave, *bClear;
+	QSpinBox *bPWidth;
+	QToolButton *bPColor, *bSave, *bClear;
 
-protected slots:
-    void slotSave();
-    void slotColor();
-    void slotWidth( int );
-    void slotClear();
-
+      protected slots:
+	void slotSave();
+	void slotColor();
+	void slotWidth(int);
+	void slotClear();
 };
 
 #endif

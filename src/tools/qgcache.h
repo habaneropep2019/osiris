@@ -39,89 +39,103 @@
 #define QGCACHE_H
 
 #ifndef QT_H
-#include "qcollection.h"
-#include "qglist.h"
-#include "qgdict.h"
+# include "qcollection.h"
+# include "qglist.h"
+# include "qgdict.h"
 #endif // QT_H
 
 
-class QCList;					// internal classes
+class QCList; // internal classes
 class QCListIt;
 class QCDict;
 
 
-class Q_EXPORT QGCache : public QCollection	// generic LRU cache
+class Q_EXPORT QGCache : public QCollection // generic LRU cache
 {
-friend class QGCacheIterator;
-protected:
-    enum KeyType { StringKey, AsciiKey, IntKey, PtrKey };
-      // identical to QGDict's, but PtrKey is not used at the moment
+	friend class QGCacheIterator;
 
-    QGCache( int maxCost, uint size, KeyType kt, bool caseSensitive,
-	     bool copyKeys );
-    QGCache( const QGCache & );			// not allowed, calls fatal()
-   ~QGCache();
-    QGCache &operator=( const QGCache & );	// not allowed, calls fatal()
+      protected:
+	enum KeyType { StringKey, AsciiKey, IntKey, PtrKey };
+	// identical to QGDict's, but PtrKey is not used at the moment
 
-    uint    count()	const	{ return ((QGDict*)dict)->count(); }
-    uint    size()	const	{ return ((QGDict*)dict)->size(); }
-    int	    maxCost()	const	{ return mCost; }
-    int	    totalCost() const	{ return tCost; }
-    void    setMaxCost( int maxCost );
-    void    clear();
+	QGCache(int maxCost, uint size, KeyType kt, bool caseSensitive,
+		bool copyKeys);
+	QGCache(const QGCache &); // not allowed, calls fatal()
+	~QGCache();
+	QGCache &operator=(const QGCache &); // not allowed, calls fatal()
 
-    bool    insert_string( const QString &key, QCollection::Item,
-			   int cost, int priority );
-    bool    insert_other( const char *key, QCollection::Item,
-			  int cost, int priority );
-    bool    remove_string( const QString &key );
-    bool    remove_other( const char *key );
-    QCollection::Item take_string( const QString &key );
-    QCollection::Item take_other( const char *key );
+	uint count() const
+	{
+		return ((QGDict *)dict)->count();
+	}
+	uint size() const
+	{
+		return ((QGDict *)dict)->size();
+	}
+	int maxCost() const
+	{
+		return mCost;
+	}
+	int totalCost() const
+	{
+		return tCost;
+	}
+	void setMaxCost(int maxCost);
+	void clear();
 
-    QCollection::Item find_string( const QString &key, bool ref=TRUE ) const;
-    QCollection::Item find_other( const char *key, bool ref=TRUE ) const;
+	bool insert_string(const QString &key, QCollection::Item, int cost,
+			   int priority);
+	bool insert_other(const char *key, QCollection::Item, int cost,
+			  int priority);
+	bool remove_string(const QString &key);
+	bool remove_other(const char *key);
+	QCollection::Item take_string(const QString &key);
+	QCollection::Item take_other(const char *key);
 
-    void    statistics() const;
+	QCollection::Item find_string(const QString &key,
+				      bool ref = TRUE) const;
+	QCollection::Item find_other(const char *key, bool ref = TRUE) const;
 
-private:
-    bool    makeRoomFor( int cost, int priority = -1 );
-    KeyType keytype;
-    QCList *lruList;
-    QCDict *dict;
-    int	    mCost;
-    int	    tCost;
-    bool    copyk;
+	void statistics() const;
+
+      private:
+	bool makeRoomFor(int cost, int priority = -1);
+	KeyType keytype;
+	QCList *lruList;
+	QCDict *dict;
+	int mCost;
+	int tCost;
+	bool copyk;
 };
 
 
-class Q_EXPORT QGCacheIterator			// generic cache iterator
+class Q_EXPORT QGCacheIterator // generic cache iterator
 {
-protected:
-    QGCacheIterator( const QGCache & );
-    QGCacheIterator( const QGCacheIterator & );
-   ~QGCacheIterator();
-    QGCacheIterator &operator=( const QGCacheIterator & );
+      protected:
+	QGCacheIterator(const QGCache &);
+	QGCacheIterator(const QGCacheIterator &);
+	~QGCacheIterator();
+	QGCacheIterator &operator=(const QGCacheIterator &);
 
-    uint	      count()   const;
-    bool	      atFirst() const;
-    bool	      atLast()  const;
-    QCollection::Item toFirst();
-    QCollection::Item toLast();
+	uint count() const;
+	bool atFirst() const;
+	bool atLast() const;
+	QCollection::Item toFirst();
+	QCollection::Item toLast();
 
-    QCollection::Item get() const;
-    QString	      getKeyString() const;
-    const char       *getKeyAscii()  const;
-    long	      getKeyInt()    const;
+	QCollection::Item get() const;
+	QString getKeyString() const;
+	const char *getKeyAscii() const;
+	long getKeyInt() const;
 
-    QCollection::Item operator()();
-    QCollection::Item operator++();
-    QCollection::Item operator+=( uint );
-    QCollection::Item operator--();
-    QCollection::Item operator-=( uint );
+	QCollection::Item operator()();
+	QCollection::Item operator++();
+	QCollection::Item operator+=(uint);
+	QCollection::Item operator--();
+	QCollection::Item operator-=(uint);
 
-protected:
-    QCListIt *it;				// iterator on cache list
+      protected:
+	QCListIt *it; // iterator on cache list
 };
 
 

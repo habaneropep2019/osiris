@@ -39,100 +39,267 @@
 #define QLIST_H
 
 #ifndef QT_H
-#include "qglist.h"
+# include "qglist.h"
 #endif // QT_H
 
 
-template<class type> class Q_EXPORT QList : public QGList
+template <class type> class Q_EXPORT QList : public QGList
 {
-public:
-    QList()				{}
-    QList( const QList<type> &l ) : QGList(l) {}
-   ~QList()				{ clear(); }
-    QList<type> &operator=(const QList<type> &l)
-			{ return (QList<type>&)QGList::operator=(l); }
-    bool operator==( const QList<type> &list ) const
-    { return QGList::operator==( list ); }
-    uint  count()   const		{ return QGList::count(); }
-    bool  isEmpty() const		{ return QGList::count() == 0; }
-    bool  insert( uint i, const type *d){ return QGList::insertAt(i,(QCollection::Item)d); }
-    void  inSort( const type *d )	{ QGList::inSort((QCollection::Item)d); }
-    void  prepend( const type *d )	{ QGList::insertAt(0,(QCollection::Item)d); }
-    void  append( const type *d )	{ QGList::append((QCollection::Item)d); }
-    bool  remove( uint i )		{ return QGList::removeAt(i); }
-    bool  remove()			{ return QGList::remove((QCollection::Item)0); }
-    bool  remove( const type *d )	{ return QGList::remove((QCollection::Item)d); }
-    bool  removeRef( const type *d )	{ return QGList::removeRef((QCollection::Item)d); }
-    void  removeNode( QLNode *n )	{ QGList::removeNode(n); }
-    bool  removeFirst()			{ return QGList::removeFirst(); }
-    bool  removeLast()			{ return QGList::removeLast(); }
-    type *take( uint i )		{ return (type *)QGList::takeAt(i); }
-    type *take()			{ return (type *)QGList::take(); }
-    type *takeNode( QLNode *n )		{ return (type *)QGList::takeNode(n); }
-    void  clear()			{ QGList::clear(); }
-    void  sort()			{ QGList::sort(); }
-    int	  find( const type *d )		{ return QGList::find((QCollection::Item)d); }
-    int	  findNext( const type *d )	{ return QGList::find((QCollection::Item)d,FALSE); }
-    int	  findRef( const type *d )	{ return QGList::findRef((QCollection::Item)d); }
-    int	  findNextRef( const type *d ){ return QGList::findRef((QCollection::Item)d,FALSE);}
-    uint  contains( const type *d ) const { return QGList::contains((QCollection::Item)d); }
-    uint  containsRef( const type *d ) const
-					{ return QGList::containsRef((QCollection::Item)d); }
-    type *at( uint i )			{ return (type *)QGList::at(i); }
-    int	  at() const			{ return QGList::at(); }
-    type *current()  const		{ return (type *)QGList::get(); }
-    QLNode *currentNode()  const	{ return QGList::currentNode(); }
-    type *getFirst() const		{ return (type *)QGList::cfirst(); }
-    type *getLast()  const		{ return (type *)QGList::clast(); }
-    type *first()			{ return (type *)QGList::first(); }
-    type *last()			{ return (type *)QGList::last(); }
-    type *next()			{ return (type *)QGList::next(); }
-    type *prev()			{ return (type *)QGList::prev(); }
-    void  toVector( QGVector *vec )const{ QGList::toVector(vec); }
-private:
-    void  deleteItem( QCollection::Item d );
+      public:
+	QList()
+	{
+	}
+	QList(const QList<type> &l) : QGList(l)
+	{
+	}
+	~QList()
+	{
+		clear();
+	}
+	QList<type> &operator=(const QList<type> &l)
+	{
+		return (QList<type> &)QGList::operator=(l);
+	}
+	bool operator==(const QList<type> &list) const
+	{
+		return QGList::operator==(list);
+	}
+	uint count() const
+	{
+		return QGList::count();
+	}
+	bool isEmpty() const
+	{
+		return QGList::count() == 0;
+	}
+	bool insert(uint i, const type *d)
+	{
+		return QGList::insertAt(i, (QCollection::Item)d);
+	}
+	void inSort(const type *d)
+	{
+		QGList::inSort((QCollection::Item)d);
+	}
+	void prepend(const type *d)
+	{
+		QGList::insertAt(0, (QCollection::Item)d);
+	}
+	void append(const type *d)
+	{
+		QGList::append((QCollection::Item)d);
+	}
+	bool remove(uint i)
+	{
+		return QGList::removeAt(i);
+	}
+	bool remove()
+	{
+		return QGList::remove((QCollection::Item)0);
+	}
+	bool remove(const type *d)
+	{
+		return QGList::remove((QCollection::Item)d);
+	}
+	bool removeRef(const type *d)
+	{
+		return QGList::removeRef((QCollection::Item)d);
+	}
+	void removeNode(QLNode *n)
+	{
+		QGList::removeNode(n);
+	}
+	bool removeFirst()
+	{
+		return QGList::removeFirst();
+	}
+	bool removeLast()
+	{
+		return QGList::removeLast();
+	}
+	type *take(uint i)
+	{
+		return (type *)QGList::takeAt(i);
+	}
+	type *take()
+	{
+		return (type *)QGList::take();
+	}
+	type *takeNode(QLNode *n)
+	{
+		return (type *)QGList::takeNode(n);
+	}
+	void clear()
+	{
+		QGList::clear();
+	}
+	void sort()
+	{
+		QGList::sort();
+	}
+	int find(const type *d)
+	{
+		return QGList::find((QCollection::Item)d);
+	}
+	int findNext(const type *d)
+	{
+		return QGList::find((QCollection::Item)d, FALSE);
+	}
+	int findRef(const type *d)
+	{
+		return QGList::findRef((QCollection::Item)d);
+	}
+	int findNextRef(const type *d)
+	{
+		return QGList::findRef((QCollection::Item)d, FALSE);
+	}
+	uint contains(const type *d) const
+	{
+		return QGList::contains((QCollection::Item)d);
+	}
+	uint containsRef(const type *d) const
+	{
+		return QGList::containsRef((QCollection::Item)d);
+	}
+	type *at(uint i)
+	{
+		return (type *)QGList::at(i);
+	}
+	int at() const
+	{
+		return QGList::at();
+	}
+	type *current() const
+	{
+		return (type *)QGList::get();
+	}
+	QLNode *currentNode() const
+	{
+		return QGList::currentNode();
+	}
+	type *getFirst() const
+	{
+		return (type *)QGList::cfirst();
+	}
+	type *getLast() const
+	{
+		return (type *)QGList::clast();
+	}
+	type *first()
+	{
+		return (type *)QGList::first();
+	}
+	type *last()
+	{
+		return (type *)QGList::last();
+	}
+	type *next()
+	{
+		return (type *)QGList::next();
+	}
+	type *prev()
+	{
+		return (type *)QGList::prev();
+	}
+	void toVector(QGVector *vec) const
+	{
+		QGList::toVector(vec);
+	}
+
+      private:
+	void deleteItem(QCollection::Item d);
 };
 
 #if defined(Q_DELETING_VOID_UNDEFINED)
-template<> inline void QList<void>::deleteItem( QCollection::Item )
+template <> inline void QList<void>::deleteItem(QCollection::Item)
 {
 }
 #endif
 
-template<class type> inline void QList<type>::deleteItem( QCollection::Item d )
+template <class type> inline void QList<type>::deleteItem(QCollection::Item d)
 {
-    if ( del_item ) delete (type *)d;
+	if (del_item)
+		delete (type *)d;
 }
 
 
-template<class type> class Q_EXPORT QListIterator : public QGListIterator
+template <class type> class Q_EXPORT QListIterator : public QGListIterator
 {
-public:
-    QListIterator(const QList<type> &l) :QGListIterator((QGList &)l) {}
-   ~QListIterator()	      {}
-    uint  count()   const     { return list->count(); }
-    bool  isEmpty() const     { return list->count() == 0; }
-    bool  atFirst() const     { return QGListIterator::atFirst(); }
-    bool  atLast()  const     { return QGListIterator::atLast(); }
-    type *toFirst()	      { return (type *)QGListIterator::toFirst(); }
-    type *toLast()	      { return (type *)QGListIterator::toLast(); }
-    operator type *() const   { return (type *)QGListIterator::get(); }
-    type *operator*()         { return (type *)QGListIterator::get(); }
+      public:
+	QListIterator(const QList<type> &l) : QGListIterator((QGList &)l)
+	{
+	}
+	~QListIterator()
+	{
+	}
+	uint count() const
+	{
+		return list->count();
+	}
+	bool isEmpty() const
+	{
+		return list->count() == 0;
+	}
+	bool atFirst() const
+	{
+		return QGListIterator::atFirst();
+	}
+	bool atLast() const
+	{
+		return QGListIterator::atLast();
+	}
+	type *toFirst()
+	{
+		return (type *)QGListIterator::toFirst();
+	}
+	type *toLast()
+	{
+		return (type *)QGListIterator::toLast();
+	}
+	operator type *() const
+	{
+		return (type *)QGListIterator::get();
+	}
+	type *operator*()
+	{
+		return (type *)QGListIterator::get();
+	}
 
-    // No good, since QList<char> (ie. QStrList fails...
-    //
-    // MSVC++ gives warning
-    // Sunpro C++ 4.1 gives error
-    //    type *operator->()        { return (type *)QGListIterator::get(); }
+	// No good, since QList<char> (ie. QStrList fails...
+	//
+	// MSVC++ gives warning
+	// Sunpro C++ 4.1 gives error
+	//    type *operator->()        { return (type *)QGListIterator::get();
+	//    }
 
-    type *current()   const   { return (type *)QGListIterator::get(); }
-    type *operator()()	      { return (type *)QGListIterator::operator()();}
-    type *operator++()	      { return (type *)QGListIterator::operator++(); }
-    type *operator+=(uint j)  { return (type *)QGListIterator::operator+=(j);}
-    type *operator--()	      { return (type *)QGListIterator::operator--(); }
-    type *operator-=(uint j)  { return (type *)QGListIterator::operator-=(j);}
-    QListIterator<type>& operator=(const QListIterator<type>&it)
-			      { QGListIterator::operator=(it); return *this; }
+	type *current() const
+	{
+		return (type *)QGListIterator::get();
+	}
+	type *operator()()
+	{
+		return (type *)QGListIterator::operator()();
+	}
+	type *operator++()
+	{
+		return (type *)QGListIterator::operator++();
+	}
+	type *operator+=(uint j)
+	{
+		return (type *)QGListIterator::operator+=(j);
+	}
+	type *operator--()
+	{
+		return (type *)QGListIterator::operator--();
+	}
+	type *operator-=(uint j)
+	{
+		return (type *)QGListIterator::operator-=(j);
+	}
+	QListIterator<type> &operator=(const QListIterator<type> &it)
+	{
+		QGListIterator::operator=(it);
+		return *this;
+	}
 };
 
 

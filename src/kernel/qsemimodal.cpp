@@ -38,7 +38,7 @@
 #include "qsemimodal.h"
 
 #ifndef QT_NO_SEMIMODAL
-#include "qapplication.h"
+# include "qapplication.h"
 
 // NOT REVISED
 /*!
@@ -69,10 +69,12 @@
   behavior different to a QWidget is automatic sizing and positioning.
 */
 
-QSemiModal::QSemiModal( QWidget *parent, const char *name, bool modal, WFlags f )
-    : QWidget( parent, name, (modal ? (f | WType_Modal) : f) | WType_TopLevel | WStyle_Dialog )
+QSemiModal::QSemiModal(QWidget *parent, const char *name, bool modal, WFlags f)
+	: QWidget(parent, name,
+		  (modal ? (f | WType_Modal) : f) | WType_TopLevel |
+			  WStyle_Dialog)
 {
-    did_move = did_resize = FALSE;
+	did_move = did_resize = FALSE;
 }
 
 /*!
@@ -94,19 +96,19 @@ QSemiModal::~QSemiModal()
 
 void QSemiModal::show()
 {
-    if ( !did_resize )
-	adjustSize();
-    if ( !did_move ) {
-	QWidget *w = parentWidget();
-	QPoint p( 0, 0 );
-	if ( w )
-	    p = w->mapToGlobal( p );
-	else
-	    w = QApplication::desktop();
-	move( p.x() + w->width()/2  - width()/2,
-	      p.y() + w->height()/2 - height()/2 );
-    }
-    QWidget::show();
+	if (!did_resize)
+		adjustSize();
+	if (!did_move) {
+		QWidget *w = parentWidget();
+		QPoint p(0, 0);
+		if (w)
+			p = w->mapToGlobal(p);
+		else
+			w = QApplication::desktop();
+		move(p.x() + w->width() / 2 - width() / 2,
+		     p.y() + w->height() / 2 - height() / 2);
+	}
+	QWidget::show();
 }
 
 /*****************************************************************************
@@ -123,61 +125,61 @@ void QSemiModal::show()
   Reimplements QWidget::move() for internal purposes.
 */
 
-void QSemiModal::move( int x, int y )
+void QSemiModal::move(int x, int y)
 {
-    did_move = TRUE;
-    QWidget::move( x, y );
+	did_move = TRUE;
+	QWidget::move(x, y);
 }
 
 /*!
   Reimplements QWidget::move() for internal purposes.
 */
 
-void QSemiModal::move( const QPoint &p )
+void QSemiModal::move(const QPoint &p)
 {
-    did_move = TRUE;
-    QWidget::move( p );
+	did_move = TRUE;
+	QWidget::move(p);
 }
 
 /*!
   Reimplements QWidget::resize() for internal purposes.
 */
 
-void QSemiModal::resize( int w, int h )
+void QSemiModal::resize(int w, int h)
 {
-    did_resize = TRUE;
-    QWidget::resize( w, h );
+	did_resize = TRUE;
+	QWidget::resize(w, h);
 }
 
 /*!
   Reimplements QWidget::resize() for internal purposes.
 */
 
-void QSemiModal::resize( const QSize &s )
+void QSemiModal::resize(const QSize &s)
 {
-    did_resize = TRUE;
-    QWidget::resize( s );
+	did_resize = TRUE;
+	QWidget::resize(s);
 }
 
 /*!
   Reimplements QWidget::setGeometry() for internal purposes.
 */
 
-void QSemiModal::setGeometry( int x, int y, int w, int h )
+void QSemiModal::setGeometry(int x, int y, int w, int h)
 {
-    did_move   = TRUE;
-    did_resize = TRUE;
-    QWidget::setGeometry( x, y, w, h );
+	did_move = TRUE;
+	did_resize = TRUE;
+	QWidget::setGeometry(x, y, w, h);
 }
 
 /*!
   Reimplements QWidget::setGeometry() for internal purposes.
 */
 
-void QSemiModal::setGeometry( const QRect &r )
+void QSemiModal::setGeometry(const QRect &r)
 {
-    did_move   = TRUE;
-    did_resize = TRUE;
-    QWidget::setGeometry( r );
+	did_move = TRUE;
+	did_resize = TRUE;
+	QWidget::setGeometry(r);
 }
-#endif //QT_NO_SEMIMODAL
+#endif // QT_NO_SEMIMODAL

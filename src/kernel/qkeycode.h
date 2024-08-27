@@ -39,8 +39,8 @@
 #define QKEYCODE_H
 
 #ifndef QT_H
-#include "qglobal.h"
-#include "qnamespace.h"
+# include "qglobal.h"
+# include "qnamespace.h"
 #endif // QT_H
 
 // all key codes are now in the Qt namespace class

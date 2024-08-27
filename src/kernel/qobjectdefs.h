@@ -39,7 +39,7 @@
 #define QOBJECTDEFS_H
 
 #ifndef QT_H
-#include "qglobal.h"
+# include "qglobal.h"
 #endif // QT_H
 
 
@@ -48,68 +48,77 @@
 // Only Q_OBJECT is used by the compiler.
 
 #ifndef QT_NO_TRANSLATION
-#define QT_TR_FUNCTION static QString tr(const char*); \
-		       static QString tr(const char*, const char*);
+# define QT_TR_FUNCTION                   \
+	 static QString tr(const char *); \
+	 static QString tr(const char *, const char *);
 #else
-#define QT_TR_FUNCTION // inherit the one from QObject
+# define QT_TR_FUNCTION // inherit the one from QObject
 #endif
 
 #ifdef QT_MOC_CPP
- #define slots			    slots
- #define signals		    signals
- #define Q_CLASSINFO( name, value ) Q_CLASSINFO( name, value )
- #define Q_PROPERTY( text )	    Q_PROPERTY( text )
- #define Q_OVERRIDE( text )	    Q_OVERRIDE( text )
- #define Q_ENUMS( x )		    Q_ENUMS( x )
- #define Q_SETS( x )		    Q_SETS( x )
- /* tmake ignore Q_OBJECT */
- #define Q_OBJECT		    Q_OBJECT
- /* tmake ignore Q_OBJECT */
- #define Q_OBJECT_FAKE		    Q_OBJECT_FAKE
+# define slots slots
+# define signals signals
+# define Q_CLASSINFO(name, value) Q_CLASSINFO(name, value)
+# define Q_PROPERTY(text) Q_PROPERTY(text)
+# define Q_OVERRIDE(text) Q_OVERRIDE(text)
+# define Q_ENUMS(x) Q_ENUMS(x)
+# define Q_SETS(x) Q_SETS(x)
+/* tmake ignore Q_OBJECT */
+# define Q_OBJECT Q_OBJECT
+/* tmake ignore Q_OBJECT */
+# define Q_OBJECT_FAKE Q_OBJECT_FAKE
 
 #else
- #define slots					// slots:   in class
- #define signals protected			// signals: in class
- #define emit					// emit signal
- #define Q_CLASSINFO( name, value )		// class info
- #define Q_PROPERTY( text )			// property
- #define Q_OVERRIDE( text )			// override property
- #define Q_ENUMS( x )
- #define Q_SETS( x )
+# define slots // slots:   in class
+# define signals protected // signals: in class
+# define emit // emit signal
+# define Q_CLASSINFO(name, value) // class info
+# define Q_PROPERTY(text) // property
+# define Q_OVERRIDE(text) // override property
+# define Q_ENUMS(x)
+# define Q_SETS(x)
 
 /* tmake ignore Q_OBJECT */
- #define Q_OBJECT					\
-public:							\
-    QMetaObject *metaObject() const { 			\
-         return staticMetaObject();			\
-    }							\
-    const char *className() const;			\
-    static QMetaObject* staticMetaObject();		\
-    QT_TR_FUNCTION					\
-protected:						\
-    void initMetaObject();				\
-private:						\
-    static QMetaObject *metaObj;
+# define Q_OBJECT                                \
+       public:                                   \
+	 QMetaObject *metaObject() const         \
+	 {                                       \
+		 return staticMetaObject();      \
+	 }                                       \
+	 const char *className() const;          \
+	 static QMetaObject *staticMetaObject(); \
+	 QT_TR_FUNCTION                          \
+       protected:                                \
+	 void initMetaObject();                  \
+                                                 \
+       private:                                  \
+	 static QMetaObject *metaObj;
 
 /* tmake ignore Q_OBJECT */
-#define Q_OBJECT_FAKE Q_OBJECT
+# define Q_OBJECT_FAKE Q_OBJECT
 
 #endif
 
 // macro for naming members
 #if defined(_OLD_CPP_)
-#define METHOD(a)	"0""a"
-#define SLOT(a)		"1""a"
-#define SIGNAL(a)	"2""a"
+# define METHOD(a) \
+	 "0"       \
+	 "a"
+# define SLOT(a) \
+	 "1"     \
+	 "a"
+# define SIGNAL(a) \
+	 "2"       \
+	 "a"
 #else
-#define METHOD(a)	"0"#a
-#define SLOT(a)		"1"#a
-#define SIGNAL(a)	"2"#a
+# define METHOD(a) "0" #a
+# define SLOT(a) "1" #a
+# define SIGNAL(a) "2" #a
 #endif
 
-#define METHOD_CODE	0			// member type codes
-#define SLOT_CODE	1
-#define SIGNAL_CODE	2
+#define METHOD_CODE 0 // member type codes
+#define SLOT_CODE 1
+#define SIGNAL_CODE 2
 
 
 // Forward declarations so you don't have to include files you don't need

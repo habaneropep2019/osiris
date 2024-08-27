@@ -39,7 +39,7 @@
 #define QCOLORDIALOG_H
 
 #ifndef QT_H
-#include <qdialog.h>
+# include <qdialog.h>
 #endif // QT_H
 
 #ifndef QT_NO_COLORDIALOG
@@ -48,41 +48,45 @@ class QColorDialogPrivate;
 
 class Q_EXPORT QColorDialog : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    static QColor getColor( QColor, QWidget *parent=0, const char* name=0 ); // ### 3.0: make const QColor&
-    static QRgb getRgba( QRgb, bool* ok = 0,
-			 QWidget *parent=0, const char* name=0 );
+      public:
+	static QColor getColor(QColor, QWidget *parent = 0,
+			       const char *name = 0); // ### 3.0: make const
+						      // QColor&
+	static QRgb getRgba(QRgb, bool *ok = 0, QWidget *parent = 0,
+			    const char *name = 0);
 
 
-    static int customCount();
-    static QRgb customColor( int );
-    static void setCustomColor( int, QRgb );
+	static int customCount();
+	static QRgb customColor(int);
+	static void setCustomColor(int, QRgb);
 
-private:
-    ~QColorDialog();
+      private:
+	~QColorDialog();
 
-    QColorDialog( QWidget* parent=0, const char* name=0, bool modal=FALSE );
-    void setColor( QColor ); // ### 3.0: make const QColor&
-    QColor color() const;
+	QColorDialog(QWidget *parent = 0, const char *name = 0,
+		     bool modal = FALSE);
+	void setColor(QColor); // ### 3.0: make const QColor&
+	QColor color() const;
 
-private:
-    void setSelectedAlpha( int );
-    int selectedAlpha() const;
+      private:
+	void setSelectedAlpha(int);
+	int selectedAlpha() const;
 
-    void showCustom( bool=TRUE );
-private:
-    QColorDialogPrivate *d;
-    friend class QColorDialogPrivate;
+	void showCustom(bool = TRUE);
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QColorDialog( const QColorDialog & );
-    QColorDialog& operator=( const QColorDialog & );
-#endif
+      private:
+	QColorDialogPrivate *d;
+	friend class QColorDialogPrivate;
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QColorDialog(const QColorDialog &);
+	QColorDialog &operator=(const QColorDialog &);
+# endif
 };
 
 #endif
 
-#endif //QCOLORDIALOG_H
+#endif // QCOLORDIALOG_H

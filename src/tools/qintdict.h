@@ -39,63 +39,138 @@
 #define QINTDICT_H
 
 #ifndef QT_H
-#include "qgdict.h"
+# include "qgdict.h"
 #endif // QT_H
 
 
-template<class type> class Q_EXPORT QIntDict : public QGDict
+template <class type> class Q_EXPORT QIntDict : public QGDict
 {
-public:
-    QIntDict(int size=17) : QGDict(size,IntKey,0,0) {}
-    QIntDict( const QIntDict<type> &d ) : QGDict(d) {}
-   ~QIntDict()				{ clear(); }
-    QIntDict<type> &operator=(const QIntDict<type> &d)
-			{ return (QIntDict<type>&)QGDict::operator=(d); }
-    uint  count()   const		{ return QGDict::count(); }
-    uint  size()    const		{ return QGDict::size(); }
-    bool  isEmpty() const		{ return QGDict::count() == 0; }
-    void  insert( long k, const type *d )
-					{ QGDict::look_int(k,(Item)d,1); }
-    void  replace( long k, const type *d )
-					{ QGDict::look_int(k,(Item)d,2); }
-    bool  remove( long k )		{ return QGDict::remove_int(k); }
-    type *take( long k )		{ return (type*)QGDict::take_int(k); }
-    type *find( long k ) const
-		{ return (type *)((QGDict*)this)->QGDict::look_int(k,0,0); }
-    type *operator[]( long k ) const
-		{ return (type *)((QGDict*)this)->QGDict::look_int(k,0,0); }
-    void  clear()			{ QGDict::clear(); }
-    void  resize( uint n )		{ QGDict::resize(n); }
-    void  statistics() const		{ QGDict::statistics(); }
-private:
-    void  deleteItem( Item d );
+      public:
+	QIntDict(int size = 17) : QGDict(size, IntKey, 0, 0)
+	{
+	}
+	QIntDict(const QIntDict<type> &d) : QGDict(d)
+	{
+	}
+	~QIntDict()
+	{
+		clear();
+	}
+	QIntDict<type> &operator=(const QIntDict<type> &d)
+	{
+		return (QIntDict<type> &)QGDict::operator=(d);
+	}
+	uint count() const
+	{
+		return QGDict::count();
+	}
+	uint size() const
+	{
+		return QGDict::size();
+	}
+	bool isEmpty() const
+	{
+		return QGDict::count() == 0;
+	}
+	void insert(long k, const type *d)
+	{
+		QGDict::look_int(k, (Item)d, 1);
+	}
+	void replace(long k, const type *d)
+	{
+		QGDict::look_int(k, (Item)d, 2);
+	}
+	bool remove(long k)
+	{
+		return QGDict::remove_int(k);
+	}
+	type *take(long k)
+	{
+		return (type *)QGDict::take_int(k);
+	}
+	type *find(long k) const
+	{
+		return (type *)((QGDict *)this)->QGDict::look_int(k, 0, 0);
+	}
+	type *operator[](long k) const
+	{
+		return (type *)((QGDict *)this)->QGDict::look_int(k, 0, 0);
+	}
+	void clear()
+	{
+		QGDict::clear();
+	}
+	void resize(uint n)
+	{
+		QGDict::resize(n);
+	}
+	void statistics() const
+	{
+		QGDict::statistics();
+	}
+
+      private:
+	void deleteItem(Item d);
 };
 
 #if defined(Q_DELETING_VOID_UNDEFINED)
-template<> inline void QIntDict<void>::deleteItem( QCollection::Item )
+template <> inline void QIntDict<void>::deleteItem(QCollection::Item)
 {
 }
 #endif
 
-template<class type> inline void QIntDict<type>::deleteItem( QCollection::Item d )
+template <class type>
+inline void QIntDict<type>::deleteItem(QCollection::Item d)
 {
-    if ( del_item ) delete (type *)d;
+	if (del_item)
+		delete (type *)d;
 }
 
-template<class type> class Q_EXPORT QIntDictIterator : public QGDictIterator
+template <class type> class Q_EXPORT QIntDictIterator : public QGDictIterator
 {
-public:
-    QIntDictIterator(const QIntDict<type> &d) :QGDictIterator((QGDict &)d) {}
-   ~QIntDictIterator()	      {}
-    uint  count()   const     { return dict->count(); }
-    bool  isEmpty() const     { return dict->count() == 0; }
-    type *toFirst()	      { return (type *)QGDictIterator::toFirst(); }
-    operator type *()  const  { return (type *)QGDictIterator::get(); }
-    type *current()    const  { return (type *)QGDictIterator::get(); }
-    long  currentKey() const  { return QGDictIterator::getKeyInt(); }
-    type *operator()()	      { return (type *)QGDictIterator::operator()(); }
-    type *operator++()	      { return (type *)QGDictIterator::operator++(); }
-    type *operator+=(uint j)  { return (type *)QGDictIterator::operator+=(j);}
+      public:
+	QIntDictIterator(const QIntDict<type> &d) : QGDictIterator((QGDict &)d)
+	{
+	}
+	~QIntDictIterator()
+	{
+	}
+	uint count() const
+	{
+		return dict->count();
+	}
+	bool isEmpty() const
+	{
+		return dict->count() == 0;
+	}
+	type *toFirst()
+	{
+		return (type *)QGDictIterator::toFirst();
+	}
+	operator type *() const
+	{
+		return (type *)QGDictIterator::get();
+	}
+	type *current() const
+	{
+		return (type *)QGDictIterator::get();
+	}
+	long currentKey() const
+	{
+		return QGDictIterator::getKeyInt();
+	}
+	type *operator()()
+	{
+		return (type *)QGDictIterator::operator()();
+	}
+	type *operator++()
+	{
+		return (type *)QGDictIterator::operator++();
+	}
+	type *operator+=(uint j)
+	{
+		return (type *)QGDictIterator::operator+=(j);
+	}
 };
 
 

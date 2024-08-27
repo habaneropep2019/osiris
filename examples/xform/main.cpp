@@ -2,12 +2,12 @@
 
 int main(int argc, char **argv)
 {
-    QApplication a(argc, argv);
+	QApplication a(argc, argv);
 
-    XFormCenter *xfc = new XFormCenter;
+	XFormCenter *xfc = new XFormCenter;
 
-    a.setMainWidget(xfc);
-    xfc->setCaption("Qt Example - XForm");
-    xfc->show();
-    return a.exec();
+	a.setMainWidget(xfc);
+	xfc->setCaption("Qt Example - XForm");
+	xfc->show();
+	return a.exec();
 }

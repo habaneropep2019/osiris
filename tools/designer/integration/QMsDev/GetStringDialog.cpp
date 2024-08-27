@@ -6,16 +6,16 @@
 #include "GetStringDialog.h"
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
+# define new DEBUG_NEW
+# undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
-// Dialogfeld GetStringDialog 
+// Dialogfeld GetStringDialog
 
 
-GetStringDialog::GetStringDialog(CWnd* pParent /*=NULL*/)
+GetStringDialog::GetStringDialog(CWnd *pParent /*=NULL*/)
 	: CDialog(GetStringDialog::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(GetStringDialog)
@@ -24,7 +24,7 @@ GetStringDialog::GetStringDialog(CWnd* pParent /*=NULL*/)
 }
 
 
-void GetStringDialog::DoDataExchange(CDataExchange* pDX)
+void GetStringDialog::DoDataExchange(CDataExchange *pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(GetStringDialog)
@@ -34,10 +34,10 @@ void GetStringDialog::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(GetStringDialog, CDialog)
-	//{{AFX_MSG_MAP(GetStringDialog)
-		// HINWEIS: Der Klassen-Assistent fügt hier Zuordnungsmakros für Nachrichten ein
-	//}}AFX_MSG_MAP
+//{{AFX_MSG_MAP(GetStringDialog)
+// HINWEIS: Der Klassen-Assistent fügt hier Zuordnungsmakros für Nachrichten ein
+//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
-// Behandlungsroutinen für Nachrichten GetStringDialog 
+// Behandlungsroutinen für Nachrichten GetStringDialog

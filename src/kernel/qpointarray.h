@@ -39,8 +39,8 @@
 #define QPOINTARRAY_H
 
 #ifndef QT_H
-#include "qarray.h"
-#include "qpoint.h"
+# include "qarray.h"
+# include "qpoint.h"
 #endif // QT_H
 
 
@@ -50,44 +50,57 @@ template class Q_EXPORT QArray<QPoint>;
 
 class Q_EXPORT QPointArray : public QArray<QPoint>
 {
-public:
-    QPointArray() {}
-    ~QPointArray() {}
-    QPointArray( int size ) : QArray<QPoint>( size ) {}
-    QPointArray( const QPointArray &a ) : QArray<QPoint>( a ) {}
-    QPointArray( const QRect &r, bool closed=FALSE );
-    QPointArray( int nPoints, const QCOORD *points );
+      public:
+	QPointArray()
+	{
+	}
+	~QPointArray()
+	{
+	}
+	QPointArray(int size) : QArray<QPoint>(size)
+	{
+	}
+	QPointArray(const QPointArray &a) : QArray<QPoint>(a)
+	{
+	}
+	QPointArray(const QRect &r, bool closed = FALSE);
+	QPointArray(int nPoints, const QCOORD *points);
 
-    QPointArray	 &operator=( const QPointArray &a )
-	{ return (QPointArray&)assign( a ); }
+	QPointArray &operator=(const QPointArray &a)
+	{
+		return (QPointArray &)assign(a);
+	}
 
-    QPointArray copy() const
-	{ QPointArray tmp; return *((QPointArray*)&tmp.duplicate(*this)); }
+	QPointArray copy() const
+	{
+		QPointArray tmp;
+		return *((QPointArray *)&tmp.duplicate(*this));
+	}
 
-    void    translate( int dx, int dy );
-    QRect   boundingRect() const;
+	void translate(int dx, int dy);
+	QRect boundingRect() const;
 
-    void    point( uint i, int *x, int *y ) const;
-    QPoint  point( uint i ) const;
-    void    setPoint( uint i, int x, int y );
-    void    setPoint( uint i, const QPoint &p );
-    bool    setPoints( int nPoints, const QCOORD *points );
-    bool    setPoints( int nPoints, int firstx, int firsty, ... );
-    bool    putPoints( int index, int nPoints, const QCOORD *points );
-    bool    putPoints( int index, int nPoints, int firstx, int firsty, ... );
+	void point(uint i, int *x, int *y) const;
+	QPoint point(uint i) const;
+	void setPoint(uint i, int x, int y);
+	void setPoint(uint i, const QPoint &p);
+	bool setPoints(int nPoints, const QCOORD *points);
+	bool setPoints(int nPoints, int firstx, int firsty, ...);
+	bool putPoints(int index, int nPoints, const QCOORD *points);
+	bool putPoints(int index, int nPoints, int firstx, int firsty, ...);
 
-    void    makeArc( int x, int y, int w, int h, int a1, int a2 );
-    void    makeEllipse( int x, int y, int w, int h );
-    void    makeArc( int x, int y, int w, int h, int a1, int a2,
-		     const QWMatrix& );
-    QPointArray quadBezier() const;
+	void makeArc(int x, int y, int w, int h, int a1, int a2);
+	void makeEllipse(int x, int y, int w, int h);
+	void makeArc(int x, int y, int w, int h, int a1, int a2,
+		     const QWMatrix &);
+	QPointArray quadBezier() const;
 
-    void*  shortPoints( int index = 0, int nPoints = -1 ) const;
-    static void cleanBuffers();
+	void *shortPoints(int index = 0, int nPoints = -1) const;
+	static void cleanBuffers();
 
-protected:
-    static uint splen;
-    static void* sp;
+      protected:
+	static uint splen;
+	static void *sp;
 };
 
 
@@ -95,17 +108,17 @@ protected:
   QPointArray stream functions
  *****************************************************************************/
 #ifndef QT_NO_DATASTREAM
-Q_EXPORT QDataStream &operator<<( QDataStream &, const QPointArray & );
-Q_EXPORT QDataStream &operator>>( QDataStream &, QPointArray & );
+Q_EXPORT QDataStream &operator<<(QDataStream &, const QPointArray &);
+Q_EXPORT QDataStream &operator>>(QDataStream &, QPointArray &);
 #endif
 
 /*****************************************************************************
   Misc. QPointArray functions
  *****************************************************************************/
 
-inline void QPointArray::setPoint( uint i, const QPoint &p )
+inline void QPointArray::setPoint(uint i, const QPoint &p)
 {
-    setPoint( i, p.x(), p.y() );
+	setPoint(i, p.x(), p.y());
 }
 
 

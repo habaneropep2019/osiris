@@ -25,16 +25,16 @@
 
 QPixmap splashScreen()
 {
-    Embed2 *e = &embed_vec2[ 0 ];
-    while ( e->name ) {
-	if ( QString( e->name ) == "splash.png" ) {
-	    QImage img;
-	    img.loadFromData( (const uchar*)e->data, e->size );
-	    QPixmap pix;
-	    pix.convertFromImage( img );
-	    return pix;
+	Embed2 *e = &embed_vec2[0];
+	while (e->name) {
+		if (QString(e->name) == "splash.png") {
+			QImage img;
+			img.loadFromData((const uchar *)e->data, e->size);
+			QPixmap pix;
+			pix.convertFromImage(img);
+			return pix;
+		}
+		e++;
 	}
-	e++;
-    }
-    return QPixmap();
+	return QPixmap();
 }

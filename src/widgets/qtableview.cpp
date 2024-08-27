@@ -37,46 +37,47 @@
 
 #include "qtableview.h"
 #ifndef QT_NO_TABLEVIEW
-#include "qscrollbar.h"
-#include "qpainter.h"
-#include "qdrawutil.h"
-#include <limits.h>
+# include "qscrollbar.h"
+# include "qpainter.h"
+# include "qdrawutil.h"
+# include <limits.h>
 
-extern void qt_set_paintevent_clipping( QPaintDevice* dev, const QRegion& region);
+extern void qt_set_paintevent_clipping(QPaintDevice *dev,
+				       const QRegion &region);
 extern void qt_clear_paintevent_clipping();
 
 
 enum ScrollBarDirtyFlags {
-    verGeometry	  = 0x01,
-    verSteps	  = 0x02,
-    verRange	  = 0x04,
-    verValue	  = 0x08,
-    horGeometry	  = 0x10,
-    horSteps	  = 0x20,
-    horRange	  = 0x40,
-    horValue	  = 0x80,
-    verMask	  = 0x0F,
-    horMask	  = 0xF0
+	verGeometry = 0x01,
+	verSteps = 0x02,
+	verRange = 0x04,
+	verValue = 0x08,
+	horGeometry = 0x10,
+	horSteps = 0x20,
+	horRange = 0x40,
+	horValue = 0x80,
+	verMask = 0x0F,
+	horMask = 0xF0
 };
 
 
-#define HSBEXT horizontalScrollBar()->sizeHint().height()
-#define VSBEXT verticalScrollBar()->sizeHint().width()
+# define HSBEXT horizontalScrollBar()->sizeHint().height()
+# define VSBEXT verticalScrollBar()->sizeHint().width()
 
 
-class QCornerSquare : public QWidget		// internal class
+class QCornerSquare : public QWidget // internal class
 {
-public:
-    QCornerSquare( QWidget *, const char* = 0 );
-    void paintEvent( QPaintEvent * );
+      public:
+	QCornerSquare(QWidget *, const char * = 0);
+	void paintEvent(QPaintEvent *);
 };
 
-QCornerSquare::QCornerSquare( QWidget *parent, const char *name )
-	: QWidget( parent, name )
+QCornerSquare::QCornerSquare(QWidget *parent, const char *name)
+	: QWidget(parent, name)
 {
 }
 
-void QCornerSquare::paintEvent( QPaintEvent * )
+void QCornerSquare::paintEvent(QPaintEvent *)
 {
 }
 
@@ -170,27 +171,27 @@ void QCornerSquare::paintEvent( QPaintEvent * )
 
 */
 
-QTableView::QTableView( QWidget *parent, const char *name, WFlags f )
-    : QFrame( parent, name, f, FALSE )
+QTableView::QTableView(QWidget *parent, const char *name, WFlags f)
+	: QFrame(parent, name, f, FALSE)
 {
-    nRows		 = nCols      = 0;	// zero rows/cols
-    xCellOffs		 = yCellOffs  = 0;	// zero offset
-    xCellDelta		 = yCellDelta = 0;	// zero cell offset
-    xOffs		 = yOffs      = 0;	// zero total pixel offset
-    cellH		 = cellW      = 0;	// user defined cell size
-    tFlags		 = 0;
-    vScrollBar		 = hScrollBar = 0;	// no scroll bars
-    cornerSquare	 = 0;
-    sbDirty		 = 0;
-    eraseInPaint	 = FALSE;
-    verSliding		 = FALSE;
-    verSnappingOff	 = FALSE;
-    horSliding		 = FALSE;
-    horSnappingOff	 = FALSE;
-    coveringCornerSquare = FALSE;
-    inSbUpdate		 = FALSE;
-    setFontPropagation( SamePalette );
-    setPalettePropagation( SamePalette );
+	nRows = nCols = 0; // zero rows/cols
+	xCellOffs = yCellOffs = 0; // zero offset
+	xCellDelta = yCellDelta = 0; // zero cell offset
+	xOffs = yOffs = 0; // zero total pixel offset
+	cellH = cellW = 0; // user defined cell size
+	tFlags = 0;
+	vScrollBar = hScrollBar = 0; // no scroll bars
+	cornerSquare = 0;
+	sbDirty = 0;
+	eraseInPaint = FALSE;
+	verSliding = FALSE;
+	verSnappingOff = FALSE;
+	horSliding = FALSE;
+	horSnappingOff = FALSE;
+	coveringCornerSquare = FALSE;
+	inSbUpdate = FALSE;
+	setFontPropagation(SamePalette);
+	setPalettePropagation(SamePalette);
 }
 
 /*!
@@ -199,9 +200,9 @@ QTableView::QTableView( QWidget *parent, const char *name, WFlags f )
 
 QTableView::~QTableView()
 {
-    delete vScrollBar;
-    delete hScrollBar;
-    delete cornerSquare;
+	delete vScrollBar;
+	delete hScrollBar;
+	delete cornerSquare;
 }
 
 
@@ -211,26 +212,26 @@ QTableView::~QTableView()
   \sa setPalette()
 */
 
-void QTableView::setBackgroundColor( const QColor &c )
+void QTableView::setBackgroundColor(const QColor &c)
 {
-    QWidget::setBackgroundColor( c );
+	QWidget::setBackgroundColor(c);
 }
 
 /*!\reimp
-*/
+ */
 
-void QTableView::setPalette( const QPalette &p )
+void QTableView::setPalette(const QPalette &p)
 {
-    QWidget::setPalette( p );
+	QWidget::setPalette(p);
 }
 
 /*!\reimp
-*/
+ */
 
 void QTableView::show()
 {
-    showOrHideScrollBars();
-    QWidget::show();
+	showOrHideScrollBars();
+	QWidget::show();
 }
 
 
@@ -258,24 +259,24 @@ void QTableView::show()
   clearing and then repainting one cell at at time, it can make the
   screen flicker less than it would otherwise.  */
 
-void QTableView::repaint( int x, int y, int w, int h, bool erase )
+void QTableView::repaint(int x, int y, int w, int h, bool erase)
 {
-    if ( !isVisible() || testWState(WState_BlockUpdates) )
-	return;
-    if ( w < 0 )
-	w = width()  - x;
-    if ( h < 0 )
-	h = height() - y;
-    QRect r( x, y, w, h );
-    if ( r.isEmpty() )
-	return; // nothing to do
-    QPaintEvent e( r );
-    if ( erase && backgroundMode() != NoBackground )
-	eraseInPaint = TRUE;			// erase when painting
-    qt_set_paintevent_clipping( this, r );
-    paintEvent( &e );
-    qt_clear_paintevent_clipping();
-    eraseInPaint = FALSE;
+	if (!isVisible() || testWState(WState_BlockUpdates))
+		return;
+	if (w < 0)
+		w = width() - x;
+	if (h < 0)
+		h = height() - y;
+	QRect r(x, y, w, h);
+	if (r.isEmpty())
+		return; // nothing to do
+	QPaintEvent e(r);
+	if (erase && backgroundMode() != NoBackground)
+		eraseInPaint = TRUE; // erase when painting
+	qt_set_paintevent_clipping(this, r);
+	paintEvent(&e);
+	qt_clear_paintevent_clipping();
+	eraseInPaint = FALSE;
 }
 
 /*!
@@ -298,31 +299,32 @@ void QTableView::repaint( int x, int y, int w, int h, bool erase )
   \sa numCols(), setNumCols(), numRows()
 */
 
-void QTableView::setNumRows( int rows )
+void QTableView::setNumRows(int rows)
 {
-    if ( rows < 0 ) {
-#if defined(CHECK_RANGE)
-	qWarning( "QTableView::setNumRows: (%s) Negative argument %d.",
-		 name( "unnamed" ), rows );
-#endif
-	return;
-    }
-    if ( nRows == rows )
-	return;
+	if (rows < 0) {
+# if defined(CHECK_RANGE)
+		qWarning("QTableView::setNumRows: (%s) Negative argument %d.",
+			 name("unnamed"), rows);
+# endif
+		return;
+	}
+	if (nRows == rows)
+		return;
 
-    if ( autoUpdate() && isVisible() ) {
-	int oldLastVisible = lastRowVisible();
-	int oldTopCell = topCell();
-	nRows = rows;
-	if ( autoUpdate() && isVisible() &&
-	     ( oldLastVisible != lastRowVisible() || oldTopCell != topCell() ) )
-		repaint( oldTopCell != topCell() );
-    } else {
-	// Be more careful - if destructing, bad things might happen.
-	nRows = rows;
-    }
-    updateScrollBars( verRange );
-    updateFrameSize();
+	if (autoUpdate() && isVisible()) {
+		int oldLastVisible = lastRowVisible();
+		int oldTopCell = topCell();
+		nRows = rows;
+		if (autoUpdate() && isVisible() &&
+		    (oldLastVisible != lastRowVisible() ||
+		     oldTopCell != topCell()))
+			repaint(oldTopCell != topCell());
+	} else {
+		// Be more careful - if destructing, bad things might happen.
+		nRows = rows;
+	}
+	updateScrollBars(verRange);
+	updateFrameSize();
 }
 
 /*!
@@ -340,26 +342,26 @@ void QTableView::setNumRows( int rows )
   \sa numCols(), numRows(), setNumRows()
 */
 
-void QTableView::setNumCols( int cols )
+void QTableView::setNumCols(int cols)
 {
-    if ( cols < 0 ) {
-#if defined(CHECK_RANGE)
-	qWarning( "QTableView::setNumCols: (%s) Negative argument %d.",
-		 name( "unnamed" ), cols );
-#endif
-	return;
-    }
-    if ( nCols == cols )
-	return;
-    int oldCols = nCols;
-    nCols = cols;
-    if ( autoUpdate() && isVisible() ) {
-	int maxCol = lastColVisible();
-	if ( maxCol >= oldCols || maxCol >= nCols )
-	    repaint();
-    }
-    updateScrollBars( horRange );
-    updateFrameSize();
+	if (cols < 0) {
+# if defined(CHECK_RANGE)
+		qWarning("QTableView::setNumCols: (%s) Negative argument %d.",
+			 name("unnamed"), cols);
+# endif
+		return;
+	}
+	if (nCols == cols)
+		return;
+	int oldCols = nCols;
+	nCols = cols;
+	if (autoUpdate() && isVisible()) {
+		int maxCol = lastColVisible();
+		if (maxCol >= oldCols || maxCol >= nCols)
+			repaint();
+	}
+	updateScrollBars(horRange);
+	updateFrameSize();
 }
 
 
@@ -376,10 +378,10 @@ void QTableView::setNumCols( int cols )
   \sa setYOffset(), setTopLeftCell(), setLeftCell()
 */
 
-void QTableView::setTopCell( int row )
+void QTableView::setTopCell(int row)
 {
-    setTopLeftCell( row, -1 );
-    return;
+	setTopLeftCell(row, -1);
+	return;
 }
 
 /*!
@@ -395,10 +397,10 @@ void QTableView::setTopCell( int row )
   \sa setXOffset(), setTopLeftCell(), setTopCell()
 */
 
-void QTableView::setLeftCell( int col )
+void QTableView::setLeftCell(int col)
 {
-    setTopLeftCell( -1, col );
-    return;
+	setTopLeftCell(-1, col);
+	return;
 }
 
 /*!
@@ -408,34 +410,36 @@ void QTableView::setLeftCell( int col )
   \sa setLeftCell(), setTopCell(), setOffset()
 */
 
-void QTableView::setTopLeftCell( int row, int col )
+void QTableView::setTopLeftCell(int row, int col)
 {
-    int newX = xOffs;
-    int newY = yOffs;
+	int newX = xOffs;
+	int newY = yOffs;
 
-    if ( col >= 0 ) {
-	if ( cellW ) {
-	    newX = col*cellW;
-	    if ( newX > maxXOffset() )
-		newX = maxXOffset();
-	} else {
-	    newX = 0;
-	    while ( col )
-		newX += cellWidth( --col );   // optimize using current! ###
+	if (col >= 0) {
+		if (cellW) {
+			newX = col * cellW;
+			if (newX > maxXOffset())
+				newX = maxXOffset();
+		} else {
+			newX = 0;
+			while (col)
+				newX += cellWidth(--col); // optimize using
+							  // current! ###
+		}
 	}
-    }
-    if ( row >= 0 ) {
-	if ( cellH ) {
-	    newY = row*cellH;
-	    if ( newY > maxYOffset() )
-		newY = maxYOffset();
-	} else {
-	    newY = 0;
-	    while ( row )
-		newY += cellHeight( --row );   // optimize using current! ###
+	if (row >= 0) {
+		if (cellH) {
+			newY = row * cellH;
+			if (newY > maxYOffset())
+				newY = maxYOffset();
+		} else {
+			newY = 0;
+			while (row)
+				newY += cellHeight(--row); // optimize using
+							   // current! ###
+		}
 	}
-    }
-    setOffset( newX, newY );
+	setOffset(newX, newY);
 }
 
 
@@ -457,9 +461,9 @@ void QTableView::setTopLeftCell( int row, int col )
   \sa xOffset(), setYOffset(), setOffset(), setLeftCell()
 */
 
-void QTableView::setXOffset( int x )
+void QTableView::setXOffset(int x)
 {
-    setOffset( x, yOffset() );
+	setOffset(x, yOffset());
 }
 
 /*!
@@ -482,9 +486,9 @@ void QTableView::setXOffset( int x )
   \sa yOffset(), setXOffset(), setOffset(), setTopCell()
 */
 
-void QTableView::setYOffset( int y )
+void QTableView::setYOffset(int y)
 {
-    setOffset( xOffset(), y );
+	setOffset(xOffset(), y);
 }
 
 /*!
@@ -498,74 +502,74 @@ void QTableView::setYOffset( int y )
   \sa xOffset(), yOffset(), setXOffset(), setYOffset(), setTopLeftCell()
 */
 
-void QTableView::setOffset( int x, int y, bool updateScrBars )
+void QTableView::setOffset(int x, int y, bool updateScrBars)
 {
-    if ( (!testTableFlags(Tbl_snapToHGrid) || xCellDelta == 0) &&
-	 (!testTableFlags(Tbl_snapToVGrid) || yCellDelta == 0) &&
-	 (x == xOffs && y == yOffs) )
-	return;
+	if ((!testTableFlags(Tbl_snapToHGrid) || xCellDelta == 0) &&
+	    (!testTableFlags(Tbl_snapToVGrid) || yCellDelta == 0) &&
+	    (x == xOffs && y == yOffs))
+		return;
 
-    if ( x < 0 )
-	x = 0;
-    if ( y < 0 )
-	y = 0;
+	if (x < 0)
+		x = 0;
+	if (y < 0)
+		y = 0;
 
-    if ( cellW ) {
-	if ( x > maxXOffset() )
-	    x = maxXOffset();
-	xCellOffs = x / cellW;
-	if ( !testTableFlags(Tbl_snapToHGrid) ) {
-	    xCellDelta	= (short)(x % cellW);
+	if (cellW) {
+		if (x > maxXOffset())
+			x = maxXOffset();
+		xCellOffs = x / cellW;
+		if (!testTableFlags(Tbl_snapToHGrid)) {
+			xCellDelta = (short)(x % cellW);
+		} else {
+			x = xCellOffs * cellW;
+			xCellDelta = 0;
+		}
 	} else {
-	    x		= xCellOffs*cellW;
-	    xCellDelta	= 0;
+		int xn = 0, xcd = 0, col = 0;
+		while (col < nCols - 1 && x >= xn + (xcd = cellWidth(col))) {
+			xn += xcd;
+			col++;
+		}
+		xCellOffs = col;
+		if (testTableFlags(Tbl_snapToHGrid)) {
+			xCellDelta = 0;
+			x = xn;
+		} else {
+			xCellDelta = (short)(x - xn);
+		}
 	}
-    } else {
-	int xn=0, xcd=0, col = 0;
-	while ( col < nCols-1 && x >= xn+(xcd=cellWidth(col)) ) {
-	    xn += xcd;
-	    col++;
-	}
-	xCellOffs = col;
-	if ( testTableFlags(Tbl_snapToHGrid) ) {
-	    xCellDelta = 0;
-	    x = xn;
+	if (cellH) {
+		if (y > maxYOffset())
+			y = maxYOffset();
+		yCellOffs = y / cellH;
+		if (!testTableFlags(Tbl_snapToVGrid)) {
+			yCellDelta = (short)(y % cellH);
+		} else {
+			y = yCellOffs * cellH;
+			yCellDelta = 0;
+		}
 	} else {
-	    xCellDelta = (short)(x-xn);
+		int yn = 0, yrd = 0, row = 0;
+		while (row < nRows - 1 && y >= yn + (yrd = cellHeight(row))) {
+			yn += yrd;
+			row++;
+		}
+		yCellOffs = row;
+		if (testTableFlags(Tbl_snapToVGrid)) {
+			yCellDelta = 0;
+			y = yn;
+		} else {
+			yCellDelta = (short)(y - yn);
+		}
 	}
-    }
-    if ( cellH ) {
-	if ( y > maxYOffset() )
-	    y = maxYOffset();
-	yCellOffs = y / cellH;
-	if ( !testTableFlags(Tbl_snapToVGrid) ) {
-	    yCellDelta	= (short)(y % cellH);
-	} else {
-	    y		= yCellOffs*cellH;
-	    yCellDelta	= 0;
-	}
-    } else {
-	int yn=0, yrd=0, row=0;
-	while ( row < nRows-1 && y >= yn+(yrd=cellHeight(row)) ) {
-	    yn += yrd;
-	    row++;
-	}
-	yCellOffs = row;
-	if ( testTableFlags(Tbl_snapToVGrid) ) {
-	    yCellDelta = 0;
-	    y = yn;
-	} else {
-	    yCellDelta = (short)(y-yn);
-	}
-    }
-    int dx = (x - xOffs);
-    int dy = (y - yOffs);
-    xOffs = x;
-    yOffs = y;
-    if ( autoUpdate() && isVisible() )
-	scroll( dx, dy );
-    if ( updateScrBars )
-	updateScrollBars( verValue | horValue );
+	int dx = (x - xOffs);
+	int dy = (y - yOffs);
+	xOffs = x;
+	yOffs = y;
+	if (autoUpdate() && isVisible())
+		scroll(dx, dy);
+	if (updateScrBars)
+		updateScrollBars(verValue | horValue);
 }
 
 
@@ -588,9 +592,9 @@ void QTableView::setOffset( int x, int y, bool updateScrBars )
   \sa setCellWidth(), cellHeight(), totalWidth(), updateTableSize()
 */
 
-int QTableView::cellWidth( int )
+int QTableView::cellWidth(int)
 {
-    return cellW;
+	return cellW;
 }
 
 
@@ -604,23 +608,23 @@ int QTableView::cellWidth( int )
   \sa cellWidth(), setCellHeight(), totalWidth(), numCols()
 */
 
-void QTableView::setCellWidth( int cellWidth )
+void QTableView::setCellWidth(int cellWidth)
 {
-    if ( cellW == cellWidth )
-	return;
-#if defined(CHECK_RANGE)
-    if ( cellWidth < 0 || cellWidth > SHRT_MAX ) {
-	qWarning( "QTableView::setCellWidth: (%s) Argument out of range (%d)",
-		 name( "unnamed" ), cellWidth );
-	return;
-    }
-#endif
-    cellW = (short)cellWidth;
+	if (cellW == cellWidth)
+		return;
+# if defined(CHECK_RANGE)
+	if (cellWidth < 0 || cellWidth > SHRT_MAX) {
+		qWarning(
+			"QTableView::setCellWidth: (%s) Argument out of range (%d)",
+			name("unnamed"), cellWidth);
+		return;
+	}
+# endif
+	cellW = (short)cellWidth;
 
-    updateScrollBars( horSteps | horRange );
-    if ( autoUpdate() && isVisible() )
-	repaint();
-
+	updateScrollBars(horSteps | horRange);
+	if (autoUpdate() && isVisible())
+		repaint();
 }
 
 /*!
@@ -643,9 +647,9 @@ void QTableView::setCellWidth( int cellWidth )
   \sa setCellHeight(), cellWidth(), totalHeight()
 */
 
-int QTableView::cellHeight( int )
+int QTableView::cellHeight(int)
 {
-    return cellH;
+	return cellH;
 }
 
 /*!
@@ -658,21 +662,22 @@ int QTableView::cellHeight( int )
   \sa cellHeight(), setCellWidth(), totalHeight(), numRows()
 */
 
-void QTableView::setCellHeight( int cellHeight )
+void QTableView::setCellHeight(int cellHeight)
 {
-    if ( cellH == cellHeight )
-	return;
-#if defined(CHECK_RANGE)
-    if ( cellHeight < 0 || cellHeight > SHRT_MAX ) {
-	qWarning( "QTableView::setCellHeight: (%s) Argument out of range (%d)",
-		 name( "unnamed" ), cellHeight );
-	return;
-    }
-#endif
-    cellH = (short)cellHeight;
-    if ( autoUpdate() && isVisible() )
-	repaint();
-    updateScrollBars( verSteps | verRange );
+	if (cellH == cellHeight)
+		return;
+# if defined(CHECK_RANGE)
+	if (cellHeight < 0 || cellHeight > SHRT_MAX) {
+		qWarning(
+			"QTableView::setCellHeight: (%s) Argument out of range (%d)",
+			name("unnamed"), cellHeight);
+		return;
+	}
+# endif
+	cellH = (short)cellHeight;
+	if (autoUpdate() && isVisible())
+		repaint();
+	updateScrollBars(verSteps | verRange);
 }
 
 
@@ -689,14 +694,14 @@ void QTableView::setCellHeight( int cellHeight )
 
 int QTableView::totalWidth()
 {
-    if ( cellW ) {
-	return cellW*nCols;
-    } else {
-	int tw = 0;
-	for( int i = 0 ; i < nCols ; i++ )
-	    tw += cellWidth( i );
-	return tw;
-    }
+	if (cellW) {
+		return cellW * nCols;
+	} else {
+		int tw = 0;
+		for (int i = 0; i < nCols; i++)
+			tw += cellWidth(i);
+		return tw;
+	}
 }
 
 /*!
@@ -713,14 +718,14 @@ int QTableView::totalWidth()
 
 int QTableView::totalHeight()
 {
-    if ( cellH ) {
-	return cellH*nRows;
-    } else {
-	int th = 0;
-	for( int i = 0 ; i < nRows ; i++ )
-	    th += cellHeight( i );
-	return th;
-    }
+	if (cellH) {
+		return cellH * nRows;
+	} else {
+		int th = 0;
+		for (int i = 0; i < nRows; i++)
+			th += cellHeight(i);
+		return th;
+	}
 }
 
 
@@ -806,56 +811,56 @@ int QTableView::totalHeight()
   \sa clearTableFlags(), testTableFlags(), tableFlags()
 */
 
-void QTableView::setTableFlags( uint f )
+void QTableView::setTableFlags(uint f)
 {
-    f = (f ^ tFlags) & f;			// clear flags already set
-    tFlags |= f;
+	f = (f ^ tFlags) & f; // clear flags already set
+	tFlags |= f;
 
-    bool updateOn = autoUpdate();
-    setAutoUpdate( FALSE );
+	bool updateOn = autoUpdate();
+	setAutoUpdate(FALSE);
 
-    uint repaintMask = Tbl_cutCellsV | Tbl_cutCellsH;
+	uint repaintMask = Tbl_cutCellsV | Tbl_cutCellsH;
 
-    if ( f & Tbl_vScrollBar ) {
-	setVerScrollBar( TRUE );
-    }
-    if ( f & Tbl_hScrollBar ) {
-	setHorScrollBar( TRUE );
-    }
-    if ( f & Tbl_autoVScrollBar ) {
-	updateScrollBars( verRange );
-    }
-    if ( f & Tbl_autoHScrollBar ) {
-	updateScrollBars( horRange );
-    }
-    if ( f & Tbl_scrollLastHCell ) {
-	updateScrollBars( horRange );
-    }
-    if ( f & Tbl_scrollLastVCell ) {
-	updateScrollBars( verRange );
-    }
-    if ( f & Tbl_snapToHGrid ) {
-	updateScrollBars( horRange );
-    }
-    if ( f & Tbl_snapToVGrid ) {
-	updateScrollBars( verRange );
-    }
-    if ( f & Tbl_snapToGrid ) {			// Note: checks for 2 flags
-	if ( (f & Tbl_snapToHGrid) != 0 && xCellDelta != 0 || //have to scroll?
-	     (f & Tbl_snapToVGrid) != 0 && yCellDelta != 0 ) {
-	    snapToGrid( (f & Tbl_snapToHGrid) != 0,	// do snapping
-			(f & Tbl_snapToVGrid) != 0 );
-	    repaintMask |= Tbl_snapToGrid;	// repaint table
+	if (f & Tbl_vScrollBar) {
+		setVerScrollBar(TRUE);
 	}
-    }
+	if (f & Tbl_hScrollBar) {
+		setHorScrollBar(TRUE);
+	}
+	if (f & Tbl_autoVScrollBar) {
+		updateScrollBars(verRange);
+	}
+	if (f & Tbl_autoHScrollBar) {
+		updateScrollBars(horRange);
+	}
+	if (f & Tbl_scrollLastHCell) {
+		updateScrollBars(horRange);
+	}
+	if (f & Tbl_scrollLastVCell) {
+		updateScrollBars(verRange);
+	}
+	if (f & Tbl_snapToHGrid) {
+		updateScrollBars(horRange);
+	}
+	if (f & Tbl_snapToVGrid) {
+		updateScrollBars(verRange);
+	}
+	if (f & Tbl_snapToGrid) { // Note: checks for 2 flags
+		if ((f & Tbl_snapToHGrid) != 0 && xCellDelta != 0 || // have to
+								     // scroll?
+		    (f & Tbl_snapToVGrid) != 0 && yCellDelta != 0) {
+			snapToGrid((f & Tbl_snapToHGrid) != 0, // do snapping
+				   (f & Tbl_snapToVGrid) != 0);
+			repaintMask |= Tbl_snapToGrid; // repaint table
+		}
+	}
 
-    if ( updateOn ) {
-	setAutoUpdate( TRUE );
-	updateScrollBars();
-	if ( isVisible() && (f & repaintMask) )
-	    repaint();
-    }
-
+	if (updateOn) {
+		setAutoUpdate(TRUE);
+		updateScrollBars();
+		if (isVisible() && (f & repaintMask))
+			repaint();
+	}
 }
 
 /*!
@@ -872,59 +877,60 @@ void QTableView::setTableFlags( uint f )
   \sa setTableFlags(), testTableFlags(), tableFlags()
 */
 
-void QTableView::clearTableFlags( uint f )
+void QTableView::clearTableFlags(uint f)
 {
-    f = (f ^ ~tFlags) & f;		// clear flags that are already 0
-    tFlags &= ~f;
+	f = (f ^ ~tFlags) & f; // clear flags that are already 0
+	tFlags &= ~f;
 
-    bool updateOn = autoUpdate();
-    setAutoUpdate( FALSE );
+	bool updateOn = autoUpdate();
+	setAutoUpdate(FALSE);
 
-    uint repaintMask = Tbl_cutCellsV | Tbl_cutCellsH;
+	uint repaintMask = Tbl_cutCellsV | Tbl_cutCellsH;
 
-    if ( f & Tbl_vScrollBar ) {
-	setVerScrollBar( FALSE );
-    }
-    if ( f & Tbl_hScrollBar ) {
-	setHorScrollBar( FALSE );
-    }
-    if ( f & Tbl_scrollLastHCell ) {
-	int maxX = maxXOffset();
-	if ( xOffs > maxX ) {
-	    setOffset( maxX, yOffs );
-	    repaintMask |= Tbl_scrollLastHCell;
+	if (f & Tbl_vScrollBar) {
+		setVerScrollBar(FALSE);
 	}
-	updateScrollBars( horRange );
-    }
-    if ( f & Tbl_scrollLastVCell ) {
-	int maxY = maxYOffset();
-	if ( yOffs > maxY ) {
-	    setOffset( xOffs, maxY );
-	    repaintMask |= Tbl_scrollLastVCell;
+	if (f & Tbl_hScrollBar) {
+		setHorScrollBar(FALSE);
 	}
-	updateScrollBars( verRange );
-    }
-    if ( f & Tbl_smoothScrolling ) {	      // Note: checks for 2 flags
-	if ((f & Tbl_smoothHScrolling) != 0 && xCellDelta != 0 ||//must scroll?
-	    (f & Tbl_smoothVScrolling) != 0 && yCellDelta != 0 ) {
-	    snapToGrid( (f & Tbl_smoothHScrolling) != 0,      // do snapping
-			(f & Tbl_smoothVScrolling) != 0 );
-	    repaintMask |= Tbl_smoothScrolling;		     // repaint table
+	if (f & Tbl_scrollLastHCell) {
+		int maxX = maxXOffset();
+		if (xOffs > maxX) {
+			setOffset(maxX, yOffs);
+			repaintMask |= Tbl_scrollLastHCell;
+		}
+		updateScrollBars(horRange);
 	}
-    }
-    if ( f & Tbl_snapToHGrid ) {
-	updateScrollBars( horRange );
-    }
-    if ( f & Tbl_snapToVGrid ) {
-	updateScrollBars( verRange );
-    }
-    if ( updateOn ) {
-	setAutoUpdate( TRUE );
-	updateScrollBars();	     // returns immediately if nothing to do
-	if ( isVisible() && (f & repaintMask) )
-	    repaint();
-    }
-
+	if (f & Tbl_scrollLastVCell) {
+		int maxY = maxYOffset();
+		if (yOffs > maxY) {
+			setOffset(xOffs, maxY);
+			repaintMask |= Tbl_scrollLastVCell;
+		}
+		updateScrollBars(verRange);
+	}
+	if (f & Tbl_smoothScrolling) { // Note: checks for 2 flags
+		if ((f & Tbl_smoothHScrolling) != 0 &&
+			    xCellDelta != 0 || // must scroll?
+		    (f & Tbl_smoothVScrolling) != 0 && yCellDelta != 0) {
+			snapToGrid((f & Tbl_smoothHScrolling) != 0, // do
+								    // snapping
+				   (f & Tbl_smoothVScrolling) != 0);
+			repaintMask |= Tbl_smoothScrolling; // repaint table
+		}
+	}
+	if (f & Tbl_snapToHGrid) {
+		updateScrollBars(horRange);
+	}
+	if (f & Tbl_snapToVGrid) {
+		updateScrollBars(verRange);
+	}
+	if (updateOn) {
+		setAutoUpdate(TRUE);
+		updateScrollBars(); // returns immediately if nothing to do
+		if (isVisible() && (f & repaintMask))
+			repaint();
+	}
 }
 
 
@@ -960,15 +966,15 @@ void QTableView::clearTableFlags( uint f )
   \sa autoUpdate(), repaint()
 */
 
-void QTableView::setAutoUpdate( bool enable )
+void QTableView::setAutoUpdate(bool enable)
 {
-    if ( isUpdatesEnabled() == enable )
-	return;
-    setUpdatesEnabled( enable );
-    if ( enable ) {
-	showOrHideScrollBars();
-	updateScrollBars();
-    }
+	if (isUpdatesEnabled() == enable)
+		return;
+	setUpdatesEnabled(enable);
+	if (enable) {
+		showOrHideScrollBars();
+		updateScrollBars();
+	}
 }
 
 
@@ -981,17 +987,16 @@ void QTableView::setAutoUpdate( bool enable )
   \sa isVisible()
 */
 
-void QTableView::updateCell( int row, int col, bool erase )
+void QTableView::updateCell(int row, int col, bool erase)
 {
-    int xPos, yPos;
-    if ( !colXPos( col, &xPos ) )
-	return;
-    if ( !rowYPos( row, &yPos ) )
-	return;
-    QRect uR = QRect( xPos, yPos,
-		      cellW ? cellW : cellWidth(col),
-		      cellH ? cellH : cellHeight(row) );
-    repaint( uR.intersect(viewRect()), erase );
+	int xPos, yPos;
+	if (!colXPos(col, &xPos))
+		return;
+	if (!rowYPos(row, &yPos))
+		return;
+	QRect uR = QRect(xPos, yPos, cellW ? cellW : cellWidth(col),
+			 cellH ? cellH : cellHeight(row));
+	repaint(uR.intersect(viewRect()), erase);
 }
 
 
@@ -1012,7 +1017,7 @@ void QTableView::updateCell( int row, int col, bool erase )
 
 QRect QTableView::viewRect() const
 {
-    return QRect( frameWidth(), frameWidth(), viewWidth(), viewHeight() );
+	return QRect(frameWidth(), frameWidth(), viewWidth(), viewHeight());
 }
 
 
@@ -1028,19 +1033,19 @@ QRect QTableView::viewRect() const
 
 int QTableView::lastRowVisible() const
 {
-    int cellMaxY;
-    int row = findRawRow( maxViewY(), &cellMaxY );
-    if ( row == -1 || row >= nRows ) {		// maxViewY() past end?
-	row = nRows - 1;			// yes: return last row
-    } else {
-	if ( testTableFlags(Tbl_cutCellsV) && cellMaxY > maxViewY() ) {
-	    if ( row == yCellOffs )		// cut by right margin?
-		return -1;			// yes, nothing in the view
-	    else
-	       row = row - 1;			// cut by margin, one back
+	int cellMaxY;
+	int row = findRawRow(maxViewY(), &cellMaxY);
+	if (row == -1 || row >= nRows) { // maxViewY() past end?
+		row = nRows - 1; // yes: return last row
+	} else {
+		if (testTableFlags(Tbl_cutCellsV) && cellMaxY > maxViewY()) {
+			if (row == yCellOffs) // cut by right margin?
+				return -1; // yes, nothing in the view
+			else
+				row = row - 1; // cut by margin, one back
+		}
 	}
-    }
-    return row;
+	return row;
 }
 
 /*!
@@ -1055,19 +1060,19 @@ int QTableView::lastRowVisible() const
 
 int QTableView::lastColVisible() const
 {
-    int cellMaxX;
-    int col = findRawCol( maxViewX(), &cellMaxX );
-    if ( col == -1 || col >= nCols ) {		// maxViewX() past end?
-	col = nCols - 1;			// yes: return last col
-    } else {
-	if ( testTableFlags(Tbl_cutCellsH) && cellMaxX > maxViewX() ) {
-	    if ( col == xCellOffs )		// cut by bottom margin?
-		return -1;			// yes, nothing in the view
-	    else
-	       col = col - 1;			// cell by margin, one back
+	int cellMaxX;
+	int col = findRawCol(maxViewX(), &cellMaxX);
+	if (col == -1 || col >= nCols) { // maxViewX() past end?
+		col = nCols - 1; // yes: return last col
+	} else {
+		if (testTableFlags(Tbl_cutCellsH) && cellMaxX > maxViewX()) {
+			if (col == xCellOffs) // cut by bottom margin?
+				return -1; // yes, nothing in the view
+			else
+				col = col - 1; // cell by margin, one back
+		}
 	}
-    }
-    return col;
+	return col;
 }
 
 /*!
@@ -1075,9 +1080,9 @@ int QTableView::lastColVisible() const
   \sa colIsVisible()
 */
 
-bool QTableView::rowIsVisible( int row ) const
+bool QTableView::rowIsVisible(int row) const
 {
-    return rowYPos( row, 0 );
+	return rowYPos(row, 0);
 }
 
 /*!
@@ -1085,9 +1090,9 @@ bool QTableView::rowIsVisible( int row ) const
   \sa rowIsVisible()
 */
 
-bool QTableView::colIsVisible( int col ) const
+bool QTableView::colIsVisible(int col) const
 {
-    return colXPos( col, 0 );
+	return colXPos(col, 0);
 }
 
 
@@ -1097,23 +1102,22 @@ bool QTableView::colIsVisible( int col ) const
   bottom left corner between the two scroll bars with an empty widget.
 */
 
-void QTableView::coverCornerSquare( bool enable )
+void QTableView::coverCornerSquare(bool enable)
 {
-    coveringCornerSquare = enable;
-    if ( !cornerSquare && enable ) {
-	cornerSquare = new QCornerSquare( this );
-	CHECK_PTR( cornerSquare );
-	cornerSquare->setGeometry( maxViewX() + frameWidth() + 1,
-				   maxViewY() + frameWidth() + 1,
-                                   VSBEXT,
-                                 HSBEXT);
-    }
-    if ( autoUpdate() && cornerSquare ) {
-	if ( enable )
-	    cornerSquare->show();
-	else
-	    cornerSquare->hide();
-    }
+	coveringCornerSquare = enable;
+	if (!cornerSquare && enable) {
+		cornerSquare = new QCornerSquare(this);
+		CHECK_PTR(cornerSquare);
+		cornerSquare->setGeometry(maxViewX() + frameWidth() + 1,
+					  maxViewY() + frameWidth() + 1, VSBEXT,
+					  HSBEXT);
+	}
+	if (autoUpdate() && cornerSquare) {
+		if (enable)
+			cornerSquare->show();
+		else
+			cornerSquare->hide();
+	}
 }
 
 
@@ -1131,25 +1135,25 @@ void QTableView::coverCornerSquare( bool enable )
   \link setTableFlags() Tbl_snapTo*Grid \endlink table flags.
 */
 
-void QTableView::snapToGrid( bool horizontal, bool vertical )
+void QTableView::snapToGrid(bool horizontal, bool vertical)
 {
-    int newXCell = -1;
-    int newYCell = -1;
-    if ( horizontal && xCellDelta != 0 ) {
-	int w = cellW ? cellW : cellWidth( xCellOffs );
-	if ( xCellDelta >= w/2 )
-	    newXCell = xCellOffs + 1;
-	else
-	    newXCell = xCellOffs;
-    }
-    if ( vertical && yCellDelta != 0 ) {
-	int h = cellH ? cellH : cellHeight( yCellOffs );
-	if ( yCellDelta >= h/2 )
-	    newYCell = yCellOffs + 1;
-	else
-	    newYCell = yCellOffs;
-    }
-    setTopLeftCell( newYCell, newXCell );  //row,column
+	int newXCell = -1;
+	int newYCell = -1;
+	if (horizontal && xCellDelta != 0) {
+		int w = cellW ? cellW : cellWidth(xCellOffs);
+		if (xCellDelta >= w / 2)
+			newXCell = xCellOffs + 1;
+		else
+			newXCell = xCellOffs;
+	}
+	if (vertical && yCellDelta != 0) {
+		int h = cellH ? cellH : cellHeight(yCellOffs);
+		if (yCellDelta >= h / 2)
+			newYCell = yCellOffs + 1;
+		else
+			newYCell = yCellOffs;
+	}
+	setTopLeftCell(newYCell, newXCell); // row,column
 }
 
 /*!
@@ -1161,16 +1165,16 @@ void QTableView::snapToGrid( bool horizontal, bool vertical )
   scroll bar.
 */
 
-void QTableView::horSbValue( int val )
+void QTableView::horSbValue(int val)
 {
-    if ( horSliding ) {
-	horSliding = FALSE;
-	if ( horSnappingOff ) {
-	    horSnappingOff = FALSE;
-	    tFlags |= Tbl_snapToHGrid;
+	if (horSliding) {
+		horSliding = FALSE;
+		if (horSnappingOff) {
+			horSnappingOff = FALSE;
+			tFlags |= Tbl_snapToHGrid;
+		}
 	}
-    }
-    setOffset( val, yOffs, FALSE );
+	setOffset(val, yOffs, FALSE);
 }
 
 /*!
@@ -1181,16 +1185,16 @@ void QTableView::horSbValue( int val )
   Scrolls the table smoothly horizontally even if \c Tbl_snapToHGrid is set.
 */
 
-void QTableView::horSbSliding( int val )
+void QTableView::horSbSliding(int val)
 {
-    if ( testTableFlags(Tbl_snapToHGrid) &&
-	 testTableFlags(Tbl_smoothHScrolling) ) {
-	tFlags &= ~Tbl_snapToHGrid;	// turn off snapping while sliding
-	setOffset( val, yOffs, FALSE );
-	tFlags |= Tbl_snapToHGrid;	// turn on snapping again
-    } else {
-	setOffset( val, yOffs, FALSE );
-    }
+	if (testTableFlags(Tbl_snapToHGrid) &&
+	    testTableFlags(Tbl_smoothHScrolling)) {
+		tFlags &= ~Tbl_snapToHGrid; // turn off snapping while sliding
+		setOffset(val, yOffs, FALSE);
+		tFlags |= Tbl_snapToHGrid; // turn on snapping again
+	} else {
+		setOffset(val, yOffs, FALSE);
+	}
 }
 
 /*!
@@ -1199,11 +1203,11 @@ void QTableView::horSbSliding( int val )
   QScrollBar::sliderReleased() signal.
 */
 
-void QTableView::horSbSlidingDone( )
+void QTableView::horSbSlidingDone()
 {
-    if ( testTableFlags(Tbl_snapToHGrid) &&
-	 testTableFlags(Tbl_smoothHScrolling) )
-	snapToGrid( TRUE, FALSE );
+	if (testTableFlags(Tbl_snapToHGrid) &&
+	    testTableFlags(Tbl_smoothHScrolling))
+		snapToGrid(TRUE, FALSE);
 }
 
 /*!
@@ -1215,16 +1219,16 @@ void QTableView::horSbSlidingDone( )
   scroll bar.
 */
 
-void QTableView::verSbValue( int val )
+void QTableView::verSbValue(int val)
 {
-    if ( verSliding ) {
-	verSliding = FALSE;
-	if ( verSnappingOff ) {
-	    verSnappingOff = FALSE;
-	    tFlags |= Tbl_snapToVGrid;
+	if (verSliding) {
+		verSliding = FALSE;
+		if (verSnappingOff) {
+			verSnappingOff = FALSE;
+			tFlags |= Tbl_snapToVGrid;
+		}
 	}
-    }
-    setOffset( xOffs, val, FALSE );
+	setOffset(xOffs, val, FALSE);
 }
 
 /*!
@@ -1235,16 +1239,16 @@ void QTableView::verSbValue( int val )
   Scrolls the table smoothly vertically even if \c Tbl_snapToVGrid is set.
 */
 
-void QTableView::verSbSliding( int val )
+void QTableView::verSbSliding(int val)
 {
-    if ( testTableFlags(Tbl_snapToVGrid) &&
-	 testTableFlags(Tbl_smoothVScrolling) ) {
-	tFlags &= ~Tbl_snapToVGrid;	// turn off snapping while sliding
-	setOffset( xOffs, val, FALSE );
-	tFlags |= Tbl_snapToVGrid;	// turn on snapping again
-    } else {
-	setOffset( xOffs, val, FALSE );
-    }
+	if (testTableFlags(Tbl_snapToVGrid) &&
+	    testTableFlags(Tbl_smoothVScrolling)) {
+		tFlags &= ~Tbl_snapToVGrid; // turn off snapping while sliding
+		setOffset(xOffs, val, FALSE);
+		tFlags |= Tbl_snapToVGrid; // turn on snapping again
+	} else {
+		setOffset(xOffs, val, FALSE);
+	}
 }
 
 /*!
@@ -1253,11 +1257,11 @@ void QTableView::verSbSliding( int val )
   QScrollBar::sliderReleased() signal.
 */
 
-void QTableView::verSbSlidingDone( )
+void QTableView::verSbSlidingDone()
 {
-    if ( testTableFlags(Tbl_snapToVGrid) &&
-	 testTableFlags(Tbl_smoothVScrolling) )
-	snapToGrid( FALSE, TRUE );
+	if (testTableFlags(Tbl_snapToVGrid) &&
+	    testTableFlags(Tbl_smoothVScrolling))
+		snapToGrid(FALSE, TRUE);
 }
 
 
@@ -1268,7 +1272,7 @@ void QTableView::verSbSlidingDone( )
   do so for each cell.
 */
 
-void QTableView::setupPainter( QPainter * )
+void QTableView::setupPainter(QPainter *)
 {
 }
 
@@ -1297,154 +1301,160 @@ void QTableView::setupPainter( QPainter * )
   Calls paintCell() for the cells that needs to be repainted.
 */
 
-void QTableView::paintEvent( QPaintEvent *e )
+void QTableView::paintEvent(QPaintEvent *e)
 {
-    QRect updateR = e->rect();			// update rectangle
-    if ( sbDirty ) {
-	bool e = eraseInPaint;
-	updateScrollBars();
-	eraseInPaint = e;
-    }
-
-    QPainter paint( this );
-
-    if ( !contentsRect().contains( updateR, TRUE  ) ) {// update frame ?
-	drawFrame( &paint );
-	if ( updateR.left() < frameWidth() ) 		//###
-	    updateR.setLeft( frameWidth() );
-	if ( updateR.top() < frameWidth() )
-	    updateR.setTop( frameWidth() );
-    }
-
-    int maxWX = maxViewX();
-    int maxWY = maxViewY();
-    if ( updateR.right() > maxWX )
-	updateR.setRight( maxWX );
-    if ( updateR.bottom() > maxWY )
-	updateR.setBottom( maxWY );
-
-    setupPainter( &paint );			// prepare for painting table
-
-    int firstRow = findRow( updateR.y() );
-    int firstCol = findCol( updateR.x() );
-    int	 xStart, yStart;
-    if ( !colXPos( firstCol, &xStart ) || !rowYPos( firstRow, &yStart ) ) {
-	paint.eraseRect( updateR ); // erase area outside cells but in view
-	return;
-    }
-    int	  maxX	= updateR.right();
-    int	  maxY	= updateR.bottom();
-    int	  row	= firstRow;
-    int	  col;
-    int	  yPos	= yStart;
-    int	  xPos = maxX+1; // in case the while() is empty
-    int	  nextX;
-    int	  nextY;
-    QRect winR = viewRect();
-    QRect cellR;
-    QRect cellUR;
-#ifndef QT_NO_TRANSFORMATIONS
-    QWMatrix matrix;
-#endif
-
-    while ( yPos <= maxY && row < nRows ) {
-	nextY = yPos + (cellH ? cellH : cellHeight( row ));
-	if ( testTableFlags( Tbl_cutCellsV ) && nextY > ( maxWY + 1 ) )
-	    break;
-	col  = firstCol;
-	xPos = xStart;
-	while ( xPos <= maxX && col < nCols ) {
-	    nextX = xPos + (cellW ? cellW : cellWidth( col ));
-	    if ( testTableFlags( Tbl_cutCellsH ) && nextX > ( maxWX + 1 ) )
-		break;
-
-	    cellR.setRect( xPos, yPos, cellW ? cellW : cellWidth(col),
-				       cellH ? cellH : cellHeight(row) );
-	    cellUR = cellR.intersect( updateR );
-	    if ( cellUR.isValid() ) {
-		cellUpdateR = cellUR;
-		cellUpdateR.moveBy( -xPos, -yPos ); // cell coordinates
-		if ( eraseInPaint )
-		    paint.eraseRect( cellUR );
-
-#ifndef QT_NO_TRANSFORMATIONS
-		matrix.translate( xPos, yPos );
-		paint.setWorldMatrix( matrix );
-		if ( testTableFlags(Tbl_clipCellPainting) ||
-		     frameWidth() > 0 && !winR.contains( cellR ) ) { //##arnt
-		    paint.setClipRect( cellUR );
-		    paintCell( &paint, row, col );
-		    paint.setClipping( FALSE );
-		} else {
-		    paintCell( &paint, row, col );
-		}
-		matrix.reset();
-		paint.setWorldMatrix( matrix );
-#else
-		paint.translate( xPos, yPos );
-		if ( testTableFlags(Tbl_clipCellPainting) ||
-		     frameWidth() > 0 && !winR.contains( cellR ) ) { //##arnt
-		    paint.setClipRect( cellUR );
-		    paintCell( &paint, row, col );
-		    paint.setClipping( FALSE );
-		} else {
-		    paintCell( &paint, row, col );
-		}
-		paint.translate( -xPos, -yPos );
-#endif
-	    }
-	    col++;
-	    xPos = nextX;
+	QRect updateR = e->rect(); // update rectangle
+	if (sbDirty) {
+		bool e = eraseInPaint;
+		updateScrollBars();
+		eraseInPaint = e;
 	}
-	row++;
-	yPos = nextY;
-    }
 
-    // while painting we have to erase any areas in the view that
-    // are not covered by cells but are covered by the paint event
-    // rectangle these must be erased. We know that xPos is the last
-    // x pixel updated + 1 and that yPos is the last y pixel updated + 1.
+	QPainter paint(this);
 
-    // Note that this needs to be done regardless whether we do
-    // eraseInPaint or not. Reason: a subclass (for example
-    // QMultiLineEdit) may implement flicker-freeness and encourage
-    // the use of repaint(FALSE). The subclass, however, cannot draw
-    // all pixels, just those inside the cells. So QTableView is
-    // reponsible for all pixels outside the cells.
+	if (!contentsRect().contains(updateR, TRUE)) { // update frame ?
+		drawFrame(&paint);
+		if (updateR.left() < frameWidth()) // ###
+			updateR.setLeft(frameWidth());
+		if (updateR.top() < frameWidth())
+			updateR.setTop(frameWidth());
+	}
 
-    QRect viewR = viewRect();
-    const QColorGroup g = colorGroup();
-    
-    if ( xPos <= maxX ) {
-	QRect r = viewR;
-	r.setLeft( xPos );
-	r.setBottom( yPos<maxY?yPos:maxY );
-	if ( inherits( "QMultiLineEdit" ) )
-	    paint.fillRect( r.intersect( updateR ), g.base() );
-	else
-	    paint.eraseRect( r.intersect( updateR ) );
-    }
-    if ( yPos <= maxY ) {
-	QRect r = viewR;
-	r.setTop( yPos );
-	if ( inherits( "QMultiLineEdit" ) )
-	    paint.fillRect( r.intersect( updateR ), g.base() );
-	else
-	    paint.eraseRect( r.intersect( updateR ) );
-    }
+	int maxWX = maxViewX();
+	int maxWY = maxViewY();
+	if (updateR.right() > maxWX)
+		updateR.setRight(maxWX);
+	if (updateR.bottom() > maxWY)
+		updateR.setBottom(maxWY);
+
+	setupPainter(&paint); // prepare for painting table
+
+	int firstRow = findRow(updateR.y());
+	int firstCol = findCol(updateR.x());
+	int xStart, yStart;
+	if (!colXPos(firstCol, &xStart) || !rowYPos(firstRow, &yStart)) {
+		paint.eraseRect(updateR); // erase area outside cells but in
+					  // view
+		return;
+	}
+	int maxX = updateR.right();
+	int maxY = updateR.bottom();
+	int row = firstRow;
+	int col;
+	int yPos = yStart;
+	int xPos = maxX + 1; // in case the while() is empty
+	int nextX;
+	int nextY;
+	QRect winR = viewRect();
+	QRect cellR;
+	QRect cellUR;
+# ifndef QT_NO_TRANSFORMATIONS
+	QWMatrix matrix;
+# endif
+
+	while (yPos <= maxY && row < nRows) {
+		nextY = yPos + (cellH ? cellH : cellHeight(row));
+		if (testTableFlags(Tbl_cutCellsV) && nextY > (maxWY + 1))
+			break;
+		col = firstCol;
+		xPos = xStart;
+		while (xPos <= maxX && col < nCols) {
+			nextX = xPos + (cellW ? cellW : cellWidth(col));
+			if (testTableFlags(Tbl_cutCellsH) &&
+			    nextX > (maxWX + 1))
+				break;
+
+			cellR.setRect(xPos, yPos,
+				      cellW ? cellW : cellWidth(col),
+				      cellH ? cellH : cellHeight(row));
+			cellUR = cellR.intersect(updateR);
+			if (cellUR.isValid()) {
+				cellUpdateR = cellUR;
+				cellUpdateR.moveBy(-xPos, -yPos); // cell
+								  // coordinates
+				if (eraseInPaint)
+					paint.eraseRect(cellUR);
+
+# ifndef QT_NO_TRANSFORMATIONS
+				matrix.translate(xPos, yPos);
+				paint.setWorldMatrix(matrix);
+				if (testTableFlags(Tbl_clipCellPainting) ||
+				    frameWidth() > 0 &&
+					    !winR.contains(cellR)) { // ##arnt
+					paint.setClipRect(cellUR);
+					paintCell(&paint, row, col);
+					paint.setClipping(FALSE);
+				} else {
+					paintCell(&paint, row, col);
+				}
+				matrix.reset();
+				paint.setWorldMatrix(matrix);
+# else
+				paint.translate(xPos, yPos);
+				if (testTableFlags(Tbl_clipCellPainting) ||
+				    frameWidth() > 0 &&
+					    !winR.contains(cellR)) { // ##arnt
+					paint.setClipRect(cellUR);
+					paintCell(&paint, row, col);
+					paint.setClipping(FALSE);
+				} else {
+					paintCell(&paint, row, col);
+				}
+				paint.translate(-xPos, -yPos);
+# endif
+			}
+			col++;
+			xPos = nextX;
+		}
+		row++;
+		yPos = nextY;
+	}
+
+	// while painting we have to erase any areas in the view that
+	// are not covered by cells but are covered by the paint event
+	// rectangle these must be erased. We know that xPos is the last
+	// x pixel updated + 1 and that yPos is the last y pixel updated + 1.
+
+	// Note that this needs to be done regardless whether we do
+	// eraseInPaint or not. Reason: a subclass (for example
+	// QMultiLineEdit) may implement flicker-freeness and encourage
+	// the use of repaint(FALSE). The subclass, however, cannot draw
+	// all pixels, just those inside the cells. So QTableView is
+	// reponsible for all pixels outside the cells.
+
+	QRect viewR = viewRect();
+	const QColorGroup g = colorGroup();
+
+	if (xPos <= maxX) {
+		QRect r = viewR;
+		r.setLeft(xPos);
+		r.setBottom(yPos < maxY ? yPos : maxY);
+		if (inherits("QMultiLineEdit"))
+			paint.fillRect(r.intersect(updateR), g.base());
+		else
+			paint.eraseRect(r.intersect(updateR));
+	}
+	if (yPos <= maxY) {
+		QRect r = viewR;
+		r.setTop(yPos);
+		if (inherits("QMultiLineEdit"))
+			paint.fillRect(r.intersect(updateR), g.base());
+		else
+			paint.eraseRect(r.intersect(updateR));
+	}
 }
 
 /*!\reimp
-*/
-void QTableView::resizeEvent( QResizeEvent * )
+ */
+void QTableView::resizeEvent(QResizeEvent *)
 {
-    updateScrollBars( horValue | verValue | horSteps | horGeometry | horRange |
-		      verSteps | verGeometry | verRange );
-    showOrHideScrollBars();
-    updateFrameSize();
-    int maxX = QMIN( xOffs, maxXOffset() );			// ### can be slow
-    int maxY = QMIN( yOffs, maxYOffset() );
-    setOffset( maxX, maxY );
+	updateScrollBars(horValue | verValue | horSteps | horGeometry |
+			 horRange | verSteps | verGeometry | verRange);
+	showOrHideScrollBars();
+	updateFrameSize();
+	int maxX = QMIN(xOffs, maxXOffset()); // ### can be slow
+	int maxY = QMIN(yOffs, maxYOffset());
+	setOffset(maxX, maxY);
 }
 
 
@@ -1454,7 +1464,7 @@ void QTableView::resizeEvent( QResizeEvent * )
 
 void QTableView::updateView()
 {
-    repaint( viewRect() );
+	repaint(viewRect());
 }
 
 /*!
@@ -1465,27 +1475,24 @@ void QTableView::updateView()
 
 QScrollBar *QTableView::verticalScrollBar() const
 {
-    QTableView *that = (QTableView*)this; // semantic const
-    if ( !vScrollBar ) {
-	QScrollBar *sb = new QScrollBar( QScrollBar::Vertical, that );
-#ifndef QT_NO_CURSOR
-	sb->setCursor( arrowCursor );
-#endif
-        sb->resize( sb->sizeHint() ); // height is irrelevant
-	CHECK_PTR(sb);
-	sb->setTracking( FALSE );
-	sb->setFocusPolicy( NoFocus );
-	connect( sb, SIGNAL(valueChanged(int)),
-		 SLOT(verSbValue(int)));
-	connect( sb, SIGNAL(sliderMoved(int)),
-		 SLOT(verSbSliding(int)));
-	connect( sb, SIGNAL(sliderReleased()),
-		 SLOT(verSbSlidingDone()));
-	sb->hide();
-	that->vScrollBar = sb;
-	return sb;
-    }
-    return vScrollBar;
+	QTableView *that = (QTableView *)this; // semantic const
+	if (!vScrollBar) {
+		QScrollBar *sb = new QScrollBar(QScrollBar::Vertical, that);
+# ifndef QT_NO_CURSOR
+		sb->setCursor(arrowCursor);
+# endif
+		sb->resize(sb->sizeHint()); // height is irrelevant
+		CHECK_PTR(sb);
+		sb->setTracking(FALSE);
+		sb->setFocusPolicy(NoFocus);
+		connect(sb, SIGNAL(valueChanged(int)), SLOT(verSbValue(int)));
+		connect(sb, SIGNAL(sliderMoved(int)), SLOT(verSbSliding(int)));
+		connect(sb, SIGNAL(sliderReleased()), SLOT(verSbSlidingDone()));
+		sb->hide();
+		that->vScrollBar = sb;
+		return sb;
+	}
+	return vScrollBar;
 }
 
 /*!
@@ -1496,27 +1503,24 @@ QScrollBar *QTableView::verticalScrollBar() const
 
 QScrollBar *QTableView::horizontalScrollBar() const
 {
-    QTableView *that = (QTableView*)this; // semantic const
-    if ( !hScrollBar ) {
-	QScrollBar *sb = new QScrollBar( QScrollBar::Horizontal, that );
-#ifndef QT_NO_CURSOR
-	sb->setCursor( arrowCursor );
-#endif
-	sb->resize( sb->sizeHint() ); // width is irrelevant
-	sb->setFocusPolicy( NoFocus );
-	CHECK_PTR(sb);
-	sb->setTracking( FALSE );
-	connect( sb, SIGNAL(valueChanged(int)),
-		 SLOT(horSbValue(int)));
-	connect( sb, SIGNAL(sliderMoved(int)),
-		 SLOT(horSbSliding(int)));
-	connect( sb, SIGNAL(sliderReleased()),
-		 SLOT(horSbSlidingDone()));
-	sb->hide();
-	that->hScrollBar = sb;
-	return sb;
-    }
-    return hScrollBar;
+	QTableView *that = (QTableView *)this; // semantic const
+	if (!hScrollBar) {
+		QScrollBar *sb = new QScrollBar(QScrollBar::Horizontal, that);
+# ifndef QT_NO_CURSOR
+		sb->setCursor(arrowCursor);
+# endif
+		sb->resize(sb->sizeHint()); // width is irrelevant
+		sb->setFocusPolicy(NoFocus);
+		CHECK_PTR(sb);
+		sb->setTracking(FALSE);
+		connect(sb, SIGNAL(valueChanged(int)), SLOT(horSbValue(int)));
+		connect(sb, SIGNAL(sliderMoved(int)), SLOT(horSbSliding(int)));
+		connect(sb, SIGNAL(sliderReleased()), SLOT(horSbSlidingDone()));
+		sb->hide();
+		that->hScrollBar = sb;
+		return sb;
+	}
+	return hScrollBar;
 }
 
 /*!
@@ -1524,37 +1528,38 @@ QScrollBar *QTableView::horizontalScrollBar() const
   setAutoUpdate() and the \link setTableFlags() table flags\endlink.
 */
 
-void QTableView::setHorScrollBar( bool on, bool update )
+void QTableView::setHorScrollBar(bool on, bool update)
 {
-    if ( on ) {
-	tFlags |= Tbl_hScrollBar;
-	horizontalScrollBar(); // created
-	if ( update )
-	    updateScrollBars( horMask | verMask );
-	else
-	    sbDirty = sbDirty | (horMask | verMask);
-	if ( testTableFlags( Tbl_vScrollBar ) )
-	    coverCornerSquare( TRUE );
-	if ( autoUpdate() )
-	    sbDirty = sbDirty | horMask;
-    } else {
-	tFlags &= ~Tbl_hScrollBar;
-	if ( !hScrollBar )
-	    return;
-	coverCornerSquare( FALSE );
-	bool hideScrollBar = autoUpdate() && hScrollBar->isVisible();
-	if ( hideScrollBar )
-	    hScrollBar->hide();
-	if ( update )
-	    updateScrollBars( verMask );
-	else
-	    sbDirty = sbDirty | verMask;
-	if ( hideScrollBar && isVisible() )
-	    repaint( hScrollBar->x(), hScrollBar->y(),
-		     width() - hScrollBar->x(), hScrollBar->height() );
-    }
-    if ( update )
-	updateFrameSize();
+	if (on) {
+		tFlags |= Tbl_hScrollBar;
+		horizontalScrollBar(); // created
+		if (update)
+			updateScrollBars(horMask | verMask);
+		else
+			sbDirty = sbDirty | (horMask | verMask);
+		if (testTableFlags(Tbl_vScrollBar))
+			coverCornerSquare(TRUE);
+		if (autoUpdate())
+			sbDirty = sbDirty | horMask;
+	} else {
+		tFlags &= ~Tbl_hScrollBar;
+		if (!hScrollBar)
+			return;
+		coverCornerSquare(FALSE);
+		bool hideScrollBar = autoUpdate() && hScrollBar->isVisible();
+		if (hideScrollBar)
+			hScrollBar->hide();
+		if (update)
+			updateScrollBars(verMask);
+		else
+			sbDirty = sbDirty | verMask;
+		if (hideScrollBar && isVisible())
+			repaint(hScrollBar->x(), hScrollBar->y(),
+				width() - hScrollBar->x(),
+				hScrollBar->height());
+	}
+	if (update)
+		updateFrameSize();
 }
 
 
@@ -1563,132 +1568,140 @@ void QTableView::setHorScrollBar( bool on, bool update )
   setAutoUpdate() and the \link setTableFlags() table flags\endlink.
 */
 
-void QTableView::setVerScrollBar( bool on, bool update )
+void QTableView::setVerScrollBar(bool on, bool update)
 {
-    if ( on ) {
-	tFlags |= Tbl_vScrollBar;
-	verticalScrollBar(); // created
-	if ( update )
-	    updateScrollBars( verMask | horMask );
-	else
-	    sbDirty = sbDirty | (horMask | verMask);
-	if ( testTableFlags( Tbl_hScrollBar ) )
-	    coverCornerSquare( TRUE );
-	if ( autoUpdate() )
-	    sbDirty = sbDirty | verMask;
-    } else {
-	tFlags &= ~Tbl_vScrollBar;
-	if ( !vScrollBar )
-	    return;
-	coverCornerSquare( FALSE );
-	bool hideScrollBar = autoUpdate() && vScrollBar->isVisible();
-	if ( hideScrollBar )
-	    vScrollBar->hide();
-	if ( update )
-	    updateScrollBars( horMask );
-	else
-	    sbDirty = sbDirty | horMask;
-	if ( hideScrollBar && isVisible() )
-	    repaint( vScrollBar->x(), vScrollBar->y(),
-		     vScrollBar->width(), height() - vScrollBar->y() );
-    }
-    if ( update )
-	updateFrameSize();
+	if (on) {
+		tFlags |= Tbl_vScrollBar;
+		verticalScrollBar(); // created
+		if (update)
+			updateScrollBars(verMask | horMask);
+		else
+			sbDirty = sbDirty | (horMask | verMask);
+		if (testTableFlags(Tbl_hScrollBar))
+			coverCornerSquare(TRUE);
+		if (autoUpdate())
+			sbDirty = sbDirty | verMask;
+	} else {
+		tFlags &= ~Tbl_vScrollBar;
+		if (!vScrollBar)
+			return;
+		coverCornerSquare(FALSE);
+		bool hideScrollBar = autoUpdate() && vScrollBar->isVisible();
+		if (hideScrollBar)
+			vScrollBar->hide();
+		if (update)
+			updateScrollBars(horMask);
+		else
+			sbDirty = sbDirty | horMask;
+		if (hideScrollBar && isVisible())
+			repaint(vScrollBar->x(), vScrollBar->y(),
+				vScrollBar->width(),
+				height() - vScrollBar->y());
+	}
+	if (update)
+		updateFrameSize();
 }
 
 
 
 
-int QTableView::findRawRow( int yPos, int *cellMaxY, int *cellMinY,
-			    bool goOutsideView ) const
+int QTableView::findRawRow(int yPos, int *cellMaxY, int *cellMinY,
+			   bool goOutsideView) const
 {
-    int r = -1;
-    if ( nRows == 0 )
+	int r = -1;
+	if (nRows == 0)
+		return r;
+	if (goOutsideView || yPos >= minViewY() && yPos <= maxViewY()) {
+		if (yPos < minViewY()) {
+# if defined(CHECK_RANGE)
+			qWarning("QTableView::findRawRow: (%s) internal error: "
+				 "yPos < minViewY() && goOutsideView "
+				 "not supported. (%d,%d)",
+				 name("unnamed"), yPos, yOffs);
+# endif
+			return -1;
+		}
+		if (cellH) { // uniform cell height
+			r = (yPos - minViewY() + yCellDelta) / cellH; // cell
+								      // offs
+								      // from
+								      // top
+			if (cellMaxY)
+				*cellMaxY = (r + 1) * cellH + minViewY() -
+					    yCellDelta - 1;
+			if (cellMinY)
+				*cellMinY = r * cellH + minViewY() - yCellDelta;
+			r += yCellOffs; // absolute cell index
+		} else { // variable cell height
+			QTableView *tw = (QTableView *)this;
+			r = yCellOffs;
+			int h = minViewY() - yCellDelta; // ##arnt3
+			int oldH = h;
+			ASSERT(r < nRows);
+			while (r < nRows) {
+				oldH = h;
+				h += tw->cellHeight(r); // Start of next cell
+				if (yPos < h)
+					break;
+				r++;
+			}
+			if (cellMaxY)
+				*cellMaxY = h - 1;
+			if (cellMinY)
+				*cellMinY = oldH;
+		}
+	}
 	return r;
-    if ( goOutsideView || yPos >= minViewY() && yPos <= maxViewY() ) {
-	if ( yPos < minViewY() ) {
-#if defined(CHECK_RANGE)
-	    qWarning( "QTableView::findRawRow: (%s) internal error: "
-		     "yPos < minViewY() && goOutsideView "
-		     "not supported. (%d,%d)",
-		     name( "unnamed" ), yPos, yOffs );
-#endif
-	    return -1;
-	}
-	if ( cellH ) {				     // uniform cell height
-	    r = (yPos - minViewY() + yCellDelta)/cellH; // cell offs from top
-	    if ( cellMaxY )
-		*cellMaxY = (r + 1)*cellH + minViewY() - yCellDelta - 1;
-	    if ( cellMinY )
-		*cellMinY = r*cellH + minViewY() - yCellDelta;
-	    r += yCellOffs;			     // absolute cell index
-	} else {				     // variable cell height
-	    QTableView *tw = (QTableView *)this;
-	    r	     = yCellOffs;
-	    int h    = minViewY() - yCellDelta; //##arnt3
-	    int oldH = h;
-	    ASSERT( r < nRows );
-	    while ( r < nRows ) {
-		oldH = h;
-		h += tw->cellHeight( r );	     // Start of next cell
-		if ( yPos < h )
-		    break;
-		r++;
-	    }
-	    if ( cellMaxY )
-		*cellMaxY = h - 1;
-	    if ( cellMinY )
-		*cellMinY = oldH;
-	}
-    }
-    return r;
-
 }
 
 
-int QTableView::findRawCol( int xPos, int *cellMaxX, int *cellMinX ,
-			    bool goOutsideView ) const
+int QTableView::findRawCol(int xPos, int *cellMaxX, int *cellMinX,
+			   bool goOutsideView) const
 {
-    int c = -1;
-    if ( nCols == 0 )
+	int c = -1;
+	if (nCols == 0)
+		return c;
+	if (goOutsideView || xPos >= minViewX() && xPos <= maxViewX()) {
+		if (xPos < minViewX()) {
+# if defined(CHECK_RANGE)
+			qWarning("QTableView::findRawCol: (%s) internal error: "
+				 "xPos < minViewX() && goOutsideView "
+				 "not supported. (%d,%d)",
+				 name("unnamed"), xPos, xOffs);
+# endif
+			return -1;
+		}
+		if (cellW) { // uniform cell width
+			c = (xPos - minViewX() + xCellDelta) / cellW; // cell
+								      // offs
+								      // from
+								      // left
+			if (cellMaxX)
+				*cellMaxX = (c + 1) * cellW + minViewX() -
+					    xCellDelta - 1;
+			if (cellMinX)
+				*cellMinX = c * cellW + minViewX() - xCellDelta;
+			c += xCellOffs; // absolute cell index
+		} else { // variable cell width
+			QTableView *tw = (QTableView *)this;
+			c = xCellOffs;
+			int w = minViewX() - xCellDelta; // ##arnt3
+			int oldW = w;
+			ASSERT(c < nCols);
+			while (c < nCols) {
+				oldW = w;
+				w += tw->cellWidth(c); // Start of next cell
+				if (xPos < w)
+					break;
+				c++;
+			}
+			if (cellMaxX)
+				*cellMaxX = w - 1;
+			if (cellMinX)
+				*cellMinX = oldW;
+		}
+	}
 	return c;
-    if ( goOutsideView || xPos >= minViewX() && xPos <= maxViewX() ) {
-	if ( xPos < minViewX() ) {
-#if defined(CHECK_RANGE)
-	    qWarning( "QTableView::findRawCol: (%s) internal error: "
-		     "xPos < minViewX() && goOutsideView "
-		     "not supported. (%d,%d)",
-		     name( "unnamed" ), xPos, xOffs );
-#endif
-	    return -1;
-	}
-	if ( cellW ) {				// uniform cell width
-	    c = (xPos - minViewX() + xCellDelta)/cellW; //cell offs from left
-	    if ( cellMaxX )
-		*cellMaxX = (c + 1)*cellW + minViewX() - xCellDelta - 1;
-	    if ( cellMinX )
-		*cellMinX = c*cellW + minViewX() - xCellDelta;
-	    c += xCellOffs;			// absolute cell index
-	} else {				// variable cell width
-	    QTableView *tw = (QTableView *)this;
-	    c	     = xCellOffs;
-	    int w    = minViewX() - xCellDelta; //##arnt3
-	    int oldW = w;
-	    ASSERT( c < nCols );
-	    while ( c < nCols ) {
-		oldW = w;
-		w += tw->cellWidth( c );	// Start of next cell
-		if ( xPos < w )
-		    break;
-		c++;
-	    }
-	    if ( cellMaxX )
-		*cellMaxX = w - 1;
-	    if ( cellMinX )
-		*cellMinX = oldW;
-	}
-    }
-    return c;
 }
 
 
@@ -1700,15 +1713,15 @@ int QTableView::findRawCol( int xPos, int *cellMaxX, int *cellMinX ,
   \sa findCol(), rowYPos()
 */
 
-int QTableView::findRow( int yPos ) const
+int QTableView::findRow(int yPos) const
 {
-    int cellMaxY;
-    int row = findRawRow( yPos, &cellMaxY );
-    if ( testTableFlags(Tbl_cutCellsV) && cellMaxY > maxViewY() )
-	row = - 1;				//  cell cut by bottom margin
-    if ( row >= nRows )
-	row = -1;
-    return row;
+	int cellMaxY;
+	int row = findRawRow(yPos, &cellMaxY);
+	if (testTableFlags(Tbl_cutCellsV) && cellMaxY > maxViewY())
+		row = -1; //  cell cut by bottom margin
+	if (row >= nRows)
+		row = -1;
+	return row;
 }
 
 
@@ -1720,15 +1733,15 @@ int QTableView::findRow( int yPos ) const
   \sa findRow(), colXPos()
 */
 
-int QTableView::findCol( int xPos ) const
+int QTableView::findCol(int xPos) const
 {
-    int cellMaxX;
-    int col = findRawCol( xPos, &cellMaxX );
-    if ( testTableFlags(Tbl_cutCellsH) && cellMaxX > maxViewX() )
-	col = - 1;				//  cell cut by right margin
-    if ( col >= nCols )
-	col = -1;
-    return col;
+	int cellMaxX;
+	int col = findRawCol(xPos, &cellMaxX);
+	if (testTableFlags(Tbl_cutCellsH) && cellMaxX > maxViewX())
+		col = -1; //  cell cut by right margin
+	if (col >= nCols)
+		col = -1;
+	return col;
 }
 
 
@@ -1742,33 +1755,33 @@ int QTableView::findCol( int xPos ) const
   \sa colXPos(), findRow()
 */
 
-bool QTableView::rowYPos( int row, int *yPos ) const
+bool QTableView::rowYPos(int row, int *yPos) const
 {
-    int y;
-    if ( row >= yCellOffs ) {
-	if ( cellH ) {
-	    int lastVisible = lastRowVisible();
-	    if ( row > lastVisible || lastVisible == -1 )
-		return FALSE;
-	    y = (row - yCellOffs)*cellH + minViewY() - yCellDelta;
+	int y;
+	if (row >= yCellOffs) {
+		if (cellH) {
+			int lastVisible = lastRowVisible();
+			if (row > lastVisible || lastVisible == -1)
+				return FALSE;
+			y = (row - yCellOffs) * cellH + minViewY() - yCellDelta;
+		} else {
+			// ##arnt3
+			y = minViewY() - yCellDelta; // y of leftmost cell in
+						     // view
+			int r = yCellOffs;
+			QTableView *tw = (QTableView *)this;
+			int maxY = maxViewY();
+			while (r < row && y <= maxY)
+				y += tw->cellHeight(r++);
+			if (y > maxY)
+				return FALSE;
+		}
 	} else {
-	    //##arnt3
-	    y = minViewY() - yCellDelta;	// y of leftmost cell in view
-	    int r = yCellOffs;
-	    QTableView *tw = (QTableView *)this;
-	    int maxY = maxViewY();
-	    while ( r < row && y <= maxY )
-		y += tw->cellHeight( r++ );
-	    if ( y > maxY )
 		return FALSE;
-
 	}
-    } else {
-	return FALSE;
-    }
-    if ( yPos )
-	*yPos = y;
-    return TRUE;
+	if (yPos)
+		*yPos = y;
+	return TRUE;
 }
 
 
@@ -1782,32 +1795,33 @@ bool QTableView::rowYPos( int row, int *yPos ) const
   \sa rowYPos(), findCol()
 */
 
-bool QTableView::colXPos( int col, int *xPos ) const
+bool QTableView::colXPos(int col, int *xPos) const
 {
-    int x;
-    if ( col >= xCellOffs ) {
-	if ( cellW ) {
-	    int lastVisible = lastColVisible();
-	    if ( col > lastVisible || lastVisible == -1 )
-		return FALSE;
-	    x = (col - xCellOffs)*cellW + minViewX() - xCellDelta;
+	int x;
+	if (col >= xCellOffs) {
+		if (cellW) {
+			int lastVisible = lastColVisible();
+			if (col > lastVisible || lastVisible == -1)
+				return FALSE;
+			x = (col - xCellOffs) * cellW + minViewX() - xCellDelta;
+		} else {
+			// ##arnt3
+			x = minViewX() - xCellDelta; // x of uppermost cell in
+						     // view
+			int c = xCellOffs;
+			QTableView *tw = (QTableView *)this;
+			int maxX = maxViewX();
+			while (c < col && x <= maxX)
+				x += tw->cellWidth(c++);
+			if (x > maxX)
+				return FALSE;
+		}
 	} else {
-	    //##arnt3
-	    x = minViewX() - xCellDelta;	// x of uppermost cell in view
-	    int c = xCellOffs;
-	    QTableView *tw = (QTableView *)this;
-	    int maxX = maxViewX();
-	    while ( c < col && x <= maxX )
-		x += tw->cellWidth( c++ );
-	    if ( x > maxX )
 		return FALSE;
 	}
-    } else {
-	return FALSE;
-    }
-    if ( xPos )
-	*xPos = x;
-    return TRUE;
+	if (xPos)
+		*xPos = x;
+	return TRUE;
 }
 
 
@@ -1825,9 +1839,9 @@ bool QTableView::colXPos( int col, int *xPos ) const
   setLeftCell(), setTopLeftOffset()
 */
 
-void QTableView::scroll( int xPixels, int yPixels )
+void QTableView::scroll(int xPixels, int yPixels)
 {
-    QWidget::scroll( -xPixels, -yPixels, contentsRect() );
+	QWidget::scroll(-xPixels, -yPixels, contentsRect());
 }
 
 
@@ -1840,7 +1854,7 @@ void QTableView::scroll( int xPixels, int yPixels )
 
 int QTableView::minViewX() const
 {
-    return frameWidth();
+	return frameWidth();
 }
 
 
@@ -1853,7 +1867,7 @@ int QTableView::minViewX() const
 
 int QTableView::minViewY() const
 {
-    return frameWidth();
+	return frameWidth();
 }
 
 
@@ -1867,9 +1881,8 @@ int QTableView::minViewY() const
 
 int QTableView::maxViewX() const
 {
-    return width() - 1 - frameWidth()
-        - (tFlags & Tbl_vScrollBar ? VSBEXT
-           : 0);
+	return width() - 1 - frameWidth() -
+	       (tFlags & Tbl_vScrollBar ? VSBEXT : 0);
 }
 
 
@@ -1883,9 +1896,8 @@ int QTableView::maxViewX() const
 
 int QTableView::maxViewY() const
 {
-    return height() - 1 - frameWidth()
-        - (tFlags & Tbl_hScrollBar ? HSBEXT
-           : 0);
+	return height() - 1 - frameWidth() -
+	       (tFlags & Tbl_hScrollBar ? HSBEXT : 0);
 }
 
 
@@ -1899,7 +1911,7 @@ int QTableView::maxViewY() const
 
 int QTableView::viewWidth() const
 {
-    return maxViewX() - minViewX() + 1;
+	return maxViewX() - minViewX() + 1;
 }
 
 
@@ -1913,60 +1925,60 @@ int QTableView::viewWidth() const
 
 int QTableView::viewHeight() const
 {
-    return maxViewY() - minViewY() + 1;
+	return maxViewY() - minViewY() + 1;
 }
 
 
 void QTableView::doAutoScrollBars()
 {
-    int viewW = width()	 - frameWidth() - minViewX();
-    int viewH = height() - frameWidth() - minViewY();
-    bool vScrollOn = testTableFlags(Tbl_vScrollBar);
-    bool hScrollOn = testTableFlags(Tbl_hScrollBar);
-    int w = 0;
-    int h = 0;
-    int i;
+	int viewW = width() - frameWidth() - minViewX();
+	int viewH = height() - frameWidth() - minViewY();
+	bool vScrollOn = testTableFlags(Tbl_vScrollBar);
+	bool hScrollOn = testTableFlags(Tbl_hScrollBar);
+	int w = 0;
+	int h = 0;
+	int i;
 
-    if ( testTableFlags(Tbl_autoHScrollBar) ) {
-	if ( cellW ) {
-	    w = cellW*nCols;
-	} else {
-	    i = 0;
-	    while ( i < nCols && w <= viewW )
-		w += cellWidth( i++ );
-	}
-	if ( w > viewW )
-	    hScrollOn = TRUE;
-	else
-	    hScrollOn = FALSE;
-    }
-
-    if ( testTableFlags(Tbl_autoVScrollBar) ) {
-	if ( cellH ) {
-	    h = cellH*nRows;
-	} else {
-	    i = 0;
-	    while ( i < nRows && h <= viewH )
-		h += cellHeight( i++ );
+	if (testTableFlags(Tbl_autoHScrollBar)) {
+		if (cellW) {
+			w = cellW * nCols;
+		} else {
+			i = 0;
+			while (i < nCols && w <= viewW)
+				w += cellWidth(i++);
+		}
+		if (w > viewW)
+			hScrollOn = TRUE;
+		else
+			hScrollOn = FALSE;
 	}
 
-	if ( h > viewH )
-	    vScrollOn = TRUE;
-	else
-	    vScrollOn = FALSE;
-    }
+	if (testTableFlags(Tbl_autoVScrollBar)) {
+		if (cellH) {
+			h = cellH * nRows;
+		} else {
+			i = 0;
+			while (i < nRows && h <= viewH)
+				h += cellHeight(i++);
+		}
 
-    if ( testTableFlags(Tbl_autoHScrollBar) && vScrollOn && !hScrollOn )
-	if ( w > viewW - VSBEXT )
-	    hScrollOn = TRUE;
+		if (h > viewH)
+			vScrollOn = TRUE;
+		else
+			vScrollOn = FALSE;
+	}
 
-    if ( testTableFlags(Tbl_autoVScrollBar) && hScrollOn && !vScrollOn )
-	if ( h > viewH - HSBEXT )
-	    vScrollOn = TRUE;
+	if (testTableFlags(Tbl_autoHScrollBar) && vScrollOn && !hScrollOn)
+		if (w > viewW - VSBEXT)
+			hScrollOn = TRUE;
 
-    setHorScrollBar( hScrollOn, FALSE );
-    setVerScrollBar( vScrollOn, FALSE );
-    updateFrameSize();
+	if (testTableFlags(Tbl_autoVScrollBar) && hScrollOn && !vScrollOn)
+		if (h > viewH - HSBEXT)
+			vScrollOn = TRUE;
+
+	setHorScrollBar(hScrollOn, FALSE);
+	setVerScrollBar(vScrollOn, FALSE);
+	updateFrameSize();
 }
 
 
@@ -1986,113 +1998,118 @@ void QTableView::doAutoScrollBars()
   \sa setTableFlags()
 */
 
-void QTableView::updateScrollBars( uint f )
+void QTableView::updateScrollBars(uint f)
 {
-    sbDirty = sbDirty | f;
-    if ( inSbUpdate )
-	return;
-    inSbUpdate = TRUE;
+	sbDirty = sbDirty | f;
+	if (inSbUpdate)
+		return;
+	inSbUpdate = TRUE;
 
-    if ( testTableFlags(Tbl_autoHScrollBar) && (sbDirty & horRange) ||
-	 testTableFlags(Tbl_autoVScrollBar) && (sbDirty & verRange) )
-					// if range change and auto
-	doAutoScrollBars();		// turn scroll bars on/off if needed
+	if (testTableFlags(Tbl_autoHScrollBar) && (sbDirty & horRange) ||
+	    testTableFlags(Tbl_autoVScrollBar) && (sbDirty & verRange))
+		// if range change and auto
+		doAutoScrollBars(); // turn scroll bars on/off if needed
 
-    if ( !autoUpdate() ) {
-	inSbUpdate = FALSE;
-	return;
-    }
-    if ( yOffset() > 0 && testTableFlags( Tbl_autoVScrollBar ) &&
-	 !testTableFlags( Tbl_vScrollBar ) ) {
-	setYOffset( 0 );
-    }
-    if ( xOffset() > 0 && testTableFlags( Tbl_autoHScrollBar ) &&
-	 !testTableFlags( Tbl_hScrollBar ) ) {
-	setXOffset( 0 );
-    }
-    if ( !isVisible() ) {
-	inSbUpdate = FALSE;
-	return;
-    }
-
-    if ( testTableFlags(Tbl_hScrollBar) && (sbDirty & horMask) != 0 ) {
-	if ( sbDirty & horGeometry )
-	    hScrollBar->setGeometry( 0,height() - HSBEXT,
-                                     viewWidth() + frameWidth()*2,
-                                   HSBEXT);
-
-	if ( sbDirty & horSteps ) {
-	    if ( cellW )
-		hScrollBar->setSteps( QMIN(cellW,viewWidth()/2), viewWidth() );
-	    else
-		hScrollBar->setSteps( 16, viewWidth() );
+	if (!autoUpdate()) {
+		inSbUpdate = FALSE;
+		return;
+	}
+	if (yOffset() > 0 && testTableFlags(Tbl_autoVScrollBar) &&
+	    !testTableFlags(Tbl_vScrollBar)) {
+		setYOffset(0);
+	}
+	if (xOffset() > 0 && testTableFlags(Tbl_autoHScrollBar) &&
+	    !testTableFlags(Tbl_hScrollBar)) {
+		setXOffset(0);
+	}
+	if (!isVisible()) {
+		inSbUpdate = FALSE;
+		return;
 	}
 
-	if ( sbDirty & horRange )
-	    hScrollBar->setRange( 0, maxXOffset() );
+	if (testTableFlags(Tbl_hScrollBar) && (sbDirty & horMask) != 0) {
+		if (sbDirty & horGeometry)
+			hScrollBar->setGeometry(0, height() - HSBEXT,
+						viewWidth() + frameWidth() * 2,
+						HSBEXT);
 
-	if ( sbDirty & horValue )
-	    hScrollBar->setValue( xOffs );
+		if (sbDirty & horSteps) {
+			if (cellW)
+				hScrollBar->setSteps(QMIN(cellW,
+							  viewWidth() / 2),
+						     viewWidth());
+			else
+				hScrollBar->setSteps(16, viewWidth());
+		}
 
-			// show scrollbar only when it has a sane geometry
-	if ( !hScrollBar->isVisible() )
-	    hScrollBar->show();
-    }
+		if (sbDirty & horRange)
+			hScrollBar->setRange(0, maxXOffset());
 
-    if ( testTableFlags(Tbl_vScrollBar) && (sbDirty & verMask) != 0 ) {
-	if ( sbDirty & verGeometry )
-	    vScrollBar->setGeometry( width() - VSBEXT, 0,
-                                     VSBEXT,
-                                     viewHeight() + frameWidth()*2 );
+		if (sbDirty & horValue)
+			hScrollBar->setValue(xOffs);
 
-	if ( sbDirty & verSteps ) {
-	    if ( cellH )
-		vScrollBar->setSteps( QMIN(cellH,viewHeight()/2), viewHeight() );
-	    else
-		vScrollBar->setSteps( 16, viewHeight() );  // fttb! ###
+		// show scrollbar only when it has a sane geometry
+		if (!hScrollBar->isVisible())
+			hScrollBar->show();
 	}
 
-	if ( sbDirty & verRange )
-	    vScrollBar->setRange( 0, maxYOffset() );
+	if (testTableFlags(Tbl_vScrollBar) && (sbDirty & verMask) != 0) {
+		if (sbDirty & verGeometry)
+			vScrollBar->setGeometry(width() - VSBEXT, 0, VSBEXT,
+						viewHeight() +
+							frameWidth() * 2);
 
-	if ( sbDirty & verValue )
-	    vScrollBar->setValue( yOffs );
+		if (sbDirty & verSteps) {
+			if (cellH)
+				vScrollBar->setSteps(QMIN(cellH,
+							  viewHeight() / 2),
+						     viewHeight());
+			else
+				vScrollBar->setSteps(16, viewHeight()); // fttb!
+									// ###
+		}
 
-			// show scrollbar only when it has a sane geometry
-	if ( !vScrollBar->isVisible() )
-	    vScrollBar->show();
-    }
-    if ( coveringCornerSquare &&
-	 ( (sbDirty & verGeometry ) || (sbDirty & horGeometry)) )
-	cornerSquare->move( maxViewX() + frameWidth() + 1,
-			    maxViewY() + frameWidth() + 1 );
+		if (sbDirty & verRange)
+			vScrollBar->setRange(0, maxYOffset());
 
-    sbDirty = 0;
-    inSbUpdate = FALSE;
+		if (sbDirty & verValue)
+			vScrollBar->setValue(yOffs);
+
+		// show scrollbar only when it has a sane geometry
+		if (!vScrollBar->isVisible())
+			vScrollBar->show();
+	}
+	if (coveringCornerSquare &&
+	    ((sbDirty & verGeometry) || (sbDirty & horGeometry)))
+		cornerSquare->move(maxViewX() + frameWidth() + 1,
+				   maxViewY() + frameWidth() + 1);
+
+	sbDirty = 0;
+	inSbUpdate = FALSE;
 }
 
 
 void QTableView::updateFrameSize()
 {
-    int rw = width()  - ( testTableFlags(Tbl_vScrollBar) ?
-                          VSBEXT : 0 );
-    int rh = height() - ( testTableFlags(Tbl_hScrollBar) ?
-                          HSBEXT : 0 );
-    if ( rw < 0 )
-	rw = 0;
-    if ( rh < 0 )
-	rh = 0;
+	int rw = width() - (testTableFlags(Tbl_vScrollBar) ? VSBEXT : 0);
+	int rh = height() - (testTableFlags(Tbl_hScrollBar) ? HSBEXT : 0);
+	if (rw < 0)
+		rw = 0;
+	if (rh < 0)
+		rh = 0;
 
-    if ( autoUpdate() ) {
-        int fh = frameRect().height();
-	int fw = frameRect().width();
-	setFrameRect( QRect(0,0,rw,rh) );
+	if (autoUpdate()) {
+		int fh = frameRect().height();
+		int fw = frameRect().width();
+		setFrameRect(QRect(0, 0, rw, rh));
 
-	if ( rw != fw )
-	    update( QMIN(fw,rw) - frameWidth() - 2, 0, frameWidth()+4, rh );
-	if ( rh != fh )
-	    update( 0, QMIN(fh,rh) - frameWidth() - 2, rw, frameWidth()+4 );
-    }
+		if (rw != fw)
+			update(QMIN(fw, rw) - frameWidth() - 2, 0,
+			       frameWidth() + 4, rh);
+		if (rh != fh)
+			update(0, QMIN(fh, rh) - frameWidth() - 2, rw,
+			       frameWidth() + 4);
+	}
 }
 
 
@@ -2107,38 +2124,39 @@ void QTableView::updateFrameSize()
 
 int QTableView::maxXOffset()
 {
-    int tw = totalWidth();
-    int maxOffs;
-    if ( testTableFlags(Tbl_scrollLastHCell) ) {
-	if ( nCols != 1)
-	    maxOffs =  tw - ( cellW ? cellW : cellWidth( nCols - 1 ) );
-	else
-	    maxOffs = tw - viewWidth();
-    } else {
-	if ( testTableFlags(Tbl_snapToHGrid) ) {
-	    if ( cellW ) {
-		maxOffs =  tw - (viewWidth()/cellW)*cellW;
-	    } else {
-		int goal = tw - viewWidth();
-		int pos = tw;
-		int nextCol = nCols - 1;
-		int nextCellWidth = cellWidth( nextCol );
-		while( nextCol > 0 && pos > goal + nextCellWidth ) {
-		    pos -= nextCellWidth;
-		    nextCellWidth = cellWidth( --nextCol );
-		}
-		if ( goal + nextCellWidth == pos )
-		    maxOffs = goal;
-		 else if ( goal < pos )
-		   maxOffs = pos;
-		 else
-		   maxOffs = 0;
-	    }
+	int tw = totalWidth();
+	int maxOffs;
+	if (testTableFlags(Tbl_scrollLastHCell)) {
+		if (nCols != 1)
+			maxOffs = tw - (cellW ? cellW : cellWidth(nCols - 1));
+		else
+			maxOffs = tw - viewWidth();
 	} else {
-	    maxOffs = tw - viewWidth();
+		if (testTableFlags(Tbl_snapToHGrid)) {
+			if (cellW) {
+				maxOffs = tw - (viewWidth() / cellW) * cellW;
+			} else {
+				int goal = tw - viewWidth();
+				int pos = tw;
+				int nextCol = nCols - 1;
+				int nextCellWidth = cellWidth(nextCol);
+				while (nextCol > 0 &&
+				       pos > goal + nextCellWidth) {
+					pos -= nextCellWidth;
+					nextCellWidth = cellWidth(--nextCol);
+				}
+				if (goal + nextCellWidth == pos)
+					maxOffs = goal;
+				else if (goal < pos)
+					maxOffs = pos;
+				else
+					maxOffs = 0;
+			}
+		} else {
+			maxOffs = tw - viewWidth();
+		}
 	}
-    }
-    return maxOffs > 0 ? maxOffs : 0;
+	return maxOffs > 0 ? maxOffs : 0;
 }
 
 
@@ -2153,38 +2171,39 @@ int QTableView::maxXOffset()
 
 int QTableView::maxYOffset()
 {
-    int th = totalHeight();
-    int maxOffs;
-    if ( testTableFlags(Tbl_scrollLastVCell) ) {
-	if ( nRows != 1)
-	    maxOffs =  th - ( cellH ? cellH : cellHeight( nRows - 1 ) );
-	else
-	    maxOffs = th - viewHeight();
-    } else {
-	if ( testTableFlags(Tbl_snapToVGrid) ) {
-	    if ( cellH ) {
-		maxOffs =  th - (viewHeight()/cellH)*cellH;
-	    } else {
-		int goal = th - viewHeight();
-		int pos = th;
-		int nextRow = nRows - 1;
-		int nextCellHeight = cellHeight( nextRow );
-		while( nextRow > 0 && pos > goal + nextCellHeight ) {
-		    pos -= nextCellHeight;
-		    nextCellHeight = cellHeight( --nextRow );
-		}
-		if ( goal + nextCellHeight == pos )
-		    maxOffs = goal;
-		 else if ( goal < pos )
-		   maxOffs = pos;
-		 else
-		   maxOffs = 0;
-	    }
+	int th = totalHeight();
+	int maxOffs;
+	if (testTableFlags(Tbl_scrollLastVCell)) {
+		if (nRows != 1)
+			maxOffs = th - (cellH ? cellH : cellHeight(nRows - 1));
+		else
+			maxOffs = th - viewHeight();
 	} else {
-	    maxOffs = th - viewHeight();
+		if (testTableFlags(Tbl_snapToVGrid)) {
+			if (cellH) {
+				maxOffs = th - (viewHeight() / cellH) * cellH;
+			} else {
+				int goal = th - viewHeight();
+				int pos = th;
+				int nextRow = nRows - 1;
+				int nextCellHeight = cellHeight(nextRow);
+				while (nextRow > 0 &&
+				       pos > goal + nextCellHeight) {
+					pos -= nextCellHeight;
+					nextCellHeight = cellHeight(--nextRow);
+				}
+				if (goal + nextCellHeight == pos)
+					maxOffs = goal;
+				else if (goal < pos)
+					maxOffs = pos;
+				else
+					maxOffs = 0;
+			}
+		} else {
+			maxOffs = th - viewHeight();
+		}
 	}
-    }
-    return maxOffs > 0 ? maxOffs : 0;
+	return maxOffs > 0 ? maxOffs : 0;
 }
 
 
@@ -2200,17 +2219,17 @@ int QTableView::maxYOffset()
 
 int QTableView::maxColOffset()
 {
-    int mx = maxXOffset();
-    if ( cellW )
-	return mx/cellW;
-    else {
-	int xcd=0, col=0;
-	while ( col < nCols && mx > (xcd=cellWidth(col)) ) {
-	    mx -= xcd;
-	    col++;
+	int mx = maxXOffset();
+	if (cellW)
+		return mx / cellW;
+	else {
+		int xcd = 0, col = 0;
+		while (col < nCols && mx > (xcd = cellWidth(col))) {
+			mx -= xcd;
+			col++;
+		}
+		return col;
 	}
-	return col;
-    }
 }
 
 
@@ -2226,52 +2245,52 @@ int QTableView::maxColOffset()
 
 int QTableView::maxRowOffset()
 {
-    int my = maxYOffset();
-    if ( cellH )
-	return my/cellH;
-    else {
-	int ycd=0, row=0;
-	while ( row < nRows && my > (ycd=cellHeight(row)) ) {
-	    my -= ycd;
-	    row++;
+	int my = maxYOffset();
+	if (cellH)
+		return my / cellH;
+	else {
+		int ycd = 0, row = 0;
+		while (row < nRows && my > (ycd = cellHeight(row))) {
+			my -= ycd;
+			row++;
+		}
+		return row;
 	}
-	return row;
-    }
 }
 
 
 void QTableView::showOrHideScrollBars()
 {
-    if ( !autoUpdate() )
-	return;
-    if ( vScrollBar ) {
-	if ( testTableFlags(Tbl_vScrollBar) ) {
-	    if ( !vScrollBar->isVisible() )
-		sbDirty = sbDirty | verMask;
-	} else {
-	    if ( vScrollBar->isVisible() )
-	       vScrollBar->hide();
+	if (!autoUpdate())
+		return;
+	if (vScrollBar) {
+		if (testTableFlags(Tbl_vScrollBar)) {
+			if (!vScrollBar->isVisible())
+				sbDirty = sbDirty | verMask;
+		} else {
+			if (vScrollBar->isVisible())
+				vScrollBar->hide();
+		}
 	}
-    }
-    if ( hScrollBar ) {
-	if ( testTableFlags(Tbl_hScrollBar) ) {
-	    if ( !hScrollBar->isVisible() )
-		sbDirty = sbDirty | horMask;
-	} else {
-	    if ( hScrollBar->isVisible() )
-		hScrollBar->hide();
+	if (hScrollBar) {
+		if (testTableFlags(Tbl_hScrollBar)) {
+			if (!hScrollBar->isVisible())
+				sbDirty = sbDirty | horMask;
+		} else {
+			if (hScrollBar->isVisible())
+				hScrollBar->hide();
+		}
 	}
-    }
-    if ( cornerSquare ) {
-	if ( testTableFlags(Tbl_hScrollBar) &&
-	     testTableFlags(Tbl_vScrollBar) ) {
-	    if ( !cornerSquare->isVisible() )
-		cornerSquare->show();
-	} else {
-	    if ( cornerSquare->isVisible() )
-		cornerSquare->hide();
+	if (cornerSquare) {
+		if (testTableFlags(Tbl_hScrollBar) &&
+		    testTableFlags(Tbl_vScrollBar)) {
+			if (!cornerSquare->isVisible())
+				cornerSquare->show();
+		} else {
+			if (cornerSquare->isVisible())
+				cornerSquare->hide();
+		}
 	}
-    }
 }
 
 
@@ -2286,16 +2305,16 @@ void QTableView::showOrHideScrollBars()
 
 void QTableView::updateTableSize()
 {
-    bool updateOn = autoUpdate();
-    setAutoUpdate( FALSE );
-    int xofs = xOffset();
-    xOffs++; //so that setOffset will not return immediately
-    setOffset(xofs,yOffset(),FALSE); //to calculate internal state correctly
-    setAutoUpdate(updateOn);
+	bool updateOn = autoUpdate();
+	setAutoUpdate(FALSE);
+	int xofs = xOffset();
+	xOffs++; // so that setOffset will not return immediately
+	setOffset(xofs, yOffset(), FALSE); // to calculate internal state
+					   // correctly
+	setAutoUpdate(updateOn);
 
-    updateScrollBars( horSteps |  horRange |
-		      verSteps |  verRange );
-    showOrHideScrollBars();
+	updateScrollBars(horSteps | horRange | verSteps | verRange);
+	showOrHideScrollBars();
 }
 
 

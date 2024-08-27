@@ -28,28 +28,27 @@ class FormWindow;
 
 class ListBoxEditor : public ListBoxEditorBase
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    ListBoxEditor( QWidget *parent, QWidget *editWidget, FormWindow *fw );
+      public:
+	ListBoxEditor(QWidget *parent, QWidget *editWidget, FormWindow *fw);
 
-protected slots:
-    void insertNewItem();
-    void deleteCurrentItem();
-    void currentItemChanged( QListBoxItem * );
-    void currentTextChanged( const QString & );
-    void okClicked();
-    void cancelClicked();
-    void applyClicked();
-    void choosePixmap();
-    void moveItemUp();
-    void moveItemDown();
-    void deletePixmap();
+      protected slots:
+	void insertNewItem();
+	void deleteCurrentItem();
+	void currentItemChanged(QListBoxItem *);
+	void currentTextChanged(const QString &);
+	void okClicked();
+	void cancelClicked();
+	void applyClicked();
+	void choosePixmap();
+	void moveItemUp();
+	void moveItemDown();
+	void deletePixmap();
 
-private:
-    QListBox *listbox;
-    FormWindow *formwindow;
-    
+      private:
+	QListBox *listbox;
+	FormWindow *formwindow;
 };
 
 #endif

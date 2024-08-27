@@ -21,27 +21,29 @@ class QMultiLineEdit;
 
 class ImageTextEditor : public QDialog
 {
-    Q_OBJECT
-public:
-    ImageTextEditor( QImage& i, QWidget *parent=0, const char *name=0, WFlags f=0 );
-    ~ImageTextEditor();
-    void accept();
-public slots:
-    void imageChanged();
-    void updateText();
-    void addText();
-    void removeText();
-private:
-    void storeText();
-    QImage& image;
-    QComboBox* languages;
-    QComboBox* keys;
-    QMultiLineEdit* text;
-    QLineEdit* newlang;
-    QLineEdit* newkey;
-    QString currKey();
-    QString currLang();
-    QString currText();
+	Q_OBJECT
+      public:
+	ImageTextEditor(QImage &i, QWidget *parent = 0, const char *name = 0,
+			WFlags f = 0);
+	~ImageTextEditor();
+	void accept();
+      public slots:
+	void imageChanged();
+	void updateText();
+	void addText();
+	void removeText();
+
+      private:
+	void storeText();
+	QImage &image;
+	QComboBox *languages;
+	QComboBox *keys;
+	QMultiLineEdit *text;
+	QLineEdit *newlang;
+	QLineEdit *newkey;
+	QString currKey();
+	QString currLang();
+	QString currText();
 };
 
 #endif // IMAGETEXTEDITOR_H

@@ -24,37 +24,36 @@ class QCheckBox;
 
 class ABCentralWidget : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    ABCentralWidget( QWidget *parent, const char *name = 0 );
+      public:
+	ABCentralWidget(QWidget *parent, const char *name = 0);
 
-    void save( const QString &filename );
-    void load( const QString &filename );
+	void save(const QString &filename);
+	void load(const QString &filename);
 
-protected slots:
-    void addEntry();
-    void changeEntry();
-    void itemSelected( QListViewItem* );
-    void selectionChanged();
-    void toggleFirstName();
-    void toggleLastName();
-    void toggleAddress();
-    void toggleEMail();
-    void findEntries();
+      protected slots:
+	void addEntry();
+	void changeEntry();
+	void itemSelected(QListViewItem *);
+	void selectionChanged();
+	void toggleFirstName();
+	void toggleLastName();
+	void toggleAddress();
+	void toggleEMail();
+	void findEntries();
 
-protected:
-    void setupTabWidget();
-    void setupListView();
+      protected:
+	void setupTabWidget();
+	void setupListView();
 
-    QGridLayout *mainGrid;
-    QTabWidget *tabWidget;
-    QListView *listView;
-    QPushButton *add, *change, *find;
-    QLineEdit *iFirstName, *iLastName, *iAddress, *iEMail,
-        *sFirstName, *sLastName, *sAddress, *sEMail;
-    QCheckBox *cFirstName, *cLastName, *cAddress, *cEMail;
-
+	QGridLayout *mainGrid;
+	QTabWidget *tabWidget;
+	QListView *listView;
+	QPushButton *add, *change, *find;
+	QLineEdit *iFirstName, *iLastName, *iAddress, *iEMail, *sFirstName,
+		*sLastName, *sAddress, *sEMail;
+	QCheckBox *cFirstName, *cLastName, *cAddress, *cEMail;
 };
 
 #endif

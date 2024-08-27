@@ -24,7 +24,7 @@
 // Shared display list id:
 GLuint GLBox::sharedDisplayList = 0;
 
-// Counter keeping track of number of GLBox instances sharing 
+// Counter keeping track of number of GLBox instances sharing
 // the display list, so that the last instance can delete it:
 int GLBox::sharedListUsers = 0;
 
@@ -33,13 +33,13 @@ int GLBox::sharedListUsers = 0;
   Create a GLBox widget
 */
 
-GLBox::GLBox( QWidget* parent, const char* name, const QGLWidget* shareWidget )
-    : QGLWidget( parent, name, shareWidget )
+GLBox::GLBox(QWidget *parent, const char *name, const QGLWidget *shareWidget)
+	: QGLWidget(parent, name, shareWidget)
 {
-    xRot = yRot = zRot = 0.0;		// default object rotation
-    scale = 1.0;			// default object scale
-    object = 0;
-    localDisplayList = 0;
+	xRot = yRot = zRot = 0.0; // default object rotation
+	scale = 1.0; // default object scale
+	object = 0;
+	localDisplayList = 0;
 }
 
 
@@ -49,29 +49,27 @@ GLBox::GLBox( QWidget* parent, const char* name, const QGLWidget* shareWidget )
 
 void GLBox::initializeGL()
 {
-    // Let OpenGL clear to black
-    qglClearColor( black ); 
+	// Let OpenGL clear to black
+	qglClearColor(black);
 
-    glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 
-    if ( sharedListUsers == 0 ) {	// No shared list has been made yet
-	sharedDisplayList = makeObject();	// Make one
-	object = sharedDisplayList;		// Use it
-	sharedListUsers++;				// Keep reference count
-	qDebug( "GLBox %s created shared display list.", name() );
-    }
-    else {				// There is a shared diplay list
-	if ( isSharing() ) {		// Can we access it?
-	    object = sharedDisplayList;		// Yes, use it
-	    sharedListUsers++;			// Keep reference count
-	    qDebug( "GLBox %s uses shared display list.", name() );
+	if (sharedListUsers == 0) { // No shared list has been made yet
+		sharedDisplayList = makeObject(); // Make one
+		object = sharedDisplayList; // Use it
+		sharedListUsers++; // Keep reference count
+		qDebug("GLBox %s created shared display list.", name());
+	} else { // There is a shared diplay list
+		if (isSharing()) { // Can we access it?
+			object = sharedDisplayList; // Yes, use it
+			sharedListUsers++; // Keep reference count
+			qDebug("GLBox %s uses shared display list.", name());
+		} else {
+			localDisplayList = makeObject(); // No, roll our own
+			object = localDisplayList; // and use that
+			qDebug("GLBox %s uses private display list.", name());
+		}
 	}
-	else {				
-	    localDisplayList = makeObject();	// No, roll our own
-	    object = localDisplayList;		// and use that
-	    qDebug( "GLBox %s uses private display list.", name() );
-	}
-    }
 }
 
 
@@ -82,19 +80,18 @@ void GLBox::initializeGL()
 
 GLBox::~GLBox()
 {
-    makeCurrent();				// We're going to do gl calls
-    if ( localDisplayList != 0 ) {		// Did we make our own?
-	glDeleteLists( localDisplayList, 1 );	// Yes, delete it
-	qDebug( "GLBox %s deleted private display list.", name() );
-    }
-    else {
-	sharedListUsers--;	// No, we used the shared one; keep refcount
-	if ( sharedListUsers == 0 ) { 			// Any sharers left?
-	    glDeleteLists( sharedDisplayList, 1 );	// No, delete it
-	    sharedDisplayList = 0;
-	    qDebug( "GLBox %s deleted shared display list.", name() );
+	makeCurrent(); // We're going to do gl calls
+	if (localDisplayList != 0) { // Did we make our own?
+		glDeleteLists(localDisplayList, 1); // Yes, delete it
+		qDebug("GLBox %s deleted private display list.", name());
+	} else {
+		sharedListUsers--; // No, we used the shared one; keep refcount
+		if (sharedListUsers == 0) { // Any sharers left?
+			glDeleteLists(sharedDisplayList, 1); // No, delete it
+			sharedDisplayList = 0;
+			qDebug("GLBox %s deleted shared display list.", name());
+		}
 	}
-    }
 }
 
 
@@ -105,18 +102,18 @@ GLBox::~GLBox()
 
 void GLBox::paintGL()
 {
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-    glTranslatef( 0.0, 0.0, -3.0 );
-    glScalef( scale, scale, scale );
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0.0, 0.0, -3.0);
+	glScalef(scale, scale, scale);
 
-    glRotatef( xRot, 1.0, 0.0, 0.0 ); 
-    glRotatef( yRot, 0.0, 1.0, 0.0 ); 
-    glRotatef( zRot, 0.0, 0.0, 1.0 );
+	glRotatef(xRot, 1.0, 0.0, 0.0);
+	glRotatef(yRot, 0.0, 1.0, 0.0);
+	glRotatef(zRot, 0.0, 0.0, 1.0);
 
-    glCallList( object );
+	glCallList(object);
 }
 
 
@@ -126,12 +123,12 @@ void GLBox::paintGL()
   Set up the OpenGL view port, matrix mode, etc.
 */
 
-void GLBox::resizeGL( int w, int h )
+void GLBox::resizeGL(int w, int h)
 {
-    glViewport( 0, 0, (GLint)w, (GLint)h );
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-    glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10.0);
+	glViewport(0, 0, (GLint)w, (GLint)h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10.0);
 }
 
 
@@ -141,41 +138,41 @@ void GLBox::resizeGL( int w, int h )
 
 GLuint GLBox::makeObject()
 {
-    GLuint list;
+	GLuint list;
 
-    list = glGenLists( 1 );
+	list = glGenLists(1);
 
-    glNewList( list, GL_COMPILE );
+	glNewList(list, GL_COMPILE);
 
-    glBegin(GL_QUADS);
-    /* Front face */
-    qglColor( green );
-    glVertex3f(-1.0, 1.0, 1.0);
-    glVertex3f(1.0, 1.0, 1.0);
-    glVertex3f(1.0, -1.0, 1.0);
-    glVertex3f(-1.0, -1.0, 1.0);
-    /* Back face */
-    qglColor( yellow );
-    glVertex3f(-1.0, 1.0, -1.0);
-    glVertex3f(1.0, 1.0, -1.0);
-    glVertex3f(1.0, -1.0, -1.0);
-    glVertex3f(-1.0, -1.0, -1.0);
-    /* Top side face */
-    qglColor( blue );
-    glVertex3f(-1.0, 1.0, 1.0);
-    glVertex3f(1.0, 1.0, 1.0);
-    glVertex3f(1.0, 1.0, -1.0);
-    glVertex3f(-1.0, 1.0, -1.0);
-    /* Bottom side face */
-    qglColor( red );
-    glVertex3f(-1.0, -1.0, 1.0);
-    glVertex3f(1.0, -1.0, 1.0);
-    glVertex3f(1.0, -1.0, -1.0);
-    glVertex3f(-1.0, -1.0, -1.0);
-    glEnd();
-    glEndList();
+	glBegin(GL_QUADS);
+	/* Front face */
+	qglColor(green);
+	glVertex3f(-1.0, 1.0, 1.0);
+	glVertex3f(1.0, 1.0, 1.0);
+	glVertex3f(1.0, -1.0, 1.0);
+	glVertex3f(-1.0, -1.0, 1.0);
+	/* Back face */
+	qglColor(yellow);
+	glVertex3f(-1.0, 1.0, -1.0);
+	glVertex3f(1.0, 1.0, -1.0);
+	glVertex3f(1.0, -1.0, -1.0);
+	glVertex3f(-1.0, -1.0, -1.0);
+	/* Top side face */
+	qglColor(blue);
+	glVertex3f(-1.0, 1.0, 1.0);
+	glVertex3f(1.0, 1.0, 1.0);
+	glVertex3f(1.0, 1.0, -1.0);
+	glVertex3f(-1.0, 1.0, -1.0);
+	/* Bottom side face */
+	qglColor(red);
+	glVertex3f(-1.0, -1.0, 1.0);
+	glVertex3f(1.0, -1.0, 1.0);
+	glVertex3f(1.0, -1.0, -1.0);
+	glVertex3f(-1.0, -1.0, -1.0);
+	glEnd();
+	glEndList();
 
-    return list;
+	return list;
 }
 
 
@@ -183,10 +180,10 @@ GLuint GLBox::makeObject()
   Set the rotation angle of the object to \e degrees around the X axis.
 */
 
-void GLBox::setXRotation( int degrees )
+void GLBox::setXRotation(int degrees)
 {
-    xRot = (GLfloat)(degrees % 360);
-    updateGL();
+	xRot = (GLfloat)(degrees % 360);
+	updateGL();
 }
 
 
@@ -194,10 +191,10 @@ void GLBox::setXRotation( int degrees )
   Set the rotation angle of the object to \e degrees around the Y axis.
 */
 
-void GLBox::setYRotation( int degrees )
+void GLBox::setYRotation(int degrees)
 {
-    yRot = (GLfloat)(degrees % 360);
-    updateGL();
+	yRot = (GLfloat)(degrees % 360);
+	updateGL();
 }
 
 
@@ -205,8 +202,8 @@ void GLBox::setYRotation( int degrees )
   Set the rotation angle of the object to \e degrees around the Z axis.
 */
 
-void GLBox::setZRotation( int degrees )
+void GLBox::setZRotation(int degrees)
 {
-    zRot = (GLfloat)(degrees % 360);
-    updateGL();
+	zRot = (GLfloat)(degrees % 360);
+	updateGL();
 }

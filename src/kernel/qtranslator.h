@@ -40,8 +40,8 @@
 #define QTRANSLATOR_H
 
 #ifndef QT_H
-#include "qobject.h"
-#include "qintdict.h"
+# include "qobject.h"
+# include "qintdict.h"
 #endif // QT_H
 
 #ifndef QT_NO_TRANSLATION
@@ -51,107 +51,146 @@ class QTranslatorPrivate;
 
 class Q_EXPORT QTranslatorMessage
 {
-public:
-    QTranslatorMessage();
-    QTranslatorMessage( const char * context,
-			const char * sourceText,
-			const char * comment,
-			const QString& translation = QString::null );
-    QTranslatorMessage( QDataStream & );
-    QTranslatorMessage( const QTranslatorMessage & m );
+      public:
+	QTranslatorMessage();
+	QTranslatorMessage(const char *context, const char *sourceText,
+			   const char *comment,
+			   const QString &translation = QString::null);
+	QTranslatorMessage(QDataStream &);
+	QTranslatorMessage(const QTranslatorMessage &m);
 
-    QTranslatorMessage & operator=( const QTranslatorMessage & m );
+	QTranslatorMessage &operator=(const QTranslatorMessage &m);
 
-    uint hash() const { return h; }
-    const char *context() const { return cx; }
-    const char *sourceText() const { return st; }
-    const char *comment() const { return cm; }
+	uint hash() const
+	{
+		return h;
+	}
+	const char *context() const
+	{
+		return cx;
+	}
+	const char *sourceText() const
+	{
+		return st;
+	}
+	const char *comment() const
+	{
+		return cm;
+	}
 
-    void setTranslation( const QString & translation ) { tn = translation; }
-    QString translation() const { return tn; }
+	void setTranslation(const QString &translation)
+	{
+		tn = translation;
+	}
+	QString translation() const
+	{
+		return tn;
+	}
 
-    enum Prefix { NoPrefix, Hash, HashContext, HashContextSourceText,
-    		  HashContextSourceTextComment };
-    void write( QDataStream & s, bool strip,
-		Prefix prefix = HashContextSourceTextComment ) const;
-    Prefix commonPrefix( const QTranslatorMessage& ) const;
+	enum Prefix {
+		NoPrefix,
+		Hash,
+		HashContext,
+		HashContextSourceText,
+		HashContextSourceTextComment
+	};
+	void write(QDataStream &s, bool strip,
+		   Prefix prefix = HashContextSourceTextComment) const;
+	Prefix commonPrefix(const QTranslatorMessage &) const;
 
-    bool operator==( const QTranslatorMessage& m ) const;
-    bool operator!=( const QTranslatorMessage& m ) const
-    { return !operator==( m ); }
-    bool operator<( const QTranslatorMessage& m ) const;
-    bool operator<=( const QTranslatorMessage& m ) const
-    { return !operator>( m ); }
-    bool operator>( const QTranslatorMessage& m ) const
-    { return this->operator<( m ); }
-    bool operator>=( const QTranslatorMessage& m ) const
-    { return !operator<( m ); }
+	bool operator==(const QTranslatorMessage &m) const;
+	bool operator!=(const QTranslatorMessage &m) const
+	{
+		return !operator==(m);
+	}
+	bool operator<(const QTranslatorMessage &m) const;
+	bool operator<=(const QTranslatorMessage &m) const
+	{
+		return !operator>(m);
+	}
+	bool operator>(const QTranslatorMessage &m) const
+	{
+		return this->operator<(m);
+	}
+	bool operator>=(const QTranslatorMessage &m) const
+	{
+		return !operator<(m);
+	}
 
-private:
-    uint h;
-    QCString cx;
-    QCString st;
-    QCString cm;
-    QString tn;
+      private:
+	uint h;
+	QCString cx;
+	QCString st;
+	QCString cm;
+	QString tn;
 
-    enum Tag { Tag_End = 1, Tag_SourceText16, Tag_Translation, Tag_Context16,
-	       Tag_Hash, Tag_SourceText, Tag_Context, Tag_Comment,
-	       Tag_Obsolete1 };
+	enum Tag {
+		Tag_End = 1,
+		Tag_SourceText16,
+		Tag_Translation,
+		Tag_Context16,
+		Tag_Hash,
+		Tag_SourceText,
+		Tag_Context,
+		Tag_Comment,
+		Tag_Obsolete1
+	};
 };
 
 
-class Q_EXPORT QTranslator: public QObject
+class Q_EXPORT QTranslator : public QObject
 {
-    Q_OBJECT
-public:
-    QTranslator( QObject * parent, const char * name = 0 );
-    ~QTranslator();
+	Q_OBJECT
+      public:
+	QTranslator(QObject *parent, const char *name = 0);
+	~QTranslator();
 
-// ### find( const char *, const char *, const char * ) obsolete in Qt 3.0 ?
-    QString find( const char *, const char *, const char * ) const;
-// ### find( const char *, const char * ) obsolete in Qt 3.0
-    virtual QString find( const char *, const char * ) const;
-// ### findMessage made virtual in Qt 3.0
-    QTranslatorMessage findMessage( const char *, const char *,
-				    const char * ) const;
+	// ### find( const char *, const char *, const char * ) obsolete in
+	// Qt 3.0 ?
+	QString find(const char *, const char *, const char *) const;
+	// ### find( const char *, const char * ) obsolete in Qt 3.0
+	virtual QString find(const char *, const char *) const;
+	// ### findMessage made virtual in Qt 3.0
+	QTranslatorMessage findMessage(const char *, const char *,
+				       const char *) const;
 
-    bool load( const QString & filename,
-	       const QString & directory = QString::null,
-	       const QString & search_delimiters = QString::null,
-	       const QString & suffix = QString::null );
+	bool load(const QString &filename,
+		  const QString &directory = QString::null,
+		  const QString &search_delimiters = QString::null,
+		  const QString &suffix = QString::null);
 
-    enum SaveMode { Everything, Stripped };
+	enum SaveMode { Everything, Stripped };
 
-    bool save( const QString & filename, SaveMode mode = Everything );
+	bool save(const QString &filename, SaveMode mode = Everything);
 
-    void clear();
+	void clear();
 
-    void insert( const QTranslatorMessage& );
-// ### insert() obsolete in Qt 3.0
-    void insert( const char *, const char *, const QString & );
-    void remove( const QTranslatorMessage& );
-// ### first remove obsolete in Qt 3.0
-    void remove( const char *, const char * );
-    bool contains( const char *, const char *, const char * ) const;
-// ### contains removed in Qt 3.0
-    bool contains( const char *, const char * ) const;
+	void insert(const QTranslatorMessage &);
+	// ### insert() obsolete in Qt 3.0
+	void insert(const char *, const char *, const QString &);
+	void remove(const QTranslatorMessage &);
+	// ### first remove obsolete in Qt 3.0
+	void remove(const char *, const char *);
+	bool contains(const char *, const char *, const char *) const;
+	// ### contains removed in Qt 3.0
+	bool contains(const char *, const char *) const;
 
-// ### squeeze() obsolete in Qt 3.0
-// ### replaced by squeeze( SaveMode mode = Everything )
-    void squeeze( SaveMode );
-    void squeeze();
-    void unsqueeze();
+	// ### squeeze() obsolete in Qt 3.0
+	// ### replaced by squeeze( SaveMode mode = Everything )
+	void squeeze(SaveMode);
+	void squeeze();
+	void unsqueeze();
 
-    QValueList<QTranslatorMessage> messages() const;
+	QValueList<QTranslatorMessage> messages() const;
 
-private:
-    QTranslatorPrivate * d;
+      private:
+	QTranslatorPrivate *d;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QTranslator( const QTranslator & );
-    QTranslator &operator=( const QTranslator & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QTranslator(const QTranslator &);
+	QTranslator &operator=(const QTranslator &);
+# endif
 };
 
 #endif // QT_NO_TRANSLATION

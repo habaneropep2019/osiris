@@ -39,8 +39,8 @@
 #define QURLINFO_H
 
 #ifndef QT_H
-#include "qdatetime.h"
-#include "qstring.h"
+# include "qdatetime.h"
+# include "qstring.h"
 #endif // QT_H
 
 class QUrlOperator;
@@ -49,58 +49,59 @@ class QUrl;
 
 class Q_EXPORT QUrlInfo
 {
-public:
-    QUrlInfo();
-    QUrlInfo( const QUrlOperator &path, const QString &file );
-    QUrlInfo( const QUrlInfo &ui );
-    QUrlInfo( const QString &name, int permissions, const QString &owner,
-	      const QString &group, uint size, const QDateTime &lastModified,
-	      const QDateTime &lastRead, bool isDir, bool isFile, bool isSymLink,
-	      bool isWritable, bool isReadable, bool isExecutable );
-    QUrlInfo( const QUrl &url, int permissions, const QString &owner,
-	      const QString &group, uint size, const QDateTime &lastModified,
-	      const QDateTime &lastRead, bool isDir, bool isFile, bool isSymLink,
-	      bool isWritable, bool isReadable, bool isExecutable );
-    QUrlInfo &operator=( const QUrlInfo &ui );
-    virtual ~QUrlInfo();
+      public:
+	QUrlInfo();
+	QUrlInfo(const QUrlOperator &path, const QString &file);
+	QUrlInfo(const QUrlInfo &ui);
+	QUrlInfo(const QString &name, int permissions, const QString &owner,
+		 const QString &group, uint size, const QDateTime &lastModified,
+		 const QDateTime &lastRead, bool isDir, bool isFile,
+		 bool isSymLink, bool isWritable, bool isReadable,
+		 bool isExecutable);
+	QUrlInfo(const QUrl &url, int permissions, const QString &owner,
+		 const QString &group, uint size, const QDateTime &lastModified,
+		 const QDateTime &lastRead, bool isDir, bool isFile,
+		 bool isSymLink, bool isWritable, bool isReadable,
+		 bool isExecutable);
+	QUrlInfo &operator=(const QUrlInfo &ui);
+	virtual ~QUrlInfo();
 
-    virtual void setName( const QString &name );
-    virtual void setDir( bool b );
-    virtual void setFile( bool b );
-    virtual void setSymLink( bool b );
-    virtual void setOwner( const QString &s );
-    virtual void setGroup( const QString &s );
-    virtual void setSize( uint s );
-    virtual void setWritable( bool b );
-    virtual void setReadable( bool b );
-    virtual void setPermissions( int p );
-    virtual void setLastModified( const QDateTime &dt );
+	virtual void setName(const QString &name);
+	virtual void setDir(bool b);
+	virtual void setFile(bool b);
+	virtual void setSymLink(bool b);
+	virtual void setOwner(const QString &s);
+	virtual void setGroup(const QString &s);
+	virtual void setSize(uint s);
+	virtual void setWritable(bool b);
+	virtual void setReadable(bool b);
+	virtual void setPermissions(int p);
+	virtual void setLastModified(const QDateTime &dt);
 
-    QString name() const;
-    int permissions() const;
-    QString owner() const;
-    QString group() const;
-    uint size() const;
-    QDateTime lastModified() const;
-    QDateTime lastRead() const;
-    bool isDir() const;
-    bool isFile() const;
-    bool isSymLink() const;
-    bool isWritable() const;
-    bool isReadable() const;
-    bool isExecutable() const;
+	QString name() const;
+	int permissions() const;
+	QString owner() const;
+	QString group() const;
+	uint size() const;
+	QDateTime lastModified() const;
+	QDateTime lastRead() const;
+	bool isDir() const;
+	bool isFile() const;
+	bool isSymLink() const;
+	bool isWritable() const;
+	bool isReadable() const;
+	bool isExecutable() const;
 
-    static bool greaterThan( const QUrlInfo &i1, const QUrlInfo &i2,
-			     int sortBy );
-    static bool lessThan( const QUrlInfo &i1, const QUrlInfo &i2,
-			  int sortBy );
-    static bool equal( const QUrlInfo &i1, const QUrlInfo &i2,
-		       int sortBy );
+	static bool greaterThan(const QUrlInfo &i1, const QUrlInfo &i2,
+				int sortBy);
+	static bool lessThan(const QUrlInfo &i1, const QUrlInfo &i2,
+			     int sortBy);
+	static bool equal(const QUrlInfo &i1, const QUrlInfo &i2, int sortBy);
 
-    bool operator==( const QUrlInfo &i ) const;
-private:
-    QUrlInfoPrivate *d;
+	bool operator==(const QUrlInfo &i) const;
 
+      private:
+	QUrlInfoPrivate *d;
 };
 
 #endif

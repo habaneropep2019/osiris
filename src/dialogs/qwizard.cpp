@@ -39,14 +39,14 @@
 
 #ifndef QT_NO_WIZARD
 
-#include "qlayout.h"
-#include "qpushbutton.h"
-#include "qlabel.h"
-#include "qwidgetstack.h"
-#include "qapplication.h"
-#include "qvector.h"
-#include "qpainter.h"
-#include "qaccel.h"
+# include "qlayout.h"
+# include "qpushbutton.h"
+# include "qlabel.h"
+# include "qwidgetstack.h"
+# include "qapplication.h"
+# include "qvector.h"
+# include "qpainter.h"
+# include "qaccel.h"
 
 // NOT REVISED
 /*! \class QWizard qwizard.h
@@ -66,102 +66,96 @@
 
 class QWizardPrivate
 {
-public:
-    struct Page {
-	Page( QWidget * widget, const QString & title ):
-	    w( widget ), t( title ), back( 0 ),
-	    backEnabled( TRUE ), nextEnabled( TRUE ), finishEnabled( FALSE ),
-	    helpEnabled( TRUE ),
-	    appropriate( TRUE )
-	{}
-	QWidget * w;
-	QString t;
-	QWidget * back;
-	bool backEnabled;
-	bool nextEnabled;
-	bool finishEnabled;
-	bool helpEnabled;
-	bool appropriate;
-    };
+      public:
+	struct Page {
+		Page(QWidget *widget, const QString &title)
+			: w(widget), t(title), back(0), backEnabled(TRUE),
+			  nextEnabled(TRUE), finishEnabled(FALSE),
+			  helpEnabled(TRUE), appropriate(TRUE)
+		{
+		}
+		QWidget *w;
+		QString t;
+		QWidget *back;
+		bool backEnabled;
+		bool nextEnabled;
+		bool finishEnabled;
+		bool helpEnabled;
+		bool appropriate;
+	};
 
-    QVBoxLayout * v;
-    Page * current;
-    QWidgetStack * ws;
-    QVector<Page> pages;
-    QLabel * title;
-    QPushButton * backButton;
-    QPushButton * nextButton;
-    QPushButton * finishButton;
-    QPushButton * cancelButton;
-    QPushButton * helpButton;
+	QVBoxLayout *v;
+	Page *current;
+	QWidgetStack *ws;
+	QVector<Page> pages;
+	QLabel *title;
+	QPushButton *backButton;
+	QPushButton *nextButton;
+	QPushButton *finishButton;
+	QPushButton *cancelButton;
+	QPushButton *helpButton;
 
-    QFrame * hbar1, * hbar2;
+	QFrame *hbar1, *hbar2;
 
-    QAccel * accel;
-    int backAccel;
-    int nextAccel;
+	QAccel *accel;
+	int backAccel;
+	int nextAccel;
 
-    Page * page( const QWidget * w )
-    {
-	if ( !w )
-	    return 0;
-	int i = pages.size();
-	while( --i >= 0 && pages[i] && pages[i]->w != w ) { }
-	return i >= 0 ? pages[i] : 0;
-    }
-
+	Page *page(const QWidget *w)
+	{
+		if (!w)
+			return 0;
+		int i = pages.size();
+		while (--i >= 0 && pages[i] && pages[i]->w != w) {
+		}
+		return i >= 0 ? pages[i] : 0;
+	}
 };
 
 
 /*!  Constructs an empty wizard dialog. */
 
-QWizard::QWizard( QWidget *parent, const char *name, bool modal,
-		  WFlags f )
-    : QDialog( parent, name, modal, f )
+QWizard::QWizard(QWidget *parent, const char *name, bool modal, WFlags f)
+	: QDialog(parent, name, modal, f)
 {
-    d = new QWizardPrivate();
-    d->current = 0; // not quite true, but...
-    d->ws = new QWidgetStack( this );
-    d->pages.setAutoDelete( TRUE );
-    d->title = 0;
+	d = new QWizardPrivate();
+	d->current = 0; // not quite true, but...
+	d->ws = new QWidgetStack(this);
+	d->pages.setAutoDelete(TRUE);
+	d->title = 0;
 
-    // create in nice tab order
-    d->nextButton = new QPushButton( this, "next" );
-    d->finishButton = new QPushButton( this, "finish" );
-    d->helpButton = new QPushButton( this, "help" );
-    d->backButton = new QPushButton( this, "back" );
-    d->cancelButton = new QPushButton( this, "cancel" );
+	// create in nice tab order
+	d->nextButton = new QPushButton(this, "next");
+	d->finishButton = new QPushButton(this, "finish");
+	d->helpButton = new QPushButton(this, "help");
+	d->backButton = new QPushButton(this, "back");
+	d->cancelButton = new QPushButton(this, "cancel");
 
-    d->ws->installEventFilter( this );
+	d->ws->installEventFilter(this);
 
-    d->v = 0;
-    d->hbar1 = 0;
-    d->hbar2 = 0;
+	d->v = 0;
+	d->hbar1 = 0;
+	d->hbar2 = 0;
 
-    d->cancelButton->setText( tr( "Cancel" ) );
-    d->backButton->setText( tr( "< Back" ) );
-    d->nextButton->setText( tr( "Next >" ) );
-    d->finishButton->setText( tr( "Finish" ) );
-    d->helpButton->setText( tr( "Help" ) );
+	d->cancelButton->setText(tr("Cancel"));
+	d->backButton->setText(tr("< Back"));
+	d->nextButton->setText(tr("Next >"));
+	d->finishButton->setText(tr("Finish"));
+	d->helpButton->setText(tr("Help"));
 
-    d->nextButton->setDefault( TRUE );
+	d->nextButton->setDefault(TRUE);
 
-    connect( d->backButton, SIGNAL(clicked()),
-	     this, SLOT(back()) );
-    connect( d->nextButton, SIGNAL(clicked()),
-	     this, SLOT(next()) );
-    connect( d->finishButton, SIGNAL(clicked()),
-	     this, SLOT(accept()) );
-    connect( d->cancelButton, SIGNAL(clicked()),
-	     this, SLOT(reject()) );
-    connect( d->helpButton, SIGNAL(clicked()),
-	     this, SLOT(help()) );
+	connect(d->backButton, SIGNAL(clicked()), this, SLOT(back()));
+	connect(d->nextButton, SIGNAL(clicked()), this, SLOT(next()));
+	connect(d->finishButton, SIGNAL(clicked()), this, SLOT(accept()));
+	connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+	connect(d->helpButton, SIGNAL(clicked()), this, SLOT(help()));
 
-    d->accel = new QAccel( this, "arrow-key accel" );
-    d->backAccel = d->accel->insertItem( Qt::ALT + Qt::Key_Left );
-    d->accel->connectItem( d->backAccel, this, SLOT(back()) );
-    d->nextAccel = d->accel->insertItem( Qt::ALT + Qt::Key_Right );
-    d->accel->connectItem( d->nextAccel, this, SLOT(next()) );
+	d->accel = new QAccel(this, "arrow-key accel");
+	d->backAccel = d->accel->insertItem(Qt::ALT + Qt::Key_Left);
+	d->accel->connectItem(d->backAccel, this, SLOT(back()));
+	d->nextAccel = d->accel->insertItem(Qt::ALT + Qt::Key_Right);
+	d->accel->connectItem(d->nextAccel, this, SLOT(next()));
 }
 
 
@@ -171,7 +165,7 @@ of course, all pages and controllers.
 
 QWizard::~QWizard()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -179,48 +173,47 @@ QWizard::~QWizard()
 
 void QWizard::show()
 {
-    if ( d->current )
-	showPage( d->current->w );
-    else if ( pageCount() > 0 )
-	showPage( d->pages[0]->w );
-    else
-	showPage( 0 );
+	if (d->current)
+		showPage(d->current->w);
+	else if (pageCount() > 0)
+		showPage(d->pages[0]->w);
+	else
+		showPage(0);
 
-    QDialog::show();
+	QDialog::show();
 }
 
 
 /*! \reimp */
 
-void QWizard::setFont( const QFont & font )
+void QWizard::setFont(const QFont &font)
 {
-    QApplication::postEvent( this, new QEvent( QEvent::LayoutHint ) );
-    QDialog::setFont( font );
+	QApplication::postEvent(this, new QEvent(QEvent::LayoutHint));
+	QDialog::setFont(font);
 }
 
 
 /*!  Adds \a page to the end of the wizard, titled \a title.
-*/
+ */
 
-void QWizard::addPage( QWidget * page, const QString & title )
+void QWizard::addPage(QWidget *page, const QString &title)
 {
-    if ( !page )
-	return;
-    if ( d->page( page ) ) {
-#if defined(CHECK_STATE)
-	qWarning( "QWizard::addPage(): already added %s/%s to %s/%s",
-		  page->className(), page->name(),
-		  className(), name() );
-#endif
-	return;
-    }
-    int i = d->pages.size();
-    QWizardPrivate::Page * p = new QWizardPrivate::Page( page, title );
-    p->backEnabled = ( i > 0 );
+	if (!page)
+		return;
+	if (d->page(page)) {
+# if defined(CHECK_STATE)
+		qWarning("QWizard::addPage(): already added %s/%s to %s/%s",
+			 page->className(), page->name(), className(), name());
+# endif
+		return;
+	}
+	int i = d->pages.size();
+	QWizardPrivate::Page *p = new QWizardPrivate::Page(page, title);
+	p->backEnabled = (i > 0);
 
-    d->ws->addWidget( page, i );
-    d->pages.resize( i+1 );
-    d->pages.insert( i, p );
+	d->ws->addWidget(page, i);
+	d->pages.resize(i + 1);
+	d->pages.insert(i, p);
 }
 
 /*!
@@ -232,19 +225,19 @@ void QWizard::addPage( QWidget * page, const QString & title )
 
 /*!  Makes \a page be the displayed page and emits the selected() signal. */
 
-void QWizard::showPage( QWidget * page )
+void QWizard::showPage(QWidget *page)
 {
-    QWizardPrivate::Page * p = d->page( page );
-    if ( p ) {
-	setBackEnabled( p->back != 0 );
-	setNextEnabled( TRUE );
-	d->ws->raiseWidget( page );
-	d->current = p;
-    }
+	QWizardPrivate::Page *p = d->page(page);
+	if (p) {
+		setBackEnabled(p->back != 0);
+		setNextEnabled(TRUE);
+		d->ws->raiseWidget(page);
+		d->current = p;
+	}
 
-    layOut();
-    updateButtons();
-    emit selected( p ? p->t : QString::null );
+	layOut();
+	updateButtons();
+	emit selected(p ? p->t : QString::null);
 }
 
 
@@ -252,7 +245,7 @@ void QWizard::showPage( QWidget * page )
 
 int QWizard::pageCount() const
 {
-    return d->pages.count();
+	return d->pages.count();
 }
 
 
@@ -262,8 +255,8 @@ int QWizard::pageCount() const
 */
 void QWizard::back()
 {
-    if ( d->current && d->current->back )
-	showPage( d->current->back );
+	if (d->current && d->current->back)
+		showPage(d->current->back);
 }
 
 
@@ -273,23 +266,23 @@ void QWizard::back()
 */
 void QWizard::next()
 {
-    if ( nextButton()->isEnabled() ) {
-	int i = 0;
-	while( i < (int)d->pages.size() && d->pages[i] &&
-	    d->current && d->pages[i]->w != d->current->w )
-	    i++;
-	i++;
-	while( i <= (int)d->pages.size()-1 &&
-	    ( !d->pages[i] || !appropriate( d->pages[i]->w ) ) )
-	    i++;
-	// if we fell of the end of the world, step back
-	while ( i > 0 && (i >= (int)d->pages.size() || !d->pages[i] ) )
-	    i--;
-	if ( d->pages.at( i ) && d->pages.at( i ) != d->current ) {
-	    d->pages[i]->back = d->current ? d->current->w : 0;
-	    showPage( d->pages[i]->w );
+	if (nextButton()->isEnabled()) {
+		int i = 0;
+		while (i < (int)d->pages.size() && d->pages[i] && d->current &&
+		       d->pages[i]->w != d->current->w)
+			i++;
+		i++;
+		while (i <= (int)d->pages.size() - 1 &&
+		       (!d->pages[i] || !appropriate(d->pages[i]->w)))
+			i++;
+		// if we fell of the end of the world, step back
+		while (i > 0 && (i >= (int)d->pages.size() || !d->pages[i]))
+			i--;
+		if (d->pages.at(i) && d->pages.at(i) != d->current) {
+			d->pages[i]->back = d->current ? d->current->w : 0;
+			showPage(d->pages[i]->w);
+		}
 	}
-    }
 }
 
 
@@ -304,44 +297,44 @@ way it knows is to emit the helpClicked() signal.
 
 void QWizard::help()
 {
-    QWidget * page = d->ws->visibleWidget();
-    if ( !page )
-	return;
+	QWidget *page = d->ws->visibleWidget();
+	if (!page)
+		return;
 
-#if 0
+# if 0
     if ( page->inherits( "QWizardPage" ) )
 	emit ((QWizardPage *)page)->helpClicked();
-#endif
-    emit helpClicked();
+# endif
+	emit helpClicked();
 }
 
 
-void QWizard::setBackEnabled( bool enable )
+void QWizard::setBackEnabled(bool enable)
 {
-    d->backButton->setEnabled( enable );
-    d->accel->setItemEnabled( d->backAccel, enable );
+	d->backButton->setEnabled(enable);
+	d->accel->setItemEnabled(d->backAccel, enable);
 }
 
 
-void QWizard::setNextEnabled( bool enable )
+void QWizard::setNextEnabled(bool enable)
 {
-    d->nextButton->setEnabled( enable );
-    d->accel->setItemEnabled( d->nextAccel, enable );
+	d->nextButton->setEnabled(enable);
+	d->accel->setItemEnabled(d->nextAccel, enable);
 }
 
 
-void QWizard::setHelpEnabled( bool enable )
+void QWizard::setHelpEnabled(bool enable)
 {
-    d->helpButton->setEnabled( enable );
+	d->helpButton->setEnabled(enable);
 }
 
 
 /*!
   \obsolete
 */
-void QWizard::setFinish( QWidget *, bool )
+void QWizard::setFinish(QWidget *, bool)
 {
-    // Didn't do anything.
+	// Didn't do anything.
 }
 
 
@@ -349,14 +342,14 @@ void QWizard::setFinish( QWidget *, bool )
   Enables or disables the "Back" button for pages \a w in the wizard.
   By default, all pages have this button.
 */
-void QWizard::setBackEnabled( QWidget * w, bool enable )
+void QWizard::setBackEnabled(QWidget *w, bool enable)
 {
-    QWizardPrivate::Page * p = d->page( w );
-    if ( !p )
-	return;
+	QWizardPrivate::Page *p = d->page(w);
+	if (!p)
+		return;
 
-    p->backEnabled = enable;
-    updateButtons();
+	p->backEnabled = enable;
+	updateButtons();
 }
 
 
@@ -364,14 +357,14 @@ void QWizard::setBackEnabled( QWidget * w, bool enable )
   Enables or disables the "Next" button for pages \a w in the wizard.
   By default, all pages have this button.
 */
-void QWizard::setNextEnabled( QWidget * w, bool enable )
+void QWizard::setNextEnabled(QWidget *w, bool enable)
 {
-    QWizardPrivate::Page * p = d->page( w );
-    if ( !p )
-	return;
+	QWizardPrivate::Page *p = d->page(w);
+	if (!p)
+		return;
 
-    p->nextEnabled = enable;
-    updateButtons();
+	p->nextEnabled = enable;
+	updateButtons();
 }
 
 
@@ -379,14 +372,14 @@ void QWizard::setNextEnabled( QWidget * w, bool enable )
   Enables or disables the "Finish" button for pages \a w in the wizard.
   By default, \e no pages have this button.
 */
-void QWizard::setFinishEnabled( QWidget * w, bool enable )
+void QWizard::setFinishEnabled(QWidget *w, bool enable)
 {
-    QWizardPrivate::Page * p = d->page( w );
-    if ( !p )
-	return;
+	QWizardPrivate::Page *p = d->page(w);
+	if (!p)
+		return;
 
-    p->finishEnabled = enable;
-    updateButtons();
+	p->finishEnabled = enable;
+	updateButtons();
 }
 
 
@@ -394,14 +387,14 @@ void QWizard::setFinishEnabled( QWidget * w, bool enable )
   Enables or disables the "Help" button for pages \a w in the wizard.
   By default, all pages have this button.
 */
-void QWizard::setHelpEnabled( QWidget * w, bool enable )
+void QWizard::setHelpEnabled(QWidget *w, bool enable)
 {
-    QWizardPrivate::Page * p = d->page( w );
-    if ( !p )
-	return;
+	QWizardPrivate::Page *p = d->page(w);
+	if (!p)
+		return;
 
-    p->helpEnabled = enable;
-    updateButtons();
+	p->helpEnabled = enable;
+	updateButtons();
 }
 
 
@@ -418,10 +411,10 @@ The default implementation returns whatever was set using
 setAppropriate().  The ultimate default is TRUE.
 */
 
-bool QWizard::appropriate( QWidget * w ) const
+bool QWizard::appropriate(QWidget *w) const
 {
-    QWizardPrivate::Page * p = d->page( w );
-    return p ? p->appropriate : TRUE;
+	QWizardPrivate::Page *p = d->page(w);
+	return p ? p->appropriate : TRUE;
 }
 
 
@@ -431,29 +424,29 @@ bool QWizard::appropriate( QWidget * w ) const
 
   \sa appropriate()
 */
-void QWizard::setAppropriate( QWidget * w, bool enable )
+void QWizard::setAppropriate(QWidget *w, bool enable)
 {
-    QWizardPrivate::Page * p = d->page( w );
-    if ( p )
-	p->appropriate = enable;
+	QWizardPrivate::Page *p = d->page(w);
+	if (p)
+		p->appropriate = enable;
 }
 
 
 void QWizard::updateButtons()
 {
-    if ( !d->current )
-	return;
+	if (!d->current)
+		return;
 
-    setBackEnabled( d->current->backEnabled && d->current->back != 0 );
-    setNextEnabled( d->current->nextEnabled );
-    d->finishButton->setEnabled( d->current->finishEnabled );
-    d->helpButton->setEnabled( d->current->helpEnabled );
+	setBackEnabled(d->current->backEnabled && d->current->back != 0);
+	setNextEnabled(d->current->nextEnabled);
+	d->finishButton->setEnabled(d->current->finishEnabled);
+	d->helpButton->setEnabled(d->current->helpEnabled);
 
-    if ( ( d->current->finishEnabled && !d->finishButton->isVisible() ) ||
-	 ( d->current->backEnabled && !d->backButton->isVisible() ) ||
-	 ( d->current->nextEnabled && !d->nextButton->isVisible() ) ||
-	 ( d->current->helpEnabled && !d->helpButton->isVisible() ) )
-	layOut();
+	if ((d->current->finishEnabled && !d->finishButton->isVisible()) ||
+	    (d->current->backEnabled && !d->backButton->isVisible()) ||
+	    (d->current->nextEnabled && !d->nextButton->isVisible()) ||
+	    (d->current->helpEnabled && !d->helpButton->isVisible()))
+		layOut();
 }
 
 
@@ -462,31 +455,31 @@ wizard.  The wizard does its best to make sure that this value is
 never 0, but if you try hard enough it can be.
 */
 
-QWidget * QWizard::currentPage() const
+QWidget *QWizard::currentPage() const
 {
-    return d->ws->visibleWidget();
+	return d->ws->visibleWidget();
 }
 
 
 /*!  Returns the title of \a page.
-*/
+ */
 
-QString QWizard::title( QWidget * page ) const
+QString QWizard::title(QWidget *page) const
 {
-    QWizardPrivate::Page * p = d->page( page );
-    return p ? p->t : QString::null;
+	QWizardPrivate::Page *p = d->page(page);
+	return p ? p->t : QString::null;
 }
 
 /*!  Sets the title for the \a page to \a title.
-*/
+ */
 
-void QWizard::setTitle( QWidget *page, const QString &t )
+void QWizard::setTitle(QWidget *page, const QString &t)
 {
-    QWizardPrivate::Page * p = d->page( page );
-    if ( p )
-	p->t = t;
-    if ( page == currentPage() )
-	d->title->setText( t );	
+	QWizardPrivate::Page *p = d->page(page);
+	if (p)
+		p->t = t;
+	if (page == currentPage())
+		d->title->setText(t);
 }
 
 
@@ -496,9 +489,9 @@ void QWizard::setTitle( QWidget *page, const QString &t )
   By default, this button is connected to the back()
   slot, which is virtual.
 */
-QPushButton * QWizard::backButton() const
+QPushButton *QWizard::backButton() const
 {
-    return d->backButton;
+	return d->backButton;
 }
 
 
@@ -508,9 +501,9 @@ QPushButton * QWizard::backButton() const
   By default, this button is connected to the next()
   slot, which is virtual.
 */
-QPushButton * QWizard::nextButton() const
+QPushButton *QWizard::nextButton() const
 {
-    return d->nextButton;
+	return d->nextButton;
 }
 
 
@@ -520,9 +513,9 @@ QPushButton * QWizard::nextButton() const
   By default, this button is connected to the QDialog::accept() slot,
   which is virtual so you may reimplement it in a QWizard subclass.
 */
-QPushButton * QWizard::finishButton() const
+QPushButton *QWizard::finishButton() const
 {
-    return d->finishButton;
+	return d->finishButton;
 }
 
 
@@ -532,9 +525,9 @@ QPushButton * QWizard::finishButton() const
   By default, this button is connected to the QDialog::reject() slot,
   which is virtual so you may reimplement it in a QWizard subclass.
 */
-QPushButton * QWizard::cancelButton() const
+QPushButton *QWizard::cancelButton() const
 {
-    return d->cancelButton;
+	return d->cancelButton;
 }
 
 
@@ -543,9 +536,9 @@ QPushButton * QWizard::cancelButton() const
 
   By default, this button is connected to the help() slot.
 */
-QPushButton * QWizard::helpButton() const
+QPushButton *QWizard::helpButton() const
 {
-    return d->helpButton;
+	return d->helpButton;
 }
 
 
@@ -555,68 +548,67 @@ divider and buttons below it.
 \a layout is the vertical layout of the entire wizard.
 */
 
-void QWizard::layOutButtonRow( QHBoxLayout * layout )
+void QWizard::layOutButtonRow(QHBoxLayout *layout)
 {
-    bool hasHelp = FALSE;
-    bool hasEarlyFinish = FALSE;
+	bool hasHelp = FALSE;
+	bool hasEarlyFinish = FALSE;
 
-    int i = d->pages.size() - 2;
-    while ( !hasEarlyFinish && i >= 0 ) {
-	if ( d->pages[i] && d->pages[i]->finishEnabled )
-	    hasEarlyFinish = TRUE;
-	i--;
-    }
-    i = 0;
-    while ( !hasHelp && i < (int)d->pages.size() ) {
-	if ( d->pages[i] && d->pages[i]->helpEnabled )
-	    hasHelp = TRUE;
-	i++;
-    }
+	int i = d->pages.size() - 2;
+	while (!hasEarlyFinish && i >= 0) {
+		if (d->pages[i] && d->pages[i]->finishEnabled)
+			hasEarlyFinish = TRUE;
+		i--;
+	}
+	i = 0;
+	while (!hasHelp && i < (int)d->pages.size()) {
+		if (d->pages[i] && d->pages[i]->helpEnabled)
+			hasHelp = TRUE;
+		i++;
+	}
 
-    QBoxLayout * h = new QBoxLayout( QBoxLayout::LeftToRight );
-    layout->addLayout( h );
+	QBoxLayout *h = new QBoxLayout(QBoxLayout::LeftToRight);
+	layout->addLayout(h);
 
-    h->addWidget( d->cancelButton );
+	h->addWidget(d->cancelButton);
 
-    h->addStretch( 42 );
+	h->addStretch(42);
 
-    h->addWidget( d->backButton );
+	h->addWidget(d->backButton);
 
-    h->addSpacing( 6 );
+	h->addSpacing(6);
 
-    if ( hasEarlyFinish ) {
-	d->nextButton->show();
-	d->finishButton->show();
-	h->addWidget( d->nextButton );
-	h->addSpacing( 12 );
-	h->addWidget( d->finishButton );
-    } else if ( d->pages.size() == 0 ||
-		d->current->finishEnabled ||
-		d->current == d->pages[d->pages.size()-1] ) {
-	d->nextButton->hide();
-	d->finishButton->show();
-	h->addWidget( d->finishButton );
-    } else {
-	d->nextButton->show();
-	d->finishButton->hide();
-	h->addWidget( d->nextButton );
-    }
+	if (hasEarlyFinish) {
+		d->nextButton->show();
+		d->finishButton->show();
+		h->addWidget(d->nextButton);
+		h->addSpacing(12);
+		h->addWidget(d->finishButton);
+	} else if (d->pages.size() == 0 || d->current->finishEnabled ||
+		   d->current == d->pages[d->pages.size() - 1]) {
+		d->nextButton->hide();
+		d->finishButton->show();
+		h->addWidget(d->finishButton);
+	} else {
+		d->nextButton->show();
+		d->finishButton->hide();
+		h->addWidget(d->nextButton);
+	}
 
-    // if last page is disabled - show finished btn. at lastpage-1
-    i = d->pages.count()-1;
-    if ( i >= 0 && !appropriate( d->pages.at( i )->w ) &&
-	 d->current == d->pages.at( d->pages.count()-2 ) ) {
-	d->nextButton->hide();
-	d->finishButton->show();
-	h->addWidget( d->finishButton );
-    }
+	// if last page is disabled - show finished btn. at lastpage-1
+	i = d->pages.count() - 1;
+	if (i >= 0 && !appropriate(d->pages.at(i)->w) &&
+	    d->current == d->pages.at(d->pages.count() - 2)) {
+		d->nextButton->hide();
+		d->finishButton->show();
+		h->addWidget(d->finishButton);
+	}
 
-    if ( hasHelp ) {
-        h->addSpacing( 12 );
-        h->addWidget( d->helpButton );
-    } else {
-        d->helpButton->hide();
-    }
+	if (hasHelp) {
+		h->addSpacing(12);
+		h->addWidget(d->helpButton);
+	} else {
+		d->helpButton->hide();
+	}
 }
 
 
@@ -627,13 +619,13 @@ for this page, and this function is called every time \a title
 changes.
 */
 
-void QWizard::layOutTitleRow( QHBoxLayout * layout, const QString & title )
+void QWizard::layOutTitleRow(QHBoxLayout *layout, const QString &title)
 {
-    if ( !d->title )
-	d->title = new QLabel( this );
-    d->title->setText( title );
-    layout->addWidget( d->title, 10 );
-    d->title->repaint();
+	if (!d->title)
+		d->title = new QLabel(this);
+	d->title->setText(title);
+	layout->addWidget(d->title, 10);
+	d->title->repaint();
 }
 
 
@@ -643,48 +635,48 @@ void QWizard::layOutTitleRow( QHBoxLayout * layout, const QString & title )
 
 void QWizard::layOut()
 {
-    delete d->v;
-    d->v = new QVBoxLayout( this, 6, 0, "top-level layout" );
+	delete d->v;
+	d->v = new QVBoxLayout(this, 6, 0, "top-level layout");
 
-    QHBoxLayout * l;
-    l = new QHBoxLayout( 6 );
-    d->v->addLayout( l, 0 );
-    layOutTitleRow( l, d->current ? d->current->t : QString::null );
+	QHBoxLayout *l;
+	l = new QHBoxLayout(6);
+	d->v->addLayout(l, 0);
+	layOutTitleRow(l, d->current ? d->current->t : QString::null);
 
-    if ( ! d->hbar1 ) {
-	d->hbar1 = new QFrame( this, "<hr>", 0, TRUE );
-	d->hbar1->setFrameStyle( QFrame::Sunken + QFrame::HLine );
-	d->hbar1->setFixedHeight( 12 );
-    }
+	if (!d->hbar1) {
+		d->hbar1 = new QFrame(this, "<hr>", 0, TRUE);
+		d->hbar1->setFrameStyle(QFrame::Sunken + QFrame::HLine);
+		d->hbar1->setFixedHeight(12);
+	}
 
-    d->v->addWidget( d->hbar1 );
+	d->v->addWidget(d->hbar1);
 
-    d->v->addWidget( d->ws, 10 );
+	d->v->addWidget(d->ws, 10);
 
-    if ( ! d->hbar2 ) {
-	d->hbar2 = new QFrame( this, "<hr>", 0, TRUE );
-	d->hbar2->setFrameStyle( QFrame::Sunken + QFrame::HLine );
-	d->hbar2->setFixedHeight( 12 );
-    }
-    d->v->addWidget( d->hbar2 );
+	if (!d->hbar2) {
+		d->hbar2 = new QFrame(this, "<hr>", 0, TRUE);
+		d->hbar2->setFrameStyle(QFrame::Sunken + QFrame::HLine);
+		d->hbar2->setFixedHeight(12);
+	}
+	d->v->addWidget(d->hbar2);
 
-    l = new QHBoxLayout( 6 );
-    d->v->addLayout( l );
-    layOutButtonRow( l );
-    d->v->activate();
+	l = new QHBoxLayout(6);
+	d->v->addLayout(l);
+	layOutButtonRow(l);
+	d->v->activate();
 }
 
 
 /*! \reimp */
 
-bool QWizard::eventFilter( QObject * o, QEvent * e )
+bool QWizard::eventFilter(QObject *o, QEvent *e)
 {
-    if ( o == d->ws && e && e->type() == QEvent::ChildRemoved ) {
-	QChildEvent * c = (QChildEvent*)e;
-	if ( c->child() && c->child()->isWidgetType() )
-	    removePage( (QWidget *)c->child() );
-    }
-    return QDialog::eventFilter( o, e );
+	if (o == d->ws && e && e->type() == QEvent::ChildRemoved) {
+		QChildEvent *c = (QChildEvent *)e;
+		if (c->child() && c->child()->isWidgetType())
+			removePage((QWidget *)c->child());
+	}
+	return QDialog::eventFilter(o, e);
 }
 
 
@@ -693,22 +685,23 @@ bool QWizard::eventFilter( QObject * o, QEvent * e )
   display something else.
 */
 
-void QWizard::removePage( QWidget * page )
+void QWizard::removePage(QWidget *page)
 {
-    if ( !page )
-	return;
+	if (!page)
+		return;
 
-    int i = d->pages.size();
-    while( --i >= 0 && d->pages[i] && d->pages[i]->w != page ) { }
-    if ( i < 0 )
-	return;
-    d->pages.remove( i );
-    for ( uint j = i; j < d->pages.size() - 1; ++j )
-	d->pages.insert( j, d->pages.take( j + 1 ) );
-    d->pages.resize( d->pages.size() - 1 );
-    d->ws->removeWidget( page );
-    if ( pageCount() > 0 )
-	showPage( QWizard::page( 0 ) );
+	int i = d->pages.size();
+	while (--i >= 0 && d->pages[i] && d->pages[i]->w != page) {
+	}
+	if (i < 0)
+		return;
+	d->pages.remove(i);
+	for (uint j = i; j < d->pages.size() - 1; ++j)
+		d->pages.insert(j, d->pages.take(j + 1));
+	d->pages.resize(d->pages.size() - 1);
+	d->ws->removeWidget(page);
+	if (pageCount() > 0)
+		showPage(QWizard::page(0));
 }
 
 
@@ -717,12 +710,12 @@ void QWizard::removePage( QWidget * page )
   The first page has position 0.
 */
 
-QWidget* QWizard::page( int pos ) const
+QWidget *QWizard::page(int pos) const
 {
-    if ( pos >= pageCount() || pos < 0 )
-      return 0;
+	if (pos >= pageCount() || pos < 0)
+		return 0;
 
-    return d->pages[ pos ]->w;
+	return d->pages[pos]->w;
 }
 
 #endif // QT_NO_WIZARD

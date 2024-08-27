@@ -14,26 +14,26 @@
 #include <qlcdnumber.h>
 
 
-class DigitalClock : public QLCDNumber		// digital clock widget
+class DigitalClock : public QLCDNumber // digital clock widget
 {
-    Q_OBJECT
-public:
-    DigitalClock( QWidget *parent=0, const char *name=0 );
+	Q_OBJECT
+      public:
+	DigitalClock(QWidget *parent = 0, const char *name = 0);
 
-protected:					// event handlers
-    void	timerEvent( QTimerEvent * );
-    void	mousePressEvent( QMouseEvent * );
+      protected: // event handlers
+	void timerEvent(QTimerEvent *);
+	void mousePressEvent(QMouseEvent *);
 
-private slots:					// internal slots
-    void	stopDate();
-    void	showTime();
+      private slots: // internal slots
+	void stopDate();
+	void showTime();
 
-private:					// internal data
-    void	showDate();
+      private: // internal data
+	void showDate();
 
-    bool	showingColon;
-    int		normalTimer;
-    int		showDateTimer;
+	bool showingColon;
+	int normalTimer;
+	int showDateTimer;
 };
 
 

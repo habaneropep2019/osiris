@@ -39,30 +39,31 @@
 #define QSIZEGRIP_H
 
 #ifndef QT_H
-#include "qwidget.h"
+# include "qwidget.h"
 #endif // QT_H
 
 #ifndef QT_NO_SIZEGRIP
 
-class Q_EXPORT QSizeGrip: public QWidget
+class Q_EXPORT QSizeGrip : public QWidget
 {
-    Q_OBJECT
-public:
-    QSizeGrip( QWidget *parent, const char* name=0 );
-    ~QSizeGrip();
+	Q_OBJECT
+      public:
+	QSizeGrip(QWidget *parent, const char *name = 0);
+	~QSizeGrip();
 
-    QSize sizeHint() const;
-    QSizePolicy sizePolicy() const;
+	QSize sizeHint() const;
+	QSizePolicy sizePolicy() const;
 
-protected:
-    void paintEvent( QPaintEvent * );
-    void mousePressEvent( QMouseEvent * );
-    void mouseMoveEvent( QMouseEvent * );
-private:
-    QPoint p;
-    QSize s;
-    int d;
+      protected:
+	void paintEvent(QPaintEvent *);
+	void mousePressEvent(QMouseEvent *);
+	void mouseMoveEvent(QMouseEvent *);
+
+      private:
+	QPoint p;
+	QSize s;
+	int d;
 };
 
-#endif //QT_NO_SIZEGRIP
+#endif // QT_NO_SIZEGRIP
 #endif

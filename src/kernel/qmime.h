@@ -39,53 +39,57 @@
 #define QMIME_H
 
 #ifndef QT_H
-#include "qwindowdefs.h"
+# include "qwindowdefs.h"
 #endif // QT_H
 
 #ifndef QT_NO_MIME
 
-class Q_EXPORT QMimeSource {
-public:
-    virtual ~QMimeSource();
-    virtual const char* format( int n = 0 ) const = 0;
-    virtual bool provides( const char* ) const;
-    virtual QByteArray encodedData( const char* ) const = 0;
+class Q_EXPORT QMimeSource
+{
+      public:
+	virtual ~QMimeSource();
+	virtual const char *format(int n = 0) const = 0;
+	virtual bool provides(const char *) const;
+	virtual QByteArray encodedData(const char *) const = 0;
 };
 
 class QMimeSourceFactoryData;
 class QStringList;
 
-class Q_EXPORT QMimeSourceFactory {
-public:
-    QMimeSourceFactory();
-    virtual ~QMimeSourceFactory();
+class Q_EXPORT QMimeSourceFactory
+{
+      public:
+	QMimeSourceFactory();
+	virtual ~QMimeSourceFactory();
 
-    static QMimeSourceFactory* defaultFactory();
-    static void setDefaultFactory( QMimeSourceFactory* );
+	static QMimeSourceFactory *defaultFactory();
+	static void setDefaultFactory(QMimeSourceFactory *);
 
-    virtual const QMimeSource* data(const QString& abs_name) const;
-    virtual QString makeAbsolute(const QString& abs_or_rel_name, const QString& context) const;
-    const QMimeSource* data(const QString& abs_or_rel_name, const QString& context) const;
+	virtual const QMimeSource *data(const QString &abs_name) const;
+	virtual QString makeAbsolute(const QString &abs_or_rel_name,
+				     const QString &context) const;
+	const QMimeSource *data(const QString &abs_or_rel_name,
+				const QString &context) const;
 
-    virtual void setText( const QString& abs_name, const QString& text );
-    virtual void setImage( const QString& abs_name, const QImage& im );
-    virtual void setPixmap( const QString& abs_name, const QPixmap& pm );
-    virtual void setData( const QString& abs_name, QMimeSource* data );
-    virtual void setFilePath( const QStringList& );
-    virtual QStringList filePath() const;
-    void addFilePath( const QString& );
-    virtual void setExtensionType( const QString& ext, const char* mimetype );
+	virtual void setText(const QString &abs_name, const QString &text);
+	virtual void setImage(const QString &abs_name, const QImage &im);
+	virtual void setPixmap(const QString &abs_name, const QPixmap &pm);
+	virtual void setData(const QString &abs_name, QMimeSource *data);
+	virtual void setFilePath(const QStringList &);
+	virtual QStringList filePath() const;
+	void addFilePath(const QString &);
+	virtual void setExtensionType(const QString &ext, const char *mimetype);
 
-private:
-    QMimeSourceFactoryData* d;
+      private:
+	QMimeSourceFactoryData *d;
 };
 
-#ifdef _WS_WIN_
+# ifdef _WS_WIN_
 
 // This header file is down here for GCC 2.7.* compatibility
-#ifndef QT_H
-#include "qlist.h"
-#endif // QT_H
+#  ifndef QT_H
+#   include "qlist.h"
+#  endif // QT_H
 
 /*
   Encapsulation of conversion between MIME and Windows CLIPFORMAT.
@@ -93,30 +97,33 @@ private:
   directly.
 */
 
-class Q_EXPORT QWindowsMime {
-public:
-    QWindowsMime();
-    virtual ~QWindowsMime();
+class Q_EXPORT QWindowsMime
+{
+      public:
+	QWindowsMime();
+	virtual ~QWindowsMime();
 
-    static void initialize();
+	static void initialize();
 
-    static QList<QWindowsMime> all();
-    static QWindowsMime* convertor( const char* mime, int cf );
-    static const char* cfToMime(int cf);
+	static QList<QWindowsMime> all();
+	static QWindowsMime *convertor(const char *mime, int cf);
+	static const char *cfToMime(int cf);
 
-    static int registerMimeType(const char *mime);
+	static int registerMimeType(const char *mime);
 
-    virtual const char* convertorName()=0;
-    virtual int countCf()=0;
-    virtual int cf(int index)=0;
-    virtual bool canConvert( const char* mime, int cf )=0;
-    virtual const char* mimeFor(int cf)=0;
-    virtual int cfFor(const char* )=0;
-    virtual QByteArray convertToMime( QByteArray data, const char* mime, int cf )=0;
-    virtual QByteArray convertFromMime( QByteArray data, const char* mime, int cf )=0;
+	virtual const char *convertorName() = 0;
+	virtual int countCf() = 0;
+	virtual int cf(int index) = 0;
+	virtual bool canConvert(const char *mime, int cf) = 0;
+	virtual const char *mimeFor(int cf) = 0;
+	virtual int cfFor(const char *) = 0;
+	virtual QByteArray convertToMime(QByteArray data, const char *mime,
+					 int cf) = 0;
+	virtual QByteArray convertFromMime(QByteArray data, const char *mime,
+					   int cf) = 0;
 };
 
-#endif // _WS_WIN_
+# endif // _WS_WIN_
 
 #endif // QT_NO_MIME
 

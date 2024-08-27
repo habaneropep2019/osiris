@@ -39,7 +39,7 @@
 #define QSTATUSBAR_H
 
 #ifndef QT_H
-#include "qwidget.h"
+# include "qwidget.h"
 #endif // QT_H
 
 #ifndef QT_NO_STATUSBAR
@@ -48,40 +48,43 @@
 class QStatusBarPrivate;
 
 
-class Q_EXPORT QStatusBar: public QWidget
+class Q_EXPORT QStatusBar : public QWidget
 {
-    Q_OBJECT
-    Q_PROPERTY( bool sizeGripEnabled READ isSizeGripEnabled WRITE setSizeGripEnabled )
-    
-public:
-    QStatusBar( QWidget * parent = 0, const char *name = 0 );
-    ~QStatusBar();
+	Q_OBJECT
+	Q_PROPERTY(bool sizeGripEnabled READ isSizeGripEnabled WRITE
+			   setSizeGripEnabled)
 
-    void addWidget( QWidget *, int stretch = 0, bool = FALSE );
-    void removeWidget( QWidget * );
+      public:
+	QStatusBar(QWidget *parent = 0, const char *name = 0);
+	~QStatusBar();
 
-    void setSizeGripEnabled(bool);
-    bool isSizeGripEnabled() const;
+	void addWidget(QWidget *, int stretch = 0, bool = FALSE);
+	void removeWidget(QWidget *);
 
-public slots:
-    void message( const QString &);
-    void message( const QString &, int );
-    void clear();
+	void setSizeGripEnabled(bool);
+	bool isSizeGripEnabled() const;
 
-protected:
-    void paintEvent( QPaintEvent * );
-    void resizeEvent( QResizeEvent * );
+      public slots:
+	void message(const QString &);
+	void message(const QString &, int);
+	void clear();
 
-    void reformat();
-    void hideOrShow();
-    bool event( QEvent *);
-private:
-    QStatusBarPrivate * d;
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QStatusBar( const QStatusBar & );
-    QStatusBar& operator=( const QStatusBar & );
-#endif
+      protected:
+	void paintEvent(QPaintEvent *);
+	void resizeEvent(QResizeEvent *);
+
+	void reformat();
+	void hideOrShow();
+	bool event(QEvent *);
+
+      private:
+	QStatusBarPrivate *d;
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QStatusBar(const QStatusBar &);
+	QStatusBar &operator=(const QStatusBar &);
+# endif
 };
 
 #endif // QT_NO_STATUSBAR

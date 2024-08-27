@@ -16,19 +16,19 @@
 
 class MyWidget : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    MyWidget( QWidget* parent=0, const char* name = 0 );
+      public:
+	MyWidget(QWidget *parent = 0, const char *name = 0);
 
-signals:
-    void closed();
+      signals:
+	void closed();
 
-protected:
-    void closeEvent(QCloseEvent*);
+      protected:
+	void closeEvent(QCloseEvent *);
 
-private:
-    static void initChoices(QWidget* parent);
+      private:
+	static void initChoices(QWidget *parent);
 };
 
 #endif

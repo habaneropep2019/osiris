@@ -40,32 +40,32 @@
 /*!
   Constructs a QProcess.
 */
-QProcess::QProcess( QObject *parent, const char *name )
-    : QObject( parent, name )
+QProcess::QProcess(QObject *parent, const char *name) : QObject(parent, name)
 {
-    d = new QProcessPrivate( this );
+	d = new QProcessPrivate(this);
 }
 
 /*!
   Constructs a QProcess with the given command (but does not start it).
 */
-QProcess::QProcess( const QString& com, QObject *parent, const char *name )
-    : QObject( parent, name )
+QProcess::QProcess(const QString &com, QObject *parent, const char *name)
+	: QObject(parent, name)
 {
-    d = new QProcessPrivate( this );
-    setCommand( com );
+	d = new QProcessPrivate(this);
+	setCommand(com);
 }
 
 /*!
   Constructs a QProcess with the given command and arguments (but does not
   start it).
 */
-QProcess::QProcess( const QString& com, const QStringList& args, QObject *parent, const char *name )
-    : QObject( parent, name )
+QProcess::QProcess(const QString &com, const QStringList &args, QObject *parent,
+		   const char *name)
+	: QObject(parent, name)
 {
-    d = new QProcessPrivate( this );
-    setCommand( com );
-    setArguments( args );
+	d = new QProcessPrivate(this);
+	setCommand(com);
+	setArguments(args);
 }
 
 /*!
@@ -74,41 +74,41 @@ QProcess::QProcess( const QString& com, const QStringList& args, QObject *parent
 */
 QProcess::~QProcess()
 {
-    delete d;
+	delete d;
 }
 
 
 /*!
   Set the command that should be executed.
 */
-void QProcess::setCommand( const QString& com )
+void QProcess::setCommand(const QString &com)
 {
-    d->command = com;
+	d->command = com;
 }
 
 /*!
   Set the arguments for the command. Previous set arguments will be deleted
   first.
 */
-void QProcess::setArguments( const QStringList& args )
+void QProcess::setArguments(const QStringList &args)
 {
-    d->arguments = args;
+	d->arguments = args;
 }
 
 /*!
   Add a argument to the end of the existing list of arguments.
 */
-void QProcess::addArgument( const QString& arg )
+void QProcess::addArgument(const QString &arg)
 {
-    d->arguments.append( arg );
+	d->arguments.append(arg);
 }
 
 /*!
   Set a working directory in which the command is executed.
 */
-void QProcess::setWorkingDirectory( const QDir& dir )
+void QProcess::setWorkingDirectory(const QDir &dir)
 {
-    d->workingDir = dir;
+	d->workingDir = dir;
 }
 
 
@@ -147,11 +147,11 @@ void QProcess::setWorkingDirectory( const QDir& dir )
 */
 bool QProcess::normalExit()
 {
-    // isRunning() has the side effect that it determines the exit status!
-    if ( isRunning() )
-	return FALSE;
-    else
-	return d->exitNormal;
+	// isRunning() has the side effect that it determines the exit status!
+	if (isRunning())
+		return FALSE;
+	else
+		return d->exitNormal;
 }
 
 /*!
@@ -160,11 +160,11 @@ bool QProcess::normalExit()
 */
 int QProcess::exitStatus()
 {
-    // isRunning() has the side effect that it determines the exit status!
-    if ( isRunning() )
-	return 0;
-    else
-	return d->exitStat;
+	// isRunning() has the side effect that it determines the exit status!
+	if (isRunning())
+		return 0;
+	else
+		return d->exitStat;
 }
 
 
@@ -212,11 +212,11 @@ int QProcess::exitStatus()
   may not read this data. If the data gets read, the signal \l wroteStdin() is
   emitted.
 */
-void QProcess::dataStdin( const QString& buf )
+void QProcess::dataStdin(const QString &buf)
 {
-    QByteArray bbuf;
-    bbuf.duplicate( buf.latin1(), buf.length() );
-    dataStdin( bbuf );
+	QByteArray bbuf;
+	bbuf.duplicate(buf.latin1(), buf.length());
+	dataStdin(bbuf);
 }
 
 /*!

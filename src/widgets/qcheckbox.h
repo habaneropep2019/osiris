@@ -39,51 +39,55 @@
 #define QCHECKBOX_H
 
 #ifndef QT_H
-#include "qbutton.h"
+# include "qbutton.h"
 #endif // QT_H
 
 #ifndef QT_NO_CHECKBOX
 
 class Q_EXPORT QCheckBox : public QButton
 {
-    Q_OBJECT
-    Q_PROPERTY( bool checked READ isChecked WRITE setChecked )
-    Q_PROPERTY( bool tristate READ isTristate WRITE setTristate )
+	Q_OBJECT
+	Q_PROPERTY(bool checked READ isChecked WRITE setChecked)
+	Q_PROPERTY(bool tristate READ isTristate WRITE setTristate)
 
-public:
-    QCheckBox( QWidget *parent, const char *name=0 );
-    QCheckBox( const QString &text, QWidget *parent, const char* name=0 );
+      public:
+	QCheckBox(QWidget *parent, const char *name = 0);
+	QCheckBox(const QString &text, QWidget *parent, const char *name = 0);
 
-    bool    isChecked() const;
-    void    setChecked( bool check );
+	bool isChecked() const;
+	void setChecked(bool check);
 
-    void    setNoChange();
+	void setNoChange();
 
-    void    setTristate(bool y=TRUE);
-    bool    isTristate() const;
+	void setTristate(bool y = TRUE);
+	bool isTristate() const;
 
-    QSize sizeHint() const;
-    QSizePolicy sizePolicy() const;
+	QSize sizeHint() const;
+	QSizePolicy sizePolicy() const;
 
-protected:
-    void    resizeEvent( QResizeEvent* );
-    void    drawButton( QPainter * );
-    void    drawButtonLabel( QPainter * );
-    void    updateMask();
+      protected:
+	void resizeEvent(QResizeEvent *);
+	void drawButton(QPainter *);
+	void drawButtonLabel(QPainter *);
+	void updateMask();
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QCheckBox( const QCheckBox & );
-    QCheckBox &operator=( const QCheckBox & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QCheckBox(const QCheckBox &);
+	QCheckBox &operator=(const QCheckBox &);
+# endif
 };
 
 
 inline bool QCheckBox::isChecked() const
-{ return isOn(); }
+{
+	return isOn();
+}
 
-inline void QCheckBox::setChecked( bool check )
-{ setOn( check ); }
+inline void QCheckBox::setChecked(bool check)
+{
+	setOn(check);
+}
 
 
 #endif // QT_NO_CHECKBOX

@@ -81,10 +81,10 @@
   Moves the cursor to the focusWidget() and returns that widget.
   You must call this before next() or prev() to iterate meaningfully.
 */
-QWidget* QFocusData::home()
+QWidget *QFocusData::home()
 {
-    focusWidgets.find(it.current());
-    return focusWidgets.current();
+	focusWidgets.find(it.current());
+	return focusWidgets.current();
 }
 
 /*!
@@ -92,12 +92,12 @@ QWidget* QFocusData::home()
   are a \e loop of widgets.  If you keep calling next(), it will
   loop, without ever returning 0.
 */
-QWidget* QFocusData::next()
+QWidget *QFocusData::next()
 {
-    QWidget* r = focusWidgets.next();
-    if ( !r )
-	r = focusWidgets.first();
-    return r;
+	QWidget *r = focusWidgets.next();
+	if (!r)
+		r = focusWidgets.first();
+	return r;
 }
 
 /*!
@@ -105,10 +105,10 @@ QWidget* QFocusData::next()
   are a \e loop of widgets.  If you keep calling prev(), it will
   loop, without ever returning 0.
 */
-QWidget* QFocusData::prev()
+QWidget *QFocusData::prev()
 {
-    QWidget* r = focusWidgets.prev();
-    if ( !r )
-	r = focusWidgets.last();
-    return r;
+	QWidget *r = focusWidgets.prev();
+	if (!r)
+		r = focusWidgets.last();
+	return r;
 }

@@ -20,242 +20,250 @@
 
 // -----------------------------------------------------------------
 
-MessageHeader::MessageHeader( const MessageHeader &mh )
+MessageHeader::MessageHeader(const MessageHeader &mh)
 {
-    msender = mh.msender;
-    msubject = mh.msubject;
-    mdatetime = mh.mdatetime;
+	msender = mh.msender;
+	msubject = mh.msubject;
+	mdatetime = mh.mdatetime;
 }
 
-MessageHeader &MessageHeader::operator=( const MessageHeader &mh )
+MessageHeader &MessageHeader::operator=(const MessageHeader &mh)
 {
-    msender = mh.msender;
-    msubject = mh.msubject;
-    mdatetime = mh.mdatetime;
+	msender = mh.msender;
+	msubject = mh.msubject;
+	mdatetime = mh.mdatetime;
 
-    return *this;
-}
-
-// -----------------------------------------------------------------
-
-Folder::Folder( Folder *parent, const QString &name )
-    : QObject( parent, name ), fName( name )
-{
-    lstMessages.setAutoDelete( TRUE );
+	return *this;
 }
 
 // -----------------------------------------------------------------
 
-FolderListItem::FolderListItem( QListView *parent, Folder *f )
-    : QListViewItem( parent )
+Folder::Folder(Folder *parent, const QString &name)
+	: QObject(parent, name), fName(name)
 {
-    myFolder = f;
-    setText( 0, f->folderName() );
-
-    if ( myFolder->children() )
-	insertSubFolders( myFolder->children() );
-}
-
-FolderListItem::FolderListItem( FolderListItem *parent, Folder *f )
-    : QListViewItem( parent )
-{
-    myFolder = f;
-
-    setText( 0, f->folderName() );
-
-    if ( myFolder->children() )
-	insertSubFolders( myFolder->children() );
-}
-
-void FolderListItem::insertSubFolders( const QObjectList *lst )
-{
-    Folder *f;
-    for ( f = ( Folder* )( ( QObjectList* )lst )->first(); f; f = ( Folder* )( ( QObjectList* )lst )->next() )
-	(void)new FolderListItem( this, f );
+	lstMessages.setAutoDelete(TRUE);
 }
 
 // -----------------------------------------------------------------
 
-MessageListItem::MessageListItem( QListView *parent, Message *m )
-    : QListViewItem( parent )
+FolderListItem::FolderListItem(QListView *parent, Folder *f)
+	: QListViewItem(parent)
 {
-    myMessage = m;
-    setText( 0, myMessage->header().sender() );
-    setText( 1, myMessage->header().subject() );
-    setText( 2, myMessage->header().datetime().toString() );
+	myFolder = f;
+	setText(0, f->folderName());
+
+	if (myFolder->children())
+		insertSubFolders(myFolder->children());
 }
 
-void MessageListItem::paintCell( QPainter *p, const QColorGroup &cg,
-				 int column, int width, int alignment )
+FolderListItem::FolderListItem(FolderListItem *parent, Folder *f)
+	: QListViewItem(parent)
 {
-    QColorGroup _cg( cg );
-    QColor c = _cg.text();
+	myFolder = f;
 
-    if ( myMessage->state() == Message::Unread )
-	_cg.setColor( QColorGroup::Text, Qt::red );
+	setText(0, f->folderName());
 
-    QListViewItem::paintCell( p, _cg, column, width, alignment );
+	if (myFolder->children())
+		insertSubFolders(myFolder->children());
+}
 
-    _cg.setColor( QColorGroup::Text, c );
+void FolderListItem::insertSubFolders(const QObjectList *lst)
+{
+	Folder *f;
+	for (f = (Folder *)((QObjectList *)lst)->first(); f;
+	     f = (Folder *)((QObjectList *)lst)->next())
+		(void)new FolderListItem(this, f);
 }
 
 // -----------------------------------------------------------------
 
-ListViews::ListViews( QWidget *parent, const char *name )
-    : QSplitter( Qt::Horizontal, parent, name )
+MessageListItem::MessageListItem(QListView *parent, Message *m)
+	: QListViewItem(parent)
 {
-    lstFolders.setAutoDelete( TRUE );
+	myMessage = m;
+	setText(0, myMessage->header().sender());
+	setText(1, myMessage->header().subject());
+	setText(2, myMessage->header().datetime().toString());
+}
 
-    folders = new QListView( this );
-    folders->header()->setClickEnabled( FALSE );
-    folders->addColumn( "Folder" );
+void MessageListItem::paintCell(QPainter *p, const QColorGroup &cg, int column,
+				int width, int alignment)
+{
+	QColorGroup _cg(cg);
+	QColor c = _cg.text();
 
-    initFolders();
-    setupFolders();
+	if (myMessage->state() == Message::Unread)
+		_cg.setColor(QColorGroup::Text, Qt::red);
 
-    folders->setRootIsDecorated( TRUE );
-    setResizeMode( folders, QSplitter::KeepSize );
+	QListViewItem::paintCell(p, _cg, column, width, alignment);
 
-    QSplitter *vsplitter = new QSplitter( Qt::Vertical, this );
+	_cg.setColor(QColorGroup::Text, c);
+}
 
-    messages = new QListView( vsplitter );
-    messages->addColumn( "Sender" );
-    messages->addColumn( "Subject" );
-    messages->addColumn( "Date" );
-    messages->setColumnAlignment( 1, Qt::AlignRight );
-    messages->setAllColumnsShowFocus( TRUE );
-    messages->setShowSortIndicator( TRUE );
-    menu = new QPopupMenu( messages );
-    for( int i = 1; i <= 10; i++ )
-	menu->insertItem( QString( "Context Item %1" ).arg( i ) );
-    connect(messages, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint& , int ) ),
-	    this, SLOT( slotRMB( QListViewItem *, const QPoint &, int ) ) );
-    vsplitter->setResizeMode( messages, QSplitter::KeepSize );
+// -----------------------------------------------------------------
 
-    message = new QLabel( vsplitter );
-    message->setAlignment( Qt::AlignTop );
-    message->setBackgroundMode( PaletteBase );
+ListViews::ListViews(QWidget *parent, const char *name)
+	: QSplitter(Qt::Horizontal, parent, name)
+{
+	lstFolders.setAutoDelete(TRUE);
 
-    connect( folders, SIGNAL( selectionChanged( QListViewItem* ) ),
-	     this, SLOT( slotFolderChanged( QListViewItem* ) ) );
-    connect( messages, SIGNAL( selectionChanged() ),
-	     this, SLOT( slotMessageChanged() ) );
-    connect( messages, SIGNAL( currentChanged( QListViewItem * ) ),
-	     this, SLOT( slotMessageChanged() ) );
+	folders = new QListView(this);
+	folders->header()->setClickEnabled(FALSE);
+	folders->addColumn("Folder");
 
-    messages->setSelectionMode( QListView::Extended );
-    // some preparations
-    folders->firstChild()->setOpen( TRUE );
-    folders->firstChild()->firstChild()->setOpen( TRUE );
-    folders->setCurrentItem( folders->firstChild()->firstChild()->firstChild() );
-    folders->setSelected( folders->firstChild()->firstChild()->firstChild(), TRUE );
+	initFolders();
+	setupFolders();
 
-    messages->setSelected( messages->firstChild(), TRUE );
-    messages->setCurrentItem( messages->firstChild() );
-    message->setMargin( 5 );
+	folders->setRootIsDecorated(TRUE);
+	setResizeMode(folders, QSplitter::KeepSize);
 
-    QValueList<int> lst;
-    lst.append( 170 );
-    setSizes( lst );
+	QSplitter *vsplitter = new QSplitter(Qt::Vertical, this);
+
+	messages = new QListView(vsplitter);
+	messages->addColumn("Sender");
+	messages->addColumn("Subject");
+	messages->addColumn("Date");
+	messages->setColumnAlignment(1, Qt::AlignRight);
+	messages->setAllColumnsShowFocus(TRUE);
+	messages->setShowSortIndicator(TRUE);
+	menu = new QPopupMenu(messages);
+	for (int i = 1; i <= 10; i++)
+		menu->insertItem(QString("Context Item %1").arg(i));
+	connect(messages,
+		SIGNAL(rightButtonPressed(QListViewItem *, const QPoint &,
+					  int)),
+		this, SLOT(slotRMB(QListViewItem *, const QPoint &, int)));
+	vsplitter->setResizeMode(messages, QSplitter::KeepSize);
+
+	message = new QLabel(vsplitter);
+	message->setAlignment(Qt::AlignTop);
+	message->setBackgroundMode(PaletteBase);
+
+	connect(folders, SIGNAL(selectionChanged(QListViewItem *)), this,
+		SLOT(slotFolderChanged(QListViewItem *)));
+	connect(messages, SIGNAL(selectionChanged()), this,
+		SLOT(slotMessageChanged()));
+	connect(messages, SIGNAL(currentChanged(QListViewItem *)), this,
+		SLOT(slotMessageChanged()));
+
+	messages->setSelectionMode(QListView::Extended);
+	// some preparations
+	folders->firstChild()->setOpen(TRUE);
+	folders->firstChild()->firstChild()->setOpen(TRUE);
+	folders->setCurrentItem(
+		folders->firstChild()->firstChild()->firstChild());
+	folders->setSelected(folders->firstChild()->firstChild()->firstChild(),
+			     TRUE);
+
+	messages->setSelected(messages->firstChild(), TRUE);
+	messages->setCurrentItem(messages->firstChild());
+	message->setMargin(5);
+
+	QValueList<int> lst;
+	lst.append(170);
+	setSizes(lst);
 }
 
 void ListViews::initFolders()
 {
-    unsigned int mcount = 1;
+	unsigned int mcount = 1;
 
-    for ( unsigned int i = 1; i < 20; i++ ) {
-	QString str;
-	str = QString( "Folder %1" ).arg( i );
-	Folder *f = new Folder( 0, str );
-	for ( unsigned int j = 1; j < 5; j++ ) {
-	    QString str2;
-	    str2 = QString( "Sub Folder %1" ).arg( j );
-	    Folder *f2 = new Folder( f, str2 );
-	    for ( unsigned int k = 1; k < 3; k++ ) {
-		QString str3;
-		str3 = QString( "Sub Sub Folder %1" ).arg( k );
-		Folder *f3 = new Folder( f2, str3 );
-		initFolder( f3, mcount );
-	    }
+	for (unsigned int i = 1; i < 20; i++) {
+		QString str;
+		str = QString("Folder %1").arg(i);
+		Folder *f = new Folder(0, str);
+		for (unsigned int j = 1; j < 5; j++) {
+			QString str2;
+			str2 = QString("Sub Folder %1").arg(j);
+			Folder *f2 = new Folder(f, str2);
+			for (unsigned int k = 1; k < 3; k++) {
+				QString str3;
+				str3 = QString("Sub Sub Folder %1").arg(k);
+				Folder *f3 = new Folder(f2, str3);
+				initFolder(f3, mcount);
+			}
+		}
+		lstFolders.append(f);
 	}
-	lstFolders.append( f );
-    }
 }
 
-void ListViews::initFolder( Folder *folder, unsigned int &count )
+void ListViews::initFolder(Folder *folder, unsigned int &count)
 {
-    for ( unsigned int i = 0; i < 15; i++, count++ ) {
-	QString str;
-	str = QString( "Message %1  " ).arg( count );
-	QDateTime dt = QDateTime::currentDateTime();
-	dt = dt.addSecs( 60 * count );
-	MessageHeader mh( "Trolltech <info@trolltech.com>  ", str, dt );
+	for (unsigned int i = 0; i < 15; i++, count++) {
+		QString str;
+		str = QString("Message %1  ").arg(count);
+		QDateTime dt = QDateTime::currentDateTime();
+		dt = dt.addSecs(60 * count);
+		MessageHeader mh("Trolltech <info@trolltech.com>  ", str, dt);
 
-	QString body;
-	body = QString( "This is the message number %1 of this application, \n"
-			"which shows how to use QListViews, QListViewItems, \n"
-			"QSplitters and so on. The code should show how easy\n"
-			"this can be done in Qt." ).arg( count );
-	Message *msg = new Message( mh, body );
-	folder->addMessage( msg );
-    }
+		QString body;
+		body = QString("This is the message number %1 of this application, \n"
+			       "which shows how to use QListViews, QListViewItems, \n"
+			       "QSplitters and so on. The code should show how easy\n"
+			       "this can be done in Qt.")
+			       .arg(count);
+		Message *msg = new Message(mh, body);
+		folder->addMessage(msg);
+	}
 }
 
 void ListViews::setupFolders()
 {
-    folders->clear();
+	folders->clear();
 
-    for ( Folder* f = lstFolders.first(); f; f = lstFolders.next() )
-	(void)new FolderListItem( folders, f );
+	for (Folder *f = lstFolders.first(); f; f = lstFolders.next())
+		(void)new FolderListItem(folders, f);
 }
 
-void ListViews::slotRMB( QListViewItem* Item, const QPoint & point, int )
+void ListViews::slotRMB(QListViewItem *Item, const QPoint &point, int)
 {
-    if( Item )
-	menu->popup( point );
+	if (Item)
+		menu->popup(point);
 }
 
 
-void ListViews::slotFolderChanged( QListViewItem *i )
+void ListViews::slotFolderChanged(QListViewItem *i)
 {
-    if ( !i )
-	return;
-    messages->clear();
-    message->setText( "" );
+	if (!i)
+		return;
+	messages->clear();
+	message->setText("");
 
-    FolderListItem *item = ( FolderListItem* )i;
+	FolderListItem *item = (FolderListItem *)i;
 
-    for ( Message* msg = item->folder()->firstMessage(); msg;
-	  msg = item->folder()->nextMessage() )
-	(void)new MessageListItem( messages, msg );
+	for (Message *msg = item->folder()->firstMessage(); msg;
+	     msg = item->folder()->nextMessage())
+		(void)new MessageListItem(messages, msg);
 }
 
 void ListViews::slotMessageChanged()
 {
-    QListViewItem *i = messages->currentItem();
-    if ( !i )
-	return;
+	QListViewItem *i = messages->currentItem();
+	if (!i)
+		return;
 
-    if ( !i->isSelected() ) {
-	message->setText( "" );
-	return;
-    }
+	if (!i->isSelected()) {
+		message->setText("");
+		return;
+	}
 
-    MessageListItem *item = ( MessageListItem* )i;
-    Message *msg = item->message();
+	MessageListItem *item = (MessageListItem *)i;
+	Message *msg = item->message();
 
-    QString text;
-    QString tmp = msg->header().sender();
-    tmp = tmp.replace( QRegExp( "[<]" ), "&lt;" );
-    tmp = tmp.replace( QRegExp( "[>]" ), "&gt;" );
-    text = QString( "<b><i>From:</i></b> <a href=\"mailto:info@trolltech.com\">%1</a><br>"
-		    "<b><i>Subject:</i></b> <big><big><b>%2</b></big></big><br>"
-		    "<b><i>Date:</i></b> %3<br><br>"
-		    "%4" ).
-	   arg( tmp ).arg( msg->header().subject() ).
-	   arg( msg->header().datetime().toString() ).arg( msg->body() );
+	QString text;
+	QString tmp = msg->header().sender();
+	tmp = tmp.replace(QRegExp("[<]"), "&lt;");
+	tmp = tmp.replace(QRegExp("[>]"), "&gt;");
+	text = QString("<b><i>From:</i></b> <a href=\"mailto:info@trolltech.com\">%1</a><br>"
+		       "<b><i>Subject:</i></b> <big><big><b>%2</b></big></big><br>"
+		       "<b><i>Date:</i></b> %3<br><br>"
+		       "%4")
+		       .arg(tmp)
+		       .arg(msg->header().subject())
+		       .arg(msg->header().datetime().toString())
+		       .arg(msg->body());
 
-    message->setText( text );
+	message->setText(text);
 
-    msg->setState( Message::Read );
+	msg->setState(Message::Read);
 }

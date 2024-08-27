@@ -39,9 +39,9 @@
 #define QINPUTDIALOG_H
 
 #ifndef QT_H
-#include <qdialog.h>
-#include <qstring.h>
-#include <qlineedit.h>
+# include <qdialog.h>
+# include <qstring.h>
+# include <qlineedit.h>
 #endif // QT_H
 
 #ifndef QT_NO_INPUTDIALOG
@@ -53,56 +53,68 @@ class QComboBox;
 
 class Q_EXPORT QInputDialog : public QDialog
 {
-#if defined(_CC_MSVC_)
-    friend class QInputDialog;
-#endif
-    Q_OBJECT
-	
-private:
-    enum Type { LineEdit, SpinBox, ComboBox, EditableComboBox };
+# if defined(_CC_MSVC_)
+	friend class QInputDialog;
+# endif
+	Q_OBJECT
 
-    QInputDialog( const QString &label, QWidget* parent = 0, const char* name = 0,
-		 bool modal = TRUE, Type type = LineEdit );
-    ~QInputDialog();
+      private:
+	enum Type { LineEdit, SpinBox, ComboBox, EditableComboBox };
 
-    QLineEdit *lineEdit() const;
-    QSpinBox *spinBox() const;
-    QComboBox *comboBox() const;
-    QComboBox *editableComboBox() const;
+	QInputDialog(const QString &label, QWidget *parent = 0,
+		     const char *name = 0, bool modal = TRUE,
+		     Type type = LineEdit);
+	~QInputDialog();
 
-    void setType( Type t );
-    Type type() const;
+	QLineEdit *lineEdit() const;
+	QSpinBox *spinBox() const;
+	QComboBox *comboBox() const;
+	QComboBox *editableComboBox() const;
 
-public:
-    static QString getText( const QString &caption, const QString &label, const QString &text = QString::null,
-			    bool *ok = 0, QWidget *parent = 0, const char *name = 0 ); // ### merge with below in 3.0
-    static QString getText( const QString &caption, const QString &label, QLineEdit::EchoMode echo,  //### make default Normal in 3.0
-			    const QString &text = QString::null, bool *ok = 0, QWidget *parent = 0, const char *name = 0 );
+	void setType(Type t);
+	Type type() const;
 
-    static int getInteger( const QString &caption, const QString &label, int num = 0, int from = -2147483647,
-			   int to = 2147483647,
-			   int step = 1, bool *ok = 0, QWidget *parent = 0, const char *name = 0 );
-    static double getDouble( const QString &caption, const QString &label, double num = 0,
-			     double from = -2147483647, double to = 2147483647,
-			     int decimals = 1, bool *ok = 0, QWidget *parent = 0, const char *name = 0 );
-    static QString getItem( const QString &caption, const QString &label, const QStringList &list,
-			    int current = 0, bool editable = TRUE,
-			    bool *ok = 0, QWidget *parent = 0, const char *name = 0 );
+      public:
+	static QString getText(const QString &caption, const QString &label,
+			       const QString &text = QString::null,
+			       bool *ok = 0, QWidget *parent = 0,
+			       const char *name = 0); // ### merge with below
+						      // in 3.0
+	static QString getText(const QString &caption, const QString &label,
+			       QLineEdit::EchoMode echo, // ### make default
+							 // Normal in 3.0
+			       const QString &text = QString::null,
+			       bool *ok = 0, QWidget *parent = 0,
+			       const char *name = 0);
 
-private slots:
-    void textChanged( const QString &s );
-    void tryAccept();
+	static int getInteger(const QString &caption, const QString &label,
+			      int num = 0, int from = -2147483647,
+			      int to = 2147483647, int step = 1, bool *ok = 0,
+			      QWidget *parent = 0, const char *name = 0);
+	static double getDouble(const QString &caption, const QString &label,
+				double num = 0, double from = -2147483647,
+				double to = 2147483647, int decimals = 1,
+				bool *ok = 0, QWidget *parent = 0,
+				const char *name = 0);
+	static QString getItem(const QString &caption, const QString &label,
+			       const QStringList &list, int current = 0,
+			       bool editable = TRUE, bool *ok = 0,
+			       QWidget *parent = 0, const char *name = 0);
 
-private:
-    QInputDialogPrivate *d;
-    // just to avoid warnings...
-    friend class QInputDialogPrivate;
+      private slots:
+	void textChanged(const QString &s);
+	void tryAccept();
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QInputDialog( const QInputDialog & );
-    QInputDialog &operator=( const QInputDialog & );
-#endif
+      private:
+	QInputDialogPrivate *d;
+	// just to avoid warnings...
+	friend class QInputDialogPrivate;
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QInputDialog(const QInputDialog &);
+	QInputDialog &operator=(const QInputDialog &);
+# endif
 };
 
 #endif // QT_NO_INPUTDIALOG

@@ -31,19 +31,19 @@ class QResizeEvent;
 
 class QtFileIconDrag : public QIconDrag
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    QtFileIconDrag( QWidget * dragSource, const char* name = 0 );
+      public:
+	QtFileIconDrag(QWidget *dragSource, const char *name = 0);
 
-    const char* format( int i ) const;
-    QByteArray encodedData( const char* mime ) const;
-    static bool canDecode( QMimeSource* e );
-    void append( const QIconDragItem &item, const QRect &pr, const QRect &tr, const QString &url );
+	const char *format(int i) const;
+	QByteArray encodedData(const char *mime) const;
+	static bool canDecode(QMimeSource *e);
+	void append(const QIconDragItem &item, const QRect &pr, const QRect &tr,
+		    const QString &url);
 
-private:
-    QStringList urls;
-
+      private:
+	QStringList urls;
 };
 
 /*****************************************************************************
@@ -54,69 +54,74 @@ private:
 class QtFileIconViewItem;
 class QtFileIconView : public QIconView
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    QtFileIconView( const QString &dir, QWidget *parent = 0, const char *name = 0 );
+      public:
+	QtFileIconView(const QString &dir, QWidget *parent = 0,
+		       const char *name = 0);
 
-    enum ViewMode { Large, Small };
+	enum ViewMode { Large, Small };
 
-    void setViewMode( ViewMode m );
-    ViewMode viewMode() const { return vm; }
-    void setOpenItem( QtFileIconViewItem *i ) {
-	openItem = i;
-    }
+	void setViewMode(ViewMode m);
+	ViewMode viewMode() const
+	{
+		return vm;
+	}
+	void setOpenItem(QtFileIconViewItem *i)
+	{
+		openItem = i;
+	}
 
-public slots:
-    void setDirectory( const QString &dir );
-    void setDirectory( const QDir &dir );
-    void newDirectory();
-    QDir currentDir();
+      public slots:
+	void setDirectory(const QString &dir);
+	void setDirectory(const QDir &dir);
+	void newDirectory();
+	QDir currentDir();
 
-signals:
-    void directoryChanged( const QString & );
-    void startReadDir( int dirs );
-    void readNextDir();
-    void readDirDone();
-    void enableUp();
-    void disableUp();
-    void enableMkdir();
-    void disableMkdir();
+      signals:
+	void directoryChanged(const QString &);
+	void startReadDir(int dirs);
+	void readNextDir();
+	void readDirDone();
+	void enableUp();
+	void disableUp();
+	void enableMkdir();
+	void disableMkdir();
 
-protected slots:
-    void itemDoubleClicked( QIconViewItem *i );
-    void slotDropped( QDropEvent *e, const QValueList<QIconDragItem> & );
+      protected slots:
+	void itemDoubleClicked(QIconViewItem *i);
+	void slotDropped(QDropEvent *e, const QValueList<QIconDragItem> &);
 
-    void viewLarge();
-    void viewSmall();
-    void viewBottom();
-    void viewRight();
-    void flowEast();
-    void flowSouth();
-    void itemTextTruncate();
-    void itemTextWordWrap();
-    void sortAscending();
-    void sortDescending();
-    void arrangeItemsInGrid() {
-	QIconView::arrangeItemsInGrid( TRUE );
-    }
+	void viewLarge();
+	void viewSmall();
+	void viewBottom();
+	void viewRight();
+	void flowEast();
+	void flowSouth();
+	void itemTextTruncate();
+	void itemTextWordWrap();
+	void sortAscending();
+	void sortDescending();
+	void arrangeItemsInGrid()
+	{
+		QIconView::arrangeItemsInGrid(TRUE);
+	}
 
-    void slotRightPressed( QIconViewItem *item );
-    void openFolder();
+	void slotRightPressed(QIconViewItem *item);
+	void openFolder();
 
-protected:
-    void readDir( const QDir &dir );
-    virtual QDragObject *dragObject();
+      protected:
+	void readDir(const QDir &dir);
+	virtual QDragObject *dragObject();
 
-    virtual void keyPressEvent( QKeyEvent *e );
+	virtual void keyPressEvent(QKeyEvent *e);
 
-    QDir viewDir;
-    int newFolderNum;
-    QSize sz;
-    QPixmap pix;
-    ViewMode vm;
-    QtFileIconViewItem *openItem;
-
+	QDir viewDir;
+	int newFolderNum;
+	QSize sz;
+	QPixmap pix;
+	ViewMode vm;
+	QtFileIconViewItem *openItem;
 };
 
 /*****************************************************************************
@@ -127,44 +132,44 @@ protected:
 
 class QtFileIconViewItem : public QIconViewItem
 {
-    friend class QtFileIconView;
+	friend class QtFileIconView;
 
-public:
-    enum ItemType {
-        File = 0,
-        Dir,
-        Link
-    };
+      public:
+	enum ItemType { File = 0, Dir, Link };
 
-    QtFileIconViewItem( QtFileIconView *parent, QFileInfo *fi );
+	QtFileIconViewItem(QtFileIconView *parent, QFileInfo *fi);
 
-    virtual ~QtFileIconViewItem();
+	virtual ~QtFileIconViewItem();
 
-    ItemType type() const
-    { return itemType; }
-    QString filename() const { return itemFileName; }
+	ItemType type() const
+	{
+		return itemType;
+	}
+	QString filename() const
+	{
+		return itemFileName;
+	}
 
-    virtual bool acceptDrop( const QMimeSource *e ) const;
+	virtual bool acceptDrop(const QMimeSource *e) const;
 
-    virtual void setText( const QString &text );
-    virtual QPixmap *pixmap() const;
+	virtual void setText(const QString &text);
+	virtual QPixmap *pixmap() const;
 
-    virtual void dragEntered();
-    virtual void dragLeft();
+	virtual void dragEntered();
+	virtual void dragLeft();
 
-    void viewModeChanged( QtFileIconView::ViewMode m );
-    void paintItem( QPainter *p, const QColorGroup &cg );
+	void viewModeChanged(QtFileIconView::ViewMode m);
+	void paintItem(QPainter *p, const QColorGroup &cg);
 
-protected:
-    virtual void dropped( QDropEvent *e, const QValueList<QIconDragItem> & );
+      protected:
+	virtual void dropped(QDropEvent *e, const QValueList<QIconDragItem> &);
 
-    QString itemFileName;
-    QFileInfo *itemFileInfo;
-    ItemType itemType;
-    bool checkSetText;
-    QTimer timer;
-    QtFileIconView::ViewMode vm;
-
+	QString itemFileName;
+	QFileInfo *itemFileInfo;
+	ItemType itemType;
+	bool checkSetText;
+	QTimer timer;
+	QtFileIconView::ViewMode vm;
 };
 
 

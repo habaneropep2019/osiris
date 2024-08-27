@@ -16,15 +16,15 @@
 // Constructs a DigitalClock widget with a parent and a name.
 //
 
-DigitalClock::DigitalClock( QWidget *parent, const char *name )
-    : QLCDNumber( parent, name )
+DigitalClock::DigitalClock(QWidget *parent, const char *name)
+	: QLCDNumber(parent, name)
 {
-    showingColon = FALSE;
-    setFrameStyle( QFrame::Panel | QFrame::Raised );
-    setLineWidth( 2 );				// set frame line width
-    showTime();					// display the current time
-    normalTimer = startTimer( 500 );		// 1/2 second timer events
-    showDateTimer = -1;				// not showing date
+	showingColon = FALSE;
+	setFrameStyle(QFrame::Panel | QFrame::Raised);
+	setLineWidth(2); // set frame line width
+	showTime(); // display the current time
+	normalTimer = startTimer(500); // 1/2 second timer events
+	showDateTimer = -1; // not showing date
 }
 
 
@@ -34,24 +34,24 @@ DigitalClock::DigitalClock( QWidget *parent, const char *name )
 // and another one for switching back from date mode to time mode.
 //
 
-void DigitalClock::timerEvent( QTimerEvent *e )
+void DigitalClock::timerEvent(QTimerEvent *e)
 {
-    if ( e->timerId() == showDateTimer )	// stop showing date
-	stopDate();
-    else {					// normal timer
-	if ( showDateTimer == -1 )		// not showing date
-	    showTime();
-    }
+	if (e->timerId() == showDateTimer) // stop showing date
+		stopDate();
+	else { // normal timer
+		if (showDateTimer == -1) // not showing date
+			showTime();
+	}
 }
 
 //
 // Enters date mode when the left mouse button is pressed.
 //
 
-void DigitalClock::mousePressEvent( QMouseEvent *e )
+void DigitalClock::mousePressEvent(QMouseEvent *e)
 {
-    if ( e->button() == QMouseEvent::LeftButton )		// left button pressed
-	showDate();
+	if (e->button() == QMouseEvent::LeftButton) // left button pressed
+		showDate();
 }
 
 
@@ -62,13 +62,13 @@ void DigitalClock::mousePressEvent( QMouseEvent *e )
 
 void DigitalClock::showDate()
 {
-    if ( showDateTimer != -1 )			// already showing date
-	return;
-    QDate date = QDate::currentDate();
-    QString s;
-    s.sprintf( "%2d %2d", date.month(), date.day() );
-    display( s );				// sets the LCD number/text
-    showDateTimer = startTimer( 2000 );		// keep this state for 2 secs
+	if (showDateTimer != -1) // already showing date
+		return;
+	QDate date = QDate::currentDate();
+	QString s;
+	s.sprintf("%2d %2d", date.month(), date.day());
+	display(s); // sets the LCD number/text
+	showDateTimer = startTimer(2000); // keep this state for 2 secs
 }
 
 //
@@ -77,9 +77,9 @@ void DigitalClock::showDate()
 
 void DigitalClock::stopDate()
 {
-    killTimer( showDateTimer );
-    showDateTimer = -1;
-    showTime();
+	killTimer(showDateTimer);
+	showDateTimer = -1;
+	showTime();
 }
 
 //
@@ -88,11 +88,11 @@ void DigitalClock::stopDate()
 
 void DigitalClock::showTime()
 {
-    showingColon = !showingColon;		// toggle/blink colon
-    QString s = QTime::currentTime().toString().left(5);
-    if ( !showingColon )
-	s[2] = ' ';
-    if ( s[0] == '0' )
-	s[0] = ' ';
-    display( s );				// set LCD number/text
+	showingColon = !showingColon; // toggle/blink colon
+	QString s = QTime::currentTime().toString().left(5);
+	if (!showingColon)
+		s[2] = ' ';
+	if (s[0] == '0')
+		s[0] = ' ';
+	display(s); // set LCD number/text
 }

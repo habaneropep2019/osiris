@@ -10,13 +10,13 @@
 
 #include "statistics.h"
 #include <qapplication.h>
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a(argc,argv);			
+	QApplication a(argc, argv);
 
-    Table t;
-    a.setMainWidget( &t );
-    t.setCaption("Qt Example - Statistics");
-    t.show();
-    return a.exec();
+	Table t;
+	a.setMainWidget(&t);
+	t.setCaption("Qt Example - Statistics");
+	t.show();
+	return a.exec();
 }

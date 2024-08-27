@@ -23,17 +23,17 @@ class GLBox;
 
 class GLObjectWindow : public QWidget
 {
-    Q_OBJECT
-public:
-    GLObjectWindow( QWidget* parent = 0, const char* name = 0 );
+	Q_OBJECT
+      public:
+	GLObjectWindow(QWidget *parent = 0, const char *name = 0);
 
-protected slots:
+      protected slots:
 
-    void		deleteFirstWidget();
+	void deleteFirstWidget();
 
-private:
-    GLBox* c1;
-    GLBox* c2;
+      private:
+	GLBox *c1;
+	GLBox *c2;
 };
 
 

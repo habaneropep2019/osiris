@@ -39,114 +39,115 @@
 #define QMENUBAR_H
 
 #ifndef QT_H
-#include "qpopupmenu.h"
+# include "qpopupmenu.h"
 #endif // QT_H
 
 #ifndef QT_NO_MENUBAR
 
 class Q_EXPORT QMenuBar : public QFrame, public QMenuData
 {
-    Q_OBJECT
-    Q_ENUMS( Separator )
-    Q_PROPERTY( Separator separator READ separator WRITE setSeparator )
-    Q_PROPERTY( bool defaultUp READ isDefaultUp WRITE setDefaultUp )
-	
-public:
-    QMenuBar( QWidget *parent=0, const char *name=0 );
-   ~QMenuBar();
+	Q_OBJECT
+	Q_ENUMS(Separator)
+	Q_PROPERTY(Separator separator READ separator WRITE setSeparator)
+	Q_PROPERTY(bool defaultUp READ isDefaultUp WRITE setDefaultUp)
 
-    void	updateItem( int id );
+      public:
+	QMenuBar(QWidget *parent = 0, const char *name = 0);
+	~QMenuBar();
 
-    void	show();				// reimplemented show
-    void	hide();				// reimplemented hide
+	void updateItem(int id);
 
-    bool	eventFilter( QObject *, QEvent * );
+	void show(); // reimplemented show
+	void hide(); // reimplemented hide
 
-    int		heightForWidth(int) const;
+	bool eventFilter(QObject *, QEvent *);
 
-    enum	Separator { Never=0, InWindowsStyle=1 };
-    Separator 	separator() const;
-    virtual void	setSeparator( Separator when );
+	int heightForWidth(int) const;
 
-    void	setDefaultUp( bool );
-    bool	isDefaultUp() const;
+	enum Separator { Never = 0, InWindowsStyle = 1 };
+	Separator separator() const;
+	virtual void setSeparator(Separator when);
 
-    bool customWhatsThis() const;
+	void setDefaultUp(bool);
+	bool isDefaultUp() const;
 
-    QSize sizeHint() const;
-    QSize minimumSize() const;
-    QSize minimumSizeHint() const;
-    
-    void activateItemAt( int index ); // ### virtual in QMenuData 3.0
+	bool customWhatsThis() const;
 
-signals:
-    void	activated( int itemId );
-    void	highlighted( int itemId );
+	QSize sizeHint() const;
+	QSize minimumSize() const;
+	QSize minimumSizeHint() const;
 
-protected:
-    void	drawContents( QPainter * );
-    void	fontChange( const QFont & );
-    void	mousePressEvent( QMouseEvent * );
-    void	mouseReleaseEvent( QMouseEvent * );
-    void	mouseMoveEvent( QMouseEvent * );
-    void	keyPressEvent( QKeyEvent * );
-    void	focusInEvent( QFocusEvent * );
-    void	focusOutEvent( QFocusEvent * );
-    void	resizeEvent( QResizeEvent * );
-    void	leaveEvent( QEvent * );
-    void	menuContentsChanged();
-    void	menuStateChanged();
-    void 	styleChange( QStyle& );
+	void activateItemAt(int index); // ### virtual in QMenuData 3.0
 
-private slots:
-    void	subActivated( int itemId );
-    void	subHighlighted( int itemId );
-#ifndef QT_NO_ACCEL
-    void	accelActivated( int itemId );
-    void	accelDestroyed();
-#endif
-private:
-    void	menuInsPopup( QPopupMenu * );
-    void	menuDelPopup( QPopupMenu * );
-    void	frameChanged();
+      signals:
+	void activated(int itemId);
+	void highlighted(int itemId);
 
-    bool	tryMouseEvent( QPopupMenu *, QMouseEvent * );
-    void	tryKeyEvent( QPopupMenu *, QKeyEvent * );
-    void	goodbye( bool cancelled = FALSE );
-    void	openActPopup();
-    void	hidePopups();
+      protected:
+	void drawContents(QPainter *);
+	void fontChange(const QFont &);
+	void mousePressEvent(QMouseEvent *);
+	void mouseReleaseEvent(QMouseEvent *);
+	void mouseMoveEvent(QMouseEvent *);
+	void keyPressEvent(QKeyEvent *);
+	void focusInEvent(QFocusEvent *);
+	void focusOutEvent(QFocusEvent *);
+	void resizeEvent(QResizeEvent *);
+	void leaveEvent(QEvent *);
+	void menuContentsChanged();
+	void menuStateChanged();
+	void styleChange(QStyle &);
 
-    virtual void	setActItem( int, bool = FALSE );
-    virtual void	setWindowsAltMode( bool, int = 0 );
+      private slots:
+	void subActivated(int itemId);
+	void subHighlighted(int itemId);
+# ifndef QT_NO_ACCEL
+	void accelActivated(int itemId);
+	void accelDestroyed();
+# endif
+      private:
+	void menuInsPopup(QPopupMenu *);
+	void menuDelPopup(QPopupMenu *);
+	void frameChanged();
 
-    void setActiveItem( int index, bool show = TRUE, bool activate_first_item = TRUE );
-    void setAltMode( bool );
+	bool tryMouseEvent(QPopupMenu *, QMouseEvent *);
+	void tryKeyEvent(QPopupMenu *, QKeyEvent *);
+	void goodbye(bool cancelled = FALSE);
+	void openActPopup();
+	void hidePopups();
 
-    int		calculateRects( int max_width = -1 );
-    int		itemAtPos( const QPoint & );
-    QRect	itemRect( int item );
+	virtual void setActItem(int, bool = FALSE);
+	virtual void setWindowsAltMode(bool, int = 0);
 
-#ifndef QT_NO_ACCEL
-    void	setupAccelerators();
-    QAccel     *autoaccel;
-#endif
-    QRect      *irects;
-    int		rightSide;
+	void setActiveItem(int index, bool show = TRUE,
+			   bool activate_first_item = TRUE);
+	void setAltMode(bool);
 
-    uint	mseparator : 1;
-    uint	waitforalt : 1;
-    uint	popupvisible  : 1;
-    uint	hasmouse : 1;
-    uint 	defaultup : 1;
-    uint 	toggleclose : 1;
+	int calculateRects(int max_width = -1);
+	int itemAtPos(const QPoint &);
+	QRect itemRect(int item);
 
-    friend class QPopupMenu;
+# ifndef QT_NO_ACCEL
+	void setupAccelerators();
+	QAccel *autoaccel;
+# endif
+	QRect *irects;
+	int rightSide;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QMenuBar( const QMenuBar & );
-    QMenuBar &operator=( const QMenuBar & );
-#endif
+	uint mseparator:1;
+	uint waitforalt:1;
+	uint popupvisible:1;
+	uint hasmouse:1;
+	uint defaultup:1;
+	uint toggleclose:1;
+
+	friend class QPopupMenu;
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QMenuBar(const QMenuBar &);
+	QMenuBar &operator=(const QMenuBar &);
+# endif
 };
 
 

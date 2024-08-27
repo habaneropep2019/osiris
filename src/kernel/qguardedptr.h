@@ -39,120 +39,121 @@
 #define QGUARDEDPTR_H
 
 #ifndef QT_H
-#include "qobject.h"
+# include "qobject.h"
 #endif // QT_H
 
-class Q_EXPORT QGuardedPtrPrivate : public  QObject, public QShared
+class Q_EXPORT QGuardedPtrPrivate : public QObject, public QShared
 {
-    Q_OBJECT
-public:
-    QGuardedPtrPrivate( QObject*);
-    ~QGuardedPtrPrivate();
+	Q_OBJECT
+      public:
+	QGuardedPtrPrivate(QObject *);
+	~QGuardedPtrPrivate();
 
-    QObject* object() const;
-private slots:
-    void objectDestroyed();
-private:
-    QObject* obj;
+	QObject *object() const;
+      private slots:
+	void objectDestroyed();
+
+      private:
+	QObject *obj;
 };
 
 
 template <class T> class Q_EXPORT QGuardedPtr
 {
-public:
-    QGuardedPtr()
-    {
-	priv = new QGuardedPtrPrivate( 0 );
-    }
-    QGuardedPtr( T* o)
-    {
-#if defined(Q_TEMPLATE_NEEDS_EXPLICIT_CONVERSION)
-	priv = new QGuardedPtrPrivate( (QObject*)o );
-#else
-	priv = new QGuardedPtrPrivate( o );
-#endif
-    }
-    QGuardedPtr(const QGuardedPtr<T> &p)
-    {
-	priv = p.priv;
-	ref();
-    }
-    ~QGuardedPtr()
-    {
-	deref();
-    }
-
-    QGuardedPtr<T> &operator=(const QGuardedPtr<T> &p)
-    {
-	if ( priv != p.priv ) {
-	    deref();
-	    priv = p.priv;
-	    ref();
+      public:
+	QGuardedPtr()
+	{
+		priv = new QGuardedPtrPrivate(0);
 	}
-	return *this;
-    }
-
-    QGuardedPtr<T> &operator=(T* o)
-    {
-	deref();
+	QGuardedPtr(T *o)
+	{
 #if defined(Q_TEMPLATE_NEEDS_EXPLICIT_CONVERSION)
-	priv = new QGuardedPtrPrivate( (QObject*)o );
+		priv = new QGuardedPtrPrivate((QObject *)o);
 #else
-	priv = new QGuardedPtrPrivate( o );
+		priv = new QGuardedPtrPrivate(o);
 #endif
-	return *this;
-    }
+	}
+	QGuardedPtr(const QGuardedPtr<T> &p)
+	{
+		priv = p.priv;
+		ref();
+	}
+	~QGuardedPtr()
+	{
+		deref();
+	}
 
-    bool operator==( const QGuardedPtr<T> &p ) const
-    {
-	return priv->object() == p.priv->object();
-    }
+	QGuardedPtr<T> &operator=(const QGuardedPtr<T> &p)
+	{
+		if (priv != p.priv) {
+			deref();
+			priv = p.priv;
+			ref();
+		}
+		return *this;
+	}
 
-    bool operator!= ( const QGuardedPtr<T>& p ) const
-    {
-	return !( *this == p );
-    }
+	QGuardedPtr<T> &operator=(T *o)
+	{
+		deref();
+#if defined(Q_TEMPLATE_NEEDS_EXPLICIT_CONVERSION)
+		priv = new QGuardedPtrPrivate((QObject *)o);
+#else
+		priv = new QGuardedPtrPrivate(o);
+#endif
+		return *this;
+	}
 
-    bool isNull() const
-    {
-	return !priv->object();
-    }
+	bool operator==(const QGuardedPtr<T> &p) const
+	{
+		return priv->object() == p.priv->object();
+	}
 
-    T* operator->() const
-    {
-	return (T*) priv->object();
-    }
+	bool operator!=(const QGuardedPtr<T> &p) const
+	{
+		return !(*this == p);
+	}
 
-    T& operator*() const
-    {
-	return *( (T*)priv->object() );
-    }
+	bool isNull() const
+	{
+		return !priv->object();
+	}
 
-    operator T*() const
-    {
-	return (T*) priv->object();
-    }
+	T *operator->() const
+	{
+		return (T *)priv->object();
+	}
+
+	T &operator*() const
+	{
+		return *((T *)priv->object());
+	}
+
+	operator T *() const
+	{
+		return (T *)priv->object();
+	}
 
 
-private:
-    void ref()
-    {
-	priv->ref();
-    }
-    void deref()
-    {
-	if ( priv->deref() )
-	    delete priv;
-    }
-    QGuardedPtrPrivate* priv;
+      private:
+	void ref()
+	{
+		priv->ref();
+	}
+	void deref()
+	{
+		if (priv->deref())
+			delete priv;
+	}
+	QGuardedPtrPrivate *priv;
 };
 
 
 
 
-inline QObject* QGuardedPtrPrivate::object() const
+inline QObject *QGuardedPtrPrivate::object() const
 {
-    return obj;
+	return obj;
 }
 
 

@@ -39,16 +39,17 @@
 
 #ifndef QT_NO_NETWORKPROTOCOL
 
-#include "qnetworkprotocol.h"
+# include "qnetworkprotocol.h"
 
 // protocols
-#include "qftp.h"
+# include "qftp.h"
 
 void qInitNetworkProtocols()
 {
-#ifndef QT_NO_NETWORKPROTOCOL_FTP
-    QNetworkProtocol::registerNetworkProtocol( "ftp", new QNetworkProtocolFactory< QFtp > );
-#endif
+# ifndef QT_NO_NETWORKPROTOCOL_FTP
+	QNetworkProtocol::registerNetworkProtocol(
+		"ftp", new QNetworkProtocolFactory<QFtp>);
+# endif
 };
 
 #endif // QT_NO_NETWORKPROTOCOL

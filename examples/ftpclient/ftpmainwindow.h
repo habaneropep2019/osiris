@@ -26,52 +26,52 @@ class QProgressBar;
 
 class FtpMainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    FtpMainWindow();
+      public:
+	FtpMainWindow();
 
-    QSplitter *mainSplitter() const {
-	return splitter;
-    }
+	QSplitter *mainSplitter() const
+	{
+		return splitter;
+	}
 
-private:
-    void setupLeftSide();
-    void setupRightSide();
-    void setupCenterCommandBar();
-    void setup();
+      private:
+	void setupLeftSide();
+	void setupRightSide();
+	void setupCenterCommandBar();
+	void setup();
 
-private slots:
-    void slotLocalDirChanged( const QString &path );
-    void slotLocalDirChanged( const QUrlInfo &info );
-    void slotRemoteDirChanged( const QString &path );
-    void slotRemoteDirChanged( const QUrlInfo &info );
-    void slotConnect();
-    void slotUpload();
-    void slotDownload();
-    void slotLocalStart( QNetworkOperation * );
-    void slotLocalFinished( QNetworkOperation * );
-    void slotRemoteStart( QNetworkOperation * );
-    void slotRemoteFinished( QNetworkOperation * );
-    void slotLocalDataTransferProgress( int, int, QNetworkOperation * );
-    void slotRemoteDataTransferProgress( int, int, QNetworkOperation * );
-    void slotLocalMkdir();
-    void slotLocalRemove();
-    void slotRemoteMkdir();
-    void slotRemoteRemove();
-    void slotConnectionStateChanged( int, const QString &msg );
-    
-private:
-    QSplitter *splitter;
-    QVBox *mainWidget;
-    FtpView *leftView, *rightView;
-    QComboBox *localCombo, *remoteHostCombo, *remotePathCombo, *userCombo;
-    QLineEdit *passLined;
-    QSpinBox *portSpin;
-    QUrlOperator localOperator, remoteOperator, oldLocal, oldRemote;
-    QLabel *progressLabel1, *progressLabel2;
-    QProgressBar *progressBar1, *progressBar2;
+      private slots:
+	void slotLocalDirChanged(const QString &path);
+	void slotLocalDirChanged(const QUrlInfo &info);
+	void slotRemoteDirChanged(const QString &path);
+	void slotRemoteDirChanged(const QUrlInfo &info);
+	void slotConnect();
+	void slotUpload();
+	void slotDownload();
+	void slotLocalStart(QNetworkOperation *);
+	void slotLocalFinished(QNetworkOperation *);
+	void slotRemoteStart(QNetworkOperation *);
+	void slotRemoteFinished(QNetworkOperation *);
+	void slotLocalDataTransferProgress(int, int, QNetworkOperation *);
+	void slotRemoteDataTransferProgress(int, int, QNetworkOperation *);
+	void slotLocalMkdir();
+	void slotLocalRemove();
+	void slotRemoteMkdir();
+	void slotRemoteRemove();
+	void slotConnectionStateChanged(int, const QString &msg);
 
+      private:
+	QSplitter *splitter;
+	QVBox *mainWidget;
+	FtpView *leftView, *rightView;
+	QComboBox *localCombo, *remoteHostCombo, *remotePathCombo, *userCombo;
+	QLineEdit *passLined;
+	QSpinBox *portSpin;
+	QUrlOperator localOperator, remoteOperator, oldLocal, oldRemote;
+	QLabel *progressLabel1, *progressLabel2;
+	QProgressBar *progressBar1, *progressBar2;
 };
 
 #endif

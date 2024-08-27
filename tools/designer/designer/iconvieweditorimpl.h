@@ -27,26 +27,25 @@ class FormWindow;
 
 class IconViewEditor : public IconViewEditorBase
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    IconViewEditor( QWidget *parent, QWidget *editWidget, FormWindow *fw );
+      public:
+	IconViewEditor(QWidget *parent, QWidget *editWidget, FormWindow *fw);
 
-protected slots:
-    void insertNewItem();
-    void deleteCurrentItem();
-    void currentItemChanged( QIconViewItem * );
-    void currentTextChanged( const QString & );
-    void okClicked();
-    void cancelClicked();
-    void applyClicked();
-    void choosePixmap();
-    void deletePixmap();
+      protected slots:
+	void insertNewItem();
+	void deleteCurrentItem();
+	void currentItemChanged(QIconViewItem *);
+	void currentTextChanged(const QString &);
+	void okClicked();
+	void cancelClicked();
+	void applyClicked();
+	void choosePixmap();
+	void deletePixmap();
 
-private:
-    QIconView *iconview;
-    FormWindow *formwindow;
-    
+      private:
+	QIconView *iconview;
+	FormWindow *formwindow;
 };
 
 #endif

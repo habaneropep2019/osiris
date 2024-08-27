@@ -39,7 +39,7 @@
 #define QDATETIME_H
 
 #ifndef QT_H
-#include "qstring.h"
+# include "qstring.h"
 #endif // QT_H
 
 
@@ -49,53 +49,78 @@
 
 class Q_EXPORT QDate
 {
-public:
-    QDate()  { jd=0; }				// set null date
-    QDate( int y, int m, int d );		// set date
+      public:
+	QDate()
+	{
+		jd = 0;
+	} // set null date
+	QDate(int y, int m, int d); // set date
 
-    bool   isNull()	 const { return jd == 0; }
-    bool   isValid()	 const;			// valid date
+	bool isNull() const
+	{
+		return jd == 0;
+	}
+	bool isValid() const; // valid date
 
-    int	   year()	 const;			// 1752..
-    int	   month()	 const;			// 1..12
-    int	   day()	 const;			// 1..31
-    int	   dayOfWeek()	 const;			// 1..7 (monday==1)
-    int	   dayOfYear()	 const;			// 1..365
-    int	   daysInMonth() const;			// 28..31
-    int	   daysInYear()	 const;			// 365 or 366
+	int year() const; // 1752..
+	int month() const; // 1..12
+	int day() const; // 1..31
+	int dayOfWeek() const; // 1..7 (monday==1)
+	int dayOfYear() const; // 1..365
+	int daysInMonth() const; // 28..31
+	int daysInYear() const; // 365 or 366
 
-    virtual QString monthName( int month ) const;
-    virtual QString dayName( int weekday ) const;
+	virtual QString monthName(int month) const;
+	virtual QString dayName(int weekday) const;
 
-    QString toString()	 const;
+	QString toString() const;
 
-    bool   setYMD( int y, int m, int d );
+	bool setYMD(int y, int m, int d);
 
-    QDate  addDays( int days )		const;
-    int	   daysTo( const QDate & )	const;
+	QDate addDays(int days) const;
+	int daysTo(const QDate &) const;
 
-    bool   operator==( const QDate &d ) const { return jd == d.jd; }
-    bool   operator!=( const QDate &d ) const { return jd != d.jd; }
-    bool   operator<( const QDate &d )	const { return jd < d.jd; }
-    bool   operator<=( const QDate &d ) const { return jd <= d.jd; }
-    bool   operator>( const QDate &d )	const { return jd > d.jd; }
-    bool   operator>=( const QDate &d ) const { return jd >= d.jd; }
+	bool operator==(const QDate &d) const
+	{
+		return jd == d.jd;
+	}
+	bool operator!=(const QDate &d) const
+	{
+		return jd != d.jd;
+	}
+	bool operator<(const QDate &d) const
+	{
+		return jd < d.jd;
+	}
+	bool operator<=(const QDate &d) const
+	{
+		return jd <= d.jd;
+	}
+	bool operator>(const QDate &d) const
+	{
+		return jd > d.jd;
+	}
+	bool operator>=(const QDate &d) const
+	{
+		return jd >= d.jd;
+	}
 
-    static QDate currentDate();
-    static bool	 isValid( int y, int m, int d );
-    static bool	 leapYear( int year );
+	static QDate currentDate();
+	static bool isValid(int y, int m, int d);
+	static bool leapYear(int year);
 
-protected:
-    static uint	 greg2jul( int y, int m, int d );
-    static void	 jul2greg( uint jd, int &y, int &m, int &d );
-private:
-    static const char * const monthNames[];
-    static const char * const weekdayNames[];
-    uint	 jd;
-    friend class QDateTime;
+      protected:
+	static uint greg2jul(int y, int m, int d);
+	static void jul2greg(uint jd, int &y, int &m, int &d);
+
+      private:
+	static const char *const monthNames[];
+	static const char *const weekdayNames[];
+	uint jd;
+	friend class QDateTime;
 #ifndef QT_NO_DATASTREAM
-    friend Q_EXPORT QDataStream &operator<<( QDataStream &, const QDate & );
-    friend Q_EXPORT QDataStream &operator>>( QDataStream &, QDate & );
+	friend Q_EXPORT QDataStream &operator<<(QDataStream &, const QDate &);
+	friend Q_EXPORT QDataStream &operator>>(QDataStream &, QDate &);
 #endif
 };
 
@@ -106,49 +131,73 @@ private:
 
 class Q_EXPORT QTime
 {
-public:
-    QTime() { ds=0; }				// set null time
-    QTime( int h, int m, int s=0, int ms=0 );	// set time
+      public:
+	QTime()
+	{
+		ds = 0;
+	} // set null time
+	QTime(int h, int m, int s = 0, int ms = 0); // set time
 
-    bool   isNull()	 const { return ds == 0; }
-    bool   isValid()	 const;			// valid time
+	bool isNull() const
+	{
+		return ds == 0;
+	}
+	bool isValid() const; // valid time
 
-    int	   hour()	 const;			// 0..23
-    int	   minute()	 const;			// 0..59
-    int	   second()	 const;			// 0..59
-    int	   msec()	 const;			// 0..999
+	int hour() const; // 0..23
+	int minute() const; // 0..59
+	int second() const; // 0..59
+	int msec() const; // 0..999
 
-    QString toString()	 const;
+	QString toString() const;
 
-    bool   setHMS( int h, int m, int s, int ms=0 );
+	bool setHMS(int h, int m, int s, int ms = 0);
 
-    QTime  addSecs( int secs )		const;
-    int	   secsTo( const QTime & )	const;
-    QTime  addMSecs( int ms )		const;
-    int	   msecsTo( const QTime & )	const;
+	QTime addSecs(int secs) const;
+	int secsTo(const QTime &) const;
+	QTime addMSecs(int ms) const;
+	int msecsTo(const QTime &) const;
 
-    bool   operator==( const QTime &d ) const { return ds == d.ds; }
-    bool   operator!=( const QTime &d ) const { return ds != d.ds; }
-    bool   operator<( const QTime &d )	const { return ds < d.ds; }
-    bool   operator<=( const QTime &d ) const { return ds <= d.ds; }
-    bool   operator>( const QTime &d )	const { return ds > d.ds; }
-    bool   operator>=( const QTime &d ) const { return ds >= d.ds; }
+	bool operator==(const QTime &d) const
+	{
+		return ds == d.ds;
+	}
+	bool operator!=(const QTime &d) const
+	{
+		return ds != d.ds;
+	}
+	bool operator<(const QTime &d) const
+	{
+		return ds < d.ds;
+	}
+	bool operator<=(const QTime &d) const
+	{
+		return ds <= d.ds;
+	}
+	bool operator>(const QTime &d) const
+	{
+		return ds > d.ds;
+	}
+	bool operator>=(const QTime &d) const
+	{
+		return ds >= d.ds;
+	}
 
-    static QTime currentTime();
-    static bool	 isValid( int h, int m, int s, int ms=0 );
+	static QTime currentTime();
+	static bool isValid(int h, int m, int s, int ms = 0);
 
-    void   start();
-    int	   restart();
-    int	   elapsed();
+	void start();
+	int restart();
+	int elapsed();
 
-private:
-    static bool currentTime( QTime * );
+      private:
+	static bool currentTime(QTime *);
 
-    uint   ds;
-    friend class QDateTime;
+	uint ds;
+	friend class QDateTime;
 #ifndef QT_NO_DATASTREAM
-    friend Q_EXPORT QDataStream &operator<<( QDataStream &, const QTime & );
-    friend Q_EXPORT QDataStream &operator>>( QDataStream &, QTime & );
+	friend Q_EXPORT QDataStream &operator<<(QDataStream &, const QTime &);
+	friend Q_EXPORT QDataStream &operator>>(QDataStream &, QTime &);
 #endif
 };
 
@@ -159,42 +208,63 @@ private:
 
 class Q_EXPORT QDateTime
 {
-public:
-    QDateTime() {}				// set null date and null time
-    QDateTime( const QDate & );
-    QDateTime( const QDate &, const QTime & );
+      public:
+	QDateTime()
+	{
+	} // set null date and null time
+	QDateTime(const QDate &);
+	QDateTime(const QDate &, const QTime &);
 
-    bool   isNull()	const		{ return d.isNull() && t.isNull(); }
-    bool   isValid()	const		{ return d.isValid() && t.isValid(); }
+	bool isNull() const
+	{
+		return d.isNull() && t.isNull();
+	}
+	bool isValid() const
+	{
+		return d.isValid() && t.isValid();
+	}
 
-    QDate  date()	const		{ return d; }
-    QTime  time()	const		{ return t; }
-    void   setDate( const QDate &date ) { d=date; }
-    void   setTime( const QTime &time ) { t=time; }
-    void   setTime_t( uint secsSince1Jan1970UTC );
+	QDate date() const
+	{
+		return d;
+	}
+	QTime time() const
+	{
+		return t;
+	}
+	void setDate(const QDate &date)
+	{
+		d = date;
+	}
+	void setTime(const QTime &time)
+	{
+		t = time;
+	}
+	void setTime_t(uint secsSince1Jan1970UTC);
 
-    QString toString()	const;
+	QString toString() const;
 
-    QDateTime addDays( int days )	const;
-    QDateTime addSecs( int secs )	const;
-    int	   daysTo( const QDateTime & )	const;
-    int	   secsTo( const QDateTime & )	const;
+	QDateTime addDays(int days) const;
+	QDateTime addSecs(int secs) const;
+	int daysTo(const QDateTime &) const;
+	int secsTo(const QDateTime &) const;
 
-    bool   operator==( const QDateTime &dt ) const;
-    bool   operator!=( const QDateTime &dt ) const;
-    bool   operator<( const QDateTime &dt )  const;
-    bool   operator<=( const QDateTime &dt ) const;
-    bool   operator>( const QDateTime &dt )  const;
-    bool   operator>=( const QDateTime &dt ) const;
+	bool operator==(const QDateTime &dt) const;
+	bool operator!=(const QDateTime &dt) const;
+	bool operator<(const QDateTime &dt) const;
+	bool operator<=(const QDateTime &dt) const;
+	bool operator>(const QDateTime &dt) const;
+	bool operator>=(const QDateTime &dt) const;
 
-    static QDateTime currentDateTime();
+	static QDateTime currentDateTime();
 
-private:
-    QDate  d;
-    QTime  t;
+      private:
+	QDate d;
+	QTime t;
 #ifndef QT_NO_DATASTREAM
-    friend Q_EXPORT QDataStream &operator<<( QDataStream &, const QDateTime &);
-    friend Q_EXPORT QDataStream &operator>>( QDataStream &, QDateTime & );
+	friend Q_EXPORT QDataStream &operator<<(QDataStream &,
+						const QDateTime &);
+	friend Q_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
 #endif
 };
 
@@ -204,12 +274,12 @@ private:
  *****************************************************************************/
 
 #ifndef QT_NO_DATASTREAM
-Q_EXPORT QDataStream &operator<<( QDataStream &, const QDate & );
-Q_EXPORT QDataStream &operator>>( QDataStream &, QDate & );
-Q_EXPORT QDataStream &operator<<( QDataStream &, const QTime & );
-Q_EXPORT QDataStream &operator>>( QDataStream &, QTime & );
-Q_EXPORT QDataStream &operator<<( QDataStream &, const QDateTime & );
-Q_EXPORT QDataStream &operator>>( QDataStream &, QDateTime & );
+Q_EXPORT QDataStream &operator<<(QDataStream &, const QDate &);
+Q_EXPORT QDataStream &operator>>(QDataStream &, QDate &);
+Q_EXPORT QDataStream &operator<<(QDataStream &, const QTime &);
+Q_EXPORT QDataStream &operator>>(QDataStream &, QTime &);
+Q_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &);
+Q_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
 #endif // QT_NO_DATASTREAM
 
 #endif // QDATETIME_H

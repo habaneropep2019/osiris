@@ -39,10 +39,10 @@
 #define QTOOLBUTTON_H
 
 #ifndef QT_H
-#include "qbutton.h"
-#include "qstring.h"
-#include "qpixmap.h"
-#include "qiconset.h"
+# include "qbutton.h"
+# include "qstring.h"
+# include "qpixmap.h"
+# include "qiconset.h"
 #endif // QT_H
 
 #ifndef QT_NO_TOOLBUTTON
@@ -52,106 +52,114 @@ class QToolButtonPrivate;
 class QToolBar;
 class QStyle;
 
-class Q_EXPORT QToolButton: public QButton
+class Q_EXPORT QToolButton : public QButton
 {
-    Q_OBJECT
+	Q_OBJECT
 
-    Q_PROPERTY( QIconSet onIconSet READ onIconSet WRITE setOnIconSet )
-    Q_PROPERTY( QIconSet offIconSet READ offIconSet WRITE setOffIconSet )
-    Q_PROPERTY( bool usesBigPixmap READ usesBigPixmap WRITE setUsesBigPixmap )
-    Q_PROPERTY( bool usesTextLabel READ usesTextLabel WRITE setUsesTextLabel )
-    Q_PROPERTY( QString textLabel READ textLabel WRITE setTextLabel )
-    Q_PROPERTY( int popupDelay READ popupDelay WRITE setPopupDelay )
-    Q_PROPERTY( bool autoRaise READ autoRaise WRITE setAutoRaise )
+	Q_PROPERTY(QIconSet onIconSet READ onIconSet WRITE setOnIconSet)
+	Q_PROPERTY(QIconSet offIconSet READ offIconSet WRITE setOffIconSet)
+	Q_PROPERTY(bool usesBigPixmap READ usesBigPixmap WRITE setUsesBigPixmap)
+	Q_PROPERTY(bool usesTextLabel READ usesTextLabel WRITE setUsesTextLabel)
+	Q_PROPERTY(QString textLabel READ textLabel WRITE setTextLabel)
+	Q_PROPERTY(int popupDelay READ popupDelay WRITE setPopupDelay)
+	Q_PROPERTY(bool autoRaise READ autoRaise WRITE setAutoRaise)
 
-    Q_OVERRIDE( bool toggleButton WRITE setToggleButton )
-    Q_OVERRIDE( bool on WRITE setOn )
+	Q_OVERRIDE(bool toggleButton WRITE setToggleButton)
+	Q_OVERRIDE(bool on WRITE setOn)
 
-public:
-    QToolButton( QWidget * parent, const char *name = 0 );
-    QToolButton( const QPixmap & pm, const QString &textLabel, //### fjern 3.0
-		 const QString& grouptext,
-		 QObject * receiver, const char* slot,
-		 QToolBar * parent, const char* name = 0 );
-    QToolButton( const QIconSet& s, const QString &textLabel,
-		 const QString& grouptext,
-		 QObject * receiver, const char* slot,
-		 QToolBar * parent, const char* name = 0 );
-    QToolButton( ArrowType type, QWidget *parent, const char *name = 0 );
-    ~QToolButton();
+      public:
+	QToolButton(QWidget *parent, const char *name = 0);
+	QToolButton(const QPixmap &pm, const QString &textLabel, // ###
+								 // fjern 3.0
+		    const QString &grouptext, QObject *receiver,
+		    const char *slot, QToolBar *parent, const char *name = 0);
+	QToolButton(const QIconSet &s, const QString &textLabel,
+		    const QString &grouptext, QObject *receiver,
+		    const char *slot, QToolBar *parent, const char *name = 0);
+	QToolButton(ArrowType type, QWidget *parent, const char *name = 0);
+	~QToolButton();
 
-    QSize sizeHint() const;
-    QSizePolicy sizePolicy() const;
+	QSize sizeHint() const;
+	QSizePolicy sizePolicy() const;
 
-    void setOnIconSet( const QIconSet& );
-    void setOffIconSet( const QIconSet& );
-    QIconSet onIconSet() const;
-    QIconSet offIconSet( ) const;
-    virtual void setIconSet( const QIconSet &, bool on = FALSE );
-    QIconSet iconSet( bool on = FALSE) const;
+	void setOnIconSet(const QIconSet &);
+	void setOffIconSet(const QIconSet &);
+	QIconSet onIconSet() const;
+	QIconSet offIconSet() const;
+	virtual void setIconSet(const QIconSet &, bool on = FALSE);
+	QIconSet iconSet(bool on = FALSE) const;
 
-    bool usesBigPixmap() const { return ubp; }
-    bool usesTextLabel() const { return utl; }
-    QString textLabel() const { return tl; }
+	bool usesBigPixmap() const
+	{
+		return ubp;
+	}
+	bool usesTextLabel() const
+	{
+		return utl;
+	}
+	QString textLabel() const
+	{
+		return tl;
+	}
 
-    void setPopup( QPopupMenu* popup );
-    QPopupMenu* popup() const;
+	void setPopup(QPopupMenu *popup);
+	QPopupMenu *popup() const;
 
-    void setPopupDelay( int delay );
-    int popupDelay() const;
+	void setPopupDelay(int delay);
+	int popupDelay() const;
 
-    void setAutoRaise( bool enable );
-    bool autoRaise() const;
+	void setAutoRaise(bool enable);
+	bool autoRaise() const;
 
-public slots:
-    virtual void setUsesBigPixmap( bool enable );
-    virtual void setUsesTextLabel( bool enable );
-    virtual void setTextLabel( const QString &, bool );
+      public slots:
+	virtual void setUsesBigPixmap(bool enable);
+	virtual void setUsesTextLabel(bool enable);
+	virtual void setTextLabel(const QString &, bool);
 
-    virtual void setToggleButton( bool enable ); //### fjern virtual 3.0
+	virtual void setToggleButton(bool enable); // ### fjern virtual 3.0
 
-    virtual void setOn( bool enable ); //### fjern virtual 3.0
-    void toggle();
-    void setTextLabel( const QString & );
+	virtual void setOn(bool enable); // ### fjern virtual 3.0
+	void toggle();
+	void setTextLabel(const QString &);
 
-protected:
-    void drawButton( QPainter * );
-    void drawButtonLabel( QPainter * );
+      protected:
+	void drawButton(QPainter *);
+	void drawButtonLabel(QPainter *);
 
-    void enterEvent( QEvent * );
-    void leaveEvent( QEvent * );
-    void moveEvent( QMoveEvent * );
+	void enterEvent(QEvent *);
+	void leaveEvent(QEvent *);
+	void moveEvent(QMoveEvent *);
 
-    bool uses3D() const;
+	bool uses3D() const;
 
-private slots:
-    void popupTimerDone();
-    void popupPressed();
+      private slots:
+	void popupTimerDone();
+	void popupPressed();
 
-private:
-    void init();
+      private:
+	void init();
 
-    QPixmap bp;
-    int bpID;
-    QPixmap sp;
-    int spID;
+	QPixmap bp;
+	int bpID;
+	QPixmap sp;
+	int spID;
 
-    QString tl;
+	QString tl;
 
-    QToolButtonPrivate * d;
-    QIconSet * s, *son;
+	QToolButtonPrivate *d;
+	QIconSet *s, *son;
 
-    uint utl: 1;
-    uint ubp: 1;
-    uint hasArrow : 1;
+	uint utl:1;
+	uint ubp:1;
+	uint hasArrow:1;
 
-    friend class QStyle;
+	friend class QStyle;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QToolButton( const QToolButton & );
-    QToolButton& operator=( const QToolButton & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QToolButton(const QToolButton &);
+	QToolButton &operator=(const QToolButton &);
+# endif
 };
 
 #endif // QT_NO_TOOLBUTTON

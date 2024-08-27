@@ -40,39 +40,39 @@
 
 #ifndef QT_NO_TRANSLATION
 
-#include "qfileinfo.h"
+# include "qfileinfo.h"
 
-#if defined(_OS_UNIX_)
-# define QT_USE_MMAP
-#endif
+# if defined(_OS_UNIX_)
+#  define QT_USE_MMAP
+# endif
 
-#if defined(QT_USE_MMAP)
+# if defined(QT_USE_MMAP)
 // for close
-# include <unistd.h>
+#  include <unistd.h>
 // for mmap
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <sys/mman.h>
-# include <fcntl.h>
-# include <errno.h>
+#  include <sys/types.h>
+#  include <sys/stat.h>
+#  include <sys/mman.h>
+#  include <fcntl.h>
+#  include <errno.h>
 // for htonl
-# include <netinet/in.h>
-#else
+#  include <netinet/in.h>
+# else
 // appropriate stuff here
-#endif
+# endif
 
 // for qsort
-#include <stdlib.h>
+# include <stdlib.h>
 
 // other qt stuff necessary for the implementation
-#include "qintdict.h"
-#include "qstring.h"
-#include "qapplication.h"
-#include "qfile.h"
-#include "qbuffer.h"
-#include "qdatastream.h"
-#include "qmap.h"
-#include "qtl.h"
+# include "qintdict.h"
+# include "qstring.h"
+# include "qapplication.h"
+# include "qfile.h"
+# include "qbuffer.h"
+# include "qdatastream.h"
+# include "qmap.h"
+# include "qtl.h"
 
 /*
 $ mcookie
@@ -82,104 +82,112 @@ $
 
 static const int magic_length = 16;
 static const uchar magic[magic_length] = { // magic number for the file
-    0x3c, 0xb8, 0x64, 0x18, 0xca, 0xef, 0x9c, 0x95,
-    0xcd, 0x21, 0x1c, 0xbf, 0x60, 0xa1, 0xbd, 0xdd
-};
+	0x3c, 0xb8, 0x64, 0x18, 0xca, 0xef, 0x9c, 0x95,
+	0xcd, 0x21, 0x1c, 0xbf, 0x60, 0xa1, 0xbd, 0xdd};
 
-static bool match( const char* found, const char* target )
+static bool match(const char *found, const char *target)
 {
-    return found[0] == '\0' || qstrcmp(found, target) == 0;
+	return found[0] == '\0' || qstrcmp(found, target) == 0;
 }
 
-#if defined(Q_C_CALLBACKS)
+# if defined(Q_C_CALLBACKS)
 extern "C" {
-#endif
+# endif
 
-static int cmp_uint32_little( const void* target, const void* candidate )
+static int cmp_uint32_little(const void *target, const void *candidate)
 {
-    const uchar* t = (const uchar*) target;
-    const uchar* c = (const uchar*) candidate;
-    return t[3] != c[0] ? (int) t[3] - (int) c[0]
-	   : t[2] != c[1] ? (int) t[2] - (int) c[1]
-	   : t[1] != c[2] ? (int) t[1] - (int) c[2]
-	   : (int) t[0] - (int) c[3];
+	const uchar *t = (const uchar *)target;
+	const uchar *c = (const uchar *)candidate;
+	return t[3] != c[0] ? (int)t[3] - (int)c[0] :
+	       t[2] != c[1] ? (int)t[2] - (int)c[1] :
+	       t[1] != c[2] ? (int)t[1] - (int)c[2] :
+			      (int)t[0] - (int)c[3];
 }
 
-static int cmp_uint32_big( const void* target, const void* candidate )
+static int cmp_uint32_big(const void *target, const void *candidate)
 {
-    const uchar* t = (const uchar*) target;
-    const uchar* c = (const uchar*) candidate;
-    return t[0] != c[0] ? (int) t[0] - (int) c[0]
-	   : t[1] != c[1] ? (int) t[1] - (int) c[1]
-	   : t[2] != c[2] ? (int) t[2] - (int) c[2]
-	   : (int) t[3] - (int) c[3];
+	const uchar *t = (const uchar *)target;
+	const uchar *c = (const uchar *)candidate;
+	return t[0] != c[0] ? (int)t[0] - (int)c[0] :
+	       t[1] != c[1] ? (int)t[1] - (int)c[1] :
+	       t[2] != c[2] ? (int)t[2] - (int)c[2] :
+			      (int)t[3] - (int)c[3];
 }
 
-#if defined(Q_C_CALLBACKS)
+# if defined(Q_C_CALLBACKS)
 }
-#endif
+# endif
 
 static int systemWordSize = 0;
 static bool systemBigEndian;
 
-static uint elfHash( const char * name )
+static uint elfHash(const char *name)
 {
-    const uchar *k;
-    uint h = 0;
-    uint g;
+	const uchar *k;
+	uint h = 0;
+	uint g;
 
-    if ( name ) {
-	k = (const uchar*)name;
-	while( *k ) {
-	    h = (h << 4) + *k++;
-	    if ( (g = (h & 0xf0000000)) != 0 )
-		h ^= g >> 24;
-	    h &= ~g;
+	if (name) {
+		k = (const uchar *)name;
+		while (*k) {
+			h = (h << 4) + *k++;
+			if ((g = (h & 0xf0000000)) != 0)
+				h ^= g >> 24;
+			h &= ~g;
+		}
 	}
-    }
 
-    if ( !h )
-	h = 1;
+	if (!h)
+		h = 1;
 
-    return h;
+	return h;
 }
 
 
-class QTranslatorPrivate {
-public:
-    struct Offset {
-	Offset() { h=0; o=0; }
-	Offset( const QTranslatorMessage& m, int offset )
-	{ h = m.hash(); o = offset; } // ### qChecksum
+class QTranslatorPrivate
+{
+      public:
+	struct Offset {
+		Offset()
+		{
+			h = 0;
+			o = 0;
+		}
+		Offset(const QTranslatorMessage &m, int offset)
+		{
+			h = m.hash();
+			o = offset;
+		} // ### qChecksum
 
-	bool operator<( const Offset&k ) const { return ( h != k.h )
-							     ? h < k.h
-							     : o < k.o; }
+		bool operator<(const Offset &k) const
+		{
+			return (h != k.h) ? h < k.h : o < k.o;
+		}
 
-	uint h;
-	uint o;
-    };
+		uint h;
+		uint o;
+	};
 
-    enum { Contexts = 0x2f, Hashes = 0x42, Messages = 0x69 } Tag;
+	enum { Contexts = 0x2f, Hashes = 0x42, Messages = 0x69 } Tag;
 
-    QTranslatorPrivate() :
-	unmapPointer( 0 ), unmapLength( 0 ),
-	messageArray( 0 ), offsetArray( 0 ), contextArray( 0 ),
-	messages( 0 ) { }
-    // note: QTranslator must finalize this before deallocating it.
+	QTranslatorPrivate()
+		: unmapPointer(0), unmapLength(0), messageArray(0),
+		  offsetArray(0), contextArray(0), messages(0)
+	{
+	}
+	// note: QTranslator must finalize this before deallocating it.
 
-    // for mmap'ed files, this is what needs to be unmapped.
-    char * unmapPointer;
-    unsigned int unmapLength;
+	// for mmap'ed files, this is what needs to be unmapped.
+	char *unmapPointer;
+	unsigned int unmapLength;
 
 
-    // for squeezed but non-file data, this is what needs to be deleted
-    QByteArray * messageArray;
-    QByteArray * offsetArray;
-    QByteArray * contextArray;
+	// for squeezed but non-file data, this is what needs to be deleted
+	QByteArray *messageArray;
+	QByteArray *offsetArray;
+	QByteArray *contextArray;
 
-    QMap<QTranslatorMessage, void *> * messages;
-
+	QMap<QTranslatorMessage, void *> *messages;
 };
 
 
@@ -290,24 +298,24 @@ public:
 */
 
 /*!  Constructs an empty message file, not connected to any file.
-*/
+ */
 
-QTranslator::QTranslator( QObject * parent, const char * name )
-    : QObject( parent, name )
+QTranslator::QTranslator(QObject *parent, const char *name)
+	: QObject(parent, name)
 {
-    d = new QTranslatorPrivate;
+	d = new QTranslatorPrivate;
 }
 
 
 /*!  Destructs the object and frees any allocated resources.
-*/
+ */
 
 QTranslator::~QTranslator()
 {
-    if ( qApp )
-	qApp->removeTranslator( this );
-    clear();
-    delete d;
+	if (qApp)
+		qApp->removeTranslator(this);
+	clear();
+	delete d;
 }
 
 
@@ -339,164 +347,168 @@ QTranslator::~QTranslator()
   \sa save()
 */
 
-bool QTranslator::load( const QString & filename, const QString & directory,
-			const QString & search_delimiters,
-			const QString & suffix )
+bool QTranslator::load(const QString &filename, const QString &directory,
+		       const QString &search_delimiters, const QString &suffix)
 {
-    clear();
-
-    QString prefix;
-
-    if ( filename[0] == '/'
-#ifdef _WS_WIN_
-	 || filename[0] && filename[1] == ':'
-	 || filename[0] == '\\'
-#endif
-	 )
-	prefix = QString::fromLatin1("");
-    else
-	prefix = directory;
-
-    if ( prefix.length() ) {
-	if ( prefix[int(prefix.length()-1)] != '/' )
-	    prefix += QChar('/');
-    }
-
-    QString fname = filename;
-    QString realname;
-    QString delims;
-    delims = search_delimiters.isNull() ?
-	     QString::fromLatin1("_.") : search_delimiters;
-
-    for (;;) {
-	QFileInfo fi;
-
-	realname = prefix + fname;
-	fi.setFile(realname);
-	if ( fi.isReadable() )
-	    break;
-
-	realname += suffix.isNull() ? QString::fromLatin1(".qm") : suffix;
-	fi.setFile(realname);
-	if ( fi.isReadable() )
-	    break;
-
-	int rightmost = 0;
-	for ( int i = 0; i < (int)delims.length(); i++ ) {
-	    int k = fname.findRev( delims[i] );
-	    if ( k > rightmost )
-		rightmost = k;
-	}
-
-	// no truncations? fail
-	if ( rightmost == 0 )
-	    return FALSE;
-
-	fname.truncate( rightmost );
-    }
-
-    // realname is now the fully qualified name of a readable file.
-
-
-#if defined(QT_USE_MMAP)
-    // unix (if mmap supported)
-
-#ifndef MAP_FILE
-#define MAP_FILE 0
-#endif
-#ifndef MAP_FAILED
-#define MAP_FAILED -1
-#endif
-
-    //const char * lang = getenv( "LANG" );
-
-    int f;
-
-    f = ::open( QFile::encodeName(realname), O_RDONLY );
-    if ( f < 0 ) {
-	// qDebug( "can't open %s: %s", realname.ascii(), strerror( errno ) );
-	return FALSE;
-    }
-
-    struct stat st;
-    if ( fstat( f, &st ) ) {
-	// qDebug( "can't stat %s: %s", realname.ascii(), strerror( errno ) );
-	return FALSE;
-    }
-    char * tmp;
-    tmp = (char*)mmap( 0, st.st_size, // any address, whole file
-		       PROT_READ, // read-only memory
-		       MAP_FILE | MAP_PRIVATE, // swap-backed map from file
-		       f, 0 ); // from offset 0 of f
-    if ( !tmp || tmp == (char*)MAP_FAILED ) {
-	// qDebug( "can't mmap %s: %s", filename.ascii(), strerror( errno ) );
-	// #### could revert to file io?
-	return FALSE;
-    }
-
-    ::close( f );
-
-    d->unmapPointer = tmp;
-    d->unmapLength = st.st_size;
-#else
-    // windows, or unix without mmap
-    QFile f(realname);
-    if ( !f.exists() )
-	return FALSE;
-    d->unmapLength = f.size();
-    d->unmapPointer = new char[d->unmapLength]; // ### really not
-    bool ok = FALSE;
-    if ( f.open(IO_ReadOnly) ) {
-	ok = d->unmapLength ==
-	     (uint)f.readBlock( d->unmapPointer, d->unmapLength );
-	f.close();
-    }
-    if ( !ok ) {
-	delete [] d->unmapPointer;
-	d->unmapPointer = 0;
-	return FALSE;
-    }
-#endif
-
-    // now that we've read it and all, check that it has the right
-    // magic number, and forget all about it if it doesn't.
-    if ( memcmp( (const void *)(d->unmapPointer), magic, magic_length ) ) {
 	clear();
-	return FALSE;
-    }
-    // prepare to read.
-    QByteArray tmpArray;
-    tmpArray.setRawData( d->unmapPointer, d->unmapLength );
-    QDataStream s( tmpArray, IO_ReadOnly );
-    s.device()->at( magic_length );
 
-    // read.
-    Q_UINT8 tag = 0;
-    Q_UINT32 length = 0;
-    s >> tag >> length;
-    while( tag && length ) {
-	if ( tag == QTranslatorPrivate::Contexts && !d->contextArray ) {
-	    d->contextArray = new QByteArray;
-	    d->contextArray->setRawData( tmpArray.data()+s.device()->at(),
-					 length );
-	} else if ( tag == QTranslatorPrivate::Hashes && !d->offsetArray ) {
-	    d->offsetArray = new QByteArray;
-	    d->offsetArray->setRawData( tmpArray.data()+s.device()->at(),
-					length );
-	} else if ( tag == QTranslatorPrivate::Messages && !d->messageArray ) {
-	    d->messageArray = new QByteArray;
-	    d->messageArray->setRawData( tmpArray.data()+s.device()->at(),
-					 length );
+	QString prefix;
+
+	if (filename[0] == '/'
+# ifdef _WS_WIN_
+	    || filename[0] && filename[1] == ':' || filename[0] == '\\'
+# endif
+	)
+		prefix = QString::fromLatin1("");
+	else
+		prefix = directory;
+
+	if (prefix.length()) {
+		if (prefix[int(prefix.length() - 1)] != '/')
+			prefix += QChar('/');
 	}
-	s.device()->at( s.device()->at() + length );
-	tag = 0;
-	length = 0;
-	if ( !s.atEnd() )
-	    s >> tag >> length;
-    }
 
-    tmpArray.resetRawData( d->unmapPointer, d->unmapLength );
-    return TRUE;
+	QString fname = filename;
+	QString realname;
+	QString delims;
+	delims = search_delimiters.isNull() ? QString::fromLatin1("_.") :
+					      search_delimiters;
+
+	for (;;) {
+		QFileInfo fi;
+
+		realname = prefix + fname;
+		fi.setFile(realname);
+		if (fi.isReadable())
+			break;
+
+		realname += suffix.isNull() ? QString::fromLatin1(".qm") :
+					      suffix;
+		fi.setFile(realname);
+		if (fi.isReadable())
+			break;
+
+		int rightmost = 0;
+		for (int i = 0; i < (int)delims.length(); i++) {
+			int k = fname.findRev(delims[i]);
+			if (k > rightmost)
+				rightmost = k;
+		}
+
+		// no truncations? fail
+		if (rightmost == 0)
+			return FALSE;
+
+		fname.truncate(rightmost);
+	}
+
+	// realname is now the fully qualified name of a readable file.
+
+
+# if defined(QT_USE_MMAP)
+	// unix (if mmap supported)
+
+#  ifndef MAP_FILE
+#   define MAP_FILE 0
+#  endif
+#  ifndef MAP_FAILED
+#   define MAP_FAILED -1
+#  endif
+
+	// const char * lang = getenv( "LANG" );
+
+	int f;
+
+	f = ::open(QFile::encodeName(realname), O_RDONLY);
+	if (f < 0) {
+		// qDebug( "can't open %s: %s", realname.ascii(), strerror(
+		// errno ) );
+		return FALSE;
+	}
+
+	struct stat st;
+	if (fstat(f, &st)) {
+		// qDebug( "can't stat %s: %s", realname.ascii(), strerror(
+		// errno ) );
+		return FALSE;
+	}
+	char *tmp;
+	tmp = (char *)mmap(0, st.st_size, // any address, whole file
+			   PROT_READ, // read-only memory
+			   MAP_FILE | MAP_PRIVATE, // swap-backed map from file
+			   f, 0); // from offset 0 of f
+	if (!tmp || tmp == (char *)MAP_FAILED) {
+		// qDebug( "can't mmap %s: %s", filename.ascii(), strerror(
+		// errno ) );
+		// #### could revert to file io?
+		return FALSE;
+	}
+
+	::close(f);
+
+	d->unmapPointer = tmp;
+	d->unmapLength = st.st_size;
+# else
+	// windows, or unix without mmap
+	QFile f(realname);
+	if (!f.exists())
+		return FALSE;
+	d->unmapLength = f.size();
+	d->unmapPointer = new char[d->unmapLength]; // ### really not
+	bool ok = FALSE;
+	if (f.open(IO_ReadOnly)) {
+		ok = d->unmapLength ==
+		     (uint)f.readBlock(d->unmapPointer, d->unmapLength);
+		f.close();
+	}
+	if (!ok) {
+		delete[] d->unmapPointer;
+		d->unmapPointer = 0;
+		return FALSE;
+	}
+# endif
+
+	// now that we've read it and all, check that it has the right
+	// magic number, and forget all about it if it doesn't.
+	if (memcmp((const void *)(d->unmapPointer), magic, magic_length)) {
+		clear();
+		return FALSE;
+	}
+	// prepare to read.
+	QByteArray tmpArray;
+	tmpArray.setRawData(d->unmapPointer, d->unmapLength);
+	QDataStream s(tmpArray, IO_ReadOnly);
+	s.device()->at(magic_length);
+
+	// read.
+	Q_UINT8 tag = 0;
+	Q_UINT32 length = 0;
+	s >> tag >> length;
+	while (tag && length) {
+		if (tag == QTranslatorPrivate::Contexts && !d->contextArray) {
+			d->contextArray = new QByteArray;
+			d->contextArray->setRawData(
+				tmpArray.data() + s.device()->at(), length);
+		} else if (tag == QTranslatorPrivate::Hashes &&
+			   !d->offsetArray) {
+			d->offsetArray = new QByteArray;
+			d->offsetArray->setRawData(
+				tmpArray.data() + s.device()->at(), length);
+		} else if (tag == QTranslatorPrivate::Messages &&
+			   !d->messageArray) {
+			d->messageArray = new QByteArray;
+			d->messageArray->setRawData(
+				tmpArray.data() + s.device()->at(), length);
+		}
+		s.device()->at(s.device()->at() + length);
+		tag = 0;
+		length = 0;
+		if (!s.atEnd())
+			s >> tag >> length;
+	}
+
+	tmpArray.resetRawData(d->unmapPointer, d->unmapLength);
+	return TRUE;
 }
 
 
@@ -509,37 +521,37 @@ bool QTranslator::load( const QString & filename, const QString & directory,
   \sa load()
 */
 
-bool QTranslator::save( const QString & filename, SaveMode mode )
+bool QTranslator::save(const QString &filename, SaveMode mode)
 {
-    QFile f( filename );
-    if ( f.open( IO_WriteOnly ) ) {
-	squeeze( mode );
+	QFile f(filename);
+	if (f.open(IO_WriteOnly)) {
+		squeeze(mode);
 
-	QDataStream s( &f );
-	s.writeRawBytes( (const char *)magic, magic_length );
-	Q_UINT8 tag;
+		QDataStream s(&f);
+		s.writeRawBytes((const char *)magic, magic_length);
+		Q_UINT8 tag;
 
-	if ( d->offsetArray != 0 ) {
-	    tag = (Q_UINT8) QTranslatorPrivate::Hashes;
-	    Q_UINT32 oas = (Q_UINT32) d->offsetArray->size();
-	    s << tag << oas;
-	    s.writeRawBytes( d->offsetArray->data(), oas );
+		if (d->offsetArray != 0) {
+			tag = (Q_UINT8)QTranslatorPrivate::Hashes;
+			Q_UINT32 oas = (Q_UINT32)d->offsetArray->size();
+			s << tag << oas;
+			s.writeRawBytes(d->offsetArray->data(), oas);
+		}
+		if (d->messageArray != 0) {
+			tag = (Q_UINT8)QTranslatorPrivate::Messages;
+			Q_UINT32 mas = (Q_UINT32)d->messageArray->size();
+			s << tag << mas;
+			s.writeRawBytes(d->messageArray->data(), mas);
+		}
+		if (d->contextArray != 0) {
+			tag = (Q_UINT8)QTranslatorPrivate::Contexts;
+			Q_UINT32 cas = (Q_UINT32)d->contextArray->size();
+			s << tag << cas;
+			s.writeRawBytes(d->contextArray->data(), cas);
+		}
+		return TRUE;
 	}
-	if ( d->messageArray != 0 ) {
-	    tag = (Q_UINT8) QTranslatorPrivate::Messages;
-	    Q_UINT32 mas = (Q_UINT32) d->messageArray->size();
-	    s << tag << mas;
-	    s.writeRawBytes( d->messageArray->data(), mas );
-	}
-	if ( d->contextArray != 0 ) {
-	    tag = (Q_UINT8) QTranslatorPrivate::Contexts;
-	    Q_UINT32 cas = (Q_UINT32) d->contextArray->size();
-	    s << tag << cas;
-	    s.writeRawBytes( d->contextArray->data(), cas );
-	}
-	return TRUE;
-    }
-    return FALSE;
+	return FALSE;
 }
 
 
@@ -550,32 +562,32 @@ bool QTranslator::save( const QString & filename, SaveMode mode )
 
 void QTranslator::clear()
 {
-    if ( d->unmapPointer && d->unmapLength ) {
-#if defined(QT_USE_MMAP)
-	munmap( d->unmapPointer, d->unmapLength );
-#else
-	delete [] d->unmapPointer;
-#endif
-	d->unmapPointer = 0;
-	d->unmapLength = 0;
-	if ( d->messageArray )
-	    d->messageArray->resetRawData( d->messageArray->data(),
-					   d->messageArray->size() );
-	if ( d->offsetArray )
-	    d->offsetArray->resetRawData( d->offsetArray->data(),
-					  d->offsetArray->size() );
-	if ( d->contextArray )
-	    d->contextArray->resetRawData( d->contextArray->data(),
-					   d->contextArray->size() );
-    }
-    delete d->messageArray;
-    d->messageArray = 0;
-    delete d->offsetArray;
-    d->offsetArray = 0;
-    delete d->contextArray;
-    d->contextArray = 0;
-    delete d->messages;
-    d->messages = 0;
+	if (d->unmapPointer && d->unmapLength) {
+# if defined(QT_USE_MMAP)
+		munmap(d->unmapPointer, d->unmapLength);
+# else
+		delete[] d->unmapPointer;
+# endif
+		d->unmapPointer = 0;
+		d->unmapLength = 0;
+		if (d->messageArray)
+			d->messageArray->resetRawData(d->messageArray->data(),
+						      d->messageArray->size());
+		if (d->offsetArray)
+			d->offsetArray->resetRawData(d->offsetArray->data(),
+						     d->offsetArray->size());
+		if (d->contextArray)
+			d->contextArray->resetRawData(d->contextArray->data(),
+						      d->contextArray->size());
+	}
+	delete d->messageArray;
+	d->messageArray = 0;
+	delete d->offsetArray;
+	d->offsetArray = 0;
+	delete d->contextArray;
+	d->contextArray = 0;
+	delete d->messages;
+	d->messages = 0;
 }
 
 
@@ -588,138 +600,145 @@ void QTranslator::clear()
   \sa save() unsqueeze()
 */
 
-void QTranslator::squeeze( SaveMode mode )
+void QTranslator::squeeze(SaveMode mode)
 {
-    if ( !d->messages ) {
-	if ( mode == Stripped )
-	    unsqueeze();
-	else
-	    return;
-    }
-
-    QMap<QTranslatorMessage, void *> * messages = d->messages;
-
-    d->messages = 0;
-    clear();
-
-    d->messageArray = new QByteArray;
-    d->offsetArray = new QByteArray;
-
-    QMap<QTranslatorPrivate::Offset, void *> offsets;
-
-    QDataStream ms( *d->messageArray, IO_WriteOnly );
-    QMap<QTranslatorMessage, void *>::Iterator it = messages->begin(), next;
-    int cpPrev = 0, cpNext = 0;
-    for ( it = messages->begin(); it != messages->end(); ++it ) {
-	cpPrev = cpNext;
-	next = it;
-	++next;
-	if ( next == messages->end() )
-	    cpNext = 0;
-	else
-	    cpNext = (int) it.key().commonPrefix( next.key() );
-	offsets.replace( QTranslatorPrivate::Offset(it.key(),
-			 ms.device()->at()), (void*)0 );
-	it.key().write( ms, mode == Stripped,
-			(QTranslatorMessage::Prefix) QMAX(cpPrev, cpNext + 1) );
-    }
-
-    d->offsetArray->resize( 0 );
-    QMap<QTranslatorPrivate::Offset, void *>::Iterator offset;
-    offset = offsets.begin();
-    QDataStream ds( *d->offsetArray, IO_WriteOnly );
-    while( offset != offsets.end() ) {
-	QTranslatorPrivate::Offset k = offset.key();
-	++offset;
-	ds << (Q_UINT32)k.h << (Q_UINT32)k.o;
-    }
-
-    if ( mode == Stripped ) {
-	QAsciiDict<int> contextSet( 1511 );
-	int strindberg;
-
-	for ( it = messages->begin(); it != messages->end(); ++it )
-	    contextSet.replace( it.key().context(), &strindberg );
-
-	Q_UINT16 hTableSize;
-	if ( contextSet.count() < 200 )
-	    hTableSize = ( contextSet.count() < 60 ) ? 151 : 503;
-	else if ( contextSet.count() < 2500 )
-	    hTableSize = ( contextSet.count() < 750 ) ? 1511 : 5003;
-	else
-	    hTableSize = 15013;
-
-	QIntDict<char> hDict( hTableSize );
-	QAsciiDictIterator<int> c = contextSet;
-	while ( c.current() != 0 ) {
-	    hDict.insert( (long) (elfHash(c.currentKey()) % hTableSize),
-			  c.currentKey() );
-	    ++c;
+	if (!d->messages) {
+		if (mode == Stripped)
+			unsqueeze();
+		else
+			return;
 	}
 
-	/*
-	  The contexts found in this translator are stored in a hash table to
-	  provide fast look-up.  The context array has the following format:
+	QMap<QTranslatorMessage, void *> *messages = d->messages;
 
-	      Q_UINT16 hTableSize;
-	      Q_UINT16 hTable[hTableSize];
-	      Q_UINT8  contextPool[...];
+	d->messages = 0;
+	clear();
 
-	  The context pool stores the contexts as Pascal strings (au da!):
+	d->messageArray = new QByteArray;
+	d->offsetArray = new QByteArray;
 
-	      Q_UINT8  len;
-	      Q_UINT8  data[len];
+	QMap<QTranslatorPrivate::Offset, void *> offsets;
 
-	  Let's consider the look-up of context "FunnyDialog".  A hash value
-	  between 0 and hTableSize - 1 is computed, say h.  If hTable[h] is 0,
-	  "FunnyDialog" is not covered by this translator.  Else, we check in
-	  the contextPool at offset 2 * hTable[h] to see if "FunnyDialog" is one
-	  of the contexts stored there, until we find it or we meet the empty
-	  string.
-	*/
-	d->contextArray = new QByteArray;
-	d->contextArray->resize( 2 + (hTableSize << 1) );
-	QDataStream t( *d->contextArray, IO_WriteOnly );
-	Q_UINT16 *hTable = new Q_UINT16[hTableSize];
-	memset( hTable, 0, hTableSize * sizeof(Q_UINT16) );
-
-	t << hTableSize;
-	t.device()->at( 2 + (hTableSize << 1) );
-	t << (Q_UINT16) 0; // the entry at offset 0 cannot be used
-	uint upto = 2;
-
-	for ( int i = 0; i < hTableSize; i++ ) {
-	    const char *con = hDict.find( i );
-	    if ( con == 0 ) {
-		hTable[i] = 0;
-	    } else {
-		hTable[i] = (Q_UINT16) ( upto >> 1 );
-		do {
-		    uint len = (uint) qstrlen( con );
-		    len = QMIN( len, 255 );
-		    t << (Q_UINT8) len;
-		    t.writeRawBytes( con, len );
-		    upto += 1 + len;
-		    hDict.remove( i );
-		} while ( (con = hDict.find(i)) != 0 );
-		do {
-		    t << (Q_UINT8) 0; // empty string (at least one)
-		    upto++;
-		} while ( (upto & 0x1) != 0 ); // offsets have to be even
-	    }
+	QDataStream ms(*d->messageArray, IO_WriteOnly);
+	QMap<QTranslatorMessage, void *>::Iterator it = messages->begin(), next;
+	int cpPrev = 0, cpNext = 0;
+	for (it = messages->begin(); it != messages->end(); ++it) {
+		cpPrev = cpNext;
+		next = it;
+		++next;
+		if (next == messages->end())
+			cpNext = 0;
+		else
+			cpNext = (int)it.key().commonPrefix(next.key());
+		offsets.replace(QTranslatorPrivate::Offset(it.key(),
+							   ms.device()->at()),
+				(void *)0);
+		it.key().write(ms, mode == Stripped,
+			       (QTranslatorMessage::Prefix)QMAX(cpPrev,
+								cpNext + 1));
 	}
-	t.device()->at( 2 );
-	for ( int j = 0; j < hTableSize; j++ )
-	    t << hTable[j];
-	delete [] hTable;
 
-	if ( upto > 131072 ) {
-	    qWarning( "QTranslator::squeeze: Too many contexts" );
-	    delete d->contextArray;
-	    d->contextArray = 0;
+	d->offsetArray->resize(0);
+	QMap<QTranslatorPrivate::Offset, void *>::Iterator offset;
+	offset = offsets.begin();
+	QDataStream ds(*d->offsetArray, IO_WriteOnly);
+	while (offset != offsets.end()) {
+		QTranslatorPrivate::Offset k = offset.key();
+		++offset;
+		ds << (Q_UINT32)k.h << (Q_UINT32)k.o;
 	}
-    }
-    delete messages;
+
+	if (mode == Stripped) {
+		QAsciiDict<int> contextSet(1511);
+		int strindberg;
+
+		for (it = messages->begin(); it != messages->end(); ++it)
+			contextSet.replace(it.key().context(), &strindberg);
+
+		Q_UINT16 hTableSize;
+		if (contextSet.count() < 200)
+			hTableSize = (contextSet.count() < 60) ? 151 : 503;
+		else if (contextSet.count() < 2500)
+			hTableSize = (contextSet.count() < 750) ? 1511 : 5003;
+		else
+			hTableSize = 15013;
+
+		QIntDict<char> hDict(hTableSize);
+		QAsciiDictIterator<int> c = contextSet;
+		while (c.current() != 0) {
+			hDict.insert(
+				(long)(elfHash(c.currentKey()) % hTableSize),
+				c.currentKey());
+			++c;
+		}
+
+		/*
+		  The contexts found in this translator are stored in a hash
+		  table to provide fast look-up.  The context array has the
+		  following format:
+
+		      Q_UINT16 hTableSize;
+		      Q_UINT16 hTable[hTableSize];
+		      Q_UINT8  contextPool[...];
+
+		  The context pool stores the contexts as Pascal strings (au
+		  da!):
+
+		      Q_UINT8  len;
+		      Q_UINT8  data[len];
+
+		  Let's consider the look-up of context "FunnyDialog".  A hash
+		  value between 0 and hTableSize - 1 is computed, say h.  If
+		  hTable[h] is 0, "FunnyDialog" is not covered by this
+		  translator.  Else, we check in the contextPool at offset 2 *
+		  hTable[h] to see if "FunnyDialog" is one of the contexts
+		  stored there, until we find it or we meet the empty string.
+		*/
+		d->contextArray = new QByteArray;
+		d->contextArray->resize(2 + (hTableSize << 1));
+		QDataStream t(*d->contextArray, IO_WriteOnly);
+		Q_UINT16 *hTable = new Q_UINT16[hTableSize];
+		memset(hTable, 0, hTableSize * sizeof(Q_UINT16));
+
+		t << hTableSize;
+		t.device()->at(2 + (hTableSize << 1));
+		t << (Q_UINT16)0; // the entry at offset 0 cannot be used
+		uint upto = 2;
+
+		for (int i = 0; i < hTableSize; i++) {
+			const char *con = hDict.find(i);
+			if (con == 0) {
+				hTable[i] = 0;
+			} else {
+				hTable[i] = (Q_UINT16)(upto >> 1);
+				do {
+					uint len = (uint)qstrlen(con);
+					len = QMIN(len, 255);
+					t << (Q_UINT8)len;
+					t.writeRawBytes(con, len);
+					upto += 1 + len;
+					hDict.remove(i);
+				} while ((con = hDict.find(i)) != 0);
+				do {
+					t << (Q_UINT8)0; // empty string (at
+							 // least one)
+					upto++;
+				} while ((upto & 0x1) != 0); // offsets have to
+							     // be even
+			}
+		}
+		t.device()->at(2);
+		for (int j = 0; j < hTableSize; j++)
+			t << hTable[j];
+		delete[] hTable;
+
+		if (upto > 131072) {
+			qWarning("QTranslator::squeeze: Too many contexts");
+			delete d->contextArray;
+			d->contextArray = 0;
+		}
+	}
+	delete messages;
 }
 
 
@@ -731,7 +750,7 @@ void QTranslator::squeeze( SaveMode mode )
 
 void QTranslator::squeeze()
 {
-    squeeze( Everything );
+	squeeze(Everything);
 }
 
 
@@ -746,20 +765,20 @@ void QTranslator::squeeze()
 
 void QTranslator::unsqueeze()
 {
-    if ( d->messages )
-	return;
+	if (d->messages)
+		return;
 
-    d->messages = new QMap<QTranslatorMessage, void *>;
-    if ( !d->messageArray )
-	return;
+	d->messages = new QMap<QTranslatorMessage, void *>;
+	if (!d->messageArray)
+		return;
 
-    QDataStream s( *d->messageArray, IO_ReadOnly );
-    for (;;) {
-	QTranslatorMessage m( s );
-	if ( m.hash() == 0 )
-	    break;
-	d->messages->insert( m, (void *) 0 );
-    }
+	QDataStream s(*d->messageArray, IO_ReadOnly);
+	for (;;) {
+		QTranslatorMessage m(s);
+		if (m.hash() == 0)
+			break;
+		d->messages->insert(m, (void *)0);
+	}
 }
 
 
@@ -771,10 +790,10 @@ void QTranslator::unsqueeze()
   (This is is a one-liner that calls find().)
 */
 
-bool QTranslator::contains( const char* context, const char* sourceText,
-			    const char* comment ) const
+bool QTranslator::contains(const char *context, const char *sourceText,
+			   const char *comment) const
 {
-    return find( context, sourceText, comment ) != QString::null;
+	return find(context, sourceText, comment) != QString::null;
 }
 
 
@@ -784,9 +803,9 @@ bool QTranslator::contains( const char* context, const char* sourceText,
   This version of the function assumes that the comment is "".
 */
 
-bool QTranslator::contains( const char* context, const char* sourceText ) const
+bool QTranslator::contains(const char *context, const char *sourceText) const
 {
-    return contains( context, sourceText, "" );
+	return contains(context, sourceText, "");
 }
 
 /*!  Inserts \a message into this message file.
@@ -797,11 +816,11 @@ bool QTranslator::contains( const char* context, const char* sourceText ) const
   \sa remove()
 */
 
-void QTranslator::insert( const QTranslatorMessage& message )
+void QTranslator::insert(const QTranslatorMessage &message)
 {
-    unsqueeze();
-    d->messages->remove( message ); // safer
-    d->messages->insert( message, (void *) 0 );
+	unsqueeze();
+	d->messages->remove(message); // safer
+	d->messages->insert(message, (void *)0);
 }
 
 
@@ -809,10 +828,10 @@ void QTranslator::insert( const QTranslatorMessage& message )
   \obsolete
 */
 
-void QTranslator::insert( const char * context, const char * sourceText,
-			  const QString & translation )
+void QTranslator::insert(const char *context, const char *sourceText,
+			 const QString &translation)
 {
-    insert( QTranslatorMessage(context, sourceText, "", translation) );
+	insert(QTranslatorMessage(context, sourceText, "", translation));
 }
 
 
@@ -823,10 +842,10 @@ void QTranslator::insert( const char * context, const char * sourceText,
   \sa insert()
 */
 
-void QTranslator::remove( const QTranslatorMessage& message )
+void QTranslator::remove(const QTranslatorMessage &message)
 {
-    unsqueeze();
-    d->messages->remove( message );
+	unsqueeze();
+	d->messages->remove(message);
 }
 
 
@@ -837,9 +856,9 @@ void QTranslator::remove( const QTranslatorMessage& message )
   "" ) from this translator.
 */
 
-void QTranslator::remove( const char *context, const char *sourceText )
+void QTranslator::remove(const char *context, const char *sourceText)
 {
-    remove( QTranslatorMessage(context, sourceText, "") );
+	remove(QTranslatorMessage(context, sourceText, ""));
 }
 
 
@@ -851,13 +870,13 @@ void QTranslator::remove( const char *context, const char *sourceText )
   \sa findMessage
 */
 
-QString QTranslator::find( const char* context, const char* sourceText,
-			   const char* comment ) const
+QString QTranslator::find(const char *context, const char *sourceText,
+			  const char *comment) const
 {
-    if ( comment == 0 || comment[0] == '\0' )
-	return find( context, sourceText );
-    else
-	return findMessage( context, sourceText, comment ).translation();
+	if (comment == 0 || comment[0] == '\0')
+		return find(context, sourceText);
+	else
+		return findMessage(context, sourceText, comment).translation();
 }
 
 
@@ -868,9 +887,9 @@ QString QTranslator::find( const char* context, const char* sourceText,
   QString::null if there is none in this translator.
 */
 
-QString QTranslator::find( const char* context, const char* sourceText ) const
+QString QTranslator::find(const char *context, const char *sourceText) const
 {
-    return findMessage( context, sourceText, "" ).translation();
+	return findMessage(context, sourceText, "").translation();
 }
 
 
@@ -878,98 +897,97 @@ QString QTranslator::find( const char* context, const char* sourceText ) const
   ( \a context, \a sourceText, \a comment ).
 */
 
-QTranslatorMessage QTranslator::findMessage( const char* context,
-					     const char* sourceText,
-					     const char* comment ) const
+QTranslatorMessage QTranslator::findMessage(const char *context,
+					    const char *sourceText,
+					    const char *comment) const
 {
-    if ( context == 0 )
-	context = "";
-    if ( sourceText == 0 )
-	sourceText = "";
-    if ( comment == 0 )
-	comment = "";
+	if (context == 0)
+		context = "";
+	if (sourceText == 0)
+		sourceText = "";
+	if (comment == 0)
+		comment = "";
 
-    if ( d->messages ) {
-	QMap<QTranslatorMessage, void *>::ConstIterator it
-	    = d->messages->find( QTranslatorMessage(context, sourceText,
-				 comment) );
-	if ( it == d->messages->end() )
-	    return QTranslatorMessage();
-	return it.key();
-    }
-
-    if ( !d->offsetArray )
-	return QTranslatorMessage();
-
-    /*
-      Check if that belongs to this QTranslator.  If many translators are
-      installed, this step is necessary.
-    */
-    if ( d->contextArray ) {
-	Q_UINT16 hTableSize = 0;
-	QDataStream t( *d->contextArray, IO_ReadOnly );
-	t >> hTableSize;
-	uint g = elfHash( context ) % hTableSize;
-	t.device()->at( 2 + (g << 1) );
-	Q_UINT16 off;
-	t >> off;
-	if ( off == 0 )
-	    return QTranslatorMessage();
-	t.device()->at( 2 + (hTableSize << 1) + (off << 1) );
-
-	Q_UINT8 len;
-	char con[256];
-	for (;;) {
-	    t >> len;
-	    if ( len == 0 )
-		return QTranslatorMessage();
-	    t.readRawBytes( con, len );
-	    con[len] = '\0';
-	    if ( qstrcmp(con, context) == 0 )
-		break;
+	if (d->messages) {
+		QMap<QTranslatorMessage, void *>::ConstIterator it =
+			d->messages->find(QTranslatorMessage(
+				context, sourceText, comment));
+		if (it == d->messages->end())
+			return QTranslatorMessage();
+		return it.key();
 	}
-    }
 
-    Q_UINT32 h = elfHash( QCString(sourceText) + comment );
+	if (!d->offsetArray)
+		return QTranslatorMessage();
 
-    Q_UINT32 rh;
-    Q_UINT32 ro;
+	/*
+	  Check if that belongs to this QTranslator.  If many translators are
+	  installed, this step is necessary.
+	*/
+	if (d->contextArray) {
+		Q_UINT16 hTableSize = 0;
+		QDataStream t(*d->contextArray, IO_ReadOnly);
+		t >> hTableSize;
+		uint g = elfHash(context) % hTableSize;
+		t.device()->at(2 + (g << 1));
+		Q_UINT16 off;
+		t >> off;
+		if (off == 0)
+			return QTranslatorMessage();
+		t.device()->at(2 + (hTableSize << 1) + (off << 1));
 
-    size_t numItems = d->offsetArray->size() / ( 2 * sizeof(Q_UINT32) );
-    if ( !numItems )
-	return QTranslatorMessage();
+		Q_UINT8 len;
+		char con[256];
+		for (;;) {
+			t >> len;
+			if (len == 0)
+				return QTranslatorMessage();
+			t.readRawBytes(con, len);
+			con[len] = '\0';
+			if (qstrcmp(con, context) == 0)
+				break;
+		}
+	}
 
-    if ( systemWordSize == 0 )
-	qSysInfo( &systemWordSize, &systemBigEndian );
-    char *r = (char *) bsearch( &h, d->offsetArray->data(), numItems,
-				2 * sizeof(Q_UINT32),
-				systemBigEndian ? cmp_uint32_big
-				: cmp_uint32_little );
-    if ( r == 0 )
-	return QTranslatorMessage();
+	Q_UINT32 h = elfHash(QCString(sourceText) + comment);
 
-    while( r != d->offsetArray->data() && cmp_uint32_big( r - 8, r ) == 0 )
-	r -= 8;
+	Q_UINT32 rh;
+	Q_UINT32 ro;
 
-    QDataStream s( *d->offsetArray, IO_ReadOnly );
-    s.device()->at( r - d->offsetArray->data() );
+	size_t numItems = d->offsetArray->size() / (2 * sizeof(Q_UINT32));
+	if (!numItems)
+		return QTranslatorMessage();
 
-    s >> rh >> ro;
+	if (systemWordSize == 0)
+		qSysInfo(&systemWordSize, &systemBigEndian);
+	char *r = (char *)bsearch(
+		&h, d->offsetArray->data(), numItems, 2 * sizeof(Q_UINT32),
+		systemBigEndian ? cmp_uint32_big : cmp_uint32_little);
+	if (r == 0)
+		return QTranslatorMessage();
 
-    QDataStream ms( *d->messageArray, IO_ReadOnly );
-    while( rh == h ) {
-	ms.device()->at( ro );
-	QTranslatorMessage m( ms );
-	if ( match(m.context(), context)
-		&& match(m.sourceText(), sourceText)
-		&& match(m.comment(), comment) )
-	    return m;
-	if ( s.atEnd() )
-	    return QTranslatorMessage();
+	while (r != d->offsetArray->data() && cmp_uint32_big(r - 8, r) == 0)
+		r -= 8;
+
+	QDataStream s(*d->offsetArray, IO_ReadOnly);
+	s.device()->at(r - d->offsetArray->data());
+
 	s >> rh >> ro;
-    }
 
-    return QTranslatorMessage();
+	QDataStream ms(*d->messageArray, IO_ReadOnly);
+	while (rh == h) {
+		ms.device()->at(ro);
+		QTranslatorMessage m(ms);
+		if (match(m.context(), context) &&
+		    match(m.sourceText(), sourceText) &&
+		    match(m.comment(), comment))
+			return m;
+		if (s.atEnd())
+			return QTranslatorMessage();
+		s >> rh >> ro;
+	}
+
+	return QTranslatorMessage();
 }
 
 
@@ -980,12 +998,12 @@ QTranslatorMessage QTranslator::findMessage( const char* context,
 
 QValueList<QTranslatorMessage> QTranslator::messages() const
 {
-    ((QTranslator *) this)->unsqueeze();
-    QValueList<QTranslatorMessage> result;
-    QMap<QTranslatorMessage, void *>::ConstIterator it;
-    for ( it = d->messages->begin(); it != d->messages->end(); ++it )
-	result.append( it.key() );
-    return result;
+	((QTranslator *)this)->unsqueeze();
+	QValueList<QTranslatorMessage> result;
+	QMap<QTranslatorMessage, void *>::ConstIterator it;
+	for (it = d->messages->begin(); it != d->messages->end(); ++it)
+		result.append(it.key());
+	return result;
 }
 
 
@@ -1007,7 +1025,7 @@ QValueList<QTranslatorMessage> QTranslator::messages() const
   text, \e comment ), where \a hash is computed from the source text
   and the comment.  Unless you plan to read and write messages
   yourself, you need not worry about the hash value.
-  
+
   QTranslatorMessage stores theis triple or quadruple, the relevant
   translation if there is any, and the status of the message.
 
@@ -1018,8 +1036,7 @@ QValueList<QTranslatorMessage> QTranslator::messages() const
   QString::null as translation.
 */
 
-QTranslatorMessage::QTranslatorMessage()
-    : h( 0 ), cx( "" ), st( "" ), cm( "" )
+QTranslatorMessage::QTranslatorMessage() : h(0), cx(""), st(""), cm("")
 {
 }
 
@@ -1029,13 +1046,13 @@ QTranslatorMessage::QTranslatorMessage()
   \a sourceText and \a comment, and possibly with a \a translation.
 */
 
-QTranslatorMessage::QTranslatorMessage( const char * context,
-					const char * sourceText,
-					const char * comment,
-					const QString& translation )
-    : cx( context ), st( sourceText ), cm( comment ), tn( translation )
+QTranslatorMessage::QTranslatorMessage(const char *context,
+				       const char *sourceText,
+				       const char *comment,
+				       const QString &translation)
+	: cx(context), st(sourceText), cm(comment), tn(translation)
 {
-    h = elfHash( st + cm );
+	h = elfHash(st + cm);
 }
 
 
@@ -1045,65 +1062,65 @@ QTranslatorMessage::QTranslatorMessage( const char * context,
   \sa save()
  */
 
-QTranslatorMessage::QTranslatorMessage( QDataStream & stream )
-    : cx( "" ), st( "" ), cm( "" )
+QTranslatorMessage::QTranslatorMessage(QDataStream &stream)
+	: cx(""), st(""), cm("")
 {
-    QString str16;
-    char tag;
-    Q_UINT8 obs1;
+	QString str16;
+	char tag;
+	Q_UINT8 obs1;
 
-   for (;;) {
-	tag = 0;
-	if ( !stream.atEnd() )
-	    stream.readRawBytes( &tag, 1 );
-	switch( (Tag)tag ) {
-	case Tag_End:
-	    if ( h == 0 )
-		h = elfHash( st + cm );
-	    return;
-	case Tag_SourceText16:
-	    stream >> str16;
-	    st = str16.latin1();
-	    break;
-	case Tag_Translation:
-	    stream >> tn;
-	    break;
-	case Tag_Context16:
-	    stream >> str16;
-	    cx = str16.latin1();
-	    break;
-	case Tag_Hash:
-	    stream >> h;
-	    break;
-	case Tag_SourceText:
-	    stream >> st;
-	    break;
-	case Tag_Context:
-	    stream >> cx;
-	    break;
-	case Tag_Comment:
-	    stream >> cm;
-	    break;
-	case Tag_Obsolete1:
-	    stream >> obs1;
-	    break;
-	default:
-	    h = 0;
-	    st = cx = cm = "";
-	    tn = QString::null;
-	    return;
+	for (;;) {
+		tag = 0;
+		if (!stream.atEnd())
+			stream.readRawBytes(&tag, 1);
+		switch ((Tag)tag) {
+		case Tag_End:
+			if (h == 0)
+				h = elfHash(st + cm);
+			return;
+		case Tag_SourceText16:
+			stream >> str16;
+			st = str16.latin1();
+			break;
+		case Tag_Translation:
+			stream >> tn;
+			break;
+		case Tag_Context16:
+			stream >> str16;
+			cx = str16.latin1();
+			break;
+		case Tag_Hash:
+			stream >> h;
+			break;
+		case Tag_SourceText:
+			stream >> st;
+			break;
+		case Tag_Context:
+			stream >> cx;
+			break;
+		case Tag_Comment:
+			stream >> cm;
+			break;
+		case Tag_Obsolete1:
+			stream >> obs1;
+			break;
+		default:
+			h = 0;
+			st = cx = cm = "";
+			tn = QString::null;
+			return;
+		}
 	}
-    }
 }
 
 
 /*!  Constructs a copy of translator message \a m.
-*/
+ */
 
-QTranslatorMessage::QTranslatorMessage( const QTranslatorMessage & m )
-    : cx( m.cx ), st( m.st ), cm( m.cm ), tn( m.tn )
+QTranslatorMessage::QTranslatorMessage(const QTranslatorMessage &m)
+	: cx(m.cx), st(m.st), cm(m.cm), tn(m.tn)
 {
-    h = m.h;
+	h = m.h;
 }
 
 
@@ -1111,15 +1128,14 @@ QTranslatorMessage::QTranslatorMessage( const QTranslatorMessage & m )
   translator message.
 */
 
-QTranslatorMessage & QTranslatorMessage::operator=(
-	const QTranslatorMessage & m )
+QTranslatorMessage &QTranslatorMessage::operator=(const QTranslatorMessage &m)
 {
-    h = m.h;
-    cx = m.cx;
-    st = m.st;
-    cm = m.cm;
-    tn = m.tn;
-    return *this;
+	h = m.h;
+	cx = m.cx;
+	st = m.st;
+	cm = m.cm;
+	tn = m.tn;
+	return *this;
 }
 
 
@@ -1186,45 +1202,45 @@ QTranslatorMessage & QTranslatorMessage::operator=(
   \sa commonPrefix()
 */
 
-void QTranslatorMessage::write( QDataStream & stream, bool strip,
-				Prefix prefix ) const
+void QTranslatorMessage::write(QDataStream &stream, bool strip,
+			       Prefix prefix) const
 {
-    char tag;
+	char tag;
 
-    tag = (char)Tag_Translation;
-    stream.writeRawBytes( &tag, 1 );
-    stream << tn;
+	tag = (char)Tag_Translation;
+	stream.writeRawBytes(&tag, 1);
+	stream << tn;
 
-    bool mustWriteHash = TRUE;
-    if ( !strip )
-	prefix = HashContextSourceTextComment;
+	bool mustWriteHash = TRUE;
+	if (!strip)
+		prefix = HashContextSourceTextComment;
 
-    switch ( prefix ) {
-    case HashContextSourceTextComment:
-	tag = (char)Tag_Comment;
-	stream.writeRawBytes( &tag, 1 );
-	stream << cm;
-	// fall through
-    case HashContextSourceText:
-	tag = (char)Tag_SourceText;
-	stream.writeRawBytes( &tag, 1 );
-	stream << st;
-	// fall through
-    case HashContext:
-	tag = (char)Tag_Context;
-	stream.writeRawBytes( &tag, 1 );
-	stream << cx;
-	// fall through
-    default:
-	if ( mustWriteHash ) {
-	    tag = (char)Tag_Hash;
-	    stream.writeRawBytes( &tag, 1 );
-	    stream << h;
+	switch (prefix) {
+	case HashContextSourceTextComment:
+		tag = (char)Tag_Comment;
+		stream.writeRawBytes(&tag, 1);
+		stream << cm;
+		// fall through
+	case HashContextSourceText:
+		tag = (char)Tag_SourceText;
+		stream.writeRawBytes(&tag, 1);
+		stream << st;
+		// fall through
+	case HashContext:
+		tag = (char)Tag_Context;
+		stream.writeRawBytes(&tag, 1);
+		stream << cx;
+		// fall through
+	default:
+		if (mustWriteHash) {
+			tag = (char)Tag_Hash;
+			stream.writeRawBytes(&tag, 1);
+			stream << h;
+		}
 	}
-    }
 
-    tag = (char)Tag_End;
-    stream.writeRawBytes( &tag, 1 );
+	tag = (char)Tag_End;
+	stream.writeRawBytes(&tag, 1);
 }
 
 
@@ -1238,18 +1254,18 @@ void QTranslatorMessage::write( QDataStream & stream, bool strip,
   \sa write()
 */
 
-QTranslatorMessage::Prefix QTranslatorMessage::commonPrefix(
-	const QTranslatorMessage& m ) const
+QTranslatorMessage::Prefix
+QTranslatorMessage::commonPrefix(const QTranslatorMessage &m) const
 {
-    if ( h != m.h )
-	return NoPrefix;
-    if ( cx != m.cx )
-	return Hash;
-    if ( st != m.st )
-	return HashContext;
-    if ( cm != m.cm )
-	return HashContextSourceText;
-    return HashContextSourceTextComment;
+	if (h != m.h)
+		return NoPrefix;
+	if (cx != m.cx)
+		return Hash;
+	if (st != m.st)
+		return HashContext;
+	if (cm != m.cm)
+		return HashContextSourceText;
+	return HashContextSourceTextComment;
 }
 
 
@@ -1257,9 +1273,9 @@ QTranslatorMessage::Prefix QTranslatorMessage::commonPrefix(
   otherwise FALSE.
 */
 
-bool QTranslatorMessage::operator==( const QTranslatorMessage& m ) const
+bool QTranslatorMessage::operator==(const QTranslatorMessage &m) const
 {
-    return h == m.h && cx == m.cx && st == m.st && cm == m.cm;
+	return h == m.h && cx == m.cx && st == m.st && cm == m.cm;
 }
 
 
@@ -1274,11 +1290,11 @@ bool QTranslatorMessage::operator==( const QTranslatorMessage& m ) const
   than that of \a m, otherwise FALSE.
 */
 
-bool QTranslatorMessage::operator<( const QTranslatorMessage& m ) const
+bool QTranslatorMessage::operator<(const QTranslatorMessage &m) const
 {
-    return h != m.h ? h < m.h
-	   : ( cx != m.cx ? cx < m.cx
-	     : (st != m.st ? st < m.st : cm < m.cm) );
+	return h != m.h ? h < m.h :
+			  (cx != m.cx ? cx < m.cx :
+					(st != m.st ? st < m.st : cm < m.cm));
 }
 
 

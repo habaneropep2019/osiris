@@ -39,56 +39,57 @@
 #define QSESSIONMANAGER_H
 
 #ifndef QT_H
-#include "qobject.h"
-#include "qwindowdefs.h"
-#include "qnamespace.h"
-#include "qstring.h"
-#include "qstringlist.h"
+# include "qobject.h"
+# include "qwindowdefs.h"
+# include "qnamespace.h"
+# include "qstring.h"
+# include "qstringlist.h"
 #endif // QT_H
 #ifndef QT_NO_SESSIONMANAGER
 class QSessionManagerData;
 
-class Q_EXPORT  QSessionManager : public QObject
+class Q_EXPORT QSessionManager : public QObject
 {
-    Q_OBJECT
-    QSessionManager( QApplication *app, QString &session );
-    ~QSessionManager();
-public:
-    QString sessionId() const;
-#if defined(_WS_X11_)
-    void* handle() const;
-#endif
+	Q_OBJECT
+	QSessionManager(QApplication *app, QString &session);
+	~QSessionManager();
 
-    bool allowsInteraction();
-    bool allowsErrorInteraction();
-    void release();
+      public:
+	QString sessionId() const;
+# if defined(_WS_X11_)
+	void *handle() const;
+# endif
 
-    void cancel();
+	bool allowsInteraction();
+	bool allowsErrorInteraction();
+	void release();
 
-    enum RestartHint {
-	RestartIfRunning,
-	RestartAnyway,
-	RestartImmediately,
-	RestartNever
-    };
-    void setRestartHint( RestartHint );
-    RestartHint restartHint() const;
+	void cancel();
 
-    void setRestartCommand( const QStringList& );
-    QStringList restartCommand() const;
-    void setDiscardCommand( const QStringList& );
-    QStringList discardCommand() const;
+	enum RestartHint {
+		RestartIfRunning,
+		RestartAnyway,
+		RestartImmediately,
+		RestartNever
+	};
+	void setRestartHint(RestartHint);
+	RestartHint restartHint() const;
 
-    void setProperty( const QString& name, const QString& value );
-    void setProperty( const QString& name, const QStringList& value );
+	void setRestartCommand(const QStringList &);
+	QStringList restartCommand() const;
+	void setDiscardCommand(const QStringList &);
+	QStringList discardCommand() const;
 
-    bool isPhase2() const;
-    void requestPhase2();
+	void setProperty(const QString &name, const QString &value);
+	void setProperty(const QString &name, const QStringList &value);
 
-private:
-    friend class QApplication;
-    friend class QBaseApplication;
-    QSessionManagerData* d;
+	bool isPhase2() const;
+	void requestPhase2();
+
+      private:
+	friend class QApplication;
+	friend class QBaseApplication;
+	QSessionManagerData *d;
 };
 
 #endif // QT_NO_SESSIONMANAGER

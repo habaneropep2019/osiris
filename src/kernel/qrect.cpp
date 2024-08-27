@@ -35,7 +35,7 @@
 **
 **********************************************************************/
 
-#define	 QRECT_C
+#define QRECT_C
 #include "qrect.h"
 #include "qdatastream.h"
 
@@ -87,12 +87,12 @@
   \e bottomRight as the bottom right corner.
 */
 
-QRect::QRect( const QPoint &topLeft, const QPoint &bottomRight )
+QRect::QRect(const QPoint &topLeft, const QPoint &bottomRight)
 {
-    x1 = (QCOORD)topLeft.x();
-    y1 = (QCOORD)topLeft.y();
-    x2 = (QCOORD)bottomRight.x();
-    y2 = (QCOORD)bottomRight.y();
+	x1 = (QCOORD)topLeft.x();
+	y1 = (QCOORD)topLeft.y();
+	x2 = (QCOORD)bottomRight.x();
+	y2 = (QCOORD)bottomRight.y();
 }
 
 /*!
@@ -100,12 +100,12 @@ QRect::QRect( const QPoint &topLeft, const QPoint &bottomRight )
   \e size as the rectangle size.
 */
 
-QRect::QRect( const QPoint &topLeft, const QSize &size )
+QRect::QRect(const QPoint &topLeft, const QSize &size)
 {
-    x1 = (QCOORD)topLeft.x();
-    y1 = (QCOORD)topLeft.y();
-    x2 = (QCOORD)(x1+size.width()-1);
-    y2 = (QCOORD)(y1+size.height()-1);
+	x1 = (QCOORD)topLeft.x();
+	y1 = (QCOORD)topLeft.y();
+	x2 = (QCOORD)(x1 + size.width() - 1);
+	y2 = (QCOORD)(y1 + size.height() - 1);
 }
 
 /*!
@@ -178,22 +178,22 @@ QRect::QRect( const QPoint &topLeft, const QSize &size )
 
 QRect QRect::normalize() const
 {
-    QRect r;
-    if ( x2 < x1 ) {				// swap bad x values
-	r.x1 = x2;
-	r.x2 = x1;
-    } else {
-	r.x1 = x1;
-	r.x2 = x2;
-    }
-    if ( y2 < y1 ) {				// swap bad y values
-	r.y1 = y2;
-	r.y2 = y1;
-    } else {
-	r.y1 = y1;
-	r.y2 = y2;
-    }
-    return r;
+	QRect r;
+	if (x2 < x1) { // swap bad x values
+		r.x1 = x2;
+		r.x2 = x1;
+	} else {
+		r.x1 = x1;
+		r.x2 = x2;
+	}
+	if (y2 < y1) { // swap bad y values
+		r.y1 = y2;
+		r.y2 = y1;
+	} else {
+		r.y1 = y1;
+		r.y2 = y2;
+	}
+	return r;
 }
 
 
@@ -375,12 +375,12 @@ QRect QRect::normalize() const
   \sa setRect(), coords()
 */
 
-void QRect::rect( int *x, int *y, int *w, int *h ) const
+void QRect::rect(int *x, int *y, int *w, int *h) const
 {
-    *x = x1;
-    *y = y1;
-    *w = x2-x1+1;
-    *h = y2-y1+1;
+	*x = x1;
+	*y = y1;
+	*w = x2 - x1 + 1;
+	*h = y2 - y1 + 1;
 }
 
 /*!
@@ -389,12 +389,12 @@ void QRect::rect( int *x, int *y, int *w, int *h ) const
   \sa setCoords(), rect()
 */
 
-void QRect::coords( int *xp1, int *yp1, int *xp2, int *yp2 ) const
+void QRect::coords(int *xp1, int *yp1, int *xp2, int *yp2) const
 {
-    *xp1 = x1;
-    *yp1 = y1;
-    *xp2 = x2;
-    *yp2 = y2;
+	*xp1 = x1;
+	*yp1 = y1;
+	*xp2 = x2;
+	*yp2 = y2;
 }
 
 /*!
@@ -404,12 +404,12 @@ void QRect::coords( int *xp1, int *yp1, int *xp2, int *yp2 ) const
   setTop(), setLeft()
 */
 
-void QRect::moveTopLeft( const QPoint &p )
+void QRect::moveTopLeft(const QPoint &p)
 {
-    x2 += (QCOORD)(p.x() - x1);
-    y2 += (QCOORD)(p.y() - y1);
-    x1 = (QCOORD)p.x();
-    y1 = (QCOORD)p.y();
+	x2 += (QCOORD)(p.x() - x1);
+	y2 += (QCOORD)(p.y() - y1);
+	x1 = (QCOORD)p.x();
+	y1 = (QCOORD)p.y();
 }
 
 /*!
@@ -419,12 +419,12 @@ void QRect::moveTopLeft( const QPoint &p )
   setBottom(), setRight()
 */
 
-void QRect::moveBottomRight( const QPoint &p )
+void QRect::moveBottomRight(const QPoint &p)
 {
-    x1 += (QCOORD)(p.x() - x2);
-    y1 += (QCOORD)(p.y() - y2);
-    x2 = (QCOORD)p.x();
-    y2 = (QCOORD)p.y();
+	x1 += (QCOORD)(p.x() - x2);
+	y1 += (QCOORD)(p.y() - y2);
+	x2 = (QCOORD)p.x();
+	y2 = (QCOORD)p.y();
 }
 
 /*!
@@ -434,12 +434,12 @@ void QRect::moveBottomRight( const QPoint &p )
   setTop(), setRight()
 */
 
-void QRect::moveTopRight( const QPoint &p )
+void QRect::moveTopRight(const QPoint &p)
 {
-    x1 += (QCOORD)(p.x() - x2);
-    y2 += (QCOORD)(p.y() - y1);
-    x2 = (QCOORD)p.x();
-    y1 = (QCOORD)p.y();
+	x1 += (QCOORD)(p.x() - x2);
+	y2 += (QCOORD)(p.y() - y1);
+	x2 = (QCOORD)p.x();
+	y1 = (QCOORD)p.y();
 }
 
 /*!
@@ -449,29 +449,30 @@ void QRect::moveTopRight( const QPoint &p )
   setBottom(), setLeft()
 */
 
-void QRect::moveBottomLeft( const QPoint &p )
+void QRect::moveBottomLeft(const QPoint &p)
 {
-    x2 += (QCOORD)(p.x() - x1);
-    y1 += (QCOORD)(p.y() - y2);
-    x1 = (QCOORD)p.x();
-    y2 = (QCOORD)p.y();
+	x2 += (QCOORD)(p.x() - x1);
+	y1 += (QCOORD)(p.y() - y2);
+	x1 = (QCOORD)p.x();
+	y2 = (QCOORD)p.y();
 }
 
 
 /*!
   Sets the center point of the rectangle to \e p, leaving the size
   unchanged.
-  \sa center(), moveTopLeft(), moveTopRight(), moveBottomLeft(), moveBottomRight()
+  \sa center(), moveTopLeft(), moveTopRight(), moveBottomLeft(),
+  moveBottomRight()
 */
 
-void QRect::moveCenter( const QPoint &p )
+void QRect::moveCenter(const QPoint &p)
 {
-    QCOORD w = x2 - x1;
-    QCOORD h = y2 - y1;
-    x1 = (QCOORD)(p.x() - w/2);
-    y1 = (QCOORD)(p.y() - h/2);
-    x2 = x1 + w;
-    y2 = y1 + h;
+	QCOORD w = x2 - x1;
+	QCOORD h = y2 - y1;
+	x1 = (QCOORD)(p.x() - w / 2);
+	y1 = (QCOORD)(p.y() - h / 2);
+	x2 = x1 + w;
+	y2 = y1 + h;
 }
 
 
@@ -482,12 +483,12 @@ void QRect::moveCenter( const QPoint &p )
 */
 
 
-void QRect::moveBy( int dx, int dy )
+void QRect::moveBy(int dx, int dy)
 {
-    x1 += (QCOORD)dx;
-    y1 += (QCOORD)dy;
-    x2 += (QCOORD)dx;
-    y2 += (QCOORD)dy;
+	x1 += (QCOORD)dx;
+	y1 += (QCOORD)dy;
+	x2 += (QCOORD)dx;
+	y2 += (QCOORD)dy;
 }
 
 /*!
@@ -496,12 +497,12 @@ void QRect::moveBy( int dx, int dy )
   \sa rect(), setCoords()
 */
 
-void QRect::setRect( int x, int y, int w, int h )
+void QRect::setRect(int x, int y, int w, int h)
 {
-    x1 = (QCOORD)x;
-    y1 = (QCOORD)y;
-    x2 = (QCOORD)(x+w-1);
-    y2 = (QCOORD)(y+h-1);
+	x1 = (QCOORD)x;
+	y1 = (QCOORD)y;
+	x2 = (QCOORD)(x + w - 1);
+	y2 = (QCOORD)(y + h - 1);
 }
 
 /*!
@@ -510,12 +511,12 @@ void QRect::setRect( int x, int y, int w, int h )
   \sa coords(), setRect()
 */
 
-void QRect::setCoords( int xp1, int yp1, int xp2, int yp2 )
+void QRect::setCoords(int xp1, int yp1, int xp2, int yp2)
 {
-    x1 = (QCOORD)xp1;
-    y1 = (QCOORD)yp1;
-    x2 = (QCOORD)xp2;
-    y2 = (QCOORD)yp2;
+	x1 = (QCOORD)xp1;
+	y1 = (QCOORD)yp1;
+	x2 = (QCOORD)xp2;
+	y2 = (QCOORD)yp2;
 }
 
 
@@ -545,9 +546,9 @@ void QRect::setCoords( int xp1, int yp1, int xp2, int yp2 )
   \sa width(), setLeft(), setRight(), setSize()
 */
 
-void QRect::setWidth( int w )
+void QRect::setWidth(int w)
 {
-    x2 = (QCOORD)(x1 + w - 1);
+	x2 = (QCOORD)(x1 + w - 1);
 }
 
 /*!
@@ -556,9 +557,9 @@ void QRect::setWidth( int w )
   \sa height(), setTop(), setBottom(), setSize()
 */
 
-void QRect::setHeight( int h )
+void QRect::setHeight(int h)
 {
-    y2 = (QCOORD)(y1 + h - 1);
+	y2 = (QCOORD)(y1 + h - 1);
 }
 
 /*!
@@ -566,10 +567,10 @@ void QRect::setHeight( int h )
   \sa size(), setWidth(), setHeight()
 */
 
-void QRect::setSize( const QSize &s )
+void QRect::setSize(const QSize &s)
 {
-    x2 = (QCOORD)(s.width() +x1-1);
-    y2 = (QCOORD)(s.height()+y1-1);
+	x2 = (QCOORD)(s.width() + x1 - 1);
+	y2 = (QCOORD)(s.height() + y1 - 1);
 }
 
 /*!
@@ -580,14 +581,12 @@ void QRect::setSize( const QSize &s )
   inside (not on the edge).
 */
 
-bool QRect::contains( const QPoint &p, bool proper ) const
+bool QRect::contains(const QPoint &p, bool proper) const
 {
-    if ( proper )
-	return p.x() > x1 && p.x() < x2 &&
-	       p.y() > y1 && p.y() < y2;
-    else
-	return p.x() >= x1 && p.x() <= x2 &&
-	       p.y() >= y1 && p.y() <= y2;
+	if (proper)
+		return p.x() > x1 && p.x() < x2 && p.y() > y1 && p.y() < y2;
+	else
+		return p.x() >= x1 && p.x() <= x2 && p.y() >= y1 && p.y() <= y2;
 }
 
 /*!
@@ -604,30 +603,30 @@ bool QRect::contains( const QPoint &p, bool proper ) const
   \sa unite(), intersect(), intersects()
 */
 
-bool QRect::contains( const QRect &r, bool proper ) const
+bool QRect::contains(const QRect &r, bool proper) const
 {
-    if ( proper )
-	return r.x1 > x1 && r.x2 < x2 && r.y1 > y1 && r.y2 < y2;
-    else
-	return r.x1 >= x1 && r.x2 <= x2 && r.y1 >= y1 && r.y2 <= y2;
+	if (proper)
+		return r.x1 > x1 && r.x2 < x2 && r.y1 > y1 && r.y2 < y2;
+	else
+		return r.x1 >= x1 && r.x2 <= x2 && r.y1 >= y1 && r.y2 <= y2;
 }
 
 /*!
   Unites this rectangle with \a r.
 */
-QRect& QRect::operator|=(const QRect &r)
+QRect &QRect::operator|=(const QRect &r)
 {
-    *this = *this | r;
-    return *this;
+	*this = *this | r;
+	return *this;
 }
 
 /*!
   Intersects this rectangle with \a r.
 */
-QRect& QRect::operator&=(const QRect &r)
+QRect &QRect::operator&=(const QRect &r)
 {
-    *this = *this & r;
-    return *this;
+	*this = *this & r;
+	return *this;
 }
 
 
@@ -643,28 +642,28 @@ QRect& QRect::operator&=(const QRect &r)
 
 QRect QRect::operator|(const QRect &r) const
 {
-    if ( isValid() ) {
-	if ( r.isValid() ) {
-	    QRect tmp;
-	    tmp.setLeft(   QMIN( x1, r.x1 ) );
-	    tmp.setRight(  QMAX( x2, r.x2 ) );
-	    tmp.setTop(	   QMIN( y1, r.y1 ) );
-	    tmp.setBottom( QMAX( y2, r.y2 ) );
-	    return tmp;
+	if (isValid()) {
+		if (r.isValid()) {
+			QRect tmp;
+			tmp.setLeft(QMIN(x1, r.x1));
+			tmp.setRight(QMAX(x2, r.x2));
+			tmp.setTop(QMIN(y1, r.y1));
+			tmp.setBottom(QMAX(y2, r.y2));
+			return tmp;
+		} else {
+			return *this;
+		}
 	} else {
-	    return *this;
+		return r;
 	}
-    } else {
-	return r;
-    }
 }
 
 /*!
   \code r.unite(s) \endcode is equivalent to \code r|s\endcode.
 */
-QRect QRect::unite( const QRect &r ) const
+QRect QRect::unite(const QRect &r) const
 {
-    return *this | r;
+	return *this | r;
 }
 
 
@@ -676,22 +675,22 @@ QRect QRect::unite( const QRect &r ) const
   \sa operator&=(), operator|(), isEmpty(), intersects(), contains()
 */
 
-QRect QRect::operator&( const QRect &r ) const
+QRect QRect::operator&(const QRect &r) const
 {
-    QRect tmp;
-    tmp.x1 = QMAX( x1, r.x1 );
-    tmp.x2 = QMIN( x2, r.x2 );
-    tmp.y1 = QMAX( y1, r.y1 );
-    tmp.y2 = QMIN( y2, r.y2 );
-    return tmp;
+	QRect tmp;
+	tmp.x1 = QMAX(x1, r.x1);
+	tmp.x2 = QMIN(x2, r.x2);
+	tmp.y1 = QMAX(y1, r.y1);
+	tmp.y2 = QMIN(y2, r.y2);
+	return tmp;
 }
 
 /*!
   \code r.intersect(s) \endcode is equivalent to \code r&s\endcode.
 */
-QRect QRect::intersect( const QRect &r ) const
+QRect QRect::intersect(const QRect &r) const
 {
-    return *this & r;
+	return *this & r;
 }
 
 /*!
@@ -700,10 +699,10 @@ QRect QRect::intersect( const QRect &r ) const
   \sa intersect(), contains()
 */
 
-bool QRect::intersects( const QRect &r ) const
+bool QRect::intersects(const QRect &r) const
 {
-    return ( QMAX( x1, r.x1 ) <= QMIN( x2, r.x2 ) &&
-	     QMAX( y1, r.y1 ) <= QMIN( y2, r.y2 ) );
+	return (QMAX(x1, r.x1) <= QMIN(x2, r.x2) &&
+		QMAX(y1, r.y1) <= QMIN(y2, r.y2));
 }
 
 
@@ -712,9 +711,10 @@ bool QRect::intersects( const QRect &r ) const
   Returns TRUE if \e r1 and \e r2 are equal, or FALSE if they are different.
 */
 
-bool operator==( const QRect &r1, const QRect &r2 )
+bool operator==(const QRect &r1, const QRect &r2)
 {
-    return r1.x1==r2.x1 && r1.x2==r2.x2 && r1.y1==r2.y1 && r1.y2==r2.y2;
+	return r1.x1 == r2.x1 && r1.x2 == r2.x2 && r1.y1 == r2.y1 &&
+	       r1.y2 == r2.y2;
 }
 
 /*!
@@ -722,9 +722,10 @@ bool operator==( const QRect &r1, const QRect &r2 )
   Returns TRUE if \e r1 and \e r2 are different, or FALSE if they are equal.
 */
 
-bool operator!=( const QRect &r1, const QRect &r2 )
+bool operator!=(const QRect &r1, const QRect &r2)
 {
-    return r1.x1!=r2.x1 || r1.x2!=r2.x2 || r1.y1!=r2.y1 || r1.y2!=r2.y2;
+	return r1.x1 != r2.x1 || r1.x2 != r2.x2 || r1.y1 != r2.y1 ||
+	       r1.y2 != r2.y2;
 }
 
 
@@ -740,15 +741,15 @@ bool operator!=( const QRect &r1, const QRect &r2 )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator<<( QDataStream &s, const QRect &r )
+QDataStream &operator<<(QDataStream &s, const QRect &r)
 {
-    if ( s.version() == 1 )
-	s << (Q_INT16)r.left() << (Q_INT16)r.top()
-	  << (Q_INT16)r.right() << (Q_INT16)r.bottom();
-    else
-	s << (Q_INT32)r.left() << (Q_INT32)r.top()
-	  << (Q_INT32)r.right() << (Q_INT32)r.bottom();
-    return s;
+	if (s.version() == 1)
+		s << (Q_INT16)r.left() << (Q_INT16)r.top() << (Q_INT16)r.right()
+		  << (Q_INT16)r.bottom();
+	else
+		s << (Q_INT32)r.left() << (Q_INT32)r.top() << (Q_INT32)r.right()
+		  << (Q_INT32)r.bottom();
+	return s;
 }
 
 /*!
@@ -759,18 +760,23 @@ QDataStream &operator<<( QDataStream &s, const QRect &r )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator>>( QDataStream &s, QRect &r )
+QDataStream &operator>>(QDataStream &s, QRect &r)
 {
-    if ( s.version() == 1 ) {
-	Q_INT16 x1, y1, x2, y2;
-	s >> x1; s >> y1; s >> x2; s >> y2;
-	r.setCoords( x1, y1, x2, y2 );
-    }
-    else {
-	Q_INT32 x1, y1, x2, y2;
-	s >> x1; s >> y1; s >> x2; s >> y2;
-	r.setCoords( x1, y1, x2, y2 );
-    }
-    return s;
+	if (s.version() == 1) {
+		Q_INT16 x1, y1, x2, y2;
+		s >> x1;
+		s >> y1;
+		s >> x2;
+		s >> y2;
+		r.setCoords(x1, y1, x2, y2);
+	} else {
+		Q_INT32 x1, y1, x2, y2;
+		s >> x1;
+		s >> y1;
+		s >> x2;
+		s >> y2;
+		r.setCoords(x1, y1, x2, y2);
+	}
+	return s;
 }
 #endif // QT_NO_DATASTREAM

@@ -24,183 +24,185 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 
-Config::Config( const QString &fn )
-    : filename( fn )
+Config::Config(const QString &fn) : filename(fn)
 {
-    git = groups.end();
-    read();
+	git = groups.end();
+	read();
 }
 
 Config::~Config()
 {
-    write();
+	write();
 }
 
-void Config::setGroup( const QString &gname )
+void Config::setGroup(const QString &gname)
 {
-    QMap< QString, ConfigGroup>::Iterator it = groups.find( gname );
-    if ( it == groups.end() ) {
-	ConfigGroup *grp = new ConfigGroup;
-	git = groups.insert( gname, *grp );
-	return;
-    }
-    git = it;
+	QMap<QString, ConfigGroup>::Iterator it = groups.find(gname);
+	if (it == groups.end()) {
+		ConfigGroup *grp = new ConfigGroup;
+		git = groups.insert(gname, *grp);
+		return;
+	}
+	git = it;
 }
 
-void Config::writeEntry( const QString &key, const QString &value )
+void Config::writeEntry(const QString &key, const QString &value)
 {
-    if ( git == groups.end() ) {
-	qWarning( "no group set" );
-	return;
-    }
-    ( *git ).insert( key, value );
+	if (git == groups.end()) {
+		qWarning("no group set");
+		return;
+	}
+	(*git).insert(key, value);
 }
 
-void Config::writeEntry( const QString &key, int num )
+void Config::writeEntry(const QString &key, int num)
 {
-    QString s;
-    s.setNum( num );
-    writeEntry( key, s );
+	QString s;
+	s.setNum(num);
+	writeEntry(key, s);
 }
 
 #ifdef Q_HAS_BOOL_TYPE
-void Config::writeEntry( const QString &key, bool b )
+void Config::writeEntry(const QString &key, bool b)
 {
-    QString s;
-    s.setNum( ( int )b );
-    writeEntry( key, s );
+	QString s;
+	s.setNum((int)b);
+	writeEntry(key, s);
 }
 #endif
 
-void Config::writeEntry( const QString &key, const QStringList &lst, const QChar &sep )
+void Config::writeEntry(const QString &key, const QStringList &lst,
+			const QChar &sep)
 {
-    QString s;
-    QStringList::ConstIterator it = lst.begin();
-    for ( ; it != lst.end(); ++it )
-	s += *it + sep;
-    writeEntry( key, s );
+	QString s;
+	QStringList::ConstIterator it = lst.begin();
+	for (; it != lst.end(); ++it)
+		s += *it + sep;
+	writeEntry(key, s);
 }
 
-QString Config::readEntry( const QString &key, const QString &deflt )
+QString Config::readEntry(const QString &key, const QString &deflt)
 {
-    if ( git == groups.end() ) {
-	//qWarning( "no group set" );
-	return deflt;
-    }
-    ConfigGroup::Iterator it = ( *git ).find( key );
-    if ( it != ( *git ).end() )
-	return *it;
-    else
-	return deflt;
+	if (git == groups.end()) {
+		// qWarning( "no group set" );
+		return deflt;
+	}
+	ConfigGroup::Iterator it = (*git).find(key);
+	if (it != (*git).end())
+		return *it;
+	else
+		return deflt;
 }
 
-int Config::readNumEntry( const QString &key, int deflt )
+int Config::readNumEntry(const QString &key, int deflt)
 {
-    QString s = readEntry( key );
-    if ( s.isEmpty() )
-	return deflt;
-    else
-	return s.toInt();
+	QString s = readEntry(key);
+	if (s.isEmpty())
+		return deflt;
+	else
+		return s.toInt();
 }
 
-bool Config::readBoolEntry( const QString &key, bool deflt )
+bool Config::readBoolEntry(const QString &key, bool deflt)
 {
-    QString s = readEntry( key );
-    if ( s.isEmpty() )
-	return deflt;
-    else
-	return (bool)s.toInt();
+	QString s = readEntry(key);
+	if (s.isEmpty())
+		return deflt;
+	else
+		return (bool)s.toInt();
 }
 
-QStringList Config::readListEntry( const QString &key, const QChar &sep )
+QStringList Config::readListEntry(const QString &key, const QChar &sep)
 {
-    QString s = readEntry( key );
-    if ( s.isEmpty() )
-	return QStringList();
-    else
-	return QStringList::split( sep, s );
+	QString s = readEntry(key);
+	if (s.isEmpty())
+		return QStringList();
+	else
+		return QStringList::split(sep, s);
 }
 
 void Config::clearGroup()
 {
-    if ( git == groups.end() ) {
-	qWarning( "no group set" );
-	return;
-    }
-    ( *git ).clear();
+	if (git == groups.end()) {
+		qWarning("no group set");
+		return;
+	}
+	(*git).clear();
 }
 
-void Config::write( const QString &fn )
+void Config::write(const QString &fn)
 {
-    if ( !fn.isEmpty() )
-	filename = fn;
+	if (!fn.isEmpty())
+		filename = fn;
 
-    QFile f( filename );
-    if ( !f.open( IO_WriteOnly ) ) {
-	qWarning( "could not open for writing `%s'", filename.latin1() );
-	git = groups.end();
-	return;
-    }
+	QFile f(filename);
+	if (!f.open(IO_WriteOnly)) {
+		qWarning("could not open for writing `%s'", filename.latin1());
+		git = groups.end();
+		return;
+	}
 
-    QTextStream s( &f );
-    QMap< QString, ConfigGroup >::Iterator g_it = groups.begin();
-    for ( ; g_it != groups.end(); ++g_it ) {
-	s << "[" << g_it.key() << "]" << "\n";
-	ConfigGroup::Iterator e_it = ( *g_it ).begin();
-	for ( ; e_it != ( *g_it ).end(); ++e_it )
-	    s << e_it.key() << " = " << *e_it << "\n";
-    }
+	QTextStream s(&f);
+	QMap<QString, ConfigGroup>::Iterator g_it = groups.begin();
+	for (; g_it != groups.end(); ++g_it) {
+		s << "[" << g_it.key() << "]"
+		  << "\n";
+		ConfigGroup::Iterator e_it = (*g_it).begin();
+		for (; e_it != (*g_it).end(); ++e_it)
+			s << e_it.key() << " = " << *e_it << "\n";
+	}
 
-    f.close();
+	f.close();
 }
 
 void Config::read()
 {
-    if ( !QFileInfo( filename ).exists() ) {
-// 	qWarning( "`%s' doesn't exist", filename.latin1() );
-	git = groups.end();
-	return;
-    }
+	if (!QFileInfo(filename).exists()) {
+		// 	qWarning( "`%s' doesn't exist", filename.latin1() );
+		git = groups.end();
+		return;
+	}
 
-    QFile f( filename );
-    if ( !f.open( IO_ReadOnly ) ) {
-	qWarning( "could not open for reading `%s'", filename.latin1() );
-	git = groups.end();
-	return;
-    }
+	QFile f(filename);
+	if (!f.open(IO_ReadOnly)) {
+		qWarning("could not open for reading `%s'", filename.latin1());
+		git = groups.end();
+		return;
+	}
 
-    QTextStream s( &f );
+	QTextStream s(&f);
 
-    QString line;
-    while ( !s.atEnd() ) {
-	line = s.readLine();
-	parse( line );
-    }
+	QString line;
+	while (!s.atEnd()) {
+		line = s.readLine();
+		parse(line);
+	}
 
-    f.close();
+	f.close();
 }
 
-void Config::parse( const QString &l )
+void Config::parse(const QString &l)
 {
-    QString line = l.stripWhiteSpace();
-    if ( line[ 0 ] == QChar( '[' ) ) {
-	QString gname = line;
-	gname = gname.remove( 0, 1 );
-	if ( gname[ (int)gname.length() - 1 ] == QChar( ']' ) )
-	    gname = gname.remove( gname.length() - 1, 1 );
-	ConfigGroup *grp = new ConfigGroup;
-	git = groups.insert( gname, *grp );
-    } else {
-	if ( git == groups.end() ) {
-	    qWarning( "line `%s' out of group", line.latin1() );
-	    return;
+	QString line = l.stripWhiteSpace();
+	if (line[0] == QChar('[')) {
+		QString gname = line;
+		gname = gname.remove(0, 1);
+		if (gname[(int)gname.length() - 1] == QChar(']'))
+			gname = gname.remove(gname.length() - 1, 1);
+		ConfigGroup *grp = new ConfigGroup;
+		git = groups.insert(gname, *grp);
+	} else {
+		if (git == groups.end()) {
+			qWarning("line `%s' out of group", line.latin1());
+			return;
+		}
+		QStringList lst = QStringList::split('=', line);
+		if (lst.count() != 2 && line.find('=') == -1) {
+			qWarning("corrupted line `%s' in group `%s'",
+				 line.latin1(), git.key().latin1());
+			return;
+		}
+		(*git).insert(lst[0].stripWhiteSpace(),
+			      lst[1].stripWhiteSpace());
 	}
-	QStringList lst = QStringList::split( '=', line );
-	if ( lst.count() != 2 && line.find( '=' ) == -1 ) {
-	    qWarning( "corrupted line `%s' in group `%s'",
-		      line.latin1(), git.key().latin1() );
-	    return;
-	}
-	( *git ).insert( lst[ 0 ].stripWhiteSpace(), lst[ 1 ].stripWhiteSpace() );
-    }
 }

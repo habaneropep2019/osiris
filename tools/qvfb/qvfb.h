@@ -26,53 +26,52 @@ class QMenuData;
 class QFileDialog;
 class Config;
 
-class QVFb: public QMainWindow
+class QVFb : public QMainWindow
 {
-    Q_OBJECT
-public:
-    QVFb( int display_id, int w, int h, int d, const QString &skin, QWidget *parent = 0,
-		const char *name = 0, uint wflags = 0 );
-    ~QVFb();
+	Q_OBJECT
+      public:
+	QVFb(int display_id, int w, int h, int d, const QString &skin,
+	     QWidget *parent = 0, const char *name = 0, uint wflags = 0);
+	~QVFb();
 
-    void enableCursor( bool e );
-    void popupMenu();
+	void enableCursor(bool e);
+	void popupMenu();
 
-    QSize sizeHint() const;
+	QSize sizeHint() const;
 
-protected slots:
-    void saveImage();
-    void toggleAnimation();
-    void toggleCursor();
-    void changeRate();
-    void about();
+      protected slots:
+	void saveImage();
+	void toggleAnimation();
+	void toggleCursor();
+	void changeRate();
+	void about();
 
-    void configure();
+	void configure();
 
-    void setZoom(double);
-    void setZoom1();
-    void setZoom2();
-    void setZoom3();
-    void setZoom4();
-    void setZoomHalf();
+	void setZoom(double);
+	void setZoom1();
+	void setZoom2();
+	void setZoom3();
+	void setZoom4();
+	void setZoomHalf();
 
-protected:
-    void createMenu(QMenuData *menu);
+      protected:
+	void createMenu(QMenuData *menu);
 
-private:
-    void init( int display_id, int w, int h, int d, const QString &skin );
-    QVFbView *view;
-    QVFbRateDialog *rateDlg;
-    QFileDialog* imagesave;
-    QPopupMenu *viewMenu;
-    int cursorId;
-    Config* config;
-    QString currentSkin;
+      private:
+	void init(int display_id, int w, int h, int d, const QString &skin);
+	QVFbView *view;
+	QVFbRateDialog *rateDlg;
+	QFileDialog *imagesave;
+	QPopupMenu *viewMenu;
+	int cursorId;
+	Config *config;
+	QString currentSkin;
 
-private slots:
-    void setGamma400(int n);
-    void setR400(int n);
-    void setG400(int n);
-    void setB400(int n);
-    void updateGammaLabels();
+      private slots:
+	void setGamma400(int n);
+	void setR400(int n);
+	void setG400(int n);
+	void setB400(int n);
+	void updateGammaLabels();
 };
-

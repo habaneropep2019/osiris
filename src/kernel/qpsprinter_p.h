@@ -55,8 +55,8 @@
 
 
 #ifndef QT_H
-#include "qprinter.h"
-#include "qtextstream.h"
+# include "qprinter.h"
+# include "qtextstream.h"
 #endif // QT_H
 
 #ifndef QT_NO_PRINTER
@@ -65,41 +65,42 @@ struct QPSPrinterPrivate;
 
 class Q_EXPORT QPSPrinter : public QPaintDevice
 {
-private:
-    // QPrinter uses these
-    QPSPrinter( QPrinter *, int );
-   ~QPSPrinter();
+      private:
+	// QPrinter uses these
+	QPSPrinter(QPrinter *, int);
+	~QPSPrinter();
 
-    bool cmd ( int, QPainter *, QPDevCmdParam * );
+	bool cmd(int, QPainter *, QPDevCmdParam *);
 
-    enum { NewPage = 100, AbortPrinting };
+	enum { NewPage = 100, AbortPrinting };
 
-    friend class QPrinter;
-private:
-    // QPrinter does not use these
+	friend class QPrinter;
 
-    QPrinter   *printer;
-    QPSPrinterPrivate *d;
-    QTextStream stream;
-    int		pageCount;
-    bool	dirtyMatrix;
-    bool	dirtyNewPage;
-    bool	epsf;
-    QString	fontsUsed;
+      private:
+	// QPrinter does not use these
 
-    void matrixSetup( QPainter * );
-    void clippingSetup( QPainter * );
-    virtual void setClippingOff( QPainter * );
-    void orientationSetup();
-    void newPageSetup( QPainter * );
-    void resetDrawingTools( QPainter * );
-    void emitHeader( bool finished );
-    virtual void setFont( const QFont & );
-    void drawImage( QPainter *, const QPoint &, const QImage & );
+	QPrinter *printer;
+	QPSPrinterPrivate *d;
+	QTextStream stream;
+	int pageCount;
+	bool dirtyMatrix;
+	bool dirtyNewPage;
+	bool epsf;
+	QString fontsUsed;
 
-    // Disabled copy constructor and operator=
-    QPSPrinter( const QPSPrinter & );
-    QPSPrinter &operator=( const QPSPrinter & );
+	void matrixSetup(QPainter *);
+	void clippingSetup(QPainter *);
+	virtual void setClippingOff(QPainter *);
+	void orientationSetup();
+	void newPageSetup(QPainter *);
+	void resetDrawingTools(QPainter *);
+	void emitHeader(bool finished);
+	virtual void setFont(const QFont &);
+	void drawImage(QPainter *, const QPoint &, const QImage &);
+
+	// Disabled copy constructor and operator=
+	QPSPrinter(const QPSPrinter &);
+	QPSPrinter &operator=(const QPSPrinter &);
 };
 
 #endif // QT_NO_PRINTER

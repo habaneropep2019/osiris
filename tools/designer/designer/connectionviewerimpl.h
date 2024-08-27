@@ -30,21 +30,20 @@ class FormWindow;
 
 class ConnectionViewer : public ConnectionViewerBase
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    ConnectionViewer( QWidget *parent, FormWindow *fw );
+      public:
+	ConnectionViewer(QWidget *parent, FormWindow *fw);
 
-protected slots:
-    void editConnection();
-    void disconnectConnection();
-    void currentConnectionChanged( QListViewItem *i );
+      protected slots:
+	void editConnection();
+	void disconnectConnection();
+	void currentConnectionChanged(QListViewItem *i);
 
-private:
-    void readConnections();
-    FormWindow *formWindow;
-    QMap<QListViewItem*, MetaDataBase::Connection> connections;
-    
+      private:
+	void readConnections();
+	FormWindow *formWindow;
+	QMap<QListViewItem *, MetaDataBase::Connection> connections;
 };
 
 #endif

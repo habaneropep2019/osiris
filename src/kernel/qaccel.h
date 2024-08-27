@@ -39,66 +39,65 @@
 #define QACCEL_H
 
 #ifndef QT_H
-#include "qobject.h"
+# include "qobject.h"
 #endif // QT_H
 
 #ifndef QT_NO_ACCEL
-class QAccelPrivate;				// internal class
+class QAccelPrivate; // internal class
 
 
-class Q_EXPORT QAccel : public QObject			// accelerator class
+class Q_EXPORT QAccel : public QObject // accelerator class
 {
-    Q_OBJECT
-public:
-    QAccel( QWidget *parent, const char *name=0 );
-    QAccel( QWidget* watch, QObject *parent, const char *name=0 );
-    ~QAccel();
+	Q_OBJECT
+      public:
+	QAccel(QWidget *parent, const char *name = 0);
+	QAccel(QWidget *watch, QObject *parent, const char *name = 0);
+	~QAccel();
 
-    bool	isEnabled() const;
-    void	setEnabled( bool );
+	bool isEnabled() const;
+	void setEnabled(bool);
 
-    uint	count() const;
+	uint count() const;
 
-    int		insertItem( int key, int id=-1);
-    void	removeItem( int id );
-    void	clear();
+	int insertItem(int key, int id = -1);
+	void removeItem(int id);
+	void clear();
 
-    int		key( int id );
-    int		findKey( int key ) const;
+	int key(int id);
+	int findKey(int key) const;
 
-    bool	isItemEnabled( int id ) const;
-    void	setItemEnabled( int id, bool enable );
+	bool isItemEnabled(int id) const;
+	void setItemEnabled(int id, bool enable);
 
-    bool	connectItem( int id,
-			     const QObject *receiver, const char* member );
-    bool	disconnectItem( int id,
-				const QObject *receiver, const char* member );
+	bool connectItem(int id, const QObject *receiver, const char *member);
+	bool disconnectItem(int id, const QObject *receiver,
+			    const char *member);
 
-    void	repairEventFilter();
+	void repairEventFilter();
 
-    void setWhatsThis( int id, const QString& );
-    QString whatsThis( int id ) const;
-    void setIgnoreWhatsThis( bool );
-    bool ignoreWhatsThis() const;
+	void setWhatsThis(int id, const QString &);
+	QString whatsThis(int id) const;
+	void setIgnoreWhatsThis(bool);
+	bool ignoreWhatsThis() const;
 
-    static int shortcutKey( const QString & );
-    static QString keyToString( int k );
-    static int stringToKey( const QString & );
+	static int shortcutKey(const QString &);
+	static QString keyToString(int k);
+	static int stringToKey(const QString &);
 
-signals:
-    void	activated( int id );
+      signals:
+	void activated(int id);
 
-protected:
-    bool	eventFilter( QObject *, QEvent * );
+      protected:
+	bool eventFilter(QObject *, QEvent *);
 
-private:
-    QAccelPrivate * d;
+      private:
+	QAccelPrivate *d;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QAccel( const QAccel & );
-    QAccel &operator=( const QAccel & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QAccel(const QAccel &);
+	QAccel &operator=(const QAccel &);
+# endif
 };
 
 #endif // QT_NO_ACCEL

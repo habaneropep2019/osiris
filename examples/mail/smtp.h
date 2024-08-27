@@ -20,41 +20,34 @@ class QDns;
 
 class Smtp : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    Smtp( const QString &, const QString &, const QString &, const QString & );
-    ~Smtp();
+      public:
+	Smtp(const QString &, const QString &, const QString &,
+	     const QString &);
+	~Smtp();
 
-signals:
-    void finished();
-    void status( const QString & );
+      signals:
+	void finished();
+	void status(const QString &);
 
-private slots:
-    void readyRead();
-    void connected();
-    void deleteMe();
-    void dnsLookupHelper();
+      private slots:
+	void readyRead();
+	void connected();
+	void deleteMe();
+	void dnsLookupHelper();
 
-private:
-    enum State {
-	Init,
-	Mail,
-	Rcpt,
-	Data,
-	Body,
-	Quit,
-	Close
-    };
+      private:
+	enum State { Init, Mail, Rcpt, Data, Body, Quit, Close };
 
-    QString message;
-    QString from;
-    QString rcpt;
-    QSocket *socket;
-    QTextStream * t;
-    int state;
-    QString response;
-    QDns * mxLookup;
+	QString message;
+	QString from;
+	QString rcpt;
+	QSocket *socket;
+	QTextStream *t;
+	int state;
+	QString response;
+	QDns *mxLookup;
 };
 
 #endif

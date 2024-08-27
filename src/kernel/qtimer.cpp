@@ -95,7 +95,7 @@
 */
 
 
-const int INV_TIMER = -1;			// invalid timer id
+const int INV_TIMER = -1; // invalid timer id
 
 
 /*!
@@ -105,8 +105,8 @@ const int INV_TIMER = -1;			// invalid timer id
   object.
 */
 
-QTimer::QTimer( QObject *parent, const char *name )
-    : QObject( parent, name ), id(INV_TIMER), single(FALSE)
+QTimer::QTimer(QObject *parent, const char *name)
+	: QObject(parent, name), id(INV_TIMER), single(FALSE)
 {
 }
 
@@ -116,8 +116,8 @@ QTimer::QTimer( QObject *parent, const char *name )
 
 QTimer::~QTimer()
 {
-    if ( id != INV_TIMER )			// stop running timer
-	stop();
+	if (id != INV_TIMER) // stop running timer
+		stop();
 }
 
 
@@ -144,14 +144,14 @@ QTimer::~QTimer()
   \sa stop(), changeInterval(), isActive()
 */
 
-int QTimer::start( int msec, bool sshot )
+int QTimer::start(int msec, bool sshot)
 {
-    if ( id >=0 && !msec && single && sshot)
-	return id;
-    if ( id != INV_TIMER )			// stop running timer
-	stop();
-    single = sshot;
-    return id = startTimer( msec );
+	if (id >= 0 && !msec && single && sshot)
+		return id;
+	if (id != INV_TIMER) // stop running timer
+		stop();
+	single = sshot;
+	return id = startTimer(msec);
 }
 
 
@@ -164,14 +164,14 @@ int QTimer::start( int msec, bool sshot )
   \sa start(), isActive()
 */
 
-void QTimer::changeInterval( int msec )
+void QTimer::changeInterval(int msec)
 {
-    if ( id == INV_TIMER ) {			// create new timer
-	start( msec );
-    } else {
-	killTimer( id );			// restart timer
-	id = startTimer( msec );
-    }
+	if (id == INV_TIMER) { // create new timer
+		start(msec);
+	} else {
+		killTimer(id); // restart timer
+		id = startTimer(msec);
+	}
 }
 
 /*!
@@ -181,23 +181,23 @@ void QTimer::changeInterval( int msec )
 
 void QTimer::stop()
 {
-    if ( id != INV_TIMER ) {
-	killTimer( id );
-	id = INV_TIMER;
-    }
+	if (id != INV_TIMER) {
+		killTimer(id);
+		id = INV_TIMER;
+	}
 }
 
 
 /*!\reimp
-*/
-bool QTimer::event( QEvent *e )
+ */
+bool QTimer::event(QEvent *e)
 {
-    if ( e->type() != QEvent::Timer )		// ignore all other events
-	return FALSE;
-    if ( single )				// stop single shot timer
-	stop();
-    emit timeout();				// emit timeout signal
-    return TRUE;
+	if (e->type() != QEvent::Timer) // ignore all other events
+		return FALSE;
+	if (single) // stop single shot timer
+		stop();
+	emit timeout(); // emit timeout signal
+	return TRUE;
 }
 
 
@@ -207,56 +207,59 @@ bool QTimer::event( QEvent *e )
   and kills itself when it gets the timeout.
 */
 
-static QObjectList *sst_list = 0;		// list of single shot timers
+static QObjectList *sst_list = 0; // list of single shot timers
 
 void sst_cleanup()
 {
-    if ( sst_list ) {
-	sst_list->setAutoDelete( TRUE );
-	delete sst_list;
-	sst_list = 0;
-    }
+	if (sst_list) {
+		sst_list->setAutoDelete(TRUE);
+		delete sst_list;
+		sst_list = 0;
+	}
 }
 
 void sst_init()
 {
-    if ( !sst_list ) {
-	sst_list = new QObjectList;
-	CHECK_PTR( sst_list );
-	qAddPostRoutine( sst_cleanup );
-    }
+	if (!sst_list) {
+		sst_list = new QObjectList;
+		CHECK_PTR(sst_list);
+		qAddPostRoutine(sst_cleanup);
+	}
 }
 
 
 class QSingleShotTimer : public QObject
 {
-public:
-    bool    start( int msec, QObject *r, const char * m );
-protected:
-    bool    event( QEvent * );
-private:
-    QSignal signal;
-    int	    timerId;
+      public:
+	bool start(int msec, QObject *r, const char *m);
+
+      protected:
+	bool event(QEvent *);
+
+      private:
+	QSignal signal;
+	int timerId;
 };
 
-extern int  qStartTimer( int interval, QObject *obj ); // implemented in qapp_xxx.cpp
-extern bool qKillTimer( int id );
+extern int qStartTimer(int interval, QObject *obj); // implemented in
+						    // qapp_xxx.cpp
+extern bool qKillTimer(int id);
 
-bool QSingleShotTimer::start( int msec, QObject *r, const char *m )
+bool QSingleShotTimer::start(int msec, QObject *r, const char *m)
 {
-    timerId = 0;
-    if ( signal.connect(r, m) )
-	timerId = qStartTimer( msec, (QObject *)this );
-    return timerId != 0;
+	timerId = 0;
+	if (signal.connect(r, m))
+		timerId = qStartTimer(msec, (QObject *)this);
+	return timerId != 0;
 }
 
-bool QSingleShotTimer::event( QEvent * )
+bool QSingleShotTimer::event(QEvent *)
 {
-    qKillTimer( timerId );			// no more timeouts
-    signal.activate();				// emit the signal
-    signal.disconnect( 0, 0 );
-    sst_list->insert( 0, this );		// store in free list
-    return TRUE;
+	qKillTimer(timerId); // no more timeouts
+	signal.activate(); // emit the signal
+	signal.disconnect(0, 0);
+	sst_list->insert(0, this); // store in free list
+	return TRUE;
 }
 
 
@@ -285,15 +288,15 @@ bool QSingleShotTimer::event( QEvent * )
   600000 milliseconds).
 */
 
-void QTimer::singleShot( int msec, QObject *receiver, const char *member )
+void QTimer::singleShot(int msec, QObject *receiver, const char *member)
 {
-    if ( !sst_list )
-	sst_init();
-    QSingleShotTimer *sst;
-    if ( sst_list->isEmpty() ) {		// create new ss timer
-	sst = new QSingleShotTimer;
-    } else {					// use existing one
-	sst = (QSingleShotTimer *)sst_list->take( 0 );
-    }	
-    sst->start(msec, receiver, member);
+	if (!sst_list)
+		sst_init();
+	QSingleShotTimer *sst;
+	if (sst_list->isEmpty()) { // create new ss timer
+		sst = new QSingleShotTimer;
+	} else { // use existing one
+		sst = (QSingleShotTimer *)sst_list->take(0);
+	}
+	sst->start(msec, receiver, member);
 }

@@ -18,18 +18,17 @@ class QRadioButton;
 
 class ButtonsGroups : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    ButtonsGroups( QWidget *parent = 0, const char *name = 0 );
+      public:
+	ButtonsGroups(QWidget *parent = 0, const char *name = 0);
 
-protected:
-    QCheckBox *state;
-    QRadioButton *rb21, *rb22, *rb23;
+      protected:
+	QCheckBox *state;
+	QRadioButton *rb21, *rb22, *rb23;
 
-protected slots:    
-    void slotChangeGrp3State();
-
+      protected slots:
+	void slotChangeGrp3State();
 };
 
 #endif

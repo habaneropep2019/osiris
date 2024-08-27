@@ -18,19 +18,18 @@ class QLabel;
 
 class CheckLists : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    CheckLists( QWidget *parent = 0, const char *name = 0 );
+      public:
+	CheckLists(QWidget *parent = 0, const char *name = 0);
 
-protected:
-    QListView *lv1, *lv2;
-    QLabel *label;
+      protected:
+	QListView *lv1, *lv2;
+	QLabel *label;
 
-protected slots:
-    void copy1to2();
-    void copy2to3();
-
+      protected slots:
+	void copy1to2();
+	void copy2to3();
 };
 
 #endif

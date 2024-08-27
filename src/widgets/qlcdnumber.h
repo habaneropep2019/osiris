@@ -39,8 +39,8 @@
 #define QLCDNUMBER_H
 
 #ifndef QT_H
-#include "qframe.h"
-#include "qbitarray.h"
+# include "qframe.h"
+# include "qbitarray.h"
 #endif // QT_H
 
 #ifndef QT_NO_LCDNUMBER
@@ -48,94 +48,109 @@
 
 class QLCDNumberPrivate;
 
-class Q_EXPORT QLCDNumber : public QFrame		// LCD number widget
+class Q_EXPORT QLCDNumber : public QFrame // LCD number widget
 {
-    Q_OBJECT
-    Q_ENUMS( Mode SegmentStyle )
-    Q_PROPERTY( bool smallDecimalPoint READ smallDecimalPoint WRITE setSmallDecimalPoint )
-    Q_PROPERTY( int numDigits READ numDigits WRITE setNumDigits )
-    Q_PROPERTY( Mode mode READ mode WRITE setMode )
-    Q_PROPERTY( SegmentStyle segmentStyle READ segmentStyle WRITE setSegmentStyle )
-    Q_PROPERTY( double value READ value WRITE display )
-    Q_PROPERTY( int intValue READ intValue WRITE display )
+	Q_OBJECT
+	Q_ENUMS(Mode SegmentStyle)
+	Q_PROPERTY(bool smallDecimalPoint READ smallDecimalPoint WRITE
+			   setSmallDecimalPoint)
+	Q_PROPERTY(int numDigits READ numDigits WRITE setNumDigits)
+	Q_PROPERTY(Mode mode READ mode WRITE setMode)
+	Q_PROPERTY(SegmentStyle segmentStyle READ segmentStyle WRITE
+			   setSegmentStyle)
+	Q_PROPERTY(double value READ value WRITE display)
+	Q_PROPERTY(int intValue READ intValue WRITE display)
 
-public:
-    QLCDNumber( QWidget *parent=0, const char *name=0 );
-    QLCDNumber( uint numDigits, QWidget *parent=0, const char *name=0 );
-   ~QLCDNumber();
+      public:
+	QLCDNumber(QWidget *parent = 0, const char *name = 0);
+	QLCDNumber(uint numDigits, QWidget *parent = 0, const char *name = 0);
+	~QLCDNumber();
 
-    enum Mode { Hex, HEX=Hex, Dec, DEC=Dec, Oct, OCT=Oct, Bin, BIN=Bin };
-    enum SegmentStyle { Outline, Filled, Flat };
+	enum Mode {
+		Hex,
+		HEX = Hex,
+		Dec,
+		DEC = Dec,
+		Oct,
+		OCT = Oct,
+		Bin,
+		BIN = Bin
+	};
+	enum SegmentStyle { Outline, Filled, Flat };
 
-    bool    smallDecimalPoint() const;
+	bool smallDecimalPoint() const;
 
-    int	    numDigits() const;
-    virtual void setNumDigits( int nDigits );
+	int numDigits() const;
+	virtual void setNumDigits(int nDigits);
 
-    bool    checkOverflow( double num ) const;
-    bool    checkOverflow( int	  num ) const;
+	bool checkOverflow(double num) const;
+	bool checkOverflow(int num) const;
 
-    Mode mode() const;
-    virtual void setMode( Mode );
+	Mode mode() const;
+	virtual void setMode(Mode);
 
-    SegmentStyle segmentStyle() const;
-    virtual void setSegmentStyle( SegmentStyle );
+	SegmentStyle segmentStyle() const;
+	virtual void setSegmentStyle(SegmentStyle);
 
-    double  value() const;
-    int	    intValue() const;
+	double value() const;
+	int intValue() const;
 
-    QSize sizeHint() const;
-    QSizePolicy sizePolicy() const;
+	QSize sizeHint() const;
+	QSizePolicy sizePolicy() const;
 
-public slots:
-    void    display( int num );
-    void    display( double num );
-    void    display( const QString &str );
-    virtual void setHexMode();
-    virtual void setDecMode();
-    virtual void setOctMode();
-    virtual void setBinMode();
-    virtual void setSmallDecimalPoint( bool );
+      public slots:
+	void display(int num);
+	void display(double num);
+	void display(const QString &str);
+	virtual void setHexMode();
+	virtual void setDecMode();
+	virtual void setOctMode();
+	virtual void setBinMode();
+	virtual void setSmallDecimalPoint(bool);
 
-signals:
-    void    overflow();
+      signals:
+	void overflow();
 
-protected:
-    void    drawContents( QPainter * );
+      protected:
+	void drawContents(QPainter *);
 
-private:
-    void    init();
-    void    internalDisplay( const QString &);
-    void    internalSetString( const QString& s );
-    void    drawString( const QString& s, QPainter &, QBitArray * = 0,
-			bool = TRUE );
-    //void    drawString( const QString &, QPainter &, QBitArray * = 0 ) const;
-    void    drawDigit( const QPoint &, QPainter &, int, char,
-		       char = ' ' );
-    void    drawSegment( const QPoint &, char, QPainter &, int, bool = FALSE );
+      private:
+	void init();
+	void internalDisplay(const QString &);
+	void internalSetString(const QString &s);
+	void drawString(const QString &s, QPainter &, QBitArray * = 0,
+			bool = TRUE);
+	// void    drawString( const QString &, QPainter &, QBitArray * = 0 )
+	// const;
+	void drawDigit(const QPoint &, QPainter &, int, char, char = ' ');
+	void drawSegment(const QPoint &, char, QPainter &, int, bool = FALSE);
 
-    int	    ndigits;
-    double  val;
-    uint    base	: 2;
-    uint    smallPoint	: 1;
-    uint    fill	: 1;
-    uint    shadow	: 1;
-    QString digitStr;
-    QBitArray points;
-    QLCDNumberPrivate * d;
+	int ndigits;
+	double val;
+	uint base:2;
+	uint smallPoint:1;
+	uint fill:1;
+	uint shadow:1;
+	QString digitStr;
+	QBitArray points;
+	QLCDNumberPrivate *d;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QLCDNumber( const QLCDNumber & );
-    QLCDNumber &operator=( const QLCDNumber & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QLCDNumber(const QLCDNumber &);
+	QLCDNumber &operator=(const QLCDNumber &);
+# endif
 };
 
 inline bool QLCDNumber::smallDecimalPoint() const
-{ return (bool)smallPoint; }
+{
+	return (bool)smallPoint;
+}
 
 inline int QLCDNumber::numDigits() const
-{ return ndigits; }
+{
+	return ndigits;
+}
 
 
 #endif // QT_NO_LCDNUMBER

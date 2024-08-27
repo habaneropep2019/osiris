@@ -39,85 +39,85 @@
 #define QURL_H
 
 #ifndef QT_H
-#include "qstring.h"
-#include "qdir.h"
+# include "qstring.h"
+# include "qdir.h"
 #endif // QT_H
 
 struct QUrlPrivate;
 
 class Q_EXPORT QUrl
 {
-public:
-    QUrl();
-    QUrl( const QString& url );
-    QUrl( const QUrl& url );
-    QUrl( const QUrl& url, const QString& relUrl, bool checkSlash = FALSE );
-    virtual ~QUrl();
+      public:
+	QUrl();
+	QUrl(const QString &url);
+	QUrl(const QUrl &url);
+	QUrl(const QUrl &url, const QString &relUrl, bool checkSlash = FALSE);
+	virtual ~QUrl();
 
-    QString protocol() const;
-    virtual void setProtocol( const QString& protocol );
+	QString protocol() const;
+	virtual void setProtocol(const QString &protocol);
 
-    QString user() const;
-    virtual void setUser( const QString& user );
-    bool hasUser() const;
+	QString user() const;
+	virtual void setUser(const QString &user);
+	bool hasUser() const;
 
-    QString password() const;
-    virtual void setPassword( const QString& pass );
-    bool hasPassword() const;
+	QString password() const;
+	virtual void setPassword(const QString &pass);
+	bool hasPassword() const;
 
-    QString host() const;
-    virtual void setHost( const QString& user );
-    bool hasHost() const;
+	QString host() const;
+	virtual void setHost(const QString &user);
+	bool hasHost() const;
 
-    int port() const;
-    virtual void setPort( int port );
+	int port() const;
+	virtual void setPort(int port);
 
-    QString path( bool correct = TRUE ) const;
-    virtual void setPath( const QString& path );
-    bool hasPath() const;
+	QString path(bool correct = TRUE) const;
+	virtual void setPath(const QString &path);
+	bool hasPath() const;
 
-    virtual void setEncodedPathAndQuery( const QString& enc );
-    QString encodedPathAndQuery();
+	virtual void setEncodedPathAndQuery(const QString &enc);
+	QString encodedPathAndQuery();
 
-    virtual void setQuery( const QString& txt );
-    QString query() const;
+	virtual void setQuery(const QString &txt);
+	QString query() const;
 
-    QString ref() const;
-    virtual void setRef( const QString& txt );
-    bool hasRef() const;
+	QString ref() const;
+	virtual void setRef(const QString &txt);
+	bool hasRef() const;
 
-    bool isValid() const;
-    bool isLocalFile() const;
+	bool isValid() const;
+	bool isLocalFile() const;
 
-    virtual void addPath( const QString& path );
-    virtual void setFileName( const QString& txt );
+	virtual void addPath(const QString &path);
+	virtual void setFileName(const QString &txt);
 
-    QString fileName() const;
-    QString dirPath() const;
+	QString fileName() const;
+	QString dirPath() const;
 
-    QUrl& operator=( const QUrl& url );
-    QUrl& operator=( const QString& url );
+	QUrl &operator=(const QUrl &url);
+	QUrl &operator=(const QString &url);
 
-    bool operator==( const QUrl& url ) const;
-    bool operator==( const QString& url ) const;
+	bool operator==(const QUrl &url) const;
+	bool operator==(const QString &url) const;
 
-    static void decode( QString& url );
-    static void encode( QString& url );
+	static void decode(QString &url);
+	static void encode(QString &url);
 
-    operator QString() const;
-    virtual QString toString( bool encodedPath = FALSE, bool forcePrependProtocol = TRUE ) const;
+	operator QString() const;
+	virtual QString toString(bool encodedPath = FALSE,
+				 bool forcePrependProtocol = TRUE) const;
 
-    virtual bool cdUp();
+	virtual bool cdUp();
 
-    static bool isRelativeUrl( const QString &url );
+	static bool isRelativeUrl(const QString &url);
 
-protected:
-    virtual void reset();
-    virtual bool parse( const QString& url );
+      protected:
+	virtual void reset();
+	virtual bool parse(const QString &url);
 
-private:
-    QUrlPrivate *d;
-
+      private:
+	QUrlPrivate *d;
 };
 
 #endif

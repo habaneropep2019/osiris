@@ -24,7 +24,7 @@ executable('canvas',
             link_with : [default_osirislib],
 )
 
-install_data('qt-trans.xpm', 'qtlogo.png', 'butterfly.png',
+install_data('qt-trans.xpm', 'osirislogo.png', 'butterfly.png',
              install_dir : examples_install_dir + '/canvas',
              install_tag : 'bin-example',
 )

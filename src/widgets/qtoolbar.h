@@ -39,8 +39,8 @@
 #define QTOOLBAR_H
 
 #ifndef QT_H
-#include "qwidget.h"
-#include "qmainwindow.h"
+# include "qwidget.h"
+# include "qmainwindow.h"
 #endif // QT_H
 
 #ifndef QT_NO_TOOLBAR
@@ -49,86 +49,91 @@ class QButton;
 class QBoxLayout;
 class QToolBarPrivate;
 
-class Q_EXPORT QToolBar: public QWidget
+class Q_EXPORT QToolBar : public QWidget
 {
-    Q_OBJECT
-    Q_PROPERTY( QString label READ label WRITE setLabel )
-    Q_PROPERTY( bool hStretchable READ isHorizontalStretchable WRITE setHorizontalStretchable )
-    Q_PROPERTY( bool vStretchable READ isVerticalStretchable WRITE setVerticalStretchable )
-    Q_PROPERTY( Orientation orientation READ orientation WRITE setOrientation )
+	Q_OBJECT
+	Q_PROPERTY(QString label READ label WRITE setLabel)
+	Q_PROPERTY(bool hStretchable READ isHorizontalStretchable WRITE
+			   setHorizontalStretchable)
+	Q_PROPERTY(bool vStretchable READ isVerticalStretchable WRITE
+			   setVerticalStretchable)
+	Q_PROPERTY(Orientation orientation READ orientation WRITE setOrientation)
 
-public:
-    QToolBar( const QString &label,
-	      QMainWindow *, QMainWindow::ToolBarDock = QMainWindow::Top,
-	      bool newLine = FALSE, const char * name = 0 );
-    QToolBar( const QString &label, QMainWindow *, QWidget *,
-	      bool newLine = FALSE, const char * name = 0, WFlags f = 0 );
-    QToolBar( QMainWindow * parent = 0, const char * name = 0 );
-    ~QToolBar();
+      public:
+	QToolBar(const QString &label, QMainWindow *,
+		 QMainWindow::ToolBarDock = QMainWindow::Top,
+		 bool newLine = FALSE, const char *name = 0);
+	QToolBar(const QString &label, QMainWindow *, QWidget *,
+		 bool newLine = FALSE, const char *name = 0, WFlags f = 0);
+	QToolBar(QMainWindow *parent = 0, const char *name = 0);
+	~QToolBar();
 
-    void addSeparator();
+	void addSeparator();
 
-    virtual void setOrientation( Orientation );
-    Orientation orientation() const { return o; }
+	virtual void setOrientation(Orientation);
+	Orientation orientation() const
+	{
+		return o;
+	}
 
-    void show();
-    void hide();
+	void show();
+	void hide();
 
-    QMainWindow * mainWindow();
+	QMainWindow *mainWindow();
 
-    virtual void setStretchableWidget( QWidget * );
-    void setHorizontalStretchable( bool b );
-    void setVerticalStretchable( bool b );
-    bool isHorizontalStretchable() const;
-    bool isVerticalStretchable() const;
+	virtual void setStretchableWidget(QWidget *);
+	void setHorizontalStretchable(bool b);
+	void setVerticalStretchable(bool b);
+	bool isHorizontalStretchable() const;
+	bool isVerticalStretchable() const;
 
-    bool event( QEvent * e );
-    bool eventFilter( QObject *, QEvent * );
+	bool event(QEvent *e);
+	bool eventFilter(QObject *, QEvent *);
 
-    virtual void setLabel( const QString & );
-    QString label() const;
+	virtual void setLabel(const QString &);
+	QString label() const;
 
-    void clear();
+	void clear();
 
-    QSize minimumSize() const;
-    QSize minimumSizeHint() const;
+	QSize minimumSize() const;
+	QSize minimumSizeHint() const;
 
-protected:
-    void paintEvent( QPaintEvent * );
-    void resizeEvent( QResizeEvent * );
-    void styleChange( QStyle & );
+      protected:
+	void paintEvent(QPaintEvent *);
+	void resizeEvent(QResizeEvent *);
+	void styleChange(QStyle &);
 
-signals:
-    void orientationChanged( Orientation );
+      signals:
+	void orientationChanged(Orientation);
 
-private slots:
-    void startMoving( QToolBar *tb );
-    void endMoving( QToolBar *tb );
-    void popupSelected( int );
-    void emulateButtonClicked();
-    void updateArrowStuff();
-    void setupArrowMenu();
+      private slots:
+	void startMoving(QToolBar *tb);
+	void endMoving(QToolBar *tb);
+	void popupSelected(int);
+	void emulateButtonClicked();
+	void updateArrowStuff();
+	void setupArrowMenu();
 
-private:
-    void init();
-    virtual void setUpGM();
-    void paintToolBar();
-    QBoxLayout *boxLayout();
-    
-    QBoxLayout * bl;
-    QToolBarPrivate * d;
-    Orientation o;
-    QMainWindow * mw;
-    QWidget * sw;
-    QString l;
+      private:
+	void init();
+	virtual void setUpGM();
+	void paintToolBar();
+	QBoxLayout *boxLayout();
 
-    friend class QMainWindow;
+	QBoxLayout *bl;
+	QToolBarPrivate *d;
+	Orientation o;
+	QMainWindow *mw;
+	QWidget *sw;
+	QString l;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QToolBar( const QToolBar & );
-    QToolBar& operator=( const QToolBar & );
-#endif
+	friend class QMainWindow;
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QToolBar(const QToolBar &);
+	QToolBar &operator=(const QToolBar &);
+# endif
 };
 
 #endif // QT_NO_TOOLBAR

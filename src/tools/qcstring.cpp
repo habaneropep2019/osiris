@@ -59,22 +59,22 @@
   copied correctly even if \e src and \e dst overlap.
 */
 
-void *qmemmove( void *dst, const void *src, uint len )
+void *qmemmove(void *dst, const void *src, uint len)
 {
-    register char *d;
-    register char *s;
-    if ( dst > src ) {
-	d = (char *)dst + len - 1;
-	s = (char *)src + len - 1;
-	while ( len-- )
-	    *d-- = *s--;
-    } else if ( dst < src ) {
-	d = (char *)dst;
-	s = (char *)src;
-	while ( len-- )
-	    *d++ = *s++;
-    }
-    return dst;
+	register char *d;
+	register char *s;
+	if (dst > src) {
+		d = (char *)dst + len - 1;
+		s = (char *)src + len - 1;
+		while (len--)
+			*d-- = *s--;
+	} else if (dst < src) {
+		d = (char *)dst;
+		s = (char *)src;
+		while (len--)
+			*d++ = *s++;
+	}
+	return dst;
 }
 
 /*!
@@ -87,13 +87,13 @@ void *qmemmove( void *dst, const void *src, uint len )
   If \e src is null, it immediately returns 0.
 */
 
-char *qstrdup( const char *str )
+char *qstrdup(const char *str)
 {
-    if ( !str )
-	return 0;
-    char *dst = new char[strlen(str)+1];
-    CHECK_PTR( dst );
-    return strcpy( dst, str );
+	if (!str)
+		return 0;
+	char *dst = new char[strlen(str) + 1];
+	CHECK_PTR(dst);
+	return strcpy(dst, str);
 }
 
 /*!
@@ -108,14 +108,14 @@ char *qstrdup( const char *str )
   \sa qstrcpy()
 */
 
-char *qstrncpy( char *dst, const char *src, uint len )
+char *qstrncpy(char *dst, const char *src, uint len)
 {
-    if ( !src )
-	return 0;
-    strncpy( dst, src, len );
-    if ( len > 0 )
-	dst[len-1] = '\0';
-    return dst;
+	if (!src)
+		return 0;
+	strncpy(dst, src, len);
+	if (len > 0)
+		dst[len - 1] = '\0';
+	return dst;
 }
 
 /*!
@@ -176,18 +176,18 @@ char *qstrncpy( char *dst, const char *src, uint len )
   \sa qstrcmp(), qstrncmp(), qstrnicmp()
 */
 
-int qstricmp( const char *str1, const char *str2 )
+int qstricmp(const char *str1, const char *str2)
 {
-    register const uchar *s1 = (const uchar *)str1;
-    register const uchar *s2 = (const uchar *)str2;
-    int res;
-    uchar c;
-    if ( !s1 || !s2 )
-	return s1 == s2 ? 0 : (int)((long)s2 - (long)s1);
-    for ( ; !(res = (c=tolower(*s1)) - tolower(*s2)); s1++, s2++ )
-	if ( !c )				// strings are equal
-	    break;
-    return res;
+	register const uchar *s1 = (const uchar *)str1;
+	register const uchar *s2 = (const uchar *)str2;
+	int res;
+	uchar c;
+	if (!s1 || !s2)
+		return s1 == s2 ? 0 : (int)((long)s2 - (long)s1);
+	for (; !(res = (c = tolower(*s1)) - tolower(*s2)); s1++, s2++)
+		if (!c) // strings are equal
+			break;
+	return res;
 }
 
 /*!
@@ -210,54 +210,54 @@ int qstricmp( const char *str1, const char *str2 )
   \sa qstrcmp(), qstrncmp() qstricmp()
 */
 
-int qstrnicmp( const char *str1, const char *str2, uint len )
+int qstrnicmp(const char *str1, const char *str2, uint len)
 {
-    register const uchar *s1 = (const uchar *)str1;
-    register const uchar *s2 = (const uchar *)str2;
-    int res;
-    uchar c;
-    if ( !s1 || !s2 )
-	return (int)((long)s2 - (long)s1);
-    for ( ; len--; s1++, s2++ ) {
-	if ( (res = (c=tolower(*s1)) - tolower(*s2)) )
-	    return res;
-	if ( !c )				// strings are equal
-	    break;
-    }
-    return 0;
+	register const uchar *s1 = (const uchar *)str1;
+	register const uchar *s2 = (const uchar *)str2;
+	int res;
+	uchar c;
+	if (!s1 || !s2)
+		return (int)((long)s2 - (long)s1);
+	for (; len--; s1++, s2++) {
+		if ((res = (c = tolower(*s1)) - tolower(*s2)))
+			return res;
+		if (!c) // strings are equal
+			break;
+	}
+	return 0;
 }
 
 
 static Q_UINT16 crc_tbl[16];
-static bool   crc_tbl_init = FALSE;
+static bool crc_tbl_init = FALSE;
 
-static void createCRC16Table()			// build CRC16 lookup table
+static void createCRC16Table() // build CRC16 lookup table
 {
-    register uint i;
-    register uint j;
-    uint v0, v1, v2, v3;
-    for ( i=0; i<16; i++ ) {
-	v0 = i & 1;
-	v1 = (i >> 1) & 1;
-	v2 = (i >> 2) & 1;
-	v3 = (i >> 3) & 1;
-	j = 0;
-#undef	SET_BIT
-#define SET_BIT(x,b,v)	x |= v << b
-	SET_BIT(j, 0,v0);
-	SET_BIT(j, 7,v0);
-	SET_BIT(j,12,v0);
-	SET_BIT(j, 1,v1);
-	SET_BIT(j, 8,v1);
-	SET_BIT(j,13,v1);
-	SET_BIT(j, 2,v2);
-	SET_BIT(j, 9,v2);
-	SET_BIT(j,14,v2);
-	SET_BIT(j, 3,v3);
-	SET_BIT(j,10,v3);
-	SET_BIT(j,15,v3);
-	crc_tbl[i] = j;
-    }
+	register uint i;
+	register uint j;
+	uint v0, v1, v2, v3;
+	for (i = 0; i < 16; i++) {
+		v0 = i & 1;
+		v1 = (i >> 1) & 1;
+		v2 = (i >> 2) & 1;
+		v3 = (i >> 3) & 1;
+		j = 0;
+#undef SET_BIT
+#define SET_BIT(x, b, v) x |= v << b
+		SET_BIT(j, 0, v0);
+		SET_BIT(j, 7, v0);
+		SET_BIT(j, 12, v0);
+		SET_BIT(j, 1, v1);
+		SET_BIT(j, 8, v1);
+		SET_BIT(j, 13, v1);
+		SET_BIT(j, 2, v2);
+		SET_BIT(j, 9, v2);
+		SET_BIT(j, 14, v2);
+		SET_BIT(j, 3, v3);
+		SET_BIT(j, 10, v3);
+		SET_BIT(j, 15, v3);
+		crc_tbl[i] = j;
+	}
 }
 
 /*!
@@ -267,22 +267,22 @@ static void createCRC16Table()			// build CRC16 lookup table
   The checksum is independent of the byte order (endianness).
 */
 
-Q_UINT16 qChecksum( const char *data, uint len )
+Q_UINT16 qChecksum(const char *data, uint len)
 {
-    if ( !crc_tbl_init ) {			// create lookup table
-	createCRC16Table();
-	crc_tbl_init = TRUE;
-    }
-    register Q_UINT16 crc = 0xffff;
-    uchar c;
-    uchar *p = (uchar *)data;
-    while ( len-- ) {
-	c = *p++;
-	crc = ((crc >> 4) & 0x0fff) ^ crc_tbl[((crc ^ c) & 15)];
-	c >>= 4;
-	crc = ((crc >> 4) & 0x0fff) ^ crc_tbl[((crc ^ c) & 15)];
-    }
-    return (~crc & 0xffff);
+	if (!crc_tbl_init) { // create lookup table
+		createCRC16Table();
+		crc_tbl_init = TRUE;
+	}
+	register Q_UINT16 crc = 0xffff;
+	uchar c;
+	uchar *p = (uchar *)data;
+	while (len--) {
+		c = *p++;
+		crc = ((crc >> 4) & 0x0fff) ^ crc_tbl[((crc ^ c) & 15)];
+		c >>= 4;
+		crc = ((crc >> 4) & 0x0fff) ^ crc_tbl[((crc ^ c) & 15)];
+	}
+	return (~crc & 0xffff);
 }
 
 
@@ -315,9 +315,9 @@ Q_UINT16 qChecksum( const char *data, uint len )
 */
 #ifndef QT_NO_DATASTREAM
 
-QDataStream &operator<<( QDataStream &s, const QByteArray &a )
+QDataStream &operator<<(QDataStream &s, const QByteArray &a)
 {
-    return s.writeBytes( a.data(), a.size() );
+	return s.writeBytes(a.data(), a.size());
 }
 
 /*!
@@ -327,26 +327,26 @@ QDataStream &operator<<( QDataStream &s, const QByteArray &a )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator>>( QDataStream &s, QByteArray &a )
+QDataStream &operator>>(QDataStream &s, QByteArray &a)
 {
-    Q_UINT32 len;
-    s >> len;					// read size of array
-    if ( len == 0 || s.eof() ) {		// end of file reached
-	a.resize( 0 );
+	Q_UINT32 len;
+	s >> len; // read size of array
+	if (len == 0 || s.eof()) { // end of file reached
+		a.resize(0);
+		return s;
+	}
+	if (!a.resize((uint)len)) { // resize array
+# if defined(CHECK_NULL)
+		qWarning("QDataStream: Not enough memory to read QByteArray");
+# endif
+		len = 0;
+	}
+	if (len > 0) // not null array
+		s.readRawBytes(a.data(), (uint)len);
 	return s;
-    }
-    if ( !a.resize( (uint)len ) ) {		// resize array
-#if defined(CHECK_NULL)
-	qWarning( "QDataStream: Not enough memory to read QByteArray" );
-#endif
-	len = 0;
-    }
-    if ( len > 0 )				// not null array
-	s.readRawBytes( a.data(), (uint)len );
-    return s;
 }
 
-#endif //QT_NO_DATASTREAM
+#endif // QT_NO_DATASTREAM
 
 /*****************************************************************************
   QCString member functions
@@ -426,13 +426,12 @@ QDataStream &operator>>( QDataStream &s, QByteArray &a )
   \sa resize(), isNull()
 */
 
-QCString::QCString( int size )
-    : QByteArray( size )
+QCString::QCString(int size) : QByteArray(size)
 {
-    if ( size > 0 ) {
-	*data() = '\0';				// set terminator
-	*(data()+(size-1)) = '\0';
-    }
+	if (size > 0) {
+		*data() = '\0'; // set terminator
+		*(data() + (size - 1)) = '\0';
+	}
 }
 
 /*!
@@ -443,9 +442,9 @@ QCString::QCString( int size )
   \sa isNull()
 */
 
-QCString::QCString( const char *str )
+QCString::QCString(const char *str)
 {
-    duplicate( str, qstrlen(str) + 1 );
+	duplicate(str, qstrlen(str) + 1);
 }
 
 
@@ -465,18 +464,18 @@ QCString::QCString( const char *str )
   \sa isNull()
 */
 
-QCString::QCString( const char *str, uint maxsize )
+QCString::QCString(const char *str, uint maxsize)
 {
-    if ( str == 0 )
-	return;
-    uint len; // index of first '\0'
-    for ( len = 0; len < maxsize - 1; len++ ) {
-	if ( str[len] == '\0' )
-	    break;
-    }
-    QByteArray::resize( len + 1 );
-    memcpy( data(), str, len );
-    data()[len] = 0;
+	if (str == 0)
+		return;
+	uint len; // index of first '\0'
+	for (len = 0; len < maxsize - 1; len++) {
+		if (str[len] == '\0')
+			break;
+	}
+	QByteArray::resize(len + 1);
+	memcpy(data(), str, len);
+	data()[len] = 0;
 }
 
 /*!
@@ -565,21 +564,21 @@ QCString::QCString( const char *str, uint maxsize )
   \sa truncate()
 */
 
-bool QCString::resize( uint len )
+bool QCString::resize(uint len)
 {
-    detach();
-    uint oldlen = length();
-    if ( !QByteArray::resize(len) )
-	return FALSE;
-    if ( len )
-	*(data()+len-1) = '\0';
+	detach();
+	uint oldlen = length();
+	if (!QByteArray::resize(len))
+		return FALSE;
+	if (len)
+		*(data() + len - 1) = '\0';
 
-    // if we are resized > 0, and the old length was zero, we make sure that it
-    // doesn't change
-    if (len > 0 && oldlen == 0)
-	*(data()) = '\0';
+	// if we are resized > 0, and the old length was zero, we make sure that
+	// it doesn't change
+	if (len > 0 && oldlen == 0)
+		*(data()) = '\0';
 
-    return TRUE;
+	return TRUE;
 }
 
 
@@ -612,21 +611,22 @@ bool QCString::resize( uint len )
 */
 
 /*
- * The following code was changed to use code by Martin Tobias Holmedahl Sandsmark
- * via https://invent.kde.org/sandsmark/qt2/-/commit/33030661efa9bc563cc3d6cf6a3aa5420bca03f2
+ * The following code was changed to use code by Martin Tobias Holmedahl
+ * Sandsmark via
+ * https://invent.kde.org/sandsmark/qt2/-/commit/33030661efa9bc563cc3d6cf6a3aa5420bca03f2
  * The licensing notice on the reference file is the same as this file.
  */
-QCString &QCString::sprintf( const char *format, ... )
+QCString &QCString::sprintf(const char *format, ...)
 {
-    detach();
-    va_list ap;
-    va_start( ap, format );
-    if ( size() < 256 )
-	QByteArray::resize( 256 );		// make string big enough
-    vsnprintf( data(), size(), format, ap );
-    resize( qstrlen(data()) + 1 );		// truncate
-    va_end( ap );
-    return *this;
+	detach();
+	va_list ap;
+	va_start(ap, format);
+	if (size() < 256)
+		QByteArray::resize(256); // make string big enough
+	vsnprintf(data(), size(), format, ap);
+	resize(qstrlen(data()) + 1); // truncate
+	va_end(ap);
+	return *this;
 }
 /*
  * End copied code
@@ -642,15 +642,15 @@ QCString &QCString::sprintf( const char *format, ... )
   resize the string, otherwise TRUE is returned.
 */
 
-bool QCString::fill( char c, int len )
+bool QCString::fill(char c, int len)
 {
-    detach();
-    if ( len < 0 )
-	len = length();
-    if ( !QByteArray::fill(c,len+1) )
-	return FALSE;
-    *(data()+len) = '\0';
-    return TRUE;
+	detach();
+	if (len < 0)
+		len = length();
+	if (!QByteArray::fill(c, len + 1))
+		return FALSE;
+	*(data() + len) = '\0';
+	return TRUE;
 }
 
 
@@ -671,22 +671,22 @@ bool QCString::fill( char c, int len )
   Returns the position of \e c, or -1 if \e c could not be found.
 */
 
-int QCString::find( char c, int index, bool cs ) const
+int QCString::find(char c, int index, bool cs) const
 {
-    if ( (uint)index >= size() )		// index outside string
-	return -1;
-    register const char *d;
-    if ( cs ) {					// case sensitive
-	d = strchr( data()+index, c );
-    } else {
-	d = data()+index;
-	c = tolower( (uchar) c );
-	while ( *d && tolower((uchar) *d) != c )
-	    d++;
-	if ( !*d && c )				// not found
-	    d = 0;
-    }
-    return d ? (int)(d - data()) : -1;
+	if ((uint)index >= size()) // index outside string
+		return -1;
+	register const char *d;
+	if (cs) { // case sensitive
+		d = strchr(data() + index, c);
+	} else {
+		d = data() + index;
+		c = tolower((uchar)c);
+		while (*d && tolower((uchar)*d) != c)
+			d++;
+		if (!*d && c) // not found
+			d = 0;
+	}
+	return d ? (int)(d - data()) : -1;
 }
 
 /*!
@@ -699,29 +699,29 @@ int QCString::find( char c, int index, bool cs ) const
   Returns the position of \e str, or -1 if \e str could not be found.
 */
 
-int QCString::find( const char *str, int index, bool cs ) const
+int QCString::find(const char *str, int index, bool cs) const
 {
-    if ( (uint)index >= size() )		// index outside string
-	return -1;
-    if ( !str )					// no search string
-	return -1;
-    if ( !*str )				// zero-length search string
-	return index;
-    register const char *d;
-    if ( cs ) {					// case sensitive
-	d = strstr( data()+index, str );
-    } else {					// case insensitive
-	d = data()+index;
-	int len = qstrlen( str );
-	while ( *d ) {
-	    if ( qstrnicmp(d, str, len) == 0 )
-		break;
-	    d++;
+	if ((uint)index >= size()) // index outside string
+		return -1;
+	if (!str) // no search string
+		return -1;
+	if (!*str) // zero-length search string
+		return index;
+	register const char *d;
+	if (cs) { // case sensitive
+		d = strstr(data() + index, str);
+	} else { // case insensitive
+		d = data() + index;
+		int len = qstrlen(str);
+		while (*d) {
+			if (qstrnicmp(d, str, len) == 0)
+				break;
+			d++;
+		}
+		if (!*d) // not found
+			d = 0;
 	}
-	if ( !*d )				// not found
-	    d = 0;
-    }
-    return d ? (int)(d - data()) : -1;
+	return d ? (int)(d - data()) : -1;
 }
 
 /*!
@@ -734,31 +734,31 @@ int QCString::find( const char *str, int index, bool cs ) const
   Returns the position of \e c, or -1 if \e c could not be found.
 */
 
-int QCString::findRev( char c, int index, bool cs ) const
+int QCString::findRev(char c, int index, bool cs) const
 {
-    const char *b = data();
-    const char *d;
-    if ( index < 0 ) {				// neg index ==> start from end
-	if ( size() == 0 )
-	    return -1;
-	if ( cs ) {
-	    d = strrchr( b, c );
-	    return d ? (int)(d - b) : -1;
+	const char *b = data();
+	const char *d;
+	if (index < 0) { // neg index ==> start from end
+		if (size() == 0)
+			return -1;
+		if (cs) {
+			d = strrchr(b, c);
+			return d ? (int)(d - b) : -1;
+		}
+		index = length();
+	} else if ((uint)index >= size()) { // bad index
+		return -1;
 	}
-	index = length();
-    } else if ( (uint)index >= size() ) {	// bad index
-	return -1;
-    }
-    d = b+index;
-    if ( cs ) {					// case sensitive
-	while ( d >= b && *d != c )
-	    d--;
-    } else {					// case insensitive
-	c = tolower( (uchar) c );
-	while ( d >= b && tolower((uchar) *d) != c )
-	    d--;
-    }
-    return d >= b ? (int)(d - b) : -1;
+	d = b + index;
+	if (cs) { // case sensitive
+		while (d >= b && *d != c)
+			d--;
+	} else { // case insensitive
+		c = tolower((uchar)c);
+		while (d >= b && tolower((uchar)*d) != c)
+			d--;
+	}
+	return d >= b ? (int)(d - b) : -1;
 }
 
 /*!
@@ -771,29 +771,29 @@ int QCString::findRev( char c, int index, bool cs ) const
   Returns the position of \e str, or -1 if \e str could not be found.
 */
 
-int QCString::findRev( const char *str, int index, bool cs ) const
+int QCString::findRev(const char *str, int index, bool cs) const
 {
-    int slen = qstrlen(str);
-    if ( index < 0 )				// neg index ==> start from end
-	index = length()-slen;
-    else if ( (uint)index >= size() )		// bad index
-	return -1;
-    else if ( (uint)(index + slen) > length() ) // str would be too long
-	index = length() - slen;
-    if ( index < 0 )
-	return -1;
+	int slen = qstrlen(str);
+	if (index < 0) // neg index ==> start from end
+		index = length() - slen;
+	else if ((uint)index >= size()) // bad index
+		return -1;
+	else if ((uint)(index + slen) > length()) // str would be too long
+		index = length() - slen;
+	if (index < 0)
+		return -1;
 
-    register char *d = data() + index;
-    if ( cs ) {					// case sensitive
-	for ( int i=index; i>=0; i-- )
-	    if ( qstrncmp(d--,str,slen)==0 )
-		return i;
-    } else {					// case insensitive
-	for ( int i=index; i>=0; i-- )
-	    if ( qstrnicmp(d--,str,slen)==0 )
-		return i;
-    }
-    return -1;
+	register char *d = data() + index;
+	if (cs) { // case sensitive
+		for (int i = index; i >= 0; i--)
+			if (qstrncmp(d--, str, slen) == 0)
+				return i;
+	} else { // case insensitive
+		for (int i = index; i >= 0; i--)
+			if (qstrnicmp(d--, str, slen) == 0)
+				return i;
+	}
+	return -1;
 }
 
 
@@ -804,25 +804,25 @@ int QCString::findRev( const char *str, int index, bool cs ) const
   if FALSE.
 */
 
-int QCString::contains( char c, bool cs ) const
+int QCString::contains(char c, bool cs) const
 {
-    int count = 0;
-    char *d = data();
-    if ( !d )
-	return 0;
-    if ( cs ) {					// case sensitive
-	while ( *d )
-	    if ( *d++ == c )
-		count++;
-    } else {					// case insensitive
-	c = tolower( (uchar) c );
-	while ( *d ) {
-	    if ( tolower((uchar) *d) == c )
-		count++;
-	    d++;
+	int count = 0;
+	char *d = data();
+	if (!d)
+		return 0;
+	if (cs) { // case sensitive
+		while (*d)
+			if (*d++ == c)
+				count++;
+	} else { // case insensitive
+		c = tolower((uchar)c);
+		while (*d) {
+			if (tolower((uchar)*d) == c)
+				count++;
+			d++;
+		}
 	}
-    }
-    return count;
+	return count;
 }
 
 /*!
@@ -837,24 +837,24 @@ int QCString::contains( char c, bool cs ) const
   \sa findRev()
 */
 
-int QCString::contains( const char *str, bool cs ) const
+int QCString::contains(const char *str, bool cs) const
 {
-    int count = 0;
-    char *d = data();
-    if ( !d )
-	return 0;
-    int len = qstrlen( str );
-    while ( *d ) {				// counts overlapping strings
-	if ( cs ) {
-	    if ( qstrncmp( d, str, len ) == 0 )
-		count++;
-	} else {
-	    if ( qstrnicmp(d, str, len) == 0 )
-		count++;
+	int count = 0;
+	char *d = data();
+	if (!d)
+		return 0;
+	int len = qstrlen(str);
+	while (*d) { // counts overlapping strings
+		if (cs) {
+			if (qstrncmp(d, str, len) == 0)
+				count++;
+		} else {
+			if (qstrnicmp(d, str, len) == 0)
+				count++;
+		}
+		d++;
 	}
-	d++;
-    }
-    return count;
+	return count;
 }
 
 /*!
@@ -872,20 +872,20 @@ int QCString::contains( const char *str, bool cs ) const
   \sa right(), mid()
 */
 
-QCString QCString::left( uint len ) const
+QCString QCString::left(uint len) const
 {
-    if ( isEmpty() ) {
-	QCString empty;
-	return empty;
-    } else if ( len >= size() ) {
-	QCString same( data() );
-	return same;
-    } else {
-	QCString s( len+1 );
-	strncpy( s.data(), data(), len );
-	*(s.data()+len) = '\0';
-	return s;
-    }
+	if (isEmpty()) {
+		QCString empty;
+		return empty;
+	} else if (len >= size()) {
+		QCString same(data());
+		return same;
+	} else {
+		QCString s(len + 1);
+		strncpy(s.data(), data(), len);
+		*(s.data() + len) = '\0';
+		return s;
+	}
 }
 
 /*!
@@ -903,18 +903,18 @@ QCString QCString::left( uint len ) const
   \sa left(), mid()
 */
 
-QCString QCString::right( uint len ) const
+QCString QCString::right(uint len) const
 {
-    if ( isEmpty() ) {
-	QCString empty;
-	return empty;
-    } else {
-	uint l = length();
-	if ( len > l )
-	    len = l;
-	char *p = data() + (l - len);
-	return QCString( p );
-    }
+	if (isEmpty()) {
+		QCString empty;
+		return empty;
+	} else {
+		uint l = length();
+		if (len > l)
+			len = l;
+		char *p = data() + (l - len);
+		return QCString(p);
+	}
 }
 
 /*!
@@ -934,20 +934,21 @@ QCString QCString::right( uint len ) const
   \sa left(), right()
 */
 
-QCString QCString::mid( uint index, uint len ) const
+QCString QCString::mid(uint index, uint len) const
 {
-    if ( len == 0xffffffff ) len = length()-index;
-    uint slen = qstrlen( data() );
-    if ( isEmpty() || index >= slen ) {
-	QCString empty;
-	return empty;
-    } else {
-	register char *p = data()+index;
-	QCString s( len+1 );
-	strncpy( s.data(), p, len );
-	*(s.data()+len) = '\0';
-	return s;
-    }
+	if (len == 0xffffffff)
+		len = length() - index;
+	uint slen = qstrlen(data());
+	if (isEmpty() || index >= slen) {
+		QCString empty;
+		return empty;
+	} else {
+		register char *p = data() + index;
+		QCString s(len + 1);
+		strncpy(s.data(), p, len);
+		*(s.data() + len) = '\0';
+		return s;
+	}
 }
 
 /*!
@@ -968,23 +969,23 @@ QCString QCString::mid( uint index, uint len ) const
   \sa rightJustify()
 */
 
-QCString QCString::leftJustify( uint width, char fill, bool truncate ) const
+QCString QCString::leftJustify(uint width, char fill, bool truncate) const
 {
-    QCString result;
-    int len = qstrlen(data());
-    int padlen = width - len;
-    if ( padlen > 0 ) {
-	result.QByteArray::resize( len+padlen+1 );
-	memcpy( result.data(), data(), len );
-	memset( result.data()+len, fill, padlen );
-	result[len+padlen] = '\0';
-    } else {
-	if ( truncate )
-	    result = left( width );
-	else
-	    result = copy();
-    }
-    return result;
+	QCString result;
+	int len = qstrlen(data());
+	int padlen = width - len;
+	if (padlen > 0) {
+		result.QByteArray::resize(len + padlen + 1);
+		memcpy(result.data(), data(), len);
+		memset(result.data() + len, fill, padlen);
+		result[len + padlen] = '\0';
+	} else {
+		if (truncate)
+			result = left(width);
+		else
+			result = copy();
+	}
+	return result;
 }
 
 /*!
@@ -1005,23 +1006,23 @@ QCString QCString::leftJustify( uint width, char fill, bool truncate ) const
   \sa leftJustify()
 */
 
-QCString QCString::rightJustify( uint width, char fill, bool truncate ) const
+QCString QCString::rightJustify(uint width, char fill, bool truncate) const
 {
-    QCString result;
-    int len = qstrlen(data());
-    int padlen = width - len;
-    if ( padlen > 0 ) {
-	result.QByteArray::resize( len+padlen+1 );
-	memset( result.data(), fill, padlen );
-	memcpy( result.data()+padlen, data(), len );
-	result[len+padlen] = '\0';
-    } else {
-	if ( truncate )
-	    result = left( width );
-	else
-	    result = copy();
-    }
-    return result;
+	QCString result;
+	int len = qstrlen(data());
+	int padlen = width - len;
+	if (padlen > 0) {
+		result.QByteArray::resize(len + padlen + 1);
+		memset(result.data(), fill, padlen);
+		memcpy(result.data() + padlen, data(), len);
+		result[len + padlen] = '\0';
+	} else {
+		if (truncate)
+			result = left(width);
+		else
+			result = copy();
+	}
+	return result;
 }
 
 /*!
@@ -1041,15 +1042,15 @@ QCString QCString::rightJustify( uint width, char fill, bool truncate ) const
 
 QCString QCString::lower() const
 {
-    QCString s( data() );
-    register char *p = s.data();
-    if ( p ) {
-	while ( *p ) {
-	    *p = tolower( (uchar) *p );
-	    p++;
+	QCString s(data());
+	register char *p = s.data();
+	if (p) {
+		while (*p) {
+			*p = tolower((uchar)*p);
+			p++;
+		}
 	}
-    }
-    return s;
+	return s;
 }
 
 /*!
@@ -1069,15 +1070,15 @@ QCString QCString::lower() const
 
 QCString QCString::upper() const
 {
-    QCString s( data() );
-    register char *p = s.data();
-    if ( p ) {
-	while ( *p ) {
-	    *p = toupper(*p);
-	    p++;
+	QCString s(data());
+	register char *p = s.data();
+	if (p) {
+		while (*p) {
+			*p = toupper(*p);
+			p++;
+		}
 	}
-    }
-    return s;
+	return s;
 }
 
 
@@ -1097,30 +1098,30 @@ QCString QCString::upper() const
 
 QCString QCString::stripWhiteSpace() const
 {
-    if ( isEmpty() )				// nothing to do
-	return copy();
+	if (isEmpty()) // nothing to do
+		return copy();
 
-    register char *s = data();
-    QCString result = s;
-    int reslen = result.length();
-    if ( !isspace((uchar) s[0]) && !isspace((uchar) s[reslen-1]) )
-	return result;				// returns a copy
+	register char *s = data();
+	QCString result = s;
+	int reslen = result.length();
+	if (!isspace((uchar)s[0]) && !isspace((uchar)s[reslen - 1]))
+		return result; // returns a copy
 
-    s = result.data();
-    int start = 0;
-    int end = reslen - 1;
-    while ( isspace((uchar) s[start]) )		// skip white space from start
-	start++;
-    if ( s[start] == '\0' ) {			// only white space
-	result.resize( 1 );
+	s = result.data();
+	int start = 0;
+	int end = reslen - 1;
+	while (isspace((uchar)s[start])) // skip white space from start
+		start++;
+	if (s[start] == '\0') { // only white space
+		result.resize(1);
+		return result;
+	}
+	while (end && isspace((uchar)s[end])) // skip white space from end
+		end--;
+	end -= start - 1;
+	memmove(result.data(), &s[start], end);
+	result.resize(end + 1);
 	return result;
-    }
-    while ( end && isspace((uchar) s[end]) )	// skip white space from end
-	end--;
-    end -= start - 1;
-    memmove( result.data(), &s[start], end );
-    result.resize( end + 1 );
-    return result;
 }
 
 
@@ -1133,35 +1134,35 @@ QCString QCString::stripWhiteSpace() const
 
   \code
     QCString s = "  lots\t of\nwhite    space ";
-    QCString t = s.simplifyWhiteSpace();		// t == "lots of white space"
-  \endcode
+    QCString t = s.simplifyWhiteSpace();		// t == "lots of white
+  space" \endcode
 
   \sa stripWhiteSpace()
 */
 
 QCString QCString::simplifyWhiteSpace() const
 {
-    if ( isEmpty() )				// nothing to do
-	return copy();
-    QCString result( size() );
-    char *from	= data();
-    char *to	= result.data();
-    char *first = to;
-    for (;;) {
-	while ( isspace((uchar) *from) )
-	    from++;
-	while ( *from && !isspace((uchar) *from) )
-	    *to++ = *from++;
-	if ( *from )
-	    *to++ = 0x20;			// ' '
-	else
-	    break;
-    }
-    if ( to > first && *(to-1) == 0x20 )
-	to--;
-    *to = '\0';
-    result.resize( (int)((long)to - (long)result.data()) + 1 );
-    return result;
+	if (isEmpty()) // nothing to do
+		return copy();
+	QCString result(size());
+	char *from = data();
+	char *to = result.data();
+	char *first = to;
+	for (;;) {
+		while (isspace((uchar)*from))
+			from++;
+		while (*from && !isspace((uchar)*from))
+			*to++ = *from++;
+		if (*from)
+			*to++ = 0x20; // ' '
+		else
+			break;
+	}
+	if (to > first && *(to - 1) == 0x20)
+		to--;
+	*to = '\0';
+	result.resize((int)((long)to - (long)result.data()) + 1);
+	return result;
 }
 
 
@@ -1179,25 +1180,25 @@ QCString QCString::simplifyWhiteSpace() const
   \endcode
 */
 
-QCString &QCString::insert( uint index, const char *s )
+QCString &QCString::insert(uint index, const char *s)
 {
-    int len = qstrlen(s);
-    if ( len == 0 )
-	return *this;
-    uint olen = length();
-    int nlen = olen + len;
-    if ( index >= olen ) {			// insert after end of string
-	detach();
-	if ( QByteArray::resize(nlen+index-olen+1) ) {
-	    memset( data()+olen, ' ', index-olen );
-	    memcpy( data()+index, s, len+1 );
+	int len = qstrlen(s);
+	if (len == 0)
+		return *this;
+	uint olen = length();
+	int nlen = olen + len;
+	if (index >= olen) { // insert after end of string
+		detach();
+		if (QByteArray::resize(nlen + index - olen + 1)) {
+			memset(data() + olen, ' ', index - olen);
+			memcpy(data() + index, s, len + 1);
+		}
+	} else if (QByteArray::resize(nlen + 1)) { // normal insert
+		detach();
+		memmove(data() + index + len, data() + index, olen - index + 1);
+		memcpy(data() + index, s, len);
 	}
-    } else if ( QByteArray::resize(nlen+1) ) {	// normal insert
-	detach();
-	memmove( data()+index+len, data()+index, olen-index+1 );
-	memcpy( data()+index, s, len );
-    }
-    return *this;
+	return *this;
 }
 
 /*!
@@ -1216,12 +1217,12 @@ QCString &QCString::insert( uint index, const char *s )
   \sa remove(), replace()
 */
 
-QCString &QCString::insert( uint index, char c )	// insert char
+QCString &QCString::insert(uint index, char c) // insert char
 {
-    char buf[2];
-    buf[0] = c;
-    buf[1] = '\0';
-    return insert( index, buf );
+	char buf[2];
+	buf[0] = c;
+	buf[1] = '\0';
+	return insert(index, buf);
 }
 
 /*!
@@ -1248,20 +1249,21 @@ QCString &QCString::insert( uint index, char c )	// insert char
   \sa insert(), replace()
 */
 
-QCString &QCString::remove( uint index, uint len )
+QCString &QCString::remove(uint index, uint len)
 {
-    uint olen = length();
-    if ( index + len >= olen ) {		// range problems
-	if ( index < olen ) {			// index ok
-	    detach();
-	    resize( index+1 );
+	uint olen = length();
+	if (index + len >= olen) { // range problems
+		if (index < olen) { // index ok
+			detach();
+			resize(index + 1);
+		}
+	} else if (len != 0) {
+		detach();
+		memmove(data() + index, data() + index + len,
+			olen - index - len + 1);
+		QByteArray::resize(olen - len + 1);
 	}
-    } else if ( len != 0 ) {
-	detach();
-	memmove( data()+index, data()+index+len, olen-index-len+1 );
-	QByteArray::resize(olen-len+1);
-    }
-    return *this;
+	return *this;
 }
 
 /*!
@@ -1280,11 +1282,11 @@ QCString &QCString::remove( uint index, uint len )
   \sa insert(), remove()
 */
 
-QCString &QCString::replace( uint index, uint len, const char *s )
+QCString &QCString::replace(uint index, uint len, const char *s)
 {
-    remove( index, len );
-    insert( index, s );
-    return *this;
+	remove(index, len);
+	insert(index, s);
+	return *this;
 }
 
 
@@ -1295,10 +1297,10 @@ QCString &QCString::replace( uint index, uint len, const char *s )
   Returns the position of the next match, or -1 if \e rx was not found.
 */
 
-int QCString::find( const QRegExp &rx, int index ) const
+int QCString::find(const QRegExp &rx, int index) const
 {
-    QString d = QString::fromLatin1( data() );
-    return d.find( rx, index );
+	QString d = QString::fromLatin1(data());
+	return d.find(rx, index);
 }
 
 /*!
@@ -1311,10 +1313,10 @@ int QCString::find( const QRegExp &rx, int index ) const
   found.
 */
 
-int QCString::findRev( const QRegExp &rx, int index ) const
+int QCString::findRev(const QRegExp &rx, int index) const
 {
-    QString d = QString::fromLatin1( data() );
-    return d.findRev( rx, index );
+	QString d = QString::fromLatin1(data());
+	return d.findRev(rx, index);
 }
 
 /*!
@@ -1330,10 +1332,10 @@ int QCString::findRev( const QRegExp &rx, int index ) const
   \sa find(), findRev()
 */
 
-int QCString::contains( const QRegExp &rx ) const
+int QCString::contains(const QRegExp &rx) const
 {
-    QString d = QString::fromLatin1( data() );
-    return d.contains( rx );
+	QString d = QString::fromLatin1(data());
+	return d.contains(rx);
 }
 
 
@@ -1355,13 +1357,13 @@ int QCString::contains( const QRegExp &rx ) const
 
 */
 
-QCString &QCString::replace( const QRegExp &rx, const char *str )
+QCString &QCString::replace(const QRegExp &rx, const char *str)
 {
-    QString d = QString::fromLatin1( data() );
-    QString r = QString::fromLatin1( str );
-    d.replace( rx, r );
-    setStr( d.ascii() );
-    return *this;
+	QString d = QString::fromLatin1(data());
+	QString r = QString::fromLatin1(str);
+	d.replace(rx, r);
+	setStr(d.ascii());
+	return *this;
 }
 
 /*!
@@ -1372,40 +1374,40 @@ QCString &QCString::replace( const QRegExp &rx, const char *str )
   it has trailing garbage.
 */
 
-long QCString::toLong( bool *ok ) const
+long QCString::toLong(bool *ok) const
 {
-    char *p = data();
-    long val=0;
-    const long max_mult = 214748364;
-    bool is_ok = FALSE;
-    int neg = 0;
-    if ( !p )
-	goto bye;
-    while ( isspace((uchar) *p) )		// skip leading space
-	p++;
-    if ( *p == '-' ) {
-	p++;
-	neg = 1;
-    } else if ( *p == '+' ) {
-	p++;
-    }
-    if ( !isdigit((uchar) *p) )
-	goto bye;
-    while ( isdigit((uchar) *p) ) {
-	if ( val > max_mult || (val == max_mult && (*p-'0') > 7+neg) )
-	    goto bye;
-	val = 10*val + (*p++ - '0');
-    }
-    if ( neg )
-	val = -val;
-    while ( isspace((uchar) *p) )		// skip trailing space
-	p++;
-    if ( *p == '\0' )
-	is_ok = TRUE;
+	char *p = data();
+	long val = 0;
+	const long max_mult = 214748364;
+	bool is_ok = FALSE;
+	int neg = 0;
+	if (!p)
+		goto bye;
+	while (isspace((uchar)*p)) // skip leading space
+		p++;
+	if (*p == '-') {
+		p++;
+		neg = 1;
+	} else if (*p == '+') {
+		p++;
+	}
+	if (!isdigit((uchar)*p))
+		goto bye;
+	while (isdigit((uchar)*p)) {
+		if (val > max_mult || (val == max_mult && (*p - '0') > 7 + neg))
+			goto bye;
+		val = 10 * val + (*p++ - '0');
+	}
+	if (neg)
+		val = -val;
+	while (isspace((uchar)*p)) // skip trailing space
+		p++;
+	if (*p == '\0')
+		is_ok = TRUE;
 bye:
-    if ( ok )
-	*ok = is_ok;
-    return is_ok ? val : 0;
+	if (ok)
+		*ok = is_ok;
+	return is_ok ? val : 0;
 }
 
 /*!
@@ -1417,33 +1419,33 @@ bye:
   or if it has trailing garbage.
 */
 
-ulong QCString::toULong( bool *ok ) const
+ulong QCString::toULong(bool *ok) const
 {
-    char *p = data();
-    ulong val=0;
-    const ulong max_mult = 429496729;
-    bool is_ok = FALSE;
-    if ( !p )
-	goto bye;
-    while ( isspace((uchar) *p) )		// skip leading space
-	p++;
-    if ( *p == '+' )
-	p++;
-    if ( !isdigit((uchar) *p) )
-	goto bye;
-    while ( isdigit((uchar) *p) ) {
-	if ( val > max_mult || (val == max_mult && (*p-'0') > 5) )
-	    goto bye;
-	val = 10*val + (*p++ - '0');
-    }
-    while ( isspace((uchar) *p) )		// skip trailing space
-	p++;
-    if ( *p == '\0' )
-	is_ok = TRUE;
+	char *p = data();
+	ulong val = 0;
+	const ulong max_mult = 429496729;
+	bool is_ok = FALSE;
+	if (!p)
+		goto bye;
+	while (isspace((uchar)*p)) // skip leading space
+		p++;
+	if (*p == '+')
+		p++;
+	if (!isdigit((uchar)*p))
+		goto bye;
+	while (isdigit((uchar)*p)) {
+		if (val > max_mult || (val == max_mult && (*p - '0') > 5))
+			goto bye;
+		val = 10 * val + (*p++ - '0');
+	}
+	while (isspace((uchar)*p)) // skip trailing space
+		p++;
+	if (*p == '\0')
+		is_ok = TRUE;
 bye:
-    if ( ok )
-	*ok = is_ok;
-    return is_ok ? val : 0;
+	if (ok)
+		*ok = is_ok;
+	return is_ok ? val : 0;
 }
 
 /*!
@@ -1454,12 +1456,12 @@ bye:
   it has trailing garbage.
 */
 
-short QCString::toShort( bool *ok ) const
+short QCString::toShort(bool *ok) const
 {
-    long v = toLong( ok );
-    if ( ok && *ok && (v < -32768 || v > 32767) )
-	*ok = FALSE;
-    return (short)v;
+	long v = toLong(ok);
+	if (ok && *ok && (v < -32768 || v > 32767))
+		*ok = FALSE;
+	return (short)v;
 }
 
 /*!
@@ -1470,12 +1472,12 @@ short QCString::toShort( bool *ok ) const
   it has trailing garbage.
 */
 
-ushort QCString::toUShort( bool *ok ) const
+ushort QCString::toUShort(bool *ok) const
 {
-    ulong v = toULong( ok );
-    if ( ok && *ok && (v > 65535) )
-	*ok = FALSE;
-    return (ushort)v;
+	ulong v = toULong(ok);
+	if (ok && *ok && (v > 65535))
+		*ok = FALSE;
+	return (ushort)v;
 }
 
 
@@ -1487,9 +1489,9 @@ ushort QCString::toUShort( bool *ok ) const
   or if it has trailing garbage.
 */
 
-int QCString::toInt( bool *ok ) const
+int QCString::toInt(bool *ok) const
 {
-    return (int)toLong( ok );
+	return (int)toLong(ok);
 }
 
 /*!
@@ -1500,9 +1502,9 @@ int QCString::toInt( bool *ok ) const
   or if it has trailing garbage.
 */
 
-uint QCString::toUInt( bool *ok ) const
+uint QCString::toUInt(bool *ok) const
 {
-    return (uint)toULong( ok );
+	return (uint)toULong(ok);
 }
 
 /*!
@@ -1513,13 +1515,13 @@ uint QCString::toUInt( bool *ok ) const
   trailing garbage.
 */
 
-double QCString::toDouble( bool *ok ) const
+double QCString::toDouble(bool *ok) const
 {
-    char *end;
-    double val = strtod( data() ? data() : "", &end );
-    if ( ok )
-	*ok = ( data() && *data() && ( end == 0 || *end == '\0' ) );
-    return val;
+	char *end;
+	double val = strtod(data() ? data() : "", &end);
+	if (ok)
+		*ok = (data() && *data() && (end == 0 || *end == '\0'));
+	return val;
 }
 
 /*!
@@ -1530,9 +1532,9 @@ double QCString::toDouble( bool *ok ) const
   or if it has trailing garbage.
 */
 
-float QCString::toFloat( bool *ok ) const
+float QCString::toFloat(bool *ok) const
 {
-    return (float)toDouble( ok );
+	return (float)toDouble(ok);
 }
 
 
@@ -1541,14 +1543,14 @@ float QCString::toFloat( bool *ok ) const
   Returns a reference to the string.
 */
 
-QCString &QCString::setStr( const char *str )
+QCString &QCString::setStr(const char *str)
 {
-    detach();
-    if ( str )					// valid string
-	store( str, qstrlen(str)+1 );
-    else					// empty
-	resize( 0 );
-    return *this;
+	detach();
+	if (str) // valid string
+		store(str, qstrlen(str) + 1);
+	else // empty
+		resize(0);
+	return *this;
 }
 
 /*!
@@ -1556,27 +1558,27 @@ QCString &QCString::setStr( const char *str )
   reference to the string.
 */
 
-QCString &QCString::setNum( long n )
+QCString &QCString::setNum(long n)
 {
-    detach();
-    char buf[20];
-    register char *p = &buf[19];
-    bool neg;
-    if ( n < 0 ) {
-	neg = TRUE;
-	n = -n;
-    } else {
-	neg = FALSE;
-    }
-    *p = '\0';
-    do {
-	*--p = ((int)(n%10)) + '0';
-	n /= 10;
-    } while ( n );
-    if ( neg )
-	*--p = '-';
-    store( p, qstrlen(p)+1 );
-    return *this;
+	detach();
+	char buf[20];
+	register char *p = &buf[19];
+	bool neg;
+	if (n < 0) {
+		neg = TRUE;
+		n = -n;
+	} else {
+		neg = FALSE;
+	}
+	*p = '\0';
+	do {
+		*--p = ((int)(n % 10)) + '0';
+		n /= 10;
+	} while (n);
+	if (neg)
+		*--p = '-';
+	store(p, qstrlen(p) + 1);
+	return *this;
 }
 
 /*!
@@ -1584,18 +1586,18 @@ QCString &QCString::setNum( long n )
   returns a reference to the string.
 */
 
-QCString &QCString::setNum( ulong n )
+QCString &QCString::setNum(ulong n)
 {
-    detach();
-    char buf[20];
-    register char *p = &buf[19];
-    *p = '\0';
-    do {
-	*--p = ((int)(n%10)) + '0';
-	n /= 10;
-    } while ( n );
-    store( p, qstrlen(p)+1 );
-    return *this;
+	detach();
+	char buf[20];
+	register char *p = &buf[19];
+	*p = '\0';
+	do {
+		*--p = ((int)(n % 10)) + '0';
+		n /= 10;
+	} while (n);
+	store(p, qstrlen(p) + 1);
+	return *this;
 }
 
 /*!
@@ -1632,28 +1634,29 @@ QCString &QCString::setNum( ulong n )
   Returns a reference to the string.
 */
 
-QCString &QCString::setNum( double n, char f, int prec )
+QCString &QCString::setNum(double n, char f, int prec)
 {
 #if defined(CHECK_RANGE)
-    if ( !(f=='f' || f=='F' || f=='e' || f=='E' || f=='g' || f=='G') )
-	qWarning( "QCString::setNum: Invalid format char '%c'", f );
+	if (!(f == 'f' || f == 'F' || f == 'e' || f == 'E' || f == 'g' ||
+	      f == 'G'))
+		qWarning("QCString::setNum: Invalid format char '%c'", f);
 #endif
-    char format[20];
-    register char *fs = format;			// generate format string
-    *fs++ = '%';				//   "%.<prec>l<f>"
-    if ( prec > 99 )
-	prec = 99;
-    *fs++ = '.';
-    if ( prec >= 10 ) {
-	*fs++ = prec / 10 + '0';
-	*fs++ = prec % 10 + '0';
-    } else {
-	*fs++ = prec + '0';
-    }
-    *fs++ = 'l';
-    *fs++ = f;
-    *fs = '\0';
-    return sprintf( format, n );
+	char format[20];
+	register char *fs = format; // generate format string
+	*fs++ = '%'; //   "%.<prec>l<f>"
+	if (prec > 99)
+		prec = 99;
+	*fs++ = '.';
+	if (prec >= 10) {
+		*fs++ = prec / 10 + '0';
+		*fs++ = prec % 10 + '0';
+	} else {
+		*fs++ = prec + '0';
+	}
+	*fs++ = 'l';
+	*fs++ = f;
+	*fs = '\0';
+	return sprintf(format, n);
 }
 
 /*!
@@ -1676,19 +1679,19 @@ QCString &QCString::setNum( double n, char f, int prec )
   not be expanded, otherwise TRUE.
 */
 
-bool QCString::setExpand( uint index, char c )
+bool QCString::setExpand(uint index, char c)
 {
-    detach();
-    uint oldlen = length();
-    if ( index >= oldlen ) {
-	if ( !QByteArray::resize( index+2 ) )	// no memory
-	    return FALSE;
-	if ( index > oldlen )
-	    memset( data() + oldlen, ' ', index - oldlen );
-	*(data() + index+1) = '\0';		// terminate padded string
-    }
-    *(data() + index) = c;
-    return TRUE;
+	detach();
+	uint oldlen = length();
+	if (index >= oldlen) {
+		if (!QByteArray::resize(index + 2)) // no memory
+			return FALSE;
+		if (index > oldlen)
+			memset(data() + oldlen, ' ', index - oldlen);
+		*(data() + index + 1) = '\0'; // terminate padded string
+	}
+	*(data() + index) = c;
+	return TRUE;
 }
 
 
@@ -1708,32 +1711,32 @@ bool QCString::setExpand( uint index, char c )
   Appends \e str to the string and returns a reference to the string.
 */
 
-QCString& QCString::operator+=( const char *str )
+QCString &QCString::operator+=(const char *str)
 {
-    if ( !str )
-	return *this;				// nothing to append
-    detach();
-    uint len1 = length();
-    uint len2 = qstrlen(str);
-    if ( !QByteArray::resize( len1 + len2 + 1 ) )
-	return *this;				// no memory
-    memcpy( data() + len1, str, len2 + 1 );
-    return *this;
+	if (!str)
+		return *this; // nothing to append
+	detach();
+	uint len1 = length();
+	uint len2 = qstrlen(str);
+	if (!QByteArray::resize(len1 + len2 + 1))
+		return *this; // no memory
+	memcpy(data() + len1, str, len2 + 1);
+	return *this;
 }
 
 /*!
   Appends \e c to the string and returns a reference to the string.
 */
 
-QCString &QCString::operator+=( char c )
+QCString &QCString::operator+=(char c)
 {
-    detach();
-    uint len = length();
-    if ( !QByteArray::resize( len + 2 ) )
-	return *this;				// no memory
-    *(data() + len) = c;
-    *(data() + len+1) = '\0';
-    return *this;
+	detach();
+	uint len = length();
+	if (!QByteArray::resize(len + 2))
+		return *this; // no memory
+	*(data() + len) = c;
+	*(data() + len + 1) = '\0';
+	return *this;
 }
 
 
@@ -1747,9 +1750,9 @@ QCString &QCString::operator+=( char c )
 
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
-QDataStream &operator<<( QDataStream &s, const QCString &str )
+QDataStream &operator<<(QDataStream &s, const QCString &str)
 {
-    return s.writeBytes( str.data(), str.size() );
+	return s.writeBytes(str.data(), str.size());
 }
 
 /*!
@@ -1759,26 +1762,26 @@ QDataStream &operator<<( QDataStream &s, const QCString &str )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator>>( QDataStream &s, QCString &str )
+QDataStream &operator>>(QDataStream &s, QCString &str)
 {
-    str.detach();
-    Q_UINT32 len;
-    s >> len;					// read size of string
-    if ( len == 0 || s.eof() ) {		// end of file reached
-	str.resize( 0 );
+	str.detach();
+	Q_UINT32 len;
+	s >> len; // read size of string
+	if (len == 0 || s.eof()) { // end of file reached
+		str.resize(0);
+		return s;
+	}
+	if (!str.QByteArray::resize((uint)len)) { // resize string
+# if defined(CHECK_NULL)
+		qWarning("QDataStream: Not enough memory to read QCString");
+# endif
+		len = 0;
+	}
+	if (len > 0) // not null array
+		s.readRawBytes(str.data(), (uint)len);
 	return s;
-    }
-    if ( !str.QByteArray::resize( (uint)len )) {// resize string
-#if defined(CHECK_NULL)
-	qWarning( "QDataStream: Not enough memory to read QCString" );
-#endif
-	len = 0;
-    }
-    if ( len > 0 )				// not null array
-	s.readRawBytes( str.data(), (uint)len );
-    return s;
 }
-#endif //QT_NO_DATASTREAM
+#endif // QT_NO_DATASTREAM
 
 /*****************************************************************************
   Documentation for related functions

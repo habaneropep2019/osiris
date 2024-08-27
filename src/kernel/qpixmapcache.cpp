@@ -85,30 +85,33 @@
 */
 
 
-static const int cache_size = 149;		// size of internal hash array
-static int cache_limit	  = 1024;		// 1024 KB cache limit
+static const int cache_size = 149; // size of internal hash array
+static int cache_limit = 1024; // 1024 KB cache limit
 
 void cleanup_pixmap_cache();
 
 
-class QPMCache: public QObject, public QCache<QPixmap>
+class QPMCache : public QObject, public QCache<QPixmap>
 {
-public:
-    QPMCache():
-	QObject( 0, "global pixmap cache" ),
-	QCache<QPixmap>( cache_limit * 1024, cache_size ),
-	id( 0 ), ps( 0 ), t( FALSE )
+      public:
+	QPMCache()
+		: QObject(0, "global pixmap cache"),
+		  QCache<QPixmap>(cache_limit * 1024, cache_size), id(0), ps(0),
+		  t(FALSE)
 	{
-	    qAddPostRoutine( cleanup_pixmap_cache );
-	    setAutoDelete( TRUE );
+		qAddPostRoutine(cleanup_pixmap_cache);
+		setAutoDelete(TRUE);
 	}
-   ~QPMCache() {}
-    void timerEvent( QTimerEvent * );
-    bool insert( const QString& k, const QPixmap *d, int c, int p = 0 );
-private:
-    int id;
-    int ps;
-    bool t;
+	~QPMCache()
+	{
+	}
+	void timerEvent(QTimerEvent *);
+	bool insert(const QString &k, const QPixmap *d, int c, int p = 0);
+
+      private:
+	int id;
+	int ps;
+	bool t;
 };
 
 
@@ -123,41 +126,41 @@ private:
   timer so Qt won't keep the CPU from going into sleep mode.
 */
 
-void QPMCache::timerEvent( QTimerEvent * )
+void QPMCache::timerEvent(QTimerEvent *)
 {
-    int mc = maxCost();
-    bool nt = totalCost() == ps;
-    setMaxCost( nt ? totalCost() * 3 / 4 : totalCost() -1 );
-    setMaxCost( mc );
-    ps = totalCost();
+	int mc = maxCost();
+	bool nt = totalCost() == ps;
+	setMaxCost(nt ? totalCost() * 3 / 4 : totalCost() - 1);
+	setMaxCost(mc);
+	ps = totalCost();
 
-    if ( !count() ) {
-	killTimer( id );
-	id = 0;
-    } else if ( nt != t ) {
-	killTimer( id );
-	id = startTimer( nt ? 10000 : 30000 );
-	t = nt;
-    }
+	if (!count()) {
+		killTimer(id);
+		id = 0;
+	} else if (nt != t) {
+		killTimer(id);
+		id = startTimer(nt ? 10000 : 30000);
+		t = nt;
+	}
 }
 
-bool QPMCache::insert( const QString& k, const QPixmap *d, int c, int p )
+bool QPMCache::insert(const QString &k, const QPixmap *d, int c, int p)
 {
-    bool r = QCache<QPixmap>::insert( k, d, c, p );
-    if ( r && !id ) {
-	id = startTimer( 30000 );
-	t = FALSE;
-    }
-    return r;
+	bool r = QCache<QPixmap>::insert(k, d, c, p);
+	if (r && !id) {
+		id = startTimer(30000);
+		t = FALSE;
+	}
+	return r;
 }
 
-static QPMCache *pm_cache = 0;			// global pixmap cache
+static QPMCache *pm_cache = 0; // global pixmap cache
 
 
 void cleanup_pixmap_cache()
 {
-    delete pm_cache;
-    pm_cache = 0;
+	delete pm_cache;
+	pm_cache = 0;
 }
 
 
@@ -187,9 +190,9 @@ void cleanup_pixmap_cache()
   \endcode
 */
 
-QPixmap *QPixmapCache::find( const QString &key )
+QPixmap *QPixmapCache::find(const QString &key)
 {
-    return pm_cache ? pm_cache->find(key) : 0;
+	return pm_cache ? pm_cache->find(key) : 0;
 }
 
 
@@ -210,11 +213,12 @@ QPixmap *QPixmapCache::find( const QString &key )
   \endcode
 */
 
-bool QPixmapCache::find( const QString &key, QPixmap& pm )
+bool QPixmapCache::find(const QString &key, QPixmap &pm)
 {
-    QPixmap* p = pm_cache ? pm_cache->find(key) : 0;
-    if ( p ) pm = *p;
-    return !!p;
+	QPixmap *p = pm_cache ? pm_cache->find(key) : 0;
+	if (p)
+		pm = *p;
+	return !!p;
 }
 
 
@@ -239,13 +243,14 @@ bool QPixmapCache::find( const QString &key, QPixmap& pm )
   </strong>
 */
 
-bool QPixmapCache::insert( const QString &key, QPixmap *pm )
+bool QPixmapCache::insert(const QString &key, QPixmap *pm)
 {
-    if ( !pm_cache ) {				// create pixmap cache
-	pm_cache = new QPMCache;
-	CHECK_PTR( pm_cache );
-    }
-    return pm_cache->insert( key, pm, pm->width()*pm->height()*pm->depth()/8 );
+	if (!pm_cache) { // create pixmap cache
+		pm_cache = new QPMCache;
+		CHECK_PTR(pm_cache);
+	}
+	return pm_cache->insert(key, pm,
+				pm->width() * pm->height() * pm->depth() / 8);
 }
 
 /*!
@@ -263,15 +268,16 @@ bool QPixmapCache::insert( const QString &key, QPixmap *pm )
   \sa setCacheLimit().
 */
 
-void QPixmapCache::insert( const QString &key, const QPixmap& pm )
+void QPixmapCache::insert(const QString &key, const QPixmap &pm)
 {
-    if ( !pm_cache ) {				// create pixmap cache
-	pm_cache = new QPMCache;
-	CHECK_PTR( pm_cache );
-    }
-    QPixmap *p = new QPixmap(pm);
-    if ( !pm_cache->insert( key, p, p->width()*p->height()*p->depth()/8 ) )
-	delete p;
+	if (!pm_cache) { // create pixmap cache
+		pm_cache = new QPMCache;
+		CHECK_PTR(pm_cache);
+	}
+	QPixmap *p = new QPixmap(pm);
+	if (!pm_cache->insert(key, p,
+			      p->width() * p->height() * p->depth() / 8))
+		delete p;
 }
 
 /*!
@@ -284,7 +290,7 @@ void QPixmapCache::insert( const QString &key, const QPixmap& pm )
 
 int QPixmapCache::cacheLimit()
 {
-    return cache_limit;
+	return cache_limit;
 }
 
 /*!
@@ -295,11 +301,11 @@ int QPixmapCache::cacheLimit()
   \sa cacheLimit()
 */
 
-void QPixmapCache::setCacheLimit( int n )
+void QPixmapCache::setCacheLimit(int n)
 {
-    cache_limit = n;
-    if ( pm_cache )
-	pm_cache->setMaxCost( 1024*cache_limit );
+	cache_limit = n;
+	if (pm_cache)
+		pm_cache->setMaxCost(1024 * cache_limit);
 }
 
 
@@ -309,6 +315,6 @@ void QPixmapCache::setCacheLimit( int n )
 
 void QPixmapCache::clear()
 {
-    if ( pm_cache )
-	pm_cache->clear();
+	if (pm_cache)
+		pm_cache->clear();
 }

@@ -39,12 +39,12 @@
 #define QFONTDATABASE_H
 
 #ifndef QT_H
-#include "qwindowdefs.h"
-#include "qstring.h"
-#include "qstringlist.h"
-#include "qfont.h"
-#include "qlist.h"
-#include "qvaluelist.h"
+# include "qwindowdefs.h"
+# include "qstring.h"
+# include "qstringlist.h"
+# include "qfont.h"
+# include "qlist.h"
+# include "qvaluelist.h"
 #endif // QT_H
 
 #ifndef QT_NO_FONTDATABASE
@@ -55,89 +55,84 @@ class QtFontStyle;
 class QtFontCharSet;
 class QtFontFamily;
 class QtFontFoundry;
-#ifdef _WS_QWS_
+# ifdef _WS_QWS_
 class QDiskFont;
-#endif
+# endif
 
 class QFontDatabasePrivate;
 
 class Q_EXPORT QFontDatabase
 {
-public:
-    QFontDatabase();
+      public:
+	QFontDatabase();
 
-    QStringList families( bool onlyForLocale = TRUE ) const;
-    QValueList<int> pointSizes( const QString &family,
+	QStringList families(bool onlyForLocale = TRUE) const;
+	QValueList<int> pointSizes(const QString &family,
+				   const QString &style = QString::null,
+				   const QString &charSet = QString::null);
+	QStringList styles(const QString &family,
+			   const QString &charSet = QString::null) const;
+	QStringList charSets(const QString &familyName,
+			     bool onlyForLocale = TRUE) const;
+
+	QFont font(const QString familyName, const QString &style,
+		   int pointSize, const QString charSetName = QString::null);
+
+	bool isBitmapScalable(const QString &family,
+			      const QString &style = QString::null,
+			      const QString &charSet = QString::null) const;
+	bool isSmoothlyScalable(const QString &family,
 				const QString &style = QString::null,
-				const QString &charSet = QString::null );
-    QStringList styles( const QString &family,
-			const QString &charSet = QString::null ) const;
-    QStringList charSets( const QString &familyName,
-			  bool onlyForLocale = TRUE ) const;
+				const QString &charSet = QString::null) const;
+	bool isScalable(const QString &family,
+			const QString &style = QString::null,
+			const QString &charSet = QString::null) const;
+	bool isFixedPitch(const QString &family,
+			  const QString &style = QString::null,
+			  const QString &charset = QString::null) const;
 
-    QFont font( const QString familyName, const QString &style,
-		int pointSize, const QString charSetName = QString::null );
+	QValueList<int> smoothSizes(const QString &family, const QString &style,
+				    const QString &charSet = QString::null);
 
-    bool  isBitmapScalable( const QString &family,
-			    const QString &style   = QString::null,
-			    const QString &charSet = QString::null ) const;
-    bool  isSmoothlyScalable( const QString &family,
-			      const QString &style   = QString::null,
-			      const QString &charSet = QString::null ) const;
-    bool  isScalable( const QString &family,
-		      const QString &style   = QString::null,
-		      const QString &charSet = QString::null ) const;
-    bool  isFixedPitch( const QString &family,
-			const QString &style   = QString::null,
-			const QString &charset = QString::null) const;
+	static QValueList<int> standardSizes();
 
-    QValueList<int> smoothSizes( const QString &family,
-				 const QString &style,
-				 const QString &charSet = QString::null );
+	bool italic(const QString &family, const QString &style,
+		    const QString &charSet = QString::null) const;
 
-    static QValueList<int> standardSizes();
+	bool bold(const QString &family, const QString &style,
+		  const QString &charSet = QString::null) const;
 
-    bool italic( const QString &family,
-		 const QString &style,
-		 const QString &charSet = QString::null ) const;
-
-    bool bold( const QString &family,
-	       const QString &style,
-	       const QString &charSet = QString::null ) const;
-
-    int weight( const QString &family,
-		const QString &style,
-		const QString &charSet = QString::null ) const;
+	int weight(const QString &family, const QString &style,
+		   const QString &charSet = QString::null) const;
 
 
-#if 0
+# if 0
     QValueList<QFont::CharSet> charSets( const QString &familyName ) const;
     bool  supportsCharSet( const QString &familyName,
 			   const QString &charSet ) const;
     bool  supportsCharSet( const QString &familyName,
 			   QFont::CharSet charSet ) const;
-#endif
+# endif
 
-    QString styleString( const QFont &);
+	QString styleString(const QFont &);
 
-    static QString verboseCharSetName( const QString & charSetName );
-    static QString charSetSample( const QString & charSetName );
+	static QString verboseCharSetName(const QString &charSetName);
+	static QString charSetSample(const QString &charSetName);
 
-#ifdef _WS_QWS_
-    static void qwsAddDiskFont( QDiskFont *qdf );
-#endif
+# ifdef _WS_QWS_
+	static void qwsAddDiskFont(QDiskFont *qdf);
+# endif
 
-private:
-    static void createDatabase();
+      private:
+	static void createDatabase();
 
-    friend class QtFontStyle;
-    friend class QtFontCharSet;
-    friend class QtFontFamily;
-    friend class QtFontFoundry;
-    friend class QFontDatabasePrivate;
+	friend class QtFontStyle;
+	friend class QtFontCharSet;
+	friend class QtFontFamily;
+	friend class QtFontFoundry;
+	friend class QFontDatabasePrivate;
 
-    QFontDatabasePrivate *d;
-
+	QFontDatabasePrivate *d;
 };
 
 #endif // QT_NO_FONTDATABASE

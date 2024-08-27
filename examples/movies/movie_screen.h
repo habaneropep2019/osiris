@@ -9,20 +9,21 @@
 
 class MovieScreen : public QFrame
 {
-    Q_OBJECT
-    QMovie movie;
-    QString filename;
+	Q_OBJECT
+	QMovie movie;
+	QString filename;
 
-public:
-    MovieScreen(const char *fname, QMovie m, QWidget *p = 0, const char *name = 0, WFlags f = 0);
+      public:
+	MovieScreen(const char *fname, QMovie m, QWidget *p = 0,
+		    const char *name = 0, WFlags f = 0);
 
-protected:
-    // Draw the contents of the QFrame - the movie and on-screen-display
-    void drawContents(QPainter *p);
-    void mouseReleaseEvent(QMouseEvent *event);
+      protected:
+	// Draw the contents of the QFrame - the movie and on-screen-display
+	void drawContents(QPainter *p);
+	void mouseReleaseEvent(QMouseEvent *event);
 
-private slots:
-    void movieUpdated(const QRect &area);
-    void movieResized(const QSize &size);
-    void movieStatus(int status);
+      private slots:
+	void movieUpdated(const QRect &area);
+	void movieResized(const QSize &size);
+	void movieStatus(int status);
 };

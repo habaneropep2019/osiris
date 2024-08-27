@@ -38,9 +38,9 @@
 #include "qstringlist.h"
 
 #ifndef QT_NO_STRINGLIST
-#include "qstrlist.h"
-#include "qdatastream.h"
-#include "qtl.h"
+# include "qstrlist.h"
+# include "qdatastream.h"
+# include "qtl.h"
 
 // NOT REVISED
 /*!
@@ -72,8 +72,8 @@
 	list.sort();
 
 	// print it out
-	for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
-	    printf( "%s \n", (*it).latin1() );
+	for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+  { printf( "%s \n", (*it).latin1() );
 	}
   \endcode
 
@@ -123,7 +123,7 @@
 */
 void QStringList::sort()
 {
-    qHeapSort(*this);
+	qHeapSort(*this);
 }
 
 /*!
@@ -140,9 +140,10 @@ void QStringList::sort()
   \sa join()
 */
 
-QStringList QStringList::split( const QChar &sep, const QString &str, bool allowEmptyEntries )
+QStringList QStringList::split(const QChar &sep, const QString &str,
+			       bool allowEmptyEntries)
 {
-    return split( QString( sep ), str, allowEmptyEntries );
+	return split(QString(sep), str, allowEmptyEntries);
 }
 
 /*!
@@ -159,34 +160,35 @@ QStringList QStringList::split( const QChar &sep, const QString &str, bool allow
   \sa join()
 */
 
-QStringList QStringList::split( const QString &sep, const QString &str, bool allowEmptyEntries )
+QStringList QStringList::split(const QString &sep, const QString &str,
+			       bool allowEmptyEntries)
 {
-    QStringList lst;
+	QStringList lst;
 
-    int j = 0;
-    int i = str.find( sep, j );
+	int j = 0;
+	int i = str.find(sep, j);
 
-    while ( i != -1 ) {
-	if ( str.mid( j, i - j ).length() > 0 )
-	    lst << str.mid( j, i - j );
-	else if ( allowEmptyEntries )
-	    lst << QString::null;
-	j = i + sep.length();
-	i = str.find( sep, j );
-    }
+	while (i != -1) {
+		if (str.mid(j, i - j).length() > 0)
+			lst << str.mid(j, i - j);
+		else if (allowEmptyEntries)
+			lst << QString::null;
+		j = i + sep.length();
+		i = str.find(sep, j);
+	}
 
-    int l = str.length() - 1;
-    if ( str.mid( j, l - j + 1 ).length() > 0 )
-	lst << str.mid( j, l - j + 1 );
-    else if ( allowEmptyEntries )
-	lst << QString::null;
+	int l = str.length() - 1;
+	if (str.mid(j, l - j + 1).length() > 0)
+		lst << str.mid(j, l - j + 1);
+	else if (allowEmptyEntries)
+		lst << QString::null;
 
-    return lst;
+	return lst;
 }
 
 /*!
-  Splits the string \a str using the regular expression \a sep as separator. Returns the
-  list of strings. If \a allowEmptyEntries is TRUE, also empty
+  Splits the string \a str using the regular expression \a sep as separator.
+  Returns the list of strings. If \a allowEmptyEntries is TRUE, also empty
   entries are inserted into the list, else not. So if you have
   a string 'abc..d.e.', a list which contains 'abc', 'd', and 'e'
   would be returned if \a allowEmptyEntries is FALSE, but
@@ -198,30 +200,31 @@ QStringList QStringList::split( const QString &sep, const QString &str, bool all
   \sa join()
 */
 
-QStringList QStringList::split( const QRegExp &sep, const QString &str, bool allowEmptyEntries )
+QStringList QStringList::split(const QRegExp &sep, const QString &str,
+			       bool allowEmptyEntries)
 {
-    QStringList lst;
+	QStringList lst;
 
-    int j = 0;
-    int len = 0;
-    int i = sep.match( str, j, &len );
+	int j = 0;
+	int len = 0;
+	int i = sep.match(str, j, &len);
 
-    while ( i != -1 ) {
-	if ( str.mid( j, i - j ).length() > 0 )
-	    lst << str.mid( j, i - j );
-	else if ( allowEmptyEntries )
-	    lst << QString::null;
-	j = i + len;
-	i = sep.match( str, j, &len );
-    }
+	while (i != -1) {
+		if (str.mid(j, i - j).length() > 0)
+			lst << str.mid(j, i - j);
+		else if (allowEmptyEntries)
+			lst << QString::null;
+		j = i + len;
+		i = sep.match(str, j, &len);
+	}
 
-    int l = str.length() - 1;
-    if ( str.mid( j, l - j + 1 ).length() > 0 )
-	lst << str.mid( j, l - j + 1 );
-    else if ( allowEmptyEntries )
-	lst << QString::null;
+	int l = str.length() - 1;
+	if (str.mid(j, l - j + 1).length() > 0)
+		lst << str.mid(j, l - j + 1);
+	else if (allowEmptyEntries)
+		lst << QString::null;
 
-    return lst;
+	return lst;
 }
 
 /*!
@@ -230,14 +233,14 @@ QStringList QStringList::split( const QRegExp &sep, const QString &str, bool all
   If \a cs is TRUE, the grep is done case sensitively, else not.
 */
 
-QStringList QStringList::grep( const QString &str, bool cs ) const
+QStringList QStringList::grep(const QString &str, bool cs) const
 {
-    QStringList res;
-    for ( QStringList::ConstIterator it = begin(); it != end(); ++it )
-	if ( (*it).contains( str, cs ) )
-	    res << *it;
+	QStringList res;
+	for (QStringList::ConstIterator it = begin(); it != end(); ++it)
+		if ((*it).contains(str, cs))
+			res << *it;
 
-    return res;
+	return res;
 }
 
 /*!
@@ -245,14 +248,14 @@ QStringList QStringList::grep( const QString &str, bool cs ) const
   the regular expression \a expr.
 */
 
-QStringList QStringList::grep( const QRegExp &expr ) const
+QStringList QStringList::grep(const QRegExp &expr) const
 {
-    QStringList res;
-    for ( QStringList::ConstIterator it = begin(); it != end(); ++it )
-	if ( (*it).contains( expr ) )
-	    res << *it;
+	QStringList res;
+	for (QStringList::ConstIterator it = begin(); it != end(); ++it)
+		if ((*it).contains(expr))
+			res << *it;
 
-    return res;
+	return res;
 }
 
 /*!
@@ -261,42 +264,42 @@ QStringList QStringList::grep( const QRegExp &expr ) const
 
   \sa split()
 */
-QString QStringList::join( const QString &sep ) const
+QString QStringList::join(const QString &sep) const
 {
-    QString res;
-    bool alredy = FALSE;
-    for ( QStringList::ConstIterator it = begin(); it != end(); ++it ) {
-	if ( alredy )
-	    res += sep;
-	alredy = TRUE;
-	res += *it;
-    }
+	QString res;
+	bool alredy = FALSE;
+	for (QStringList::ConstIterator it = begin(); it != end(); ++it) {
+		if (alredy)
+			res += sep;
+		alredy = TRUE;
+		res += *it;
+	}
 
-    return res;
+	return res;
 }
 
-#ifndef QT_NO_DATASTREAM
-Q_EXPORT QDataStream &operator>>( QDataStream & s, QStringList& l )
+# ifndef QT_NO_DATASTREAM
+Q_EXPORT QDataStream &operator>>(QDataStream &s, QStringList &l)
 {
-    return s >> (QValueList<QString>&)l;
+	return s >> (QValueList<QString> &)l;
 }
 
-Q_EXPORT QDataStream &operator<<( QDataStream & s, const QStringList& l )
+Q_EXPORT QDataStream &operator<<(QDataStream &s, const QStringList &l)
 {
-    return s << (const QValueList<QString>&)l;
+	return s << (const QValueList<QString> &)l;
 }
-#endif
+# endif
 
 /*!
   Converts from a QStrList (ASCII) to a QStringList (Unicode).
 */
-QStringList QStringList::fromStrList(const QStrList& ascii)
+QStringList QStringList::fromStrList(const QStrList &ascii)
 {
-    QStringList res;
-    const char * s;
-    for ( QStrListIterator it(ascii); (s=it.current()); ++it )
-	res << s;
-    return res;
+	QStringList res;
+	const char *s;
+	for (QStrListIterator it(ascii); (s = it.current()); ++it)
+		res << s;
+	return res;
 }
 
-#endif //QT_NO_STRINGLIST
+#endif // QT_NO_STRINGLIST

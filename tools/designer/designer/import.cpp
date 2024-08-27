@@ -18,7 +18,7 @@
 **
 **********************************************************************/
 
-#include <qvariant.h>  // HP-UX compiler needs this here
+#include <qvariant.h> // HP-UX compiler needs this here
 #include "import.h"
 #include "mainwindow.h"
 
@@ -30,94 +30,97 @@ static QMap<QString, QString> importMap;
 
 QString Import::filters()
 {
-    QString f = tr( "Qt User-Interface Files (*.ui)" ) + ";;" +
-		tr( "TMAKE Projectfile (*.pro)" ) + ";;";
-    for ( QMap<QString, QString>::Iterator it = importMap.begin(); it != importMap.end(); ++it )
-	f += it.key() + ";;";
-    f += tr( "All Files (*)" );
+	QString f = tr("Qt User-Interface Files (*.ui)") + ";;" +
+		    tr("TMAKE Projectfile (*.pro)") + ";;";
+	for (QMap<QString, QString>::Iterator it = importMap.begin();
+	     it != importMap.end(); ++it)
+		f += it.key() + ";;";
+	f += tr("All Files (*)");
 
-    return f;
+	return f;
 }
-void Import::addImportEntry( const QString &wilrdcard, const QString &command )
+void Import::addImportEntry(const QString &wilrdcard, const QString &command)
 {
-    importMap.insert( wilrdcard, command );
+	importMap.insert(wilrdcard, command);
 }
 
 int Import::numFilters()
 {
-    return importMap.count();
+	return importMap.count();
 }
 
-QString Import::wildcard( int i )
+QString Import::wildcard(int i)
 {
-    int j = 0;
-    for ( QMap<QString, QString>::Iterator it = importMap.begin(); it != importMap.end(); ++it ) {
-	if ( i == j )
-	    return it.key();
-	++j;
-    }
-    return QString::null;
+	int j = 0;
+	for (QMap<QString, QString>::Iterator it = importMap.begin();
+	     it != importMap.end(); ++it) {
+		if (i == j)
+			return it.key();
+		++j;
+	}
+	return QString::null;
 }
 
-QString Import::command( int i )
+QString Import::command(int i)
 {
-    int j = 0;
-    for ( QMap<QString, QString>::Iterator it = importMap.begin(); it != importMap.end(); ++it ) {
-	if ( i == j )
-	    return *it;
-	++j;
-    }
-    return QString::null;
+	int j = 0;
+	for (QMap<QString, QString>::Iterator it = importMap.begin();
+	     it != importMap.end(); ++it) {
+		if (i == j)
+			return *it;
+		++j;
+	}
+	return QString::null;
 }
 
 
 
 
-Import::Import( const QString &fn, MainWindow *mw )
-    : filename( fn ), mainWindow( mw ), haveLoaded( FALSE )
+Import::Import(const QString &fn, MainWindow *mw)
+	: filename(fn), mainWindow(mw), haveLoaded(FALSE)
 {
-    QString command;
-    QString ext = QFileInfo( fn ).extension();
-    for ( QMap<QString, QString>::Iterator it = importMap.begin(); it != importMap.end(); ++it ) {
-	if ( it.key().find( ext ) != -1 )
-	    command = *it;
-    }
-
-    if ( !command.isEmpty() ) {
-	QStringList lst = QStringList::split( ' ', command );
-	process = new QProcess( lst[ 0 ] );
-	QStringList::Iterator it2 = lst.begin();
-	++it2;
-	for ( ; it2 != lst.end(); ++it2 ) {
-	    if ( *it2 == "%f" )
-		process->addArgument( fn );
-	    else
-		process->addArgument( *it2 );
+	QString command;
+	QString ext = QFileInfo(fn).extension();
+	for (QMap<QString, QString>::Iterator it = importMap.begin();
+	     it != importMap.end(); ++it) {
+		if (it.key().find(ext) != -1)
+			command = *it;
 	}
 
-	connect( process, SIGNAL( dataStdout( const QString & ) ),
-		 this, SLOT( gotData( const QString & ) ) );
-	connect( process, SIGNAL( processExited() ),
-		 this, SLOT( bye() ) );
-	process->start();
-    }
+	if (!command.isEmpty()) {
+		QStringList lst = QStringList::split(' ', command);
+		process = new QProcess(lst[0]);
+		QStringList::Iterator it2 = lst.begin();
+		++it2;
+		for (; it2 != lst.end(); ++it2) {
+			if (*it2 == "%f")
+				process->addArgument(fn);
+			else
+				process->addArgument(*it2);
+		}
+
+		connect(process, SIGNAL(dataStdout(const QString &)), this,
+			SLOT(gotData(const QString &)));
+		connect(process, SIGNAL(processExited()), this, SLOT(bye()));
+		process->start();
+	}
 }
 
 
-void Import::gotData( const QString &data )
+void Import::gotData(const QString &data)
 {
-    incomingData += data;
+	incomingData += data;
 }
 
 void Import::bye()
 {
-    if ( haveLoaded )
-	return;
+	if (haveLoaded)
+		return;
 
-    haveLoaded = TRUE;
-    QStringList lst = QStringList::split( '\n', incomingData );
-    for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
-	mainWindow->openFile( (*it).stripWhiteSpace(), FALSE );
-    delete process;
-    delete this;
+	haveLoaded = TRUE;
+	QStringList lst = QStringList::split('\n', incomingData);
+	for (QStringList::Iterator it = lst.begin(); it != lst.end(); ++it)
+		mainWindow->openFile((*it).stripWhiteSpace(), FALSE);
+	delete process;
+	delete this;
 }

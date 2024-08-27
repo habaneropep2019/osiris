@@ -39,65 +39,119 @@
 #define QSIZEPOLICY_H
 
 #ifndef QT_H
-#include "qglobal.h"
+# include "qglobal.h"
 #endif // QT_H
 
 class Q_EXPORT QSizePolicy
 {
-private:
-    enum { HSize = 6, HMask = 0x3f, VMask = HMask << HSize,
-	   MayGrow = 1, ExpMask = 2, MayShrink = 4 };
-public:
-    enum SizeType { Fixed = 0,
-		    Minimum = MayGrow,
-		    Maximum = MayShrink,
-		    Preferred = MayGrow|MayShrink ,
-		    MinimumExpanding = Minimum|ExpMask,
-		    Expanding = MinimumExpanding|MayShrink };
+      private:
+	enum {
+		HSize = 6,
+		HMask = 0x3f,
+		VMask = HMask << HSize,
+		MayGrow = 1,
+		ExpMask = 2,
+		MayShrink = 4
+	};
 
-    enum ExpandData { NoDirection = 0,
-		      Horizontal = 1,
-		      Vertical = 2,
-		      BothDirections = Horizontal | Vertical };
+      public:
+	enum SizeType {
+		Fixed = 0,
+		Minimum = MayGrow,
+		Maximum = MayShrink,
+		Preferred = MayGrow | MayShrink,
+		MinimumExpanding = Minimum | ExpMask,
+		Expanding = MinimumExpanding | MayShrink
+	};
 
-    QSizePolicy() { data = 0; }
+	enum ExpandData {
+		NoDirection = 0,
+		Horizontal = 1,
+		Vertical = 2,
+		BothDirections = Horizontal | Vertical
+	};
 
-    QSizePolicy( SizeType hor, SizeType ver, bool hfw = FALSE );
+	QSizePolicy()
+	{
+		data = 0;
+	}
 
-    SizeType horData() const { return (SizeType)( data & HMask ); }
-    SizeType verData() const { return (SizeType)(( data & VMask ) >> HSize); }
+	QSizePolicy(SizeType hor, SizeType ver, bool hfw = FALSE);
 
-    bool mayShrinkHorizontally() const { return horData() & MayShrink; }
-    bool mayShrinkVertically() const { return verData() & MayShrink; }
-    bool mayGrowHorizontally() const { return horData() & MayGrow; }
-    bool mayGrowVertically() const { return verData() & MayGrow; }
+	SizeType horData() const
+	{
+		return (SizeType)(data & HMask);
+	}
+	SizeType verData() const
+	{
+		return (SizeType)((data & VMask) >> HSize);
+	}
 
-    ExpandData expanding() const
-    {
-	return (ExpandData)( (int)(verData()&ExpMask ? Vertical : 0)+
-			     (int)(horData()&ExpMask ? Horizontal : 0) );
-    }
+	bool mayShrinkHorizontally() const
+	{
+		return horData() & MayShrink;
+	}
+	bool mayShrinkVertically() const
+	{
+		return verData() & MayShrink;
+	}
+	bool mayGrowHorizontally() const
+	{
+		return horData() & MayGrow;
+	}
+	bool mayGrowVertically() const
+	{
+		return verData() & MayGrow;
+	}
 
-    void setHorData( SizeType d ) { data = (data & ~HMask) | d; }
-    void setVerData( SizeType d ) { data = (data & ~(HMask<<HSize)) |
-					   (d<<HSize); }
-		
-    void setHeightForWidth( bool b ) { data = b ? ( data | ( 1 << 2*HSize ) )
-					      : ( data & ~( 1 << 2*HSize ) );  }
-    bool hasHeightForWidth() const { return data & ( 1 << 2*HSize ); }
+	ExpandData expanding() const
+	{
+		return (ExpandData)((int)(verData() & ExpMask ? Vertical : 0) +
+				    (int)(horData() & ExpMask ? Horizontal :
+								0));
+	}
 
-    bool operator==( const QSizePolicy& s ) const { return data == s.data; }
-    bool operator!=( const QSizePolicy& s ) const { return data != s.data; }
+	void setHorData(SizeType d)
+	{
+		data = (data & ~HMask) | d;
+	}
+	void setVerData(SizeType d)
+	{
+		data = (data & ~(HMask << HSize)) | (d << HSize);
+	}
 
-private:
-    QSizePolicy( int i ): data( i ) {}
+	void setHeightForWidth(bool b)
+	{
+		data = b ? (data | (1 << 2 * HSize)) :
+			   (data & ~(1 << 2 * HSize));
+	}
+	bool hasHeightForWidth() const
+	{
+		return data & (1 << 2 * HSize);
+	}
 
-    Q_UINT16 data;
+	bool operator==(const QSizePolicy &s) const
+	{
+		return data == s.data;
+	}
+	bool operator!=(const QSizePolicy &s) const
+	{
+		return data != s.data;
+	}
+
+      private:
+	QSizePolicy(int i) : data(i)
+	{
+	}
+
+	Q_UINT16 data;
 };
 
 #if !(defined(__GNUC__) && __GNUC__ == 2 && __GNUC_MINOR__ == 96)
-inline QSizePolicy::QSizePolicy( SizeType hor, SizeType ver, bool hfw )
-	: data( hor | (ver<<HSize) | (hfw ? (1<<2*HSize) : 0) ) {}
+inline QSizePolicy::QSizePolicy(SizeType hor, SizeType ver, bool hfw)
+	: data(hor | (ver << HSize) | (hfw ? (1 << 2 * HSize) : 0))
+{
+}
 #endif
 
 #endif
