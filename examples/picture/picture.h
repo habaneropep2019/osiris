@@ -11,15 +11,15 @@
 
 class PictureDisplay : public QWidget // picture display widget
 {
-public:
-    PictureDisplay(const char *fileName);
-    ~PictureDisplay();
+      public:
+	PictureDisplay(const char *fileName);
+	~PictureDisplay();
 
-protected:
-    void paintEvent(QPaintEvent *);
-    void keyPressEvent(QKeyEvent *);
+      protected:
+	void paintEvent(QPaintEvent *);
+	void keyPressEvent(QKeyEvent *);
 
-private:
-    QPicture *pict;
-    QString name;
+      private:
+	QPicture *pict;
+	QString name;
 };

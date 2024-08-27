@@ -16,32 +16,31 @@
 class QMultiLineEdit;
 class QAction;
 
-class ApplicationWindow: public QMainWindow
+class ApplicationWindow : public QMainWindow
 {
-    Q_OBJECT
-public:
-    ApplicationWindow();
-    ~ApplicationWindow();
+	Q_OBJECT
+      public:
+	ApplicationWindow();
+	~ApplicationWindow();
 
-protected:
-    void closeEvent( QCloseEvent* );
+      protected:
+	void closeEvent(QCloseEvent *);
 
-private slots:
-    void newDoc();
-    void load();
-    void load( const char *fileName );
-    void save();
-    void saveAs();
-    void print();
+      private slots:
+	void newDoc();
+	void load();
+	void load(const char *fileName);
+	void save();
+	void saveAs();
+	void print();
 
-    void about();
-    void aboutQt();
+	void about();
+	void aboutQt();
 
-private:
-    QPrinter *printer;
-    QMultiLineEdit *e;
-    QString filename;
-
+      private:
+	QPrinter *printer;
+	QMultiLineEdit *e;
+	QString filename;
 };
 
 

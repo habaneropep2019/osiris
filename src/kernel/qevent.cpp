@@ -127,20 +127,18 @@
   <li> \c Accel - key press in child, for shortcut key handling, QKeyEvent
   <li> \c Wheel - mouse wheel rolled, QWheelEvent
   <li> \c AccelAvailable - an internal event used by Qt on some platforms.
-  <li> \c AccelOverride - key press in child, for overriding shortcut key handling, QKeyEvent
- <li> \c WindowActivate - the window was activated
- <li> \c WindowDeactivate - the window was deactivated
-  <li> \c CaptionChange - widget's caption changed
-  <li> \c IconChange - widget's icon changed
-  <li> \c ParentFontChange - the font of the parent widget changed.
-  <li> \c ApplicationFontChange - the default application font changed.
-  <li> \c ParentPaletteChange - the palette of the parent widget changed.
-  <li> \c ApplicationPaletteChange - the default application palette changed.
-  <li> \c Clipboard - system clipboard contents have changed
-  <li> \c SockAct - socket activated, used to implement QSocketNotifier
-  <li> \c DragEnter - drag-and-drop enters widget, QDragEnterEvent
-  <li> \c DragMove - drag-and-drop in progress, QDragMoveEvent
-  <li> \c DragLeave - drag-and-drop leaves widget, QDragLeaveEvent
+  <li> \c AccelOverride - key press in child, for overriding shortcut key
+handling, QKeyEvent <li> \c WindowActivate - the window was activated <li> \c
+WindowDeactivate - the window was deactivated <li> \c CaptionChange - widget's
+caption changed <li> \c IconChange - widget's icon changed <li> \c
+ParentFontChange - the font of the parent widget changed. <li> \c
+ApplicationFontChange - the default application font changed. <li> \c
+ParentPaletteChange - the palette of the parent widget changed. <li> \c
+ApplicationPaletteChange - the default application palette changed. <li> \c
+Clipboard - system clipboard contents have changed <li> \c SockAct - socket
+activated, used to implement QSocketNotifier <li> \c DragEnter - drag-and-drop
+enters widget, QDragEnterEvent <li> \c DragMove - drag-and-drop in progress,
+QDragMoveEvent <li> \c DragLeave - drag-and-drop leaves widget, QDragLeaveEvent
   <li> \c Drop - drag-and-drop is completed, QDropEvent
   <li> \c DragResponse - an internal event used by Qt on some platforms.
   <li> \c ChildInserted - object gets a child, QChildEvent
@@ -235,7 +233,8 @@
 */
 
 /*!
-  \fn QMouseEvent::QMouseEvent( Type type, const QPoint &pos, int button, int state )
+  \fn QMouseEvent::QMouseEvent( Type type, const QPoint &pos, int button, int
+  state )
 
   Constructs a mouse event object.
 
@@ -253,14 +252,16 @@
   explicitly.
 */
 
-QMouseEvent::QMouseEvent( Type type, const QPoint &pos, int button, int state )
-    : QEvent(type), p(pos), b(button),s((ushort)state){
+QMouseEvent::QMouseEvent(Type type, const QPoint &pos, int button, int state)
+	: QEvent(type), p(pos), b(button), s((ushort)state)
+{
 	g = QCursor::pos();
 }
 
 
 /*!
-  \fn QMouseEvent::QMouseEvent( Type type, const QPoint &pos, const QPoint &globalPos,  int button, int state )
+  \fn QMouseEvent::QMouseEvent( Type type, const QPoint &pos, const QPoint
+  &globalPos,  int button, int state )
 
   Constructs a mouse event object.
 
@@ -368,7 +369,7 @@ QMouseEvent::QMouseEvent( Type type, const QPoint &pos, int button, int state )
 */
 Qt::ButtonState QMouseEvent::stateAfter() const
 {
-    return Qt::ButtonState(state()^button());
+	return Qt::ButtonState(state() ^ button());
 }
 
 
@@ -408,15 +409,15 @@ Qt::ButtonState QMouseEvent::stateAfter() const
 
   \sa pos(), delta(), state()
 */
-QWheelEvent::QWheelEvent( const QPoint &pos, int delta, int state )
-    : QEvent(Wheel), p(pos), d(delta), s((ushort)state),
-      accpt(TRUE)
+QWheelEvent::QWheelEvent(const QPoint &pos, int delta, int state)
+	: QEvent(Wheel), p(pos), d(delta), s((ushort)state), accpt(TRUE)
 {
-    g = QCursor::pos();
+	g = QCursor::pos();
 }
 
 /*!
-  \fn QWheelEvent::QWheelEvent( const QPoint &pos, const QPoint&globalPos, int delta, int state )
+  \fn QWheelEvent::QWheelEvent( const QPoint &pos, const QPoint&globalPos, int
+  delta, int state )
 
   Constructs a wheel event object.
 
@@ -616,16 +617,16 @@ QWheelEvent::QWheelEvent( const QPoint &pos, int delta, int state )
 
   \sa state()
 */
-//###### We must check with XGetModifierMapping
+// ###### We must check with XGetModifierMapping
 Qt::ButtonState QKeyEvent::stateAfter() const
 {
-    if ( key() == Key_Shift )
-	return Qt::ButtonState(state()^ShiftButton);
-    if ( key() == Key_Control )
-	return Qt::ButtonState(state()^ControlButton);
-    if ( key() == Key_Alt )
-	return Qt::ButtonState(state()^AltButton);
-    return state();
+	if (key() == Key_Shift)
+		return Qt::ButtonState(state() ^ ShiftButton);
+	if (key() == Key_Control)
+		return Qt::ButtonState(state() ^ ControlButton);
+	if (key() == Key_Alt)
+		return Qt::ButtonState(state() ^ AltButton);
+	return state();
 }
 
 /*!
@@ -705,7 +706,8 @@ Qt::ButtonState QKeyEvent::stateAfter() const
   \fn QFocusEvent::QFocusEvent( Type type )
   Constructs a focus event object.
 
-  The \a type parameter must be either \a QEvent::FocusIn or \a QEvent::FocusOut.
+  The \a type parameter must be either \a QEvent::FocusIn or \a
+  QEvent::FocusOut.
 */
 
 
@@ -719,11 +721,11 @@ QFocusEvent::Reason QFocusEvent::prev_reason = QFocusEvent::Other;
   <ul>
   <li> \c Mouse - the focus change happened because of a mouse action
   <li> \c Tab - the focus change happened because of a Tab press
-        (possibly including shift/control)
+	(possibly including shift/control)
   <li> \c ActiveWindow - the window system made this window (in)active
-  <li> \c Popup - the application opened/closed a popup that grabbed/released focus
-  <li> \c Shortcut - the focus change happened because of a keyboard shortcut
-  <li> \c Other - any other reason, usually application-specific
+  <li> \c Popup - the application opened/closed a popup that grabbed/released
+  focus <li> \c Shortcut - the focus change happened because of a keyboard
+  shortcut <li> \c Other - any other reason, usually application-specific
   </ul>
 
    See the \link focus.html focus overview \endlink for more about focus.
@@ -737,7 +739,7 @@ QFocusEvent::Reason QFocusEvent::prev_reason = QFocusEvent::Other;
  */
 QFocusEvent::Reason QFocusEvent::reason()
 {
-    return m_reason;
+	return m_reason;
 }
 
 /*!
@@ -745,10 +747,10 @@ QFocusEvent::Reason QFocusEvent::reason()
 
   \sa reason(), resetReason()
  */
-void QFocusEvent::setReason( Reason reason )
+void QFocusEvent::setReason(Reason reason)
 {
-    prev_reason = m_reason;
-    m_reason = reason;
+	prev_reason = m_reason;
+	m_reason = reason;
 }
 
 /*!
@@ -759,7 +761,7 @@ void QFocusEvent::setReason( Reason reason )
  */
 void QFocusEvent::resetReason()
 {
-    m_reason = prev_reason;
+	m_reason = prev_reason;
 }
 
 /*!
@@ -981,8 +983,8 @@ void QFocusEvent::resetReason()
   A \c ChildRemoved event is sent immediately, but a \c ChildInserted event
   is \e posted (with QApplication::postEvent())
 
-  Note that if a child is removed immediately after it is inserted, the 
-  \c ChildInserted event may be suppressed, but the \c ChildRemoved 
+  Note that if a child is removed immediately after it is inserted, the
+  \c ChildInserted event may be suppressed, but the \c ChildRemoved
   event will always be sent. In this case there will be a \c ChildRemoved
   event without a corresponding \c ChildInserted event.
 
@@ -1082,12 +1084,11 @@ void QFocusEvent::resetReason()
   pointer is set to 0.
 */
 
-QCustomEvent::QCustomEvent( int type )
-    : QEvent( (QEvent::Type)type ), d( 0 )
+QCustomEvent::QCustomEvent(int type) : QEvent((QEvent::Type)type), d(0)
 {
 #if defined(CHECK_RANGE)
-    if ( type < (int)QEvent::User )
-	qWarning( "QCustomEvent: Illegal type id." );
+	if (type < (int)QEvent::User)
+		qWarning("QCustomEvent: Illegal type id.");
 #endif
 }
 
@@ -1385,7 +1386,6 @@ QCustomEvent::QCustomEvent( int type )
 
 QEvent::~QEvent()
 {
-    if (posted)
-	QApplication::removePostedEvent( this );
+	if (posted)
+		QApplication::removePostedEvent(this);
 }
-

@@ -39,71 +39,163 @@
 #define QARRAY_H
 
 #ifndef QT_H
-#include "qgarray.h"
+# include "qgarray.h"
 #endif // QT_H
 
 
-template<class type> class Q_EXPORT QArray : public QGArray
+template <class type> class Q_EXPORT QArray : public QGArray
 {
-public:
-    typedef type* Iterator;
-    typedef const type* ConstIterator;
-    typedef type ValueType;
+      public:
+	typedef type *Iterator;
+	typedef const type *ConstIterator;
+	typedef type ValueType;
 
-protected:
-    QArray( int, int ) : QGArray( 0, 0 ) {}
+      protected:
+	QArray(int, int) : QGArray(0, 0)
+	{
+	}
 
-public:
-    QArray() {}
-    QArray( int size ) : QGArray(size*sizeof(type)) {}
-    QArray( const QArray<type> &a ) : QGArray(a) {}
-   ~QArray() {}
-    QArray<type> &operator=(const QArray<type> &a)
-				{ return (QArray<type>&)QGArray::assign(a); }
-    type *data()    const	{ return (type *)QGArray::data(); }
-    uint  nrefs()   const	{ return QGArray::nrefs(); }
-    uint  size()    const	{ return QGArray::size()/sizeof(type); }
-    uint  count()   const 	{ return size(); }
-    bool  isEmpty() const	{ return QGArray::size() == 0; }
-    bool  isNull()  const	{ return QGArray::data() == 0; }
-    bool  resize( uint size )	{ return QGArray::resize(size*sizeof(type)); }
-    bool  truncate( uint pos )	{ return QGArray::resize(pos*sizeof(type)); }
-    bool  fill( const type &d, int size = -1 )
-	{ return QGArray::fill((char*)&d,size,sizeof(type) ); }
-    void  detach()		{ QGArray::detach(); }
-    QArray<type>   copy() const
-	{ QArray<type> tmp; return tmp.duplicate(*this); }
-    QArray<type>& assign( const QArray<type>& a )
-	{ return (QArray<type>&)QGArray::assign(a); }
-    QArray<type>& assign( const type *a, uint n )
-	{ return (QArray<type>&)QGArray::assign((char*)a,n*sizeof(type)); }
-    QArray<type>& duplicate( const QArray<type>& a )
-	{ return (QArray<type>&)QGArray::duplicate(a); }
-    QArray<type>& duplicate( const type *a, uint n )
-	{ return (QArray<type>&)QGArray::duplicate((char*)a,n*sizeof(type)); }
-    QArray<type>& setRawData( const type *a, uint n )
-	{ return (QArray<type>&)QGArray::setRawData((char*)a,
-						     n*sizeof(type)); }
-    void resetRawData( const type *a, uint n )
-	{ QGArray::resetRawData((char*)a,n*sizeof(type)); }
-    int	 find( const type &d, uint i=0 ) const
-	{ return QGArray::find((char*)&d,i,sizeof(type)); }
-    int	 contains( const type &d ) const
-	{ return QGArray::contains((char*)&d,sizeof(type)); }
-    void sort() { QGArray::sort(sizeof(type)); }
-    int  bsearch( const type &d ) const
-	{ return QGArray::bsearch((const char*)&d,sizeof(type)); }
-    type& operator[]( int i ) const
-	{ return (type &)(*(type *)QGArray::at(i*sizeof(type))); }
-    type& at( uint i ) const
-	{ return (type &)(*(type *)QGArray::at(i*sizeof(type))); }
-	 operator const type*() const { return (const type *)QGArray::data(); }
-    bool operator==( const QArray<type> &a ) const { return isEqual(a); }
-    bool operator!=( const QArray<type> &a ) const { return !isEqual(a); }
-    Iterator begin() { return data(); }
-    Iterator end() { return data() + size(); }
-    ConstIterator begin() const { return data(); }
-    ConstIterator end() const { return data() + size(); }
+      public:
+	QArray()
+	{
+	}
+	QArray(int size) : QGArray(size * sizeof(type))
+	{
+	}
+	QArray(const QArray<type> &a) : QGArray(a)
+	{
+	}
+	~QArray()
+	{
+	}
+	QArray<type> &operator=(const QArray<type> &a)
+	{
+		return (QArray<type> &)QGArray::assign(a);
+	}
+	type *data() const
+	{
+		return (type *)QGArray::data();
+	}
+	uint nrefs() const
+	{
+		return QGArray::nrefs();
+	}
+	uint size() const
+	{
+		return QGArray::size() / sizeof(type);
+	}
+	uint count() const
+	{
+		return size();
+	}
+	bool isEmpty() const
+	{
+		return QGArray::size() == 0;
+	}
+	bool isNull() const
+	{
+		return QGArray::data() == 0;
+	}
+	bool resize(uint size)
+	{
+		return QGArray::resize(size * sizeof(type));
+	}
+	bool truncate(uint pos)
+	{
+		return QGArray::resize(pos * sizeof(type));
+	}
+	bool fill(const type &d, int size = -1)
+	{
+		return QGArray::fill((char *)&d, size, sizeof(type));
+	}
+	void detach()
+	{
+		QGArray::detach();
+	}
+	QArray<type> copy() const
+	{
+		QArray<type> tmp;
+		return tmp.duplicate(*this);
+	}
+	QArray<type> &assign(const QArray<type> &a)
+	{
+		return (QArray<type> &)QGArray::assign(a);
+	}
+	QArray<type> &assign(const type *a, uint n)
+	{
+		return (QArray<type> &)QGArray::assign((char *)a,
+						       n * sizeof(type));
+	}
+	QArray<type> &duplicate(const QArray<type> &a)
+	{
+		return (QArray<type> &)QGArray::duplicate(a);
+	}
+	QArray<type> &duplicate(const type *a, uint n)
+	{
+		return (QArray<type> &)QGArray::duplicate((char *)a,
+							  n * sizeof(type));
+	}
+	QArray<type> &setRawData(const type *a, uint n)
+	{
+		return (QArray<type> &)QGArray::setRawData((char *)a,
+							   n * sizeof(type));
+	}
+	void resetRawData(const type *a, uint n)
+	{
+		QGArray::resetRawData((char *)a, n * sizeof(type));
+	}
+	int find(const type &d, uint i = 0) const
+	{
+		return QGArray::find((char *)&d, i, sizeof(type));
+	}
+	int contains(const type &d) const
+	{
+		return QGArray::contains((char *)&d, sizeof(type));
+	}
+	void sort()
+	{
+		QGArray::sort(sizeof(type));
+	}
+	int bsearch(const type &d) const
+	{
+		return QGArray::bsearch((const char *)&d, sizeof(type));
+	}
+	type &operator[](int i) const
+	{
+		return (type &)(*(type *)QGArray::at(i * sizeof(type)));
+	}
+	type &at(uint i) const
+	{
+		return (type &)(*(type *)QGArray::at(i * sizeof(type)));
+	}
+	operator const type *() const
+	{
+		return (const type *)QGArray::data();
+	}
+	bool operator==(const QArray<type> &a) const
+	{
+		return isEqual(a);
+	}
+	bool operator!=(const QArray<type> &a) const
+	{
+		return !isEqual(a);
+	}
+	Iterator begin()
+	{
+		return data();
+	}
+	Iterator end()
+	{
+		return data() + size();
+	}
+	ConstIterator begin() const
+	{
+		return data();
+	}
+	ConstIterator end() const
+	{
+		return data() + size();
+	}
 };
 
 

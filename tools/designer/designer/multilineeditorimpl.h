@@ -28,34 +28,32 @@ class QMultiLineEdit;
 
 class MultiLineEditor : public MultiLineEditorBase
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    MultiLineEditor( QWidget *parent, QWidget *editWidget, FormWindow *fw );
+      public:
+	MultiLineEditor(QWidget *parent, QWidget *editWidget, FormWindow *fw);
 
-protected slots:
-    void okClicked();
-    void applyClicked();
+      protected slots:
+	void okClicked();
+	void applyClicked();
 
-private:
-    QMultiLineEdit *mlined;
-    FormWindow *formwindow;
-
+      private:
+	QMultiLineEdit *mlined;
+	FormWindow *formwindow;
 };
 
 class TextEditor : public MultiLineEditorBase
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    TextEditor( QWidget *parent, const QString &text );
+      public:
+	TextEditor(QWidget *parent, const QString &text);
 
-    static QString getText( QWidget *parent, const QString &text );
-    
-protected slots:
-    void okClicked();
-    void applyClicked();
+	static QString getText(QWidget *parent, const QString &text);
 
+      protected slots:
+	void okClicked();
+	void applyClicked();
 };
 
 #endif

@@ -39,74 +39,74 @@
 
 #ifndef QT_NO_SOUND
 
-#include "qapplication.h"
-#include "qlist.h"
+# include "qapplication.h"
+# include "qlist.h"
 
-static QList<QAuServer> *servers=0;
+static QList<QAuServer> *servers = 0;
 
-QAuServer::QAuServer(QObject* parent, const char* name) :
-    QObject(parent,name)
+QAuServer::QAuServer(QObject *parent, const char *name) : QObject(parent, name)
 {
-    if ( !servers ) {
-	servers = new QList<QAuServer>;
-	// ### add cleanup
-    }
-    servers->prepend(this);
+	if (!servers) {
+		servers = new QList<QAuServer>;
+		// ### add cleanup
+	}
+	servers->prepend(this);
 }
 
 QAuServer::~QAuServer()
 {
-    servers->remove(this);
-    if ( servers->count() == 0 ) {
-	delete servers;
-	servers = 0;
-    }
+	servers->remove(this);
+	if (servers->count() == 0) {
+		delete servers;
+		servers = 0;
+	}
 }
 
-void QAuServer::play(const QString& filename)
+void QAuServer::play(const QString &filename)
 {
-    QAuBucket* b = newBucket(filename);
-    play(b);
-    deleteBucket(b);
+	QAuBucket *b = newBucket(filename);
+	play(b);
+	deleteBucket(b);
 }
 
-extern QAuServer* qt_new_audio_server();
+extern QAuServer *qt_new_audio_server();
 
-class QSoundData {
-public:
-    static QAuServer& server()
-    {
-	if (!servers) qt_new_audio_server();
-	return *servers->first();
-    }
+class QSoundData
+{
+      public:
+	static QAuServer &server()
+	{
+		if (!servers)
+			qt_new_audio_server();
+		return *servers->first();
+	}
 
-    QSoundData(const QString& fname) :
-	filename(fname), bucket(0)
-    {
-    }
+	QSoundData(const QString &fname) : filename(fname), bucket(0)
+	{
+	}
 
-    ~QSoundData()
-    {
-	if ( bucket )
-	    server().deleteBucket(bucket);
-    }
+	~QSoundData()
+	{
+		if (bucket)
+			server().deleteBucket(bucket);
+	}
 
-    void play()
-    {
-	if ( !bucket )
-	    bucket = server().newBucket(filename);
-	server().play(bucket);
-    }
+	void play()
+	{
+		if (!bucket)
+			bucket = server().newBucket(filename);
+		server().play(bucket);
+	}
 
-    QString filename;
+	QString filename;
 
-    QAuBucket* bucket;
+	QAuBucket *bucket;
 };
 
 /*!
   \class QSound qsound.h
   \brief Access to the platform audio facilities.
-  
+
   \ingroup sound
 
   Qt provides the most commonly required audio operation in
@@ -148,9 +148,9 @@ public:
 /*!
   Play the sound in file named \a filename.
 */
-void QSound::play(const QString& filename)
+void QSound::play(const QString &filename)
 {
-    QSoundData::server().play(filename);
+	QSoundData::server().play(filename);
 }
 
 /*!
@@ -162,9 +162,8 @@ void QSound::play(const QString& filename)
   The \a parent and \a name arguments (default 0) are passed on to
   the QObject constructor.
 */
-QSound::QSound(const QString& filename, QObject* parent, const char* name) :
-    QObject(parent,name),
-    d(new QSoundData(filename))
+QSound::QSound(const QString &filename, QObject *parent, const char *name)
+	: QObject(parent, name), d(new QSoundData(filename))
 {
 }
 
@@ -173,7 +172,7 @@ QSound::QSound(const QString& filename, QObject* parent, const char* name) :
 */
 QSound::~QSound()
 {
-    delete d;
+	delete d;
 }
 
 /*!
@@ -186,7 +185,7 @@ QSound::~QSound()
 */
 void QSound::play()
 {
-    d->play();
+	d->play();
 }
 
 /*!
@@ -200,7 +199,7 @@ void QSound::play()
 */
 bool QSound::available()
 {
-    return QSoundData::server().okay();
+	return QSoundData::server().okay();
 }
 
 #endif // QT_NO_SOUND

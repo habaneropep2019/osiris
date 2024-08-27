@@ -145,9 +145,9 @@
   \sa deleteItem()
 */
 
-QCollection::Item QCollection::newItem( Item d )
+QCollection::Item QCollection::newItem(Item d)
 {
-    return d;					// just return reference
+	return d; // just return reference
 }
 
 /*!
@@ -171,12 +171,12 @@ QCollection::Item QCollection::newItem( Item d )
   \sa newItem(), setAutoDelete()
 */
 
-void QCollection::deleteItem( Item d )
+void QCollection::deleteItem(Item d)
 {
-    if ( del_item )
+	if (del_item)
 #if defined(Q_DELETING_VOID_UNDEFINED)
-	delete (char *)d;			// default operation
+		delete (char *)d; // default operation
 #else
-	delete d;				// default operation
+		delete d; // default operation
 #endif
 }

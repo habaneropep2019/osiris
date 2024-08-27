@@ -40,9 +40,9 @@
 #define QWINDOWDEFS_H
 
 #ifndef QT_H
-#include "qobjectdefs.h"
-#include "qstring.h"
-#include "qnamespace.h"
+# include "qobjectdefs.h"
+# include "qstring.h"
+# include "qnamespace.h"
 #endif // QT_H
 
 #include <limits.h>
@@ -93,43 +93,43 @@ class QWidgetListIt;
 
 #if defined(_WS_MAC_)
 
-typedef void * HANDLE;
+typedef void *HANDLE;
 typedef int WId;
-typedef void * MSG;
+typedef void *MSG;
 
 #endif
 
 
 #if defined(_WS_WIN_)
-#include "qwindowdefs_win.h"
+# include "qwindowdefs_win.h"
 #endif // _WS_WIN_
 
 
 #if defined(_WS_X11_)
 
-#if OSIRIS_VERSION > 290
-#error "define WId and friends to ulong always"
-#endif
+# if OSIRIS_VERSION > 290
+#  error "define WId and friends to ulong always"
+# endif
 
-#if defined(UINT_MAX) && defined(ULONG_MAX) && (ULONG_MAX > UINT_MAX) || \
-    (defined(__SUNPRO_CC) && defined(_LP64))
-typedef unsigned long  WId;
-typedef unsigned long  HANDLE;
-#else
-typedef unsigned int  WId;
-typedef unsigned int  HANDLE;
-#endif
+# if defined(UINT_MAX) && defined(ULONG_MAX) && (ULONG_MAX > UINT_MAX) || \
+	 (defined(__SUNPRO_CC) && defined(_LP64))
+typedef unsigned long WId;
+typedef unsigned long HANDLE;
+# else
+typedef unsigned int WId;
+typedef unsigned int HANDLE;
+# endif
 
 typedef struct _XDisplay Display;
-typedef union  _XEvent XEvent;
+typedef union _XEvent XEvent;
 typedef struct _XGC *GC;
 typedef struct _XRegion *Region;
 
 Q_EXPORT Display *qt_xdisplay();
-Q_EXPORT int	 qt_xscreen();
-Q_EXPORT WId	 qt_xrootwin();
-Q_EXPORT GC	 qt_xget_readonly_gc( bool monochrome=FALSE );
-Q_EXPORT GC	 qt_xget_temp_gc( bool monochrome=FALSE );
+Q_EXPORT int qt_xscreen();
+Q_EXPORT WId qt_xrootwin();
+Q_EXPORT GC qt_xget_readonly_gc(bool monochrome = FALSE);
+Q_EXPORT GC qt_xget_temp_gc(bool monochrome = FALSE);
 
 #endif // _WS_X11_
 
@@ -137,7 +137,7 @@ Q_EXPORT GC	 qt_xget_temp_gc( bool monochrome=FALSE );
 
 struct QWSEvent;
 typedef unsigned int WId;
-typedef void* HANDLE;
+typedef void *HANDLE;
 class QGfx;
 
 #endif // _WS_QWS_
@@ -145,31 +145,31 @@ class QGfx;
 class QApplication;
 
 #if defined(NEEDS_QMAIN)
-#define main qMain
+# define main qMain
 #endif
 
 // Global platform-independent types and functions
 
 
-typedef Q_INT32 QCOORD;				// coordinate type
-const QCOORD QCOORD_MAX =  2147483647;
+typedef Q_INT32 QCOORD; // coordinate type
+const QCOORD QCOORD_MAX = 2147483647;
 const QCOORD QCOORD_MIN = -QCOORD_MAX - 1;
 
-typedef unsigned int QRgb;			// RGB triplet
+typedef unsigned int QRgb; // RGB triplet
 
-Q_EXPORT char *qAppName();			// get application name
+Q_EXPORT char *qAppName(); // get application name
 
 
 // Misc functions
 
 typedef void (*Q_CleanUpFunction)();
-Q_EXPORT void qAddPostRoutine( Q_CleanUpFunction );
-Q_EXPORT void qRemovePostRoutine( Q_CleanUpFunction );
+Q_EXPORT void qAddPostRoutine(Q_CleanUpFunction);
+Q_EXPORT void qRemovePostRoutine(Q_CleanUpFunction);
 
 // ### remove 3.0
-Q_EXPORT void *qt_find_obj_child( QObject *, const char *, const char * );
-#define Q_CHILD(parent,type,name) \
-	((type*)qt_find_obj_child(parent,#type,name))
+Q_EXPORT void *qt_find_obj_child(QObject *, const char *, const char *);
+#define Q_CHILD(parent, type, name) \
+	((type *)qt_find_obj_child(parent, #type, name))
 
 
 #endif // QWINDOWDEFS_H

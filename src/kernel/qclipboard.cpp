@@ -39,9 +39,9 @@
 
 #ifndef QT_NO_CLIPBOARD
 
-#include "qapplication.h"
-#include "qdragobject.h"
-#include "qpixmap.h"
+# include "qapplication.h"
+# include "qdragobject.h"
+# include "qpixmap.h"
 
 // REVISED: arnt
 
@@ -98,10 +98,10 @@
   than one object to represent it is almost certainly a bug.
 */
 
-QClipboard::QClipboard( QObject *parent, const char *name )
-    : QObject( parent, name )
+QClipboard::QClipboard(QObject *parent, const char *name)
+	: QObject(parent, name)
 {
-    // nothing
+	// nothing
 }
 
 /*!
@@ -110,11 +110,11 @@ QClipboard::QClipboard( QObject *parent, const char *name )
   You should never delete the clipboard. QApplication will do this when
   the application terminates.
 */
-#ifndef _WS_WIN32_
+# ifndef _WS_WIN32_
 QClipboard::~QClipboard()
 {
 }
-#endif
+# endif
 
 /*!
   \fn void QClipboard::dataChanged()
@@ -127,7 +127,7 @@ QClipboard::~QClipboard()
   QApplication member functions related to QClipboard.
  *****************************************************************************/
 
-#ifndef QT_NO_MIMECLIPBOARD
+# ifndef QT_NO_MIMECLIPBOARD
 // text handling is done directly in qclipboard_qws, for now
 
 /*!
@@ -141,12 +141,12 @@ QClipboard::~QClipboard()
   \sa setText() data(), QString::operator!()
 */
 
-QString QClipboard::text(QCString& subtype, Mode mode) const
+QString QClipboard::text(QCString &subtype, Mode mode) const
 {
-    QString r;
-    const QMimeSource* mime_source = data(mode);
-    QTextDrag::decode( mime_source, r, subtype );
-    return r;
+	QString r;
+	const QMimeSource *mime_source = data(mode);
+	QTextDrag::decode(mime_source, r, subtype);
+	return r;
 }
 
 /*!
@@ -158,8 +158,8 @@ QString QClipboard::text(QCString& subtype, Mode mode) const
 
 QString QClipboard::text(Mode mode) const
 {
-    QCString subtype = "plain";
-    return text(subtype, mode);
+	QCString subtype = "plain";
+	return text(subtype, mode);
 }
 
 
@@ -168,9 +168,9 @@ QString QClipboard::text(Mode mode) const
   \sa text() setData()
 */
 
-void QClipboard::setText( const QString &text, Mode mode )
+void QClipboard::setText(const QString &text, Mode mode)
 {
-    setData( new QTextDrag(text), mode );
+	setData(new QTextDrag(text), mode);
 }
 
 
@@ -184,9 +184,9 @@ void QClipboard::setText( const QString &text, Mode mode )
 
 QImage QClipboard::image() const
 {
-    QImage r;
-    QImageDrag::decode( data(), r );
-    return r;
+	QImage r;
+	QImageDrag::decode(data(), r);
+	return r;
 }
 
 /*!
@@ -200,9 +200,9 @@ QImage QClipboard::image() const
   \sa image(), setPixmap() setData()
 */
 
-void QClipboard::setImage( const QImage &image )
+void QClipboard::setImage(const QImage &image)
 {
-    setData( new QImageDrag( image ) );
+	setData(new QImageDrag(image));
 }
 
 
@@ -218,9 +218,9 @@ void QClipboard::setImage( const QImage &image )
 
 QPixmap QClipboard::pixmap() const
 {
-    QPixmap r;
-    QImageDrag::decode( data(), r );
-    return r;
+	QPixmap r;
+	QImageDrag::decode(data(), r);
+	return r;
 }
 
 /*!
@@ -230,10 +230,10 @@ QPixmap QClipboard::pixmap() const
   \sa pixmap() setImage() setData()
 */
 
-void QClipboard::setPixmap( const QPixmap &pixmap )
+void QClipboard::setPixmap(const QPixmap &pixmap)
 {
-    // *could* just use the handle, but that is X hackery, MIME is better.
-    setData( new QImageDrag( pixmap.convertToImage() ) );
+	// *could* just use the handle, but that is X hackery, MIME is better.
+	setData(new QImageDrag(pixmap.convertToImage()));
 }
-#endif // QT_NO_MIMECLIPBOARD
+# endif // QT_NO_MIMECLIPBOARD
 #endif // QT_NO_CLIPBOARD

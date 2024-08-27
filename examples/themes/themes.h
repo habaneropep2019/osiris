@@ -16,35 +16,35 @@
 
 class QTabWidget;
 
-class Themes: public QMainWindow
+class Themes : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    Themes( QWidget *parent = 0, const char *name = 0, WFlags f = WType_TopLevel );
+      public:
+	Themes(QWidget *parent = 0, const char *name = 0,
+	       WFlags f = WType_TopLevel);
 
-protected:
-    QTabWidget *tabwidget;
+      protected:
+	QTabWidget *tabwidget;
 
-    int sWood, sMetal, sPlatinum, sWindows, sCDE, sMotif, sMotifPlus;
+	int sWood, sMetal, sPlatinum, sWindows, sCDE, sMotif, sMotifPlus;
 
-protected slots:
-    void styleWood();
-    void styleMetal();
-    void stylePlatinum();
-    void styleWindows();
-    void styleCDE();
-    void styleMotif();
-    void styleMotifPlus();
+      protected slots:
+	void styleWood();
+	void styleMetal();
+	void stylePlatinum();
+	void styleWindows();
+	void styleCDE();
+	void styleMotif();
+	void styleMotifPlus();
 
-    void about();
-    void aboutQt();
+	void about();
+	void aboutQt();
 
-private:
-    void selectStyleMenu( int );
+      private:
+	void selectStyleMenu(int);
 
-    QFont appFont;
-
+	QFont appFont;
 };
 
 

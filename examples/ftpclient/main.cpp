@@ -14,21 +14,21 @@
 
 #include "ftpmainwindow.h"
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    // call this to register the FTP network protocol
-    // (and in the future more available ones)
-    qInitNetworkProtocols();
+	// call this to register the FTP network protocol
+	// (and in the future more available ones)
+	qInitNetworkProtocols();
 
-    FtpMainWindow m;
-    a.setMainWidget( &m );
-    QValueList<int> sizes;
-    sizes << 300 << 70 << 300;
-    m.mainSplitter()->setSizes( sizes );
-    m.resize( 800, 600 );
-    m.setCaption("Qt Example - FTP Client");
-    m.show();
-    return a.exec();
+	FtpMainWindow m;
+	a.setMainWidget(&m);
+	QValueList<int> sizes;
+	sizes << 300 << 70 << 300;
+	m.mainSplitter()->setSizes(sizes);
+	m.resize(800, 600);
+	m.setCaption("Qt Example - FTP Client");
+	m.show();
+	return a.exec();
 }

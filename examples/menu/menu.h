@@ -18,39 +18,39 @@
 
 class MenuExample : public QWidget
 {
-    Q_OBJECT
-public:
-    MenuExample( QWidget *parent=0, const char *name=0 );
+	Q_OBJECT
+      public:
+	MenuExample(QWidget *parent = 0, const char *name = 0);
 
-public slots:
-    void open();
-    void news();
-    void save();
-    void closeDoc();
-    void undo();
-    void redo();
-    void normal();
-    void bold();
-    void underline();
-    void about();
-    void aboutQt();
-    void printer();
-    void file();
-    void fax();
-    void printerSetup();
+      public slots:
+	void open();
+	void news();
+	void save();
+	void closeDoc();
+	void undo();
+	void redo();
+	void normal();
+	void bold();
+	void underline();
+	void about();
+	void aboutQt();
+	void printer();
+	void file();
+	void fax();
+	void printerSetup();
 
-protected:
-    void    resizeEvent( QResizeEvent * );
+      protected:
+	void resizeEvent(QResizeEvent *);
 
-signals:
-    void    explain( const QString& );
+      signals:
+	void explain(const QString &);
 
-private:
-    QMenuBar *menu;
-    QLabel   *label;
-    bool isBold;
-    bool isUnderline;
-    int boldID, underlineID;
+      private:
+	QMenuBar *menu;
+	QLabel *label;
+	bool isBold;
+	bool isUnderline;
+	int boldID, underlineID;
 };
 
 

@@ -12,9 +12,9 @@
 
 class ExampleWidget : public QWidget
 {
-public:
-    ExampleWidget(QWidget *parent = 0, const char *name = 0);
-    ~ExampleWidget();
+      public:
+	ExampleWidget(QWidget *parent = 0, const char *name = 0);
+	~ExampleWidget();
 
-private:
+      private:
 };

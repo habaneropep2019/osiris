@@ -37,8 +37,8 @@
 #define QTOOLTIP_H
 
 #ifndef QT_H
-#include "qwidget.h"
-#include "qtimer.h"
+# include "qwidget.h"
+# include "qtimer.h"
 #endif // QT_H
 
 #ifndef QT_NO_TOOLTIP
@@ -48,88 +48,94 @@ class QTipManager;
 class QLabel;
 class QIconViewToolTip;
 
-class Q_EXPORT QToolTipGroup: public QObject
+class Q_EXPORT QToolTipGroup : public QObject
 {
-    Q_OBJECT
-    Q_PROPERTY( bool delay READ delay WRITE setDelay )
-    Q_PROPERTY( bool enabled READ enabled WRITE setEnabled )
+	Q_OBJECT
+	Q_PROPERTY(bool delay READ delay WRITE setDelay)
+	Q_PROPERTY(bool enabled READ enabled WRITE setEnabled)
 
-public:
-    QToolTipGroup( QObject *parent, const char *name = 0 );
-   ~QToolTipGroup();
+      public:
+	QToolTipGroup(QObject *parent, const char *name = 0);
+	~QToolTipGroup();
 
-    bool delay() const;
-    bool enabled() const;
+	bool delay() const;
+	bool enabled() const;
 
-public slots:
-    void setDelay( bool );
-    void setEnabled( bool );
+      public slots:
+	void setDelay(bool);
+	void setEnabled(bool);
 
-signals:
-    void showTip( const QString &);
-    void removeTip();
+      signals:
+	void showTip(const QString &);
+	void removeTip();
 
-private:
-    uint del:1;
-    uint ena:1;
+      private:
+	uint del:1;
+	uint ena:1;
 
-    friend class QTipManager;
+	friend class QTipManager;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QToolTipGroup( const QToolTipGroup & );
-    QToolTipGroup& operator=( const QToolTipGroup & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QToolTipGroup(const QToolTipGroup &);
+	QToolTipGroup &operator=(const QToolTipGroup &);
+# endif
 };
 
 
-class Q_EXPORT QToolTip: public Qt
+class Q_EXPORT QToolTip : public Qt
 {
-public:
-    QToolTip( QWidget *, QToolTipGroup * = 0 );
+      public:
+	QToolTip(QWidget *, QToolTipGroup * = 0);
 
-    static void add( QWidget *, const QString &);
-    static void add( QWidget *, const QString &,
-		     QToolTipGroup *, const QString& );
-    static void remove( QWidget * );
+	static void add(QWidget *, const QString &);
+	static void add(QWidget *, const QString &, QToolTipGroup *,
+			const QString &);
+	static void remove(QWidget *);
 
-    static void add( QWidget *, const QRect &, const QString &);
-    static void add( QWidget *, const QRect &, const QString &,
-		     QToolTipGroup *, const QString& );
-    static void remove( QWidget *, const QRect & );
+	static void add(QWidget *, const QRect &, const QString &);
+	static void add(QWidget *, const QRect &, const QString &,
+			QToolTipGroup *, const QString &);
+	static void remove(QWidget *, const QRect &);
 
-    static void hide();
+	static void hide();
 
-    static QFont    font();
-    static void	    setFont( const QFont & );
-    static QPalette palette();
-    static void	    setPalette( const QPalette & );
+	static QFont font();
+	static void setFont(const QFont &);
+	static QPalette palette();
+	static void setPalette(const QPalette &);
 
-    static void	    setEnabled( bool );
-    static bool	    enabled();
+	static void setEnabled(bool);
+	static bool enabled();
 
-protected:
-    virtual void maybeTip( const QPoint & ) = 0;
-    void    tip( const QRect &, const QString &);
-    void    tip( const QRect &, const QString& , const QString &);
-    void    clear();
+      protected:
+	virtual void maybeTip(const QPoint &) = 0;
+	void tip(const QRect &, const QString &);
+	void tip(const QRect &, const QString &, const QString &);
+	void clear();
 
-public:
-    QWidget	  *parentWidget() const { return p; }
-    QToolTipGroup *group()	  const { return g; }
+      public:
+	QWidget *parentWidget() const
+	{
+		return p;
+	}
+	QToolTipGroup *group() const
+	{
+		return g;
+	}
 
-private:
-    void    tip( const QRect &, const QRect &, const QString &);
-    QWidget	    *p;
-    QToolTipGroup   *g;
-    static QFont    *ttFont;
-    static QPalette *ttPalette;
+      private:
+	void tip(const QRect &, const QRect &, const QString &);
+	QWidget *p;
+	QToolTipGroup *g;
+	static QFont *ttFont;
+	static QPalette *ttPalette;
 
-    static void initialize();
-    static void cleanup();
+	static void initialize();
+	static void cleanup();
 
-    friend class QTipManager;
-    friend class QIconViewToolTip;
+	friend class QTipManager;
+	friend class QIconViewToolTip;
 };
 
 

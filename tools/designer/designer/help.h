@@ -22,11 +22,11 @@
 #define HELP_H
 
 #if defined(HAVE_KDE)
-#include <kmainwindow.h>
+# include <kmainwindow.h>
 class KToolBar;
 #else
 class QToolBar;
-#include <qmainwindow.h>
+# include <qmainwindow.h>
 #endif
 
 #include <qmap.h>
@@ -37,49 +37,51 @@ class HelpDialog;
 class QPopupMenu;
 
 #if defined(HAVE_KDE)
-#define QMainWindow KMainWindow
+# define QMainWindow KMainWindow
 #endif
 
 class Help : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 #undef QMainWindow
-    
-public:
-    Help( const QString& home, MainWindow* parent = 0, const char *name=0 );
-    ~Help();
 
-    void setSource( const QString& );
+      public:
+	Help(const QString &home, MainWindow *parent = 0, const char *name = 0);
+	~Help();
 
-    void setupBookmarkMenu();
-    QTextBrowser *viewer() const { return browser; }
+	void setSource(const QString &);
 
-private slots:
-    void textChanged();
-    void filePrint();
-    void goTopics();
-    void goHome();
-    void goQt();
-    void showLink( const QString &link, const QString &title );
-    void showBookmark( int id );
+	void setupBookmarkMenu();
+	QTextBrowser *viewer() const
+	{
+		return browser;
+	}
 
-private:
-    void setupFileActions();
-    void setupGoActions();
+      private slots:
+	void textChanged();
+	void filePrint();
+	void goTopics();
+	void goHome();
+	void goQt();
+	void showLink(const QString &link, const QString &title);
+	void showBookmark(int id);
 
-private:
-    QTextBrowser* browser;
+      private:
+	void setupFileActions();
+	void setupGoActions();
+
+      private:
+	QTextBrowser *browser;
 #if defined(HAVE_KDE)
-    KToolBar *toolbar;
+	KToolBar *toolbar;
 #else
-    QToolBar *toolbar;
+	QToolBar *toolbar;
 #endif
-    MainWindow *mainWindow;
-    HelpDialog *helpDialog;
-    QPopupMenu *bookmarkMenu;
-    QMap<int, QString> bookmarks;
-
+	MainWindow *mainWindow;
+	HelpDialog *helpDialog;
+	QPopupMenu *bookmarkMenu;
+	QMap<int, QString> bookmarks;
 };
 
 #endif

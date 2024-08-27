@@ -38,12 +38,19 @@
 #include "qserversocket.h"
 
 #ifndef QT_NO_NETWORK
-class QServerSocketPrivate {
-public:
-    QServerSocketPrivate(): s(0), n(0) {}
-    ~QServerSocketPrivate() { delete n; delete s; }
-    QSocketDevice *s;
-    QSocketNotifier *n;
+class QServerSocketPrivate
+{
+      public:
+	QServerSocketPrivate() : s(0), n(0)
+	{
+	}
+	~QServerSocketPrivate()
+	{
+		delete n;
+		delete s;
+	}
+	QSocketDevice *s;
+	QSocketNotifier *n;
 };
 
 
@@ -83,12 +90,12 @@ public:
   0.
 */
 
-QServerSocket::QServerSocket( Q_UINT16 port, int backlog,
-			      QObject *parent, const char *name )
-    : QObject( parent, name )
+QServerSocket::QServerSocket(Q_UINT16 port, int backlog, QObject *parent,
+			     const char *name)
+	: QObject(parent, name)
 {
-    d = new QServerSocketPrivate;
-    init( QHostAddress(), port, backlog );
+	d = new QServerSocketPrivate;
+	init(QHostAddress(), port, backlog);
 }
 
 
@@ -105,13 +112,12 @@ QServerSocket::QServerSocket( Q_UINT16 port, int backlog,
   0.
 */
 
-QServerSocket::QServerSocket( const QHostAddress & address, Q_UINT16 port,
-			      int backlog,
-			      QObject *parent, const char *name )
-    : QObject( parent, name )
+QServerSocket::QServerSocket(const QHostAddress &address, Q_UINT16 port,
+			     int backlog, QObject *parent, const char *name)
+	: QObject(parent, name)
 {
-    d = new QServerSocketPrivate;
-    init( address, port, backlog );
+	d = new QServerSocketPrivate;
+	init(address, port, backlog);
 }
 
 
@@ -125,10 +131,10 @@ QServerSocket::QServerSocket( const QHostAddress & address, Q_UINT16 port,
   \sa setSocket()
 */
 
-QServerSocket::QServerSocket( QObject *parent, const char *name )
-    : QObject( parent, name )
+QServerSocket::QServerSocket(QObject *parent, const char *name)
+	: QObject(parent, name)
 {
-    d = new QServerSocketPrivate;
+	d = new QServerSocketPrivate;
 }
 
 
@@ -137,26 +143,27 @@ QServerSocket::QServerSocket( QObject *parent, const char *name )
 */
 bool QServerSocket::ok() const
 {
-    return !!d->s;
+	return !!d->s;
 }
 
 /*!  The common bit of the constructors. */
 
-void QServerSocket::init( const QHostAddress & address, Q_UINT16 port, int backlog )
+void QServerSocket::init(const QHostAddress &address, Q_UINT16 port,
+			 int backlog)
 {
-    d->s = new QSocketDevice;
-    if ( d->s->bind( address, port )
-      && d->s->listen( backlog ) )
-    {
-	d->n = new QSocketNotifier( d->s->socket(), QSocketNotifier::Read,
-				    this, "accepting new connections" );
-	connect( d->n, SIGNAL(activated(int)),
-		 this, SLOT(incomingConnection(int)) );
-    } else {
-	qWarning( "QServerSocket: failed to bind or listen to the socket" );
-	delete d->s;
-	d->s = 0;
-    }
+	d->s = new QSocketDevice;
+	if (d->s->bind(address, port) && d->s->listen(backlog)) {
+		d->n = new QSocketNotifier(d->s->socket(),
+					   QSocketNotifier::Read, this,
+					   "accepting new connections");
+		connect(d->n, SIGNAL(activated(int)), this,
+			SLOT(incomingConnection(int)));
+	} else {
+		qWarning(
+			"QServerSocket: failed to bind or listen to the socket");
+		delete d->s;
+		d->s = 0;
+	}
 }
 
 
@@ -173,7 +180,7 @@ void QServerSocket::init( const QHostAddress & address, Q_UINT16 port, int backl
 
 QServerSocket::~QServerSocket()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -186,11 +193,11 @@ QServerSocket::~QServerSocket()
 */
 
 
-void QServerSocket::incomingConnection( int )
+void QServerSocket::incomingConnection(int)
 {
-    int fd = d->s->accept();
-    if ( fd >= 0 )
-	newConnection( fd );
+	int fd = d->s->accept();
+	if (fd >= 0)
+		newConnection(fd);
 }
 
 
@@ -205,9 +212,9 @@ void QServerSocket::incomingConnection( int )
 
 Q_UINT16 QServerSocket::port() const
 {
-    if ( !d || !d->s )
-	return 0;
-    return d->s->port();
+	if (!d || !d->s)
+		return 0;
+	return d->s->port();
 }
 
 
@@ -217,10 +224,10 @@ Q_UINT16 QServerSocket::port() const
 
 int QServerSocket::socket() const
 {
-    if ( !d || !d->s )
-	return -1;
-    
-    return d->s->socket();
+	if (!d || !d->s)
+		return -1;
+
+	return d->s->socket();
 }
 
 /*!
@@ -233,10 +240,10 @@ int QServerSocket::socket() const
 
 QHostAddress QServerSocket::address() const
 {
-    if ( !d || !d->s )
-	return QHostAddress();
-    
-    return d->s->address();
+	if (!d || !d->s)
+		return QHostAddress();
+
+	return d->s->address();
 }
 
 
@@ -251,10 +258,10 @@ QHostAddress QServerSocket::address() const
 
 QSocketDevice *QServerSocket::socketDevice()
 {
-    if ( !d )
-	return 0;
-    
-    return d->s;
+	if (!d)
+		return 0;
+
+	return d->s;
 }
 
 
@@ -266,15 +273,15 @@ QSocketDevice *QServerSocket::socketDevice()
   types (e.g. Unix Domain Sockets under Unix).
 */
 
-void QServerSocket::setSocket( int socket )
+void QServerSocket::setSocket(int socket)
 {
-    delete d;
-    d = new QServerSocketPrivate;
-    d->s = new QSocketDevice( socket, QSocketDevice::Stream );
-    d->n = new QSocketNotifier( d->s->socket(), QSocketNotifier::Read,
-	       this, "accepting new connections" );
-    connect( d->n, SIGNAL(activated(int)),
-	     this, SLOT(incomingConnection(int)) );
+	delete d;
+	d = new QServerSocketPrivate;
+	d->s = new QSocketDevice(socket, QSocketDevice::Stream);
+	d->n = new QSocketNotifier(d->s->socket(), QSocketNotifier::Read, this,
+				   "accepting new connections");
+	connect(d->n, SIGNAL(activated(int)), this,
+		SLOT(incomingConnection(int)));
 }
 
-#endif //QT_NO_NETWORK
+#endif // QT_NO_NETWORK

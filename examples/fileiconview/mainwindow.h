@@ -23,40 +23,45 @@ class QToolButton;
 
 class FileMainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    FileMainWindow();
+      public:
+	FileMainWindow();
 
-    QtFileIconView *fileView() { return fileview; }
-    DirectoryView *dirList() { return dirlist; }
+	QtFileIconView *fileView()
+	{
+		return fileview;
+	}
+	DirectoryView *dirList()
+	{
+		return dirlist;
+	}
 
-    void show();
+	void show();
 
-protected:
-    void setup();
-    void setPathCombo();
+      protected:
+	void setup();
+	void setPathCombo();
 
-    QtFileIconView *fileview;
-    DirectoryView *dirlist;
-    QProgressBar *progress;
-    QLabel *label;
-    QComboBox *pathCombo;
-    QToolButton *upButton, *mkdirButton;
+	QtFileIconView *fileview;
+	DirectoryView *dirlist;
+	QProgressBar *progress;
+	QLabel *label;
+	QComboBox *pathCombo;
+	QToolButton *upButton, *mkdirButton;
 
-protected slots:
-    void directoryChanged( const QString & );
-    void slotStartReadDir( int dirs );
-    void slotReadNextDir();
-    void slotReadDirDone();
-    void cdUp();
-    void newFolder();
-    void changePath( const QString &path );
-    void enableUp();
-    void disableUp();
-    void enableMkdir();
-    void disableMkdir();
-
+      protected slots:
+	void directoryChanged(const QString &);
+	void slotStartReadDir(int dirs);
+	void slotReadNextDir();
+	void slotReadDirDone();
+	void cdUp();
+	void newFolder();
+	void changePath(const QString &path);
+	void enableUp();
+	void disableUp();
+	void enableMkdir();
+	void disableMkdir();
 };
 
 #endif

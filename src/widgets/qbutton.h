@@ -39,7 +39,7 @@
 #define QBUTTON_H
 
 #ifndef QT_H
-#include "qwidget.h"
+# include "qwidget.h"
 #endif // QT_H
 
 #ifndef QT_NO_BUTTON
@@ -51,173 +51,173 @@ class QToolBar;
 
 class Q_EXPORT QButton : public QWidget
 {
-    Q_OBJECT
-    Q_ENUMS( ToggleType ToggleState )
-    Q_PROPERTY( QString text READ text WRITE setText )
-    Q_PROPERTY( QPixmap pixmap READ pixmap WRITE setPixmap )
-    Q_PROPERTY( int accel READ accel WRITE setAccel )
-    Q_PROPERTY( bool toggleButton READ isToggleButton )
-    Q_PROPERTY( ToggleType toggleType READ toggleType )
-    Q_PROPERTY( bool down READ isDown WRITE setDown DESIGNABLE false  )
-    Q_PROPERTY( bool on READ isOn )
-    Q_PROPERTY( ToggleState toggleState READ state )
-    Q_PROPERTY( bool autoResize READ autoResize WRITE setAutoResize )
-    Q_PROPERTY( bool autoRepeat READ autoRepeat WRITE setAutoRepeat )
-    Q_PROPERTY( bool exclusiveToggle READ isExclusiveToggle )
+	Q_OBJECT
+	Q_ENUMS(ToggleType ToggleState)
+	Q_PROPERTY(QString text READ text WRITE setText)
+	Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap)
+	Q_PROPERTY(int accel READ accel WRITE setAccel)
+	Q_PROPERTY(bool toggleButton READ isToggleButton)
+	Q_PROPERTY(ToggleType toggleType READ toggleType)
+	Q_PROPERTY(bool down READ isDown WRITE setDown DESIGNABLE false)
+	Q_PROPERTY(bool on READ isOn)
+	Q_PROPERTY(ToggleState toggleState READ state)
+	Q_PROPERTY(bool autoResize READ autoResize WRITE setAutoResize)
+	Q_PROPERTY(bool autoRepeat READ autoRepeat WRITE setAutoRepeat)
+	Q_PROPERTY(bool exclusiveToggle READ isExclusiveToggle)
 
-public:
-    QButton( QWidget *parent=0, const char *name=0, WFlags f=0 );
-   ~QButton();
+      public:
+	QButton(QWidget *parent = 0, const char *name = 0, WFlags f = 0);
+	~QButton();
 
-    QString text() const;
-    virtual void setText( const QString &);
-    const QPixmap *pixmap() const;
-    virtual void setPixmap( const QPixmap & );
+	QString text() const;
+	virtual void setText(const QString &);
+	const QPixmap *pixmap() const;
+	virtual void setPixmap(const QPixmap &);
 
-    int		accel()	const;
-    virtual void	setAccel( int );
+	int accel() const;
+	virtual void setAccel(int);
 
-    bool	isToggleButton() const;
+	bool isToggleButton() const;
 
-    enum ToggleType { SingleShot, Toggle, Tristate };
-    ToggleType	toggleType() const;
+	enum ToggleType { SingleShot, Toggle, Tristate };
+	ToggleType toggleType() const;
 
-    virtual void setDown( bool );
-    bool	isDown() const;
+	virtual void setDown(bool);
+	bool isDown() const;
 
-    bool	isOn() const;
+	bool isOn() const;
 
-    enum ToggleState { Off, NoChange, On };
-    ToggleState	state() const;
+	enum ToggleState { Off, NoChange, On };
+	ToggleState state() const;
 
-    bool	autoResize() const; // obsolete
-    virtual void setAutoResize( bool ); // obsolete
+	bool autoResize() const; // obsolete
+	virtual void setAutoResize(bool); // obsolete
 
-    bool	autoRepeat() const;
-    virtual void setAutoRepeat( bool );
+	bool autoRepeat() const;
+	virtual void setAutoRepeat(bool);
 
-    bool	isExclusiveToggle() const;
+	bool isExclusiveToggle() const;
 
-    bool	focusNextPrevChild( bool next );
+	bool focusNextPrevChild(bool next);
 
-    QButtonGroup *group() const;
+	QButtonGroup *group() const;
 
-public slots:
-    void	animateClick();
-    void	toggle();
+      public slots:
+	void animateClick();
+	void toggle();
 
-signals:
-    void	pressed();
-    void	released();
-    void	clicked();
-    void	toggled( bool );
-    void	stateChanged( int );
+      signals:
+	void pressed();
+	void released();
+	void clicked();
+	void toggled(bool);
+	void stateChanged(int);
 
-protected:
-    void	setToggleButton( bool );
-    virtual void	setToggleType( ToggleType );
-    void	setOn( bool );
-    virtual void	setState( ToggleState );
+      protected:
+	void setToggleButton(bool);
+	virtual void setToggleType(ToggleType);
+	void setOn(bool);
+	virtual void setState(ToggleState);
 
-    virtual bool hitButton( const QPoint &pos ) const;
-    virtual void drawButton( QPainter * );
-    virtual void drawButtonLabel( QPainter * );
+	virtual bool hitButton(const QPoint &pos) const;
+	virtual void drawButton(QPainter *);
+	virtual void drawButtonLabel(QPainter *);
 
-    void	keyPressEvent( QKeyEvent *);
-    void	keyReleaseEvent( QKeyEvent *);
-    void	mousePressEvent( QMouseEvent * );
-    void	mouseReleaseEvent( QMouseEvent * );
-    void	mouseMoveEvent( QMouseEvent * );
-    void	paintEvent( QPaintEvent * );
-    void	focusInEvent( QFocusEvent * );
-    void	focusOutEvent( QFocusEvent * );
+	void keyPressEvent(QKeyEvent *);
+	void keyReleaseEvent(QKeyEvent *);
+	void mousePressEvent(QMouseEvent *);
+	void mouseReleaseEvent(QMouseEvent *);
+	void mouseMoveEvent(QMouseEvent *);
+	void paintEvent(QPaintEvent *);
+	void focusInEvent(QFocusEvent *);
+	void focusOutEvent(QFocusEvent *);
 
-    void	enabledChange( bool );
+	void enabledChange(bool);
 
-private slots:
-    void	animateTimeout();
-    void	autoRepeatTimeout();
+      private slots:
+	void animateTimeout();
+	void autoRepeatTimeout();
 
-private:
-    QString	btext;
-    QPixmap    *bpixmap;
-    uint	toggleTyp	: 2;
-    uint	buttonDown	: 1;
-    uint	stat		: 2;
-    uint	mlbDown		: 1;
-    uint	autoresize	: 1;
-    uint	animation	: 1;
-    uint	repeat		: 1;
-    QButtonData *d;
+      private:
+	QString btext;
+	QPixmap *bpixmap;
+	uint toggleTyp:2;
+	uint buttonDown:1;
+	uint stat:2;
+	uint mlbDown:1;
+	uint autoresize:1;
+	uint animation:1;
+	uint repeat:1;
+	QButtonData *d;
 
-    friend class QButtonGroup;
-    friend class QToolBar;
-    void          ensureData();
-    virtual void setGroup( QButtonGroup* );
-    QTimer	 *timer();
-    void	nextState();
+	friend class QButtonGroup;
+	friend class QToolBar;
+	void ensureData();
+	virtual void setGroup(QButtonGroup *);
+	QTimer *timer();
+	void nextState();
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QButton( const QButton & );
-    QButton &operator=( const QButton & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QButton(const QButton &);
+	QButton &operator=(const QButton &);
+# endif
 };
 
 
 inline QString QButton::text() const
 {
-    return btext;
+	return btext;
 }
 
 inline const QPixmap *QButton::pixmap() const
 {
-    return bpixmap;
+	return bpixmap;
 }
 
 inline bool QButton::isToggleButton() const
 {
-    return toggleTyp != SingleShot;
+	return toggleTyp != SingleShot;
 }
 
-inline  bool QButton::isDown() const
+inline bool QButton::isDown() const
 {
-    return buttonDown;
+	return buttonDown;
 }
 
 inline bool QButton::isOn() const
 {
-    return stat != Off;
+	return stat != Off;
 }
 
 inline bool QButton::autoResize() const // obsolete
 {
-    return autoresize;
+	return autoresize;
 }
 
 inline bool QButton::autoRepeat() const
 {
-    return repeat;
+	return repeat;
 }
 
 inline QButton::ToggleState QButton::state() const
 {
-    return ToggleState(stat);
+	return ToggleState(stat);
 }
 
-inline void QButton::setToggleButton( bool b )
+inline void QButton::setToggleButton(bool b)
 {
-    setToggleType( b ? Toggle : SingleShot );
+	setToggleType(b ? Toggle : SingleShot);
 }
 
-inline void QButton::setOn( bool y )
+inline void QButton::setOn(bool y)
 {
-    setState( y ? On : Off );
+	setState(y ? On : Off);
 }
 
 inline QButton::ToggleType QButton::toggleType() const
 {
-    return ToggleType(toggleTyp);
+	return ToggleType(toggleTyp);
 }
 
 

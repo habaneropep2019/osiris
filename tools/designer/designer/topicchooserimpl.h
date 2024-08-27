@@ -25,21 +25,20 @@
 
 class TopicChooser : public TopicChooserBase
 {
-    Q_OBJECT
-    
-public:
-    TopicChooser( QWidget *parent, const QStringList &lnkNames,
-		  const QStringList &lnks, const QString &title );
-    
-    QString link() const;
-    
-    static QString getLink( QWidget *parent, const QStringList &lnkNames,
-			    const QStringList &lnks, const QString &title );
-    
-private:
-    QString theLink;
-    QStringList links, linkNames;
+	Q_OBJECT
 
+      public:
+	TopicChooser(QWidget *parent, const QStringList &lnkNames,
+		     const QStringList &lnks, const QString &title);
+
+	QString link() const;
+
+	static QString getLink(QWidget *parent, const QStringList &lnkNames,
+			       const QStringList &lnks, const QString &title);
+
+      private:
+	QString theLink;
+	QStringList links, linkNames;
 };
 
 #endif

@@ -22,20 +22,20 @@ class QPushButton;
 
 class Composer : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    Composer( QWidget *parent = 0 );
+      public:
+	Composer(QWidget *parent = 0);
 
-private slots:
-    void sendMessage();
-    void enableSend();
+      private slots:
+	void sendMessage();
+	void enableSend();
 
-private:
-    QLineEdit *from, *to, *subject;
-    QMultiLineEdit *message;
-    QLabel * sendStatus;
-    QPushButton * send;
+      private:
+	QLineEdit *from, *to, *subject;
+	QMultiLineEdit *message;
+	QLabel *sendStatus;
+	QPushButton *send;
 };
 
 

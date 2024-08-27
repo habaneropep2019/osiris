@@ -40,29 +40,30 @@
 #define QCDESTYLE_H
 
 #ifndef QT_H
-#include "qmotifstyle.h"
+# include "qmotifstyle.h"
 #endif // QT_H
 
 #ifndef QT_NO_STYLE_CDE
 
 class Q_EXPORT QCDEStyle : public QMotifStyle
 {
-    Q_OBJECT
-public:
-    QCDEStyle( bool useHighlightCols = FALSE );
-    virtual ~QCDEStyle();
-    int defaultFrameWidth() const;
+	Q_OBJECT
+      public:
+	QCDEStyle(bool useHighlightCols = FALSE);
+	virtual ~QCDEStyle();
+	int defaultFrameWidth() const;
 
-    void drawArrow( QPainter *p, ArrowType type, bool down,
-		    int x, int y, int w, int h,
-		    const QColorGroup &g, bool enabled, const QBrush *fill = 0 );
+	void drawArrow(QPainter *p, ArrowType type, bool down, int x, int y,
+		       int w, int h, const QColorGroup &g, bool enabled,
+		       const QBrush *fill = 0);
 
-    void drawIndicator( QPainter* p, int x, int y, int w, int h,  const QColorGroup &g,
-		       int state, bool down = FALSE, bool enabled = TRUE );
+	void drawIndicator(QPainter *p, int x, int y, int w, int h,
+			   const QColorGroup &g, int state, bool down = FALSE,
+			   bool enabled = TRUE);
 
-    void drawExclusiveIndicator( QPainter* p,  int x, int y, int w, int h, const QColorGroup &g,
-				 bool on, bool down = FALSE, bool enabled = TRUE );
-    
+	void drawExclusiveIndicator(QPainter *p, int x, int y, int w, int h,
+				    const QColorGroup &g, bool on,
+				    bool down = FALSE, bool enabled = TRUE);
 };
 
 #endif // QT_NO_STYLE_CDE

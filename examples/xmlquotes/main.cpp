@@ -14,31 +14,30 @@
 #include <qfile.h>
 #include <qmessagebox.h>
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    // parse xml file
-    QuoteHandler handler;
-    QFile file( "quotes.xml" );
-    QXmlInputSource source( file );
-    QXmlSimpleReader reader;
-    reader.setContentHandler( &handler );
-    reader.setErrorHandler( &handler );
-    bool ok = reader.parse( source );
-    file.close();
-    if ( !ok ) {
-	QMessageBox::critical( 0,
-		a.tr( "Parse Error" ),
-		a.tr( handler.errorProtocol() ) );
-	return -1;
-    }
+	// parse xml file
+	QuoteHandler handler;
+	QFile file("quotes.xml");
+	QXmlInputSource source(file);
+	QXmlSimpleReader reader;
+	reader.setContentHandler(&handler);
+	reader.setErrorHandler(&handler);
+	bool ok = reader.parse(source);
+	file.close();
+	if (!ok) {
+		QMessageBox::critical(0, a.tr("Parse Error"),
+				      a.tr(handler.errorProtocol()));
+		return -1;
+	}
 
-    MyRichText richtext( handler.quotes() );
-    richtext.resize( 450, 350 );
-    richtext.setCaption( "Qt Example - XML Quotes" );
-    a.setMainWidget( &richtext );
-    richtext.show();
+	MyRichText richtext(handler.quotes());
+	richtext.resize(450, 350);
+	richtext.setCaption("Qt Example - XML Quotes");
+	a.setMainWidget(&richtext);
+	richtext.show();
 
-    return a.exec();
+	return a.exec();
 }

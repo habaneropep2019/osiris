@@ -12,19 +12,19 @@
 #include <qapplication.h>
 
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    Scribble scribble;
+	Scribble scribble;
 
-    scribble.resize( 500, 350 );
-    scribble.setCaption("Qt Example - Scribble");
-    a.setMainWidget( &scribble );
-    if ( QApplication::desktop()->width() > 550
-	 && QApplication::desktop()->height() > 366 )
-	scribble.show();
-    else
-	scribble.showMaximized();
-    return a.exec();
+	scribble.resize(500, 350);
+	scribble.setCaption("Qt Example - Scribble");
+	a.setMainWidget(&scribble);
+	if (QApplication::desktop()->width() > 550 &&
+	    QApplication::desktop()->height() > 366)
+		scribble.show();
+	else
+		scribble.showMaximized();
+	return a.exec();
 }

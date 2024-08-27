@@ -42,46 +42,50 @@
 #include <qwidget.h>
 #include <X11/Intrinsic.h>
 
-class QXtApplication : public QApplication {
-    Q_OBJECT
-    void init();
-public:
-    QXtApplication(int& argc, char** argv,
-	const char* appclass=0,
-	XrmOptionDescRec *options=0, int num_options=0,
-	const char** resources=0);
-    QXtApplication(Display*);
-    QXtApplication(Display *, int, char **);
-    ~QXtApplication();
+class QXtApplication : public QApplication
+{
+	Q_OBJECT
+	void init();
+
+      public:
+	QXtApplication(int &argc, char **argv, const char *appclass = 0,
+		       XrmOptionDescRec *options = 0, int num_options = 0,
+		       const char **resources = 0);
+	QXtApplication(Display *);
+	QXtApplication(Display *, int, char **);
+	~QXtApplication();
 };
 
-class QXtWidget : public QWidget {
-    Q_OBJECT
-    Widget xtw;
-    Widget xtparent;
-    bool   need_reroot;
-    void init(const char* name, WidgetClass widget_class,
-		    Widget parent, QWidget* qparent,
-		    ArgList args, Cardinal num_args,
-		    bool managed);
-    friend void qwidget_realize( Widget widget, XtValueMask* mask,
-				 XSetWindowAttributes* attributes );
+class QXtWidget : public QWidget
+{
+	Q_OBJECT
+	Widget xtw;
+	Widget xtparent;
+	bool need_reroot;
+	void init(const char *name, WidgetClass widget_class, Widget parent,
+		  QWidget *qparent, ArgList args, Cardinal num_args,
+		  bool managed);
+	friend void qwidget_realize(Widget widget, XtValueMask *mask,
+				    XSetWindowAttributes *attributes);
 
-public:
-    QXtWidget(const char* name, Widget parent, bool managed=FALSE);
-    QXtWidget(const char* name, WidgetClass widget_class,
-	      QWidget *parent=0, ArgList args=0, Cardinal num_args=0,
-	      bool managed=FALSE);
-    ~QXtWidget();
+      public:
+	QXtWidget(const char *name, Widget parent, bool managed = FALSE);
+	QXtWidget(const char *name, WidgetClass widget_class,
+		  QWidget *parent = 0, ArgList args = 0, Cardinal num_args = 0,
+		  bool managed = FALSE);
+	~QXtWidget();
 
-    Widget xtWidget() const { return xtw; }
-    bool isActiveWindow() const;
-    void setActiveWindow();
+	Widget xtWidget() const
+	{
+		return xtw;
+	}
+	bool isActiveWindow() const;
+	void setActiveWindow();
 
-protected:
-    void moveEvent( QMoveEvent* );
-    void resizeEvent( QResizeEvent* );
-    bool x11Event( XEvent * );
+      protected:
+	void moveEvent(QMoveEvent *);
+	void resizeEvent(QResizeEvent *);
+	bool x11Event(XEvent *);
 };
 
 #endif

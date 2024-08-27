@@ -39,36 +39,53 @@
 #define QCONNECTION_H
 
 #ifndef QT_H
-#include "qobject.h"
+# include "qobject.h"
 #endif // QT_H
 
 
-typedef void (QObject::*QMember)();		// pointer to member function
+typedef void (QObject::*QMember)(); // pointer to member function
 
 
 class Q_EXPORT QConnection
 {
-public:
-    QConnection( const QObject *, QMember, const char *memberName );
-   ~QConnection() {}
+      public:
+	QConnection(const QObject *, QMember, const char *memberName);
+	~QConnection()
+	{
+	}
 
-    bool     isConnected() const { return obj != 0; }
+	bool isConnected() const
+	{
+		return obj != 0;
+	}
 
-    QObject *object() const  { return obj; }	// get object/member pointer
-    QMember *member() const  { return (QMember*)&mbr; }
-    const char *memberName() const { return mbr_name; }
-    int	     numArgs() const { return nargs; }
+	QObject *object() const
+	{
+		return obj;
+	} // get object/member pointer
+	QMember *member() const
+	{
+		return (QMember *)&mbr;
+	}
+	const char *memberName() const
+	{
+		return mbr_name;
+	}
+	int numArgs() const
+	{
+		return nargs;
+	}
 
-private:
-    QObject *obj;				// object connected to
-    QMember  mbr;				// member connected to
-    const char *mbr_name;
-    int	     nargs;
+      private:
+	QObject *obj; // object connected to
+	QMember mbr; // member connected to
+	const char *mbr_name;
+	int nargs;
 
-private:	// Disabled copy constructor and operator=
+      private: // Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
-    QConnection( const QConnection & );
-    QConnection &operator=( const QConnection & );
+	QConnection(const QConnection &);
+	QConnection &operator=(const QConnection &);
 #endif
 };
 

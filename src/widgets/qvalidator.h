@@ -39,98 +39,113 @@
 #define QVALIDATOR_H
 
 #ifndef QT_H
-#include "qobject.h"
-#include "qstring.h"
+# include "qobject.h"
+# include "qstring.h"
 #endif // QT_H
 
 #ifndef QT_NO_VALIDATOR
 
 
-class Q_EXPORT QValidator: public QObject
+class Q_EXPORT QValidator : public QObject
 {
-    Q_OBJECT
-public:
-    QValidator( QWidget * parent, const char *name = 0 );
-    ~QValidator();
+	Q_OBJECT
+      public:
+	QValidator(QWidget *parent, const char *name = 0);
+	~QValidator();
 
-    enum State { Invalid, Intermediate, Valid=Intermediate, Acceptable };
+	enum State { Invalid, Intermediate, Valid = Intermediate, Acceptable };
 
-    virtual State validate( QString &, int & ) const = 0;
-    virtual void fixup( QString & ) const;
+	virtual State validate(QString &, int &) const = 0;
+	virtual void fixup(QString &) const;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QValidator( const QValidator & );
-    QValidator& operator=( const QValidator & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QValidator(const QValidator &);
+	QValidator &operator=(const QValidator &);
+# endif
 };
 
 
-class Q_EXPORT QIntValidator: public QValidator
+class Q_EXPORT QIntValidator : public QValidator
 {
-    Q_OBJECT
-    Q_PROPERTY( int bottom READ bottom WRITE setBottom )
-    Q_PROPERTY( int top READ top WRITE setTop )
+	Q_OBJECT
+	Q_PROPERTY(int bottom READ bottom WRITE setBottom)
+	Q_PROPERTY(int top READ top WRITE setTop)
 
-public:
-    QIntValidator( QWidget * parent, const char *name = 0 );
-    QIntValidator( int bottom, int top,
-		   QWidget * parent, const char *name = 0 );
-    ~QIntValidator();
+      public:
+	QIntValidator(QWidget *parent, const char *name = 0);
+	QIntValidator(int bottom, int top, QWidget *parent,
+		      const char *name = 0);
+	~QIntValidator();
 
-    QValidator::State validate( QString &, int & ) const;
+	QValidator::State validate(QString &, int &) const;
 
-    void setBottom( int );
-    void setTop( int );
-    virtual void setRange( int bottom, int top );
+	void setBottom(int);
+	void setTop(int);
+	virtual void setRange(int bottom, int top);
 
-    int bottom() const { return b; }
-    int top() const { return t; }
+	int bottom() const
+	{
+		return b;
+	}
+	int top() const
+	{
+		return t;
+	}
 
-private:
-    int b, t;
+      private:
+	int b, t;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QIntValidator( const QIntValidator & );
-    QIntValidator& operator=( const QIntValidator & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QIntValidator(const QIntValidator &);
+	QIntValidator &operator=(const QIntValidator &);
+# endif
 };
 
 
-class Q_EXPORT QDoubleValidator: public QValidator
+class Q_EXPORT QDoubleValidator : public QValidator
 {
-    Q_OBJECT
-    Q_PROPERTY( double bottom READ bottom WRITE setBottom )
-    Q_PROPERTY( double top READ top WRITE setTop )
-    Q_PROPERTY( int decimals READ decimals WRITE setDecimals )
+	Q_OBJECT
+	Q_PROPERTY(double bottom READ bottom WRITE setBottom)
+	Q_PROPERTY(double top READ top WRITE setTop)
+	Q_PROPERTY(int decimals READ decimals WRITE setDecimals)
 
-public:
-    QDoubleValidator( QWidget * parent, const char *name = 0 );
-    QDoubleValidator( double bottom, double top, int decimals,
-		      QWidget * parent, const char *name = 0 );
-    ~QDoubleValidator();
+      public:
+	QDoubleValidator(QWidget *parent, const char *name = 0);
+	QDoubleValidator(double bottom, double top, int decimals,
+			 QWidget *parent, const char *name = 0);
+	~QDoubleValidator();
 
-    QValidator::State validate( QString &, int & ) const;
+	QValidator::State validate(QString &, int &) const;
 
-    virtual void setRange( double bottom, double top, int decimals = 0 );
-    void setBottom( double );
-    void setTop( double );
-    void setDecimals( int );
+	virtual void setRange(double bottom, double top, int decimals = 0);
+	void setBottom(double);
+	void setTop(double);
+	void setDecimals(int);
 
-    double bottom() const { return b; }
-    double top() const { return t; }
-    int decimals() const { return d; }
+	double bottom() const
+	{
+		return b;
+	}
+	double top() const
+	{
+		return t;
+	}
+	int decimals() const
+	{
+		return d;
+	}
 
-private:
-    double b, t;
-    int d;
+      private:
+	double b, t;
+	int d;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QDoubleValidator( const QDoubleValidator & );
-    QDoubleValidator& operator=( const QDoubleValidator & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QDoubleValidator(const QDoubleValidator &);
+	QDoubleValidator &operator=(const QDoubleValidator &);
+# endif
 };
 
 

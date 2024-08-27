@@ -39,21 +39,23 @@
 #define QVBOX_H
 
 #ifndef QT_H
-#include "qhbox.h"
+# include "qhbox.h"
 #endif // QT_H
 
 #ifndef QT_NO_VBOX
 
 class Q_EXPORT QVBox : public QHBox
 {
-    Q_OBJECT
-public:
-    QVBox( QWidget *parent=0, const char *name=0, WFlags f=0,  bool allowLines=TRUE );
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QVBox( const QVBox & );
-    QVBox& operator=( const QVBox & );
-#endif
+	Q_OBJECT
+      public:
+	QVBox(QWidget *parent = 0, const char *name = 0, WFlags f = 0,
+	      bool allowLines = TRUE);
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QVBox(const QVBox &);
+	QVBox &operator=(const QVBox &);
+# endif
 };
 
 #endif // QT_NO_VBOX

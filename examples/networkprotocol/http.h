@@ -16,42 +16,41 @@
 #define QHTTP_H
 
 #ifndef QT_H
-#include "qsocket.h"
-#include "qapplication.h"
-#include "qstring.h"
-#include "qurlinfo.h"
-#include "qnetworkprotocol.h"
-#include "qurloperator.h"
+# include "qsocket.h"
+# include "qapplication.h"
+# include "qstring.h"
+# include "qurlinfo.h"
+# include "qnetworkprotocol.h"
+# include "qurloperator.h"
 #endif // QT_H
 
 #ifndef QT_NO_NETWORKPROTOCOL_HTTP
 
 class Http : public QNetworkProtocol
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    Http();
-    virtual ~Http();
-    virtual int supportedOperations() const;
+      public:
+	Http();
+	virtual ~Http();
+	virtual int supportedOperations() const;
 
-protected:
-    virtual void operationGet( QNetworkOperation *op );
-    virtual void operationPut( QNetworkOperation *op );
+      protected:
+	virtual void operationGet(QNetworkOperation *op);
+	virtual void operationPut(QNetworkOperation *op);
 
-    QSocket *commandSocket;
-    bool connectionReady, passiveMode;
+	QSocket *commandSocket;
+	bool connectionReady, passiveMode;
 
-private:
-    bool checkConnection( QNetworkOperation *op );
-    void close();
+      private:
+	bool checkConnection(QNetworkOperation *op);
+	void close();
 
-protected slots:
-    void hostFound();
-    void connected();
-    void closed();
-    void readyRead();
-
+      protected slots:
+	void hostFound();
+	void connected();
+	void closed();
+	void readyRead();
 };
 
 #endif // QT_NO_NETWORKPROTOCOL_HTTP

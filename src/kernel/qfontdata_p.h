@@ -55,23 +55,23 @@
 #ifndef QT_H
 #endif // QT_H
 
-struct QFontDef {				// font definition
-    QString	family;
-    QString	addStyle;
-    int		pointSize;
-    uint	styleHint	: 8;
-    uint	styleStrategy	: 8;
-    uint	charSet		: 8;
-    uint	weight		: 8;
-    uint	italic		: 1;
-    uint	underline	: 1;
-    uint	strikeOut	: 1;
-    uint	fixedPitch	: 1;
-    uint	hintSetByUser	: 1;
-    uint	rawMode		: 1;
-    uint	dirty		: 1;
-    short	lbearing;
-    short	rbearing;
+struct QFontDef { // font definition
+	QString family;
+	QString addStyle;
+	int pointSize;
+	uint styleHint:8;
+	uint styleStrategy:8;
+	uint charSet:8;
+	uint weight:8;
+	uint italic:1;
+	uint underline:1;
+	uint strikeOut:1;
+	uint fixedPitch:1;
+	uint hintSetByUser:1;
+	uint rawMode:1;
+	uint dirty:1;
+	short lbearing;
+	short rbearing;
 };
 
 
@@ -79,31 +79,33 @@ class QFontInternal;
 class QTextCodec;
 
 struct QFontData : public QShared {
-    QFontData()
-	: exactMatch(FALSE), fin(0), printerHackFont( 0 )
-	{}
-    QFontData( const QFontData &d )
-	: QShared(d), req(d.req), exactMatch(d.exactMatch), fin(d.fin),
-	  printerHackFont(0)
+	QFontData() : exactMatch(FALSE), fin(0), printerHackFont(0)
+	{
+	}
+	QFontData(const QFontData &d)
+		: QShared(d), req(d.req), exactMatch(d.exactMatch), fin(d.fin),
+		  printerHackFont(0)
 	// Copy the QShared count as well. The count may need to be
 	// reset when using the QFontData class, see QFont::QFont(QFontData*)
-	{}
-   ~QFontData()
-	{}
-    QFontData &operator=( const QFontData &d )
 	{
-	    req = d.req;
-	    exactMatch = d.exactMatch;
-	    fin = d.fin;
-	    printerHackFont=d.printerHackFont;
-	    return *this;
 	}
-    QFontDef	      req;			// requested font
-    bool	      exactMatch;
-    QFontInternal    *fin;
-    QFont            *printerHackFont;
-    const QTextCodec *mapper()  const;
-    void	     *fontSet() const;
+	~QFontData()
+	{
+	}
+	QFontData &operator=(const QFontData &d)
+	{
+		req = d.req;
+		exactMatch = d.exactMatch;
+		fin = d.fin;
+		printerHackFont = d.printerHackFont;
+		return *this;
+	}
+	QFontDef req; // requested font
+	bool exactMatch;
+	QFontInternal *fin;
+	QFont *printerHackFont;
+	const QTextCodec *mapper() const;
+	void *fontSet() const;
 };
 
 

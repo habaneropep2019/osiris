@@ -31,33 +31,31 @@
 
 #ifndef QVFBHDR_H
 
-#ifndef QT_H
-#include <qcolor.h>
-#include <qrect.h>
-#endif // QT_H
+# ifndef QT_H
+#  include <qcolor.h>
+#  include <qrect.h>
+# endif // QT_H
 
-#define QT_VFB_MOUSE_PIPE	"/tmp/.qtvfb_mouse-%1"
-#define QT_VFB_KEYBOARD_PIPE	"/tmp/.qtvfb_keyboard-%1"
+# define QT_VFB_MOUSE_PIPE "/tmp/.qtvfb_mouse-%1"
+# define QT_VFB_KEYBOARD_PIPE "/tmp/.qtvfb_keyboard-%1"
 
-struct QVFbHeader
-{
-    int width;
-    int height;
-    int depth;
-    int linestep;
-    int dataoffset;
-    QRect update;
-    bool dirty;
-    int  numcols;
-    QRgb clut[256];
+struct QVFbHeader {
+	int width;
+	int height;
+	int depth;
+	int linestep;
+	int dataoffset;
+	QRect update;
+	bool dirty;
+	int numcols;
+	QRgb clut[256];
 };
 
-struct QVFbKeyData
-{
-    unsigned int unicode;
-    unsigned int modifiers;
-    bool press;
-    bool repeat;
+struct QVFbKeyData {
+	unsigned int unicode;
+	unsigned int modifiers;
+	bool press;
+	bool repeat;
 };
 
 #endif

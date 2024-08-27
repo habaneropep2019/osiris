@@ -39,134 +39,143 @@
 #define QMESSAGEBOX_H
 
 #ifndef QT_H
-#include "qdialog.h"
+# include "qdialog.h"
 #endif // QT_H
 
 #ifndef QT_NO_MESSAGEBOX
 
-class  QLabel;
-class  QPushButton;
+class QLabel;
+class QPushButton;
 struct QMBData;
 
 class Q_EXPORT QMessageBox : public QDialog
 {
-    Q_OBJECT
-    Q_ENUMS( Icon )
-    Q_PROPERTY( QString text READ text WRITE setText )
-    Q_PROPERTY( Icon icon READ icon WRITE setIcon )
-    Q_PROPERTY( QPixmap iconPixmap READ iconPixmap WRITE setIconPixmap )
-    Q_PROPERTY( TextFormat textFormat READ textFormat WRITE setTextFormat )
+	Q_OBJECT
+	Q_ENUMS(Icon)
+	Q_PROPERTY(QString text READ text WRITE setText)
+	Q_PROPERTY(Icon icon READ icon WRITE setIcon)
+	Q_PROPERTY(QPixmap iconPixmap READ iconPixmap WRITE setIconPixmap)
+	Q_PROPERTY(TextFormat textFormat READ textFormat WRITE setTextFormat)
 
-public:
-    enum Icon { NoIcon = 0, Information = 1, Warning = 2, Critical = 3 };
+      public:
+	enum Icon { NoIcon = 0, Information = 1, Warning = 2, Critical = 3 };
 
-    QMessageBox( QWidget *parent=0, const char *name=0 );
-    QMessageBox( const QString& caption, const QString &text, Icon icon,
-		 int button0, int button1, int button2,
-		 QWidget *parent=0, const char *name=0, bool modal=TRUE,
-		 WFlags f=WStyle_DialogBorder  );
-   ~QMessageBox();
+	QMessageBox(QWidget *parent = 0, const char *name = 0);
+	QMessageBox(const QString &caption, const QString &text, Icon icon,
+		    int button0, int button1, int button2, QWidget *parent = 0,
+		    const char *name = 0, bool modal = TRUE,
+		    WFlags f = WStyle_DialogBorder);
+	~QMessageBox();
 
-    enum { NoButton = 0, Ok = 1, Cancel = 2, Yes = 3, No = 4, Abort = 5,
-	   Retry = 6, Ignore = 7, ButtonMask = 0x07,
-	   Default = 0x100, Escape = 0x200, FlagMask = 0x300 };
+	enum {
+		NoButton = 0,
+		Ok = 1,
+		Cancel = 2,
+		Yes = 3,
+		No = 4,
+		Abort = 5,
+		Retry = 6,
+		Ignore = 7,
+		ButtonMask = 0x07,
+		Default = 0x100,
+		Escape = 0x200,
+		FlagMask = 0x300
+	};
 
-    static int information( QWidget *parent, const QString &caption,
-			    const QString& text,
-			    int button0, int button1=0, int button2=0 );
-    static int information( QWidget *parent, const QString &caption,
-			    const QString& text,
-			    const QString& button0Text = QString::null,
-			    const QString& button1Text = QString::null,
-			    const QString& button2Text = QString::null,
+	static int information(QWidget *parent, const QString &caption,
+			       const QString &text, int button0,
+			       int button1 = 0, int button2 = 0);
+	static int information(QWidget *parent, const QString &caption,
+			       const QString &text,
+			       const QString &button0Text = QString::null,
+			       const QString &button1Text = QString::null,
+			       const QString &button2Text = QString::null,
+			       int defaultButtonNumber = 0,
+			       int escapeButtonNumber = -1);
+
+	static int warning(QWidget *parent, const QString &caption,
+			   const QString &text, int button0, int button1,
+			   int button2 = 0);
+	static int warning(QWidget *parent, const QString &caption,
+			   const QString &text,
+			   const QString &button0Text = QString::null,
+			   const QString &button1Text = QString::null,
+			   const QString &button2Text = QString::null,
+			   int defaultButtonNumber = 0,
+			   int escapeButtonNumber = -1);
+
+	static int critical(QWidget *parent, const QString &caption,
+			    const QString &text, int button0, int button1,
+			    int button2 = 0);
+	static int critical(QWidget *parent, const QString &caption,
+			    const QString &text,
+			    const QString &button0Text = QString::null,
+			    const QString &button1Text = QString::null,
+			    const QString &button2Text = QString::null,
 			    int defaultButtonNumber = 0,
-			    int escapeButtonNumber = -1 );
+			    int escapeButtonNumber = -1);
 
-    static int warning( QWidget *parent, const QString &caption,
-			const QString& text,
-			int button0, int button1, int button2=0 );
-    static int warning( QWidget *parent, const QString &caption,
-			const QString& text,
-			const QString& button0Text = QString::null,
-			const QString& button1Text = QString::null,
-			const QString& button2Text = QString::null,
-			int defaultButtonNumber = 0,
-			int escapeButtonNumber = -1 );
+	static void about(QWidget *parent, const QString &caption,
+			  const QString &text);
 
-    static int critical( QWidget *parent, const QString &caption,
-			 const QString& text,
-			 int button0, int button1, int button2=0 );
-    static int critical( QWidget *parent, const QString &caption,
-			 const QString& text,
-			 const QString& button0Text = QString::null,
-			 const QString& button1Text = QString::null,
-			 const QString& button2Text = QString::null,
-			 int defaultButtonNumber = 0,
-			 int escapeButtonNumber = -1 );
+	static void aboutQt(QWidget *parent,
+			    const QString &caption = QString::null);
 
-    static void about( QWidget *parent, const QString &caption,
-		       const QString& text );
+# if 1 /* OBSOLETE */
+	static int message(const QString &caption, const QString &text,
+			   const QString &buttonText = QString::null,
+			   QWidget *parent = 0, const char *name = 0);
 
-    static void aboutQt( QWidget *parent,
-			 const QString& caption=QString::null );
+	static bool query(const QString &caption, const QString &text,
+			  const QString &yesButtonText = QString::null,
+			  const QString &noButtonText = QString::null,
+			  QWidget *parent = 0, const char *name = 0);
+# endif
 
-#if 1 /* OBSOLETE */
-    static int message( const QString &caption,
-			const QString& text, 
-			const QString& buttonText=QString::null,
-			QWidget *parent=0, const char *name=0 );
+	QString text() const;
+	void setText(const QString &);
 
-    static bool query( const QString &caption,
-		       const QString& text, 
-		       const QString& yesButtonText=QString::null,
-		       const QString& noButtonText=QString::null,
-		       QWidget *parent=0, const char *name=0 );
-#endif
+	Icon icon() const;
 
-    QString	text() const;
-    void	setText( const QString &);
+	// ### the next four functions will probably be renamed in 3.0.
+	void setIcon(Icon);
+	void setIcon(const QPixmap &);
 
-    Icon	icon() const;
+	const QPixmap *iconPixmap() const;
+	void setIconPixmap(const QPixmap &);
 
-    // ### the next four functions will probably be renamed in 3.0.
-    void	setIcon( Icon );
-    void	setIcon( const QPixmap & );
+	QString buttonText(int button) const;
+	void setButtonText(int button, const QString &);
 
-    const QPixmap *iconPixmap() const;
-    void	setIconPixmap( const QPixmap & );
+	void adjustSize();
 
-    QString	buttonText( int button ) const;
-    void	setButtonText( int button, const QString &);
+	static QPixmap standardIcon(Icon icon, GUIStyle style);
 
-    void	adjustSize();
+	TextFormat textFormat() const;
+	void setTextFormat(TextFormat);
 
-    static QPixmap standardIcon( Icon icon, GUIStyle style );
+      protected:
+	void resizeEvent(QResizeEvent *);
+	void keyPressEvent(QKeyEvent *);
+	void styleChanged(QStyle &);
 
-    TextFormat textFormat() const;
-    void 	 setTextFormat( TextFormat );
+      private slots:
+	void buttonClicked();
 
-protected:
-    void	resizeEvent( QResizeEvent * );
-    void	keyPressEvent( QKeyEvent * );
-    void	styleChanged( QStyle& );
+      private:
+	void init(int, int, int);
+	int indexOf(int) const;
+	void resizeButtons();
+	QLabel *label;
+	QMBData *mbd;
+	void *reserved1;
+	void *reserved2;
 
-private slots:
-    void	buttonClicked();
-
-private:
-    void	init( int, int, int );
-    int		indexOf( int ) const;
-    void	resizeButtons();
-    QLabel     *label;
-    QMBData    *mbd;
-    void       *reserved1;
-    void       *reserved2;
-
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QMessageBox( const QMessageBox & );
-    QMessageBox &operator=( const QMessageBox & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QMessageBox(const QMessageBox &);
+	QMessageBox &operator=(const QMessageBox &);
+# endif
 };
 
 #endif // QT_NO_MESSAGEBOX

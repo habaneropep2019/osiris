@@ -39,11 +39,11 @@
 #define QTEXTBROWSER_H
 
 #ifndef QT_H
-#include "qlist.h"
-#include "qpixmap.h"
-#include "qscrollview.h"
-#include "qcolor.h"
-#include "qtextview.h"
+# include "qlist.h"
+# include "qpixmap.h"
+# include "qscrollview.h"
+# include "qcolor.h"
+# include "qtextview.h"
 #endif // QT_H
 
 #ifndef QT_NO_TEXTBROWSER
@@ -52,49 +52,50 @@ class QTextBrowserData;
 
 class Q_EXPORT QTextBrowser : public QTextView
 {
-    Q_OBJECT
-    Q_PROPERTY( QString source READ source WRITE setSource )
+	Q_OBJECT
+	Q_PROPERTY(QString source READ source WRITE setSource)
 
-public:
-    QTextBrowser( QWidget *parent=0, const char *name=0 );
-    ~QTextBrowser();
+      public:
+	QTextBrowser(QWidget *parent = 0, const char *name = 0);
+	~QTextBrowser();
 
-    virtual void setSource(const QString& name);
-    QString source() const;
+	virtual void setSource(const QString &name);
+	QString source() const;
 
-    void setText( const QString& contents, const QString& context=QString::null );
+	void setText(const QString &contents,
+		     const QString &context = QString::null);
 
-    void scrollToAnchor(const QString& name);
+	void scrollToAnchor(const QString &name);
 
 
-public slots:
-    virtual void backward();
-    virtual void forward();
-    virtual void home();
+      public slots:
+	virtual void backward();
+	virtual void forward();
+	virtual void home();
 
-signals:
-    void backwardAvailable( bool );
-    void forwardAvailable( bool );
-    void highlighted( const QString& );
-    void textChanged();
+      signals:
+	void backwardAvailable(bool);
+	void forwardAvailable(bool);
+	void highlighted(const QString &);
+	void textChanged();
 
-protected:
-    void viewportMousePressEvent( QMouseEvent* );
-    void viewportMouseReleaseEvent( QMouseEvent* );
-    void viewportMouseMoveEvent( QMouseEvent* );
-    void keyPressEvent( QKeyEvent * e);
-    void showEvent( QShowEvent* );
+      protected:
+	void viewportMousePressEvent(QMouseEvent *);
+	void viewportMouseReleaseEvent(QMouseEvent *);
+	void viewportMouseMoveEvent(QMouseEvent *);
+	void keyPressEvent(QKeyEvent *e);
+	void showEvent(QShowEvent *);
 
-private:
-    void popupDetail( const QString& contents, const QPoint& pos );
-    QString anchorAt(const QPoint& pos); // public in 3.0
-    QTextBrowserData *d;
+      private:
+	void popupDetail(const QString &contents, const QPoint &pos);
+	QString anchorAt(const QPoint &pos); // public in 3.0
+	QTextBrowserData *d;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QTextBrowser( const QTextBrowser & );
-    QTextBrowser& operator=( const QTextBrowser & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QTextBrowser(const QTextBrowser &);
+	QTextBrowser &operator=(const QTextBrowser &);
+# endif
 };
 
 #endif // QT_NO_TEXTBROWSER

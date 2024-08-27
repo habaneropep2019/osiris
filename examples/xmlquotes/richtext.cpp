@@ -18,62 +18,62 @@
 #include <qapplication.h>
 
 
-MyRichText::MyRichText( const QStringList &s, QWidget *parent, const char *name )
-    : QVBox( parent, name ), sayings( s )
+MyRichText::MyRichText(const QStringList &s, QWidget *parent, const char *name)
+	: QVBox(parent, name), sayings(s)
 {
-    setMargin( 5 );
+	setMargin(5);
 
-    view = new QTextView( this );
-    view->setText( "This is a <b>Test</b> with <i>italic</i> <u>stuff</u>" );
-    QBrush paper;
-    paper.setPixmap( QPixmap( "../richtext/marble.png" ) );
-    view->setPaper( paper );
+	view = new QTextView(this);
+	view->setText("This is a <b>Test</b> with <i>italic</i> <u>stuff</u>");
+	QBrush paper;
+	paper.setPixmap(QPixmap("../richtext/marble.png"));
+	view->setPaper(paper);
 
-    view->setText( sayings[0] );
-    view->setMinimumSize( 450, 250 );
+	view->setText(sayings[0]);
+	view->setMinimumSize(450, 250);
 
-    QHBox *buttons = new QHBox( this );
-    buttons->setMargin( 5 );
+	QHBox *buttons = new QHBox(this);
+	buttons->setMargin(5);
 
-    bClose = new QPushButton( "&Close", buttons );
-    bPrev = new QPushButton( "<< &Prev", buttons );
-    bNext = new QPushButton( "&Next >>", buttons );
+	bClose = new QPushButton("&Close", buttons);
+	bPrev = new QPushButton("<< &Prev", buttons);
+	bNext = new QPushButton("&Next >>", buttons);
 
-    bPrev->setEnabled( FALSE );
+	bPrev->setEnabled(FALSE);
 
-    connect( bClose, SIGNAL( clicked() ), qApp, SLOT( quit() ) );
-    connect( bPrev, SIGNAL( clicked() ), this, SLOT( prev() ) );
-    connect( bNext, SIGNAL( clicked() ), this, SLOT( next() ) );
+	connect(bClose, SIGNAL(clicked()), qApp, SLOT(quit()));
+	connect(bPrev, SIGNAL(clicked()), this, SLOT(prev()));
+	connect(bNext, SIGNAL(clicked()), this, SLOT(next()));
 
-    num = 0;
+	num = 0;
 }
 
 void MyRichText::prev()
 {
-    if ( num <= 0 )
-        return;
+	if (num <= 0)
+		return;
 
-    num--;
+	num--;
 
-    view->setText( sayings[num] );
+	view->setText(sayings[num]);
 
-    if ( num == 0 )
-        bPrev->setEnabled( FALSE );
+	if (num == 0)
+		bPrev->setEnabled(FALSE);
 
-    bNext->setEnabled( TRUE );
+	bNext->setEnabled(TRUE);
 }
 
 void MyRichText::next()
 {
-    if ( num >= (int)sayings.count()-1 )
-        return;
+	if (num >= (int)sayings.count() - 1)
+		return;
 
-    num++;
+	num++;
 
-    view->setText( sayings[num] );
+	view->setText(sayings[num]);
 
-    if ( num >= (int)sayings.count()-1 )
-        bNext->setEnabled( FALSE );
+	if (num >= (int)sayings.count() - 1)
+		bNext->setEnabled(FALSE);
 
-    bPrev->setEnabled( TRUE );
+	bPrev->setEnabled(TRUE);
 }

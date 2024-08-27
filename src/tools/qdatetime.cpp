@@ -35,49 +35,50 @@
 **
 **********************************************************************/
 
-#define gettimeofday	__hide_gettimeofday
+#define gettimeofday __hide_gettimeofday
 #include "qdatetime.h"
 #include "qdatastream.h"
 #include <stdio.h>
 #include <time.h>
 #if defined(_OS_WIN32_)
-#if defined(_CC_BOOL_DEF_)
-#undef	bool
-#include <windows.h>
-#define bool int
-#else
-#include <windows.h>
-#endif
+# if defined(_CC_BOOL_DEF_)
+#  undef bool
+#  include <windows.h>
+#  define bool int
+# else
+#  include <windows.h>
+# endif
 #elif defined(_OS_MSDOS_)
-#include <dos.h>
+# include <dos.h>
 #elif defined(_OS_OS2_)
-#include <os2.h>
+# include <os2.h>
 #elif defined(_OS_UNIX_)
-#include <unistd.h>
-#include <sys/time.h>
-#undef	gettimeofday
-extern "C" int gettimeofday( struct timeval *, struct timezone * );
+# include <unistd.h>
+# include <sys/time.h>
+# undef gettimeofday
+extern "C" int gettimeofday(struct timeval *, struct timezone *);
 #endif
 
-static const uint FIRST_DAY	= 2361222;	// Julian day for 1752/09/14
-static const int  FIRST_YEAR	= 1752;		// ### wrong for many countries
-static const uint SECS_PER_DAY	= 86400;
+static const uint FIRST_DAY = 2361222; // Julian day for 1752/09/14
+static const int FIRST_YEAR = 1752; // ### wrong for many countries
+static const uint SECS_PER_DAY = 86400;
 static const uint MSECS_PER_DAY = 86400000;
 static const uint SECS_PER_HOUR = 3600;
-static const uint MSECS_PER_HOUR= 3600000;
-static const uint SECS_PER_MIN	= 60;
+static const uint MSECS_PER_HOUR = 3600000;
+static const uint SECS_PER_MIN = 60;
 static const uint MSECS_PER_MIN = 60000;
 
-static const short monthDays[] ={0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+static const short monthDays[] = {0,  31, 28, 31, 30, 31, 30,
+				  31, 31, 30, 31, 30, 31};
 
 // ##### Localize.
 
-const char * const QDate::monthNames[] = {
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+const char *const QDate::monthNames[] = {"Jan", "Feb", "Mar", "Apr",
+					 "May", "Jun", "Jul", "Aug",
+					 "Sep", "Oct", "Nov", "Dec"};
 
-const char * const QDate::weekdayNames[] ={
-    "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+const char *const QDate::weekdayNames[] = {"Mon", "Tue", "Wed", "Thu",
+					   "Fri", "Sat", "Sun"};
 
 
 /*****************************************************************************
@@ -152,10 +153,10 @@ const char * const QDate::weekdayNames[] ={
   \sa isValid()
 */
 
-QDate::QDate( int y, int m, int d )
+QDate::QDate(int y, int m, int d)
 {
-    jd = 0;
-    setYMD( y, m, d );
+	jd = 0;
+	setYMD(y, m, d);
 }
 
 
@@ -176,7 +177,7 @@ QDate::QDate( int y, int m, int d )
 
 bool QDate::isValid() const
 {
-    return jd >= FIRST_DAY;
+	return jd >= FIRST_DAY;
 }
 
 
@@ -188,9 +189,9 @@ bool QDate::isValid() const
 
 int QDate::year() const
 {
-    int y, m, d;
-    jul2greg( jd, y, m, d );
-    return y;
+	int y, m, d;
+	jul2greg(jd, y, m, d);
+	return y;
 }
 
 /*!
@@ -201,9 +202,9 @@ int QDate::year() const
 
 int QDate::month() const
 {
-    int y, m, d;
-    jul2greg( jd, y, m, d );
-    return m;
+	int y, m, d;
+	jul2greg(jd, y, m, d);
+	return m;
 }
 
 /*!
@@ -214,9 +215,9 @@ int QDate::month() const
 
 int QDate::day() const
 {
-    int y, m, d;
-    jul2greg( jd, y, m, d );
-    return d;
+	int y, m, d;
+	jul2greg(jd, y, m, d);
+	return d;
 }
 
 /*!
@@ -227,7 +228,7 @@ int QDate::day() const
 
 int QDate::dayOfWeek() const
 {
-    return (((jd+1) % 7) + 6)%7 + 1;
+	return (((jd + 1) % 7) + 6) % 7 + 1;
 }
 
 /*!
@@ -238,7 +239,7 @@ int QDate::dayOfWeek() const
 
 int QDate::dayOfYear() const
 {
-    return jd - greg2jul(year(), 1, 1) + 1;
+	return jd - greg2jul(year(), 1, 1) + 1;
 }
 
 /*!
@@ -249,12 +250,12 @@ int QDate::dayOfYear() const
 
 int QDate::daysInMonth() const
 {
-    int y, m, d;
-    jul2greg( jd, y, m, d );
-    if ( m == 2 && leapYear(y) )
-	return 29;
-    else
-	return monthDays[m];
+	int y, m, d;
+	jul2greg(jd, y, m, d);
+	if (m == 2 && leapYear(y))
+		return 29;
+	else
+		return monthDays[m];
 }
 
 /*!
@@ -265,9 +266,9 @@ int QDate::daysInMonth() const
 
 int QDate::daysInYear() const
 {
-    int y, m, d;
-    jul2greg( jd, y, m, d );
-    return leapYear(y) ? 366 : 365;
+	int y, m, d;
+	jul2greg(jd, y, m, d);
+	return leapYear(y) ? 366 : 365;
 }
 
 
@@ -279,16 +280,16 @@ int QDate::daysInYear() const
   \sa toString(), dayName()
 */
 
-QString QDate::monthName( int month ) const
+QString QDate::monthName(int month) const
 {
 #if defined(CHECK_RANGE)
-    if ( month < 1 || month > 12 ) {
-	qWarning( "QDate::monthName: Parameter out ouf range." );
-	month = 1;
-    }
+	if (month < 1 || month > 12) {
+		qWarning("QDate::monthName: Parameter out ouf range.");
+		month = 1;
+	}
 #endif
-    // ### Remove the fromLatin1 during localization
-    return QString::fromLatin1(monthNames[month-1]);
+	// ### Remove the fromLatin1 during localization
+	return QString::fromLatin1(monthNames[month - 1]);
 }
 
 /*!
@@ -299,16 +300,16 @@ QString QDate::monthName( int month ) const
   \sa toString(), monthName()
 */
 
-QString QDate::dayName( int weekday ) const
+QString QDate::dayName(int weekday) const
 {
 #if defined(CHECK_RANGE)
-    if ( weekday < 1 || weekday > 7 ) {
-	qWarning( "QDate::dayName: Parameter out of range." );
-	weekday = 1;
-    }
+	if (weekday < 1 || weekday > 7) {
+		qWarning("QDate::dayName: Parameter out of range.");
+		weekday = 1;
+	}
 #endif
-    // ### Remove the fromLatin1 during localization
-    return QString::fromLatin1(weekdayNames[weekday-1]);
+	// ### Remove the fromLatin1 during localization
+	return QString::fromLatin1(weekdayNames[weekday - 1]);
 }
 
 
@@ -323,15 +324,15 @@ QString QDate::dayName( int weekday ) const
 
 QString QDate::toString() const
 {
-    int y, m, d;
-    jul2greg( jd, y, m, d );
-    QString buf = dayName(dayOfWeek());
-    buf += ' ';
-    buf += monthName(m);
-    QString t;
-    t.sprintf( " %d %d", d, y);
-    buf += t;
-    return buf;
+	int y, m, d;
+	jul2greg(jd, y, m, d);
+	QString buf = dayName(dayOfWeek());
+	buf += ' ';
+	buf += monthName(m);
+	QString t;
+	t.sprintf(" %d %d", d, y);
+	buf += t;
+	return buf;
 }
 
 
@@ -345,19 +346,19 @@ QString QDate::toString() const
   Returns TRUE if the date is valid, otherwise FALSE.
 */
 
-bool QDate::setYMD( int y, int m, int d )
+bool QDate::setYMD(int y, int m, int d)
 {
-    if ( !isValid(y,m,d) ) {
+	if (!isValid(y, m, d)) {
 #if defined(CHECK_RANGE)
-	 qWarning( "QDate::setYMD: Invalid date %04d/%02d/%02d", y, m, d );
+		qWarning("QDate::setYMD: Invalid date %04d/%02d/%02d", y, m, d);
 #endif
-	 return FALSE;
-    }
-    jd = greg2jul( y, m, d );
+		return FALSE;
+	}
+	jd = greg2jul(y, m, d);
 #if defined(DEBUG)
-    ASSERT( year() == (y > 99 ? y : 1900+y) && month() == m && day() == d );
+	ASSERT(year() == (y > 99 ? y : 1900 + y) && month() == m && day() == d);
 #endif
-    return TRUE;
+	return TRUE;
 }
 
 /*!
@@ -367,11 +368,11 @@ bool QDate::setYMD( int y, int m, int d )
   \sa daysTo()
 */
 
-QDate QDate::addDays( int ndays ) const
+QDate QDate::addDays(int ndays) const
 {
-    QDate d;
-    d.jd = jd + ndays;
-    return d;
+	QDate d;
+	d.jd = jd + ndays;
+	return d;
 }
 
 /*!
@@ -389,9 +390,9 @@ QDate QDate::addDays( int ndays ) const
   \sa addDays()
 */
 
-int QDate::daysTo( const QDate &d ) const
+int QDate::daysTo(const QDate &d) const
 {
-    return d.jd - jd;
+	return d.jd - jd;
 }
 
 
@@ -438,20 +439,20 @@ QDate QDate::currentDate()
 {
 #if defined(_OS_WIN32_)
 
-    SYSTEMTIME t;
-    GetLocalTime( &t );
-    QDate d;
-    d.jd = greg2jul( t.wYear, t.wMonth, t.wDay );
-    return d;
+	SYSTEMTIME t;
+	GetLocalTime(&t);
+	QDate d;
+	d.jd = greg2jul(t.wYear, t.wMonth, t.wDay);
+	return d;
 
 #else
 
-    time_t ltime;
-    time( &ltime );
-    tm *t = localtime( &ltime );
-    QDate d;
-    d.jd = greg2jul( t->tm_year + 1900, t->tm_mon + 1, t->tm_mday );
-    return d;
+	time_t ltime;
+	time(&ltime);
+	tm *t = localtime(&ltime);
+	QDate d;
+	d.jd = greg2jul(t->tm_year + 1900, t->tm_mon + 1, t->tm_mday);
+	return d;
 
 #endif
 }
@@ -474,24 +475,24 @@ QDate QDate::currentDate()
   \sa isNull(), setYMD()
 */
 
-bool QDate::isValid( int y, int m, int d )
+bool QDate::isValid(int y, int m, int d)
 {
-    if ( y >= 0 && y <= 99 )
-	y += 1900;
-    else if ( y < FIRST_YEAR || (y == FIRST_YEAR && (m < 9 ||
-						    (m == 9 && d < 14))) )
-	return FALSE;
-    return (d > 0 && m > 0 && m <= 12) &&
-	   (d <= monthDays[m] || (d == 29 && m == 2 && leapYear(y)));
+	if (y >= 0 && y <= 99)
+		y += 1900;
+	else if (y < FIRST_YEAR ||
+		 (y == FIRST_YEAR && (m < 9 || (m == 9 && d < 14))))
+		return FALSE;
+	return (d > 0 && m > 0 && m <= 12) &&
+	       (d <= monthDays[m] || (d == 29 && m == 2 && leapYear(y)));
 }
 
 /*!
   Returns TRUE if the specified year \a y is a leap year.
 */
 
-bool QDate::leapYear( int y )
+bool QDate::leapYear(int y)
 {
-    return y % 4 == 0 && y % 100 != 0 || y % 400 == 0;
+	return y % 4 == 0 && y % 100 != 0 || y % 400 == 0;
 }
 
 /*!
@@ -501,21 +502,22 @@ bool QDate::leapYear( int y )
   \sa jul2greg()
 */
 
-uint QDate::greg2jul( int y, int m, int d )
+uint QDate::greg2jul(int y, int m, int d)
 {
-    uint c, ya;
-    if ( y <= 99 )
-	y += 1900;
-    if ( m > 2 ) {
-	m -= 3;
-    } else {
-	m += 9;
-	y--;
-    }
-    c = y;					// NOTE: Sym C++ 6.0 bug
-    c /= 100;
-    ya = y - 100*c;
-    return 1721119 + d + (146097*c)/4 + (1461*ya)/4 + (153*m+2)/5;
+	uint c, ya;
+	if (y <= 99)
+		y += 1900;
+	if (m > 2) {
+		m -= 3;
+	} else {
+		m += 9;
+		y--;
+	}
+	c = y; // NOTE: Sym C++ 6.0 bug
+	c /= 100;
+	ya = y - 100 * c;
+	return 1721119 + d + (146097 * c) / 4 + (1461 * ya) / 4 +
+	       (153 * m + 2) / 5;
 }
 
 /*!
@@ -525,26 +527,26 @@ uint QDate::greg2jul( int y, int m, int d )
   \sa greg2jul()
 */
 
-void QDate::jul2greg( uint jd, int &y, int &m, int &d )
+void QDate::jul2greg(uint jd, int &y, int &m, int &d)
 {
-    uint x;
-    uint j = jd - 1721119;
-    y = (j*4 - 1)/146097;
-    j = j*4 - 146097*y - 1;
-    x = j/4;
-    j = (x*4 + 3) / 1461;
-    y = 100*y + j;
-    x = (x*4) + 3 - 1461*j;
-    x = (x + 4)/4;
-    m = (5*x - 3)/153;
-    x = 5*x - 3 - 153*m;
-    d = (x + 5)/5;
-    if ( m < 10 ) {
-	m += 3;
-    } else {
-	m -= 9;
-	y++;
-    }
+	uint x;
+	uint j = jd - 1721119;
+	y = (j * 4 - 1) / 146097;
+	j = j * 4 - 146097 * y - 1;
+	x = j / 4;
+	j = (x * 4 + 3) / 1461;
+	y = 100 * y + j;
+	x = (x * 4) + 3 - 1461 * j;
+	x = (x + 4) / 4;
+	m = (5 * x - 3) / 153;
+	x = 5 * x - 3 - 153 * m;
+	d = (x + 5) / 5;
+	if (m < 10) {
+		m += 3;
+	} else {
+		m -= 9;
+		y++;
+	}
 }
 
 
@@ -615,9 +617,9 @@ void QDate::jul2greg( uint jd, int &y, int &m, int &d )
   \sa isValid()
 */
 
-QTime::QTime( int h, int m, int s, int ms )
+QTime::QTime(int h, int m, int s, int ms)
 {
-    setHMS( h, m, s, ms );
+	setHMS(h, m, s, ms);
 }
 
 
@@ -637,7 +639,7 @@ QTime::QTime( int h, int m, int s, int ms )
 
 bool QTime::isValid() const
 {
-    return ds < MSECS_PER_DAY;
+	return ds < MSECS_PER_DAY;
 }
 
 
@@ -647,7 +649,7 @@ bool QTime::isValid() const
 
 int QTime::hour() const
 {
-    return ds / MSECS_PER_HOUR;
+	return ds / MSECS_PER_HOUR;
 }
 
 /*!
@@ -656,7 +658,7 @@ int QTime::hour() const
 
 int QTime::minute() const
 {
-    return (ds % MSECS_PER_HOUR)/MSECS_PER_MIN;
+	return (ds % MSECS_PER_HOUR) / MSECS_PER_MIN;
 }
 
 /*!
@@ -665,7 +667,7 @@ int QTime::minute() const
 
 int QTime::second() const
 {
-    return (ds / 1000)%SECS_PER_MIN;
+	return (ds / 1000) % SECS_PER_MIN;
 }
 
 /*!
@@ -674,7 +676,7 @@ int QTime::second() const
 
 int QTime::msec() const
 {
-    return ds % 1000;
+	return ds % 1000;
 }
 
 
@@ -686,9 +688,9 @@ int QTime::msec() const
 
 QString QTime::toString() const
 {
-    QString buf;
-    buf.sprintf( "%.2d:%.2d:%.2d", hour(), minute(), second() );
-    return buf;
+	QString buf;
+	buf.sprintf("%.2d:%.2d:%.2d", hour(), minute(), second());
+	return buf;
 }
 
 
@@ -703,18 +705,18 @@ QString QTime::toString() const
   \sa isValid()
 */
 
-bool QTime::setHMS( int h, int m, int s, int ms )
+bool QTime::setHMS(int h, int m, int s, int ms)
 {
-    if ( !isValid(h,m,s,ms) ) {
+	if (!isValid(h, m, s, ms)) {
 #if defined(CHECK_RANGE)
-	qWarning( "QTime::setHMS Invalid time %02d:%02d:%02d.%03d", h, m, s,
-		 ms );
+		qWarning("QTime::setHMS Invalid time %02d:%02d:%02d.%03d", h, m,
+			 s, ms);
 #endif
-	ds = MSECS_PER_DAY;		// make this invalid
-	return FALSE;
-    }
-    ds = (h*SECS_PER_HOUR + m*SECS_PER_MIN + s)*1000 + ms;
-    return TRUE;
+		ds = MSECS_PER_DAY; // make this invalid
+		return FALSE;
+	}
+	ds = (h * SECS_PER_HOUR + m * SECS_PER_MIN + s) * 1000 + ms;
+	return TRUE;
 }
 
 /*!
@@ -736,9 +738,9 @@ bool QTime::setHMS( int h, int m, int s, int ms )
   \sa addMSecs(), secsTo(), QDateTime::addSecs()
 */
 
-QTime QTime::addSecs( int nsecs ) const
+QTime QTime::addSecs(int nsecs) const
 {
-    return addMSecs(nsecs*1000);
+	return addMSecs(nsecs * 1000);
 }
 
 /*!
@@ -751,9 +753,9 @@ QTime QTime::addSecs( int nsecs ) const
   \sa addSecs() QDateTime::secsTo()
 */
 
-int QTime::secsTo( const QTime &t ) const
+int QTime::secsTo(const QTime &t) const
 {
-    return ((int)t.ds - (int)ds)/1000;
+	return ((int)t.ds - (int)ds) / 1000;
 }
 
 /*!
@@ -766,18 +768,17 @@ int QTime::secsTo( const QTime &t ) const
   \sa addSecs(), msecsTo()
 */
 
-QTime QTime::addMSecs( int ms ) const
+QTime QTime::addMSecs(int ms) const
 {
-    QTime t;
-    if ( ms < 0 ) {
-	// % not well-defined for -ve, but / is.
-	int negdays = (MSECS_PER_DAY-ms) / MSECS_PER_DAY;
-	t.ds = ((int)ds + ms + negdays*MSECS_PER_DAY)
-		% MSECS_PER_DAY;
-    } else {
-	t.ds = ((int)ds + ms) % MSECS_PER_DAY;
-    }
-    return t;
+	QTime t;
+	if (ms < 0) {
+		// % not well-defined for -ve, but / is.
+		int negdays = (MSECS_PER_DAY - ms) / MSECS_PER_DAY;
+		t.ds = ((int)ds + ms + negdays * MSECS_PER_DAY) % MSECS_PER_DAY;
+	} else {
+		t.ds = ((int)ds + ms) % MSECS_PER_DAY;
+	}
+	return t;
 }
 
 /*!
@@ -790,9 +791,9 @@ QTime QTime::addMSecs( int ms ) const
   \sa secsTo()
 */
 
-int QTime::msecsTo( const QTime &t ) const
+int QTime::msecsTo(const QTime &t) const
 {
-    return (int)t.ds - (int)ds;
+	return (int)t.ds - (int)ds;
 }
 
 
@@ -847,9 +848,9 @@ int QTime::msecsTo( const QTime &t ) const
 
 QTime QTime::currentTime()
 {
-    QTime ct;
-    currentTime( &ct );
-    return ct;
+	QTime ct;
+	currentTime(&ct);
+	return ct;
 }
 
 /*!
@@ -860,57 +861,59 @@ QTime QTime::currentTime()
   QDateTime::currentDateTime() to ensure that the date there is correct.
 */
 
-bool QTime::currentTime( QTime *ct )
+bool QTime::currentTime(QTime *ct)
 {
-    if ( !ct ) {
+	if (!ct) {
 #if defined(CHECK_NULL)
-	qWarning( "QTime::currentTime(QTime *): Null pointer not allowed" );
+		qWarning(
+			"QTime::currentTime(QTime *): Null pointer not allowed");
 #endif
-	return FALSE;
-    }
+		return FALSE;
+	}
 
 #if defined(_OS_WIN32_)
 
-    SYSTEMTIME t;
-    GetLocalTime( &t );
-    ct->ds = MSECS_PER_HOUR*t.wHour + MSECS_PER_MIN*t.wMinute +
-	     1000*t.wSecond + t.wMilliseconds;
-    return (t.wHour == 0 && t.wMinute == 0);
+	SYSTEMTIME t;
+	GetLocalTime(&t);
+	ct->ds = MSECS_PER_HOUR * t.wHour + MSECS_PER_MIN * t.wMinute +
+		 1000 * t.wSecond + t.wMilliseconds;
+	return (t.wHour == 0 && t.wMinute == 0);
 
 #elif defined(_OS_OS2_)
 
-    DATETIME t;
-    DosGetDateTime( &t );
-    ct->ds = MSECS_PER_HOUR*t.hours + MSECS_PER_MIN*t.minutes +
-	     1000*t.seconds + 10*t.hundredths;
-    return (t.hours == 0 && t.minutes == 0);
+	DATETIME t;
+	DosGetDateTime(&t);
+	ct->ds = MSECS_PER_HOUR * t.hours + MSECS_PER_MIN * t.minutes +
+		 1000 * t.seconds + 10 * t.hundredths;
+	return (t.hours == 0 && t.minutes == 0);
 
 #elif defined(_OS_MSDOS_)
 
-    _dostime_t t;
-    _dos_gettime( &t );
-    ct->ds = MSECS_PER_HOUR*t.hour + MSECS_PER_MIN*t.minute +
-	     t.second*1000 + t.hsecond*10;
-    return (t.hour== 0 && t.minute == 0);
+	_dostime_t t;
+	_dos_gettime(&t);
+	ct->ds = MSECS_PER_HOUR * t.hour + MSECS_PER_MIN * t.minute +
+		 t.second * 1000 + t.hsecond * 10;
+	return (t.hour == 0 && t.minute == 0);
 
 #elif defined(_OS_UNIX_)
 
-    struct timeval tv;
-    gettimeofday( &tv, 0 );
-    time_t ltime = tv.tv_sec;
-    tm *t = localtime( &ltime );
-    ct->ds = (uint)( MSECS_PER_HOUR*t->tm_hour + MSECS_PER_MIN*t->tm_min +
-		     1000*t->tm_sec + tv.tv_usec/1000 );
-    return (t->tm_hour== 0 && t->tm_min == 0);
+	struct timeval tv;
+	gettimeofday(&tv, 0);
+	time_t ltime = tv.tv_sec;
+	tm *t = localtime(&ltime);
+	ct->ds =
+		(uint)(MSECS_PER_HOUR * t->tm_hour + MSECS_PER_MIN * t->tm_min +
+		       1000 * t->tm_sec + tv.tv_usec / 1000);
+	return (t->tm_hour == 0 && t->tm_min == 0);
 
 #else
 
-    time_t ltime;			// no millisecond resolution!!
-    ::time( &ltime );
-    tm *t = localtime( &ltime );
-    ct->ds = MSECS_PER_HOUR*t->tm_hour + MSECS_PER_MIN*t->tm_min +
-	     1000*t->tm_sec;
-    return (t->tm_hour== 0 && t->tm_min == 0);
+	time_t ltime; // no millisecond resolution!!
+	::time(&ltime);
+	tm *t = localtime(&ltime);
+	ct->ds = MSECS_PER_HOUR * t->tm_hour + MSECS_PER_MIN * t->tm_min +
+		 1000 * t->tm_sec;
+	return (t->tm_hour == 0 && t->tm_min == 0);
 #endif
 }
 
@@ -927,9 +930,9 @@ bool QTime::currentTime( QTime *ct )
   \endcode
 */
 
-bool QTime::isValid( int h, int m, int s, int ms )
+bool QTime::isValid(int h, int m, int s, int ms)
 {
-    return (uint)h < 24 && (uint)m < 60 && (uint)s < 60 && (uint)ms < 1000;
+	return (uint)h < 24 && (uint)m < 60 && (uint)s < 60 && (uint)ms < 1000;
 }
 
 
@@ -948,7 +951,7 @@ bool QTime::isValid( int h, int m, int s, int ms )
 
 void QTime::start()
 {
-    *this = currentTime();
+	*this = currentTime();
 }
 
 /*!
@@ -972,12 +975,12 @@ void QTime::start()
 
 int QTime::restart()
 {
-    QTime t = currentTime();
-    int n = msecsTo( t );
-    if ( n < 0 )				// passed midnight
-	n += 86400*1000;
-    *this = t;
-    return n;
+	QTime t = currentTime();
+	int n = msecsTo(t);
+	if (n < 0) // passed midnight
+		n += 86400 * 1000;
+	*this = t;
+	return n;
 }
 
 /*!
@@ -999,10 +1002,10 @@ int QTime::restart()
 
 int QTime::elapsed()
 {
-    int n = msecsTo( currentTime() );
-    if ( n < 0 )				// passed midnight
-	n += 86400*1000;
-    return n;
+	int n = msecsTo(currentTime());
+	if (n < 0) // passed midnight
+		n += 86400 * 1000;
+	return n;
 }
 
 
@@ -1065,8 +1068,7 @@ int QTime::elapsed()
   Constructs a datetime with date \a date and null time (00:00:00.000).
 */
 
-QDateTime::QDateTime( const QDate &date )
-    : d(date)
+QDateTime::QDateTime(const QDate &date) : d(date)
 {
 }
 
@@ -1074,8 +1076,7 @@ QDateTime::QDateTime( const QDate &date )
   Constructs a datetime with date \a date and time \a time.
 */
 
-QDateTime::QDateTime( const QDate &date, const QTime &time )
-    : d(date), t(time)
+QDateTime::QDateTime(const QDate &date, const QTime &time) : d(date), t(time)
 {
 }
 
@@ -1139,21 +1140,21 @@ QDateTime::QDateTime( const QDate &date, const QTime &time )
   \a secsSince1Jan1970UTC.
 */
 
-void QDateTime::setTime_t( uint secsSince1Jan1970UTC )
+void QDateTime::setTime_t(uint secsSince1Jan1970UTC)
 {
-    time_t tmp = (time_t) secsSince1Jan1970UTC;
-    tm *tM = localtime( &tmp );
-    if ( !tM ) {
-	tM = gmtime( &tmp );
-	if ( !tM ) {
-	    d.jd = QDate::greg2jul( 1970, 1, 1 );
-	    t.ds = 0;
-	    return;
+	time_t tmp = (time_t)secsSince1Jan1970UTC;
+	tm *tM = localtime(&tmp);
+	if (!tM) {
+		tM = gmtime(&tmp);
+		if (!tM) {
+			d.jd = QDate::greg2jul(1970, 1, 1);
+			t.ds = 0;
+			return;
+		}
 	}
-    }
-    d.jd = QDate::greg2jul( tM->tm_year + 1900, tM->tm_mon + 1, tM->tm_mday );
-    t.ds = MSECS_PER_HOUR*tM->tm_hour + MSECS_PER_MIN*tM->tm_min +
-	    1000*tM->tm_sec;
+	d.jd = QDate::greg2jul(tM->tm_year + 1900, tM->tm_mon + 1, tM->tm_mday);
+	t.ds = MSECS_PER_HOUR * tM->tm_hour + MSECS_PER_MIN * tM->tm_min +
+	       1000 * tM->tm_sec;
 }
 
 
@@ -1169,16 +1170,16 @@ void QDateTime::setTime_t( uint secsSince1Jan1970UTC )
 
 QString QDateTime::toString() const
 {
-    QString buf = d.dayName(d.dayOfWeek());
-    buf += ' ';
-    buf += d.monthName(d.month());
-    buf += ' ';
-    buf += QString().setNum(d.day());
-    buf += ' ';
-    buf += t.toString();
-    buf += ' ';
-    buf += QString().setNum(d.year());
-    return buf;
+	QString buf = d.dayName(d.dayOfWeek());
+	buf += ' ';
+	buf += d.monthName(d.month());
+	buf += ' ';
+	buf += QString().setNum(d.day());
+	buf += ' ';
+	buf += t.toString();
+	buf += ' ';
+	buf += QString().setNum(d.year());
+	return buf;
 }
 
 /*!
@@ -1189,9 +1190,9 @@ QString QDateTime::toString() const
   \sa daysTo(), addSecs()
 */
 
-QDateTime QDateTime::addDays( int ndays ) const
+QDateTime QDateTime::addDays(int ndays) const
 {
-    return QDateTime( d.addDays(ndays), t );
+	return QDateTime(d.addDays(ndays), t);
 }
 
 /*!
@@ -1202,33 +1203,33 @@ QDateTime QDateTime::addDays( int ndays ) const
   \sa secsTo(), addDays()
 */
 
-QDateTime QDateTime::addSecs( int nsecs ) const
+QDateTime QDateTime::addSecs(int nsecs) const
 {
-    uint dd = d.jd;
-    int  tt = t.ds;
-    int  sign = 1;
-    if ( nsecs < 0 ) {
-	nsecs = -nsecs;
-	sign = -1;
-    }
-    if ( nsecs >= (int)SECS_PER_DAY ) {
-	dd += sign*(nsecs/SECS_PER_DAY);
-	nsecs %= SECS_PER_DAY;
-    }
-    tt += sign*nsecs*1000;
-    if ( tt < 0 ) {
-	tt = MSECS_PER_DAY - tt - 1;
-	dd -= tt / MSECS_PER_DAY;
-	tt = tt % MSECS_PER_DAY;
-	tt = MSECS_PER_DAY - tt - 1;
-    } else if ( tt >= (int)MSECS_PER_DAY ) {
-	dd += ( tt / MSECS_PER_DAY );
-	tt = tt % MSECS_PER_DAY;
-    }
-    QDateTime ret;
-    ret.t.ds = tt;
-    ret.d.jd = dd;
-    return ret;
+	uint dd = d.jd;
+	int tt = t.ds;
+	int sign = 1;
+	if (nsecs < 0) {
+		nsecs = -nsecs;
+		sign = -1;
+	}
+	if (nsecs >= (int)SECS_PER_DAY) {
+		dd += sign * (nsecs / SECS_PER_DAY);
+		nsecs %= SECS_PER_DAY;
+	}
+	tt += sign * nsecs * 1000;
+	if (tt < 0) {
+		tt = MSECS_PER_DAY - tt - 1;
+		dd -= tt / MSECS_PER_DAY;
+		tt = tt % MSECS_PER_DAY;
+		tt = MSECS_PER_DAY - tt - 1;
+	} else if (tt >= (int)MSECS_PER_DAY) {
+		dd += (tt / MSECS_PER_DAY);
+		tt = tt % MSECS_PER_DAY;
+	}
+	QDateTime ret;
+	ret.t.ds = tt;
+	ret.d.jd = dd;
+	return ret;
 }
 
 /*!
@@ -1238,9 +1239,9 @@ QDateTime QDateTime::addSecs( int nsecs ) const
   \sa addDays(), secsTo()
 */
 
-int QDateTime::daysTo( const QDateTime &dt ) const
+int QDateTime::daysTo(const QDateTime &dt) const
 {
-    return d.daysTo( dt.d );
+	return d.daysTo(dt.d);
 }
 
 /*!
@@ -1257,9 +1258,9 @@ int QDateTime::daysTo( const QDateTime &dt ) const
   \sa addSecs(), daysTo(), QTime::secsTo()
 */
 
-int QDateTime::secsTo( const QDateTime &dt ) const
+int QDateTime::secsTo(const QDateTime &dt) const
 {
-    return t.secsTo(dt.t) + d.daysTo(dt.d)*SECS_PER_DAY;
+	return t.secsTo(dt.t) + d.daysTo(dt.d) * SECS_PER_DAY;
 }
 
 
@@ -1269,9 +1270,9 @@ int QDateTime::secsTo( const QDateTime &dt ) const
   \sa operator!=()
 */
 
-bool QDateTime::operator==( const QDateTime &dt ) const
+bool QDateTime::operator==(const QDateTime &dt) const
 {
-    return  t == dt.t && d == dt.d;
+	return t == dt.t && d == dt.d;
 }
 
 /*!
@@ -1280,20 +1281,20 @@ bool QDateTime::operator==( const QDateTime &dt ) const
   \sa operator==()
 */
 
-bool QDateTime::operator!=( const QDateTime &dt ) const
+bool QDateTime::operator!=(const QDateTime &dt) const
 {
-    return  t != dt.t || d != dt.d;
+	return t != dt.t || d != dt.d;
 }
 
 /*!
   Returns TRUE if this datetime is earlier than \a dt, otherwise FALSE.
 */
 
-bool QDateTime::operator<( const QDateTime &dt ) const
+bool QDateTime::operator<(const QDateTime &dt) const
 {
-    if ( d < dt.d )
-	return TRUE;
-    return d == dt.d ? t < dt.t : FALSE;
+	if (d < dt.d)
+		return TRUE;
+	return d == dt.d ? t < dt.t : FALSE;
 }
 
 /*!
@@ -1301,22 +1302,22 @@ bool QDateTime::operator<( const QDateTime &dt ) const
   otherwise FALSE.
 */
 
-bool QDateTime::operator<=( const QDateTime &dt ) const
+bool QDateTime::operator<=(const QDateTime &dt) const
 {
-    if ( d < dt.d )
-	return TRUE;
-    return d == dt.d ? t <= dt.t : FALSE;
+	if (d < dt.d)
+		return TRUE;
+	return d == dt.d ? t <= dt.t : FALSE;
 }
 
 /*!
   Returns TRUE if this datetime is later than \a dt, otherwise FALSE.
 */
 
-bool QDateTime::operator>( const QDateTime &dt ) const
+bool QDateTime::operator>(const QDateTime &dt) const
 {
-    if ( d > dt.d )
-	return TRUE;
-    return d == dt.d ? t > dt.t : FALSE;
+	if (d > dt.d)
+		return TRUE;
+	return d == dt.d ? t > dt.t : FALSE;
 }
 
 /*!
@@ -1324,11 +1325,11 @@ bool QDateTime::operator>( const QDateTime &dt ) const
   otherwise FALSE.
 */
 
-bool QDateTime::operator>=( const QDateTime &dt ) const
+bool QDateTime::operator>=(const QDateTime &dt) const
 {
-    if ( d > dt.d )
-	return TRUE;
-    return d == dt.d ? t >= dt.t : FALSE;
+	if (d > dt.d)
+		return TRUE;
+	return d == dt.d ? t >= dt.t : FALSE;
 }
 
 /*!
@@ -1339,12 +1340,12 @@ bool QDateTime::operator>=( const QDateTime &dt ) const
 
 QDateTime QDateTime::currentDateTime()
 {
-    QDate cd = QDate::currentDate();
-    QTime ct;
-    if ( QTime::currentTime(&ct) )		// too close to midnight?
-	cd = QDate::currentDate();		// YES! time for some midnight
-						// voodoo, fetch date again
-    return QDateTime( cd, ct );
+	QDate cd = QDate::currentDate();
+	QTime ct;
+	if (QTime::currentTime(&ct)) // too close to midnight?
+		cd = QDate::currentDate(); // YES! time for some midnight
+					   // voodoo, fetch date again
+	return QDateTime(cd, ct);
 }
 
 
@@ -1360,9 +1361,9 @@ QDateTime QDateTime::currentDateTime()
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator<<( QDataStream &s, const QDate &d )
+QDataStream &operator<<(QDataStream &s, const QDate &d)
 {
-    return s << (Q_UINT32)(d.jd);
+	return s << (Q_UINT32)(d.jd);
 }
 
 /*!
@@ -1372,12 +1373,12 @@ QDataStream &operator<<( QDataStream &s, const QDate &d )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator>>( QDataStream &s, QDate &d )
+QDataStream &operator>>(QDataStream &s, QDate &d)
 {
-    Q_UINT32 jd;
-    s >> jd;
-    d.jd = jd;
-    return s;
+	Q_UINT32 jd;
+	s >> jd;
+	d.jd = jd;
+	return s;
 }
 
 /*!
@@ -1387,9 +1388,9 @@ QDataStream &operator>>( QDataStream &s, QDate &d )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator<<( QDataStream &s, const QTime &t )
+QDataStream &operator<<(QDataStream &s, const QTime &t)
 {
-    return s << (Q_UINT32)(t.ds);
+	return s << (Q_UINT32)(t.ds);
 }
 
 /*!
@@ -1399,12 +1400,12 @@ QDataStream &operator<<( QDataStream &s, const QTime &t )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator>>( QDataStream &s, QTime &t )
+QDataStream &operator>>(QDataStream &s, QTime &t)
 {
-    Q_UINT32 ds;
-    s >> ds;
-    t.ds = ds;
-    return s;
+	Q_UINT32 ds;
+	s >> ds;
+	t.ds = ds;
+	return s;
 }
 
 /*!
@@ -1414,9 +1415,9 @@ QDataStream &operator>>( QDataStream &s, QTime &t )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator<<( QDataStream &s, const QDateTime &dt )
+QDataStream &operator<<(QDataStream &s, const QDateTime &dt)
 {
-    return s << dt.d << dt.t;
+	return s << dt.d << dt.t;
 }
 
 /*!
@@ -1426,9 +1427,9 @@ QDataStream &operator<<( QDataStream &s, const QDateTime &dt )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator>>( QDataStream &s, QDateTime &dt )
+QDataStream &operator>>(QDataStream &s, QDateTime &dt)
 {
-    s >> dt.d >> dt.t;
-    return s;
+	s >> dt.d >> dt.t;
+	return s;
 }
-#endif //QT_NO_DATASTREAM
+#endif // QT_NO_DATASTREAM

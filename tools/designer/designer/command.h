@@ -45,541 +45,589 @@ class QMultiLineEdit;
 
 class Command : public Qt
 {
-public:
-    Command( const QString &n, FormWindow *fw );
-    virtual ~Command();
+      public:
+	Command(const QString &n, FormWindow *fw);
+	virtual ~Command();
 
-    enum Type {
-	Resize,
-	Insert,
-	Move,
-	Delete,
-	SetProperty,
-	LayoutHorizontal,
-	LayoutVertical,
-	LayoutGrid,
-	BreakLayout,
-	Macro,
-	AddTabPage,
-	DeleteTabPage,
-	AddWizardPage,
-	DeleteWizardPage,
-	AddConnection,
-	RemoveConnection,
-	AddSlot,
-	RemoveSlot,
-	Lower,
-	Raise,
-	Paste,
-	TabOrder,
-	PopulateListBox,
-	PopulateIconView,
-	PopulateListView,
-	PopulateMultiLineEdit
-    };
+	enum Type {
+		Resize,
+		Insert,
+		Move,
+		Delete,
+		SetProperty,
+		LayoutHorizontal,
+		LayoutVertical,
+		LayoutGrid,
+		BreakLayout,
+		Macro,
+		AddTabPage,
+		DeleteTabPage,
+		AddWizardPage,
+		DeleteWizardPage,
+		AddConnection,
+		RemoveConnection,
+		AddSlot,
+		RemoveSlot,
+		Lower,
+		Raise,
+		Paste,
+		TabOrder,
+		PopulateListBox,
+		PopulateIconView,
+		PopulateListView,
+		PopulateMultiLineEdit
+	};
 
-    QString name() const;
+	QString name() const;
 
-    virtual void execute() = 0;
-    virtual void unexecute() = 0;
-    virtual Type type() const = 0;
-    virtual void merge( Command *c );
-    virtual bool canMerge( Command *c );
+	virtual void execute() = 0;
+	virtual void unexecute() = 0;
+	virtual Type type() const = 0;
+	virtual void merge(Command *c);
+	virtual bool canMerge(Command *c);
 
-    FormWindow *formWindow() const;
+	FormWindow *formWindow() const;
 
-private:
-    QString cmdName;
-    FormWindow *formWin;
-
+      private:
+	QString cmdName;
+	FormWindow *formWin;
 };
 
 class CommandHistory : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    CommandHistory( int s );
+      public:
+	CommandHistory(int s);
 
-    void addCommand( Command *cmd, bool tryCompress = FALSE );
-    void undo();
-    void redo();
+	void addCommand(Command *cmd, bool tryCompress = FALSE);
+	void undo();
+	void redo();
 
-    void emitUndoRedo();
+	void emitUndoRedo();
 
-    void setModified( bool m );
-    bool isModified() const;
+	void setModified(bool m);
+	bool isModified() const;
 
-public slots:
-    void checkCompressedCommand();
+      public slots:
+	void checkCompressedCommand();
 
-signals:
-    void undoRedoChanged( bool undoAvailable, bool redoAvailable,
-			  const QString &undoCmd, const QString &redoCmd );
-    void modificationChanged( bool m );
+      signals:
+	void undoRedoChanged(bool undoAvailable, bool redoAvailable,
+			     const QString &undoCmd, const QString &redoCmd);
+	void modificationChanged(bool m);
 
-private:
-    QList<Command> history;
-    int current, steps;
-    bool modified;
-    int savedAt;
-    Command *compressedCommand;
-
+      private:
+	QList<Command> history;
+	int current, steps;
+	bool modified;
+	int savedAt;
+	Command *compressedCommand;
 };
 
 class ResizeCommand : public Command
 {
-public:
-    ResizeCommand( const QString &n, FormWindow *fw,
-		   QWidget *w, const QRect &oldr, const QRect &nr );
+      public:
+	ResizeCommand(const QString &n, FormWindow *fw, QWidget *w,
+		      const QRect &oldr, const QRect &nr);
 
-    void execute();
-    void unexecute();
-    Type type() const { return Resize; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return Resize;
+	}
 
-private:
-    QWidget *widget;
-    QRect oldRect, newRect;
-
+      private:
+	QWidget *widget;
+	QRect oldRect, newRect;
 };
 
 class InsertCommand : public Command
 {
-public:
-    InsertCommand( const QString &n, FormWindow *fw, QWidget *w, const QRect &g );
+      public:
+	InsertCommand(const QString &n, FormWindow *fw, QWidget *w,
+		      const QRect &g);
 
-    void execute();
-    void unexecute();
-    Type type() const { return Insert; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return Insert;
+	}
 
-private:
-    QWidget *widget;
-    QRect geometry;
-
+      private:
+	QWidget *widget;
+	QRect geometry;
 };
 
 class MoveCommand : public Command
 {
-public:
-    MoveCommand( const QString &n, FormWindow *fw,
-		 const QWidgetList &w,
-		 const QValueList<QPoint> op,
-		 const QValueList<QPoint> np,
-		 QWidget *opr, QWidget *npr );
-    void execute();
-    void unexecute();
-    Type type() const { return Move; }
-    void merge( Command *c );
-    bool canMerge( Command *c );
+      public:
+	MoveCommand(const QString &n, FormWindow *fw, const QWidgetList &w,
+		    const QValueList<QPoint> op, const QValueList<QPoint> np,
+		    QWidget *opr, QWidget *npr);
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return Move;
+	}
+	void merge(Command *c);
+	bool canMerge(Command *c);
 
-private:
-    QWidgetList widgets;
-    QValueList<QPoint> oldPos, newPos;
-    QWidget *oldParent, *newParent;
-
+      private:
+	QWidgetList widgets;
+	QValueList<QPoint> oldPos, newPos;
+	QWidget *oldParent, *newParent;
 };
 
 class DeleteCommand : public Command
 {
-public:
-    DeleteCommand( const QString &n, FormWindow *fw,
-		   const QWidgetList &w );
-    void execute();
-    void unexecute();
-    Type type() const { return Delete; }
+      public:
+	DeleteCommand(const QString &n, FormWindow *fw, const QWidgetList &w);
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return Delete;
+	}
 
-private:
-    QWidgetList widgets;
-    QMap< QWidget*, QValueList<MetaDataBase::Connection> > connections;
-
+      private:
+	QWidgetList widgets;
+	QMap<QWidget *, QValueList<MetaDataBase::Connection>> connections;
 };
 
 class SetPropertyCommand : public Command
 {
-public:
-    SetPropertyCommand( const QString &n, FormWindow *fw,
-			QWidget *w, PropertyEditor *e,
-			const QString &pn, const QVariant &ov,
-			const QVariant &nv, const QString &ncut,
-			const QString &ocut,
-			bool reset = FALSE );
+      public:
+	SetPropertyCommand(const QString &n, FormWindow *fw, QWidget *w,
+			   PropertyEditor *e, const QString &pn,
+			   const QVariant &ov, const QVariant &nv,
+			   const QString &ncut, const QString &ocut,
+			   bool reset = FALSE);
 
-    void execute();
-    void unexecute();
-    Type type() const { return SetProperty; }
-    void merge( Command *c );
-    bool canMerge( Command *c );
-    bool checkProperty();
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return SetProperty;
+	}
+	void merge(Command *c);
+	bool canMerge(Command *c);
+	bool checkProperty();
 
-private:
-    void setProperty( const QVariant &v, const QString &currentItemText, bool select = TRUE );
+      private:
+	void setProperty(const QVariant &v, const QString &currentItemText,
+			 bool select = TRUE);
 
-    QWidget *widget;
-    PropertyEditor *editor;
-    QString propName;
-    QVariant oldValue, newValue;
-    QString oldCurrentItemText, newCurrentItemText;
-    bool wasChanged;
-    bool isResetCommand;
-
+	QWidget *widget;
+	PropertyEditor *editor;
+	QString propName;
+	QVariant oldValue, newValue;
+	QString oldCurrentItemText, newCurrentItemText;
+	bool wasChanged;
+	bool isResetCommand;
 };
 
 class LayoutHorizontalCommand : public Command
 {
-public:
-    LayoutHorizontalCommand( const QString &n, FormWindow *fw,
-			     QWidget *parent, QWidget *layoutBase,
-			     const QWidgetList &wl );
+      public:
+	LayoutHorizontalCommand(const QString &n, FormWindow *fw,
+				QWidget *parent, QWidget *layoutBase,
+				const QWidgetList &wl);
 
-    void execute();
-    void unexecute();
-    Type type() const { return LayoutHorizontal; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return LayoutHorizontal;
+	}
 
-private:
-    HorizontalLayout layout;
-
+      private:
+	HorizontalLayout layout;
 };
 
 class LayoutVerticalCommand : public Command
 {
-public:
-    LayoutVerticalCommand( const QString &n, FormWindow *fw,
-			   QWidget *parent, QWidget *layoutBase,
-			   const QWidgetList &wl );
+      public:
+	LayoutVerticalCommand(const QString &n, FormWindow *fw, QWidget *parent,
+			      QWidget *layoutBase, const QWidgetList &wl);
 
-    void execute();
-    void unexecute();
-    Type type() const { return LayoutVertical; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return LayoutVertical;
+	}
 
-private:
-    VerticalLayout layout;
-
+      private:
+	VerticalLayout layout;
 };
 
 class LayoutGridCommand : public Command
 {
-public:
-    LayoutGridCommand( const QString &n, FormWindow *fw,
-		       QWidget *parent, QWidget *layoutBase,
-		       const QWidgetList &wl, int xres, int yres );
+      public:
+	LayoutGridCommand(const QString &n, FormWindow *fw, QWidget *parent,
+			  QWidget *layoutBase, const QWidgetList &wl, int xres,
+			  int yres);
 
-    void execute();
-    void unexecute();
-    Type type() const { return LayoutGrid; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return LayoutGrid;
+	}
 
-private:
-    GridLayout layout;
-
+      private:
+	GridLayout layout;
 };
 
 class BreakLayoutCommand : public Command
 {
-public:
-    BreakLayoutCommand( const QString &n, FormWindow *fw,
-			QWidget *layoutBase, const QWidgetList &wl );
+      public:
+	BreakLayoutCommand(const QString &n, FormWindow *fw,
+			   QWidget *layoutBase, const QWidgetList &wl);
 
-    void execute();
-    void unexecute();
-    Type type() const { return BreakLayout; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return BreakLayout;
+	}
 
-private:
-    Layout *layout;
-    int spacing;
-    int margin;
-    QWidget *lb;
-    QWidgetList widgets;
-    
+      private:
+	Layout *layout;
+	int spacing;
+	int margin;
+	QWidget *lb;
+	QWidgetList widgets;
 };
 
 class MacroCommand : public Command
 {
-public:
-    MacroCommand( const QString &n, FormWindow *fw,
-		  const QList<Command> &cmds );
+      public:
+	MacroCommand(const QString &n, FormWindow *fw,
+		     const QList<Command> &cmds);
 
-    void execute();
-    void unexecute();
-    Type type() const { return Macro; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return Macro;
+	}
 
-private:
-    QList<Command> commands;
-
+      private:
+	QList<Command> commands;
 };
 
 class AddTabPageCommand : public Command
 {
-public:
-    AddTabPageCommand( const QString &n, FormWindow *fw,
-		       QTabWidget *tw, const QString &label );
+      public:
+	AddTabPageCommand(const QString &n, FormWindow *fw, QTabWidget *tw,
+			  const QString &label);
 
-    void execute();
-    void unexecute();
-    Type type() const { return AddTabPage; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return AddTabPage;
+	}
 
-private:
-    QTabWidget *tabWidget;
-    int index;
-    QWidget *tabPage;
-    QString tabLabel;
-
+      private:
+	QTabWidget *tabWidget;
+	int index;
+	QWidget *tabPage;
+	QString tabLabel;
 };
 
 class DeleteTabPageCommand : public Command
 {
-public:
-    DeleteTabPageCommand( const QString &n, FormWindow *fw,
-			  QTabWidget *tw, QWidget *page );
+      public:
+	DeleteTabPageCommand(const QString &n, FormWindow *fw, QTabWidget *tw,
+			     QWidget *page);
 
-    void execute();
-    void unexecute();
-    Type type() const { return DeleteTabPage; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return DeleteTabPage;
+	}
 
-private:
-    QTabWidget *tabWidget;
-    int index;
-    QWidget *tabPage;
-    QString tabLabel;
-
+      private:
+	QTabWidget *tabWidget;
+	int index;
+	QWidget *tabPage;
+	QString tabLabel;
 };
 
 class AddWizardPageCommand : public Command
 {
-public:
-    AddWizardPageCommand( const QString &n, FormWindow *fw,
-			  QWizard *w, const QString &label );
+      public:
+	AddWizardPageCommand(const QString &n, FormWindow *fw, QWizard *w,
+			     const QString &label);
 
-    void execute();
-    void unexecute();
-    Type type() const { return AddWizardPage; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return AddWizardPage;
+	}
 
-private:
-    QWizard *wizard;
-    int index;
-    QWidget *page;
-    QString pageLabel;
-
+      private:
+	QWizard *wizard;
+	int index;
+	QWidget *page;
+	QString pageLabel;
 };
 
 class DeleteWizardPageCommand : public Command
 {
-public:
-    DeleteWizardPageCommand( const QString &n, FormWindow *fw,
-			     QWizard *w, QWidget *p );
+      public:
+	DeleteWizardPageCommand(const QString &n, FormWindow *fw, QWizard *w,
+				QWidget *p);
 
-    void execute();
-    void unexecute();
-    Type type() const { return DeleteWizardPage; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return DeleteWizardPage;
+	}
 
-private:
-    QWizard *wizard;
-    int index;
-    QWidget *page;
-    QString pageLabel;
-
+      private:
+	QWizard *wizard;
+	int index;
+	QWidget *page;
+	QString pageLabel;
 };
 
 class AddConnectionCommand : public Command
 {
-public:
-    AddConnectionCommand( const QString &name, FormWindow *fw,
-			  MetaDataBase::Connection c );
+      public:
+	AddConnectionCommand(const QString &name, FormWindow *fw,
+			     MetaDataBase::Connection c);
 
-    void execute();
-    void unexecute();
-    Type type() const { return AddConnection; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return AddConnection;
+	}
 
-private:
-    MetaDataBase::Connection connection;
-
+      private:
+	MetaDataBase::Connection connection;
 };
 
 class RemoveConnectionCommand : public Command
 {
-public:
-    RemoveConnectionCommand( const QString &name, FormWindow *fw,
-			     MetaDataBase::Connection c );
+      public:
+	RemoveConnectionCommand(const QString &name, FormWindow *fw,
+				MetaDataBase::Connection c);
 
-    void execute();
-    void unexecute();
-    Type type() const { return RemoveConnection; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return RemoveConnection;
+	}
 
-private:
-    MetaDataBase::Connection connection;
-
+      private:
+	MetaDataBase::Connection connection;
 };
 
 class AddSlotCommand : public Command
 {
-public:
-    AddSlotCommand( const QString &name, FormWindow *fw, const QCString &s, const QString &a );
+      public:
+	AddSlotCommand(const QString &name, FormWindow *fw, const QCString &s,
+		       const QString &a);
 
-    void execute();
-    void unexecute();
-    Type type() const { return AddSlot; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return AddSlot;
+	}
 
-private:
-    QCString slot;
-    QString access;
-
+      private:
+	QCString slot;
+	QString access;
 };
 
 class RemoveSlotCommand : public Command
 {
-public:
-    RemoveSlotCommand( const QString &name, FormWindow *fw, const QCString &s, const QString &a );
+      public:
+	RemoveSlotCommand(const QString &name, FormWindow *fw,
+			  const QCString &s, const QString &a);
 
-    void execute();
-    void unexecute();
-    Type type() const { return RemoveSlot; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return RemoveSlot;
+	}
 
-private:
-    QCString slot;
-    QString access;
-
+      private:
+	QCString slot;
+	QString access;
 };
 
 class LowerCommand : public Command
 {
-public:
-    LowerCommand( const QString &name, FormWindow *fw, const QWidgetList &w );
+      public:
+	LowerCommand(const QString &name, FormWindow *fw, const QWidgetList &w);
 
-    void execute();
-    void unexecute();
-    Type type() const { return Lower; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return Lower;
+	}
 
-private:
-    QWidgetList widgets;
-
+      private:
+	QWidgetList widgets;
 };
 
 class RaiseCommand : public Command
 {
-public:
-    RaiseCommand( const QString &name, FormWindow *fw, const QWidgetList &w );
+      public:
+	RaiseCommand(const QString &name, FormWindow *fw, const QWidgetList &w);
 
-    void execute();
-    void unexecute();
-    Type type() const { return Raise; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return Raise;
+	}
 
-private:
-    QWidgetList widgets;
-
+      private:
+	QWidgetList widgets;
 };
 
 class PasteCommand : public Command
 {
-public:
-    PasteCommand( const QString &n, FormWindow *fw, const QWidgetList &w );
+      public:
+	PasteCommand(const QString &n, FormWindow *fw, const QWidgetList &w);
 
-    void execute();
-    void unexecute();
-    Type type() const { return Paste; }
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return Paste;
+	}
 
-private:
-    QWidgetList widgets;
-
+      private:
+	QWidgetList widgets;
 };
 
 class TabOrderCommand : public Command
 {
-public:
-    TabOrderCommand( const QString &n, FormWindow *fw, const QWidgetList &ol, const QWidgetList &nl );
+      public:
+	TabOrderCommand(const QString &n, FormWindow *fw, const QWidgetList &ol,
+			const QWidgetList &nl);
 
-    void execute();
-    void unexecute();
-    Type type() const { return TabOrder; }
-    void merge( Command *c );
-    bool canMerge( Command *c );
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return TabOrder;
+	}
+	void merge(Command *c);
+	bool canMerge(Command *c);
 
-private:
-    QWidgetList oldOrder, newOrder;
-
+      private:
+	QWidgetList oldOrder, newOrder;
 };
 
 class PopulateListBoxCommand : public Command
 {
-public:
-    struct Item
-    {
-	QString text;
-	QPixmap pix;
+      public:
+	struct Item {
+		QString text;
+		QPixmap pix;
 #if defined(Q_FULL_TEMPLATE_INSTANTIATION)
-	bool operator==( const Item & ) const;
+		bool operator==(const Item &) const;
 #endif
-    };
+	};
 
-    PopulateListBoxCommand( const QString &n, FormWindow *fw,
-			    QListBox *lb, const QValueList<Item> &items );
-    void execute();
-    void unexecute();
-    Type type() const { return PopulateListBox; }
+	PopulateListBoxCommand(const QString &n, FormWindow *fw, QListBox *lb,
+			       const QValueList<Item> &items);
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return PopulateListBox;
+	}
 
-    bool operator==( const PopulateListBoxCommand & ) const;
+	bool operator==(const PopulateListBoxCommand &) const;
 
-private:
-    QValueList<Item> oldItems, newItems;
-    QListBox *listbox;
-
+      private:
+	QValueList<Item> oldItems, newItems;
+	QListBox *listbox;
 };
 
 class PopulateIconViewCommand : public Command
 {
-public:
-    struct Item
-    {
-	QString text;
-	QPixmap pix;
+      public:
+	struct Item {
+		QString text;
+		QPixmap pix;
 #if defined(Q_FULL_TEMPLATE_INSTANTIATION)
-	bool operator==( const Item & ) const;
+		bool operator==(const Item &) const;
 #endif
-    };
+	};
 
-    PopulateIconViewCommand( const QString &n, FormWindow *fw,
-			    QIconView *iv, const QValueList<Item> &items );
-    void execute();
-    void unexecute();
-    Type type() const { return PopulateIconView; }
+	PopulateIconViewCommand(const QString &n, FormWindow *fw, QIconView *iv,
+				const QValueList<Item> &items);
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return PopulateIconView;
+	}
 
-    bool operator==( const PopulateIconViewCommand & ) const;
+	bool operator==(const PopulateIconViewCommand &) const;
 
-private:
-    QValueList<Item> oldItems, newItems;
-    QIconView *iconview;
-
+      private:
+	QValueList<Item> oldItems, newItems;
+	QIconView *iconview;
 };
 
 class PopulateListViewCommand : public Command
 {
-public:
-    PopulateListViewCommand( const QString &n, FormWindow *fw,
-			     QListView *lv, QListView *from );
-    void execute();
-    void unexecute();
-    Type type() const { return PopulateListView; }
-    static void transferItems( QListView *from, QListView *to );
+      public:
+	PopulateListViewCommand(const QString &n, FormWindow *fw, QListView *lv,
+				QListView *from);
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return PopulateListView;
+	}
+	static void transferItems(QListView *from, QListView *to);
 
-    bool operator==( const PopulateListViewCommand & ) const;
+	bool operator==(const PopulateListViewCommand &) const;
 
-private:
-    QListView *oldItems, *newItems;
-    QListView *listview;
-
+      private:
+	QListView *oldItems, *newItems;
+	QListView *listview;
 };
 
 class PopulateMultiLineEditCommand : public Command
 {
-public:
-    PopulateMultiLineEditCommand( const QString &n, FormWindow *fw,
-				  QMultiLineEdit *mle, const QString &txt );
-    void execute();
-    void unexecute();
-    Type type() const { return PopulateMultiLineEdit; }
+      public:
+	PopulateMultiLineEditCommand(const QString &n, FormWindow *fw,
+				     QMultiLineEdit *mle, const QString &txt);
+	void execute();
+	void unexecute();
+	Type type() const
+	{
+		return PopulateMultiLineEdit;
+	}
 
-private:
-    QString newText, oldText;
-    QMultiLineEdit *mlined;
-    bool wasChanged;
-
+      private:
+	QString newText, oldText;
+	QMultiLineEdit *mlined;
+	bool wasChanged;
 };
 
 #endif

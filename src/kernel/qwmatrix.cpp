@@ -38,9 +38,9 @@
 #include "qwmatrix.h"
 #include "qdatastream.h"
 #if defined(_WS_X11_)
-double qsincos( double, bool calcCos );		// defined in qpainter_x11.cpp
+double qsincos(double, bool calcCos); // defined in qpainter_x11.cpp
 #else
-#include <math.h>
+# include <math.h>
 #endif
 
 #ifndef QT_NO_WMATRIX
@@ -164,20 +164,23 @@ double qsincos( double, bool calcCos );		// defined in qpainter_x11.cpp
 
 QWMatrix::QWMatrix()
 {
-    _m11 = _m22 = 1.0;
-    _m12 = _m21 = _dx = _dy = 0.0;
+	_m11 = _m22 = 1.0;
+	_m12 = _m21 = _dx = _dy = 0.0;
 }
 
 /*!
   Constructs a matrix with the specified elements.
 */
 
-QWMatrix::QWMatrix( double m11, double m12, double m21, double m22,
-		    double dx, double dy )
+QWMatrix::QWMatrix(double m11, double m12, double m21, double m22, double dx,
+		   double dy)
 {
-    _m11 = m11;	 _m12 = m12;
-    _m21 = m21;	 _m22 = m22;
-    _dx	 = dx;	 _dy  = dy;
+	_m11 = m11;
+	_m12 = m12;
+	_m21 = m21;
+	_m22 = m22;
+	_dx = dx;
+	_dy = dy;
 }
 
 
@@ -185,12 +188,15 @@ QWMatrix::QWMatrix( double m11, double m12, double m21, double m22,
   Sets the matrix elements to the specified values.
 */
 
-void QWMatrix::setMatrix( double m11, double m12, double m21, double m22,
-			  double dx, double dy )
+void QWMatrix::setMatrix(double m11, double m12, double m21, double m22,
+			 double dx, double dy)
 {
-    _m11 = m11;	 _m12 = m12;
-    _m21 = m21;	 _m22 = m22;
-    _dx	 = dx;	 _dy  = dy;
+	_m11 = m11;
+	_m12 = m12;
+	_m21 = m21;
+	_m22 = m22;
+	_dx = dx;
+	_dy = dy;
 }
 
 
@@ -234,10 +240,10 @@ void QWMatrix::setMatrix( double m11, double m12, double m21, double m22,
   \endcode
 */
 
-void QWMatrix::map( double x, double y, double *tx, double *ty ) const
+void QWMatrix::map(double x, double y, double *tx, double *ty) const
 {
-    *tx = _m11*x + _m21*y + _dx;
-    *ty = _m12*x + _m22*y + _dy;
+	*tx = _m11 * x + _m21 * y + _dx;
+	*ty = _m12 * x + _m22 * y + _dy;
 }
 
 /*!
@@ -249,24 +255,24 @@ void QWMatrix::map( double x, double y, double *tx, double *ty ) const
   \endcode
 */
 
-void QWMatrix::map( int x, int y, int *tx, int *ty ) const
+void QWMatrix::map(int x, int y, int *tx, int *ty) const
 {
-    double fx = x;
-    double fy = y;
-    *tx = qRound(_m11*fx + _m21*fy + _dx);
-    *ty = qRound(_m12*fx + _m22*fy + _dy);
+	double fx = x;
+	double fy = y;
+	*tx = qRound(_m11 * fx + _m21 * fy + _dx);
+	*ty = qRound(_m12 * fx + _m22 * fy + _dy);
 }
 
 /*!
   Returns the transformed \e p.
 */
 
-QPoint QWMatrix::map( const QPoint &p ) const
+QPoint QWMatrix::map(const QPoint &p) const
 {
-    double fx = p.x();
-    double fy = p.y();
-    return QPoint( qRound(_m11*fx + _m21*fy + _dx),
-		   qRound(_m12*fx + _m22*fy + _dy) );
+	double fx = p.x();
+	double fy = p.y();
+	return QPoint(qRound(_m11 * fx + _m21 * fy + _dx),
+		      qRound(_m12 * fx + _m22 * fy + _dy));
 }
 
 /*!
@@ -276,33 +282,33 @@ QPoint QWMatrix::map( const QPoint &p ) const
   will be returned.
 */
 
-QRect QWMatrix::map( const QRect &r ) const
+QRect QWMatrix::map(const QRect &r) const
 {
-    QRect result;
-    if ( _m12 == 0.0F && _m21 == 0.0F ) {
-	result = QRect( map(r.topLeft()), map(r.bottomRight()) );
-    } else {
-	QPointArray a( r );
-	a = map( a );
-	result = a.boundingRect();
-    }
-    return result;
+	QRect result;
+	if (_m12 == 0.0F && _m21 == 0.0F) {
+		result = QRect(map(r.topLeft()), map(r.bottomRight()));
+	} else {
+		QPointArray a(r);
+		a = map(a);
+		result = a.boundingRect();
+	}
+	return result;
 }
 
 /*!
   Returns the point array \e a transformed by calling map for each point.
 */
 
-QPointArray QWMatrix::map( const QPointArray &a ) const
+QPointArray QWMatrix::map(const QPointArray &a) const
 {
-    QPointArray result = a.copy();
-    int x, y;
-    for ( int i=0; i<(int)result.size(); i++ ) {
-	result.point( i, &x, &y );
-	map( x, y, &x, &y );
-	result.setPoint( i, x, y );
-    }
-    return result;
+	QPointArray result = a.copy();
+	int x, y;
+	for (int i = 0; i < (int)result.size(); i++) {
+		result.point(i, &x, &y);
+		map(x, y, &x, &y);
+		result.setPoint(i, x, y);
+	}
+	return result;
 }
 
 
@@ -315,8 +321,8 @@ QPointArray QWMatrix::map( const QPointArray &a ) const
 
 void QWMatrix::reset()
 {
-    _m11 = _m22 = 1.0;
-    _m12 = _m21 = _dx = _dy = 0.0;
+	_m11 = _m22 = 1.0;
+	_m12 = _m21 = _dx = _dy = 0.0;
 }
 
 
@@ -329,10 +335,10 @@ void QWMatrix::reset()
   \sa scale(), shear(), rotate()
 */
 
-QWMatrix &QWMatrix::translate( double dx, double dy )
+QWMatrix &QWMatrix::translate(double dx, double dy)
 {
-    QWMatrix result( 1.0F, 0.0F, 0.0F, 1.0F, dx, dy );
-    return bmul( result );
+	QWMatrix result(1.0F, 0.0F, 0.0F, 1.0F, dx, dy);
+	return bmul(result);
 }
 
 /*!
@@ -344,10 +350,10 @@ QWMatrix &QWMatrix::translate( double dx, double dy )
   \sa translate(), shear(), rotate()
 */
 
-QWMatrix &QWMatrix::scale( double sx, double sy )
+QWMatrix &QWMatrix::scale(double sx, double sy)
 {
-    QWMatrix result( sx, 0.0F, 0.0F, sy, 0.0F, 0.0F );
-    return bmul( result );
+	QWMatrix result(sx, 0.0F, 0.0F, sy, 0.0F, 0.0F);
+	return bmul(result);
 }
 
 /*!
@@ -358,13 +364,13 @@ QWMatrix &QWMatrix::scale( double sx, double sy )
   \sa translate(), scale(), rotate()
 */
 
-QWMatrix &QWMatrix::shear( double sh, double sv )
+QWMatrix &QWMatrix::shear(double sh, double sv)
 {
-    QWMatrix result( 1.0F, sv, sh, 1.0F, 0.0F, 0.0F );
-    return bmul( result );
+	QWMatrix result(1.0F, sv, sh, 1.0F, 0.0F, 0.0F);
+	return bmul(result);
 }
 
-const double deg2rad = 0.017453292519943295769;	// pi/180
+const double deg2rad = 0.017453292519943295769; // pi/180
 
 /*!
   Rotates the coordinate system \e a degrees counterclockwise.
@@ -374,18 +380,18 @@ const double deg2rad = 0.017453292519943295769;	// pi/180
   \sa translate(), scale(), shear()
 */
 
-QWMatrix &QWMatrix::rotate( double a )
+QWMatrix &QWMatrix::rotate(double a)
 {
-    double b = deg2rad*a;			// convert to radians
-#if defined(_WS_X11_)
-    double sina = qsincos(b,FALSE);		// fast and convenient
-    double cosa = qsincos(b,TRUE);
-#else
-    double sina = sin(b);
-    double cosa = cos(b);
-#endif
-    QWMatrix result( cosa, sina, -sina, cosa, 0.0F, 0.0F );
-    return bmul( result );
+	double b = deg2rad * a; // convert to radians
+# if defined(_WS_X11_)
+	double sina = qsincos(b, FALSE); // fast and convenient
+	double cosa = qsincos(b, TRUE);
+# else
+	double sina = sin(b);
+	double cosa = cos(b);
+# endif
+	QWMatrix result(cosa, sina, -sina, cosa, 0.0F, 0.0F);
+	return bmul(result);
 }
 
 
@@ -399,25 +405,24 @@ QWMatrix &QWMatrix::rotate( double a )
   be set to TRUE or FALSE to tell if the matrix is invertible or not.
 */
 
-QWMatrix QWMatrix::invert( bool *invertible ) const
+QWMatrix QWMatrix::invert(bool *invertible) const
 {
-    double det = _m11*_m22 - _m12*_m21;
-    if ( det == 0.0 ) {
-	if ( invertible )
-	    *invertible = FALSE;		// singular matrix
-	QWMatrix defaultMatrix;
-	return defaultMatrix;
-    }
-    else {					// invertible matrix
-	if ( invertible )
-	    *invertible = TRUE;
-	double dinv = 1.0/det;
-	QWMatrix imatrix( (_m22*dinv),	(-_m12*dinv),
-			  (-_m21*dinv), ( _m11*dinv),
-			  ((_m21*_dy - _m22*_dx)*dinv),
-			  ((_m12*_dx - _m11*_dy)*dinv) );
-	return imatrix;
-    }
+	double det = _m11 * _m22 - _m12 * _m21;
+	if (det == 0.0) {
+		if (invertible)
+			*invertible = FALSE; // singular matrix
+		QWMatrix defaultMatrix;
+		return defaultMatrix;
+	} else { // invertible matrix
+		if (invertible)
+			*invertible = TRUE;
+		double dinv = 1.0 / det;
+		QWMatrix imatrix((_m22 * dinv), (-_m12 * dinv), (-_m21 * dinv),
+				 (_m11 * dinv),
+				 ((_m21 * _dy - _m22 * _dx) * dinv),
+				 ((_m12 * _dx - _m11 * _dy) * dinv));
+		return imatrix;
+	}
 }
 
 
@@ -425,50 +430,42 @@ QWMatrix QWMatrix::invert( bool *invertible ) const
   Returns TRUE if this matrix is equal to \e m.
 */
 
-bool QWMatrix::operator==( const QWMatrix &m ) const
+bool QWMatrix::operator==(const QWMatrix &m) const
 {
-    return _m11 == m._m11 &&
-	   _m12 == m._m12 &&
-	   _m21 == m._m21 &&
-	   _m22 == m._m22 &&
-	   _dx == m._dx &&
-	   _dy == m._dy;
+	return _m11 == m._m11 && _m12 == m._m12 && _m21 == m._m21 &&
+	       _m22 == m._m22 && _dx == m._dx && _dy == m._dy;
 }
 
 /*!
   Returns TRUE if this matrix is not equal to \e m.
 */
 
-bool QWMatrix::operator!=( const QWMatrix &m ) const
+bool QWMatrix::operator!=(const QWMatrix &m) const
 {
-    return _m11 != m._m11 ||
-	   _m12 != m._m12 ||
-	   _m21 != m._m21 ||
-	   _m22 != m._m22 ||
-	   _dx != m._dx ||
-	   _dy != m._dy;
+	return _m11 != m._m11 || _m12 != m._m12 || _m21 != m._m21 ||
+	       _m22 != m._m22 || _dx != m._dx || _dy != m._dy;
 }
 
 /*!
   Returns the result of multiplying this matrix with \e m.
 */
 
-QWMatrix &QWMatrix::operator*=( const QWMatrix &m )
+QWMatrix &QWMatrix::operator*=(const QWMatrix &m)
 {
-    setMatrix( _m11*m._m11 + _m12*m._m21,  _m11*m._m12 + _m12*m._m22,
-	       _m21*m._m11 + _m22*m._m21,  _m21*m._m12 + _m22*m._m22,
-	       _dx*m._m11  + _dy*m._m21 + m._dx,
-	       _dx*m._m12  + _dy*m._m22 + m._dy );
-    return *this;
+	setMatrix(_m11 * m._m11 + _m12 * m._m21, _m11 * m._m12 + _m12 * m._m22,
+		  _m21 * m._m11 + _m22 * m._m21, _m21 * m._m12 + _m22 * m._m22,
+		  _dx * m._m11 + _dy * m._m21 + m._dx,
+		  _dx * m._m12 + _dy * m._m22 + m._dy);
+	return *this;
 }
 
-QWMatrix &QWMatrix::bmul( const QWMatrix &m )
+QWMatrix &QWMatrix::bmul(const QWMatrix &m)
 {
-    setMatrix( m._m11*_m11 + m._m12*_m21,  m._m11*_m12 + m._m12*_m22,
-	       m._m21*_m11 + m._m22*_m21,  m._m21*_m12 + m._m22*_m22,
-	       m._dx*_m11  + m._dy*_m21 + _dx,
-	       m._dx*_m12  + m._dy*_m22 + _dy );
-    return *this;
+	setMatrix(m._m11 * _m11 + m._m12 * _m21, m._m11 * _m12 + m._m12 * _m22,
+		  m._m21 * _m11 + m._m22 * _m21, m._m21 * _m12 + m._m22 * _m22,
+		  m._dx * _m11 + m._dy * _m21 + _dx,
+		  m._dx * _m12 + m._dy * _m22 + _dy);
+	return *this;
 }
 
 /*!
@@ -479,18 +476,18 @@ QWMatrix &QWMatrix::bmul( const QWMatrix &m )
   a*b != b*a.
 */
 
-QWMatrix operator*( const QWMatrix &m1, const QWMatrix &m2 )
+QWMatrix operator*(const QWMatrix &m1, const QWMatrix &m2)
 {
-    QWMatrix result = m1;
-    result *= m2;
-    return result;
+	QWMatrix result = m1;
+	result *= m2;
+	return result;
 }
 
 
 /*****************************************************************************
   QWMatrix stream functions
  *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
+# ifndef QT_NO_DATASTREAM
 /*!
   \relates QWMatrix
   Writes a matrix to the stream and returns a reference to the stream.
@@ -498,15 +495,15 @@ QWMatrix operator*( const QWMatrix &m1, const QWMatrix &m2 )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator<<( QDataStream &s, const QWMatrix &m )
+QDataStream &operator<<(QDataStream &s, const QWMatrix &m)
 {
-    if ( s.version() == 1 )
-	s << (float)m.m11() << (float)m.m12() << (float)m.m21()
-	  << (float)m.m22() << (float)m.dx()  << (float)m.dy();
-    else
-	s << m.m11() << m.m12() << m.m21() << m.m22()
-	  << m.dx() << m.dy();
-    return s;
+	if (s.version() == 1)
+		s << (float)m.m11() << (float)m.m12() << (float)m.m21()
+		  << (float)m.m22() << (float)m.dx() << (float)m.dy();
+	else
+		s << m.m11() << m.m12() << m.m21() << m.m22() << m.dx()
+		  << m.dy();
+	return s;
 }
 
 /*!
@@ -516,22 +513,28 @@ QDataStream &operator<<( QDataStream &s, const QWMatrix &m )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator>>( QDataStream &s, QWMatrix &m )
+QDataStream &operator>>(QDataStream &s, QWMatrix &m)
 {
-    if ( s.version() == 1 ) {
-	float m11, m12, m21, m22, dx, dy;
-	s >> m11;  s >> m12;  s >> m21;  s >> m22;
-	s >> dx;   s >> dy;
-	m.setMatrix( m11, m12, m21, m22, dx, dy );
-    }
-    else {
-	double m11, m12, m21, m22, dx, dy;
-	s >> m11;  s >> m12;  s >> m21;  s >> m22;
-	s >> dx;   s >> dy;
-	m.setMatrix( m11, m12, m21, m22, dx, dy );
-    }
-    return s;
+	if (s.version() == 1) {
+		float m11, m12, m21, m22, dx, dy;
+		s >> m11;
+		s >> m12;
+		s >> m21;
+		s >> m22;
+		s >> dx;
+		s >> dy;
+		m.setMatrix(m11, m12, m21, m22, dx, dy);
+	} else {
+		double m11, m12, m21, m22, dx, dy;
+		s >> m11;
+		s >> m12;
+		s >> m21;
+		s >> m22;
+		s >> dx;
+		s >> dy;
+		m.setMatrix(m11, m12, m21, m22, dx, dy);
+	}
+	return s;
 }
-#endif // QT_NO_DATASTREAM
+# endif // QT_NO_DATASTREAM
 #endif // QT_NO_WMATRIX
-

@@ -39,37 +39,39 @@
 #define QSIGNALMAPPER_H
 
 #ifndef QT_H
-#include "qobject.h"
+# include "qobject.h"
 #endif // QT_H
 
 
-class  QSignalMapperData;
+class QSignalMapperData;
 struct QSignalMapperRec;
 
 
-class Q_EXPORT QSignalMapper : public QObject {
-    Q_OBJECT
-public:
-    QSignalMapper( QObject* parent, const char* name=0 );
-    ~QSignalMapper();
+class Q_EXPORT QSignalMapper : public QObject
+{
+	Q_OBJECT
+      public:
+	QSignalMapper(QObject *parent, const char *name = 0);
+	~QSignalMapper();
 
-    virtual void setMapping( const QObject* sender, int identifier );
-    virtual void setMapping( const QObject* sender, const QString &identifier );
-    void removeMappings( const QObject* sender );
+	virtual void setMapping(const QObject *sender, int identifier);
+	virtual void setMapping(const QObject *sender,
+				const QString &identifier);
+	void removeMappings(const QObject *sender);
 
-signals:
-    void mapped(int);
-    void mapped(const QString &);
+      signals:
+	void mapped(int);
+	void mapped(const QString &);
 
-public slots:
-    void map();
+      public slots:
+	void map();
 
-private:
-    QSignalMapperData* d;
-    QSignalMapperRec* getRec( const QObject* );
+      private:
+	QSignalMapperData *d;
+	QSignalMapperRec *getRec(const QObject *);
 
-private slots:
-    void removeMapping();
+      private slots:
+	void removeMapping();
 };
 
 

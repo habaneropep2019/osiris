@@ -17,19 +17,18 @@
 
 class TabDialog : public QTabDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    TabDialog( QWidget *parent, const char *name, const QString &_filename );
+      public:
+	TabDialog(QWidget *parent, const char *name, const QString &_filename);
 
-protected:
-    QString filename;
-    QFileInfo fileinfo;
+      protected:
+	QString filename;
+	QFileInfo fileinfo;
 
-    void setupTab1();
-    void setupTab2();
-    void setupTab3();
-
+	void setupTab1();
+	void setupTab2();
+	void setupTab3();
 };
 
 #endif

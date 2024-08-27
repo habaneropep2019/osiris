@@ -39,74 +39,71 @@
 #define QCOMMONSTYLE_H
 
 #ifndef QT_H
-#include "qstyle.h"
+# include "qstyle.h"
 #endif // QT_H
 
 #if !defined(QT_NO_STYLE_WINDOWS) || !defined(QT_NO_STYLE_MOTIF)
 
-class Q_EXPORT QCommonStyle: public QStyle
+class Q_EXPORT QCommonStyle : public QStyle
 {
-    Q_OBJECT
-private:
-    QCommonStyle(GUIStyle);
-    ~QCommonStyle();
+	Q_OBJECT
+      private:
+	QCommonStyle(GUIStyle);
+	~QCommonStyle();
 
-    friend class QMotifStyle;
-    friend class QWindowsStyle;
-    friend class QPlatinumStyle;
-public:
+	friend class QMotifStyle;
+	friend class QWindowsStyle;
+	friend class QPlatinumStyle;
 
-    // "combo box"
-    void drawComboButton( QPainter *p, int x, int y, int w, int h,
-				  const QColorGroup &g, bool sunken = FALSE,
-				  bool editable = FALSE,
-				  bool enabled = TRUE,
-				  const QBrush *fill = 0 );
-    QRect comboButtonRect( int x, int y, int w, int h);
-    QRect comboButtonFocusRect( int x, int y, int w, int h);
+      public:
+	// "combo box"
+	void drawComboButton(QPainter *p, int x, int y, int w, int h,
+			     const QColorGroup &g, bool sunken = FALSE,
+			     bool editable = FALSE, bool enabled = TRUE,
+			     const QBrush *fill = 0);
+	QRect comboButtonRect(int x, int y, int w, int h);
+	QRect comboButtonFocusRect(int x, int y, int w, int h);
 
-    void drawComboButtonMask( QPainter *p, int x, int y, int w, int h);
-
+	void drawComboButtonMask(QPainter *p, int x, int y, int w, int h);
 
 
-    // push buttons
-    void drawPushButtonLabel( QPushButton* btn, QPainter *p);
 
-    void getButtonShift( int &x, int &y);
+	// push buttons
+	void drawPushButtonLabel(QPushButton *btn, QPainter *p);
 
-    // frame
-    int defaultFrameWidth() const;
+	void getButtonShift(int &x, int &y);
 
-    // tabbars
-    void tabbarMetrics( const QTabBar*, int&, int&, int& );
-    void drawTab( QPainter*, const QTabBar*, QTab*, bool selected );
-    void drawTabMask( QPainter*, const QTabBar*, QTab*, bool selected );
+	// frame
+	int defaultFrameWidth() const;
 
-    // scrollbars
-    ScrollControl scrollBarPointOver( const QScrollBar* sb, int sliderStart, const QPoint& p );
+	// tabbars
+	void tabbarMetrics(const QTabBar *, int &, int &, int &);
+	void drawTab(QPainter *, const QTabBar *, QTab *, bool selected);
+	void drawTabMask(QPainter *, const QTabBar *, QTab *, bool selected);
 
-    // sliders
-    void drawSliderMask( QPainter *p,
-				 int x, int y, int w, int h,
-				 Orientation, bool tickAbove, bool tickBelow);
-    void drawSliderGrooveMask( QPainter *p,
-				       int x, int y, int w, int h,
-				       QCOORD c,
-				       Orientation );
-    int maximumSliderDragDistance() const;
+	// scrollbars
+	ScrollControl scrollBarPointOver(const QScrollBar *sb, int sliderStart,
+					 const QPoint &p);
 
-    // popups
-    int popupSubmenuIndicatorWidth( const QFontMetrics& fm  );
+	// sliders
+	void drawSliderMask(QPainter *p, int x, int y, int w, int h,
+			    Orientation, bool tickAbove, bool tickBelow);
+	void drawSliderGrooveMask(QPainter *p, int x, int y, int w, int h,
+				  QCOORD c, Orientation);
+	int maximumSliderDragDistance() const;
 
-    void drawMenuBarItem( QPainter* p, int x, int y, int w, int h,
-				    QMenuItem* mi, QColorGroup& g,
-				    bool enabled, bool active );
+	// popups
+	int popupSubmenuIndicatorWidth(const QFontMetrics &fm);
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QCommonStyle( const QCommonStyle & );
-    QCommonStyle &operator=( const QCommonStyle & );
-#endif
+	void drawMenuBarItem(QPainter *p, int x, int y, int w, int h,
+			     QMenuItem *mi, QColorGroup &g, bool enabled,
+			     bool active);
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QCommonStyle(const QCommonStyle &);
+	QCommonStyle &operator=(const QCommonStyle &);
+# endif
 };
 
 

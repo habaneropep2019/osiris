@@ -14,27 +14,30 @@
 
 int main(int argc, char **argv)
 {
-    QApplication a(argc, argv);
+	QApplication a(argc, argv);
 
-    QIconView qiconview;
-    qiconview.setSelectionMode(QIconView::Extended);
+	QIconView qiconview;
+	qiconview.setSelectionMode(QIconView::Extended);
 
-    for (unsigned int i = 0; i < 3000; i++)
-    {
-        QIconViewItem *item = new QIconViewItem(&qiconview, QString("Item %1").arg(i + 1));
-        item->setRenameEnabled(TRUE);
-    }
+	for (unsigned int i = 0; i < 3000; i++) {
+		QIconViewItem *item = new QIconViewItem(
+			&qiconview, QString("Item %1").arg(i + 1));
+		item->setRenameEnabled(TRUE);
+	}
 
-    qiconview.setCaption("Qt Example - Iconview");
+	qiconview.setCaption("Qt Example - Iconview");
 
-    ListenDND listen_dnd(&qiconview);
-    QObject::connect(&qiconview, SIGNAL(dropped(QDropEvent *, const QValueList<QIconDragItem> &)),
-                     &listen_dnd, SLOT(dropped(QDropEvent *)));
-    QObject::connect(&qiconview, SIGNAL(moved()), &listen_dnd, SLOT(moved()));
+	ListenDND listen_dnd(&qiconview);
+	QObject::connect(&qiconview,
+			 SIGNAL(dropped(QDropEvent *,
+					const QValueList<QIconDragItem> &)),
+			 &listen_dnd, SLOT(dropped(QDropEvent *)));
+	QObject::connect(&qiconview, SIGNAL(moved()), &listen_dnd,
+			 SLOT(moved()));
 
-    a.setMainWidget(&qiconview);
-    qiconview.show();
-    qiconview.resize(qiconview.sizeHint());
+	a.setMainWidget(&qiconview);
+	qiconview.show();
+	qiconview.resize(qiconview.sizeHint());
 
-    return a.exec();
+	return a.exec();
 }

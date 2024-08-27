@@ -39,38 +39,62 @@
 #define QPAINTDEVICEMETRICS_H
 
 #ifndef QT_H
-#include "qwindowdefs.h"
-#include "qpaintdevice.h"
+# include "qwindowdefs.h"
+# include "qpaintdevice.h"
 #endif // QT_H
 
 
-class Q_EXPORT QPaintDeviceMetrics			// paint device metrics
+class Q_EXPORT QPaintDeviceMetrics // paint device metrics
 {
-public:
-    QPaintDeviceMetrics( const QPaintDevice * );
+      public:
+	QPaintDeviceMetrics(const QPaintDevice *);
 
-    enum {
-	PdmWidth = 1,
-	PdmHeight,
-	PdmWidthMM,
-	PdmHeightMM,
-	PdmNumColors,
-	PdmDepth,
-	PdmDpiX,
-	PdmDpiY
-    };
+	enum {
+		PdmWidth = 1,
+		PdmHeight,
+		PdmWidthMM,
+		PdmHeightMM,
+		PdmNumColors,
+		PdmDepth,
+		PdmDpiX,
+		PdmDpiY
+	};
 
-    int	  width()	const	{ return (int)pdev->metric(PdmWidth); }
-    int	  height()	const	{ return (int)pdev->metric(PdmHeight); }
-    int	  widthMM()	const	{ return (int)pdev->metric(PdmWidthMM); }
-    int	  heightMM()	const	{ return (int)pdev->metric(PdmHeightMM); }
-    int	  logicalDpiX()	const	{ return (int)pdev->metric(PdmDpiX); }
-    int	  logicalDpiY()	const	{ return (int)pdev->metric(PdmDpiY); }
-    int	  numColors()	const	{ return (int)pdev->metric(PdmNumColors); }
-    int	  depth()	const	{ return (int)pdev->metric(PdmDepth); }
+	int width() const
+	{
+		return (int)pdev->metric(PdmWidth);
+	}
+	int height() const
+	{
+		return (int)pdev->metric(PdmHeight);
+	}
+	int widthMM() const
+	{
+		return (int)pdev->metric(PdmWidthMM);
+	}
+	int heightMM() const
+	{
+		return (int)pdev->metric(PdmHeightMM);
+	}
+	int logicalDpiX() const
+	{
+		return (int)pdev->metric(PdmDpiX);
+	}
+	int logicalDpiY() const
+	{
+		return (int)pdev->metric(PdmDpiY);
+	}
+	int numColors() const
+	{
+		return (int)pdev->metric(PdmNumColors);
+	}
+	int depth() const
+	{
+		return (int)pdev->metric(PdmDepth);
+	}
 
-private:
-    QPaintDevice *pdev;
+      private:
+	QPaintDevice *pdev;
 };
 
 

@@ -39,8 +39,8 @@
 #define QFONTMETRICS_H
 
 #ifndef QT_H
-#include "qfont.h"
-#include "qrect.h"
+# include "qfont.h"
+# include "qrect.h"
 #endif // QT_H
 
 class QTextCodec;
@@ -48,70 +48,85 @@ class QTextCodec;
 
 class Q_EXPORT QFontMetrics
 {
-public:
-    QFontMetrics( const QFont & );
-    QFontMetrics( const QFontMetrics & );
-   ~QFontMetrics();
+      public:
+	QFontMetrics(const QFont &);
+	QFontMetrics(const QFontMetrics &);
+	~QFontMetrics();
 
-    QFontMetrics &operator=( const QFontMetrics & );
+	QFontMetrics &operator=(const QFontMetrics &);
 
-    int		ascent()	const;
-    int		descent()	const;
-    int		height()	const;
-    int		leading()	const;
-    int		lineSpacing()	const;
-    int		minLeftBearing() const;
-    int		minRightBearing() const;
-    int		maxWidth()	const;
+	int ascent() const;
+	int descent() const;
+	int height() const;
+	int leading() const;
+	int lineSpacing() const;
+	int minLeftBearing() const;
+	int minRightBearing() const;
+	int maxWidth() const;
 
-    bool	inFont(QChar)	const;
+	bool inFont(QChar) const;
 
-    int		leftBearing(QChar) const;
-    int		rightBearing(QChar) const;
-    int		width( const QString &, int len = -1 ) const;
-    int		width( QChar ) const;
-    int		width( char c ) const { return width( (QChar) c ); }
-    QRect	boundingRect( const QString &, int len = -1 ) const;
-    QRect	boundingRect( QChar ) const;
-    QRect	boundingRect( int x, int y, int w, int h, int flags,
-			      const QString& str, int len=-1, int tabstops=0,
-			      int *tabarray=0, char **intern=0 ) const;
-    QSize	size( int flags,
-		      const QString& str, int len=-1, int tabstops=0,
-		      int *tabarray=0, char **intern=0 ) const;
+	int leftBearing(QChar) const;
+	int rightBearing(QChar) const;
+	int width(const QString &, int len = -1) const;
+	int width(QChar) const;
+	int width(char c) const
+	{
+		return width((QChar)c);
+	}
+	QRect boundingRect(const QString &, int len = -1) const;
+	QRect boundingRect(QChar) const;
+	QRect boundingRect(int x, int y, int w, int h, int flags,
+			   const QString &str, int len = -1, int tabstops = 0,
+			   int *tabarray = 0, char **intern = 0) const;
+	QSize size(int flags, const QString &str, int len = -1,
+		   int tabstops = 0, int *tabarray = 0,
+		   char **intern = 0) const;
 
-    int		underlinePos()	const;
-    int		strikeOutPos()	const;
-    int		lineWidth()	const;
+	int underlinePos() const;
+	int strikeOutPos() const;
+	int lineWidth() const;
 
-private:
-    QFontMetrics( const QPainter * );
-    static void reset( const QPainter * );
-    const QFontDef *spec() const;
+      private:
+	QFontMetrics(const QPainter *);
+	static void reset(const QPainter *);
+	const QFontDef *spec() const;
 
 #if defined(_WS_WIN_)
-    void   *textMetric() const;
-    HDC	    hdc() const;
+	void *textMetric() const;
+	HDC hdc() const;
 #elif defined(_WS_X11_)
-    void   *fontStruct() const;
-    void   *fontSet() const;
-    const QTextCodec *mapper() const;
-    int	    printerAdjusted(int) const;
+	void *fontStruct() const;
+	void *fontSet() const;
+	const QTextCodec *mapper() const;
+	int printerAdjusted(int) const;
 #elif defined(_WS_QWS_)
-    QFontInternal *internal();
+	QFontInternal *internal();
 #endif
 
-    friend class QWidget;
-    friend class QPainter;
+	friend class QWidget;
+	friend class QPainter;
 
-    QFontInternal *fin;
-    QPainter      *painter;
-    int		   flags;
+	QFontInternal *fin;
+	QPainter *painter;
+	int flags;
 
-    bool    underlineFlag()  const { return (flags & 0x1) != 0; }
-    bool    strikeOutFlag()  const { return (flags & 0x2) != 0; }
-    void    setUnderlineFlag()	   { flags |= 0x1; }
-    void    setStrikeOutFlag()	   { flags |= 0x2; }
+	bool underlineFlag() const
+	{
+		return (flags & 0x1) != 0;
+	}
+	bool strikeOutFlag() const
+	{
+		return (flags & 0x2) != 0;
+	}
+	void setUnderlineFlag()
+	{
+		flags |= 0x1;
+	}
+	void setStrikeOutFlag()
+	{
+		flags |= 0x2;
+	}
 };
 
 

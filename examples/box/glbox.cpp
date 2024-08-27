@@ -20,19 +20,18 @@
 #include "glbox.h"
 
 #if defined(_CC_MSVC_)
-#pragma warning(disable:4305) // init: truncation from const double to float
+# pragma warning(disable:4305) // init: truncation from const double to float
 #endif
 
 /*!
   Create a GLBox widget
 */
 
-GLBox::GLBox( QWidget* parent, const char* name )
-    : QGLWidget( parent, name )
+GLBox::GLBox(QWidget *parent, const char *name) : QGLWidget(parent, name)
 {
-    xRot = yRot = zRot = 0.0;		// default object rotation
-    scale = 1.25;			// default object scale
-    object = 0;
+	xRot = yRot = zRot = 0.0; // default object rotation
+	scale = 1.25; // default object scale
+	object = 0;
 }
 
 
@@ -42,7 +41,7 @@ GLBox::GLBox( QWidget* parent, const char* name )
 
 GLBox::~GLBox()
 {
-    glDeleteLists( object, 1 );
+	glDeleteLists(object, 1);
 }
 
 
@@ -53,17 +52,17 @@ GLBox::~GLBox()
 
 void GLBox::paintGL()
 {
-    glClear( GL_COLOR_BUFFER_BIT );
+	glClear(GL_COLOR_BUFFER_BIT);
 
-    glLoadIdentity();
-    glTranslatef( 0.0, 0.0, -10.0 );
-    glScalef( scale, scale, scale );
+	glLoadIdentity();
+	glTranslatef(0.0, 0.0, -10.0);
+	glScalef(scale, scale, scale);
 
-    glRotatef( xRot, 1.0, 0.0, 0.0 ); 
-    glRotatef( yRot, 0.0, 1.0, 0.0 ); 
-    glRotatef( zRot, 0.0, 0.0, 1.0 );
+	glRotatef(xRot, 1.0, 0.0, 0.0);
+	glRotatef(yRot, 0.0, 1.0, 0.0);
+	glRotatef(zRot, 0.0, 0.0, 1.0);
 
-    glCallList( object );
+	glCallList(object);
 }
 
 
@@ -73,9 +72,9 @@ void GLBox::paintGL()
 
 void GLBox::initializeGL()
 {
-    qglClearColor( black ); 		// Let OpenGL clear to black
-    object = makeObject();		// Generate an OpenGL display list
-    glShadeModel( GL_FLAT );
+	qglClearColor(black); // Let OpenGL clear to black
+	object = makeObject(); // Generate an OpenGL display list
+	glShadeModel(GL_FLAT);
 }
 
 
@@ -84,13 +83,13 @@ void GLBox::initializeGL()
   Set up the OpenGL view port, matrix mode, etc.
 */
 
-void GLBox::resizeGL( int w, int h )
+void GLBox::resizeGL(int w, int h)
 {
-    glViewport( 0, 0, (GLint)w, (GLint)h );
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-    glFrustum( -1.0, 1.0, -1.0, 1.0, 5.0, 15.0 );
-    glMatrixMode( GL_MODELVIEW );
+	glViewport(0, 0, (GLint)w, (GLint)h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glFrustum(-1.0, 1.0, -1.0, 1.0, 5.0, 15.0);
+	glMatrixMode(GL_MODELVIEW);
 }
 
 
@@ -99,41 +98,45 @@ void GLBox::resizeGL( int w, int h )
 */
 
 GLuint GLBox::makeObject()
-{	
-    GLuint list;
+{
+	GLuint list;
 
-    list = glGenLists( 1 );
+	list = glGenLists(1);
 
-    glNewList( list, GL_COMPILE );
+	glNewList(list, GL_COMPILE);
 
-    qglColor( white );		      // Shorthand for glColor3f or glIndex
+	qglColor(white); // Shorthand for glColor3f or glIndex
 
-    glLineWidth( 2.0 );
+	glLineWidth(2.0);
 
-    glBegin( GL_LINE_LOOP );
-    glVertex3f(  1.0,  0.5, -0.4 );
-    glVertex3f(  1.0, -0.5, -0.4 );
-    glVertex3f( -1.0, -0.5, -0.4 );
-    glVertex3f( -1.0,  0.5, -0.4 );
-    glEnd();
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(1.0, 0.5, -0.4);
+	glVertex3f(1.0, -0.5, -0.4);
+	glVertex3f(-1.0, -0.5, -0.4);
+	glVertex3f(-1.0, 0.5, -0.4);
+	glEnd();
 
-    glBegin( GL_LINE_LOOP );
-    glVertex3f(  1.0,  0.5, 0.4 );
-    glVertex3f(  1.0, -0.5, 0.4 );
-    glVertex3f( -1.0, -0.5, 0.4 );
-    glVertex3f( -1.0,  0.5, 0.4 );
-    glEnd();
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(1.0, 0.5, 0.4);
+	glVertex3f(1.0, -0.5, 0.4);
+	glVertex3f(-1.0, -0.5, 0.4);
+	glVertex3f(-1.0, 0.5, 0.4);
+	glEnd();
 
-    glBegin( GL_LINES );
-    glVertex3f(  1.0,  0.5, -0.4 );   glVertex3f(  1.0,  0.5, 0.4 );
-    glVertex3f(  1.0, -0.5, -0.4 );   glVertex3f(  1.0, -0.5, 0.4 );
-    glVertex3f( -1.0, -0.5, -0.4 );   glVertex3f( -1.0, -0.5, 0.4 );
-    glVertex3f( -1.0,  0.5, -0.4 );   glVertex3f( -1.0,  0.5, 0.4 );
-    glEnd();
+	glBegin(GL_LINES);
+	glVertex3f(1.0, 0.5, -0.4);
+	glVertex3f(1.0, 0.5, 0.4);
+	glVertex3f(1.0, -0.5, -0.4);
+	glVertex3f(1.0, -0.5, 0.4);
+	glVertex3f(-1.0, -0.5, -0.4);
+	glVertex3f(-1.0, -0.5, 0.4);
+	glVertex3f(-1.0, 0.5, -0.4);
+	glVertex3f(-1.0, 0.5, 0.4);
+	glEnd();
 
-    glEndList();
+	glEndList();
 
-    return list;
+	return list;
 }
 
 
@@ -141,10 +144,10 @@ GLuint GLBox::makeObject()
   Set the rotation angle of the object to \e degrees around the X axis.
 */
 
-void GLBox::setXRotation( int degrees )
+void GLBox::setXRotation(int degrees)
 {
-    xRot = (GLfloat)(degrees % 360);
-    updateGL();
+	xRot = (GLfloat)(degrees % 360);
+	updateGL();
 }
 
 
@@ -152,10 +155,10 @@ void GLBox::setXRotation( int degrees )
   Set the rotation angle of the object to \e degrees around the Y axis.
 */
 
-void GLBox::setYRotation( int degrees )
+void GLBox::setYRotation(int degrees)
 {
-    yRot = (GLfloat)(degrees % 360);
-    updateGL();
+	yRot = (GLfloat)(degrees % 360);
+	updateGL();
 }
 
 
@@ -163,8 +166,8 @@ void GLBox::setYRotation( int degrees )
   Set the rotation angle of the object to \e degrees around the Z axis.
 */
 
-void GLBox::setZRotation( int degrees )
+void GLBox::setZRotation(int degrees)
 {
-    zRot = (GLfloat)(degrees % 360);
-    updateGL();
+	zRot = (GLfloat)(degrees % 360);
+	updateGL();
 }

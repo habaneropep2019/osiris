@@ -11,51 +11,49 @@
 
 class YellowThread : public QThread
 {
-public:
-    YellowThread(QWidget *o)
-        : receiver(o)
-    {
-        ;
-    }
+      public:
+	YellowThread(QWidget *o) : receiver(o)
+	{
+		;
+	}
 
-    void run();
+	void run();
 
-private:
-    QWidget *receiver;
+      private:
+	QWidget *receiver;
 };
 
 class GreenThread : public QThread
 {
-public:
-    GreenThread(QWidget *o)
-        : receiver(o)
-    {
-        ;
-    }
+      public:
+	GreenThread(QWidget *o) : receiver(o)
+	{
+		;
+	}
 
-    void run();
+	void run();
 
-private:
-    QWidget *receiver;
+      private:
+	QWidget *receiver;
 };
 
 class SemaphoreExample : public QWidget
 {
-    Q_OBJECT
-public:
-    SemaphoreExample();
+	Q_OBJECT
+      public:
+	SemaphoreExample();
 
-    void customEvent(QCustomEvent *);
+	void customEvent(QCustomEvent *);
 
-public slots:
-    void startExample();
+      public slots:
+	void startExample();
 
-protected:
-private:
-    QMultiLineEdit *mlineedit;
-    QPushButton *button;
-    QLabel *label;
+      protected:
+      private:
+	QMultiLineEdit *mlineedit;
+	QPushButton *button;
+	QLabel *label;
 
-    YellowThread yellowThread;
-    GreenThread greenThread;
+	YellowThread yellowThread;
+	GreenThread greenThread;
 };

@@ -19,9 +19,9 @@
 
 class Test : public QWidget
 {
-public:
-    Test(QWidget *parent = 0, const char *name = 0, int f = 0);
-    void paintEvent(QPaintEvent *e);
+      public:
+	Test(QWidget *parent = 0, const char *name = 0, int f = 0);
+	void paintEvent(QPaintEvent *e);
 
-private:
+      private:
 };

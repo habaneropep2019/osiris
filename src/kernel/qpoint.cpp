@@ -54,15 +54,15 @@
 
   The coordinates are accessed by the functions x() and y(), they can
   be set by setX() and setY(), or by the reference functions rx() and ry().
-  
+
   Given a point \e p, the following statements are all equivalent:
   \code
      p.setX( p.x() + 1 );
      p += QPoint( 1, 0 );
      p.rx()++;
   \endcode
-  
-  
+
+
   A QPoint can also be used as a vector.  Addition and subtraction of
   QPoint are defined as for vectors (each component is added
   separately). You can divide or multiply a QPoint by an \c int or a
@@ -71,18 +71,18 @@
 
   Example:
   \code
-     //QPoint oldPos is defined somewhere else 
+     //QPoint oldPos is defined somewhere else
      MyWidget::mouseMoveEvent( QMouseEvent *e )
      {
-        QPoint vector = e->pos() - oldPos;
+	QPoint vector = e->pos() - oldPos;
 	if ( vector.manhattanLength() > 3 )
 	   ... //mouse has moved more than 3 pixels since oldPos
      }
   \endcode
-  
+
   QPoints can be compared for equality or inequality, and they can be
   written to and read from a QStream.
-  
+
   \sa QSize, QRect
 */
 
@@ -269,9 +269,9 @@
 */
 
 /*!
-  \fn QPoint operator-( const QPoint &p ) 
-  \relates QPoint 
-  
+  \fn QPoint operator-( const QPoint &p )
+  \relates QPoint
+
   Returns the QPoint formed by changing the sign of both components of
   \a p, equivalent to <code>QPoint(0,0) - p</code>.
 */
@@ -323,7 +323,7 @@
 void QPoint::warningDivByZero()
 {
 #if defined(CHECK_MATH)
-    qWarning( "QPoint: Division by zero error" );
+	qWarning("QPoint: Division by zero error");
 #endif
 }
 
@@ -339,13 +339,13 @@ void QPoint::warningDivByZero()
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator<<( QDataStream &s, const QPoint &p )
+QDataStream &operator<<(QDataStream &s, const QPoint &p)
 {
-    if ( s.version() == 1 )
-	s << (Q_INT16)p.x() << (Q_INT16)p.y();
-    else
-	s << (Q_INT32)p.x() << (Q_INT32)p.y();
-    return s;
+	if (s.version() == 1)
+		s << (Q_INT16)p.x() << (Q_INT16)p.y();
+	else
+		s << (Q_INT32)p.x() << (Q_INT32)p.y();
+	return s;
 }
 
 /*!
@@ -355,19 +355,22 @@ QDataStream &operator<<( QDataStream &s, const QPoint &p )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator>>( QDataStream &s, QPoint &p )
+QDataStream &operator>>(QDataStream &s, QPoint &p)
 {
-    if ( s.version() == 1 ) {
-	Q_INT16 x, y;
-	s >> x;  p.rx() = x;
-	s >> y;  p.ry() = y;
-    }
-    else {
-	Q_INT32 x, y;
-	s >> x;  p.rx() = x;
-	s >> y;  p.ry() = y;
-    }
-    return s;
+	if (s.version() == 1) {
+		Q_INT16 x, y;
+		s >> x;
+		p.rx() = x;
+		s >> y;
+		p.ry() = y;
+	} else {
+		Q_INT32 x, y;
+		s >> x;
+		p.rx() = x;
+		s >> y;
+		p.ry() = y;
+	}
+	return s;
 }
 #endif // QT_NO_DATASTREAM
 /*!
@@ -382,5 +385,5 @@ QDataStream &operator>>( QDataStream &s, QPoint &p )
 */
 int QPoint::manhattanLength() const
 {
-    return QABS(x())+QABS(y());
+	return QABS(x()) + QABS(y());
 }

@@ -21,74 +21,74 @@ class QPopupMenu;
 
 class ImageViewer : public QWidget
 {
-    Q_OBJECT
-public:
-    ImageViewer( QWidget *parent=0, const char *name=0, int wFlags=0 );
-    ~ImageViewer();
-    bool	loadImage( const char *fileName );
-protected:
-    void	paintEvent( QPaintEvent * );
-    void	resizeEvent( QResizeEvent * );
-    void	mousePressEvent( QMouseEvent * );
-    void	mouseReleaseEvent( QMouseEvent * );
-    void	mouseMoveEvent( QMouseEvent * );
+	Q_OBJECT
+      public:
+	ImageViewer(QWidget *parent = 0, const char *name = 0, int wFlags = 0);
+	~ImageViewer();
+	bool loadImage(const char *fileName);
 
-private:
-    void	scale();
-    int		conversion_flags;
-    bool	smooth() const;
-    bool	unscaled() const;
-    bool	useColorContext() const;
-    int		alloc_context;
-    bool	convertEvent( QMouseEvent* e, int& x, int& y );
-    const char* filename;
-    QImage	image;			// the loaded image
-    QPixmap	pm;			// the converted pixmap
-    QPixmap	pmScaled;		// the scaled pixmap
+      protected:
+	void paintEvent(QPaintEvent *);
+	void resizeEvent(QResizeEvent *);
+	void mousePressEvent(QMouseEvent *);
+	void mouseReleaseEvent(QMouseEvent *);
+	void mouseMoveEvent(QMouseEvent *);
 
-    QMenuBar   *menubar;
-    QPopupMenu  *file;
-    QPopupMenu   *saveimage;
-    QPopupMenu   *savepixmap;
-    QPopupMenu  *edit;
-    QPopupMenu  *options;
+      private:
+	void scale();
+	int conversion_flags;
+	bool smooth() const;
+	bool unscaled() const;
+	bool useColorContext() const;
+	int alloc_context;
+	bool convertEvent(QMouseEvent *e, int &x, int &y);
+	const char *filename;
+	QImage image; // the loaded image
+	QPixmap pm; // the converted pixmap
+	QPixmap pmScaled; // the scaled pixmap
 
-    QWidget    *helpmsg;
-    QLabel     *status;
-    int         si, sp, ac, co, mo, fd, bd, // Menu item ids
-		td, ta, ba, fa, au, ad, dd,
-		ns, us, ss, cc, t1, t8, t32;
-    void	updateStatus();
-    void	setMenuItemFlags();
-    bool 	reconvertImage();
-    int		pickx, picky;
-    int		clickx, clicky;
-    bool	may_be_other;
-    static ImageViewer* other;
-    void	setImage(const QImage& newimage);
+	QMenuBar *menubar;
+	QPopupMenu *file;
+	QPopupMenu *saveimage;
+	QPopupMenu *savepixmap;
+	QPopupMenu *edit;
+	QPopupMenu *options;
 
-private slots:
-    void	to1Bit();
-    void	to8Bit();
-    void	to32Bit();
-    void	toBitDepth(int);
+	QWidget *helpmsg;
+	QLabel *status;
+	int si, sp, ac, co, mo, fd, bd, // Menu item ids
+		td, ta, ba, fa, au, ad, dd, ns, us, ss, cc, t1, t8, t32;
+	void updateStatus();
+	void setMenuItemFlags();
+	bool reconvertImage();
+	int pickx, picky;
+	int clickx, clicky;
+	bool may_be_other;
+	static ImageViewer *other;
+	void setImage(const QImage &newimage);
 
-    void	copy();
-    void	paste();
+      private slots:
+	void to1Bit();
+	void to8Bit();
+	void to32Bit();
+	void toBitDepth(int);
 
-    void	hFlip();
-    void	vFlip();
-    void	rot180();
+	void copy();
+	void paste();
 
-    void	editText();
+	void hFlip();
+	void vFlip();
+	void rot180();
 
-    void	newWindow();
-    void	openFile();
-    void	saveImage(int);
-    void	savePixmap(int);
-    void	giveHelp();
-    void	doOption(int);
-    void	copyFrom(ImageViewer*);
+	void editText();
+
+	void newWindow();
+	void openFile();
+	void saveImage(int);
+	void savePixmap(int);
+	void giveHelp();
+	void doOption(int);
+	void copyFrom(ImageViewer *);
 };
 
 

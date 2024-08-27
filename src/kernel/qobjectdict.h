@@ -39,8 +39,8 @@
 #define QOBJECTDICT_H
 
 #ifndef QT_H
-#include "qmetaobject.h"
-#include "qasciidict.h"
+# include "qmetaobject.h"
+# include "qasciidict.h"
 #endif // QT_H
 
 
@@ -56,14 +56,24 @@ template class Q_EXPORT QAsciiDict<QMetaObject>;
 
 class Q_EXPORT QObjectDictionary : public QAsciiDict<QMetaObject>
 {
-public:
-    QObjectDictionary(int size=17,bool cs=TRUE,bool ck=TRUE)
-	: QAsciiDict<QMetaObject>(size,cs,ck) {}
-    QObjectDictionary( const QObjectDictionary &dict )
-	: QAsciiDict<QMetaObject>(dict) {}
-   ~QObjectDictionary() { clear(); }
-    QObjectDictionary &operator=(const QObjectDictionary &dict)
-	{ return (QObjectDictionary&)QAsciiDict<QMetaObject>::operator=(dict);}
+      public:
+	QObjectDictionary(int size = 17, bool cs = TRUE, bool ck = TRUE)
+		: QAsciiDict<QMetaObject>(size, cs, ck)
+	{
+	}
+	QObjectDictionary(const QObjectDictionary &dict)
+		: QAsciiDict<QMetaObject>(dict)
+	{
+	}
+	~QObjectDictionary()
+	{
+		clear();
+	}
+	QObjectDictionary &operator=(const QObjectDictionary &dict)
+	{
+		return (QObjectDictionary &)QAsciiDict<QMetaObject>::operator=(
+			dict);
+	}
 };
 
 // Global object dictionary defined in qmetaobject.cpp

@@ -39,160 +39,164 @@
 #define QSTYLESHEET_H
 
 #ifndef QT_H
-#include "qstring.h"
-#include "qdict.h"
-#include "qobject.h"
+# include "qstring.h"
+# include "qdict.h"
+# include "qobject.h"
 #endif // QT_H
 
 #ifndef QT_NO_RICHTEXT
 
 class QStyleSheet;
 class QStyleSheetItemData;
-template<class Key, class T> class QMap;
+template <class Key, class T> class QMap;
 
 
 class Q_EXPORT QStyleSheetItem : public Qt
 {
-public:
-    QStyleSheetItem( QStyleSheet* parent, const QString& name );
-    QStyleSheetItem( const QStyleSheetItem & );
-    ~QStyleSheetItem();
+      public:
+	QStyleSheetItem(QStyleSheet *parent, const QString &name);
+	QStyleSheetItem(const QStyleSheetItem &);
+	~QStyleSheetItem();
 
-    QString name() const;
+	QString name() const;
 
-    QStyleSheet* styleSheet();
-    const QStyleSheet* styleSheet() const;
+	QStyleSheet *styleSheet();
+	const QStyleSheet *styleSheet() const;
 
-    enum AdditionalStyleValues { Undefined  = - 1};
+	enum AdditionalStyleValues { Undefined = -1 };
 
-    enum DisplayMode {
-	DisplayBlock,
-	DisplayInline,
-	DisplayListItem,
-	DisplayNone
-    };
+	enum DisplayMode {
+		DisplayBlock,
+		DisplayInline,
+		DisplayListItem,
+		DisplayNone
+	};
 
-    DisplayMode displayMode() const;
-    void setDisplayMode(DisplayMode m);
+	DisplayMode displayMode() const;
+	void setDisplayMode(DisplayMode m);
 
-    int alignment() const;
-    void setAlignment( int f);
+	int alignment() const;
+	void setAlignment(int f);
 
-    int fontWeight() const;
-    void setFontWeight(int w);
+	int fontWeight() const;
+	void setFontWeight(int w);
 
-    int logicalFontSize() const;
-    void setLogicalFontSize(int s);
+	int logicalFontSize() const;
+	void setLogicalFontSize(int s);
 
-    int logicalFontSizeStep() const;
-    void setLogicalFontSizeStep( int s );
+	int logicalFontSizeStep() const;
+	void setLogicalFontSizeStep(int s);
 
-    int fontSize() const;
-    void setFontSize(int s);
+	int fontSize() const;
+	void setFontSize(int s);
 
-    QString fontFamily() const;
-    void setFontFamily( const QString& );
+	QString fontFamily() const;
+	void setFontFamily(const QString &);
 
-    int numberOfColumns() const;
-    void setNumberOfColumns(int ncols);
+	int numberOfColumns() const;
+	void setNumberOfColumns(int ncols);
 
-    QColor color() const;
-    void setColor( const QColor &);
+	QColor color() const;
+	void setColor(const QColor &);
 
-    bool fontItalic() const;
-    void setFontItalic( bool );
-    bool definesFontItalic() const;
+	bool fontItalic() const;
+	void setFontItalic(bool);
+	bool definesFontItalic() const;
 
-    bool fontUnderline() const;
-    void setFontUnderline( bool );
-    bool definesFontUnderline() const;
+	bool fontUnderline() const;
+	void setFontUnderline(bool);
+	bool definesFontUnderline() const;
 
-    bool isAnchor() const;
-    void setAnchor(bool anc);
+	bool isAnchor() const;
+	void setAnchor(bool anc);
 
-    enum WhiteSpaceMode { WhiteSpaceNormal, WhiteSpacePre, WhiteSpaceNoWrap };
-    WhiteSpaceMode whiteSpaceMode() const;
-    void setWhiteSpaceMode(WhiteSpaceMode m);
+	enum WhiteSpaceMode {
+		WhiteSpaceNormal,
+		WhiteSpacePre,
+		WhiteSpaceNoWrap
+	};
+	WhiteSpaceMode whiteSpaceMode() const;
+	void setWhiteSpaceMode(WhiteSpaceMode m);
 
-    enum Margin {
-	MarginLeft,
-	MarginRight,
-	MarginTop,
-	MarginBottom,
-	MarginAll,
-	MarginVertical,
-	MarginHorizontal
-    };
+	enum Margin {
+		MarginLeft,
+		MarginRight,
+		MarginTop,
+		MarginBottom,
+		MarginAll,
+		MarginVertical,
+		MarginHorizontal
+	};
 
-    int margin( Margin m) const;
-    void setMargin( Margin, int);
+	int margin(Margin m) const;
+	void setMargin(Margin, int);
 
-    enum ListStyle {
-	ListDisc,
-	ListCircle,
-	ListSquare,
-	ListDecimal,
-	ListLowerAlpha,
-	ListUpperAlpha
-    };
+	enum ListStyle {
+		ListDisc,
+		ListCircle,
+		ListSquare,
+		ListDecimal,
+		ListLowerAlpha,
+		ListUpperAlpha
+	};
 
-    ListStyle listStyle() const;
-    void setListStyle( ListStyle );
+	ListStyle listStyle() const;
+	void setListStyle(ListStyle);
 
-    QString contexts() const;
-    void setContexts( const QString& );
-    bool allowedInContext( const QStyleSheetItem* ) const;
+	QString contexts() const;
+	void setContexts(const QString &);
+	bool allowedInContext(const QStyleSheetItem *) const;
 
-    bool selfNesting() const;
-    void setSelfNesting( bool );
+	bool selfNesting() const;
+	void setSelfNesting(bool);
 
-private:
-    void init();
-    QStyleSheetItemData* d;
+      private:
+	void init();
+	QStyleSheetItemData *d;
 };
 
 
-#if defined(Q_TEMPLATEDLL)
+# if defined(Q_TEMPLATEDLL)
 // MOC_SKIP_BEGIN
 template class Q_EXPORT QDict<QStyleSheetItem>;
 // MOC_SKIP_END
-#endif
+# endif
 
 class QTextCustomItem;
 
 class Q_EXPORT QStyleSheet : public QObject
 {
-    Q_OBJECT
-public:
-    QStyleSheet( QObject *parent=0, const char *name=0 );
-    virtual ~QStyleSheet();
+	Q_OBJECT
+      public:
+	QStyleSheet(QObject *parent = 0, const char *name = 0);
+	virtual ~QStyleSheet();
 
-    static QStyleSheet* defaultSheet();
-    static void setDefaultSheet( QStyleSheet* );
+	static QStyleSheet *defaultSheet();
+	static void setDefaultSheet(QStyleSheet *);
 
 
-    QStyleSheetItem* item( const QString& name);
-    const QStyleSheetItem* item( const QString& name) const;
+	QStyleSheetItem *item(const QString &name);
+	const QStyleSheetItem *item(const QString &name) const;
 
-    void insert( QStyleSheetItem* item);
+	void insert(QStyleSheetItem *item);
 
-    virtual QTextCustomItem* tag( const QString& name,
-			    const QMap<QString, QString> &attr,
-			    const QString& context,
-			    const QMimeSourceFactory& factory,
-			    bool emptyTag = FALSE) const;
+	virtual QTextCustomItem *tag(const QString &name,
+				     const QMap<QString, QString> &attr,
+				     const QString &context,
+				     const QMimeSourceFactory &factory,
+				     bool emptyTag = FALSE) const;
 
-    static QString convertFromPlainText( const QString& );
-    static bool mightBeRichText( const QString& );
+	static QString convertFromPlainText(const QString &);
+	static bool mightBeRichText(const QString &);
 
-    virtual void scaleFont( QFont& font, int logicalSize ) const;
+	virtual void scaleFont(QFont &font, int logicalSize) const;
 
-    virtual void error( const QString& ) const;
+	virtual void error(const QString &) const;
 
-private:
-    void init();
-    QDict<QStyleSheetItem> styles;
-    QStyleSheetItem* nullstyle;
+      private:
+	void init();
+	QDict<QStyleSheetItem> styles;
+	QStyleSheetItem *nullstyle;
 };
 
 #endif // QT_NO_RICHTEXT

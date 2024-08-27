@@ -37,29 +37,29 @@
 
 #include "qbutton.h"
 #ifndef QT_NO_BUTTON
-#include "qbuttongroup.h"
-#include "qbitmap.h"
-#include "qpainter.h"
-#include "qtimer.h"
-#include "qaccel.h"
-#include "qpixmapcache.h"
-#include "qfocusdata.h"
-#include "qapplication.h"
-#include "qpushbutton.h"
-#include <ctype.h>
+# include "qbuttongroup.h"
+# include "qbitmap.h"
+# include "qpainter.h"
+# include "qtimer.h"
+# include "qaccel.h"
+# include "qpixmapcache.h"
+# include "qfocusdata.h"
+# include "qapplication.h"
+# include "qpushbutton.h"
+# include <ctype.h>
 
-static const int autoRepeatDelay  = 300;
+static const int autoRepeatDelay = 300;
 static const int autoRepeatPeriod = 100;
 
-#ifdef _WS_QWS_
+# ifdef _WS_QWS_
 // Small in Qt/Embedded - 5K on 32bpp
-static const int drawingPixWidth  = 64;
+static const int drawingPixWidth = 64;
 static const int drawingPixHeight = 20;
-#else
+# else
 // 120K on 32bpp
-static const int drawingPixWidth  = 300;
+static const int drawingPixWidth = 300;
 static const int drawingPixHeight = 100;
-#endif
+# endif
 
 
 /*
@@ -72,48 +72,49 @@ static QPixmap *drawpm = 0;
 
 static void cleanupButtonPm()
 {
-    delete drawpm;
-    drawpm = 0;
+	delete drawpm;
+	drawpm = 0;
 }
 
 
 static inline void makeDrawingPixmap()
 {
-    if ( !drawpm ) {
-	qAddPostRoutine( cleanupButtonPm );
-	drawpm = new QPixmap( drawingPixWidth, drawingPixHeight );
-	CHECK_PTR( drawpm );
-    }
+	if (!drawpm) {
+		qAddPostRoutine(cleanupButtonPm);
+		drawpm = new QPixmap(drawingPixWidth, drawingPixHeight);
+		CHECK_PTR(drawpm);
+	}
 }
 
 
-struct QButtonData
-{
-    QButtonData() {
-#ifndef QT_NO_BUTTONGROUP
-	group = 0;
-#endif
-#ifndef QT_NO_ACCEL
-	a = 0;
-#endif
-    }
-#ifndef QT_NO_BUTTONGROUP
-    QButtonGroup *group;
-#endif
-    QTimer timer;
-#ifndef QT_NO_ACCEL
-    QAccel *a;
-#endif
+struct QButtonData {
+	QButtonData()
+	{
+# ifndef QT_NO_BUTTONGROUP
+		group = 0;
+# endif
+# ifndef QT_NO_ACCEL
+		a = 0;
+# endif
+	}
+# ifndef QT_NO_BUTTONGROUP
+	QButtonGroup *group;
+# endif
+	QTimer timer;
+# ifndef QT_NO_ACCEL
+	QAccel *a;
+# endif
 };
 
 
 void QButton::ensureData()
 {
-    if ( !d ) {
-	d = new QButtonData;
-	CHECK_PTR( d );
-	connect(&d->timer, SIGNAL(timeout()), this, SLOT(autoRepeatTimeout()));
-    }
+	if (!d) {
+		d = new QButtonData;
+		CHECK_PTR(d);
+		connect(&d->timer, SIGNAL(timeout()), this,
+			SLOT(autoRepeatTimeout()));
+	}
 }
 
 
@@ -127,27 +128,27 @@ void QButton::ensureData()
 
 QButtonGroup *QButton::group() const
 {
-#ifndef QT_NO_BUTTONGROUP
-    return d ? d->group : 0;
-#else
-    return 0;
-#endif
+# ifndef QT_NO_BUTTONGROUP
+	return d ? d->group : 0;
+# else
+	return 0;
+# endif
 }
 
 
-void QButton::setGroup( QButtonGroup* g )
+void QButton::setGroup(QButtonGroup *g)
 {
-#ifndef QT_NO_BUTTONGROUP
-    ensureData();
-    d->group = g;
-#endif
+# ifndef QT_NO_BUTTONGROUP
+	ensureData();
+	d->group = g;
+# endif
 }
 
 
 QTimer *QButton::timer()
 {
-    ensureData();
-    return &d->timer;
+	ensureData();
+	return &d->timer;
 }
 
 
@@ -267,7 +268,8 @@ QTimer *QButton::timer()
 
 /*! \enum QButton::ToggleState
 
-  This enum defines the state of a toggle button at any moment.  The possible values are: <ul>
+  This enum defines the state of a toggle button at any moment.  The possible
+  values are: <ul>
 
   <li> \c Off - the button is in the "off" state
   <li> \c NoChange - the button is in the default/unchanged state
@@ -284,25 +286,25 @@ QTimer *QButton::timer()
   QButtonGroup::insert().
 */
 
-QButton::QButton( QWidget *parent, const char *name, WFlags f )
-    : QWidget( parent, name, f )
+QButton::QButton(QWidget *parent, const char *name, WFlags f)
+	: QWidget(parent, name, f)
 {
-    bpixmap    = 0;
-    toggleTyp  = SingleShot;			// button is simple
-    buttonDown = FALSE;				// button is up
-    stat       = Off;				// button is off
-    mlbDown    = FALSE;				// mouse left button up
-    autoresize = FALSE;				// not auto resizing
-    animation  = FALSE;				// no pending animateClick
-    repeat     = FALSE;				// not in autorepeat mode
-    d	       = 0;
-#ifndef QT_NO_BUTTONGROUP
-    if ( parent && parent->inherits("QButtonGroup") ) {
-	setGroup((QButtonGroup*)parent);
-	group()->insert( this );		// insert into button group
-    }
-#endif
-    setFocusPolicy( TabFocus );
+	bpixmap = 0;
+	toggleTyp = SingleShot; // button is simple
+	buttonDown = FALSE; // button is up
+	stat = Off; // button is off
+	mlbDown = FALSE; // mouse left button up
+	autoresize = FALSE; // not auto resizing
+	animation = FALSE; // no pending animateClick
+	repeat = FALSE; // not in autorepeat mode
+	d = 0;
+# ifndef QT_NO_BUTTONGROUP
+	if (parent && parent->inherits("QButtonGroup")) {
+		setGroup((QButtonGroup *)parent);
+		group()->insert(this); // insert into button group
+	}
+# endif
+	setFocusPolicy(TabFocus);
 }
 
 /*!
@@ -311,12 +313,12 @@ QButton::QButton( QWidget *parent, const char *name, WFlags f )
 
 QButton::~QButton()
 {
-#ifndef QT_NO_BUTTONGROUP
-    if ( group() )
-	group()->remove( this );
-#endif
-    delete bpixmap;
-    delete d;
+# ifndef QT_NO_BUTTONGROUP
+	if (group())
+		group()->remove(this);
+# endif
+	delete bpixmap;
+	delete d;
 }
 
 
@@ -385,26 +387,26 @@ QButton::~QButton()
   \sa text(), setPixmap(), setAccel(), QPixmap::mask()
 */
 
-void QButton::setText( const QString &text )
+void QButton::setText(const QString &text)
 {
-    if ( btext == text )
-	return;
-    btext = text;
+	if (btext == text)
+		return;
+	btext = text;
 
-    if ( bpixmap ) {
-	delete bpixmap;
-	bpixmap = 0;
-    }
+	if (bpixmap) {
+		delete bpixmap;
+		bpixmap = 0;
+	}
 
-    if ( autoresize )
-	adjustSize();
+	if (autoresize)
+		adjustSize();
 
-#ifndef QT_NO_ACCEL
-    setAccel( QAccel::shortcutKey( btext ) );
-#endif
+# ifndef QT_NO_ACCEL
+	setAccel(QAccel::shortcutKey(btext));
+# endif
 
-    update();
-    updateGeometry();
+	update();
+	updateGeometry();
 }
 
 
@@ -425,32 +427,32 @@ void QButton::setText( const QString &text )
   \sa pixmap(), setText(), setAccel(), QPixmap::mask()
 */
 
-void QButton::setPixmap( const QPixmap &pixmap )
+void QButton::setPixmap(const QPixmap &pixmap)
 {
-    if ( bpixmap && bpixmap->serialNumber() == pixmap.serialNumber() )
-	return;
+	if (bpixmap && bpixmap->serialNumber() == pixmap.serialNumber())
+		return;
 
-    bool newSize;
-    if ( bpixmap ) {
-	newSize = pixmap.width() != bpixmap->width() ||
-		  pixmap.height() != bpixmap->height();
-	*bpixmap = pixmap;
-    } else {
-	newSize = TRUE;
-	bpixmap = new QPixmap( pixmap );
-	CHECK_PTR( bpixmap );
-    }
-    if ( bpixmap->depth() == 1 && !bpixmap->mask() )
-	bpixmap->setMask( *((QBitmap *)bpixmap) );
-    if ( !btext.isNull() )
-	btext = QString::null;
-    if ( autoresize && newSize )
-	adjustSize();
-    setAccel( 0 );
-    if ( autoMask() )
-	updateMask();
-    update();
-    updateGeometry();
+	bool newSize;
+	if (bpixmap) {
+		newSize = pixmap.width() != bpixmap->width() ||
+			  pixmap.height() != bpixmap->height();
+		*bpixmap = pixmap;
+	} else {
+		newSize = TRUE;
+		bpixmap = new QPixmap(pixmap);
+		CHECK_PTR(bpixmap);
+	}
+	if (bpixmap->depth() == 1 && !bpixmap->mask())
+		bpixmap->setMask(*((QBitmap *)bpixmap));
+	if (!btext.isNull())
+		btext = QString::null;
+	if (autoresize && newSize)
+		adjustSize();
+	setAccel(0);
+	if (autoMask())
+		updateMask();
+	update();
+	updateGeometry();
 }
 
 
@@ -462,11 +464,11 @@ void QButton::setPixmap( const QPixmap &pixmap )
 
 int QButton::accel() const
 {
-#ifndef QT_NO_ACCEL
-    return d && d->a ? d->a->key( 0 ) : 0;
-#else
-    return 0;
-#endif
+# ifndef QT_NO_ACCEL
+	return d && d->a ? d->a->key(0) : 0;
+# else
+	return 0;
+# endif
 }
 
 /*!
@@ -492,19 +494,18 @@ int QButton::accel() const
   \sa accel(), setText(), QAccel
 */
 
-void QButton::setAccel( int key )
+void QButton::setAccel(int key)
 {
-#ifndef QT_NO_ACCEL
-    if ( d && d->a )
-	d->a->clear();
-    if ( !key )
-	return;
-    ensureData();
-    if ( !d->a )
-	d->a = new QAccel( this, "buttonAccel" );
-    d->a->connectItem( d->a->insertItem( key, 0 ),
-		       this, SLOT(animateClick()) );
-#endif
+# ifndef QT_NO_ACCEL
+	if (d && d->a)
+		d->a->clear();
+	if (!key)
+		return;
+	ensureData();
+	if (!d->a)
+		d->a = new QAccel(this, "buttonAccel");
+	d->a->connectItem(d->a->insertItem(key, 0), this, SLOT(animateClick()));
+# endif
 }
 
 
@@ -537,13 +538,13 @@ void QButton::setAccel( int key )
   \sa autoResize(), adjustSize()
 */
 
-void QButton::setAutoResize( bool enable )
+void QButton::setAutoResize(bool enable)
 {
-    if ( (bool)autoresize != enable ) {
-	autoresize = enable;
-	if ( autoresize )
-	    adjustSize();			// calls resize which repaints
-    }
+	if ((bool)autoresize != enable) {
+		autoresize = enable;
+		if (autoresize)
+			adjustSize(); // calls resize which repaints
+	}
 }
 
 
@@ -571,11 +572,11 @@ void QButton::setAutoResize( bool enable )
   \sa isDown(), autoRepeat(), clicked()
 */
 
-void QButton::setAutoRepeat( bool enable )
+void QButton::setAutoRepeat(bool enable)
 {
-    repeat = (uint)enable;
-    if ( repeat && mlbDown )
-	timer()->start( autoRepeatDelay, TRUE );
+	repeat = (uint)enable;
+	if (repeat && mlbDown)
+		timer()->start(autoRepeatDelay, TRUE);
 }
 
 
@@ -594,13 +595,13 @@ void QButton::setAutoRepeat( bool enable )
 
 void QButton::animateClick()
 {
-    if ( !isEnabled() || animation )
-	return;
-    animation  = TRUE;
-    buttonDown = TRUE;
-    repaint( FALSE );
-    emit pressed();
-    QTimer::singleShot( 100, this, SLOT(animateTimeout()) );
+	if (!isEnabled() || animation)
+		return;
+	animation = TRUE;
+	buttonDown = TRUE;
+	repaint(FALSE);
+	emit pressed();
+	QTimer::singleShot(100, this, SLOT(animateTimeout()));
 }
 
 
@@ -624,15 +625,15 @@ void QButton::animateClick()
   \sa isDown(), setOn(), toggle(), toggled()
 */
 
-void QButton::setDown( bool enable )
+void QButton::setDown(bool enable)
 {
-    if ( d )
-	timer()->stop();
-    mlbDown = FALSE;				// the safe setting
-    if ( (bool)buttonDown != enable ) {
-	buttonDown = enable;
-	repaint( FALSE );
-    }
+	if (d)
+		timer()->stop();
+	mlbDown = FALSE; // the safe setting
+	if ((bool)buttonDown != enable) {
+		buttonDown = enable;
+		repaint(FALSE);
+	}
 }
 
 /*!
@@ -674,26 +675,28 @@ void QButton::setDown( bool enable )
   \sa isOn(), isToggleButton()
 */
 
-void QButton::setState( ToggleState s )
+void QButton::setState(ToggleState s)
 {
-    if ( !toggleTyp ) {
-#if defined(CHECK_STATE)
-	qWarning( "QButton::setState() / setOn: (%s) Only toggle buttons "
-		 "may be switched", name( "unnamed" ) );
-#endif
-	return;
-    }
+	if (!toggleTyp) {
+# if defined(CHECK_STATE)
+		qWarning(
+			"QButton::setState() / setOn: (%s) Only toggle buttons "
+			"may be switched",
+			name("unnamed"));
+# endif
+		return;
+	}
 
-    if ( (ToggleState)stat != s ) {		// changed state
-	bool was = stat != Off;
-	stat = s;
-    if ( autoMask() )
-        updateMask();
-	repaint( FALSE );
-	if ( was != (stat != Off) )
-	    emit toggled( stat != Off );
-	emit stateChanged( s );
-    }
+	if ((ToggleState)stat != s) { // changed state
+		bool was = stat != Off;
+		stat = s;
+		if (autoMask())
+			updateMask();
+		repaint(FALSE);
+		if (was != (stat != Off))
+			emit toggled(stat != Off);
+		emit stateChanged(s);
+	}
 }
 
 
@@ -724,9 +727,9 @@ void QButton::setState( ToggleState s )
   Per default, the clickable area is the entire widget. Subclasses may
   reimplement it, though.
 */
-bool QButton::hitButton( const QPoint &pos ) const
+bool QButton::hitButton(const QPoint &pos) const
 {
-    return rect().contains( pos );
+	return rect().contains(pos);
 }
 
 /*!
@@ -739,9 +742,9 @@ bool QButton::hitButton( const QPoint &pos ) const
   \sa drawButtonLabel(), paintEvent()
 */
 
-void QButton::drawButton( QPainter * )
+void QButton::drawButton(QPainter *)
 {
-    return;
+	return;
 }
 
 /*!
@@ -753,163 +756,164 @@ void QButton::drawButton( QPainter * )
   \sa drawButton(), paintEvent()
 */
 
-void QButton::drawButtonLabel( QPainter * )
+void QButton::drawButtonLabel(QPainter *)
 {
-    return;
+	return;
 }
 
 
-static bool got_a_release = FALSE; // ### binary compatibility trick, keyReleaseEvent is new
+static bool got_a_release = FALSE; // ### binary compatibility trick,
+				   // keyReleaseEvent is new
 /*!\reimp
-*/
+ */
 
-void QButton::keyPressEvent( QKeyEvent *e )
+void QButton::keyPressEvent(QKeyEvent *e)
 {
-    switch ( e->key() ) {
-    case Key_Enter:
-    case Key_Return:
-	if ( inherits("QPushButton") )
-	    emit clicked();
-	else
-	    e->ignore();
-	break;
-    case Key_Space:
-	if ( !e->isAutoRepeat() ) {
-	    if ( got_a_release )
-		setDown( TRUE );
-	    else {
-		buttonDown = TRUE;
-		repaint( FALSE );
-	    }
-	    if ( inherits("QPushButton") )
-		emit pressed();
-	    else
+	switch (e->key()) {
+	case Key_Enter:
+	case Key_Return:
+		if (inherits("QPushButton"))
+			emit clicked();
+		else
+			e->ignore();
+		break;
+	case Key_Space:
+		if (!e->isAutoRepeat()) {
+			if (got_a_release)
+				setDown(TRUE);
+			else {
+				buttonDown = TRUE;
+				repaint(FALSE);
+			}
+			if (inherits("QPushButton"))
+				emit pressed();
+			else
+				e->ignore();
+		}
+		break;
+	case Key_Up:
+	case Key_Left:
+# ifndef QT_NO_BUTTONGROUP
+		if (group())
+			group()->moveFocus(e->key());
+		else
+# endif
+			focusNextPrevChild(FALSE);
+		break;
+	case Key_Right:
+	case Key_Down:
+# ifndef QT_NO_BUTTONGROUP
+		if (group())
+			group()->moveFocus(e->key());
+		else
+# endif
+			focusNextPrevChild(TRUE);
+		break;
+	case Key_Escape:
+		if (buttonDown) {
+			buttonDown = FALSE;
+			update();
+			break;
+		}
+		// fall through
+	default:
 		e->ignore();
 	}
-	break;
-    case Key_Up:
-    case Key_Left:
-#ifndef QT_NO_BUTTONGROUP
-	if ( group() )
-	    group()->moveFocus( e->key() );
-	else
-#endif
-	    focusNextPrevChild( FALSE );
-	break;
-    case Key_Right:
-    case Key_Down:
-#ifndef QT_NO_BUTTONGROUP
-	if ( group() )
-	    group()->moveFocus( e->key() );
-	else
-#endif
-	    focusNextPrevChild( TRUE );
-	break;
-    case Key_Escape:
-	if ( buttonDown ) {
-	    buttonDown = FALSE;
-	    update();
-	    break;
-	}
-	// fall through
-    default:
-	e->ignore();
-    }
 }
 
 /*!
   \reimp
  */
-void QButton::keyReleaseEvent( QKeyEvent * e)
+void QButton::keyReleaseEvent(QKeyEvent *e)
 {
-    got_a_release = TRUE;
-    switch ( e->key() ) {
-    case Key_Space:
-	if ( buttonDown && !e->isAutoRepeat() ) {
-	    buttonDown = FALSE;
-	    nextState();
-	    emit released();
-	    emit clicked();
+	got_a_release = TRUE;
+	switch (e->key()) {
+	case Key_Space:
+		if (buttonDown && !e->isAutoRepeat()) {
+			buttonDown = FALSE;
+			nextState();
+			emit released();
+			emit clicked();
+		}
+		break;
+	default:
+		e->ignore();
 	}
-	break;
-    default:
-	e->ignore();
-    }
 }
 
 
 
 /*! \reimp */
 
-bool QButton::focusNextPrevChild( bool next )
+bool QButton::focusNextPrevChild(bool next)
 {
-    // we do not want this any more
-    return QWidget::focusNextPrevChild( next );
+	// we do not want this any more
+	return QWidget::focusNextPrevChild(next);
 }
 
 
 /*!\reimp
-*/
+ */
 
-void QButton::mousePressEvent( QMouseEvent *e )
+void QButton::mousePressEvent(QMouseEvent *e)
 {
-    if ( e->button() != LeftButton )
-	return;
-    bool hit = hitButton( e->pos() );
-    if ( hit ) {				// mouse press on button
-	mlbDown = TRUE;				// left mouse button down
-	buttonDown = TRUE;
-    if ( autoMask() )
-        updateMask();
+	if (e->button() != LeftButton)
+		return;
+	bool hit = hitButton(e->pos());
+	if (hit) { // mouse press on button
+		mlbDown = TRUE; // left mouse button down
+		buttonDown = TRUE;
+		if (autoMask())
+			updateMask();
 
-	repaint( FALSE );
-	emit pressed();
-	if ( repeat )
-	    timer()->start( autoRepeatDelay, TRUE );
-    }
-}
-
-/*!\reimp
-*/
-
-void QButton::mouseReleaseEvent( QMouseEvent *e)
-{
-    if ( e->button() != LeftButton || !mlbDown )
-	return;
-    if ( d )
-	timer()->stop();
-    mlbDown = FALSE;				// left mouse button up
-    buttonDown = FALSE;
-    if ( hitButton( e->pos() ) ) {		// mouse release on button
-    nextState();
-        emit released();
-    emit clicked();
-    } else {
-	    repaint( FALSE );
-	    emit released();
-    }
-}
-
-/*!\reimp
-*/
-
-void QButton::mouseMoveEvent( QMouseEvent *e )
-{
-    if ( !((e->state() & LeftButton) && mlbDown) )
-	return;					// left mouse button is up
-    if ( hitButton( e->pos() ) ) {		// mouse move in button
-	if ( !buttonDown ) {
-	    buttonDown = TRUE;
-	    repaint( FALSE );
-	    emit pressed();
+		repaint(FALSE);
+		emit pressed();
+		if (repeat)
+			timer()->start(autoRepeatDelay, TRUE);
 	}
-    } else {					// mouse move outside button
-	if ( buttonDown ) {
-	    buttonDown = FALSE;
-	    repaint( FALSE );
-	    emit released();
+}
+
+/*!\reimp
+ */
+
+void QButton::mouseReleaseEvent(QMouseEvent *e)
+{
+	if (e->button() != LeftButton || !mlbDown)
+		return;
+	if (d)
+		timer()->stop();
+	mlbDown = FALSE; // left mouse button up
+	buttonDown = FALSE;
+	if (hitButton(e->pos())) { // mouse release on button
+		nextState();
+		emit released();
+		emit clicked();
+	} else {
+		repaint(FALSE);
+		emit released();
 	}
-    }
+}
+
+/*!\reimp
+ */
+
+void QButton::mouseMoveEvent(QMouseEvent *e)
+{
+	if (!((e->state() & LeftButton) && mlbDown))
+		return; // left mouse button is up
+	if (hitButton(e->pos())) { // mouse move in button
+		if (!buttonDown) {
+			buttonDown = TRUE;
+			repaint(FALSE);
+			emit pressed();
+		}
+	} else { // mouse move outside button
+		if (buttonDown) {
+			buttonDown = FALSE;
+			repaint(FALSE);
+			emit released();
+		}
+	}
 }
 
 
@@ -921,47 +925,46 @@ void QButton::mouseMoveEvent( QMouseEvent *e )
 
   \sa drawButton(), drawButtonLabel()
 */
-void QButton::paintEvent( QPaintEvent *event )
+void QButton::paintEvent(QPaintEvent *event)
 {
-    if ( event &&
-	 width() <= drawingPixWidth &&
-	 height() <= drawingPixHeight &&
-	 backgroundMode() != X11ParentRelative ) {
-	makeDrawingPixmap(); // makes file-static drawpm variable
-	if ( backgroundOrigin() == ParentOrigin && !isTopLevel() )
-	    drawpm->fill( this, x(), y() );
-	else
-	    drawpm->fill( this, 0, 0 );
-	QPainter paint;
-	paint.begin( drawpm, this );
-	drawButton( &paint );
-	paint.end();
+	if (event && width() <= drawingPixWidth &&
+	    height() <= drawingPixHeight &&
+	    backgroundMode() != X11ParentRelative) {
+		makeDrawingPixmap(); // makes file-static drawpm variable
+		if (backgroundOrigin() == ParentOrigin && !isTopLevel())
+			drawpm->fill(this, x(), y());
+		else
+			drawpm->fill(this, 0, 0);
+		QPainter paint;
+		paint.begin(drawpm, this);
+		drawButton(&paint);
+		paint.end();
 
-	paint.begin( this );
-	paint.drawPixmap( 0, 0, *drawpm );
-	paint.end();
-    } else {
-	erase( event->region() );
-	QPainter paint( this );
-	drawButton( &paint );
-    }
+		paint.begin(this);
+		paint.drawPixmap(0, 0, *drawpm);
+		paint.end();
+	} else {
+		erase(event->region());
+		QPainter paint(this);
+		drawButton(&paint);
+	}
 }
 
 /*!\reimp
-*/
+ */
 
-void QButton::focusInEvent( QFocusEvent * e)
+void QButton::focusInEvent(QFocusEvent *e)
 {
-    QWidget::focusInEvent( e );
+	QWidget::focusInEvent(e);
 }
 
 /*!\reimp
-*/
+ */
 
-void QButton::focusOutEvent( QFocusEvent * e )
+void QButton::focusOutEvent(QFocusEvent *e)
 {
-    buttonDown = FALSE;
-    QWidget::focusOutEvent( e );
+	buttonDown = FALSE;
+	QWidget::focusOutEvent(e);
 }
 
 
@@ -971,14 +974,14 @@ void QButton::focusOutEvent( QFocusEvent * e )
 
 void QButton::autoRepeatTimeout()
 {
-    if ( mlbDown && isEnabled() && autoRepeat() ) {
-	if ( buttonDown ) {
-	    emit released();
-	    emit clicked();
-	    emit pressed();
+	if (mlbDown && isEnabled() && autoRepeat()) {
+		if (buttonDown) {
+			emit released();
+			emit clicked();
+			emit pressed();
+		}
+		timer()->start(autoRepeatPeriod, TRUE);
 	}
-	timer()->start( autoRepeatPeriod, TRUE );
-    }
 }
 
 
@@ -988,44 +991,44 @@ void QButton::autoRepeatTimeout()
 
 void QButton::animateTimeout()
 {
-    if ( !animation )
-	return;
-    animation  = FALSE;
-    buttonDown = FALSE;
-    nextState();
-    emit released();
-    emit clicked();
+	if (!animation)
+		return;
+	animation = FALSE;
+	buttonDown = FALSE;
+	nextState();
+	emit released();
+	emit clicked();
 }
 
 
 void QButton::nextState()
 {
-    bool t = isToggleButton() && !( isOn() && isExclusiveToggle() );
-    bool was = stat != Off;
-    if ( t ) {
-	if ( toggleTyp == Tristate )
-	    stat = ( stat + 1 ) % 3;
-	else
-	    stat = stat ? Off : On;
-    }
-    if ( autoMask() )
-        updateMask();
-    repaint( FALSE );
-    if ( t ) {
-	if ( was != (stat != Off) )
-	    emit toggled( stat != Off );
-	emit stateChanged( stat );
-    }
+	bool t = isToggleButton() && !(isOn() && isExclusiveToggle());
+	bool was = stat != Off;
+	if (t) {
+		if (toggleTyp == Tristate)
+			stat = (stat + 1) % 3;
+		else
+			stat = stat ? Off : On;
+	}
+	if (autoMask())
+		updateMask();
+	repaint(FALSE);
+	if (t) {
+		if (was != (stat != Off))
+			emit toggled(stat != Off);
+		emit stateChanged(stat);
+	}
 }
 
 
 /*! \reimp */
 
-void QButton::enabledChange( bool e )
+void QButton::enabledChange(bool e)
 {
-    if ( !e )
-	setDown( FALSE );
-    QWidget::enabledChange( e );
+	if (!e)
+		setDown(FALSE);
+	QWidget::enabledChange(e);
 }
 
 
@@ -1033,8 +1036,8 @@ void QButton::enabledChange( bool e )
 
 void QButton::toggle()
 {
-    if ( isToggleButton() )
-	 setOn( !isOn() );
+	if (isToggleButton())
+		setOn(!isOn());
 }
 
 /*!
@@ -1042,11 +1045,11 @@ void QButton::toggle()
 
   Subclasses use this, and present it with a more comfortable interface.
 */
-void QButton::setToggleType( ToggleType type )
+void QButton::setToggleType(ToggleType type)
 {
-    toggleTyp = type;
-    if ( type != Tristate && stat == NoChange )
-	setState( On );
+	toggleTyp = type;
+	if (type != Tristate && stat == NoChange)
+		setState(On);
 }
 
 
@@ -1059,12 +1062,12 @@ void QButton::setToggleType( ToggleType type )
 
 bool QButton::isExclusiveToggle() const
 {
-#ifndef QT_NO_BUTTONGROUP
-    return group() && ( group()->isExclusive() ||
-			group()->isRadioButtonExclusive() &&
-			inherits( "QRadioButton" ) );
-#else
-    return FALSE;
-#endif
+# ifndef QT_NO_BUTTONGROUP
+	return group() &&
+	       (group()->isExclusive() ||
+		group()->isRadioButtonExclusive() && inherits("QRadioButton"));
+# else
+	return FALSE;
+# endif
 }
 #endif

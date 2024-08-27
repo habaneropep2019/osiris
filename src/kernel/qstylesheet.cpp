@@ -39,44 +39,44 @@
 
 #ifndef QT_NO_RICHTEXT
 
-#include "qrichtext_p.h"
-#include "qapplication.h"
-#include "qlayout.h"
-#include "qpainter.h"
+# include "qrichtext_p.h"
+# include "qapplication.h"
+# include "qlayout.h"
+# include "qpainter.h"
 
-#include "qstack.h"
-#include "qfile.h"
-#include "qtextstream.h"
-#include "qlayout.h"
-#include "qbitmap.h"
-#include "qtimer.h"
-#include "qimage.h"
+# include "qstack.h"
+# include "qfile.h"
+# include "qtextstream.h"
+# include "qlayout.h"
+# include "qbitmap.h"
+# include "qtimer.h"
+# include "qimage.h"
 
-#include <stdio.h>
+# include <stdio.h>
 
 class QStyleSheetItemData
 {
-public:
-    QStyleSheetItem::DisplayMode disp;
-    int fontitalic;
-    int fontunderline;
-    int fontweight;
-    int fontsize;
-    int fontsizelog;
-    int fontsizestep;
-    QString fontfamily;
-    QStyleSheetItem *parentstyle;
-    QString stylename;
-    int ncolumns;
-    QColor col;
-    bool anchor;
-    int align;
-    int margin[4];
-    QStyleSheetItem::ListStyle list;
-    QStyleSheetItem::WhiteSpaceMode whitespacemode;
-    QString contxt;
-    bool selfnest;
-    QStyleSheet* sheet;
+      public:
+	QStyleSheetItem::DisplayMode disp;
+	int fontitalic;
+	int fontunderline;
+	int fontweight;
+	int fontsize;
+	int fontsizelog;
+	int fontsizestep;
+	QString fontfamily;
+	QStyleSheetItem *parentstyle;
+	QString stylename;
+	int ncolumns;
+	QColor col;
+	bool anchor;
+	int align;
+	int margin[4];
+	QStyleSheetItem::ListStyle list;
+	QStyleSheetItem::WhiteSpaceMode whitespacemode;
+	QString contxt;
+	bool selfnest;
+	QStyleSheet *sheet;
 };
 
 // NOT REVISED
@@ -130,24 +130,24 @@ public:
   except \link QStyleSheetItem::DisplayMode display mode\endlink, which defaults
   to \c DisplayInline.
 */
-QStyleSheetItem::QStyleSheetItem( QStyleSheet* parent, const QString& name )
+QStyleSheetItem::QStyleSheetItem(QStyleSheet *parent, const QString &name)
 {
-    d = new QStyleSheetItemData;
-    d->stylename = name.lower();
-    d->sheet = parent;
-    init();
-    if (parent)
-	parent->insert( this );
+	d = new QStyleSheetItemData;
+	d->stylename = name.lower();
+	d->sheet = parent;
+	init();
+	if (parent)
+		parent->insert(this);
 }
 
 /*!
   Copy constructor. Constructs a copy of \a other that is
   not bound to any stylesheet.
  */
-QStyleSheetItem::QStyleSheetItem( const QStyleSheetItem & other )
+QStyleSheetItem::QStyleSheetItem(const QStyleSheetItem &other)
 {
-    d = new QStyleSheetItemData;
-    *d = *other.d;
+	d = new QStyleSheetItemData;
+	*d = *other.d;
 }
 
 
@@ -157,7 +157,7 @@ QStyleSheetItem::QStyleSheetItem( const QStyleSheetItem & other )
  */
 QStyleSheetItem::~QStyleSheetItem()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -165,17 +165,17 @@ QStyleSheetItem::~QStyleSheetItem()
 /*!
   Returns the stylesheet this item is in.
  */
-QStyleSheet* QStyleSheetItem::styleSheet()
+QStyleSheet *QStyleSheetItem::styleSheet()
 {
-    return d->sheet;
+	return d->sheet;
 }
 
 /*!
   Returns the stylesheet this item is in.
  */
-const QStyleSheet* QStyleSheetItem::styleSheet() const
+const QStyleSheet *QStyleSheetItem::styleSheet() const
 {
-    return d->sheet;
+	return d->sheet;
 }
 
 /*!
@@ -184,25 +184,25 @@ const QStyleSheet* QStyleSheetItem::styleSheet() const
  */
 void QStyleSheetItem::init()
 {
-    d->disp = DisplayInline;
+	d->disp = DisplayInline;
 
-    d->fontitalic = Undefined;
-    d->fontunderline = Undefined;
-    d->fontweight = Undefined;
-    d->fontsize = Undefined;
-    d->fontsizelog = Undefined;
-    d->fontsizestep = 0;
-    d->ncolumns = Undefined;
-    d->col = QColor(); // !isValid()
-    d->anchor = FALSE;
-    d->align = Undefined;
-    d->margin[0] = Undefined;
-    d->margin[1] = Undefined;
-    d->margin[2] = Undefined;
-    d->margin[3] = Undefined;
-    d->list = QStyleSheetItem::ListDisc;
-    d->whitespacemode = QStyleSheetItem::WhiteSpaceNormal;
-    d->selfnest = TRUE;
+	d->fontitalic = Undefined;
+	d->fontunderline = Undefined;
+	d->fontweight = Undefined;
+	d->fontsize = Undefined;
+	d->fontsizelog = Undefined;
+	d->fontsizestep = 0;
+	d->ncolumns = Undefined;
+	d->col = QColor(); // !isValid()
+	d->anchor = FALSE;
+	d->align = Undefined;
+	d->margin[0] = Undefined;
+	d->margin[1] = Undefined;
+	d->margin[2] = Undefined;
+	d->margin[3] = Undefined;
+	d->list = QStyleSheetItem::ListDisc;
+	d->whitespacemode = QStyleSheetItem::WhiteSpaceNormal;
+	d->selfnest = TRUE;
 }
 
 /*!
@@ -210,22 +210,24 @@ void QStyleSheetItem::init()
 */
 QString QStyleSheetItem::name() const
 {
-    return d->stylename;
+	return d->stylename;
 }
 
 /*!
-  Returns the \link QStyleSheetItem::DisplayMode display mode\endlink of the style.
+  Returns the \link QStyleSheetItem::DisplayMode display mode\endlink of the
+  style.
 
   \sa setDisplayMode()
  */
 QStyleSheetItem::DisplayMode QStyleSheetItem::displayMode() const
 {
-    return d->disp;
+	return d->disp;
 }
 
 /*! \enum QStyleSheetItem::DisplayMode
 
-  This enum type defines the way adjacent elements are displayed.  The possible values are: <ul>
+  This enum type defines the way adjacent elements are displayed.  The possible
+  values are: <ul>
 
   <li> \c DisplayBlock
 		- elements are displayed as a rectangular block.
@@ -248,7 +250,7 @@ QStyleSheetItem::DisplayMode QStyleSheetItem::displayMode() const
  */
 void QStyleSheetItem::setDisplayMode(DisplayMode m)
 {
-    d->disp=m;
+	d->disp = m;
 }
 
 
@@ -260,7 +262,7 @@ void QStyleSheetItem::setDisplayMode(DisplayMode m)
  */
 int QStyleSheetItem::alignment() const
 {
-    return d->align;
+	return d->align;
 }
 
 /*!
@@ -271,9 +273,9 @@ int QStyleSheetItem::alignment() const
 
   \sa alignment(), displayMode(), Qt::AlignmentFlags
  */
-void QStyleSheetItem::setAlignment( int f )
+void QStyleSheetItem::setAlignment(int f)
 {
-    d->align = f;
+	d->align = f;
 }
 
 
@@ -284,7 +286,7 @@ void QStyleSheetItem::setAlignment( int f )
  */
 bool QStyleSheetItem::fontItalic() const
 {
-    return d->fontitalic > 0;
+	return d->fontitalic > 0;
 }
 
 /*!
@@ -294,7 +296,7 @@ bool QStyleSheetItem::fontItalic() const
  */
 void QStyleSheetItem::setFontItalic(bool italic)
 {
-    d->fontitalic = italic?1:0;
+	d->fontitalic = italic ? 1 : 0;
 }
 
 /*!
@@ -305,7 +307,7 @@ void QStyleSheetItem::setFontItalic(bool italic)
  */
 bool QStyleSheetItem::definesFontItalic() const
 {
-    return d->fontitalic != Undefined;
+	return d->fontitalic != Undefined;
 }
 
 /*!
@@ -315,7 +317,7 @@ bool QStyleSheetItem::definesFontItalic() const
  */
 bool QStyleSheetItem::fontUnderline() const
 {
-    return d->fontunderline > 0;
+	return d->fontunderline > 0;
 }
 
 /*!
@@ -325,7 +327,7 @@ bool QStyleSheetItem::fontUnderline() const
  */
 void QStyleSheetItem::setFontUnderline(bool underline)
 {
-    d->fontunderline = underline?1:0;
+	d->fontunderline = underline ? 1 : 0;
 }
 
 /*!
@@ -336,7 +338,7 @@ void QStyleSheetItem::setFontUnderline(bool underline)
   \sa setFontUnderline(), fontUnderline() */
 bool QStyleSheetItem::definesFontUnderline() const
 {
-    return d->fontunderline != Undefined;
+	return d->fontunderline != Undefined;
 }
 
 
@@ -348,7 +350,7 @@ bool QStyleSheetItem::definesFontUnderline() const
  */
 int QStyleSheetItem::fontWeight() const
 {
-    return d->fontweight;
+	return d->fontweight;
 }
 
 /*!
@@ -359,18 +361,19 @@ int QStyleSheetItem::fontWeight() const
  */
 void QStyleSheetItem::setFontWeight(int w)
 {
-    d->fontweight = w;
+	d->fontweight = w;
 }
 
 /*!
   Returns the logical font size setting of the style. This is either a valid
   size between 1 and 7  or QStyleSheetItem::Undefined.
 
- \sa setLogicalFontSize(), setLogicalFontSizeStep(), QFont::pointSize(), QFont::setPointSize()
+ \sa setLogicalFontSize(), setLogicalFontSizeStep(), QFont::pointSize(),
+ QFont::setPointSize()
  */
 int QStyleSheetItem::logicalFontSize() const
 {
-    return d->fontsizelog;
+	return d->fontsizelog;
 }
 
 
@@ -382,7 +385,7 @@ int QStyleSheetItem::logicalFontSize() const
  */
 void QStyleSheetItem::setLogicalFontSize(int s)
 {
-    d->fontsizelog = s;
+	d->fontsizelog = s;
 }
 
 /*!
@@ -395,7 +398,7 @@ void QStyleSheetItem::setLogicalFontSize(int s)
  */
 int QStyleSheetItem::logicalFontSizeStep() const
 {
-    return d->fontsizestep;
+	return d->fontsizestep;
 }
 
 /*!
@@ -403,9 +406,9 @@ int QStyleSheetItem::logicalFontSizeStep() const
 
   \sa logicalFontSizeStep()
  */
-void QStyleSheetItem::setLogicalFontSizeStep( int s )
+void QStyleSheetItem::setLogicalFontSizeStep(int s)
 {
-    d->fontsizestep = s;
+	d->fontsizestep = s;
 }
 
 
@@ -417,7 +420,7 @@ void QStyleSheetItem::setLogicalFontSizeStep( int s )
  */
 void QStyleSheetItem::setFontSize(int s)
 {
-    d->fontsize = s;
+	d->fontsize = s;
 }
 
 /*!
@@ -428,7 +431,7 @@ void QStyleSheetItem::setFontSize(int s)
  */
 int QStyleSheetItem::fontSize() const
 {
-    return d->fontsize;
+	return d->fontsize;
 }
 
 
@@ -440,7 +443,7 @@ int QStyleSheetItem::fontSize() const
  */
 QString QStyleSheetItem::fontFamily() const
 {
-    return d->fontfamily;
+	return d->fontfamily;
 }
 
 /*!
@@ -448,9 +451,9 @@ QString QStyleSheetItem::fontFamily() const
 
  \sa fontFamily(), QFont::family(), QFont::setFamily()
  */
-void QStyleSheetItem::setFontFamily( const QString& fam)
+void QStyleSheetItem::setFontFamily(const QString &fam)
 {
-    d->fontfamily = fam;
+	d->fontfamily = fam;
 }
 
 
@@ -462,7 +465,7 @@ void QStyleSheetItem::setFontFamily( const QString& fam)
  */
 int QStyleSheetItem::numberOfColumns() const
 {
-    return d->ncolumns;
+	return d->ncolumns;
 }
 
 
@@ -471,14 +474,15 @@ int QStyleSheetItem::numberOfColumns() const
   are divided into columns.
 
   This only makes sense
-  if the style uses a \link QStyleSheetItem::DisplayMode block display mode\endlink.
+  if the style uses a \link QStyleSheetItem::DisplayMode block display
+  mode\endlink.
 
   \sa numberOfColumns()
  */
 void QStyleSheetItem::setNumberOfColumns(int ncols)
 {
-    if (ncols > 0)
-	d->ncolumns = ncols;
+	if (ncols > 0)
+		d->ncolumns = ncols;
 }
 
 
@@ -491,7 +495,7 @@ void QStyleSheetItem::setNumberOfColumns(int ncols)
  */
 QColor QStyleSheetItem::color() const
 {
-    return d->col;
+	return d->col;
 }
 
 /*!
@@ -499,9 +503,9 @@ QColor QStyleSheetItem::color() const
 
   \sa color()
  */
-void QStyleSheetItem::setColor( const QColor &c)
+void QStyleSheetItem::setColor(const QColor &c)
 {
-    d->col = c;
+	d->col = c;
 }
 
 /*!
@@ -511,7 +515,7 @@ void QStyleSheetItem::setColor( const QColor &c)
  */
 bool QStyleSheetItem::isAnchor() const
 {
-    return d->anchor;
+	return d->anchor;
 }
 
 /*!
@@ -522,7 +526,7 @@ bool QStyleSheetItem::isAnchor() const
  */
 void QStyleSheetItem::setAnchor(bool anc)
 {
-    d->anchor = anc;
+	d->anchor = anc;
 }
 
 
@@ -533,7 +537,7 @@ void QStyleSheetItem::setAnchor(bool anc)
  */
 QStyleSheetItem::WhiteSpaceMode QStyleSheetItem::whiteSpaceMode() const
 {
-    return d->whitespacemode;
+	return d->whitespacemode;
 }
 
 /*!
@@ -553,7 +557,7 @@ QStyleSheetItem::WhiteSpaceMode QStyleSheetItem::whiteSpaceMode() const
  */
 void QStyleSheetItem::setWhiteSpaceMode(WhiteSpaceMode m)
 {
-    d->whitespacemode = m;
+	d->whitespacemode = m;
 }
 
 
@@ -568,7 +572,7 @@ void QStyleSheetItem::setWhiteSpaceMode(WhiteSpaceMode m)
  */
 int QStyleSheetItem::margin(Margin m) const
 {
-    return d->margin[m];
+	return d->margin[m];
 }
 
 
@@ -583,22 +587,19 @@ int QStyleSheetItem::margin(Margin m) const
  */
 void QStyleSheetItem::setMargin(Margin m, int v)
 {
-    if (m == MarginAll ) {
-	d->margin[0] = v;
-	d->margin[1] = v;
-	d->margin[2] = v;
-	d->margin[3] = v;
-    }
-    else if (m == MarginVertical ) {
-	d->margin[MarginTop] = v;
-	d->margin[MarginBottom] = v;
-    }
-    else if (m == MarginHorizontal ) {
-	d->margin[MarginLeft] = v;
-	d->margin[MarginRight] = v;
-    }
-    else
-	d->margin[m] = v;
+	if (m == MarginAll) {
+		d->margin[0] = v;
+		d->margin[1] = v;
+		d->margin[2] = v;
+		d->margin[3] = v;
+	} else if (m == MarginVertical) {
+		d->margin[MarginTop] = v;
+		d->margin[MarginBottom] = v;
+	} else if (m == MarginHorizontal) {
+		d->margin[MarginLeft] = v;
+		d->margin[MarginRight] = v;
+	} else
+		d->margin[m] = v;
 }
 
 
@@ -609,7 +610,7 @@ void QStyleSheetItem::setMargin(Margin m, int v)
  */
 QStyleSheetItem::ListStyle QStyleSheetItem::listStyle() const
 {
-    return d->list;
+	return d->list;
 }
 
 /*! \enum QStyleSheetItem::ListStyle
@@ -636,7 +637,7 @@ QStyleSheetItem::ListStyle QStyleSheetItem::listStyle() const
  */
 void QStyleSheetItem::setListStyle(ListStyle s)
 {
-    d->list=s;
+	d->list = s;
 }
 
 
@@ -649,7 +650,7 @@ void QStyleSheetItem::setListStyle(ListStyle s)
  */
 QString QStyleSheetItem::contexts() const
 {
-    return d->contxt;
+	return d->contxt;
 }
 
 /*!
@@ -659,9 +660,9 @@ QString QStyleSheetItem::contexts() const
 
   \sa contexts()
  */
-void QStyleSheetItem::setContexts( const QString& c)
+void QStyleSheetItem::setContexts(const QString &c)
 {
-    d->contxt = QChar(' ') + c + QChar(' ');
+	d->contxt = QChar(' ') + c + QChar(' ');
 }
 
 /*!
@@ -670,11 +671,11 @@ void QStyleSheetItem::setContexts( const QString& c)
 
   \sa contxts(), setContexts()
  */
-bool QStyleSheetItem::allowedInContext( const QStyleSheetItem* s) const
+bool QStyleSheetItem::allowedInContext(const QStyleSheetItem *s) const
 {
-    if ( d->contxt.isEmpty() )
-	return TRUE;
-    return d->contxt.find( QChar(' ')+s->name()+QChar(' ')) != -1;
+	if (d->contxt.isEmpty())
+		return TRUE;
+	return d->contxt.find(QChar(' ') + s->name() + QChar(' ')) != -1;
 }
 
 
@@ -685,7 +686,7 @@ bool QStyleSheetItem::allowedInContext( const QStyleSheetItem* s) const
  */
 bool QStyleSheetItem::selfNesting() const
 {
-    return d->selfnest;
+	return d->selfnest;
 }
 
 /*!
@@ -697,9 +698,9 @@ bool QStyleSheetItem::selfNesting() const
 
   \sa selfNesting()
  */
-void QStyleSheetItem::setSelfNesting( bool nesting )
+void QStyleSheetItem::setSelfNesting(bool nesting)
 {
-    d->selfnest = nesting;
+	d->selfnest = nesting;
 }
 
 
@@ -742,18 +743,17 @@ void QStyleSheetItem::setSelfNesting( bool nesting )
 	- the caption of the document. This attribute is easily accessible with
 	QTextView::documentTitle()
 	<li> \c type
-	- The type of the document. The default type is \c page . It indicates that
-	the document is displayed in a page of its own. Another style is \c detail.
-	It can be used to explain certain expressions more detailed in a few
-	sentences. The QTextBrowser will then keep the current page and display the
-	new document in a small popup similar to QWhatsThis. Note that links
-	will not work in documents with \c &lt;qt \c type="detail" \c &gt;...&lt;/qt&gt;
+	- The type of the document. The default type is \c page . It indicates
+ that the document is displayed in a page of its own. Another style is \c
+ detail. It can be used to explain certain expressions more detailed in a few
+	sentences. The QTextBrowser will then keep the current page and display
+ the new document in a small popup similar to QWhatsThis. Note that links will
+ not work in documents with \c &lt;qt \c type="detail" \c &gt;...&lt;/qt&gt;
 	<li> \c bgcolor
-	- The background color, for example \c bgcolor="yellow" or \c bgcolor="#0000FF"
-	<li> \c background
-	- The background pixmap, for example \c background="granit.xpm". The pixmap name
-	will be resolved by a QMimeSourceFactory().
-	<li> \c text
+	- The background color, for example \c bgcolor="yellow" or \c
+ bgcolor="#0000FF" <li> \c background
+	- The background pixmap, for example \c background="granit.xpm". The
+ pixmap name will be resolved by a QMimeSourceFactory(). <li> \c text
 	- The default text color, for example \c text="red"
 	<li> \c link
 	- The link color, for example \c link="green"
@@ -792,20 +792,20 @@ void QStyleSheetItem::setSelfNesting( bool nesting )
    <ul>
     <li>\c &lt;a&gt;...&lt;/a&gt;
 	- An anchor or link. The reference target is defined in the
-	\c href attribute of the tag as in \c &lt;a \c href="target.qml"&gt;...&lt;/a&gt;.
-	You can also specify an additional anchor within the specified target document, for
-	example \c &lt;a \c href="target.qml#123"&gt;...&lt;/a&gt;.  If
-	\c a is meant to be an anchor, the reference source is given in
-	the \c name attribute.
+	\c href attribute of the tag as in \c &lt;a \c
+ href="target.qml"&gt;...&lt;/a&gt;. You can also specify an additional anchor
+ within the specified target document, for example \c &lt;a \c
+ href="target.qml#123"&gt;...&lt;/a&gt;.  If \c a is meant to be an anchor, the
+ reference source is given in the \c name attribute.
   </ul>
 
    The default character style bindings are:
    <ul>
     <li>\c &lt;em&gt;...&lt;/em&gt;
-	- Emphasized. As default, this is the same as \c &lt;i&gt;...&lt;/i&gt; (Italic)
-    <li>\c &lt;strong&gt;...&lt;/strong&gt;
-	- Strong. As default, this is the same as \c &lt;bold&gt;...&lt;/bold&gt; (bold).
-    <li>\c &lt;i&gt;...&lt;/i&gt;
+	- Emphasized. As default, this is the same as \c &lt;i&gt;...&lt;/i&gt;
+ (Italic) <li>\c &lt;strong&gt;...&lt;/strong&gt;
+	- Strong. As default, this is the same as \c
+ &lt;bold&gt;...&lt;/bold&gt; (bold). <li>\c &lt;i&gt;...&lt;/i&gt;
 	- Italic font style.
     <li>\c &lt;b&gt;...&lt;/b&gt;
 	- Bold font style.
@@ -816,9 +816,9 @@ void QStyleSheetItem::setSelfNesting( bool nesting )
     <li>\c &lt;small&gt;...&lt;/small&gt;
 	- A smaller font size.
     <li>\c &lt;code&gt;...&lt;/code&gt;
-	- Indicates Code. As default, this is the same as \c &lt;tt&gt;...&lt;/tt&gt; (typewriter). For
-	larger junks of code, use the block-tag \c pre.
-    <li>\c &lt;tt&gt;...&lt;/tt&gt;
+	- Indicates Code. As default, this is the same as \c
+ &lt;tt&gt;...&lt;/tt&gt; (typewriter). For larger junks of code, use the
+ block-tag \c pre. <li>\c &lt;tt&gt;...&lt;/tt&gt;
 	- Typewriter font style.
     <li>\c &lt;font&gt;...&lt;/font&gt;
 	- Customizes the font size, family  and text color. The tag understands
@@ -844,7 +844,8 @@ void QStyleSheetItem::setSelfNesting( bool nesting )
 	\c &lt;img \c src="qt.xpm"/&gt; The image tag also
 	understands the attributes \c width and \c height that determine
 	the size of the image. If the pixmap does not fit to the specified
-	size, it will be scaled automatically ( by using QImage::smoothScale() ).
+	size, it will be scaled automatically ( by using QImage::smoothScale()
+ ).
 
 	The \c align attribute determines where the image is
 	placed. Per default, an image is placed inline, just like a
@@ -893,9 +894,8 @@ void QStyleSheetItem::setSelfNesting( bool nesting )
 	- The background color
 	</ul>
    <li>\c &lt;td&gt;...&lt;/td&gt;
-   - A table data cell. Can only be used within \c tr. Understands the attributes
-	<ul>
-	<li>\c bgcolor
+   - A table data cell. Can only be used within \c tr. Understands the
+ attributes <ul> <li>\c bgcolor
 	- The background color
 	<li> \c width
 	- The cell width. This is either absolute in pixels or relative
@@ -920,10 +920,10 @@ void QStyleSheetItem::setSelfNesting( bool nesting )
 
   By default, the style sheet has the tag definitions defined above.
 */
-QStyleSheet::QStyleSheet( QObject *parent, const char *name )
-    : QObject( parent, name )
+QStyleSheet::QStyleSheet(QObject *parent, const char *name)
+	: QObject(parent, name)
 {
-    init();
+	init();
 }
 
 /*!
@@ -940,153 +940,153 @@ QStyleSheet::~QStyleSheet()
 */
 void QStyleSheet::init()
 {
-    styles.setAutoDelete( TRUE );
+	styles.setAutoDelete(TRUE);
 
-    nullstyle  = new QStyleSheetItem( this,
-	QString::fromLatin1("") );
+	nullstyle = new QStyleSheetItem(this, QString::fromLatin1(""));
 
-    QStyleSheetItem*  style;
+	QStyleSheetItem *style;
 
-    style = new QStyleSheetItem( this, "qml" ); // compatibility
-    style->setDisplayMode( QStyleSheetItem::DisplayBlock );
+	style = new QStyleSheetItem(this, "qml"); // compatibility
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("qt") );
-    style->setDisplayMode( QStyleSheetItem::DisplayBlock );
-    //style->setMargin( QStyleSheetItem::MarginAll, 4 );
+	style = new QStyleSheetItem(this, QString::fromLatin1("qt"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	// style->setMargin( QStyleSheetItem::MarginAll, 4 );
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("a") );
-    style->setAnchor( TRUE );
+	style = new QStyleSheetItem(this, QString::fromLatin1("a"));
+	style->setAnchor(TRUE);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("em") );
-    style->setFontItalic( TRUE );
+	style = new QStyleSheetItem(this, QString::fromLatin1("em"));
+	style->setFontItalic(TRUE);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("i") );
-    style->setFontItalic( TRUE );
+	style = new QStyleSheetItem(this, QString::fromLatin1("i"));
+	style->setFontItalic(TRUE);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("big") );
-    style->setLogicalFontSizeStep( 1 );
-    style = new QStyleSheetItem( this, QString::fromLatin1("large") ); // compatibility
-    style->setLogicalFontSizeStep( 1 );
+	style = new QStyleSheetItem(this, QString::fromLatin1("big"));
+	style->setLogicalFontSizeStep(1);
+	style = new QStyleSheetItem(
+		this, QString::fromLatin1("large")); // compatibility
+	style->setLogicalFontSizeStep(1);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("small") );
-    style->setLogicalFontSizeStep( -1 );
+	style = new QStyleSheetItem(this, QString::fromLatin1("small"));
+	style->setLogicalFontSizeStep(-1);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("strong") );
-    style->setFontWeight( QFont::Bold);
+	style = new QStyleSheetItem(this, QString::fromLatin1("strong"));
+	style->setFontWeight(QFont::Bold);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("b") );
-    style->setFontWeight( QFont::Bold);
+	style = new QStyleSheetItem(this, QString::fromLatin1("b"));
+	style->setFontWeight(QFont::Bold);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("h1") );
-    style->setFontWeight( QFont::Bold);
-    style->setLogicalFontSize(6);
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style-> setMargin(QStyleSheetItem::MarginTop, 12);
-    style-> setMargin(QStyleSheetItem::MarginBottom, 6);
+	style = new QStyleSheetItem(this, QString::fromLatin1("h1"));
+	style->setFontWeight(QFont::Bold);
+	style->setLogicalFontSize(6);
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style->setMargin(QStyleSheetItem::MarginTop, 12);
+	style->setMargin(QStyleSheetItem::MarginBottom, 6);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("h2") );
-    style->setFontWeight( QFont::Bold);
-    style->setLogicalFontSize(5);
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style-> setMargin(QStyleSheetItem::MarginTop, 10);
-    style-> setMargin(QStyleSheetItem::MarginBottom, 5);
+	style = new QStyleSheetItem(this, QString::fromLatin1("h2"));
+	style->setFontWeight(QFont::Bold);
+	style->setLogicalFontSize(5);
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style->setMargin(QStyleSheetItem::MarginTop, 10);
+	style->setMargin(QStyleSheetItem::MarginBottom, 5);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("h3") );
-    style->setFontWeight( QFont::Bold);
-    style->setLogicalFontSize(4);
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style-> setMargin(QStyleSheetItem::MarginTop, 8);
-    style-> setMargin(QStyleSheetItem::MarginBottom, 4);
+	style = new QStyleSheetItem(this, QString::fromLatin1("h3"));
+	style->setFontWeight(QFont::Bold);
+	style->setLogicalFontSize(4);
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style->setMargin(QStyleSheetItem::MarginTop, 8);
+	style->setMargin(QStyleSheetItem::MarginBottom, 4);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("p") );
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style-> setMargin(QStyleSheetItem::MarginVertical, 4);
-    style->setSelfNesting( FALSE );
+	style = new QStyleSheetItem(this, QString::fromLatin1("p"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style->setMargin(QStyleSheetItem::MarginVertical, 4);
+	style->setSelfNesting(FALSE);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("center") );
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style->setAlignment( AlignCenter );
+	style = new QStyleSheetItem(this, QString::fromLatin1("center"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style->setAlignment(AlignCenter);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("twocolumn") );
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style->setNumberOfColumns( 2 );
+	style = new QStyleSheetItem(this, QString::fromLatin1("twocolumn"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style->setNumberOfColumns(2);
 
-    style =  new QStyleSheetItem( this, QString::fromLatin1("multicol") );
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    (void) new QStyleSheetItem( this, QString::fromLatin1("font") );
+	style = new QStyleSheetItem(this, QString::fromLatin1("multicol"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	(void)new QStyleSheetItem(this, QString::fromLatin1("font"));
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("ul") );
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style-> setMargin(QStyleSheetItem::MarginVertical, 4);
+	style = new QStyleSheetItem(this, QString::fromLatin1("ul"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style->setMargin(QStyleSheetItem::MarginVertical, 4);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("ol") );
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style->setListStyle( QStyleSheetItem::ListDecimal );
-    style-> setMargin(QStyleSheetItem::MarginVertical, 4);
+	style = new QStyleSheetItem(this, QString::fromLatin1("ol"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style->setListStyle(QStyleSheetItem::ListDecimal);
+	style->setMargin(QStyleSheetItem::MarginVertical, 4);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("li") );
-    style->setDisplayMode(QStyleSheetItem::DisplayListItem);
-    style->setSelfNesting( FALSE );
-    style->setContexts(QString::fromLatin1("ol ul"));
-    style-> setMargin(QStyleSheetItem::MarginVertical, 4);
+	style = new QStyleSheetItem(this, QString::fromLatin1("li"));
+	style->setDisplayMode(QStyleSheetItem::DisplayListItem);
+	style->setSelfNesting(FALSE);
+	style->setContexts(QString::fromLatin1("ol ul"));
+	style->setMargin(QStyleSheetItem::MarginVertical, 4);
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("code") );
-    style->setFontFamily( QString::fromLatin1("courier") );
+	style = new QStyleSheetItem(this, QString::fromLatin1("code"));
+	style->setFontFamily(QString::fromLatin1("courier"));
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("tt") );
-    style->setFontFamily( QString::fromLatin1("courier") );
+	style = new QStyleSheetItem(this, QString::fromLatin1("tt"));
+	style->setFontFamily(QString::fromLatin1("courier"));
 
-    new QStyleSheetItem(this, QString::fromLatin1("img"));
-    new QStyleSheetItem(this, QString::fromLatin1("br"));
-    new QStyleSheetItem(this, QString::fromLatin1("hr"));
+	new QStyleSheetItem(this, QString::fromLatin1("img"));
+	new QStyleSheetItem(this, QString::fromLatin1("br"));
+	new QStyleSheetItem(this, QString::fromLatin1("hr"));
 
-    style = new QStyleSheetItem( this, QString::fromLatin1("pre") );
-    style->setFontFamily( QString::fromLatin1("courier") );
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style->setWhiteSpaceMode(QStyleSheetItem::WhiteSpacePre);
-    style = new QStyleSheetItem( this, QString::fromLatin1("blockquote") );
-    style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-    style->setMargin(QStyleSheetItem::MarginHorizontal, 40 );
+	style = new QStyleSheetItem(this, QString::fromLatin1("pre"));
+	style->setFontFamily(QString::fromLatin1("courier"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style->setWhiteSpaceMode(QStyleSheetItem::WhiteSpacePre);
+	style = new QStyleSheetItem(this, QString::fromLatin1("blockquote"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style->setMargin(QStyleSheetItem::MarginHorizontal, 40);
 
-     style = new QStyleSheetItem( this, QString::fromLatin1("head") );
-     style->setDisplayMode(QStyleSheetItem::DisplayNone);
-     style = new QStyleSheetItem( this, QString::fromLatin1("div") );
-     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-     style = new QStyleSheetItem( this, QString::fromLatin1("dl") );
-     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-     style = new QStyleSheetItem( this, QString::fromLatin1("dt") );
-     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-     style->setContexts(QString::fromLatin1("dl") );
-     style = new QStyleSheetItem( this, QString::fromLatin1("dd") );
-     style->setDisplayMode(QStyleSheetItem::DisplayBlock);
-     style->setMargin(QStyleSheetItem::MarginLeft, 30);
-     style->setContexts(QString::fromLatin1("dt dl") );
-     style = new QStyleSheetItem( this, QString::fromLatin1("u") );
-     style->setFontUnderline( TRUE);
-     style = new QStyleSheetItem( this, QString::fromLatin1("nobr") );
-     style->setWhiteSpaceMode( QStyleSheetItem::WhiteSpaceNoWrap );
+	style = new QStyleSheetItem(this, QString::fromLatin1("head"));
+	style->setDisplayMode(QStyleSheetItem::DisplayNone);
+	style = new QStyleSheetItem(this, QString::fromLatin1("div"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style = new QStyleSheetItem(this, QString::fromLatin1("dl"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style = new QStyleSheetItem(this, QString::fromLatin1("dt"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style->setContexts(QString::fromLatin1("dl"));
+	style = new QStyleSheetItem(this, QString::fromLatin1("dd"));
+	style->setDisplayMode(QStyleSheetItem::DisplayBlock);
+	style->setMargin(QStyleSheetItem::MarginLeft, 30);
+	style->setContexts(QString::fromLatin1("dt dl"));
+	style = new QStyleSheetItem(this, QString::fromLatin1("u"));
+	style->setFontUnderline(TRUE);
+	style = new QStyleSheetItem(this, QString::fromLatin1("nobr"));
+	style->setWhiteSpaceMode(QStyleSheetItem::WhiteSpaceNoWrap);
 
-     // tables
-     style = new QStyleSheetItem( this, QString::fromLatin1("table") );
-     style = new QStyleSheetItem( this, QString::fromLatin1("tr") );
-     style->setContexts(QString::fromLatin1("table"));
-     style = new QStyleSheetItem( this, QString::fromLatin1("td") );
-     style->setContexts(QString::fromLatin1("tr"));
-     style = new QStyleSheetItem( this, QString::fromLatin1("th") );
-     style->setFontWeight( QFont::Bold );
-     style->setAlignment( Qt::AlignCenter );
-     style->setContexts(QString::fromLatin1("tr"));
+	// tables
+	style = new QStyleSheetItem(this, QString::fromLatin1("table"));
+	style = new QStyleSheetItem(this, QString::fromLatin1("tr"));
+	style->setContexts(QString::fromLatin1("table"));
+	style = new QStyleSheetItem(this, QString::fromLatin1("td"));
+	style->setContexts(QString::fromLatin1("tr"));
+	style = new QStyleSheetItem(this, QString::fromLatin1("th"));
+	style->setFontWeight(QFont::Bold);
+	style->setAlignment(Qt::AlignCenter);
+	style->setContexts(QString::fromLatin1("tr"));
 
-     style = new QStyleSheetItem( this, QString::fromLatin1("html") );
+	style = new QStyleSheetItem(this, QString::fromLatin1("html"));
 }
 
 
 
-static QStyleSheet* defaultsheet = 0;
+static QStyleSheet *defaultsheet = 0;
 void qt_cleanup_defaultsheet()
 {
-    delete defaultsheet;
-    defaultsheet = 0;
+	delete defaultsheet;
+	defaultsheet = 0;
 }
 
 /*!
@@ -1099,13 +1099,13 @@ void qt_cleanup_defaultsheet()
 
   \sa setDefaultSheet()
 */
-QStyleSheet* QStyleSheet::defaultSheet()
+QStyleSheet *QStyleSheet::defaultSheet()
 {
-    if (!defaultsheet) {
-	defaultsheet = new QStyleSheet();
-	qAddPostRoutine( qt_cleanup_defaultsheet );
-    }
-    return defaultsheet;
+	if (!defaultsheet) {
+		defaultsheet = new QStyleSheet();
+		qAddPostRoutine(qt_cleanup_defaultsheet);
+	}
+	return defaultsheet;
 }
 
 /*!
@@ -1114,11 +1114,11 @@ QStyleSheet* QStyleSheet::defaultSheet()
 
   \sa defaultSheet()
 */
-void QStyleSheet::setDefaultSheet( QStyleSheet* sheet)
+void QStyleSheet::setDefaultSheet(QStyleSheet *sheet)
 {
-    if ( defaultsheet != sheet )
-	delete defaultsheet;
-    defaultsheet = sheet;
+	if (defaultsheet != sheet)
+		delete defaultsheet;
+	defaultsheet = sheet;
 }
 
 /*!\internal
@@ -1126,30 +1126,31 @@ void QStyleSheet::setDefaultSheet( QStyleSheet* sheet)
   bound to this style.  Note that \a style becomes owned by the
   style sheet and will be deleted when the style sheet destructs.
 */
-void QStyleSheet::insert( QStyleSheetItem* style )
+void QStyleSheet::insert(QStyleSheetItem *style)
 {
-    styles.insert(style->name(), style);
+	styles.insert(style->name(), style);
 }
 
 
 /*!
   Returns the style with name \a name or 0 if there is no such style.
  */
-QStyleSheetItem* QStyleSheet::item( const QString& name)
+QStyleSheetItem *QStyleSheet::item(const QString &name)
 {
-    if ( name.isNull() )
-	return 0;
-    return styles[name];
+	if (name.isNull())
+		return 0;
+	return styles[name];
 }
 
 /*!
-  Returns the style with name \a name or 0 if there is no such style (const version)
+  Returns the style with name \a name or 0 if there is no such style (const
+  version)
  */
-const QStyleSheetItem* QStyleSheet::item( const QString& name) const
+const QStyleSheetItem *QStyleSheet::item(const QString &name) const
 {
-    if ( name.isNull() )
-	return 0;
-    return styles[name];
+	if (name.isNull())
+		return 0;
+	return styles[name];
 }
 
 
@@ -1160,29 +1161,29 @@ const QStyleSheetItem* QStyleSheet::item( const QString& name) const
 
   This function should not (yet) be used in application code.
 */
-QTextCustomItem* QStyleSheet::tag( const QString& name,
-				   const QMap<QString, QString> &attr,
-				   const QString& context,
-				   const QMimeSourceFactory& factory,
-				   bool /*emptyTag */ ) const
+QTextCustomItem *QStyleSheet::tag(const QString &name,
+				  const QMap<QString, QString> &attr,
+				  const QString &context,
+				  const QMimeSourceFactory &factory,
+				  bool /*emptyTag */) const
 {
-    static QString s_img = QString::fromLatin1("img");
-    static QString s_hr = QString::fromLatin1("hr");
-/* ### Not used???
-    static QString s_br = QString::fromLatin1("br");
-    static QString s_multicol = QString::fromLatin1("multicol");
-    static QString s_font = QString::fromLatin1("font");
-*/
+	static QString s_img = QString::fromLatin1("img");
+	static QString s_hr = QString::fromLatin1("hr");
+	/* ### Not used???
+	    static QString s_br = QString::fromLatin1("br");
+	    static QString s_multicol = QString::fromLatin1("multicol");
+	    static QString s_font = QString::fromLatin1("font");
+	*/
 
-    const QStyleSheetItem* style = item( name );
-    // first some known  tags
-    if ( !style )
+	const QStyleSheetItem *style = item(name);
+	// first some known  tags
+	if (!style)
+		return 0;
+	if (style->name() == s_img)
+		return new QTextImage(attr, context, factory);
+	if (style->name() == s_hr)
+		return new QTextHorizontalLine();
 	return 0;
-    if ( style->name() == s_img )
-	return new QTextImage(attr, context, factory);
-    if ( style->name() == s_hr )
-	return new QTextHorizontalLine();
-   return 0;
 }
 
 
@@ -1190,41 +1191,39 @@ QTextCustomItem* QStyleSheet::tag( const QString& name,
   Auxiliary function. Converts the plain text string \a plain to a
   rich text formatted string while preserving its look.
  */
-QString QStyleSheet::convertFromPlainText( const QString& plain)
+QString QStyleSheet::convertFromPlainText(const QString &plain)
 {
-    int col = 0;
-    QString rich;
-    rich += "<p>";
-    for ( int i = 0; i < int(plain.length()); ++i ) {
-	if ( plain[i] == '\n' ){
-	    if ( col == 1 )
-		rich += "<p></p>";
-	    else
-		rich += "<br>";
-	    col = 0;
-	}
-	else if ( plain[i] == '\t' ){
-	    rich += 0x00a0U;
-	    // while ( col / 4.0 != int( col/4 ) ) { // weird
-	    while ( col % 4 ) {
-		rich += 0x00a0U;
+	int col = 0;
+	QString rich;
+	rich += "<p>";
+	for (int i = 0; i < int(plain.length()); ++i) {
+		if (plain[i] == '\n') {
+			if (col == 1)
+				rich += "<p></p>";
+			else
+				rich += "<br>";
+			col = 0;
+		} else if (plain[i] == '\t') {
+			rich += 0x00a0U;
+			// while ( col / 4.0 != int( col/4 ) ) { // weird
+			while (col % 4) {
+				rich += 0x00a0U;
+				++col;
+			}
+		} else if (plain[i].isSpace())
+			rich += 0x00a0U;
+		else if (plain[i] == '<')
+			rich += "&lt;";
+		else if (plain[i] == '>')
+			rich += "&gt;";
+		else if (plain[i] == '&')
+			rich += "&amp;";
+		else
+			rich += plain[i];
 		++col;
-	    }
 	}
-	else if ( plain[i].isSpace() )
-	    rich += 0x00a0U;
-	else if ( plain[i] == '<' )
-	    rich +="&lt;";
-	else if ( plain[i] == '>' )
-	    rich +="&gt;";
-	else if ( plain[i] == '&' )
-	    rich +="&amp;";
-	else
-	    rich += plain[i];
-	++col;
-    }
-    rich += "</p>";
-    return rich;
+	rich += "</p>";
+	return rich;
 }
 
 // Must doc this enum somewhere, and it is logically related to QStyleSheet
@@ -1240,8 +1239,10 @@ QString QStyleSheet::convertFromPlainText( const QString& plain)
 
   <ul>
   <li> \c PlainText - The text string is interpreted as a normal text string.
-  <li> \c RichText - The text string is interpreted as a rich text according to the current QStyleSheet::defaultSheet().
-  <li> \c AutoText - The text string is interpreted as for \c RichText if QStyleSheet::mightBeRichText() returns TRUE, otherwise as for \c PlainText.
+  <li> \c RichText - The text string is interpreted as a rich text according to
+  the current QStyleSheet::defaultSheet(). <li> \c AutoText - The text string is
+  interpreted as for \c RichText if QStyleSheet::mightBeRichText() returns TRUE,
+  otherwise as for \c PlainText.
   </ul>
 */
 
@@ -1254,35 +1255,37 @@ QString QStyleSheet::convertFromPlainText( const QString& plain)
   before the first line break. While the result may be correct for
   most common cases, there is no guarantee.
 */
-bool QStyleSheet::mightBeRichText( const QString& text)
+bool QStyleSheet::mightBeRichText(const QString &text)
 {
-    if ( text.isEmpty() )
-	return FALSE;
-    if ( text.left(5).lower() == "<!doc" )
-	return TRUE;
-    int open = 0;
-    while ( open < int(text.length()) && text[open] != '<'
-	    && text[open] != '\n' && text[open] != '&')
-	++open;
-    if ( text[open] == '&' ) {
-	if ( text.mid(open+1,3) == "lt;" )
-	    return TRUE; // support desperate attempt of user to see <...>
-    } else if ( text[open] == '<' ) {
-	int close = text.find('>', open);
-	if ( close > -1 ) {
-	    QString tag;
-	    for (int i = open+1; i < close; ++i) {
-		if ( text[i].isDigit() || text[i].isLetter() )
-		    tag += text[i];
-		else if ( !tag.isEmpty() && text[i].isSpace() )
-		    break;
-		else if ( !text[i].isSpace() && (!tag.isEmpty() || text[i] != '!' ) )
-		    return FALSE; // that's not a tag
-	    }
-	    return defaultSheet()->item( tag.lower() ) != 0;
+	if (text.isEmpty())
+		return FALSE;
+	if (text.left(5).lower() == "<!doc")
+		return TRUE;
+	int open = 0;
+	while (open < int(text.length()) && text[open] != '<' &&
+	       text[open] != '\n' && text[open] != '&')
+		++open;
+	if (text[open] == '&') {
+		if (text.mid(open + 1, 3) == "lt;")
+			return TRUE; // support desperate attempt of user to see
+				     // <...>
+	} else if (text[open] == '<') {
+		int close = text.find('>', open);
+		if (close > -1) {
+			QString tag;
+			for (int i = open + 1; i < close; ++i) {
+				if (text[i].isDigit() || text[i].isLetter())
+					tag += text[i];
+				else if (!tag.isEmpty() && text[i].isSpace())
+					break;
+				else if (!text[i].isSpace() &&
+					 (!tag.isEmpty() || text[i] != '!'))
+					return FALSE; // that's not a tag
+			}
+			return defaultSheet()->item(tag.lower()) != 0;
+		}
 	}
-    }
-    return FALSE;
+	return FALSE;
 }
 
 
@@ -1298,7 +1301,7 @@ bool QStyleSheet::mightBeRichText( const QString& text)
 
   \a msg is the error message.
 */
-void QStyleSheet::error( const QString& ) const
+void QStyleSheet::error(const QString &) const
 {
 }
 
@@ -1315,37 +1318,37 @@ void QStyleSheet::error( const QString& ) const
   \sa QStyleSheetItem::logicalFontSize(),
   QStyleSheetItem::logicalFontSizeStep(), QFont::setPointSize()
  */
-void QStyleSheet::scaleFont( QFont& font, int logicalSize ) const
+void QStyleSheet::scaleFont(QFont &font, int logicalSize) const
 {
-    if ( logicalSize < 1 )
-	logicalSize = 1;
-    if ( logicalSize > 7 )
-	logicalSize = 7;
-    int basePointSize = font.pointSize();
-    int s;
-    switch ( logicalSize ) {
-    case 1:
-	s =  basePointSize/2;
-	break;
-    case 2:
-	s = (8 * basePointSize) / 10;
-	break;
-    case 4:
-	s =  (12 * basePointSize) / 10;
-	break;
-    case 5:
-	s = (15 * basePointSize) / 10;
-	break;
-    case 6:
-	s = 2 * basePointSize;
-	break;
-    case 7:
-	s = (24 * basePointSize) / 10;
-	break;
-    default:
-	s = basePointSize;
-    }
-    font.setPointSize( s );
+	if (logicalSize < 1)
+		logicalSize = 1;
+	if (logicalSize > 7)
+		logicalSize = 7;
+	int basePointSize = font.pointSize();
+	int s;
+	switch (logicalSize) {
+	case 1:
+		s = basePointSize / 2;
+		break;
+	case 2:
+		s = (8 * basePointSize) / 10;
+		break;
+	case 4:
+		s = (12 * basePointSize) / 10;
+		break;
+	case 5:
+		s = (15 * basePointSize) / 10;
+		break;
+	case 6:
+		s = 2 * basePointSize;
+		break;
+	case 7:
+		s = (24 * basePointSize) / 10;
+		break;
+	default:
+		s = basePointSize;
+	}
+	font.setPointSize(s);
 }
 
 #endif // QT_NO_RICHTEXT

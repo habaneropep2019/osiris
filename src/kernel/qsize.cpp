@@ -117,9 +117,9 @@
 
 void QSize::transpose()
 {
-    QCOORD tmp = wd;
-    wd = ht;
-    ht = tmp;
+	QCOORD tmp = wd;
+	wd = ht;
+	ht = tmp;
 }
 
 /*!
@@ -289,7 +289,7 @@ void QSize::transpose()
 void QSize::warningDivByZero()
 {
 #if defined(CHECK_MATH)
-    qWarning( "QSize: Division by zero error" );
+	qWarning("QSize: Division by zero error");
 #endif
 }
 
@@ -305,13 +305,13 @@ void QSize::warningDivByZero()
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator<<( QDataStream &s, const QSize &sz )
+QDataStream &operator<<(QDataStream &s, const QSize &sz)
 {
-    if ( s.version() == 1 )
-	s << (Q_INT16)sz.width() << (Q_INT16)sz.height();
-    else
-	s << (Q_INT32)sz.width() << (Q_INT32)sz.height();
-    return s;
+	if (s.version() == 1)
+		s << (Q_INT16)sz.width() << (Q_INT16)sz.height();
+	else
+		s << (Q_INT32)sz.width() << (Q_INT32)sz.height();
+	return s;
 }
 
 /*!
@@ -321,18 +321,21 @@ QDataStream &operator<<( QDataStream &s, const QSize &sz )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator>>( QDataStream &s, QSize &sz )
+QDataStream &operator>>(QDataStream &s, QSize &sz)
 {
-    if ( s.version() == 1 ) {
-	Q_INT16 w, h;
-	s >> w;  sz.rwidth() = w;
-	s >> h;  sz.rheight() = h;
-    }
-    else {
-	Q_INT32 w, h;
-	s >> w;  sz.rwidth() = w;
-	s >> h;  sz.rheight() = h;
-    }
-    return s;
+	if (s.version() == 1) {
+		Q_INT16 w, h;
+		s >> w;
+		sz.rwidth() = w;
+		s >> h;
+		sz.rheight() = h;
+	} else {
+		Q_INT32 w, h;
+		s >> w;
+		sz.rwidth() = w;
+		s >> h;
+		sz.rheight() = h;
+	}
+	return s;
 }
 #endif // QT_NO_DATASTREAM

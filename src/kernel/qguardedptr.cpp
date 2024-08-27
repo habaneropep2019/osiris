@@ -38,10 +38,11 @@
 #include "qguardedptr.h"
 
 // REVISED: warwick
-    
+
 /*!
   \class QGuardedPtr qguardedptr.h
-  \brief The QGuardedPtr class is a template class that provides guarded pointers to QObjects
+  \brief The QGuardedPtr class is a template class that provides guarded
+  pointers to QObjects
 
   \ingroup objectmodel
 
@@ -65,7 +66,7 @@
 
       if ( label)
 	  label->show();
-      else 
+      else
 	  qDebug("The label has been destroyed");
   \endcode
 
@@ -80,7 +81,7 @@
   arithmetic operators, ++, --, -, and +, which are normally only used with
   arrays of objects. Use them like normal pointers and you will not need
   to read this class documentation.
-  
+
   For creating guarded pointers, you can construct or assign to them
   from an X* or from another guarded pointer of the same type. You can
   compare them with each other for equality (==) and inequality (!=),
@@ -137,13 +138,13 @@
 
 /*!
   \fn QGuardedPtr<T> & QGuardedPtr::operator=(T* p)
- 
+
   Assignment operator.  This guarded pointer then points to same object as is
   pointed to by \a p.
 */
 
 /*!
-  \fn bool QGuardedPtr::operator==( const QGuardedPtr<T> &p ) const 
+  \fn bool QGuardedPtr::operator==( const QGuardedPtr<T> &p ) const
 
   Equality operator, implements traditional pointer semantics: returns
   TRUE if both \a p and this are null, or if both \a p and this point
@@ -153,14 +154,14 @@
 */
 
 /*!
-  \fn bool QGuardedPtr::operator!= ( const QGuardedPtr<T>& p ) const 
+  \fn bool QGuardedPtr::operator!= ( const QGuardedPtr<T>& p ) const
 
   Unequality operator, implements pointer semantics, the negation
   of operator==().
 */
 
 /*!
-  \fn bool QGuardedPtr::isNull() const 
+  \fn bool QGuardedPtr::isNull() const
 
   Returns \c TRUE if the referenced object has been destroyed or if there is
   no referenced object.
@@ -174,7 +175,7 @@
 */
 
 /*!
-  \fn T& QGuardedPtr::operator*() const 
+  \fn T& QGuardedPtr::operator*() const
 
   Dereference operator, implements pointer semantics. Just use this
   operator as you would with a normal C++ pointer.
@@ -193,11 +194,12 @@
 /* Internal classes */
 
 
-QGuardedPtrPrivate::QGuardedPtrPrivate( QObject* o)
-    : QObject(0, "_ptrpriv" ), obj( o )
+QGuardedPtrPrivate::QGuardedPtrPrivate(QObject *o)
+	: QObject(0, "_ptrpriv"), obj(o)
 {
-    if ( obj )
-	connect( obj, SIGNAL( destroyed() ), this, SLOT( objectDestroyed() ) );
+	if (obj)
+		connect(obj, SIGNAL(destroyed()), this,
+			SLOT(objectDestroyed()));
 }
 
 
@@ -208,6 +210,5 @@ QGuardedPtrPrivate::~QGuardedPtrPrivate()
 
 void QGuardedPtrPrivate::objectDestroyed()
 {
-    obj = 0;
+	obj = 0;
 }
-

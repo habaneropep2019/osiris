@@ -38,20 +38,21 @@
 #include "qspinbox.h"
 #ifndef QT_NO_SPINBOX
 
-#include "qspinbox.h"
-#include "qpushbutton.h"
-#include "qpainter.h"
-#include "qbitmap.h"
-#include "qlineedit.h"
-#include "qvalidator.h"
-#include "qpixmapcache.h"
-#include "qapplication.h"
+# include "qspinbox.h"
+# include "qpushbutton.h"
+# include "qpainter.h"
+# include "qbitmap.h"
+# include "qlineedit.h"
+# include "qvalidator.h"
+# include "qpixmapcache.h"
+# include "qapplication.h"
 
-struct QSpinBoxPrivate
-{
-    QSpinBoxPrivate(): buttonSymbols( QSpinBox::UpDownArrows ) {}
+struct QSpinBoxPrivate {
+	QSpinBoxPrivate() : buttonSymbols(QSpinBox::UpDownArrows)
+	{
+	}
 
-    QSpinBox::ButtonSymbols buttonSymbols;
+	QSpinBox::ButtonSymbols buttonSymbols;
 };
 
 
@@ -139,11 +140,10 @@ struct QSpinBoxPrivate
   \sa minValue(), maxValue(), setRange(), lineStep(), setSteps()
 */
 
-QSpinBox::QSpinBox( QWidget * parent , const char *name )
-    : QFrame( parent, name ),
-      QRangeControl()
+QSpinBox::QSpinBox(QWidget *parent, const char *name)
+	: QFrame(parent, name), QRangeControl()
 {
-    initSpinBox();
+	initSpinBox();
 }
 
 
@@ -155,12 +155,12 @@ QSpinBox::QSpinBox( QWidget * parent , const char *name )
   \sa minValue(), maxValue(), setRange(), lineStep(), setSteps()
 */
 
-QSpinBox::QSpinBox( int minValue, int maxValue, int step, QWidget* parent,
-		    const char* name )
-    : QFrame( parent, name ),
-      QRangeControl( minValue, maxValue, step, step, minValue )
+QSpinBox::QSpinBox(int minValue, int maxValue, int step, QWidget *parent,
+		   const char *name)
+	: QFrame(parent, name),
+	  QRangeControl(minValue, maxValue, step, step, minValue)
 {
-    initSpinBox();
+	initSpinBox();
 }
 
 /*!
@@ -169,43 +169,43 @@ QSpinBox::QSpinBox( int minValue, int maxValue, int step, QWidget* parent,
 
 void QSpinBox::initSpinBox()
 {
-    d = 0;
-    wrap = FALSE;
-    edited = FALSE;
+	d = 0;
+	wrap = FALSE;
+	edited = FALSE;
 
-    up = new QPushButton( this, "up" );
-    up->setFocusPolicy( QWidget::NoFocus );
-    up->setAutoDefault( FALSE );
-    up->setAutoRepeat( TRUE );
+	up = new QPushButton(this, "up");
+	up->setFocusPolicy(QWidget::NoFocus);
+	up->setAutoDefault(FALSE);
+	up->setAutoRepeat(TRUE);
 
-    down = new QPushButton( this, "down" );
-    down->setFocusPolicy( QWidget::NoFocus );
-    down->setAutoDefault( FALSE );
-    down->setAutoRepeat( TRUE );
+	down = new QPushButton(this, "down");
+	down->setFocusPolicy(QWidget::NoFocus);
+	down->setAutoDefault(FALSE);
+	down->setAutoRepeat(TRUE);
 
-    validate = new QIntValidator( minValue(), maxValue(), this, "validator" );
-    vi = new QLineEdit( this, "line editor" );
-    vi->setFrame( FALSE );
-    setFocusProxy( vi );
-    setFocusPolicy( StrongFocus );
-    vi->setValidator( validate );
-    vi->installEventFilter( this );
+	validate = new QIntValidator(minValue(), maxValue(), this, "validator");
+	vi = new QLineEdit(this, "line editor");
+	vi->setFrame(FALSE);
+	setFocusProxy(vi);
+	setFocusPolicy(StrongFocus);
+	vi->setValidator(validate);
+	vi->installEventFilter(this);
 
-    if ( style() == WindowsStyle )
-	setFrameStyle( WinPanel | Sunken );
-    else
-	setFrameStyle( Panel | Sunken );
-    setLineWidth( 2 );
+	if (style() == WindowsStyle)
+		setFrameStyle(WinPanel | Sunken);
+	else
+		setFrameStyle(Panel | Sunken);
+	setLineWidth(2);
 
-    setPalettePropagation( AllChildren );
-    setFontPropagation( AllChildren );
+	setPalettePropagation(AllChildren);
+	setFontPropagation(AllChildren);
 
-    setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
-    updateDisplay();
+	setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
+	updateDisplay();
 
-    connect( up, SIGNAL(pressed()), SLOT(stepUp()) );
-    connect( down, SIGNAL(pressed()), SLOT(stepDown()) );
-    connect( vi, SIGNAL(textChanged(const QString&)), SLOT(textChanged()) );
+	connect(up, SIGNAL(pressed()), SLOT(stepUp()));
+	connect(down, SIGNAL(pressed()), SLOT(stepDown()));
+	connect(vi, SIGNAL(textChanged(const QString &)), SLOT(textChanged()));
 }
 
 /*!
@@ -214,7 +214,7 @@ void QSpinBox::initSpinBox()
 
 QSpinBox::~QSpinBox()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -226,7 +226,7 @@ QSpinBox::~QSpinBox()
 
 QString QSpinBox::text() const
 {
-    return vi->text();
+	return vi->text();
 }
 
 
@@ -240,20 +240,22 @@ QString QSpinBox::text() const
 
 QString QSpinBox::cleanText() const
 {
-    QString s = QString(text()).stripWhiteSpace();
-    if ( !prefix().isEmpty() ) {
-	QString px = QString(prefix()).stripWhiteSpace();
-	int len = px.length();
-	if ( len && s.left(len) == px )  // Remove _only_ if it is the prefix
-	    s.remove( 0, len );
-    }
-    if ( !suffix().isEmpty() ) {
-	QString sx = QString(suffix()).stripWhiteSpace();
-	int len = sx.length();
-	if ( len && s.right(len) == sx )  // Remove _only_ if it is the suffix
-	    s.truncate( s.length() - len );
-    }
-    return s.stripWhiteSpace();
+	QString s = QString(text()).stripWhiteSpace();
+	if (!prefix().isEmpty()) {
+		QString px = QString(prefix()).stripWhiteSpace();
+		int len = px.length();
+		if (len && s.left(len) == px) // Remove _only_ if it is the
+					      // prefix
+			s.remove(0, len);
+	}
+	if (!suffix().isEmpty()) {
+		QString sx = QString(suffix()).stripWhiteSpace();
+		int len = sx.length();
+		if (len && s.right(len) == sx) // Remove _only_ if it is the
+					       // suffix
+			s.truncate(s.length() - len);
+	}
+	return s.stripWhiteSpace();
 }
 
 
@@ -288,10 +290,10 @@ QString QSpinBox::cleanText() const
   \sa specialValueText()
 */
 
-void QSpinBox::setSpecialValueText( const QString &text )
+void QSpinBox::setSpecialValueText(const QString &text)
 {
-    specText = text;
-    updateDisplay();
+	specText = text;
+	updateDisplay();
 }
 
 
@@ -304,10 +306,10 @@ void QSpinBox::setSpecialValueText( const QString &text )
 
 QString QSpinBox::specialValueText() const
 {
-    if ( specText.isEmpty() )
-	return QString::null;
-    else
-	return specText;
+	if (specText.isEmpty())
+		return QString::null;
+	else
+		return specText;
 }
 
 
@@ -326,10 +328,10 @@ QString QSpinBox::specialValueText() const
   \sa prefix(), setSuffix(), suffix()
 */
 
-void QSpinBox::setPrefix( const QString &text )
+void QSpinBox::setPrefix(const QString &text)
 {
-    pfix = text;
-    updateDisplay();
+	pfix = text;
+	updateDisplay();
 }
 
 
@@ -348,10 +350,10 @@ void QSpinBox::setPrefix( const QString &text )
   \sa suffix(), setPrefix(), prefix()
 */
 
-void QSpinBox::setSuffix( const QString &text )
+void QSpinBox::setSuffix(const QString &text)
 {
-    sfix = text;
-    updateDisplay();
+	sfix = text;
+	updateDisplay();
 }
 
 
@@ -364,10 +366,10 @@ void QSpinBox::setSuffix( const QString &text )
 
 QString QSpinBox::prefix() const
 {
-    if ( pfix.isEmpty() )
-	return QString::null;
-    else
-	return pfix;
+	if (pfix.isEmpty())
+		return QString::null;
+	else
+		return pfix;
 }
 
 
@@ -380,10 +382,10 @@ QString QSpinBox::prefix() const
 
 QString QSpinBox::suffix() const
 {
-    if ( sfix.isEmpty() )
-	return QString::null;
-    else
-	return sfix;
+	if (sfix.isEmpty())
+		return QString::null;
+	else
+		return sfix;
 }
 
 
@@ -395,10 +397,10 @@ QString QSpinBox::suffix() const
   \sa wrapping(), minValue(), maxValue(), setRange()
 */
 
-void QSpinBox::setWrapping( bool on )
+void QSpinBox::setWrapping(bool on)
 {
-    wrap = on;
-    updateDisplay();
+	wrap = on;
+	updateDisplay();
 }
 
 
@@ -408,39 +410,41 @@ void QSpinBox::setWrapping( bool on )
 
 bool QSpinBox::wrapping() const
 {
-    return wrap;
+	return wrap;
 }
 
 
 
 /*!\reimp
-*/
+ */
 QSize QSpinBox::sizeHint() const
 {
-    constPolish();
-    QFontMetrics fm = fontMetrics();
-    int h = fm.height();
-    if ( h < 12 ) 	// ensure enough space for the button pixmaps
-	h = 12;
-    int w = 35; 	// minimum width for the value
-    int wx = fm.width( ' ' )*2;
-    QString s;
-    s = prefix() + ( (QSpinBox*)this )->mapValueToText( minValue() ) + suffix();
-    w = QMAX( w, fm.width( s ) + wx);
-    s = prefix() + ( (QSpinBox*)this )->mapValueToText( maxValue() ) + suffix();
-    w = QMAX(w, fm.width( s ) + wx );
-    if ( !specialValueText().isEmpty() ) {
-	s = specialValueText();
-	w = QMAX( w, fm.width( s ) + wx );
-    }
-    QSize r( h // buttons AND frame both sides - see resizeevent()
-	     + 6 // right/left margins
-	     + w, // widest value
-	     frameWidth() * 2 // top/bottom frame
-	     + 4 // top/bottom margins
-	     + h // font height
-	     );
-    return r.expandedTo( QApplication::globalStrut() );
+	constPolish();
+	QFontMetrics fm = fontMetrics();
+	int h = fm.height();
+	if (h < 12) // ensure enough space for the button pixmaps
+		h = 12;
+	int w = 35; // minimum width for the value
+	int wx = fm.width(' ') * 2;
+	QString s;
+	s = prefix() + ((QSpinBox *)this)->mapValueToText(minValue()) +
+	    suffix();
+	w = QMAX(w, fm.width(s) + wx);
+	s = prefix() + ((QSpinBox *)this)->mapValueToText(maxValue()) +
+	    suffix();
+	w = QMAX(w, fm.width(s) + wx);
+	if (!specialValueText().isEmpty()) {
+		s = specialValueText();
+		w = QMAX(w, fm.width(s) + wx);
+	}
+	QSize r(h // buttons AND frame both sides - see resizeevent()
+			+ 6 // right/left margins
+			+ w, // widest value
+		frameWidth() * 2 // top/bottom frame
+			+ 4 // top/bottom margins
+			+ h // font height
+	);
+	return r.expandedTo(QApplication::globalStrut());
 }
 
 
@@ -448,45 +452,45 @@ QSize QSpinBox::sizeHint() const
 
 void QSpinBox::arrangeWidgets()
 {
-    if ( !up || !down ) // may happen if the application has a pointer error
-	return;
+	if (!up || !down) // may happen if the application has a pointer error
+		return;
 
-    QSize bs; // no, it's short for 'button size'
-    if ( style() == WindowsStyle )
-	bs.setHeight( height()/2 - frameWidth() );
-    else
-	bs.setHeight( height()/2 );
-    if ( bs.height() < 8 )
-	bs.setHeight( 8 );
-    bs.setWidth( bs.height() * 8 / 5 ); // 1.6 - approximate golden mean
-    if ( style() == WindowsStyle )
-	setFrameRect( QRect( 0, 0, 0, 0 ) );
-    else
-	setFrameRect( QRect( 0, 0, width() - bs.width(), height() ) );
+	QSize bs; // no, it's short for 'button size'
+	if (style() == WindowsStyle)
+		bs.setHeight(height() / 2 - frameWidth());
+	else
+		bs.setHeight(height() / 2);
+	if (bs.height() < 8)
+		bs.setHeight(8);
+	bs.setWidth(bs.height() * 8 / 5); // 1.6 - approximate golden mean
+	if (style() == WindowsStyle)
+		setFrameRect(QRect(0, 0, 0, 0));
+	else
+		setFrameRect(QRect(0, 0, width() - bs.width(), height()));
 
-    if ( up->size() != bs || down->size() != bs ) {
-	up->resize( bs );
-	down->resize( bs );
-	updateButtonSymbols();
-    }
+	if (up->size() != bs || down->size() != bs) {
+		up->resize(bs);
+		down->resize(bs);
+		updateButtonSymbols();
+	}
 
-    int y = style() == WindowsStyle ? frameWidth() : 0;
-    int x = width() - y - bs.width();
-    up->move( x, y );
-    down->move( x, height() - y - up->height() );
-    if ( style() == WindowsStyle )
-	vi->setGeometry( frameWidth(), frameWidth(),
-			 x - frameWidth(), height() - 2*frameWidth() );
-    else
-	vi->setGeometry( contentsRect() );
+	int y = style() == WindowsStyle ? frameWidth() : 0;
+	int x = width() - y - bs.width();
+	up->move(x, y);
+	down->move(x, height() - y - up->height());
+	if (style() == WindowsStyle)
+		vi->setGeometry(frameWidth(), frameWidth(), x - frameWidth(),
+				height() - 2 * frameWidth());
+	else
+		vi->setGeometry(contentsRect());
 }
 
 /*!\reimp
-*/
+ */
 QSizePolicy QSpinBox::sizePolicy() const
 {
-    //### removeme 3.0
-    return QWidget::sizePolicy();
+	// ### removeme 3.0
+	return QWidget::sizePolicy();
 }
 
 
@@ -495,9 +499,9 @@ QSizePolicy QSpinBox::sizePolicy() const
   QRangeControl::setValue() made available as a slot.
 */
 
-void QSpinBox::setValue( int value )
+void QSpinBox::setValue(int value)
 {
-    QRangeControl::setValue( value );
+	QRangeControl::setValue(value);
 }
 
 
@@ -511,12 +515,12 @@ void QSpinBox::setValue( int value )
 
 void QSpinBox::stepUp()
 {
-    if ( edited )
-	interpretText();
-    if ( wrapping() && ( value()+lineStep() > maxValue() ) )
-	setValue( minValue() );
-    else
-	addLine();
+	if (edited)
+		interpretText();
+	if (wrapping() && (value() + lineStep() > maxValue()))
+		setValue(minValue());
+	else
+		addLine();
 }
 
 
@@ -530,12 +534,12 @@ void QSpinBox::stepUp()
 
 void QSpinBox::stepDown()
 {
-    if ( edited )
-	interpretText();
-    if ( wrapping() && ( value()-lineStep() < minValue() ) )
-	setValue( maxValue() );
-    else
-	subtractLine();
+	if (edited)
+		interpretText();
+	if (wrapping() && (value() - lineStep() < minValue()))
+		setValue(maxValue());
+	else
+		subtractLine();
 }
 
 
@@ -575,66 +579,67 @@ void QSpinBox::stepDown()
   which have special meaning for the QSpinBox.
 */
 
-bool QSpinBox::eventFilter( QObject* obj, QEvent* ev )
+bool QSpinBox::eventFilter(QObject *obj, QEvent *ev)
 {
-    if ( obj != vi )
-	return FALSE;
+	if (obj != vi)
+		return FALSE;
 
-    if ( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave || ev->type() == QEvent::Hide ) {
-	if ( edited )
-	    interpretText();
-    } else if ( ev->type() == QEvent::KeyPress ) {
-	QKeyEvent* k = (QKeyEvent*)ev;
-	if ( k->key() == Key_Up ) {
-	    stepUp();
-	    return TRUE;
-	} else if ( k->key() == Key_Down ) {
-	    stepDown();
-	    return TRUE;
-	} else if ( k->key() == Key_Return ) {
-	    interpretText();
-	    return FALSE;
+	if (ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave ||
+	    ev->type() == QEvent::Hide) {
+		if (edited)
+			interpretText();
+	} else if (ev->type() == QEvent::KeyPress) {
+		QKeyEvent *k = (QKeyEvent *)ev;
+		if (k->key() == Key_Up) {
+			stepUp();
+			return TRUE;
+		} else if (k->key() == Key_Down) {
+			stepDown();
+			return TRUE;
+		} else if (k->key() == Key_Return) {
+			interpretText();
+			return FALSE;
+		}
 	}
-    }
-    return FALSE;
+	return FALSE;
 }
 
 
 /*!\reimp
-*/
-void QSpinBox::leaveEvent( QEvent* )
+ */
+void QSpinBox::leaveEvent(QEvent *)
 {
-    if ( edited )
-	interpretText();
+	if (edited)
+		interpretText();
 }
 
 
 /*!\reimp
-*/
-void QSpinBox::resizeEvent( QResizeEvent* )
+ */
+void QSpinBox::resizeEvent(QResizeEvent *)
 {
-    arrangeWidgets();
+	arrangeWidgets();
 }
 
 /*!\reimp
-*/
-void QSpinBox::wheelEvent( QWheelEvent * e )
+ */
+void QSpinBox::wheelEvent(QWheelEvent *e)
 {
-    e->accept();
-    static float offset = 0;
-    static QSpinBox* offset_owner = 0;
-    if (offset_owner != this) {
-	offset_owner = this;
-	offset = 0;
-    }
-    offset += -e->delta()/120;
-    if (QABS(offset) < 1)
-	return;
-    int ioff = int(offset);
-    int i;
-    for (i=0; i<QABS(ioff); i++)
-	offset > 0 ? stepDown() : stepUp();
-    offset -= ioff;
+	e->accept();
+	static float offset = 0;
+	static QSpinBox *offset_owner = 0;
+	if (offset_owner != this) {
+		offset_owner = this;
+		offset = 0;
+	}
+	offset += -e->delta() / 120;
+	if (QABS(offset) < 1)
+		return;
+	int ioff = int(offset);
+	int i;
+	for (i = 0; i < QABS(ioff); i++)
+		offset > 0 ? stepDown() : stepUp();
+	offset -= ioff;
 }
 
 
@@ -646,9 +651,9 @@ void QSpinBox::wheelEvent( QWheelEvent * e )
 
 void QSpinBox::valueChange()
 {
-    updateDisplay();
-    emit valueChanged( value() );
-    emit valueChanged( currentValueText() );
+	updateDisplay();
+	emit valueChanged(value());
+	emit valueChanged(currentValueText());
 }
 
 
@@ -659,12 +664,12 @@ void QSpinBox::valueChange()
 
 void QSpinBox::rangeChange()
 {
-#if OSIRIS_VERSION >= 300
-#error "Use a virtual function."
-#endif
-    if ( validate->inherits( "QIntValidator" ) )
-	((QIntValidator*)validate)->setRange( minValue(), maxValue() );
-    updateDisplay();
+# if OSIRIS_VERSION >= 300
+#  error "Use a virtual function."
+# endif
+	if (validate->inherits("QIntValidator"))
+		((QIntValidator *)validate)->setRange(minValue(), maxValue());
+	updateDisplay();
 }
 
 
@@ -677,10 +682,10 @@ void QSpinBox::rangeChange()
   still be clamped to the range of the spinbox).
 */
 
-void QSpinBox::setValidator( const QValidator* v )
+void QSpinBox::setValidator(const QValidator *v)
 {
-    if ( vi )
-	vi->setValidator( v );
+	if (vi)
+		vi->setValidator(v);
 }
 
 
@@ -691,9 +696,9 @@ void QSpinBox::setValidator( const QValidator* v )
   \sa setValidator() QValidator
 */
 
-const QValidator * QSpinBox::validator() const
+const QValidator *QSpinBox::validator() const
 {
-    return vi ? vi->validator() : 0;
+	return vi ? vi->validator() : 0;
 }
 
 /*!
@@ -706,10 +711,10 @@ const QValidator * QSpinBox::validator() const
 
 void QSpinBox::updateDisplay()
 {
-    vi->setText( currentValueText() );
-    edited = FALSE;
-    up->setEnabled( isEnabled() && (wrapping() || value() < maxValue()) );
-    down->setEnabled( isEnabled() && (wrapping() || value() > minValue()) );
+	vi->setText(currentValueText());
+	edited = FALSE;
+	up->setEnabled(isEnabled() && (wrapping() || value() < maxValue()));
+	down->setEnabled(isEnabled() && (wrapping() || value() > minValue()));
 }
 
 
@@ -724,22 +729,22 @@ void QSpinBox::updateDisplay()
 
 void QSpinBox::interpretText()
 {
-    bool ok = TRUE;
-    bool done = FALSE;
-    int newVal = 0;
-    if ( !specialValueText().isEmpty() ) {
-	QString s = QString(text()).stripWhiteSpace();
-	QString t = QString(specialValueText()).stripWhiteSpace();
-	if ( s == t ) {
-	    newVal = minValue();
-	    done = TRUE;
+	bool ok = TRUE;
+	bool done = FALSE;
+	int newVal = 0;
+	if (!specialValueText().isEmpty()) {
+		QString s = QString(text()).stripWhiteSpace();
+		QString t = QString(specialValueText()).stripWhiteSpace();
+		if (s == t) {
+			newVal = minValue();
+			done = TRUE;
+		}
 	}
-    }
-    if ( !done )
-	newVal = mapTextToValue( &ok );
-    if ( ok )
-	setValue( newVal );
-    updateDisplay();		// Sometimes redundant
+	if (!done)
+		newVal = mapTextToValue(&ok);
+	if (ok)
+		setValue(newVal);
+	updateDisplay(); // Sometimes redundant
 }
 
 
@@ -747,9 +752,9 @@ void QSpinBox::interpretText()
   Returns a pointer to the embedded 'up' button.
 */
 
-QPushButton* QSpinBox::upButton() const
+QPushButton *QSpinBox::upButton() const
 {
-    return up;
+	return up;
 }
 
 
@@ -757,9 +762,9 @@ QPushButton* QSpinBox::upButton() const
   Returns a pointer to the embedded 'down' button.
 */
 
-QPushButton* QSpinBox::downButton() const
+QPushButton *QSpinBox::downButton() const
 {
-    return down;
+	return down;
 }
 
 
@@ -767,9 +772,9 @@ QPushButton* QSpinBox::downButton() const
   Returns a pointer to the embedded QLineEdit.
 */
 
-QLineEdit* QSpinBox::editor() const
+QLineEdit *QSpinBox::editor() const
 {
-    return vi;
+	return vi;
 }
 
 
@@ -779,7 +784,7 @@ QLineEdit* QSpinBox::editor() const
 
 void QSpinBox::textChanged()
 {
-    edited = TRUE;	// This flag is cleared in updateDisplay()
+	edited = TRUE; // This flag is cleared in updateDisplay()
 };
 
 
@@ -800,11 +805,11 @@ void QSpinBox::textChanged()
   \sa updateDisplay(), mapTextToValue()
 */
 
-QString QSpinBox::mapValueToText( int v )
+QString QSpinBox::mapValueToText(int v)
 {
-    QString s;
-    s.setNum( v );
-    return s;
+	QString s;
+	s.setNum(v);
+	return s;
 }
 
 
@@ -828,15 +833,16 @@ QString QSpinBox::mapValueToText( int v )
   \sa interpretText(), mapValueToText()
 */
 
-int QSpinBox::mapTextToValue( bool* ok )
+int QSpinBox::mapTextToValue(bool *ok)
 {
-    QString s = text();
-    int newVal = s.toInt( ok );
-    if ( !(*ok) && !( !prefix() && !suffix() ) ) {// Try removing any pre/suffix
-	s = cleanText();
-	newVal = s.toInt( ok );
-    }
-    return newVal;
+	QString s = text();
+	int newVal = s.toInt(ok);
+	if (!(*ok) && !(!prefix() && !suffix())) { // Try removing any
+						   // pre/suffix
+		s = cleanText();
+		newVal = s.toInt(ok);
+	}
+	return newVal;
 }
 
 
@@ -847,15 +853,15 @@ int QSpinBox::mapTextToValue( bool* ok )
 
 QString QSpinBox::currentValueText()
 {
-    QString s;
-    if ( (value() == minValue()) && !specialValueText().isEmpty() ) {
-	s = specialValueText();
-    } else {
-	s = prefix();
-	s.append( mapValueToText( value() ) );
-	s.append( suffix() );
-    }
-    return s;
+	QString s;
+	if ((value() == minValue()) && !specialValueText().isEmpty()) {
+		s = specialValueText();
+	} else {
+		s = prefix();
+		s.append(mapValueToText(value()));
+		s.append(suffix());
+	}
+	return s;
 }
 
 
@@ -864,28 +870,28 @@ QString QSpinBox::currentValueText()
   \reimp
 */
 
-void QSpinBox::setEnabled( bool on )
+void QSpinBox::setEnabled(bool on)
 {
-    bool b = isEnabled();
-    QFrame::setEnabled( on );
-    if ( isEnabled() != b ) {
-	// ## enabledChange() might have been a better choice
-	updateDisplay();
-    }
+	bool b = isEnabled();
+	QFrame::setEnabled(on);
+	if (isEnabled() != b) {
+		// ## enabledChange() might have been a better choice
+		updateDisplay();
+	}
 }
 
 
 
 /*! \reimp */
 
-void QSpinBox::styleChange( QStyle& old )
+void QSpinBox::styleChange(QStyle &old)
 {
-    if ( style() == WindowsStyle )
-	setFrameStyle( WinPanel | Sunken );
-    else
-	setFrameStyle( Panel | Sunken );
-    arrangeWidgets();
-    QWidget::styleChange( old );
+	if (style() == WindowsStyle)
+		setFrameStyle(WinPanel | Sunken);
+	else
+		setFrameStyle(Panel | Sunken);
+	arrangeWidgets();
+	QWidget::styleChange(old);
 }
 
 
@@ -908,15 +914,15 @@ void QSpinBox::styleChange( QStyle& old )
   \sa buttonSymbols() ButtonSymbols
 */
 
-void QSpinBox::setButtonSymbols( ButtonSymbols newSymbols )
+void QSpinBox::setButtonSymbols(ButtonSymbols newSymbols)
 {
-    if ( buttonSymbols() == newSymbols )
-	return;
+	if (buttonSymbols() == newSymbols)
+		return;
 
-    if ( !d )
-	d = new QSpinBoxPrivate;
-    d->buttonSymbols = newSymbols;
-    updateButtonSymbols();
+	if (!d)
+		d = new QSpinBoxPrivate;
+	d->buttonSymbols = newSymbols;
+	updateButtonSymbols();
 }
 
 
@@ -928,7 +934,7 @@ void QSpinBox::setButtonSymbols( ButtonSymbols newSymbols )
 
 QSpinBox::ButtonSymbols QSpinBox::buttonSymbols() const
 {
-    return d ? d->buttonSymbols : UpDownArrows;
+	return d ? d->buttonSymbols : UpDownArrows;
 }
 
 
@@ -941,80 +947,80 @@ QSpinBox::ButtonSymbols QSpinBox::buttonSymbols() const
 
 void QSpinBox::updateButtonSymbols()
 {
-    QString key( QString::fromLatin1( "$qt$qspinbox$" ) );
-    bool pmSym = buttonSymbols() == PlusMinus;
-    key += QString::fromLatin1( pmSym ? "+-" : "^v" );
-    key += QString::number( down->height() );
-    QString upKey = key + QString::fromLatin1( "$up" );
-    QString dnKey = key + QString::fromLatin1( "$down" );
-    QBitmap upBm;
-    QBitmap dnBm;
+	QString key(QString::fromLatin1("$qt$qspinbox$"));
+	bool pmSym = buttonSymbols() == PlusMinus;
+	key += QString::fromLatin1(pmSym ? "+-" : "^v");
+	key += QString::number(down->height());
+	QString upKey = key + QString::fromLatin1("$up");
+	QString dnKey = key + QString::fromLatin1("$down");
+	QBitmap upBm;
+	QBitmap dnBm;
 
-    bool found = QPixmapCache::find( dnKey, dnBm )
-		 && QPixmapCache::find( upKey, upBm );
+	bool found = QPixmapCache::find(dnKey, dnBm) &&
+		     QPixmapCache::find(upKey, upBm);
 
-    if ( !found ) {
-	QPainter p;
-	if ( pmSym ) {
-	    int h = down->height()-4;
-	    if ( h < 3 )
-		return;
-	    else if ( h == 4 )
-		h = 3;
-	    else if ( (h > 6) && (h & 1) )
-		h--;
-	    h -= ( h / 8 ) * 2;		// Empty border
-	    dnBm.resize( h, h );
-	    p.begin( &dnBm );
-	    p.eraseRect( 0, 0, h, h );
-	    p.setBrush( color1 );
-	    int c = h/2;
-	    p.drawLine( 0, c, h, c );
-	    if ( !(h & 1) )
-		p.drawLine( 0, c-1, h, c-1 );
-	    p.end();
-	    upBm = dnBm;
-	    p.begin( &upBm );
-	    p.drawLine( c, 0, c, h );
-	    if ( !(h & 1) )
-		p.drawLine( c-1, 0, c-1, h );
-	    p.end();
+	if (!found) {
+		QPainter p;
+		if (pmSym) {
+			int h = down->height() - 4;
+			if (h < 3)
+				return;
+			else if (h == 4)
+				h = 3;
+			else if ((h > 6) && (h & 1))
+				h--;
+			h -= (h / 8) * 2; // Empty border
+			dnBm.resize(h, h);
+			p.begin(&dnBm);
+			p.eraseRect(0, 0, h, h);
+			p.setBrush(color1);
+			int c = h / 2;
+			p.drawLine(0, c, h, c);
+			if (!(h & 1))
+				p.drawLine(0, c - 1, h, c - 1);
+			p.end();
+			upBm = dnBm;
+			p.begin(&upBm);
+			p.drawLine(c, 0, c, h);
+			if (!(h & 1))
+				p.drawLine(c - 1, 0, c - 1, h);
+			p.end();
+		} else {
+			int w = down->width() - 4;
+			if (w < 3)
+				return;
+			else if (!(w & 1))
+				w--;
+			w -= (w / 7) * 2; // Empty border
+			int h = w / 2 + 2; // Must have empty row at foot of
+					   // arrow
+			dnBm.resize(w, h);
+			p.begin(&dnBm);
+			p.eraseRect(0, 0, w, h);
+			QPointArray a;
+			a.setPoints(3, 0, 1, w - 1, 1, h - 2, h - 1);
+			p.setBrush(color1);
+			p.drawPolygon(a);
+			p.end();
+# ifndef QT_NO_TRANSFORMATIONS
+			QWMatrix wm;
+			wm.scale(1, -1);
+			upBm = dnBm.xForm(wm);
+# else
+			upBm.resize(w, h);
+			p.begin(&upBm);
+			p.eraseRect(0, 0, w, h);
+			a.setPoints(3, 0, h - 2, w - 1, h - 2, h - 2, 0);
+			p.setBrush(color1);
+			p.drawPolygon(a);
+			p.end();
+# endif
+		}
+		QPixmapCache::insert(dnKey, dnBm);
+		QPixmapCache::insert(upKey, upBm);
 	}
-	else {
-	    int w = down->width()-4;
-	    if ( w < 3 )
-		return;
-	    else if ( !(w & 1) )
-		w--;
-	    w -= ( w / 7 ) * 2;		// Empty border
-	    int h = w/2 + 2;        // Must have empty row at foot of arrow
-	    dnBm.resize( w, h );
-	    p.begin( &dnBm );
-	    p.eraseRect( 0, 0, w, h );
-	    QPointArray a;
-	    a.setPoints( 3,  0, 1,  w-1, 1,  h-2, h-1 );
-	    p.setBrush( color1 );
-	    p.drawPolygon( a );
-	    p.end();
-#ifndef QT_NO_TRANSFORMATIONS
-	    QWMatrix wm;
-	    wm.scale( 1, -1 );
-	    upBm = dnBm.xForm( wm );
-#else
-	    upBm.resize( w, h );
-	    p.begin( &upBm );
-	    p.eraseRect( 0, 0, w, h );
-	    a.setPoints( 3,  0, h-2,  w-1, h-2,  h-2, 0 );
-	    p.setBrush( color1 );
-	    p.drawPolygon( a );
-	    p.end();
-#endif
-	}
-	QPixmapCache::insert( dnKey, dnBm );
-	QPixmapCache::insert( upKey, upBm );
-    }
-    down->setPixmap( dnBm );
-    up->setPixmap( upBm );
+	down->setPixmap(dnBm);
+	up->setPixmap(upBm);
 }
 
 /*!
@@ -1022,7 +1028,7 @@ void QSpinBox::updateButtonSymbols()
 */
 int QSpinBox::minValue() const
 {
-    return QRangeControl::minValue();
+	return QRangeControl::minValue();
 }
 
 /*!
@@ -1030,7 +1036,7 @@ int QSpinBox::minValue() const
 */
 int QSpinBox::maxValue() const
 {
-    return QRangeControl::maxValue();
+	return QRangeControl::maxValue();
 }
 
 /*!
@@ -1039,9 +1045,9 @@ int QSpinBox::maxValue() const
 
   \sa setRange()
 */
-void QSpinBox::setMinValue( int i )
+void QSpinBox::setMinValue(int i)
 {
-    setRange( i, maxValue() );
+	setRange(i, maxValue());
 }
 
 /*!
@@ -1050,9 +1056,9 @@ void QSpinBox::setMinValue( int i )
 
   \sa setRange()
 */
-void QSpinBox::setMaxValue( int i )
+void QSpinBox::setMaxValue(int i)
 {
-    setRange( minValue(), i );
+	setRange(minValue(), i);
 }
 
 /*!
@@ -1060,7 +1066,7 @@ void QSpinBox::setMaxValue( int i )
 */
 int QSpinBox::lineStep() const
 {
-    return QRangeControl::lineStep();
+	return QRangeControl::lineStep();
 }
 
 /*!
@@ -1071,9 +1077,9 @@ int QSpinBox::lineStep() const
 
   \sa lineStep() QRangeControl::setSteps() setRange()
 */
-void QSpinBox::setLineStep( int i )
+void QSpinBox::setLineStep(int i)
 {
-    setSteps( i, pageStep() );
+	setSteps(i, pageStep());
 }
 
 /*!
@@ -1081,11 +1087,11 @@ void QSpinBox::setLineStep( int i )
 */
 int QSpinBox::value() const
 {
-    if ( edited ) {
-	QSpinBox *that = (QSpinBox*)this;
-	that->edited = FALSE;
-	that->interpretText();
-    }
-    return QRangeControl::value();
+	if (edited) {
+		QSpinBox *that = (QSpinBox *)this;
+		that->edited = FALSE;
+		that->interpretText();
+	}
+	return QRangeControl::value();
 }
 #endif

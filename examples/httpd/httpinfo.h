@@ -14,16 +14,16 @@
 
 class HttpInfo : public QVBox
 {
-    Q_OBJECT
-public:
-    HttpInfo();
-    ~HttpInfo();
+	Q_OBJECT
+      public:
+	HttpInfo();
+	~HttpInfo();
 
-private slots:
-    void newConnect();
-    void endConnect();
-    void wroteToClient();
+      private slots:
+	void newConnect();
+	void endConnect();
+	void wroteToClient();
 
-private:
-    QTextView *infoText;
+      private:
+	QTextView *infoText;
 };

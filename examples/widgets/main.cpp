@@ -18,34 +18,36 @@
 
 class MyWidgetView : public WidgetView
 {
-    int s;
-public:
-    MyWidgetView( QWidget *parent=0, const char *name=0 )
-	:WidgetView(parent, name), s(0)
+	int s;
+
+      public:
+	MyWidgetView(QWidget *parent = 0, const char *name = 0)
+		: WidgetView(parent, name), s(0)
 	{
 	}
 
-    void button1Clicked() {
-	s++;
-	switch (s%5){
-	case 0:
-	    qApp->setStyle(new QMotifStyle);
-	    break;
-	case 1:
-	    qApp->setStyle(new QCDEStyle);
-	    break;
-	case 2:
-	    qApp->setStyle(new QWindowsStyle);
-	    break;
-	case 3:
-	    qApp->setStyle(new QPlatinumStyle);
-	    break;
-	case 4:
-	    qApp->setStyle(new QSGIStyle);
-	    break;
+	void button1Clicked()
+	{
+		s++;
+		switch (s % 5) {
+		case 0:
+			qApp->setStyle(new QMotifStyle);
+			break;
+		case 1:
+			qApp->setStyle(new QCDEStyle);
+			break;
+		case 2:
+			qApp->setStyle(new QWindowsStyle);
+			break;
+		case 3:
+			qApp->setStyle(new QPlatinumStyle);
+			break;
+		case 4:
+			qApp->setStyle(new QSGIStyle);
+			break;
+		}
+		WidgetView::button1Clicked();
 	}
-	WidgetView::button1Clicked();
-    }
 };
 
 
@@ -53,16 +55,16 @@ public:
 // Create and display our WidgetView.
 //
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication::setColorSpec( QApplication::CustomColor );
-    QApplication a( argc, argv );
+	QApplication::setColorSpec(QApplication::CustomColor);
+	QApplication a(argc, argv);
 
-    MyWidgetView* w = new MyWidgetView;
-    a.setMainWidget( w );
+	MyWidgetView *w = new MyWidgetView;
+	a.setMainWidget(w);
 
-    w->show();
-    int res = a.exec();
-    delete w;
-    return res;
+	w->show();
+	int res = a.exec();
+	delete w;
+	return res;
 }

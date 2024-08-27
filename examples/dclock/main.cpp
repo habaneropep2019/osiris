@@ -12,13 +12,13 @@
 #include <qapplication.h>
 
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
-    DigitalClock *clock = new DigitalClock;
-    clock->resize( 170, 80 );
-    a.setMainWidget( clock );
-    clock->setCaption("Qt Example - Digital Clock");
-    clock->show();
-    return a.exec();
+	QApplication a(argc, argv);
+	DigitalClock *clock = new DigitalClock;
+	clock->resize(170, 80);
+	a.setMainWidget(clock);
+	clock->setCaption("Qt Example - Digital Clock");
+	clock->show();
+	return a.exec();
 }

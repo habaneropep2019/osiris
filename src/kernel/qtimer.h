@@ -39,46 +39,46 @@
 #define QTIMER_H
 
 #ifndef QT_H
-#include "qobject.h"
+# include "qobject.h"
 #endif // QT_H
 
 
 class Q_EXPORT QTimer : public QObject
 {
-    Q_OBJECT
-public:
-    QTimer( QObject *parent=0, const char *name=0 );
-   ~QTimer();
+	Q_OBJECT
+      public:
+	QTimer(QObject *parent = 0, const char *name = 0);
+	~QTimer();
 
-    bool	isActive() const;
+	bool isActive() const;
 
-    int		start( int msec, bool sshot = FALSE );
-    void	changeInterval( int msec );
-    void	stop();
+	int start(int msec, bool sshot = FALSE);
+	void changeInterval(int msec);
+	void stop();
 
-    static void singleShot( int msec, QObject *receiver, const char *member );
+	static void singleShot(int msec, QObject *receiver, const char *member);
 
-signals:
-    void	timeout();
+      signals:
+	void timeout();
 
-protected:
-    bool	event( QEvent * );
+      protected:
+	bool event(QEvent *);
 
-private:
-    int		id;
-    bool	single;
+      private:
+	int id;
+	bool single;
 
-private:	// Disabled copy constructor and operator=
+      private: // Disabled copy constructor and operator=
 #if defined(Q_DISABLE_COPY)
-    QTimer( const QTimer & );
-    QTimer &operator=( const QTimer & );
+	QTimer(const QTimer &);
+	QTimer &operator=(const QTimer &);
 #endif
 };
 
 
 inline bool QTimer::isActive() const
 {
-    return id >= 0;
+	return id >= 0;
 }
 
 

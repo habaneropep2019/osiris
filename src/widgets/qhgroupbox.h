@@ -39,24 +39,25 @@
 #define QHGROUPBOX_H
 
 #ifndef QT_H
-#include "qgroupbox.h"
+# include "qgroupbox.h"
 #endif // QT_H
 
 #ifndef QT_NO_HGROUPBOX
 
 class Q_EXPORT QHGroupBox : public QGroupBox
 {
-    Q_OBJECT
-public:
-    QHGroupBox( QWidget *parent=0, const char *name=0 );
-    QHGroupBox( const QString &title, QWidget *parent=0, const char* name=0 );
-   ~QHGroupBox();
+	Q_OBJECT
+      public:
+	QHGroupBox(QWidget *parent = 0, const char *name = 0);
+	QHGroupBox(const QString &title, QWidget *parent = 0,
+		   const char *name = 0);
+	~QHGroupBox();
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QHGroupBox( const QHGroupBox & );
-    QHGroupBox &operator=( const QHGroupBox & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QHGroupBox(const QHGroupBox &);
+	QHGroupBox &operator=(const QHGroupBox &);
+# endif
 };
 
 #endif // QT_NO_HGROUPBOX

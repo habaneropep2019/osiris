@@ -26,25 +26,25 @@ class QPopupMenu;
 
 class GLObjectWindow : public QWidget
 {
-    Q_OBJECT
-public:
-    GLObjectWindow( QWidget* parent = 0, const char* name = 0 );
+	Q_OBJECT
+      public:
+	GLObjectWindow(QWidget *parent = 0, const char *name = 0);
 
-protected slots:
+      protected slots:
 
-    void		makePixmap();
-    void		makePixmapHidden();
-    void		makePixmapForMenu();
-    void		useFixedPixmapSize();
+	void makePixmap();
+	void makePixmapHidden();
+	void makePixmapForMenu();
+	void useFixedPixmapSize();
 
-private:
-    void		drawOnPixmap( QPixmap* pm );
-    GLBox* c1;
-    QLabel* lb;
-    int fixMenuItemId;
-    int insertMenuItemId;
-    QSize pmSz;
-    QPopupMenu* file;
+      private:
+	void drawOnPixmap(QPixmap *pm);
+	GLBox *c1;
+	QLabel *lb;
+	int fixMenuItemId;
+	int insertMenuItemId;
+	QSize pmSz;
+	QPopupMenu *file;
 };
 
 

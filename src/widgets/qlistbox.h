@@ -39,9 +39,9 @@
 #define QLISTBOX_H
 
 #ifndef QT_H
-#include "qscrollview.h"
-#include "qpixmap.h"
-#include "qtimer.h"
+# include "qscrollview.h"
+# include "qpixmap.h"
+# include "qtimer.h"
 #endif // QT_H
 
 #ifndef QT_NO_LISTBOX
@@ -56,353 +56,454 @@ class QStringList;
 
 class Q_EXPORT QListBox : public QScrollView
 {
-    friend class QListBoxItem;
-    friend class QListBoxPrivate;
+	friend class QListBoxItem;
+	friend class QListBoxPrivate;
 
-    Q_OBJECT
-    Q_ENUMS( SelectionMode LayoutMode )
-    Q_PROPERTY( uint count READ count )
-    Q_PROPERTY( int numItemsVisible READ numItemsVisible )
-    Q_PROPERTY( int currentItem READ currentItem WRITE setCurrentItem DESIGNABLE false )
-    Q_PROPERTY( QString currentText READ currentText )
-    Q_PROPERTY( int topItem READ topItem WRITE setTopItem DESIGNABLE false )
-    Q_PROPERTY( SelectionMode selectionMode READ selectionMode WRITE setSelectionMode )
-    Q_PROPERTY( bool multiSelection READ isMultiSelection WRITE setMultiSelection DESIGNABLE false )
-    Q_PROPERTY( LayoutMode columnMode READ columnMode WRITE setColumnMode )
-    Q_PROPERTY( LayoutMode rowMode READ rowMode WRITE setRowMode )
-    Q_PROPERTY( int numColumns READ numColumns )
-    Q_PROPERTY( int numRows READ numRows )
-    Q_PROPERTY( bool variableWidth READ variableWidth WRITE setVariableWidth )
-    Q_PROPERTY( bool variableHeight READ variableHeight WRITE setVariableHeight )
-	
-public:
-    QListBox( QWidget *parent=0, const char *name=0, WFlags f=0  );
-   ~QListBox();
+	Q_OBJECT
+	Q_ENUMS(SelectionMode LayoutMode)
+	Q_PROPERTY(uint count READ count)
+	Q_PROPERTY(int numItemsVisible READ numItemsVisible)
+	Q_PROPERTY(int currentItem READ currentItem WRITE setCurrentItem
+			   DESIGNABLE false)
+	Q_PROPERTY(QString currentText READ currentText)
+	Q_PROPERTY(int topItem READ topItem WRITE setTopItem DESIGNABLE false)
+	Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE
+			   setSelectionMode)
+	Q_PROPERTY(bool multiSelection READ isMultiSelection WRITE
+			   setMultiSelection DESIGNABLE false)
+	Q_PROPERTY(LayoutMode columnMode READ columnMode WRITE setColumnMode)
+	Q_PROPERTY(LayoutMode rowMode READ rowMode WRITE setRowMode)
+	Q_PROPERTY(int numColumns READ numColumns)
+	Q_PROPERTY(int numRows READ numRows)
+	Q_PROPERTY(bool variableWidth READ variableWidth WRITE setVariableWidth)
+	Q_PROPERTY(
+		bool variableHeight READ variableHeight WRITE setVariableHeight)
 
-    virtual void setFont( const QFont & );
+      public:
+	QListBox(QWidget *parent = 0, const char *name = 0, WFlags f = 0);
+	~QListBox();
 
-    uint count() const;
+	virtual void setFont(const QFont &);
 
-    void insertStringList( const QStringList&, int index=-1 );
-    void insertStrList( const QStrList *, int index=-1 );
-    void insertStrList( const QStrList &, int index=-1 );
-    void insertStrList( const char **,
-			int numStrings=-1, int index=-1 );
+	uint count() const;
 
-    void insertItem( const QListBoxItem *, int index=-1 );
-    void insertItem( const QListBoxItem *, const QListBoxItem *after );
-    void insertItem( const QString &text, int index=-1 );
-    void insertItem( const QPixmap &pixmap, int index=-1 );
-    void insertItem( const QPixmap &pixmap, const QString &text, int index=-1 );
+	void insertStringList(const QStringList &, int index = -1);
+	void insertStrList(const QStrList *, int index = -1);
+	void insertStrList(const QStrList &, int index = -1);
+	void insertStrList(const char **, int numStrings = -1, int index = -1);
 
-    void removeItem( int index );
-    void clear();
+	void insertItem(const QListBoxItem *, int index = -1);
+	void insertItem(const QListBoxItem *, const QListBoxItem *after);
+	void insertItem(const QString &text, int index = -1);
+	void insertItem(const QPixmap &pixmap, int index = -1);
+	void insertItem(const QPixmap &pixmap, const QString &text,
+			int index = -1);
 
-    QString text( int index )	const;
-    const QPixmap *pixmap( int index )	const;
+	void removeItem(int index);
+	void clear();
 
-    void changeItem( const QListBoxItem *, int index );
-    void changeItem( const QString &text, int index );
-    void changeItem( const QPixmap &pixmap, int index );
-    void changeItem( const QPixmap &pixmap, const QString &text, int index );
+	QString text(int index) const;
+	const QPixmap *pixmap(int index) const;
 
-    void takeItem( const QListBoxItem * );
+	void changeItem(const QListBoxItem *, int index);
+	void changeItem(const QString &text, int index);
+	void changeItem(const QPixmap &pixmap, int index);
+	void changeItem(const QPixmap &pixmap, const QString &text, int index);
 
-    int numItemsVisible() const;
+	void takeItem(const QListBoxItem *);
 
-    int currentItem() const;
-    QString currentText() const { return text(currentItem()); }
-    virtual void setCurrentItem( int index );
-    virtual void setCurrentItem( QListBoxItem * );
-    void centerCurrentItem() { ensureCurrentVisible(); }
-    int topItem() const;
-    virtual void setTopItem( int index );
-    virtual void setBottomItem( int index );
+	int numItemsVisible() const;
 
-    long maxItemWidth() const;
+	int currentItem() const;
+	QString currentText() const
+	{
+		return text(currentItem());
+	}
+	virtual void setCurrentItem(int index);
+	virtual void setCurrentItem(QListBoxItem *);
+	void centerCurrentItem()
+	{
+		ensureCurrentVisible();
+	}
+	int topItem() const;
+	virtual void setTopItem(int index);
+	virtual void setBottomItem(int index);
 
-    enum SelectionMode { Single, Multi, Extended, NoSelection };
-    virtual void setSelectionMode( SelectionMode );
-    SelectionMode selectionMode() const;
+	long maxItemWidth() const;
 
-    void setMultiSelection( bool multi );
-    bool isMultiSelection() const;
+	enum SelectionMode { Single, Multi, Extended, NoSelection };
+	virtual void setSelectionMode(SelectionMode);
+	SelectionMode selectionMode() const;
 
-    virtual void setSelected( QListBoxItem *, bool );
-    void setSelected( int, bool );
-    bool isSelected( int ) const;
-    bool isSelected( const QListBoxItem * ) const;
+	void setMultiSelection(bool multi);
+	bool isMultiSelection() const;
 
-    QSize sizeHint() const;
-    QSize	minimumSizeHint() const;
+	virtual void setSelected(QListBoxItem *, bool);
+	void setSelected(int, bool);
+	bool isSelected(int) const;
+	bool isSelected(const QListBoxItem *) const;
 
-    QListBoxItem *item( int index ) const;
-    int index( const QListBoxItem * ) const;
-    QListBoxItem *findItem( const QString &text ) const;
+	QSize sizeHint() const;
+	QSize minimumSizeHint() const;
 
-    void triggerUpdate( bool doLayout );
+	QListBoxItem *item(int index) const;
+	int index(const QListBoxItem *) const;
+	QListBoxItem *findItem(const QString &text) const;
 
-    bool itemVisible( int index );
-    bool itemVisible( const QListBoxItem * );
+	void triggerUpdate(bool doLayout);
 
-    enum LayoutMode { FixedNumber,
-		      FitToWidth, FitToHeight = FitToWidth,
-		      Variable };
-    virtual void setColumnMode( LayoutMode );
-    virtual void setColumnMode( int );
-    virtual void setRowMode( LayoutMode );
-    virtual void setRowMode( int );
+	bool itemVisible(int index);
+	bool itemVisible(const QListBoxItem *);
 
-    LayoutMode columnMode() const;
-    LayoutMode rowMode() const;
+	enum LayoutMode {
+		FixedNumber,
+		FitToWidth,
+		FitToHeight = FitToWidth,
+		Variable
+	};
+	virtual void setColumnMode(LayoutMode);
+	virtual void setColumnMode(int);
+	virtual void setRowMode(LayoutMode);
+	virtual void setRowMode(int);
 
-    int numColumns() const;
-    int numRows() const;
+	LayoutMode columnMode() const;
+	LayoutMode rowMode() const;
 
-    bool variableWidth() const;
-    virtual void setVariableWidth( bool );
+	int numColumns() const;
+	int numRows() const;
 
-    bool variableHeight() const;
-    virtual void setVariableHeight( bool );
+	bool variableWidth() const;
+	virtual void setVariableWidth(bool);
 
-    void viewportPaintEvent( QPaintEvent * );
+	bool variableHeight() const;
+	virtual void setVariableHeight(bool);
 
-#ifndef QT_NO_COMPAT // obsolete, provided for source compatibility
-    bool dragSelect() const { return TRUE; }
-    void setDragSelect( bool ) {}
-    bool autoScroll() const { return TRUE; }
-    void setAutoScroll( bool ) {}
-    bool autoScrollBar() const { return vScrollBarMode() == Auto; }
-    void setAutoScrollBar( bool enable ) { setVScrollBarMode( enable ? Auto : AlwaysOff ); }
-    bool scrollBar() const { return vScrollBarMode() != AlwaysOff; }
-    void setScrollBar( bool enable ) { setVScrollBarMode( enable ? AlwaysOn : AlwaysOff ); }
-    bool autoBottomScrollBar() const { return hScrollBarMode() == Auto; }
-    void setAutoBottomScrollBar( bool enable ) { setHScrollBarMode( enable ? Auto : AlwaysOff ); }
-    bool bottomScrollBar() const { return hScrollBarMode() != AlwaysOff; }
-    void setBottomScrollBar( bool enable ) { setHScrollBarMode( enable ? AlwaysOn : AlwaysOff ); }
-    bool smoothScrolling() const { return FALSE; }
-    void setSmoothScrolling( bool ) {}
-    bool autoUpdate() const { return TRUE; }
-    void setAutoUpdate( bool ) {}
-    void setFixedVisibleLines( int lines ) { setRowMode( lines ); }
-    void inSort( const QListBoxItem * );
-    void inSort( const QString& text );
-    int cellHeight( int i ) const { return itemHeight(i); }
-    int cellHeight() const { return itemHeight(); }
-    int cellWidth() const { return maxItemWidth(); }
-    int cellWidth(int i) const { ASSERT(i==0); return maxItemWidth(); }
-    int	numCols() const { return numColumns(); }
-#endif
+	void viewportPaintEvent(QPaintEvent *);
 
-    int itemHeight( int index = 0 ) const;
-    QListBoxItem * itemAt( QPoint ) const;
+# ifndef QT_NO_COMPAT // obsolete, provided for source compatibility
+	bool dragSelect() const
+	{
+		return TRUE;
+	}
+	void setDragSelect(bool)
+	{
+	}
+	bool autoScroll() const
+	{
+		return TRUE;
+	}
+	void setAutoScroll(bool)
+	{
+	}
+	bool autoScrollBar() const
+	{
+		return vScrollBarMode() == Auto;
+	}
+	void setAutoScrollBar(bool enable)
+	{
+		setVScrollBarMode(enable ? Auto : AlwaysOff);
+	}
+	bool scrollBar() const
+	{
+		return vScrollBarMode() != AlwaysOff;
+	}
+	void setScrollBar(bool enable)
+	{
+		setVScrollBarMode(enable ? AlwaysOn : AlwaysOff);
+	}
+	bool autoBottomScrollBar() const
+	{
+		return hScrollBarMode() == Auto;
+	}
+	void setAutoBottomScrollBar(bool enable)
+	{
+		setHScrollBarMode(enable ? Auto : AlwaysOff);
+	}
+	bool bottomScrollBar() const
+	{
+		return hScrollBarMode() != AlwaysOff;
+	}
+	void setBottomScrollBar(bool enable)
+	{
+		setHScrollBarMode(enable ? AlwaysOn : AlwaysOff);
+	}
+	bool smoothScrolling() const
+	{
+		return FALSE;
+	}
+	void setSmoothScrolling(bool)
+	{
+	}
+	bool autoUpdate() const
+	{
+		return TRUE;
+	}
+	void setAutoUpdate(bool)
+	{
+	}
+	void setFixedVisibleLines(int lines)
+	{
+		setRowMode(lines);
+	}
+	void inSort(const QListBoxItem *);
+	void inSort(const QString &text);
+	int cellHeight(int i) const
+	{
+		return itemHeight(i);
+	}
+	int cellHeight() const
+	{
+		return itemHeight();
+	}
+	int cellWidth() const
+	{
+		return maxItemWidth();
+	}
+	int cellWidth(int i) const
+	{
+		ASSERT(i == 0);
+		return maxItemWidth();
+	}
+	int numCols() const
+	{
+		return numColumns();
+	}
+# endif
 
-    QRect itemRect( QListBoxItem *item ) const;
+	int itemHeight(int index = 0) const;
+	QListBoxItem *itemAt(QPoint) const;
 
-    QListBoxItem *firstItem() const;
+	QRect itemRect(QListBoxItem *item) const;
 
-    void sort( bool ascending = TRUE );
+	QListBoxItem *firstItem() const;
 
-public slots:
-    virtual void ensureCurrentVisible();
-    virtual void clearSelection();
-    void selectAll( bool select ); // ###### make virtual
-    void invertSelection(); // ######### make virtual
+	void sort(bool ascending = TRUE);
 
-signals:
-    void highlighted( int index );
-    void selected( int index );
-    void highlighted( const QString &);
-    void selected( const QString &);
-    void highlighted( QListBoxItem * );
-    void selected( QListBoxItem * );
+      public slots:
+	virtual void ensureCurrentVisible();
+	virtual void clearSelection();
+	void selectAll(bool select); // ###### make virtual
+	void invertSelection(); // ######### make virtual
 
-    void selectionChanged();
-    void selectionChanged( QListBoxItem * );
-    void currentChanged( QListBoxItem * );
-    void clicked( QListBoxItem * );
-    void clicked( QListBoxItem *, const QPoint & );
-    void pressed( QListBoxItem * );
-    void pressed( QListBoxItem *, const QPoint & );
+      signals:
+	void highlighted(int index);
+	void selected(int index);
+	void highlighted(const QString &);
+	void selected(const QString &);
+	void highlighted(QListBoxItem *);
+	void selected(QListBoxItem *);
 
-    void doubleClicked( QListBoxItem * );
-    void returnPressed( QListBoxItem * );
-    void rightButtonClicked( QListBoxItem *, const QPoint & );
-    void rightButtonPressed( QListBoxItem *, const QPoint & );
-    void mouseButtonPressed( int, QListBoxItem*, const QPoint& );
-    void mouseButtonClicked( int, QListBoxItem*, const QPoint& );
+	void selectionChanged();
+	void selectionChanged(QListBoxItem *);
+	void currentChanged(QListBoxItem *);
+	void clicked(QListBoxItem *);
+	void clicked(QListBoxItem *, const QPoint &);
+	void pressed(QListBoxItem *);
+	void pressed(QListBoxItem *, const QPoint &);
 
-    void onItem( QListBoxItem *item );
-    void onViewport();
+	void doubleClicked(QListBoxItem *);
+	void returnPressed(QListBoxItem *);
+	void rightButtonClicked(QListBoxItem *, const QPoint &);
+	void rightButtonPressed(QListBoxItem *, const QPoint &);
+	void mouseButtonPressed(int, QListBoxItem *, const QPoint &);
+	void mouseButtonClicked(int, QListBoxItem *, const QPoint &);
 
-protected:
-    void viewportMousePressEvent( QMouseEvent * );
-    void viewportMouseReleaseEvent( QMouseEvent * );
-    void viewportMouseDoubleClickEvent( QMouseEvent * );
-    void viewportMouseMoveEvent( QMouseEvent * );
-    void mousePressEvent( QMouseEvent * );
-    void mouseReleaseEvent( QMouseEvent * );
-    void mouseDoubleClickEvent( QMouseEvent * );
-    void mouseMoveEvent( QMouseEvent * );
-    void keyPressEvent( QKeyEvent *e );
-    void focusInEvent( QFocusEvent *e );
-    void focusOutEvent( QFocusEvent *e );
-    void resizeEvent( QResizeEvent * );
-    void showEvent( QShowEvent * );
+	void onItem(QListBoxItem *item);
+	void onViewport();
 
-    void updateItem( int index );
-    void updateItem( QListBoxItem * );
+      protected:
+	void viewportMousePressEvent(QMouseEvent *);
+	void viewportMouseReleaseEvent(QMouseEvent *);
+	void viewportMouseDoubleClickEvent(QMouseEvent *);
+	void viewportMouseMoveEvent(QMouseEvent *);
+	void mousePressEvent(QMouseEvent *);
+	void mouseReleaseEvent(QMouseEvent *);
+	void mouseDoubleClickEvent(QMouseEvent *);
+	void mouseMoveEvent(QMouseEvent *);
+	void keyPressEvent(QKeyEvent *e);
+	void focusInEvent(QFocusEvent *e);
+	void focusOutEvent(QFocusEvent *e);
+	void resizeEvent(QResizeEvent *);
+	void showEvent(QShowEvent *);
 
-#ifndef QT_NO_COMPAT
-    void updateCellWidth() { }
-    int totalWidth() const { return contentsWidth(); }
-    int totalHeight() const { return contentsHeight(); }
-#endif
+	void updateItem(int index);
+	void updateItem(QListBoxItem *);
 
-    virtual void paintCell( QPainter *, int row, int col );
+# ifndef QT_NO_COMPAT
+	void updateCellWidth()
+	{
+	}
+	int totalWidth() const
+	{
+		return contentsWidth();
+	}
+	int totalHeight() const
+	{
+		return contentsHeight();
+	}
+# endif
 
-    void toggleCurrentItem();
-    bool isRubberSelecting() const;
+	virtual void paintCell(QPainter *, int row, int col);
 
-    void doLayout() const;
+	void toggleCurrentItem();
+	bool isRubberSelecting() const;
 
-#ifndef QT_NO_COMPAT // obsolete, provided for source compatibility
-    bool itemYPos( int index, int *yPos ) const;
-    int findItem( int yPos ) const {return index(itemAt(QPoint(0,yPos)));}
-#endif
+	void doLayout() const;
 
-protected slots:
-    void clearInputString();
+# ifndef QT_NO_COMPAT // obsolete, provided for source compatibility
+	bool itemYPos(int index, int *yPos) const;
+	int findItem(int yPos) const
+	{
+		return index(itemAt(QPoint(0, yPos)));
+	}
+# endif
 
-private slots:
-    void refreshSlot();
-    void doAutoScroll();
-    void adjustItems();
+      protected slots:
+	void clearInputString();
 
-private:
-    void tryGeometry( int, int ) const;
-    int currentRow() const;
-    int currentColumn() const;
-    void updateSelection();
-    void drawRubber();
-    void doRubberSelection( const QRect &old, const QRect &rubber );
-    void handleItemChange( QListBoxItem *old, bool shift, bool control );
-    void selectRange( QListBoxItem *from, QListBoxItem *to, bool invert, bool includeFirst, bool clearSel = FALSE );
+      private slots:
+	void refreshSlot();
+	void doAutoScroll();
+	void adjustItems();
 
-    void emitChangedSignal( bool );
+      private:
+	void tryGeometry(int, int) const;
+	int currentRow() const;
+	int currentColumn() const;
+	void updateSelection();
+	void drawRubber();
+	void doRubberSelection(const QRect &old, const QRect &rubber);
+	void handleItemChange(QListBoxItem *old, bool shift, bool control);
+	void selectRange(QListBoxItem *from, QListBoxItem *to, bool invert,
+			 bool includeFirst, bool clearSel = FALSE);
 
-    int columnAt( int ) const;
-    int rowAt( int ) const;
+	void emitChangedSignal(bool);
 
-    QListBoxPrivate * d;
+	int columnAt(int) const;
+	int rowAt(int) const;
 
-    static QListBox * changedListBox;
+	QListBoxPrivate *d;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QListBox( const QListBox & );
-    QListBox &operator=( const QListBox & );
-#endif
+	static QListBox *changedListBox;
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QListBox(const QListBox &);
+	QListBox &operator=(const QListBox &);
+# endif
 };
 
 
 class Q_EXPORT QListBoxItem
 {
-public:
-    QListBoxItem( QListBox* listbox = 0 );
-    QListBoxItem( QListBox* listbox, QListBoxItem *after );
-    virtual ~QListBoxItem();
+      public:
+	QListBoxItem(QListBox *listbox = 0);
+	QListBoxItem(QListBox *listbox, QListBoxItem *after);
+	virtual ~QListBoxItem();
 
-    virtual QString text() const;
-    virtual const QPixmap *pixmap() const;
+	virtual QString text() const;
+	virtual const QPixmap *pixmap() const;
 
-    virtual int	 height( const QListBox * ) const;
-    virtual int	 width( const QListBox * )  const;
+	virtual int height(const QListBox *) const;
+	virtual int width(const QListBox *) const;
 
-    bool selected() const { return s; }
-    bool current() const;
+	bool selected() const
+	{
+		return s;
+	}
+	bool current() const;
 
-    QListBox *listBox() const;
+	QListBox *listBox() const;
 
-    void setSelectable( bool b );
-    bool isSelectable() const;
+	void setSelectable(bool b);
+	bool isSelectable() const;
 
-    QListBoxItem *next() const;
-    QListBoxItem *prev() const;
+	QListBoxItem *next() const;
+	QListBoxItem *prev() const;
 
-protected:
-    virtual void paint( QPainter * ) = 0;
-    virtual void setText( const QString &text ) { txt = text; }
-    void setCustomHighlighting( bool );
+      protected:
+	virtual void paint(QPainter *) = 0;
+	virtual void setText(const QString &text)
+	{
+		txt = text;
+	}
+	void setCustomHighlighting(bool);
 
-private:
-    QString txt;
-    uint s:1;
-    uint dirty:1;
-    uint custom_highlight : 1;
-    int x, y;
-    QListBoxItem * p, * n;
-    QListBox* lbox;
-    friend class QListBox;
-    friend class QListBoxPrivate;
-    friend class QComboBox;
+      private:
+	QString txt;
+	uint s:1;
+	uint dirty:1;
+	uint custom_highlight:1;
+	int x, y;
+	QListBoxItem *p, *n;
+	QListBox *lbox;
+	friend class QListBox;
+	friend class QListBoxPrivate;
+	friend class QComboBox;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QListBoxItem( const QListBoxItem & );
-    QListBoxItem &operator=( const QListBoxItem & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QListBoxItem(const QListBoxItem &);
+	QListBoxItem &operator=(const QListBoxItem &);
+# endif
 };
 
 
 class Q_EXPORT QListBoxText : public QListBoxItem
 {
-public:
-    QListBoxText( QListBox* listbox, const QString & text=QString::null );
-    QListBoxText( const QString & text=QString::null );
-    QListBoxText( QListBox* listbox, const QString & text, QListBoxItem *after );
-   ~QListBoxText();
+      public:
+	QListBoxText(QListBox *listbox, const QString &text = QString::null);
+	QListBoxText(const QString &text = QString::null);
+	QListBoxText(QListBox *listbox, const QString &text,
+		     QListBoxItem *after);
+	~QListBoxText();
 
-    int	 height( const QListBox * ) const;
-    int	 width( const QListBox * )  const;
+	int height(const QListBox *) const;
+	int width(const QListBox *) const;
 
-protected:
-    void  paint( QPainter * );
+      protected:
+	void paint(QPainter *);
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QListBoxText( const QListBoxText & );
-    QListBoxText &operator=( const QListBoxText & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QListBoxText(const QListBoxText &);
+	QListBoxText &operator=(const QListBoxText &);
+# endif
 };
 
 
 class Q_EXPORT QListBoxPixmap : public QListBoxItem
 {
-public:
-    QListBoxPixmap( QListBox* listbox, const QPixmap & );
-    QListBoxPixmap( const QPixmap & );
-    QListBoxPixmap( QListBox* listbox, const QPixmap & pix, QListBoxItem *after );
-    QListBoxPixmap( QListBox* listbox, const QPixmap &, const QString& );
-    QListBoxPixmap( const QPixmap &, const QString& );
-    QListBoxPixmap( QListBox* listbox, const QPixmap & pix, const QString&, QListBoxItem *after );
-   ~QListBoxPixmap();
+      public:
+	QListBoxPixmap(QListBox *listbox, const QPixmap &);
+	QListBoxPixmap(const QPixmap &);
+	QListBoxPixmap(QListBox *listbox, const QPixmap &pix,
+		       QListBoxItem *after);
+	QListBoxPixmap(QListBox *listbox, const QPixmap &, const QString &);
+	QListBoxPixmap(const QPixmap &, const QString &);
+	QListBoxPixmap(QListBox *listbox, const QPixmap &pix, const QString &,
+		       QListBoxItem *after);
+	~QListBoxPixmap();
 
-    const QPixmap *pixmap() const { return &pm; }
+	const QPixmap *pixmap() const
+	{
+		return &pm;
+	}
 
-    int	 height( const QListBox * ) const;
-    int	 width( const QListBox * )  const;
+	int height(const QListBox *) const;
+	int width(const QListBox *) const;
 
-protected:
-    void paint( QPainter * );
+      protected:
+	void paint(QPainter *);
 
-private:
-    QPixmap pm;
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QListBoxPixmap( const QListBoxPixmap & );
-    QListBoxPixmap &operator=( const QListBoxPixmap & );
-#endif
+      private:
+	QPixmap pm;
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QListBoxPixmap(const QListBoxPixmap &);
+	QListBoxPixmap &operator=(const QListBoxPixmap &);
+# endif
 };
 
 

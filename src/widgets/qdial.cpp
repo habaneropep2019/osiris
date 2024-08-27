@@ -39,15 +39,15 @@
 
 #ifndef QT_NO_DIAL
 
-#include "qpainter.h"
-#include "qpointarray.h"
-#include "qtimer.h"
-#include "qcolor.h"
-#include "qapplication.h"
-#include "qregion.h"
+# include "qpainter.h"
+# include "qpointarray.h"
+# include "qtimer.h"
+# include "qcolor.h"
+# include "qapplication.h"
+# include "qregion.h"
 
-#include <math.h> // sin(), cos(), atan()
-//### Forutsetter linking med math lib - Jfr kommentar i qpainter_x11.cpp!
+# include <math.h> // sin(), cos(), atan()
+// ### Forutsetter linking med math lib - Jfr kommentar i qpainter_x11.cpp!
 
 static const double m_pi = 3.14159265358979323846;
 static const double rad_factor = 180.0 / m_pi;
@@ -55,34 +55,35 @@ static const double rad_factor = 180.0 / m_pi;
 
 class QDialPrivate
 {
-public:
-    QDialPrivate()
-    {
-	wrapping = FALSE;
-	tracking = TRUE;
-	doNotEmit = FALSE;
-	target = 3.7;
-	mousePressed = FALSE;
-    }
+      public:
+	QDialPrivate()
+	{
+		wrapping = FALSE;
+		tracking = TRUE;
+		doNotEmit = FALSE;
+		target = 3.7;
+		mousePressed = FALSE;
+	}
 
-    bool wrapping;
-    bool tracking;
-    bool doNotEmit;
-    double target;
-    QRect eraseArea;
-    bool eraseAreaValid;
-    bool showNotches;
-    bool onlyOutside;
-    bool mousePressed;
-    
-    QPointArray lines;
+	bool wrapping;
+	bool tracking;
+	bool doNotEmit;
+	double target;
+	QRect eraseArea;
+	bool eraseAreaValid;
+	bool showNotches;
+	bool onlyOutside;
+	bool mousePressed;
+
+	QPointArray lines;
 };
 
 
 // NOT REVISED
 /*! \class QDial qdial.h
 
-  \brief The QDial class provides a rounded rangecontrol (like a speedometer or potentiometer).
+  \brief The QDial class provides a rounded rangecontrol (like a speedometer or
+  potentiometer).
 
   \ingroup basic
 
@@ -134,14 +135,15 @@ public:
 
 /*!  Constructs a dial with the default range of QRangeControl. */
 
-QDial::QDial( QWidget *parent, const char *name )
-    : QWidget( parent, name, WRepaintNoErase | WResizeNoErase ), QRangeControl()
+QDial::QDial(QWidget *parent, const char *name)
+	: QWidget(parent, name, WRepaintNoErase | WResizeNoErase),
+	  QRangeControl()
 {
-    d = new QDialPrivate;
-    d->eraseAreaValid = FALSE;
-    d->showNotches = FALSE;
-    d->onlyOutside = FALSE;
-    setFocusPolicy( QWidget::WheelFocus );
+	d = new QDialPrivate;
+	d->eraseAreaValid = FALSE;
+	d->showNotches = FALSE;
+	d->onlyOutside = FALSE;
+	setFocusPolicy(QWidget::WheelFocus);
 }
 
 
@@ -155,16 +157,16 @@ QDial::QDial( QWidget *parent, const char *name )
 
 */
 
-QDial::QDial( int minValue, int maxValue, int pageStep, int value,
-	      QWidget *parent, const char *name )
-    : QWidget( parent, name, WRepaintNoErase | WResizeNoErase ),
-      QRangeControl( minValue, maxValue, 1, pageStep, value )
+QDial::QDial(int minValue, int maxValue, int pageStep, int value,
+	     QWidget *parent, const char *name)
+	: QWidget(parent, name, WRepaintNoErase | WResizeNoErase),
+	  QRangeControl(minValue, maxValue, 1, pageStep, value)
 {
-    d = new QDialPrivate;
-    d->eraseAreaValid = FALSE;
-    d->showNotches = FALSE;
-    d->onlyOutside = FALSE;
-    setFocusPolicy( QWidget::WheelFocus );
+	d = new QDialPrivate;
+	d->eraseAreaValid = FALSE;
+	d->showNotches = FALSE;
+	d->onlyOutside = FALSE;
+	setFocusPolicy(QWidget::WheelFocus);
 }
 
 /*!
@@ -172,7 +174,7 @@ QDial::QDial( int minValue, int maxValue, int pageStep, int value,
 */
 QDial::~QDial()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -182,9 +184,9 @@ QDial::~QDial()
   possible.
 */
 
-void QDial::setTracking( bool enable )
+void QDial::setTracking(bool enable)
 {
-    d->tracking = enable;
+	d->tracking = enable;
 }
 
 
@@ -197,15 +199,15 @@ Tracking is initially enabled.
 
 bool QDial::tracking() const
 {
-    return d ? d->tracking : TRUE;
+	return d ? d->tracking : TRUE;
 }
 
 /*!  Makes QRangeControl::setValue() available as a slot.
-*/
+ */
 
-void QDial::setValue( int newValue )
+void QDial::setValue(int newValue)
 { // ### set doNotEmit?	 Matthias?
-    QRangeControl::setValue( newValue );
+	QRangeControl::setValue(newValue);
 }
 
 
@@ -213,7 +215,7 @@ void QDial::setValue( int newValue )
 
 void QDial::addLine()
 {
-    QRangeControl::addLine();
+	QRangeControl::addLine();
 }
 
 
@@ -221,16 +223,16 @@ void QDial::addLine()
 
 void QDial::subtractLine()
 {
-    QRangeControl::subtractLine();
+	QRangeControl::subtractLine();
 }
 
 
 /*! \reimp */
 
-void QDial::resizeEvent( QResizeEvent * e )
+void QDial::resizeEvent(QResizeEvent *e)
 {
-    d->lines.resize( 0 );
-    QWidget::resizeEvent( e );
+	d->lines.resize(0);
+	QWidget::resizeEvent(e);
 }
 
 
@@ -238,153 +240,155 @@ void QDial::resizeEvent( QResizeEvent * e )
   \reimp
 */
 
-void QDial::paintEvent( QPaintEvent * e )
+void QDial::paintEvent(QPaintEvent *e)
 {
-    repaintScreen( &e->rect() );
+	repaintScreen(&e->rect());
 }
 
 /*!
   Paints the dial.
 */
 
-void QDial::repaintScreen( const QRect *cr )
+void QDial::repaintScreen(const QRect *cr)
 {
-    QPainter p;
-    p.begin( this );
+	QPainter p;
+	p.begin(this);
 
-    bool resetClipping = FALSE;
+	bool resetClipping = FALSE;
 
-    // calculate clip-region for erasing background
-    if ( cr ) {
-	p.setClipRect( *cr );
-    } else if ( !d->onlyOutside && d->eraseAreaValid ) {
-	QRegion reg = d->eraseArea;
-	double a;
-	reg = reg.subtract( calcArrow( a ) );
-	p.setClipRegion( reg );
-	resetClipping = TRUE;
-    }
-
-    QRect br( calcDial() );
-    p.setPen( NoPen );
-    if ( style() == MotifStyle )
-	p.setBrush( colorGroup().brush( QColorGroup::Mid ) );
-    else {
-      QBrush b;
-      if ( colorGroup().brush( QColorGroup::Light ).pixmap() )
-	b = QBrush( colorGroup().brush( QColorGroup::Light ) );
-      else
-	b = QBrush( colorGroup().light(), Dense4Pattern );
-      p.setBrush( b );
-      p.setBackgroundMode( OpaqueMode );
-    }
-
-    QRect te = br;
-    te.setWidth(te.width()+2);
-    te.setHeight(te.height()+2);
-    // erase background of dial
-    if ( !d->onlyOutside ) {
-#ifdef _WS_QWS_
-	// brush polygon fills too slow in Qt/Embedded
-	p.drawRect( te );
-#else
-	p.drawEllipse( te );
-#endif
-    }
-
-    // erase remaining space around the dial
-    p.save();
-    QRegion remaining( 0, 0, width(), height() );
-    remaining = remaining.subtract( QRegion( te, QRegion::Ellipse ) );
-    if ( p.hasClipping() )
-	remaining = remaining.intersect( p.clipRegion() );
-    p.setClipRegion( remaining );
-    p.fillRect( remaining.boundingRect(), colorGroup().brush( QColorGroup::Background ) );
-    p.restore();
-
-    if ( resetClipping ) {
-	if ( cr )
-	    p.setClipRect( *cr );
-	else
-	    p.setClipRect( QRect( 0, 0, width(), height() ) );
-    }
-
-    // draw notches
-    if ( d->showNotches ) {
-	calcLines();
-	p.setPen( colorGroup().foreground() );
-	p.drawLineSegments( d->lines );
-    }
-
-    // calculate and paint arrow
-    p.setPen( QPen( colorGroup().dark() ) );
-    p.drawArc( te, 60 * 16, 180 * 16 );
-    p.setPen( QPen( colorGroup().light() ) );
-    p.drawArc( te, 240 * 16, 180 * 16 );
-
-    double a;
-    QPointArray arrow( calcArrow( a ) );
-    QRect ea( arrow.boundingRect() );
-    d->eraseArea = ea;
-    d->eraseAreaValid = TRUE;
-
-    p.setPen( NoPen );
-    p.setBrush( colorGroup().brush( QColorGroup::Button ) );
-    if ( !d->onlyOutside )
-	p.drawPolygon( arrow );
-
-    a = angle( QPoint( width() / 2, height() / 2 ), arrow[ 0 ] );
-    p.setBrush( Qt::NoBrush );
-
-    // that's still a hack...
-    if ( a <= 0 || a > 200 ) {
-	p.setPen( colorGroup().light() );
-	p.drawLine( arrow[ 2 ], arrow[ 0 ] );
-	p.drawLine( arrow[ 1 ], arrow[ 2 ] );
-	p.setPen( colorGroup().dark() );
-	p.drawLine( arrow[ 0 ], arrow[ 1 ] );
-    } else if ( a > 0 && a < 45 ) {
-	p.setPen( colorGroup().light() );
-	p.drawLine( arrow[ 2 ], arrow[ 0 ] );
-	p.setPen( colorGroup().dark() );
-	p.drawLine( arrow[ 1 ], arrow[ 2 ] );
-	p.drawLine( arrow[ 0 ], arrow[ 1 ] );
-    } else if ( a >= 45 && a < 135 ) {
-	p.setPen( colorGroup().dark() );
-	p.drawLine( arrow[ 2 ], arrow[ 0 ] );
-	p.drawLine( arrow[ 1 ], arrow[ 2 ] );
-	p.setPen( colorGroup().light() );
-	p.drawLine( arrow[ 0 ], arrow[ 1 ] );
-    } else if ( a >= 135 && a < 200 ) {
-	p.setPen( colorGroup().dark() );
-	p.drawLine( arrow[ 2 ], arrow[ 0 ] );
-	p.setPen( colorGroup().light() );
-	p.drawLine( arrow[ 0 ], arrow[ 1 ] );
-	p.drawLine( arrow[ 1 ], arrow[ 2 ] );
-    }
-
-    // draw focus rect around the dial
-    if ( hasFocus() ) {
-	p.setClipping( FALSE );
-	br.setWidth( br.width() + 2 );
-	br.setHeight( br.height() + 2 );
-	if ( d->showNotches ) {
-	    int r = QMIN( width(), height() ) / 2;
-	    br.moveBy( -r / 6, - r / 6 );
-	    br.setWidth( br.width() + r / 3 );
-	    br.setHeight( br.height() + r / 3 );
+	// calculate clip-region for erasing background
+	if (cr) {
+		p.setClipRect(*cr);
+	} else if (!d->onlyOutside && d->eraseAreaValid) {
+		QRegion reg = d->eraseArea;
+		double a;
+		reg = reg.subtract(calcArrow(a));
+		p.setClipRegion(reg);
+		resetClipping = TRUE;
 	}
-	// strange, but else we get redraw errors on windows!!
-	p.end();
-	p.begin( this );
+
+	QRect br(calcDial());
+	p.setPen(NoPen);
+	if (style() == MotifStyle)
+		p.setBrush(colorGroup().brush(QColorGroup::Mid));
+	else {
+		QBrush b;
+		if (colorGroup().brush(QColorGroup::Light).pixmap())
+			b = QBrush(colorGroup().brush(QColorGroup::Light));
+		else
+			b = QBrush(colorGroup().light(), Dense4Pattern);
+		p.setBrush(b);
+		p.setBackgroundMode(OpaqueMode);
+	}
+
+	QRect te = br;
+	te.setWidth(te.width() + 2);
+	te.setHeight(te.height() + 2);
+	// erase background of dial
+	if (!d->onlyOutside) {
+# ifdef _WS_QWS_
+		// brush polygon fills too slow in Qt/Embedded
+		p.drawRect(te);
+# else
+		p.drawEllipse(te);
+# endif
+	}
+
+	// erase remaining space around the dial
 	p.save();
-	p.setPen( QPen( colorGroup().background() ) );
-	p.setBrush( NoBrush );
-	p.drawRect( br );
+	QRegion remaining(0, 0, width(), height());
+	remaining = remaining.subtract(QRegion(te, QRegion::Ellipse));
+	if (p.hasClipping())
+		remaining = remaining.intersect(p.clipRegion());
+	p.setClipRegion(remaining);
+	p.fillRect(remaining.boundingRect(),
+		   colorGroup().brush(QColorGroup::Background));
 	p.restore();
-	style().drawFocusRect( &p, br, colorGroup() , &colorGroup().background() );
-    }
-    p.end();
+
+	if (resetClipping) {
+		if (cr)
+			p.setClipRect(*cr);
+		else
+			p.setClipRect(QRect(0, 0, width(), height()));
+	}
+
+	// draw notches
+	if (d->showNotches) {
+		calcLines();
+		p.setPen(colorGroup().foreground());
+		p.drawLineSegments(d->lines);
+	}
+
+	// calculate and paint arrow
+	p.setPen(QPen(colorGroup().dark()));
+	p.drawArc(te, 60 * 16, 180 * 16);
+	p.setPen(QPen(colorGroup().light()));
+	p.drawArc(te, 240 * 16, 180 * 16);
+
+	double a;
+	QPointArray arrow(calcArrow(a));
+	QRect ea(arrow.boundingRect());
+	d->eraseArea = ea;
+	d->eraseAreaValid = TRUE;
+
+	p.setPen(NoPen);
+	p.setBrush(colorGroup().brush(QColorGroup::Button));
+	if (!d->onlyOutside)
+		p.drawPolygon(arrow);
+
+	a = angle(QPoint(width() / 2, height() / 2), arrow[0]);
+	p.setBrush(Qt::NoBrush);
+
+	// that's still a hack...
+	if (a <= 0 || a > 200) {
+		p.setPen(colorGroup().light());
+		p.drawLine(arrow[2], arrow[0]);
+		p.drawLine(arrow[1], arrow[2]);
+		p.setPen(colorGroup().dark());
+		p.drawLine(arrow[0], arrow[1]);
+	} else if (a > 0 && a < 45) {
+		p.setPen(colorGroup().light());
+		p.drawLine(arrow[2], arrow[0]);
+		p.setPen(colorGroup().dark());
+		p.drawLine(arrow[1], arrow[2]);
+		p.drawLine(arrow[0], arrow[1]);
+	} else if (a >= 45 && a < 135) {
+		p.setPen(colorGroup().dark());
+		p.drawLine(arrow[2], arrow[0]);
+		p.drawLine(arrow[1], arrow[2]);
+		p.setPen(colorGroup().light());
+		p.drawLine(arrow[0], arrow[1]);
+	} else if (a >= 135 && a < 200) {
+		p.setPen(colorGroup().dark());
+		p.drawLine(arrow[2], arrow[0]);
+		p.setPen(colorGroup().light());
+		p.drawLine(arrow[0], arrow[1]);
+		p.drawLine(arrow[1], arrow[2]);
+	}
+
+	// draw focus rect around the dial
+	if (hasFocus()) {
+		p.setClipping(FALSE);
+		br.setWidth(br.width() + 2);
+		br.setHeight(br.height() + 2);
+		if (d->showNotches) {
+			int r = QMIN(width(), height()) / 2;
+			br.moveBy(-r / 6, -r / 6);
+			br.setWidth(br.width() + r / 3);
+			br.setHeight(br.height() + r / 3);
+		}
+		// strange, but else we get redraw errors on windows!!
+		p.end();
+		p.begin(this);
+		p.save();
+		p.setPen(QPen(colorGroup().background()));
+		p.setBrush(NoBrush);
+		p.drawRect(br);
+		p.restore();
+		style().drawFocusRect(&p, br, colorGroup(),
+				      &colorGroup().background());
+	}
+	p.end();
 }
 
 
@@ -392,31 +396,33 @@ void QDial::repaintScreen( const QRect *cr )
   \reimp
 */
 
-void QDial::keyPressEvent( QKeyEvent * e )
+void QDial::keyPressEvent(QKeyEvent *e)
 {
-    switch ( e->key() ) {
-    case Key_Left: case Key_Down:
-	subtractLine();
-	break;
-    case Key_Right: case Key_Up:
-	addLine();
-	break;
-    case Key_Prior:
-	subtractPage();
-	break;
-    case Key_Next:
-	addPage();
-	break;
-    case Key_Home:
-	setValue( minValue() );
-	break;
-    case Key_End:
-	setValue( maxValue() );
-	break;
-    default:
-	e->ignore();
-	break;
-    }
+	switch (e->key()) {
+	case Key_Left:
+	case Key_Down:
+		subtractLine();
+		break;
+	case Key_Right:
+	case Key_Up:
+		addLine();
+		break;
+	case Key_Prior:
+		subtractPage();
+		break;
+	case Key_Next:
+		addPage();
+		break;
+	case Key_Home:
+		setValue(minValue());
+		break;
+	case Key_End:
+		setValue(maxValue());
+		break;
+	default:
+		e->ignore();
+		break;
+	}
 }
 
 
@@ -424,11 +430,11 @@ void QDial::keyPressEvent( QKeyEvent * e )
   \reimp
 */
 
-void QDial::mousePressEvent( QMouseEvent * e )
+void QDial::mousePressEvent(QMouseEvent *e)
 {
-    d->mousePressed = TRUE;
-    setValue( valueFromPoint( e->pos() ) );
-    emit dialPressed();
+	d->mousePressed = TRUE;
+	setValue(valueFromPoint(e->pos()));
+	emit dialPressed();
 }
 
 
@@ -436,11 +442,11 @@ void QDial::mousePressEvent( QMouseEvent * e )
   \reimp
 */
 
-void QDial::mouseReleaseEvent( QMouseEvent * e )
+void QDial::mouseReleaseEvent(QMouseEvent *e)
 {
-    d->mousePressed = FALSE;
-    setValue( valueFromPoint( e->pos() ) );
-    emit dialReleased();
+	d->mousePressed = FALSE;
+	setValue(valueFromPoint(e->pos()));
+	emit dialReleased();
 }
 
 
@@ -448,16 +454,16 @@ void QDial::mouseReleaseEvent( QMouseEvent * e )
   \reimp
 */
 
-void QDial::mouseMoveEvent( QMouseEvent * e )
+void QDial::mouseMoveEvent(QMouseEvent *e)
 {
-    if ( !d->mousePressed )
-	return;
-    if ( !d->tracking || (e->state() & LeftButton) == 0 )
-	return;
-    d->doNotEmit = TRUE;
-    setValue( valueFromPoint( e->pos() ) );
-    emit dialMoved( value() );
-    d->doNotEmit = FALSE;
+	if (!d->mousePressed)
+		return;
+	if (!d->tracking || (e->state() & LeftButton) == 0)
+		return;
+	d->doNotEmit = TRUE;
+	setValue(valueFromPoint(e->pos()));
+	emit dialMoved(value());
+	d->doNotEmit = FALSE;
 }
 
 
@@ -465,9 +471,9 @@ void QDial::mouseMoveEvent( QMouseEvent * e )
   \reimp
 */
 
-void QDial::wheelEvent( QWheelEvent *e )
+void QDial::wheelEvent(QWheelEvent *e)
 {
-    setValue( value() - e->delta() / 120 );
+	setValue(value() - e->delta() / 120);
 }
 
 
@@ -475,11 +481,11 @@ void QDial::wheelEvent( QWheelEvent *e )
   \reimp
 */
 
-void QDial::focusInEvent( QFocusEvent * )
+void QDial::focusInEvent(QFocusEvent *)
 {
-    d->onlyOutside = TRUE;
-    repaintScreen();
-    d->onlyOutside = FALSE;
+	d->onlyOutside = TRUE;
+	repaintScreen();
+	d->onlyOutside = FALSE;
 }
 
 
@@ -487,11 +493,11 @@ void QDial::focusInEvent( QFocusEvent * )
   \reimp
 */
 
-void QDial::focusOutEvent( QFocusEvent * )
+void QDial::focusOutEvent(QFocusEvent *)
 {
-    d->onlyOutside = TRUE;
-    repaintScreen();
-    d->onlyOutside = FALSE;
+	d->onlyOutside = TRUE;
+	repaintScreen();
+	d->onlyOutside = FALSE;
 }
 
 /*!
@@ -501,10 +507,10 @@ void QDial::focusOutEvent( QFocusEvent * )
 
 void QDial::valueChange()
 {
-    d->lines.resize( 0 );
-    repaintScreen();
-    if ( d->tracking || !d->doNotEmit )
-	emit valueChanged( value() );
+	d->lines.resize(0);
+	repaintScreen();
+	if (d->tracking || !d->doNotEmit)
+		emit valueChanged(value());
 }
 
 
@@ -514,8 +520,8 @@ void QDial::valueChange()
 
 void QDial::rangeChange()
 {
-    d->lines.resize( 0 );
-    repaintScreen();
+	d->lines.resize(0);
+	repaintScreen();
 }
 
 
@@ -523,70 +529,75 @@ void QDial::rangeChange()
   \internal
 */
 
-int QDial::valueFromPoint( const QPoint & p ) const
+int QDial::valueFromPoint(const QPoint &p) const
 {
-    double a = atan2( (double)height()/2.0 - p.y(),
-		      (double)p.x() - width()/2.0 );
-    if ( a < m_pi/-2 )
-	a = a + m_pi*2;
+	double a = atan2((double)height() / 2.0 - p.y(),
+			 (double)p.x() - width() / 2.0);
+	if (a < m_pi / -2)
+		a = a + m_pi * 2;
 
-    int dist = 0;
-    int minv = minValue(), maxv = maxValue();
+	int dist = 0;
+	int minv = minValue(), maxv = maxValue();
 
-    if ( minValue() < 0 ) {
-	dist = -minValue();
-	minv = 0;
-	maxv = maxValue() + dist;
-    }
-
-    int r = maxv - minv;
-    int v;
-    if ( d->wrapping )
-	v =  (int)(0.5 + minv + r*(m_pi*3/2-a)/(2*m_pi));
-    else
-	v =  (int)(0.5 + minv + r*(m_pi*4/3-a)/(m_pi*10/6));
-
-    if ( dist > 0 )
-	v -= dist;
-
-    return bound( v );
-}
-
-
-/*!
-  \internal
-*/
-
-double QDial::angle( const QPoint &p1, const QPoint &p2 ) const
-{
-    double _angle = 0.0;
-
-    if ( p1.x() == p2.x() ) {
-	if ( p1.y() < p2.y() )
-	    _angle = 270.0;
-	else
-	    _angle = 90.0;
-    } else  {
-	double x1, x2, y1, y2;
-
-	if ( p1.x() <= p2.x() ) {
-	    x1 = p1.x(); y1 = p1.y();
-	    x2 = p2.x(); y2 = p2.y();
-	} else {
-	    x2 = p1.x(); y2 = p1.y();
-	    x1 = p2.x(); y1 = p2.y();
+	if (minValue() < 0) {
+		dist = -minValue();
+		minv = 0;
+		maxv = maxValue() + dist;
 	}
 
-	double m = -( y2 - y1 ) / ( x2 - x1 );
-	_angle = atan( m ) *  rad_factor;
-
-	if ( p1.x() < p2.x() )
-	    _angle = 180.0 - _angle;
+	int r = maxv - minv;
+	int v;
+	if (d->wrapping)
+		v = (int)(0.5 + minv + r * (m_pi * 3 / 2 - a) / (2 * m_pi));
 	else
-	    _angle = -_angle;
-    }
+		v = (int)(0.5 + minv +
+			  r * (m_pi * 4 / 3 - a) / (m_pi * 10 / 6));
 
-    return _angle;
+	if (dist > 0)
+		v -= dist;
+
+	return bound(v);
+}
+
+
+/*!
+  \internal
+*/
+
+double QDial::angle(const QPoint &p1, const QPoint &p2) const
+{
+	double _angle = 0.0;
+
+	if (p1.x() == p2.x()) {
+		if (p1.y() < p2.y())
+			_angle = 270.0;
+		else
+			_angle = 90.0;
+	} else {
+		double x1, x2, y1, y2;
+
+		if (p1.x() <= p2.x()) {
+			x1 = p1.x();
+			y1 = p1.y();
+			x2 = p2.x();
+			y2 = p2.y();
+		} else {
+			x2 = p1.x();
+			y2 = p1.y();
+			x1 = p2.x();
+			y1 = p2.y();
+		}
+
+		double m = -(y2 - y1) / (x2 - x1);
+		_angle = atan(m) * rad_factor;
+
+		if (p1.x() < p2.x())
+			_angle = 180.0 - _angle;
+		else
+			_angle = -_angle;
+	}
+
+	return _angle;
 }
 
 /*!
@@ -595,14 +606,14 @@ double QDial::angle( const QPoint &p1, const QPoint &p2 ) const
   some space at the bottom which is skipped by the arrow.
 */
 
-void QDial::setWrapping( bool enable )
+void QDial::setWrapping(bool enable)
 {
-    if ( d->wrapping == enable )
-	return;
-    d->lines.resize( 0 );
-    d->wrapping = enable;
-    d->eraseAreaValid = FALSE;
-    repaintScreen();
+	if (d->wrapping == enable)
+		return;
+	d->lines.resize(0);
+	d->wrapping = enable;
+	d->eraseAreaValid = FALSE;
+	repaintScreen();
 }
 
 
@@ -614,7 +625,7 @@ void QDial::setWrapping( bool enable )
 
 bool QDial::wrapping() const
 {
-    return d->wrapping;
+	return d->wrapping;
 }
 
 
@@ -627,23 +638,23 @@ results in an on-screen notch size near notchTarget().
 
 int QDial::notchSize() const
 {
-    // radius of the arc
-    int r = QMIN( width(), height() )/2;
-    // length of the whole arc
-    int l = (int)(r*(d->wrapping ? 6 : 5)*m_pi/6);
-    // length of the arc from minValue() to minValue()+pageStep()
-    if ( maxValue() > minValue()+pageStep() )
-	l = (int)(0.5 + l * pageStep() / (maxValue()-minValue()));
-    // length of a lineStep() arc
-    l = l * lineStep() / pageStep();
-    if ( l < 1 )
-	l = 1;
-    // how many times lineStep can be draw in d->target pixels
-    l = (int)(0.5 + d->target / l);
-    // we want notchSize() to be a non-zero multiple of lineStep()
-    if ( !l )
-	l = 1;
-    return lineStep() * l;
+	// radius of the arc
+	int r = QMIN(width(), height()) / 2;
+	// length of the whole arc
+	int l = (int)(r * (d->wrapping ? 6 : 5) * m_pi / 6);
+	// length of the arc from minValue() to minValue()+pageStep()
+	if (maxValue() > minValue() + pageStep())
+		l = (int)(0.5 + l * pageStep() / (maxValue() - minValue()));
+	// length of a lineStep() arc
+	l = l * lineStep() / pageStep();
+	if (l < 1)
+		l = 1;
+	// how many times lineStep can be draw in d->target pixels
+	l = (int)(0.5 + d->target / l);
+	// we want notchSize() to be a non-zero multiple of lineStep()
+	if (!l)
+		l = 1;
+	return lineStep() * l;
 }
 
 
@@ -654,14 +665,14 @@ int QDial::notchSize() const
   \sa notchTarget() notchSize()
 */
 
-void QDial::setNotchTarget( double target )
+void QDial::setNotchTarget(double target)
 {
-    d->lines.resize( 0 );
-    d->target = target;
-    d->eraseAreaValid = FALSE;
-    d->onlyOutside = TRUE;
-    repaintScreen();
-    d->onlyOutside = FALSE;
+	d->lines.resize(0);
+	d->target = target;
+	d->eraseAreaValid = FALSE;
+	d->onlyOutside = TRUE;
+	repaintScreen();
+	d->onlyOutside = FALSE;
 }
 
 
@@ -673,7 +684,7 @@ void QDial::setNotchTarget( double target )
 
 double QDial::notchTarget() const
 {
-    return d->target;
+	return d->target;
 }
 
 
@@ -681,7 +692,7 @@ double QDial::notchTarget() const
 
 void QDial::addPage()
 {
-    QRangeControl::addPage();
+	QRangeControl::addPage();
 }
 
 
@@ -689,7 +700,7 @@ void QDial::addPage()
 
 void QDial::subtractPage()
 {
-    QRangeControl::subtractPage();
+	QRangeControl::subtractPage();
 }
 
 
@@ -732,13 +743,13 @@ void QDial::subtractPage()
   are shown, else not.
 */
 
-void QDial::setNotchesVisible( bool b )
+void QDial::setNotchesVisible(bool b)
 {
-    d->showNotches = b;
-    d->eraseAreaValid = FALSE;
-    d->onlyOutside = TRUE;
-    repaintScreen();
-    d->onlyOutside = FALSE;
+	d->showNotches = b;
+	d->eraseAreaValid = FALSE;
+	d->onlyOutside = TRUE;
+	repaintScreen();
+	d->onlyOutside = FALSE;
 }
 
 /*!
@@ -749,7 +760,7 @@ void QDial::setNotchesVisible( bool b )
 
 bool QDial::notchesVisible() const
 {
-    return d->showNotches;
+	return d->showNotches;
 }
 
 /*!
@@ -758,7 +769,7 @@ bool QDial::notchesVisible() const
 
 QSize QDial::minimumSizeHint() const
 {
-    return QSize( 50, 50 );
+	return QSize(50, 50);
 }
 
 /*!
@@ -767,7 +778,7 @@ QSize QDial::minimumSizeHint() const
 
 QSize QDial::sizeHint() const
 {
-    return QSize( 100, 100 ).expandedTo( QApplication::globalStrut() );
+	return QSize(100, 100).expandedTo(QApplication::globalStrut());
 }
 
 
@@ -776,34 +787,37 @@ QSize QDial::sizeHint() const
   \internal
 */
 
-QPointArray QDial::calcArrow( double &a ) const
+QPointArray QDial::calcArrow(double &a) const
 {
-    int r = QMIN( width(), height() ) / 2;
-    if ( maxValue() == minValue() )
-	a = m_pi / 2;
-    else if ( d->wrapping )
-	a = m_pi * 3 / 2 - ( value() - minValue() ) * 2 * m_pi / ( maxValue() - minValue() );
-    else
-	a = ( m_pi * 8 - ( value() - minValue() ) * 10 * m_pi / ( maxValue() - minValue() ) ) / 6;
+	int r = QMIN(width(), height()) / 2;
+	if (maxValue() == minValue())
+		a = m_pi / 2;
+	else if (d->wrapping)
+		a = m_pi * 3 / 2 - (value() - minValue()) * 2 * m_pi /
+					   (maxValue() - minValue());
+	else
+		a = (m_pi * 8 - (value() - minValue()) * 10 * m_pi /
+					(maxValue() - minValue())) /
+		    6;
 
-    int xc = width() / 2;
-    int yc = height() / 2;
+	int xc = width() / 2;
+	int yc = height() / 2;
 
-    int len = r - calcBigLineSize() - 5;
-    if ( len < 5 )
-	len = 5;
-    int back = len / 4;
-    if ( back < 1 )
-	back = 1;
+	int len = r - calcBigLineSize() - 5;
+	if (len < 5)
+		len = 5;
+	int back = len / 4;
+	if (back < 1)
+		back = 1;
 
-    QPointArray arrow( 3 );
-    arrow[0] = QPoint( (int)( 0.5 + xc + len * cos(a) ),
-		       (int)( 0.5 + yc -len * sin( a ) ) );
-    arrow[1] = QPoint( (int)( 0.5 + xc + back * cos( a + m_pi * 5 / 6 ) ),
-		       (int)( 0.5 + yc - back * sin( a + m_pi * 5 / 6 ) ) );
-    arrow[2] = QPoint( (int)( 0.5 + xc + back * cos( a - m_pi * 5 / 6 ) ),
-		       (int)( 0.5 + yc - back * sin( a - m_pi * 5 / 6 ) ) );
-    return arrow;
+	QPointArray arrow(3);
+	arrow[0] = QPoint((int)(0.5 + xc + len * cos(a)),
+			  (int)(0.5 + yc - len * sin(a)));
+	arrow[1] = QPoint((int)(0.5 + xc + back * cos(a + m_pi * 5 / 6)),
+			  (int)(0.5 + yc - back * sin(a + m_pi * 5 / 6)));
+	arrow[2] = QPoint((int)(0.5 + xc + back * cos(a - m_pi * 5 / 6)),
+			  (int)(0.5 + yc - back * sin(a - m_pi * 5 / 6)));
+	return arrow;
 }
 
 /*!
@@ -812,12 +826,12 @@ QPointArray QDial::calcArrow( double &a ) const
 
 QRect QDial::calcDial() const
 {
-    double r = QMIN( width(), height() ) / 2.0;
-    double d_ = r / 6.0;
-    double dx = d_ + ( width() - 2 * r ) / 2.0 + 1;
-    double dy = d_ + ( height() - 2 * r ) / 2.0 + 1;
-    return QRect( int(dx), int(dy),
-		int(r * 2 - 2 * d_ - 2), int(r * 2 - 2 * d_ - 2) );
+	double r = QMIN(width(), height()) / 2.0;
+	double d_ = r / 6.0;
+	double dx = d_ + (width() - 2 * r) / 2.0 + 1;
+	double dy = d_ + (height() - 2 * r) / 2.0 + 1;
+	return QRect(int(dx), int(dy), int(r * 2 - 2 * d_ - 2),
+		     int(r * 2 - 2 * d_ - 2));
 }
 
 /*!
@@ -826,13 +840,13 @@ QRect QDial::calcDial() const
 
 int QDial::calcBigLineSize() const
 {
-    int r = QMIN( width(), height() ) / 2;
-    int bigLineSize = r / 6;
-    if ( bigLineSize < 4 )
-	bigLineSize = 4;
-    if ( bigLineSize > r / 2 )
-	bigLineSize = r / 2;
-    return bigLineSize;
+	int r = QMIN(width(), height()) / 2;
+	int bigLineSize = r / 6;
+	if (bigLineSize < 4)
+		bigLineSize = 4;
+	if (bigLineSize > r / 2)
+		bigLineSize = r / 2;
+	return bigLineSize;
 }
 
 /*!
@@ -841,36 +855,43 @@ int QDial::calcBigLineSize() const
 
 void QDial::calcLines()
 {
-    if ( !d->lines.size() ) {
-	double r = QMIN( width(), height() ) / 2.0;
-	int bigLineSize = calcBigLineSize();
-	double xc = width() / 2.0;
-	double yc = height() / 2.0;
-	int ns = notchSize();
-	int notches = ( maxValue() + ns - 1 - minValue() ) / ns;
-	d->lines.resize( 2 + 2 * notches );
-	int smallLineSize = bigLineSize / 2;
-	int i;
-	for( i = 0; i <= notches; i++ ) {
-	    double angle = d->wrapping
-		? m_pi * 3 / 2 - i * 2 * m_pi / notches
-		: (m_pi * 8 - i * 10 * m_pi / notches) / 6;
-	
-	    double s = sin( angle ); // sin/cos aren't defined as const...
-	    double c = cos( angle );
-	    if ( i == 0 || ( ((ns * i ) % pageStep() ) == 0 ) ) {
-		d->lines[2*i] = QPoint( (int)( xc + ( r - bigLineSize ) * c ),
-					(int)( yc - ( r - bigLineSize ) * s ) );
-		d->lines[2*i+1] = QPoint( (int)( xc + r * c ),
-					  (int)( yc - r * s ) );
-	    } else {
-		d->lines[2*i] = QPoint( (int)( xc + ( r - 1 - smallLineSize ) * c ),
-					(int)( yc - ( r - 1 - smallLineSize ) * s ) );
-		d->lines[2*i+1] = QPoint( (int)( xc + ( r - 1 ) * c ),
-					  (int)( yc -( r - 1 ) * s ) );
-	    }
+	if (!d->lines.size()) {
+		double r = QMIN(width(), height()) / 2.0;
+		int bigLineSize = calcBigLineSize();
+		double xc = width() / 2.0;
+		double yc = height() / 2.0;
+		int ns = notchSize();
+		int notches = (maxValue() + ns - 1 - minValue()) / ns;
+		d->lines.resize(2 + 2 * notches);
+		int smallLineSize = bigLineSize / 2;
+		int i;
+		for (i = 0; i <= notches; i++) {
+			double angle =
+				d->wrapping ?
+					m_pi * 3 / 2 - i * 2 * m_pi / notches :
+					(m_pi * 8 - i * 10 * m_pi / notches) /
+						6;
+
+			double s = sin(angle); // sin/cos aren't defined as
+					       // const...
+			double c = cos(angle);
+			if (i == 0 || (((ns * i) % pageStep()) == 0)) {
+				d->lines[2 * i] = QPoint(
+					(int)(xc + (r - bigLineSize) * c),
+					(int)(yc - (r - bigLineSize) * s));
+				d->lines[2 * i + 1] = QPoint((int)(xc + r * c),
+							     (int)(yc - r * s));
+			} else {
+				d->lines[2 * i] = QPoint(
+					(int)(xc + (r - 1 - smallLineSize) * c),
+					(int)(yc -
+					      (r - 1 - smallLineSize) * s));
+				d->lines[2 * i + 1] =
+					QPoint((int)(xc + (r - 1) * c),
+					       (int)(yc - (r - 1) * s));
+			}
+		}
 	}
-    }
 }
 
 /*!
@@ -878,7 +899,7 @@ void QDial::calcLines()
 */
 int QDial::minValue() const
 {
-    return QRangeControl::minValue();
+	return QRangeControl::minValue();
 }
 
 /*!
@@ -886,7 +907,7 @@ int QDial::minValue() const
 */
 int QDial::maxValue() const
 {
-    return QRangeControl::maxValue();
+	return QRangeControl::maxValue();
 }
 
 /*!
@@ -895,9 +916,9 @@ int QDial::maxValue() const
 
   \sa setRange()
 */
-void QDial::setMinValue( int i )
+void QDial::setMinValue(int i)
 {
-    setRange( i, maxValue() );
+	setRange(i, maxValue());
 }
 
 /*!
@@ -906,9 +927,9 @@ void QDial::setMinValue( int i )
 
   \sa setRange()
 */
-void QDial::setMaxValue( int i )
+void QDial::setMaxValue(int i)
 {
-    setRange( minValue(), i );
+	setRange(minValue(), i);
 }
 
 /*!
@@ -916,7 +937,7 @@ void QDial::setMaxValue( int i )
 */
 int QDial::lineStep() const
 {
-    return QRangeControl::lineStep();
+	return QRangeControl::lineStep();
 }
 
 /*!
@@ -924,7 +945,7 @@ int QDial::lineStep() const
 */
 int QDial::pageStep() const
 {
-    return QRangeControl::pageStep();
+	return QRangeControl::pageStep();
 }
 
 /*!
@@ -935,9 +956,9 @@ int QDial::pageStep() const
 
   \sa lineStep() QRangeControl::setSteps() setPageStep() setRange()
 */
-void QDial::setLineStep( int i )
+void QDial::setLineStep(int i)
 {
-    setSteps( i, pageStep() );
+	setSteps(i, pageStep());
 }
 
 /*!
@@ -948,9 +969,9 @@ void QDial::setLineStep( int i )
 
   \sa pageStep() QRangeControl::setSteps() setLineStep() setRange()
 */
-void QDial::setPageStep( int i )
+void QDial::setPageStep(int i)
 {
-    setSteps( lineStep(), i );
+	setSteps(lineStep(), i);
 }
 
 /*!
@@ -958,8 +979,7 @@ void QDial::setPageStep( int i )
 */
 int QDial::value() const
 {
-    return QRangeControl::value();
+	return QRangeControl::value();
 }
 
 #endif // QT_FEATURE_DIAL
-

@@ -24,9 +24,9 @@
 #include "metadatabase.h"
 
 #if defined(HAVE_KDE)
-#include <kmainwindow.h>
+# include <kmainwindow.h>
 #else
-#include <qmainwindow.h>
+# include <qmainwindow.h>
 #endif
 
 #include <qmap.h>
@@ -44,236 +44,258 @@ class QCloseEvent;
 class FormList;
 class Help;
 #if defined(Q_FULL_TEMPLATE_INSTANTIATION)
-#include <qtoolbar.h>
+# include <qtoolbar.h>
 #else
 class QToolBar;
 #endif
 class Preferences;
 
 #if defined(HAVE_KDE)
-#define QMainWindow KMainWindow
+# define QMainWindow KMainWindow
 #endif
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 #undef QMainWindow
 
-public:
-    MainWindow( bool asClient );
-    ~MainWindow();
+      public:
+	MainWindow(bool asClient);
+	~MainWindow();
 
-    HierarchyView *objectHierarchy() const;
-    FormList *formlist() const;
+	HierarchyView *objectHierarchy() const;
+	FormList *formlist() const;
 
-    void resetTool();
-    int currentTool() const;
+	void resetTool();
+	int currentTool() const;
 
-    FormWindow *formWindow();
+	FormWindow *formWindow();
 
-    bool unregisterClient( FormWindow *w );
-    QWidget *isAFormWindowChild( QObject *o ) const;
+	bool unregisterClient(FormWindow *w);
+	QWidget *isAFormWindowChild(QObject *o) const;
 
-    void insertFormWindow( FormWindow *fw );
-    QWorkspace *workSpace() const;
+	void insertFormWindow(FormWindow *fw);
+	QWorkspace *workSpace() const;
 
-    void popupFormWindoMenu( const QPoint &gp, FormWindow *fw );
-    void popupWidgetMenu( const QPoint &gp, FormWindow *fw, QWidget *w );
+	void popupFormWindoMenu(const QPoint &gp, FormWindow *fw);
+	void popupWidgetMenu(const QPoint &gp, FormWindow *fw, QWidget *w);
 
-    QPopupMenu *setupNormalHierarchyMenu( QWidget *parent );
-    QPopupMenu *setupTabWidgetHierarchyMenu( QWidget *parent, const char *addSlot, const char *removeSlot );
+	QPopupMenu *setupNormalHierarchyMenu(QWidget *parent);
+	QPopupMenu *setupTabWidgetHierarchyMenu(QWidget *parent,
+						const char *addSlot,
+						const char *removeSlot);
 
-    void openFile( const QString &fn, bool validFileName = TRUE );
-    bool isCustomWidgetUsed( MetaDataBase::CustomWidget *w );
+	void openFile(const QString &fn, bool validFileName = TRUE);
+	bool isCustomWidgetUsed(MetaDataBase::CustomWidget *w);
 
-    void setGrid( const QPoint &p );
-    void setShowGrid( bool b );
-    void setSnapGrid( bool b );
-    QPoint grid() const { return grd; }
-    bool showGrid() const { return sGrid; }
-    bool snapGrid() const { return snGrid && sGrid; }
+	void setGrid(const QPoint &p);
+	void setShowGrid(bool b);
+	void setSnapGrid(bool b);
+	QPoint grid() const
+	{
+		return grd;
+	}
+	bool showGrid() const
+	{
+		return sGrid;
+	}
+	bool snapGrid() const
+	{
+		return snGrid && sGrid;
+	}
 
-    QString documentationPath() const;
+	QString documentationPath() const;
 
-    static MainWindow *self;
-    void saveAllTemp();
+	static MainWindow *self;
+	void saveAllTemp();
 
-    QString templatePath() const { return templPath; }
-    
-public slots:
-    void showProperties( QWidget *w );
-    void updateProperties( QWidget *w );
-    void showDialogHelp();
+	QString templatePath() const
+	{
+		return templPath;
+	}
 
-signals:
-    void currentToolChanged();
-    void hasActiveForm( bool );
-    void formModified( bool );
+      public slots:
+	void showProperties(QWidget *w);
+	void updateProperties(QWidget *w);
+	void showDialogHelp();
 
-protected:
-    bool eventFilter( QObject *o, QEvent *e );
-    void closeEvent( QCloseEvent *e );
+      signals:
+	void currentToolChanged();
+	void hasActiveForm(bool);
+	void formModified(bool);
 
-private slots:
-    void fileNew();
-    void fileOpen();
-    bool fileSave();
-    bool fileSaveAs();
-    void fileSaveAll();
-    void fileCreateTemplate();
+      protected:
+	bool eventFilter(QObject *o, QEvent *e);
+	void closeEvent(QCloseEvent *e);
 
-    void editUndo();
-    void editRedo();
-    void editCut();
-    void editCopy();
-    void editPaste();
-    void editDelete();
-    void editSelectAll();
-    void editLower();
-    void editRaise();
-    void editAdjustSize();
-    void editLayoutHorizontal();
-    void editLayoutVertical();
-    void editLayoutGrid();
-    void editLayoutContainerHorizontal();
-    void editLayoutContainerVertical();
-    void editLayoutContainerGrid();
-    void editBreakLayout();
-    void editAccels();
-    void editSlots();
-    void editConnections();
-    void editFormSettings();
-    void editPreferences();
+      private slots:
+	void fileNew();
+	void fileOpen();
+	bool fileSave();
+	bool fileSaveAs();
+	void fileSaveAll();
+	void fileCreateTemplate();
 
-    void previewForm();
-    void previewFormMotif();
-    void previewFormWindows();
-    void previewFormCDE();
-    void previewFormPlatinum();
-    void previewFormSGI();
-    void previewFormMotifPlus();
+	void editUndo();
+	void editRedo();
+	void editCut();
+	void editCopy();
+	void editPaste();
+	void editDelete();
+	void editSelectAll();
+	void editLower();
+	void editRaise();
+	void editAdjustSize();
+	void editLayoutHorizontal();
+	void editLayoutVertical();
+	void editLayoutGrid();
+	void editLayoutContainerHorizontal();
+	void editLayoutContainerVertical();
+	void editLayoutContainerGrid();
+	void editBreakLayout();
+	void editAccels();
+	void editSlots();
+	void editConnections();
+	void editFormSettings();
+	void editPreferences();
 
-    void windowPropertyEditor( bool );
-    void windowHierarchyView( bool );
-    void windowFormList( bool );
+	void previewForm();
+	void previewFormMotif();
+	void previewFormWindows();
+	void previewFormCDE();
+	void previewFormPlatinum();
+	void previewFormSGI();
+	void previewFormMotifPlus();
 
-    void toolsCustomWidget();
+	void windowPropertyEditor(bool);
+	void windowHierarchyView(bool);
+	void windowFormList(bool);
 
-    void helpContents();
-    void helpManual();
-    void helpAbout();
-    void helpAboutQt();
-    void helpRegister();
-    void propertyEditorHidden();
-    void hierarchyViewHidden();
-    void formListHidden();
+	void toolsCustomWidget();
 
-    void activeWindowChanged( QWidget *w );
-    void updateUndoRedo( bool, bool, const QString &, const QString & );
+	void helpContents();
+	void helpManual();
+	void helpAbout();
+	void helpAboutQt();
+	void helpRegister();
+	void propertyEditorHidden();
+	void hierarchyViewHidden();
+	void formListHidden();
 
-    void toolSelected( QAction* );
+	void activeWindowChanged(QWidget *w);
+	void updateUndoRedo(bool, bool, const QString &, const QString &);
 
-    void clipboardChanged();
-    void selectionChanged();
+	void toolSelected(QAction *);
 
-    void chooseDocPath();
-    void windowsMenuActivated( int id );
-    void setupWindowActions();
+	void clipboardChanged();
+	void selectionChanged();
 
-    void closeAllForms();
-    void createNewTemplate();
+	void chooseDocPath();
+	void windowsMenuActivated(int id);
+	void setupWindowActions();
 
-private:
-    void setupMDI();
-    void setupMenuBar();
-    void setupEditActions();
-    void setupToolActions();
-    void setupLayoutActions();
-    void setupFileActions();
-    void setupPreviewActions();
-    void setupHelpActions();
-    void setupRMBMenus();
+	void closeAllForms();
+	void createNewTemplate();
 
-    void setupPropertyEditor();
-    void setupHierarchyView();
-    void setupFormList();
-    QWidget* previewFormInternal( QStyle* style = 0, QPalette* pal = 0 );
+      private:
+	void setupMDI();
+	void setupMenuBar();
+	void setupEditActions();
+	void setupToolActions();
+	void setupLayoutActions();
+	void setupFileActions();
+	void setupPreviewActions();
+	void setupHelpActions();
+	void setupRMBMenus();
 
-    FormWindow *insertFormWindow( int type );
+	void setupPropertyEditor();
+	void setupHierarchyView();
+	void setupFormList();
+	QWidget *previewFormInternal(QStyle *style = 0, QPalette *pal = 0);
 
-    void writeConfig();
-    void readConfig();
+	FormWindow *insertFormWindow(int type);
 
-    void setupRMBProperties( QValueList<int> &ids, QMap<QString, int> &props, QWidget *w );
-    void handleRMBProperties( int id, QMap<QString, int> &props, QWidget *w );
-    void setupRMBSpecialCommands( QValueList<int> &ids, QMap<QString, int> &commands, QWidget *w );
-    void handleRMBSpecialCommands( int id, QMap<QString, int> &commands, QWidget *w );
-    void setupRMBSpecialCommands( QValueList<int> &ids, QMap<QString, int> &commands, FormWindow *w );
-    void handleRMBSpecialCommands( int id, QMap<QString, int> &commands, FormWindow *w );
-    bool closeForm( FormWindow *fw );
+	void writeConfig();
+	void readConfig();
 
-    bool openEditor( QWidget *w );
-    void rebuildCustomWidgetGUI();
+	void setupRMBProperties(QValueList<int> &ids, QMap<QString, int> &props,
+				QWidget *w);
+	void handleRMBProperties(int id, QMap<QString, int> &props, QWidget *w);
+	void setupRMBSpecialCommands(QValueList<int> &ids,
+				     QMap<QString, int> &commands, QWidget *w);
+	void handleRMBSpecialCommands(int id, QMap<QString, int> &commands,
+				      QWidget *w);
+	void setupRMBSpecialCommands(QValueList<int> &ids,
+				     QMap<QString, int> &commands,
+				     FormWindow *w);
+	void handleRMBSpecialCommands(int id, QMap<QString, int> &commands,
+				      FormWindow *w);
+	bool closeForm(FormWindow *fw);
 
-    QStringList getUiFiles( const QString &profile );
+	bool openEditor(QWidget *w);
+	void rebuildCustomWidgetGUI();
 
-    void checkTempFiles();
+	QStringList getUiFiles(const QString &profile);
 
-    void openHelpForDialog( const QString &dia );
+	void checkTempFiles();
 
-private:
-    PropertyEditor *propertyEditor;
-    HierarchyView *hierarchyView;
-    FormList *formList;
-    QGuardedPtr<Help> help;
-    QWidget *lastPressWidget;
-    QWorkspace *workspace;
+	void openHelpForDialog(const QString &dia);
+
+      private:
+	PropertyEditor *propertyEditor;
+	HierarchyView *hierarchyView;
+	FormList *formList;
+	QGuardedPtr<Help> help;
+	QWidget *lastPressWidget;
+	QWorkspace *workspace;
 #if defined(HAVE_KDE)
-    KMenuBar *menubar;
+	KMenuBar *menubar;
 #else
-    QMenuBar *menubar;
+	QMenuBar *menubar;
 #endif
-    FormWindow *lastActiveFormWindow;
-    bool breakLayout, layoutChilds, layoutSelected;
-    QPoint grd;
-    bool sGrid, snGrid;
-    bool restoreConfig;
-    bool backPix;
-    bool splashScreen;
-    QString docPath;
+	FormWindow *lastActiveFormWindow;
+	bool breakLayout, layoutChilds, layoutSelected;
+	QPoint grd;
+	bool sGrid, snGrid;
+	bool restoreConfig;
+	bool backPix;
+	bool splashScreen;
+	QString docPath;
 
-    QAction *actionWindowPropertyEditor;
-    QAction *actionEditUndo, *actionEditRedo, *actionEditCut, *actionEditCopy,
-    *actionEditPaste, *actionEditDelete,
-    *actionEditAdjustSize,
-    *actionEditHLayout, *actionEditVLayout, *actionEditGridLayout,
-    *actionEditSelectAll, *actionEditBreakLayout, *actionEditSlots, *actionEditConnections,
-    *actionEditLower, *actionEditRaise;
-    QActionGroup *actionGroupTools;
-    QAction* actionPointerTool, *actionConnectTool, *actionOrderTool;
-    QAction* actionCurrentTool;
-    QAction *actionHelpContents, *actionHelpAbout, *actionHelpAboutQt, *actionHelpWhatsThis;
+	QAction *actionWindowPropertyEditor;
+	QAction *actionEditUndo, *actionEditRedo, *actionEditCut,
+		*actionEditCopy, *actionEditPaste, *actionEditDelete,
+		*actionEditAdjustSize, *actionEditHLayout, *actionEditVLayout,
+		*actionEditGridLayout, *actionEditSelectAll,
+		*actionEditBreakLayout, *actionEditSlots,
+		*actionEditConnections, *actionEditLower, *actionEditRaise;
+	QActionGroup *actionGroupTools;
+	QAction *actionPointerTool, *actionConnectTool, *actionOrderTool;
+	QAction *actionCurrentTool;
+	QAction *actionHelpContents, *actionHelpAbout, *actionHelpAboutQt,
+		*actionHelpWhatsThis;
 #if defined(QT_NON_COMMERCIAL)
-    QAction *actionHelpRegister;
+	QAction *actionHelpRegister;
 #endif
-    QAction *actionWindowHierarchyView, *actionWindowFormList, *actionHelpManual;
-    QAction *actionToolsCustomWidget, *actionEditPreferences;
-    QAction *actionWindowTile, *actionWindowCascade, *actionWindowClose, *actionWindowCloseAll;
-    QAction *actionWindowNext, *actionWindowPrevious;
-    QAction *actionEditFormSettings, *actionEditAccels;
+	QAction *actionWindowHierarchyView, *actionWindowFormList,
+		*actionHelpManual;
+	QAction *actionToolsCustomWidget, *actionEditPreferences;
+	QAction *actionWindowTile, *actionWindowCascade, *actionWindowClose,
+		*actionWindowCloseAll;
+	QAction *actionWindowNext, *actionWindowPrevious;
+	QAction *actionEditFormSettings, *actionEditAccels;
 
-    QPopupMenu *rmbWidgets;
-    QPopupMenu *rmbFormWindow;
-    QPopupMenu *customWidgetMenu, *windowMenu;
-    QToolBar *customWidgetToolBar, *layoutToolBar;
+	QPopupMenu *rmbWidgets;
+	QPopupMenu *rmbFormWindow;
+	QPopupMenu *customWidgetMenu, *windowMenu;
+	QToolBar *customWidgetToolBar, *layoutToolBar;
 
-    Preferences *prefDia;
-    QMap<QString,QString> propertyDocumentation;
-    QRect propGeom, flGeom, hvGeom;
-    bool client;
-    QString templPath;
-    
+	Preferences *prefDia;
+	QMap<QString, QString> propertyDocumentation;
+	QRect propGeom, flGeom, hvGeom;
+	bool client;
+	QString templPath;
 };
 
 #endif

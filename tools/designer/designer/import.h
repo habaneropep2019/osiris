@@ -29,28 +29,29 @@ class MainWindow;
 
 class Import : public QObject
 {
-    Q_OBJECT
-    
-public:
-    Import( const QString &fn, MainWindow *mw  );
-    
-    static QString filters();
-    static int numFilters();
-    static QString wildcard( int i );
-    static QString command( int i );
-    static void addImportEntry( const QString &wilrdcard, const QString &command );
-    
-private slots:
-    void gotData( const QString &data );
-    void bye();
-    
-private:
-    QProcess *process;
-    QString filename;
-    MainWindow *mainWindow;
-    QString incomingData;
+	Q_OBJECT
 
-    bool haveLoaded;    
+      public:
+	Import(const QString &fn, MainWindow *mw);
+
+	static QString filters();
+	static int numFilters();
+	static QString wildcard(int i);
+	static QString command(int i);
+	static void addImportEntry(const QString &wilrdcard,
+				   const QString &command);
+
+      private slots:
+	void gotData(const QString &data);
+	void bye();
+
+      private:
+	QProcess *process;
+	QString filename;
+	MainWindow *mainWindow;
+	QString incomingData;
+
+	bool haveLoaded;
 };
 
 #endif

@@ -38,7 +38,7 @@
 
 #include "qvbox.h"
 #ifndef QT_NO_VBOX
-#include "qlayout.h"
+# include "qlayout.h"
 
 // NOT REVISED
 /*!
@@ -58,8 +58,8 @@
 /*!
   Constructs a vbox widget with parent \a parent and name \a name
  */
-QVBox::QVBox( QWidget *parent, const char *name, WFlags f, bool allowLines )
-    :QHBox( FALSE, parent, name, f, allowLines )
+QVBox::QVBox(QWidget *parent, const char *name, WFlags f, bool allowLines)
+	: QHBox(FALSE, parent, name, f, allowLines)
 {
 }
 #endif

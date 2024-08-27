@@ -42,7 +42,7 @@
 #include "qdatetime.h"
 #include "qdir.h"
 
-extern bool qt_file_access( const QString& fn, int t );
+extern bool qt_file_access(const QString &fn, int t);
 
 // NOT REVISED
 /*!
@@ -82,8 +82,8 @@ extern bool qt_file_access( const QString& fn, int t );
 
 QFileInfo::QFileInfo()
 {
-    fic	  = 0;
-    cache = TRUE;
+	fic = 0;
+	cache = TRUE;
 }
 
 /*!
@@ -94,12 +94,12 @@ QFileInfo::QFileInfo()
   QDir::isRelativePath()
 */
 
-QFileInfo::QFileInfo( const QString &file )
+QFileInfo::QFileInfo(const QString &file)
 {
-    fn	  = file;
-    slashify( fn );
-    fic	  = 0;
-    cache = TRUE;
+	fn = file;
+	slashify(fn);
+	fic = 0;
+	cache = TRUE;
 }
 
 /*!
@@ -110,12 +110,12 @@ QFileInfo::QFileInfo( const QString &file )
   \sa isRelative()
 */
 
-QFileInfo::QFileInfo( const QFile &file )
+QFileInfo::QFileInfo(const QFile &file)
 {
-    fn	  = file.name();
-    slashify( fn );
-    fic	  = 0;
-    cache = TRUE;
+	fn = file.name();
+	slashify(fn);
+	fic = 0;
+	cache = TRUE;
 }
 
 /*!
@@ -127,28 +127,28 @@ QFileInfo::QFileInfo( const QFile &file )
   \sa isRelative()
 */
 #ifndef QT_NO_DIR
-QFileInfo::QFileInfo( const QDir &d, const QString &fileName )
+QFileInfo::QFileInfo(const QDir &d, const QString &fileName)
 {
-    fn	  = d.filePath( fileName );
-    slashify( fn );
-    fic	  = 0;
-    cache = TRUE;
+	fn = d.filePath(fileName);
+	slashify(fn);
+	fic = 0;
+	cache = TRUE;
 }
 #endif
 /*!
   Constructs a new QFileInfo that is a copy of \e fi.
 */
 
-QFileInfo::QFileInfo( const QFileInfo &fi )
+QFileInfo::QFileInfo(const QFileInfo &fi)
 {
-    fn = fi.fn;
-    if ( fi.fic ) {
-	fic = new QFileInfoCache;
-	*fic = *fi.fic;
-    } else {
-	fic = 0;
-    }
-    cache = fi.cache;
+	fn = fi.fn;
+	if (fi.fic) {
+		fic = new QFileInfoCache;
+		*fic = *fi.fic;
+	} else {
+		fic = 0;
+	}
+	cache = fi.cache;
 }
 
 /*!
@@ -157,7 +157,7 @@ QFileInfo::QFileInfo( const QFileInfo &fi )
 
 QFileInfo::~QFileInfo()
 {
-    delete fic;
+	delete fic;
 }
 
 
@@ -165,21 +165,21 @@ QFileInfo::~QFileInfo()
   Makes a copy of \e fi and assigns it to this QFileInfo.
 */
 
-QFileInfo &QFileInfo::operator=( const QFileInfo &fi )
+QFileInfo &QFileInfo::operator=(const QFileInfo &fi)
 {
-    fn = fi.fn;
-    if ( !fi.fic ) {
-	delete fic;
-	fic = 0;
-    } else {
-	if ( !fic ) {
-	    fic = new QFileInfoCache;
-	    CHECK_PTR( fic );
+	fn = fi.fn;
+	if (!fi.fic) {
+		delete fic;
+		fic = 0;
+	} else {
+		if (!fic) {
+			fic = new QFileInfoCache;
+			CHECK_PTR(fic);
+		}
+		*fic = *fi.fic;
 	}
-	*fic = *fi.fic;
-    }
-    cache = fi.cache;
-    return *this;
+	cache = fi.cache;
+	return *this;
 }
 
 
@@ -216,12 +216,12 @@ QFileInfo &QFileInfo::operator=( const QFileInfo &fi )
   \sa isRelative(), QDir::setCurrent(), QDir::isRelativePath()
 */
 
-void QFileInfo::setFile( const QString &file )
+void QFileInfo::setFile(const QString &file)
 {
-    fn = file;
-    slashify( fn );
-    delete fic;
-    fic = 0;
+	fn = file;
+	slashify(fn);
+	delete fic;
+	fic = 0;
 }
 
 /*!
@@ -232,12 +232,12 @@ void QFileInfo::setFile( const QString &file )
   \sa isRelative()
 */
 
-void QFileInfo::setFile( const QFile &file )
+void QFileInfo::setFile(const QFile &file)
 {
-    fn	= file.name();
-    slashify( fn );
-    delete fic;
-    fic = 0;
+	fn = file.name();
+	slashify(fn);
+	delete fic;
+	fic = 0;
 }
 
 /*!
@@ -249,12 +249,12 @@ void QFileInfo::setFile( const QFile &file )
   \sa isRelative()
 */
 #ifndef QT_NO_DIR
-void QFileInfo::setFile( const QDir &d, const QString &fileName )
+void QFileInfo::setFile(const QDir &d, const QString &fileName)
 {
-    fn	= d.filePath( fileName );
-    slashify( fn );
-    delete fic;
-    fic = 0;
+	fn = d.filePath(fileName);
+	slashify(fn);
+	delete fic;
+	fic = 0;
 }
 #endif
 
@@ -264,7 +264,7 @@ void QFileInfo::setFile( const QDir &d, const QString &fileName )
 
 bool QFileInfo::exists() const
 {
-    return qt_file_access( fn, F_OK );
+	return qt_file_access(fn, F_OK);
 }
 
 /*!
@@ -276,9 +276,9 @@ bool QFileInfo::exists() const
 
 void QFileInfo::refresh() const
 {
-    QFileInfo *that = (QFileInfo*)this;		// Mutable function
-    delete that->fic;
-    that->fic = 0;
+	QFileInfo *that = (QFileInfo *)this; // Mutable function
+	delete that->fic;
+	that->fic = 0;
 }
 
 /*!
@@ -299,15 +299,15 @@ void QFileInfo::refresh() const
   \sa refresh(), caching()
 */
 
-void QFileInfo::setCaching( bool enable )
+void QFileInfo::setCaching(bool enable)
 {
-    if ( cache == enable )
-	return;
-    cache = enable;
-    if ( cache ) {
-	delete fic;
-	fic = 0;
-    }
+	if (cache == enable)
+		return;
+	cache = enable;
+	if (cache) {
+		delete fic;
+		fic = 0;
+	}
 }
 
 
@@ -320,7 +320,7 @@ void QFileInfo::setCaching( bool enable )
 
 QString QFileInfo::filePath() const
 {
-    return fn;
+	return fn;
 }
 
 /*!
@@ -340,12 +340,12 @@ QString QFileInfo::filePath() const
 
 QString QFileInfo::baseName() const
 {
-    QString tmp = fileName();
-    int pos = tmp.find( '.' );
-    if ( pos == -1 )
-	return tmp;
-    else
-	return tmp.left( pos );
+	QString tmp = fileName();
+	int pos = tmp.find('.');
+	if (pos == -1)
+		return tmp;
+	else
+		return tmp.left(pos);
 }
 
 /*!
@@ -371,14 +371,14 @@ QString QFileInfo::baseName() const
 
 */
 
-QString QFileInfo::extension( bool complete ) const
+QString QFileInfo::extension(bool complete) const
 {
-    QString s = fileName();
-    int pos = complete ? s.find( '.' ) : s.findRev( '.' );
-    if ( pos < 0 )
-	return QString::fromLatin1( "" );
-    else
-	return s.right( s.length() - pos - 1 );
+	QString s = fileName();
+	int pos = complete ? s.find('.') : s.findRev('.');
+	if (pos < 0)
+		return QString::fromLatin1("");
+	else
+		return s.right(s.length() - pos - 1);
 }
 
 /*!
@@ -390,9 +390,9 @@ QString QFileInfo::extension( bool complete ) const
   \sa dirPath(), filePath(), fileName(), isRelative()
 */
 #ifndef QT_NO_DIR
-QDir QFileInfo::dir( bool absPath ) const
+QDir QFileInfo::dir(bool absPath) const
 {
-    return QDir( dirPath(absPath) );
+	return QDir(dirPath(absPath));
 }
 #endif
 
@@ -404,7 +404,7 @@ QDir QFileInfo::dir( bool absPath ) const
 
 bool QFileInfo::isReadable() const
 {
-    return qt_file_access( fn, R_OK );
+	return qt_file_access(fn, R_OK);
 }
 
 /*!
@@ -414,7 +414,7 @@ bool QFileInfo::isReadable() const
 
 bool QFileInfo::isWritable() const
 {
-    return qt_file_access( fn, W_OK );
+	return qt_file_access(fn, W_OK);
 }
 
 /*!
@@ -424,7 +424,7 @@ bool QFileInfo::isWritable() const
 
 bool QFileInfo::isExecutable() const
 {
-    return qt_file_access( fn, X_OK );
+	return qt_file_access(fn, X_OK);
 }
 
 
@@ -438,7 +438,7 @@ bool QFileInfo::isExecutable() const
 #ifndef QT_NO_DIR
 bool QFileInfo::isRelative() const
 {
-    return QDir::isRelativePath( fn );
+	return QDir::isRelativePath(fn);
 }
 
 /*!
@@ -451,8 +451,8 @@ bool QFileInfo::isRelative() const
 
 bool QFileInfo::convertToAbs()
 {
-    if ( isRelative() )
-	fn = absFilePath();
-    return QDir::isRelativePath( fn );
+	if (isRelative())
+		fn = absFilePath();
+	return QDir::isRelativePath(fn);
 }
 #endif

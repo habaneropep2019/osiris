@@ -19,7 +19,7 @@
 **********************************************************************/
 
 #ifndef ORDER_INDICATOR_H
-#define  ORDER_INDICATOR_H
+#define ORDER_INDICATOR_H
 
 #include <qwidget.h>
 
@@ -27,25 +27,24 @@ class FormWindow;
 
 class OrderIndicator : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    OrderIndicator( int i, QWidget* w, FormWindow* fw );
-    ~OrderIndicator();
+      public:
+	OrderIndicator(int i, QWidget *w, FormWindow *fw);
+	~OrderIndicator();
 
-    void setOrder( int i, QWidget* w );
-    void reposition();
+	void setOrder(int i, QWidget *w);
+	void reposition();
 
-protected:
-    void paintEvent( QPaintEvent * );
-    void mousePressEvent( QMouseEvent *e );
-    void updateMask();
+      protected:
+	void paintEvent(QPaintEvent *);
+	void mousePressEvent(QMouseEvent *e);
+	void updateMask();
 
-private:
-    int order;
-    QWidget* widget;
-    FormWindow *formWindow;
-    
+      private:
+	int order;
+	QWidget *widget;
+	FormWindow *formWindow;
 };
 
 

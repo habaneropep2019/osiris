@@ -39,8 +39,8 @@
 #define QWIDINTDICT_H
 
 #ifndef QT_H
-#include "qwidget.h"
-#include "qintdict.h"
+# include "qwidget.h"
+# include "qintdict.h"
 #endif // QT_H
 
 
@@ -52,20 +52,34 @@ template class Q_EXPORT QIntDictIterator<QWidget>;
 
 class Q_EXPORT QWidgetIntDict : public QIntDict<QWidget>
 {
-public:
-    QWidgetIntDict(int size=17) : QIntDict<QWidget>(size) {}
-    QWidgetIntDict( const QWidgetIntDict &dict ) : QIntDict<QWidget>(dict) {}
-   ~QWidgetIntDict() { clear(); }
-    QWidgetIntDict &operator=(const QWidgetIntDict &dict)
-	{ return (QWidgetIntDict&)QIntDict<QWidget>::operator=(dict); }
+      public:
+	QWidgetIntDict(int size = 17) : QIntDict<QWidget>(size)
+	{
+	}
+	QWidgetIntDict(const QWidgetIntDict &dict) : QIntDict<QWidget>(dict)
+	{
+	}
+	~QWidgetIntDict()
+	{
+		clear();
+	}
+	QWidgetIntDict &operator=(const QWidgetIntDict &dict)
+	{
+		return (QWidgetIntDict &)QIntDict<QWidget>::operator=(dict);
+	}
 };
 
 class Q_EXPORT QWidgetIntDictIt : public QIntDictIterator<QWidget>
 {
-public:
-    QWidgetIntDictIt( const QWidgetIntDict &d ) : QIntDictIterator<QWidget>(d) {}
-    QWidgetIntDictIt &operator=(const QWidgetIntDictIt &i)
-	{ return (QWidgetIntDictIt&)QIntDictIterator<QWidget>::operator=(i); }
+      public:
+	QWidgetIntDictIt(const QWidgetIntDict &d) : QIntDictIterator<QWidget>(d)
+	{
+	}
+	QWidgetIntDictIt &operator=(const QWidgetIntDictIt &i)
+	{
+		return (QWidgetIntDictIt &)QIntDictIterator<QWidget>::operator=(
+			i);
+	}
 };
 
 

@@ -17,23 +17,23 @@
   string to be displayed by the Hello widget.
 */
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a(argc,argv);
-    QString s;
-    for ( int i=1; i<argc; i++ ) {
-	s += argv[i];
-	if ( i<argc-1 )
-	    s += " ";
-    }
-    if ( s.isEmpty() )
-	s = "Hello, World";
-    Hello h( s );
-    h.setCaption( "Qt says hello" );
-    QObject::connect( &h, SIGNAL(clicked()), &a, SLOT(quit()) );
-    h.setFont( QFont("times",32,QFont::Bold) );		// default font
-    h.setBackgroundColor( Qt::white );			// default bg color
-    a.setMainWidget( &h );
-    h.show();
-    return a.exec();
+	QApplication a(argc, argv);
+	QString s;
+	for (int i = 1; i < argc; i++) {
+		s += argv[i];
+		if (i < argc - 1)
+			s += " ";
+	}
+	if (s.isEmpty())
+		s = "Hello, World";
+	Hello h(s);
+	h.setCaption("Qt says hello");
+	QObject::connect(&h, SIGNAL(clicked()), &a, SLOT(quit()));
+	h.setFont(QFont("times", 32, QFont::Bold)); // default font
+	h.setBackgroundColor(Qt::white); // default bg color
+	a.setMainWidget(&h);
+	h.show();
+	return a.exec();
 }

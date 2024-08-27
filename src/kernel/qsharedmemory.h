@@ -1,14 +1,15 @@
 #if !defined(QT_NO_QSHM)
 
-#if !defined(QT_QSHM_H)
-#define QT_QSHM_H
+# if !defined(QT_QSHM_H)
+#  define QT_QSHM_H
 
-#include <qstring.h>
-#include <sys/types.h>
-#include <sys/ipc.h>
+#  include <qstring.h>
+#  include <sys/types.h>
+#  include <sys/ipc.h>
 
-class QSharedMemory {
-public:
+class QSharedMemory
+{
+      public:
 	QSharedMemory(){};
 	QSharedMemory(int, QString);
 	~QSharedMemory(){};
@@ -20,20 +21,23 @@ public:
 	void detach();
 
 	void setPermissions(mode_t mode);
-	void * base() { return shmBase; };
+	void *base()
+	{
+		return shmBase;
+	};
 
-private:
+      private:
 	void *shmBase;
 	int shmSize;
 	QString shmFile;
-#if defined(QT_POSIX_QSHM)
+#  if defined(QT_POSIX_QSHM)
 	int shmFD;
-#else
+#  else
 	int shmId;
 	key_t key;
 	int idInitted;
-#endif
+#  endif
 };
 
-#endif
+# endif
 #endif

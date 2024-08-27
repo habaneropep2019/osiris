@@ -34,59 +34,58 @@ static const int max_mw = 10;
 
 class BigShrinker : public QFrame
 {
-    Q_OBJECT
-public:
-    BigShrinker(QWidget *parent);
-    void timerEvent(QTimerEvent *);
-    void mouseReleaseEvent(QMouseEvent *e);
+	Q_OBJECT
+      public:
+	BigShrinker(QWidget *parent);
+	void timerEvent(QTimerEvent *);
+	void mouseReleaseEvent(QMouseEvent *e);
 
-signals:
-    void clicked(int, int);
+      signals:
+	void clicked(int, int);
 };
 
 class BigMatrix : public QScrollView
 {
-    QMultiLineEdit *dragging;
+	QMultiLineEdit *dragging;
 
-public:
-    BigMatrix(QWidget *parent);
-    void viewportMousePressEvent(QMouseEvent *e);
-    void viewportMouseReleaseEvent(QMouseEvent *);
+      public:
+	BigMatrix(QWidget *parent);
+	void viewportMousePressEvent(QMouseEvent *e);
+	void viewportMouseReleaseEvent(QMouseEvent *);
 
-    void viewportMouseMoveEvent(QMouseEvent *e);
+	void viewportMouseMoveEvent(QMouseEvent *e);
 
-protected:
-    void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
+      protected:
+	void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 
-private:
-    QPixmap bg;
+      private:
+	QPixmap bg;
 };
 
 class ScrollViewExample : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    ScrollViewExample(int technique, QWidget *parent = 0, const char *name = 0);
+      public:
+	ScrollViewExample(int technique, QWidget *parent = 0,
+			  const char *name = 0);
 
-private slots:
-    void doVPMenuItem(int id);
-    void setVPMenuItems();
-    void doFMenuItem(int id);
-    void setFMenuItems();
+      private slots:
+	void doVPMenuItem(int id);
+	void setVPMenuItems();
+	void doFMenuItem(int id);
+	void setFMenuItems();
 
-private:
-    QScrollView *vp;
-    QPopupMenu *vp_options;
-    QPopupMenu *f_options;
-    QPopupMenu *lw_options;
-    QPopupMenu *mlw_options;
-    QPopupMenu *mw_options;
-    QSizeGrip *corner;
+      private:
+	QScrollView *vp;
+	QPopupMenu *vp_options;
+	QPopupMenu *f_options;
+	QPopupMenu *lw_options;
+	QPopupMenu *mlw_options;
+	QPopupMenu *mw_options;
+	QSizeGrip *corner;
 
-    int vauto_id, vaoff_id, vaon_id,
-        hauto_id, haoff_id, haon_id,
-        corn_id;
+	int vauto_id, vaoff_id, vaon_id, hauto_id, haoff_id, haon_id, corn_id;
 
-    int f_laststyle;
+	int f_laststyle;
 };

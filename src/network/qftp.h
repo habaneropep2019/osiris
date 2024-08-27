@@ -39,65 +39,64 @@
 #define QFTP_H
 
 #ifndef QT_H
-#include "qsocket.h"
-#include "qapplication.h"
-#include "qstring.h"
-#include "qstringlist.h"
+# include "qsocket.h"
+# include "qapplication.h"
+# include "qstring.h"
+# include "qstringlist.h"
 
-#include "qurlinfo.h"
-#include "qnetworkprotocol.h"
+# include "qurlinfo.h"
+# include "qnetworkprotocol.h"
 #endif // QT_H
 
 #ifndef QT_NO_NETWORKPROTOCOL_FTP
 
 class Q_EXPORT QFtp : public QNetworkProtocol
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    QFtp();
-    virtual ~QFtp();
-    virtual int supportedOperations() const;
+      public:
+	QFtp();
+	virtual ~QFtp();
+	virtual int supportedOperations() const;
 
-protected:
-    void parseDir( const QString &buffer, QUrlInfo &info );
-    virtual void operationListChildren( QNetworkOperation *op );
-    virtual void operationMkDir( QNetworkOperation *op );
-    virtual void operationRemove( QNetworkOperation *op );
-    virtual void operationRename( QNetworkOperation *op );
-    virtual void operationGet( QNetworkOperation *op );
-    virtual void operationPut( QNetworkOperation *op );
+      protected:
+	void parseDir(const QString &buffer, QUrlInfo &info);
+	virtual void operationListChildren(QNetworkOperation *op);
+	virtual void operationMkDir(QNetworkOperation *op);
+	virtual void operationRemove(QNetworkOperation *op);
+	virtual void operationRename(QNetworkOperation *op);
+	virtual void operationGet(QNetworkOperation *op);
+	virtual void operationPut(QNetworkOperation *op);
 
-    QSocket *commandSocket, *dataSocket;
-    bool connectionReady, passiveMode;
-    int getTotalSize, getDoneSize;
-    bool startGetOnFail;
-    int putToWrite, putWritten;
-    int putOffset; // not in use
-    bool errorInListChildren;
+	QSocket *commandSocket, *dataSocket;
+	bool connectionReady, passiveMode;
+	int getTotalSize, getDoneSize;
+	bool startGetOnFail;
+	int putToWrite, putWritten;
+	int putOffset; // not in use
+	bool errorInListChildren;
 
-private:
-    bool checkConnection( QNetworkOperation *op );
-    void close();
-    void reinitCommandSocket();
-    void okButTryLater( int code, const QCString &data );
-    void okGoOn( int code, const QCString &data );
-    void okButNeedMoreInfo( int code, const QCString &data );
-    void errorForNow( int code, const QCString &data );
-    void errorForgetIt( int code, const QCString &data );
+      private:
+	bool checkConnection(QNetworkOperation *op);
+	void close();
+	void reinitCommandSocket();
+	void okButTryLater(int code, const QCString &data);
+	void okGoOn(int code, const QCString &data);
+	void okButNeedMoreInfo(int code, const QCString &data);
+	void errorForNow(int code, const QCString &data);
+	void errorForgetIt(int code, const QCString &data);
 
-protected slots:
-    void hostFound();
-    void connected();
-    void closed();
-    void readyRead();
-    void dataHostFound();
-    void dataConnected();
-    void dataClosed();
-    void dataReadyRead();
-    void dataBytesWritten( int nbytes );
-    void error( int );
-
+      protected slots:
+	void hostFound();
+	void connected();
+	void closed();
+	void readyRead();
+	void dataHostFound();
+	void dataConnected();
+	void dataClosed();
+	void dataReadyRead();
+	void dataBytesWritten(int nbytes);
+	void error(int);
 };
 
 #endif // QT_NO_NETWORKPROTOCOL_FTP

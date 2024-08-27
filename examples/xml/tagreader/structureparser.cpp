@@ -6,24 +6,24 @@ $Id: qt/examples/xml/tagreader/structureparser.cpp   2.3.2   edited 2001-01-26 $
 
 #include <iostream>
 #include <qstring.h>
- 
+
 bool StructureParser::startDocument()
 {
-    indent = "";
-    return TRUE;
+	indent = "";
+	return TRUE;
 }
 
-bool StructureParser::startElement( const QString&, const QString&, 
-                                    const QString& qName, 
-                                    const QXmlAttributes& )
+bool StructureParser::startElement(const QString &, const QString &,
+				   const QString &qName, const QXmlAttributes &)
 {
-    std::cout << indent << qName << std::endl;
-    indent += "    ";
-    return TRUE;
+	std::cout << indent << qName << std::endl;
+	indent += "    ";
+	return TRUE;
 }
 
-bool StructureParser::endElement( const QString&, const QString&, const QString& )
+bool StructureParser::endElement(const QString &, const QString &,
+				 const QString &)
 {
-    indent.remove( 0, 4 );
-    return TRUE;
+	indent.remove(0, 4);
+	return TRUE;
 }

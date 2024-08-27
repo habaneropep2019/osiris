@@ -37,23 +37,23 @@
 
 #include "qtextbrowser.h"
 #ifndef QT_NO_TEXTBROWSER
-#include "../kernel/qrichtext_p.h"
+# include "../kernel/qrichtext_p.h"
 
-#include "qapplication.h"
-#include "qlayout.h"
-#include "qpainter.h"
+# include "qapplication.h"
+# include "qlayout.h"
+# include "qpainter.h"
 
-#include "qvaluestack.h"
-#include "stdio.h"
-#include "qfile.h"
-#include "qtextstream.h"
-#include "qlayout.h"
-#include "qbitmap.h"
-#include "qtimer.h"
-#include "qimage.h"
-#include "qsimplerichtext.h"
-#include "qdragobject.h"
-#include "qurl.h"
+# include "qvaluestack.h"
+# include "stdio.h"
+# include "qfile.h"
+# include "qtextstream.h"
+# include "qlayout.h"
+# include "qbitmap.h"
+# include "qtimer.h"
+# include "qimage.h"
+# include "qsimplerichtext.h"
+# include "qdragobject.h"
+# include "qurl.h"
 
 /*!
   \class QTextBrowser qtextbrowser.h
@@ -98,16 +98,16 @@
 
 class QTextBrowserData
 {
-public:
-    QString searchPath;
-    QString buttonDown;
-    QString highlight;
-    QPoint lastClick;
-    QValueStack<QString> stack;
-    QValueStack<QString> forwardStack;
-    QString home;
-    QString curmain;
-    QString curmark;
+      public:
+	QString searchPath;
+	QString buttonDown;
+	QString highlight;
+	QPoint lastClick;
+	QValueStack<QString> stack;
+	QValueStack<QString> forwardStack;
+	QString home;
+	QString curmain;
+	QString curmark;
 };
 
 
@@ -115,12 +115,12 @@ public:
   Constructs an empty QTextBrowser.
 */
 QTextBrowser::QTextBrowser(QWidget *parent, const char *name)
-    : QTextView( parent, name )
+	: QTextView(parent, name)
 {
-    d = new QTextBrowserData;
+	d = new QTextBrowserData;
 
-    viewport()->setMouseTracking( TRUE );
-//     viewport()->setAcceptDrops( TRUE );
+	viewport()->setMouseTracking(TRUE);
+	//     viewport()->setAcceptDrops( TRUE );
 }
 
 /*!
@@ -128,7 +128,7 @@ QTextBrowser::QTextBrowser(QWidget *parent, const char *name)
 */
 QTextBrowser::~QTextBrowser()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -152,112 +152,115 @@ QTextBrowser::~QTextBrowser()
   QMimeSourceFactory::data() for details.
 
 */
-void QTextBrowser::setSource(const QString& name)
+void QTextBrowser::setSource(const QString &name)
 {
-#ifndef QT_NO_CURSOR
-    if ( isVisible() )
-	qApp->setOverrideCursor( waitCursor );
-#endif
-    QString source = name;
-    QString mark;
-    int hash = name.find('#');
-    if ( hash != -1) {
-	source  = name.left( hash );
-	mark = name.mid( hash+1 );
-    }
-
-    if ( source.left(5) == "file:" )
-	source = source.mid(6);
-
-    QString url = mimeSourceFactory()->makeAbsolute( source, context() );
-    QString txt;
-    bool dosettext = FALSE;
-
-    if ( !source.isEmpty() && url != d->curmain ) {
-	const QMimeSource* m =
-		    mimeSourceFactory()->data( source, context() );
-	if ( !m ){
-	    qWarning("QTextBrowser: no mimesource for %s", source.latin1() );
-	}
-	else {
-	    if ( !QTextDrag::decode( m, txt ) ) {
-		qWarning("QTextBrowser: cannot decode %s", source.latin1() );
-	    }
+# ifndef QT_NO_CURSOR
+	if (isVisible())
+		qApp->setOverrideCursor(waitCursor);
+# endif
+	QString source = name;
+	QString mark;
+	int hash = name.find('#');
+	if (hash != -1) {
+		source = name.left(hash);
+		mark = name.mid(hash + 1);
 	}
 
- 	if ( isVisible() ) {
- 	    QString firstTag = txt.left( txt.find('>' )+1 );
- 	    QRichText* tmp = new QRichText( firstTag, QApplication::font() );
- 	    static QString s_type = QString::fromLatin1("type");
- 	    static QString s_detail = QString::fromLatin1("detail");
-	    bool doReturn = FALSE;
- 	    if ( tmp->attributes().contains(s_type)
-		 && tmp->attributes()[s_type] == s_detail )
-		doReturn = TRUE;
-	    QTextFormatCollection* formats = tmp->formats;
-	    delete tmp;
-	    delete formats; //#### fix inheritance structure in rich text
-	    if ( doReturn ) {
- 		popupDetail( txt, d->lastClick );
-#ifndef QT_NO_CURSOR
- 		qApp->restoreOverrideCursor();
-#endif
- 		return;
- 	    }
- 	}
+	if (source.left(5) == "file:")
+		source = source.mid(6);
 
-	d->curmain = url;
-	dosettext = TRUE;
-    }
+	QString url = mimeSourceFactory()->makeAbsolute(source, context());
+	QString txt;
+	bool dosettext = FALSE;
 
-    d->curmark = mark;
+	if (!source.isEmpty() && url != d->curmain) {
+		const QMimeSource *m =
+			mimeSourceFactory()->data(source, context());
+		if (!m) {
+			qWarning("QTextBrowser: no mimesource for %s",
+				 source.latin1());
+		} else {
+			if (!QTextDrag::decode(m, txt)) {
+				qWarning("QTextBrowser: cannot decode %s",
+					 source.latin1());
+			}
+		}
 
-    if ( !mark.isEmpty() ) {
-	url += "#";
-	url += mark;
-    }
-    if ( !d->home )
-	d->home = url;
+		if (isVisible()) {
+			QString firstTag = txt.left(txt.find('>') + 1);
+			QRichText *tmp =
+				new QRichText(firstTag, QApplication::font());
+			static QString s_type = QString::fromLatin1("type");
+			static QString s_detail = QString::fromLatin1("detail");
+			bool doReturn = FALSE;
+			if (tmp->attributes().contains(s_type) &&
+			    tmp->attributes()[s_type] == s_detail)
+				doReturn = TRUE;
+			QTextFormatCollection *formats = tmp->formats;
+			delete tmp;
+			delete formats; // #### fix inheritance structure in
+					// rich text
+			if (doReturn) {
+				popupDetail(txt, d->lastClick);
+# ifndef QT_NO_CURSOR
+				qApp->restoreOverrideCursor();
+# endif
+				return;
+			}
+		}
 
-    if ( d->stack.isEmpty() || d->stack.top() != url) {
-	d->stack.push( url );
-    }
+		d->curmain = url;
+		dosettext = TRUE;
+	}
 
-    int stackCount = d->stack.count();
-    if ( stackCount > 0 && d->stack.top() == url )
-	stackCount--;
-    emit backwardAvailable( stackCount > 0 );
-    stackCount = d->forwardStack.count();
-    if ( stackCount > 0 && d->forwardStack.top() == url )
-	stackCount--;
-    emit forwardAvailable( stackCount > 0 );
+	d->curmark = mark;
 
-    if ( dosettext )
-	setText( txt, url );
+	if (!mark.isEmpty()) {
+		url += "#";
+		url += mark;
+	}
+	if (!d->home)
+		d->home = url;
 
-    if ( isVisible() && !mark.isEmpty() )
-	scrollToAnchor( mark );
-    else
-	setContentsPos( 0, 0 );
+	if (d->stack.isEmpty() || d->stack.top() != url) {
+		d->stack.push(url);
+	}
 
-#ifndef QT_NO_CURSOR
-    if ( isVisible() )
-	qApp->restoreOverrideCursor();
-#endif
+	int stackCount = d->stack.count();
+	if (stackCount > 0 && d->stack.top() == url)
+		stackCount--;
+	emit backwardAvailable(stackCount > 0);
+	stackCount = d->forwardStack.count();
+	if (stackCount > 0 && d->forwardStack.top() == url)
+		stackCount--;
+	emit forwardAvailable(stackCount > 0);
+
+	if (dosettext)
+		setText(txt, url);
+
+	if (isVisible() && !mark.isEmpty())
+		scrollToAnchor(mark);
+	else
+		setContentsPos(0, 0);
+
+# ifndef QT_NO_CURSOR
+	if (isVisible())
+		qApp->restoreOverrideCursor();
+# endif
 }
 
 /*!
-  Returns the source of the currently display document. If no document is displayed or
-  the source is unknown, a null string is returned.
+  Returns the source of the currently display document. If no document is
+  displayed or the source is unknown, a null string is returned.
 
   \sa setSource()
  */
 QString QTextBrowser::source() const
 {
-    if ( d->stack.isEmpty() )
-	return QString::null;
-    else
-	return d->stack.top();
+	if (d->stack.isEmpty())
+		return QString::null;
+	else
+		return d->stack.top();
 }
 
 
@@ -265,10 +268,10 @@ QString QTextBrowser::source() const
   Sets the contents of the browser to \a text, and emits the
   textChanged() signal.
 */
-void QTextBrowser::setText( const QString& text, const QString& context )
+void QTextBrowser::setText(const QString &text, const QString &context)
 {
-    QTextView::setText( text, context );
-    emit textChanged();
+	QTextView::setText(text, context);
+	emit textChanged();
 }
 
 /*!
@@ -307,11 +310,11 @@ void QTextBrowser::setText( const QString& text, const QString& context )
 */
 void QTextBrowser::backward()
 {
-    if ( d->stack.count() <= 1)
-	return;
-    d->forwardStack.push( d->stack.pop2() );
-    setSource( d->stack.pop2() );
-    emit forwardAvailable( TRUE );
+	if (d->stack.count() <= 1)
+		return;
+	d->forwardStack.push(d->stack.pop2());
+	setSource(d->stack.pop2());
+	emit forwardAvailable(TRUE);
 }
 
 /*!
@@ -322,10 +325,10 @@ void QTextBrowser::backward()
 */
 void QTextBrowser::forward()
 {
-    if ( d->forwardStack.isEmpty() )
-	return;
-    setSource( d->forwardStack.pop2() );
-    emit forwardAvailable( !d->forwardStack.isEmpty() );
+	if (d->forwardStack.isEmpty())
+		return;
+	setSource(d->forwardStack.pop2());
+	emit forwardAvailable(!d->forwardStack.isEmpty());
 }
 
 /*!
@@ -334,183 +337,182 @@ void QTextBrowser::forward()
 */
 void QTextBrowser::home()
 {
-    if (!d->home.isNull() )
-	setSource( d->home );
+	if (!d->home.isNull())
+		setSource(d->home);
 }
 
 /*!
   Add Backward and Forward on ALT-Left and ALT-Right respectively.
 */
-void QTextBrowser::keyPressEvent( QKeyEvent * e )
+void QTextBrowser::keyPressEvent(QKeyEvent *e)
 {
-    if ( e->state() & AltButton ) {
-	switch (e->key()) {
-	case Key_Right:
-	    forward();
-	    return;
-	case Key_Left:
-	    backward();
-	    return;
-	case Key_Up:
-	    home();
-	    return;
+	if (e->state() & AltButton) {
+		switch (e->key()) {
+		case Key_Right:
+			forward();
+			return;
+		case Key_Left:
+			backward();
+			return;
+		case Key_Up:
+			home();
+			return;
+		}
 	}
-    }
-    QTextView::keyPressEvent(e);
+	QTextView::keyPressEvent(e);
 }
 
 /*!
   \e override to press anchors.
 */
-void QTextBrowser::viewportMousePressEvent( QMouseEvent* e )
+void QTextBrowser::viewportMousePressEvent(QMouseEvent *e)
 {
-    if ( e->button() == LeftButton ) {
-	d->buttonDown = anchorAt( e->pos() );
-	d->lastClick = e->globalPos();
-    }
-    QTextView::viewportMousePressEvent( e );
+	if (e->button() == LeftButton) {
+		d->buttonDown = anchorAt(e->pos());
+		d->lastClick = e->globalPos();
+	}
+	QTextView::viewportMousePressEvent(e);
 }
 
 /*!
   \e override to activate anchors.
 */
-void QTextBrowser::viewportMouseReleaseEvent( QMouseEvent* e )
+void QTextBrowser::viewportMouseReleaseEvent(QMouseEvent *e)
 {
-    if ( e->button() == LeftButton ) {
-	if ( !d->buttonDown.isEmpty() && anchorAt( e->pos() ) == d->buttonDown ) {
-	    setSource( d->buttonDown );
+	if (e->button() == LeftButton) {
+		if (!d->buttonDown.isEmpty() &&
+		    anchorAt(e->pos()) == d->buttonDown) {
+			setSource(d->buttonDown);
+		}
 	}
-    }
-    d->buttonDown = QString::null;
-    QTextView::viewportMouseReleaseEvent( e );
+	d->buttonDown = QString::null;
+	QTextView::viewportMouseReleaseEvent(e);
 }
 
 /*!
   Activate to emit highlighted().
 */
-void QTextBrowser::viewportMouseMoveEvent( QMouseEvent* e)
+void QTextBrowser::viewportMouseMoveEvent(QMouseEvent *e)
 {
-#ifndef QT_NO_DRAGANDDROP
-    if ( (e->state() & LeftButton) == LeftButton && !d->buttonDown.isEmpty()  ) {
-	if ( ( e->globalPos() - d->lastClick ).manhattanLength() > QApplication::startDragDistance() ) {
-	    QUrl url ( context(), d->buttonDown, TRUE );
-	    QUriDrag* drag = new QUriDrag( this );
-	    drag->setUnicodeUris( url.toString() );
-	    drag->drag();
+# ifndef QT_NO_DRAGANDDROP
+	if ((e->state() & LeftButton) == LeftButton &&
+	    !d->buttonDown.isEmpty()) {
+		if ((e->globalPos() - d->lastClick).manhattanLength() >
+		    QApplication::startDragDistance()) {
+			QUrl url(context(), d->buttonDown, TRUE);
+			QUriDrag *drag = new QUriDrag(this);
+			drag->setUnicodeUris(url.toString());
+			drag->drag();
+		}
+		return;
 	}
-	return;
-    }
-#endif
+# endif
 
-    if ( e->state() == 0 ) {
-	QString act = anchorAt( e->pos() );
-	if (d->highlight != act) {
-	    if ( !act.isEmpty() ){
-		emit highlighted( act );
-		d->highlight = act;
-	    }
-	    else if ( !d->highlight.isEmpty() ) {
-		emit highlighted( QString::null );
-		d->highlight = QString::null;
-	    }
-#ifndef QT_NO_CURSOR
-	    viewport()->setCursor( d->highlight.isEmpty()?arrowCursor:pointingHandCursor );
-#endif
+	if (e->state() == 0) {
+		QString act = anchorAt(e->pos());
+		if (d->highlight != act) {
+			if (!act.isEmpty()) {
+				emit highlighted(act);
+				d->highlight = act;
+			} else if (!d->highlight.isEmpty()) {
+				emit highlighted(QString::null);
+				d->highlight = QString::null;
+			}
+# ifndef QT_NO_CURSOR
+			viewport()->setCursor(d->highlight.isEmpty() ?
+						      arrowCursor :
+						      pointingHandCursor);
+# endif
+		}
 	}
-    }
 
-    QTextView::viewportMouseMoveEvent( e );
+	QTextView::viewportMouseMoveEvent(e);
 }
 
 
-QString QTextBrowser::anchorAt(const QPoint& pos)
+QString QTextBrowser::anchorAt(const QPoint &pos)
 {
-    return richText().anchorAt( QPoint(contentsX(), contentsY() ) + pos );
+	return richText().anchorAt(QPoint(contentsX(), contentsY()) + pos);
 }
 
 
 class QTextDetailPopup : public QWidget
 {
-public:
-    QTextDetailPopup()
-	: QWidget ( 0, "automatic QText detail widget", WType_Popup | WDestructiveClose )
+      public:
+	QTextDetailPopup()
+		: QWidget(0, "automatic QText detail widget",
+			  WType_Popup | WDestructiveClose)
 	{
 	}
 
-protected:
-
-    void mousePressEvent( QMouseEvent*)
+      protected:
+	void mousePressEvent(QMouseEvent *)
 	{
-	close();
+		close();
 	}
 };
 
 
-void QTextBrowser::popupDetail( const QString& contents, const QPoint& pos )
+void QTextBrowser::popupDetail(const QString &contents, const QPoint &pos)
 {
+	const int shadowWidth = 6; // also used as '5' and '6' and even '8'
+				   // below
+	const int vMargin = 8;
+	const int hMargin = 12;
 
-    const int shadowWidth = 6;   // also used as '5' and '6' and even '8' below
-    const int vMargin = 8;
-    const int hMargin = 12;
+	QWidget *popup = new QTextDetailPopup;
+	popup->setBackgroundMode(QWidget::NoBackground);
 
-    QWidget* popup = new QTextDetailPopup;
-    popup->setBackgroundMode( QWidget::NoBackground );
+	QSimpleRichText *doc = new QSimpleRichText(contents, popup->font());
+	doc->adjustSize();
+	QRect r(0, 0, doc->width(), doc->height());
 
-    QSimpleRichText* doc = new QSimpleRichText( contents, popup->font() );
-    doc->adjustSize();
-    QRect r( 0, 0, doc->width(), doc->height() );
+	int w = r.width() + 2 * hMargin;
+	int h = r.height() + 2 * vMargin;
 
-    int w = r.width() + 2*hMargin;
-    int h = r.height() + 2*vMargin;
+	popup->resize(w + shadowWidth, h + shadowWidth);
 
-    popup->resize( w + shadowWidth, h + shadowWidth );
-
-    // okay, now to find a suitable location
-    //###### we need a global fancy popup positioning somewhere
-    popup->move(pos - popup->rect().center());
-    if (popup->geometry().right() > QApplication::desktop()->width())
-	popup->move( QApplication::desktop()->width() - popup->width(),
-		     popup->y() );
-    if (popup->geometry().bottom() > QApplication::desktop()->height())
-	popup->move( popup->x(),
-		     QApplication::desktop()->height() - popup->height() );
-    if ( popup->x() < 0 )
-	popup->move( 0, popup->y() );
-    if ( popup->y() < 0 )
-	popup->move( popup->x(), 0 );
+	// okay, now to find a suitable location
+	// ###### we need a global fancy popup positioning somewhere
+	popup->move(pos - popup->rect().center());
+	if (popup->geometry().right() > QApplication::desktop()->width())
+		popup->move(QApplication::desktop()->width() - popup->width(),
+			    popup->y());
+	if (popup->geometry().bottom() > QApplication::desktop()->height())
+		popup->move(popup->x(), QApplication::desktop()->height() -
+						popup->height());
+	if (popup->x() < 0)
+		popup->move(0, popup->y());
+	if (popup->y() < 0)
+		popup->move(popup->x(), 0);
 
 
-    popup->show();
+	popup->show();
 
-    // now for super-clever shadow stuff.  super-clever mostly in
-    // how many window system problems it skirts around.
+	// now for super-clever shadow stuff.  super-clever mostly in
+	// how many window system problems it skirts around.
 
-    QPainter p( popup );
-    p.setPen( QApplication::palette().normal().foreground() );
-    p.drawRect( 0, 0, w, h );
-    p.setPen( QApplication::palette().normal().mid() );
-    p.setBrush( QColor( 255, 255, 240 ) );
-    p.drawRect( 1, 1, w-2, h-2 );
-    p.setPen( black );
+	QPainter p(popup);
+	p.setPen(QApplication::palette().normal().foreground());
+	p.drawRect(0, 0, w, h);
+	p.setPen(QApplication::palette().normal().mid());
+	p.setBrush(QColor(255, 255, 240));
+	p.drawRect(1, 1, w - 2, h - 2);
+	p.setPen(black);
 
-    doc->draw( &p, hMargin, vMargin, r, popup->colorGroup(), 0 );
-    delete doc;
+	doc->draw(&p, hMargin, vMargin, r, popup->colorGroup(), 0);
+	delete doc;
 
-    p.drawPoint( w + 5, 6 );
-    p.drawLine( w + 3, 6,
-		w + 5, 8 );
-    p.drawLine( w + 1, 6,
-		w + 5, 10 );
-    int i;
-    for( i=7; i < h; i += 2 )
-	p.drawLine( w, i,
-		    w + 5, i + 5 );
-    for( i = w - i + h; i > 6; i -= 2 )
-	p.drawLine( i, h,
-		    i + 5, h + 5 );
-    for( ; i > 0 ; i -= 2 )
-	p.drawLine( 6, h + 6 - i,
-		    i + 5, h + 5 );
+	p.drawPoint(w + 5, 6);
+	p.drawLine(w + 3, 6, w + 5, 8);
+	p.drawLine(w + 1, 6, w + 5, 10);
+	int i;
+	for (i = 7; i < h; i += 2)
+		p.drawLine(w, i, w + 5, i + 5);
+	for (i = w - i + h; i > 6; i -= 2)
+		p.drawLine(i, h, i + 5, h + 5);
+	for (; i > 0; i -= 2)
+		p.drawLine(6, h + 6 - i, i + 5, h + 5);
 }
 
 
@@ -520,37 +522,40 @@ void QTextBrowser::popupDetail( const QString& contents, const QPoint& pos )
   \a name is at the top of the view (or as close to the top
   as the size of the document allows).
 */
-void QTextBrowser::scrollToAnchor(const QString& name)
+void QTextBrowser::scrollToAnchor(const QString &name)
 {
-    if ( name.isEmpty() )
-	return;
+	if (name.isEmpty())
+		return;
 
-    d->curmark = name;
+	d->curmark = name;
 
-    QRichTextIterator it( richText() );
-    do {
-	if ( it.format()->anchorName() == name ) {
-	    QTextParagraph* b = it.outmostParagraph();
-	    if ( b->dirty ) { // QTextView layouts delayed in the background, so this may happen
-		QRichTextFormatter tc( richText() );
-		tc.gotoParagraph( 0, &richText() );
-		tc.updateLayout();
-		resizeContents( QMAX( richText().flow()->widthUsed-1, visibleWidth() ),
-				richText().flow()->height );
-	    }
-	    QRect r = it.lineGeometry();
-	    setContentsPos( contentsX(), r.top() );
-	    return;
-	}
-    } while ( it.right( FALSE ) );
+	QRichTextIterator it(richText());
+	do {
+		if (it.format()->anchorName() == name) {
+			QTextParagraph *b = it.outmostParagraph();
+			if (b->dirty) { // QTextView layouts delayed in the
+					// background, so this may happen
+				QRichTextFormatter tc(richText());
+				tc.gotoParagraph(0, &richText());
+				tc.updateLayout();
+				resizeContents(
+					QMAX(richText().flow()->widthUsed - 1,
+					     visibleWidth()),
+					richText().flow()->height);
+			}
+			QRect r = it.lineGeometry();
+			setContentsPos(contentsX(), r.top());
+			return;
+		}
+	} while (it.right(FALSE));
 }
 
 
 /*!\reimp
  */
-void QTextBrowser::showEvent( QShowEvent* e )
+void QTextBrowser::showEvent(QShowEvent *e)
 {
-    QTextView::showEvent( e );
-    scrollToAnchor( d->curmark );
+	QTextView::showEvent(e);
+	scrollToAnchor(d->curmark);
 }
-#endif  // QT_NO_TEXTBROWSER
+#endif // QT_NO_TEXTBROWSER

@@ -25,20 +25,20 @@ class QAnimationWriterData;
 
 class QAnimationWriter
 {
-public:
-    QAnimationWriter( const QString& filename, const char* format="MNG" );
-    ~QAnimationWriter();
+      public:
+	QAnimationWriter(const QString &filename, const char *format = "MNG");
+	~QAnimationWriter();
 
-    bool okay() const;
-    void setFrameRate(int);
-    void appendBlankFrame();
-    void appendFrame(const QImage&);
-    void appendFrame(const QImage&, const QPoint& offset);
+	bool okay() const;
+	void setFrameRate(int);
+	void appendBlankFrame();
+	void appendFrame(const QImage &);
+	void appendFrame(const QImage &, const QPoint &offset);
 
-private:
-    QImage prev;
-    QIODevice* dev;
-    QAnimationWriterData* d;
+      private:
+	QImage prev;
+	QIODevice *dev;
+	QAnimationWriterData *d;
 };
 
 #endif

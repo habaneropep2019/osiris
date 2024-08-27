@@ -39,60 +39,77 @@
 #define QINTERLACESTYLE_H
 
 #ifndef QT_H
-#include "qmotifstyle.h"
+# include "qmotifstyle.h"
 #endif // QT_H
 
 #ifndef QT_NO_STYLE_INTERLACE
 
-#include <qpalette.h>
+# include <qpalette.h>
 
 class Q_EXPORT QInterlaceStyle : public QMotifStyle
 {
-public:
-    QInterlaceStyle();
-    void polish( QApplication*);
-    void unPolish( QApplication*);
-    void polish( QWidget* );
-    void unPolish( QWidget* );
+      public:
+	QInterlaceStyle();
+	void polish(QApplication *);
+	void unPolish(QApplication *);
+	void polish(QWidget *);
+	void unPolish(QWidget *);
 
-    int defaultFrameWidth() const;
-    QRect pushButtonContentsRect( QPushButton *btn );
+	int defaultFrameWidth() const;
+	QRect pushButtonContentsRect(QPushButton *btn);
 
-    void drawFocusRect ( QPainter *, const QRect &, const QColorGroup &, const QColor * bg = 0, bool = FALSE );
-    void drawButton( QPainter *p, int x, int y, int w, int h,
+	void drawFocusRect(QPainter *, const QRect &, const QColorGroup &,
+			   const QColor *bg = 0, bool = FALSE);
+	void drawButton(QPainter *p, int x, int y, int w, int h,
+			const QColorGroup &g, bool sunken = FALSE,
+			const QBrush *fill = 0);
+	void drawButtonMask(QPainter *p, int x, int y, int w, int h);
+	void drawBevelButton(QPainter *p, int x, int y, int w, int h,
 			     const QColorGroup &g, bool sunken = FALSE,
-			     const QBrush *fill = 0 );
-    void drawButtonMask ( QPainter * p, int x, int y, int w, int h );
-    void drawBevelButton( QPainter *p, int x, int y, int w, int h,
-			  const QColorGroup &g, bool sunken = FALSE,
-			  const QBrush *fill = 0 );
+			     const QBrush *fill = 0);
 
-    void drawPushButton( QPushButton* btn, QPainter *p);
-    QSize indicatorSize () const;
-    void drawIndicator ( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, int state, bool down = FALSE, bool enabled = TRUE );
-    void drawIndicatorMask( QPainter *p, int x, int y, int w, int h, int );
-    QSize exclusiveIndicatorSize () const;
-    void drawExclusiveIndicator( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, bool on, bool down = FALSE, bool enabled = TRUE );
-    void drawExclusiveIndicatorMask( QPainter * p, int x, int y, int w, int h, bool );
-    QRect comboButtonRect ( int x, int y, int w, int h );
-    void drawComboButton( QPainter *p, int x, int y, int w, int h, const QColorGroup &g, bool sunken, bool editable, bool enabled, const QBrush *fb );
-    void drawPushButtonLabel( QPushButton* btn, QPainter *p);
-    void drawPanel( QPainter *p, int x, int y, int w, int h,
-		    const QColorGroup &, bool sunken,
-		    int lineWidth, const QBrush *fill );
+	void drawPushButton(QPushButton *btn, QPainter *p);
+	QSize indicatorSize() const;
+	void drawIndicator(QPainter *p, int x, int y, int w, int h,
+			   const QColorGroup &g, int state, bool down = FALSE,
+			   bool enabled = TRUE);
+	void drawIndicatorMask(QPainter *p, int x, int y, int w, int h, int);
+	QSize exclusiveIndicatorSize() const;
+	void drawExclusiveIndicator(QPainter *p, int x, int y, int w, int h,
+				    const QColorGroup &g, bool on,
+				    bool down = FALSE, bool enabled = TRUE);
+	void drawExclusiveIndicatorMask(QPainter *p, int x, int y, int w, int h,
+					bool);
+	QRect comboButtonRect(int x, int y, int w, int h);
+	void drawComboButton(QPainter *p, int x, int y, int w, int h,
+			     const QColorGroup &g, bool sunken, bool editable,
+			     bool enabled, const QBrush *fb);
+	void drawPushButtonLabel(QPushButton *btn, QPainter *p);
+	void drawPanel(QPainter *p, int x, int y, int w, int h,
+		       const QColorGroup &, bool sunken, int lineWidth,
+		       const QBrush *fill);
 
-    void scrollBarMetrics( const QScrollBar* sb, int &sliderMin, int &sliderMax, int &sliderLength, int &buttonDim );
-    void drawScrollBarControls( QPainter* p, const QScrollBar* sb, int sliderStart, uint controls, uint activeControl );
-    void drawSlider( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, Orientation, bool tickAbove, bool tickBelow );
-    void drawSliderMask( QPainter * p, int x, int y, int w, int h, Orientation, bool tickAbove, bool tickBelow );
-    void drawSliderGroove( QPainter * p, int x, int y, int w, int h, const QColorGroup & g, QCOORD c, Orientation );
-    void drawSliderGrooveMask( QPainter * p, int x, int y, int w, int h, QCOORD c, Orientation );
-    int splitterWidth() const;
-    void drawSplitter( QPainter *p, int x, int y, int w, int h,
-		      const QColorGroup &g, Orientation orient);
+	void scrollBarMetrics(const QScrollBar *sb, int &sliderMin,
+			      int &sliderMax, int &sliderLength,
+			      int &buttonDim);
+	void drawScrollBarControls(QPainter *p, const QScrollBar *sb,
+				   int sliderStart, uint controls,
+				   uint activeControl);
+	void drawSlider(QPainter *p, int x, int y, int w, int h,
+			const QColorGroup &g, Orientation, bool tickAbove,
+			bool tickBelow);
+	void drawSliderMask(QPainter *p, int x, int y, int w, int h,
+			    Orientation, bool tickAbove, bool tickBelow);
+	void drawSliderGroove(QPainter *p, int x, int y, int w, int h,
+			      const QColorGroup &g, QCOORD c, Orientation);
+	void drawSliderGrooveMask(QPainter *p, int x, int y, int w, int h,
+				  QCOORD c, Orientation);
+	int splitterWidth() const;
+	void drawSplitter(QPainter *p, int x, int y, int w, int h,
+			  const QColorGroup &g, Orientation orient);
 
-private:
-    QPalette oldPalette;
+      private:
+	QPalette oldPalette;
 };
 
 #endif // QT_NO_STYLE_INTERLACE

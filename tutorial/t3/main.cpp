@@ -9,20 +9,20 @@
 #include <qfont.h>
 #include <qvbox.h>
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    QVBox box;
-    box.resize( 200, 120 );
+	QVBox box;
+	box.resize(200, 120);
 
-    QPushButton quit( "Quit", &box );
-    quit.setFont( QFont( "Times", 18, QFont::Bold ) );
+	QPushButton quit("Quit", &box);
+	quit.setFont(QFont("Times", 18, QFont::Bold));
 
-    QObject::connect( &quit, SIGNAL(clicked()), &a, SLOT(quit()) );
+	QObject::connect(&quit, SIGNAL(clicked()), &a, SLOT(quit()));
 
-    a.setMainWidget( &box );
-    box.show();
+	a.setMainWidget(&box);
+	box.show();
 
-    return a.exec();
+	return a.exec();
 }

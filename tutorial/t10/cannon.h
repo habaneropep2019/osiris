@@ -12,31 +12,37 @@
 
 class CannonField : public QWidget
 {
-    Q_OBJECT
-public:
-    CannonField( QWidget *parent=0, const char *name=0 );
+	Q_OBJECT
+      public:
+	CannonField(QWidget *parent = 0, const char *name = 0);
 
-    QSizePolicy sizePolicy() const;
+	QSizePolicy sizePolicy() const;
 
-    int   angle() const { return ang; }
-    int   force() const { return f; }
+	int angle() const
+	{
+		return ang;
+	}
+	int force() const
+	{
+		return f;
+	}
 
-public slots:
-    void  setAngle( int degrees );
-    void  setForce( int newton );
+      public slots:
+	void setAngle(int degrees);
+	void setForce(int newton);
 
-signals:
-    void  angleChanged( int );
-    void  forceChanged( int );
+      signals:
+	void angleChanged(int);
+	void forceChanged(int);
 
-protected:
-    void  paintEvent( QPaintEvent * );
+      protected:
+	void paintEvent(QPaintEvent *);
 
-private:
-    QRect cannonRect() const;
+      private:
+	QRect cannonRect() const;
 
-    int ang;
-    int f;
+	int ang;
+	int f;
 };
 
 

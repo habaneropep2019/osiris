@@ -29,127 +29,131 @@
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 
-IconViewEditor::IconViewEditor( QWidget *parent, QWidget *editWidget, FormWindow *fw )
-    : IconViewEditorBase( parent, 0, TRUE ), formwindow( fw )
+IconViewEditor::IconViewEditor(QWidget *parent, QWidget *editWidget,
+			       FormWindow *fw)
+	: IconViewEditorBase(parent, 0, TRUE), formwindow(fw)
 {
-    connect( buttonHelp, SIGNAL( clicked() ), MainWindow::self, SLOT( showDialogHelp() ) );
-    iconview = (QIconView*)editWidget;
+	connect(buttonHelp, SIGNAL(clicked()), MainWindow::self,
+		SLOT(showDialogHelp()));
+	iconview = (QIconView *)editWidget;
 
-    itemText->setText( "" );
-    itemText->setEnabled( FALSE );
-    itemPixmap->setText( "" );
-    itemChoosePixmap->setEnabled( FALSE );
-    itemDeletePixmap->setEnabled( FALSE );
+	itemText->setText("");
+	itemText->setEnabled(FALSE);
+	itemPixmap->setText("");
+	itemChoosePixmap->setEnabled(FALSE);
+	itemDeletePixmap->setEnabled(FALSE);
 
-    QIconViewItem *i = 0;
-    for ( i = iconview->firstItem(); i; i = i->nextItem() ) {
-	(void)new QIconViewItem( preview, i->text(), *i->pixmap()  );
-    }
+	QIconViewItem *i = 0;
+	for (i = iconview->firstItem(); i; i = i->nextItem()) {
+		(void)new QIconViewItem(preview, i->text(), *i->pixmap());
+	}
 
-    if ( preview->firstItem() )
-	preview->setCurrentItem( preview->firstItem() );
+	if (preview->firstItem())
+		preview->setCurrentItem(preview->firstItem());
 }
 
 void IconViewEditor::insertNewItem()
 {
-    QIconViewItem *i = new QIconViewItem( preview, tr( "New Item" ) );
-    preview->setCurrentItem( i );
-    preview->setSelected( i, TRUE );
+	QIconViewItem *i = new QIconViewItem(preview, tr("New Item"));
+	preview->setCurrentItem(i);
+	preview->setSelected(i, TRUE);
 }
 
 void IconViewEditor::deleteCurrentItem()
 {
-    delete preview->currentItem();
-    if ( preview->currentItem() )
-	preview->setSelected( preview->currentItem(), TRUE );
+	delete preview->currentItem();
+	if (preview->currentItem())
+		preview->setSelected(preview->currentItem(), TRUE);
 }
 
-void IconViewEditor::currentItemChanged( QIconViewItem *i )
+void IconViewEditor::currentItemChanged(QIconViewItem *i)
 {
-    itemText->blockSignals( TRUE );
-    itemText->setText( "" );
-    itemPixmap->setText( "" );
-    itemText->blockSignals( FALSE );
+	itemText->blockSignals(TRUE);
+	itemText->setText("");
+	itemPixmap->setText("");
+	itemText->blockSignals(FALSE);
 
-    if ( !i ) {
-	itemText->setEnabled( FALSE );
-	itemChoosePixmap->setEnabled( FALSE );
-	return;
-    }
+	if (!i) {
+		itemText->setEnabled(FALSE);
+		itemChoosePixmap->setEnabled(FALSE);
+		return;
+	}
 
-    itemText->blockSignals( TRUE );
-    itemText->setEnabled( TRUE );
-    itemChoosePixmap->setEnabled( TRUE );
-    itemDeletePixmap->setEnabled( i->pixmap() && !i->pixmap()->isNull() );
+	itemText->blockSignals(TRUE);
+	itemText->setEnabled(TRUE);
+	itemChoosePixmap->setEnabled(TRUE);
+	itemDeletePixmap->setEnabled(i->pixmap() && !i->pixmap()->isNull());
 
-    itemText->setText( i->text() );
-    if ( i->pixmap() )
-	itemPixmap->setPixmap( *i->pixmap() );
-    itemText->blockSignals( FALSE );
+	itemText->setText(i->text());
+	if (i->pixmap())
+		itemPixmap->setPixmap(*i->pixmap());
+	itemText->blockSignals(FALSE);
 }
 
-void IconViewEditor::currentTextChanged( const QString &txt )
+void IconViewEditor::currentTextChanged(const QString &txt)
 {
-    if ( !preview->currentItem() )
-	return;
+	if (!preview->currentItem())
+		return;
 
-    preview->currentItem()->setText( txt );
+	preview->currentItem()->setText(txt);
 }
 
 void IconViewEditor::okClicked()
 {
-    applyClicked();
-    accept();
+	applyClicked();
+	accept();
 }
 
 void IconViewEditor::cancelClicked()
 {
-    reject();
+	reject();
 }
 
 void IconViewEditor::applyClicked()
 {
-    QIconViewItem *i = 0;
-    QValueList<PopulateIconViewCommand::Item> items;
-    for ( i = preview->firstItem(); i; i = i->nextItem() ) {
-	PopulateIconViewCommand::Item item;
-	if ( i->pixmap() )
-	    item.pix = *i->pixmap();
-	item.text = i->text();
-	items.append( item );
-    }
+	QIconViewItem *i = 0;
+	QValueList<PopulateIconViewCommand::Item> items;
+	for (i = preview->firstItem(); i; i = i->nextItem()) {
+		PopulateIconViewCommand::Item item;
+		if (i->pixmap())
+			item.pix = *i->pixmap();
+		item.text = i->text();
+		items.append(item);
+	}
 
-    PopulateIconViewCommand *cmd = new PopulateIconViewCommand( tr( "Edit Items of '%1'" ).arg( iconview->name() ),
-								formwindow, iconview, items );
-    cmd->execute();
-    formwindow->commandHistory()->addCommand( cmd );
+	PopulateIconViewCommand *cmd = new PopulateIconViewCommand(
+		tr("Edit Items of '%1'").arg(iconview->name()), formwindow,
+		iconview, items);
+	cmd->execute();
+	formwindow->commandHistory()->addCommand(cmd);
 }
 
 void IconViewEditor::choosePixmap()
 {
-    if ( !preview->currentItem() )
-	return;
+	if (!preview->currentItem())
+		return;
 
-    QPixmap pix;
-    if ( preview->currentItem()->pixmap() )
-    	pix = qChoosePixmap( this, formwindow, *preview->currentItem()->pixmap() );
-    else
-    	pix = qChoosePixmap( this, formwindow, QPixmap() );
+	QPixmap pix;
+	if (preview->currentItem()->pixmap())
+		pix = qChoosePixmap(this, formwindow,
+				    *preview->currentItem()->pixmap());
+	else
+		pix = qChoosePixmap(this, formwindow, QPixmap());
 
-    if ( pix.isNull() )
-	return;
+	if (pix.isNull())
+		return;
 
-    preview->currentItem()->setPixmap( pix );
-    itemPixmap->setPixmap( pix );
-    itemDeletePixmap->setEnabled( TRUE );
+	preview->currentItem()->setPixmap(pix);
+	itemPixmap->setPixmap(pix);
+	itemDeletePixmap->setEnabled(TRUE);
 }
 
 void IconViewEditor::deletePixmap()
 {
-    if ( !preview->currentItem() )
-	return;
+	if (!preview->currentItem())
+		return;
 
-    preview->currentItem()->setPixmap( QPixmap() );
-    itemPixmap->setText( "" );
-    itemDeletePixmap->setEnabled( FALSE );
+	preview->currentItem()->setPixmap(QPixmap());
+	itemPixmap->setText("");
+	itemDeletePixmap->setEnabled(FALSE);
 }

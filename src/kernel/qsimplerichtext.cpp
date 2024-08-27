@@ -39,8 +39,8 @@
 
 #ifndef QT_NO_RICHTEXT
 
-#include "qsimplerichtext.h"
-#include "qpainter.h"
+# include "qsimplerichtext.h"
+# include "qpainter.h"
 
 
 // NOT REVISED
@@ -74,11 +74,11 @@
 
 class QSimpleRichTextData
 {
-public:
-    QRichText* doc;
-    QColor linkColor;
-    bool linkUnderline;
-    QFont font;
+      public:
+	QRichText *doc;
+	QColor linkColor;
+	bool linkUnderline;
+	QFont font;
 };
 
 /*!
@@ -105,14 +105,15 @@ public:
   style sheet will be used (see QStyleSheet::defaultSheet() ).
 
 */
-QSimpleRichText::QSimpleRichText( const QString& text, const QFont& fnt,
-				  const QString& context, const QStyleSheet* sheet)
+QSimpleRichText::QSimpleRichText(const QString &text, const QFont &fnt,
+				 const QString &context,
+				 const QStyleSheet *sheet)
 {
-    d  = new QSimpleRichTextData;
-    d->linkColor = Qt::blue;
-    d->linkUnderline = TRUE;
-    d->font = fnt;
-    d->doc = new QRichText( text, fnt, context, 0, 0, sheet );
+	d = new QSimpleRichTextData;
+	d->linkColor = Qt::blue;
+	d->linkUnderline = TRUE;
+	d->font = fnt;
+	d->doc = new QRichText(text, fnt, context, 0, 0, sheet);
 }
 
 
@@ -125,17 +126,19 @@ QSimpleRichText::QSimpleRichText( const QString& text, const QFont& fnt,
   suitable for printing. Set \a verticalBreak to be the height of the
   contents area of the pages.
  */
-QSimpleRichText::QSimpleRichText( const QString& text, const QFont& fnt,
-		 const QString& context,
-				  const QStyleSheet* sheet, const QMimeSourceFactory* factory, int verticalBreak,
-				  const QColor& linkColor, bool linkUnderline )
+QSimpleRichText::QSimpleRichText(const QString &text, const QFont &fnt,
+				 const QString &context,
+				 const QStyleSheet *sheet,
+				 const QMimeSourceFactory *factory,
+				 int verticalBreak, const QColor &linkColor,
+				 bool linkUnderline)
 {
-    d  = new QSimpleRichTextData;
-    d->linkColor = linkColor;
-    d->linkUnderline = linkUnderline;
-    d->doc = new QRichText( text, fnt, context, 0, factory, sheet );
-    d->doc->flow()->pagesize = verticalBreak;
-    d->font = fnt;
+	d = new QSimpleRichTextData;
+	d->linkColor = linkColor;
+	d->linkUnderline = linkUnderline;
+	d->doc = new QRichText(text, fnt, context, 0, factory, sheet);
+	d->doc->flow()->pagesize = verticalBreak;
+	d->font = fnt;
 }
 
 
@@ -144,10 +147,10 @@ QSimpleRichText::QSimpleRichText( const QString& text, const QFont& fnt,
 */
 QSimpleRichText::~QSimpleRichText()
 {
-    QTextFormatCollection* formats = d->doc?d->doc->formats:0;
-    delete d->doc;
-    delete formats; //#### fix inheritance structure in rich text
-    delete d;
+	QTextFormatCollection *formats = d->doc ? d->doc->formats : 0;
+	delete d->doc;
+	delete formats; // #### fix inheritance structure in rich text
+	delete d;
 }
 
 /*!
@@ -155,9 +158,9 @@ QSimpleRichText::~QSimpleRichText()
 
   \sa height(), adjustSize()
 */
-void QSimpleRichText::setWidth( int w)
+void QSimpleRichText::setWidth(int w)
 {
-    d->doc->doLayout( 0, w );
+	d->doc->doLayout(0, w);
 }
 
 /*!
@@ -169,9 +172,9 @@ void QSimpleRichText::setWidth( int w)
 
   \sa height(), adjustSize()
 */
-void QSimpleRichText::setWidth( QPainter* p, int w)
+void QSimpleRichText::setWidth(QPainter *p, int w)
 {
-    d->doc->doLayout( p, w );
+	d->doc->doLayout(p, w);
 }
 
 /*!
@@ -181,7 +184,7 @@ void QSimpleRichText::setWidth( QPainter* p, int w)
 */
 int QSimpleRichText::width() const
 {
-    return d->doc->flow()->width;
+	return d->doc->flow()->width;
 }
 
 
@@ -198,7 +201,7 @@ int QSimpleRichText::width() const
 */
 int QSimpleRichText::widthUsed() const
 {
-    return d->doc->flow()->widthUsed;
+	return d->doc->flow()->widthUsed;
 }
 
 
@@ -208,7 +211,7 @@ int QSimpleRichText::widthUsed() const
 */
 int QSimpleRichText::height() const
 {
-    return d->doc->flow()->height;
+	return d->doc->flow()->height;
 }
 
 
@@ -221,10 +224,10 @@ int QSimpleRichText::height() const
   passing a brush for \a paper is preferable to simply clearing the area
   to be painted and then calling this without a brush.
 */
-void QSimpleRichText::draw( QPainter* p,  int x, int y, const QRegion& clipRegion,
-	   const QPalette& pal, const QBrush* paper ) const
+void QSimpleRichText::draw(QPainter *p, int x, int y, const QRegion &clipRegion,
+			   const QPalette &pal, const QBrush *paper) const
 {
-    draw( p, x, y, clipRegion, pal.normal(), paper );
+	draw(p, x, y, clipRegion, pal.normal(), paper);
 }
 
 /*!\overload
@@ -239,56 +242,56 @@ void QSimpleRichText::draw( QPainter* p,  int x, int y, const QRegion& clipRegio
   This is a convenience function if there's no palette but just a
   color group available. If you have a palette, pass this instead of \a cg.
 */
-void QSimpleRichText::draw( QPainter* p,  int x, int y, const QRegion& clipRegion,
-			      const QColorGroup& cg, const QBrush* paper) const
+void QSimpleRichText::draw(QPainter *p, int x, int y, const QRegion &clipRegion,
+			   const QColorGroup &cg, const QBrush *paper) const
 {
-    QRect r = clipRegion.boundingRect();
-    QRegion bg = clipRegion;
+	QRect r = clipRegion.boundingRect();
+	QRegion bg = clipRegion;
 
-    d->doc->draw(p, x, y, 0, 0, r.x(), r.y(), r.width(), r.height(), bg, cg,
-		 QTextOptions( paper, d->linkColor, d->linkUnderline ) );
-    if (paper) {
-#ifndef QT_NO_TRANSFORMATIONS
-	QWMatrix wm = p->worldMatrix();
-	bg.translate( int(wm.dx()), int(wm.dy()) );
-#endif
-	p->setClipRegion(bg);
-	if ( paper->pixmap() )
-	    p->drawTiledPixmap( r, *paper->pixmap());
-	else
-	    p->fillRect(r, *paper);
-	p->setClipping( FALSE );
-    }
+	d->doc->draw(p, x, y, 0, 0, r.x(), r.y(), r.width(), r.height(), bg, cg,
+		     QTextOptions(paper, d->linkColor, d->linkUnderline));
+	if (paper) {
+# ifndef QT_NO_TRANSFORMATIONS
+		QWMatrix wm = p->worldMatrix();
+		bg.translate(int(wm.dx()), int(wm.dy()));
+# endif
+		p->setClipRegion(bg);
+		if (paper->pixmap())
+			p->drawTiledPixmap(r, *paper->pixmap());
+		else
+			p->fillRect(r, *paper);
+		p->setClipping(FALSE);
+	}
 }
 
 
 /*!
-  Returns the context of the rich text document. If no context has been specified
-  in the constructor, a null string is returned.
+  Returns the context of the rich text document. If no context has been
+  specified in the constructor, a null string is returned.
 */
 QString QSimpleRichText::context() const
 {
-    return d->doc->context();
+	return d->doc->context();
 }
 
 /*!\obsolete
-  Returns the anchor at the requested position. The QPainter is needed for font size
-  calculations. An empty string is returned if no anchor is specified for this certain
-  position.
+  Returns the anchor at the requested position. The QPainter is needed for font
+  size calculations. An empty string is returned if no anchor is specified for
+  this certain position.
 
   This function will be removed in 3.0
 */
-QString QSimpleRichText::anchor( QPainter*, const QPoint& pos )
+QString QSimpleRichText::anchor(QPainter *, const QPoint &pos)
 {
-    return anchorAt( pos );
+	return anchorAt(pos);
 }
 
 /*! Returns the anchor at the requested position. An empty string is
   returned if no anchor is specified for this certain position.
 */
-QString QSimpleRichText::anchorAt( const QPoint& pos ) const
+QString QSimpleRichText::anchorAt(const QPoint &pos) const
 {
-    return d->doc->anchorAt( pos );
+	return d->doc->anchorAt(pos);
 }
 
 
@@ -297,20 +300,20 @@ QString QSimpleRichText::anchorAt( const QPoint& pos ) const
 
 static uint int_sqrt(uint n)
 {
-    uint h, p= 0, q= 1, r= n;
-    ASSERT( n < 1073741824U );  // UINT_MAX>>2 on 32-bits architecture
-    while ( q <= n )
-	q <<= 2;
-    while ( q != 1 ) {
-	q >>= 2;
-	h= p + q;
-	p >>= 1;
-	if ( r >= h ) {
-	    p += q;
-	    r -= h;
+	uint h, p = 0, q = 1, r = n;
+	ASSERT(n < 1073741824U); // UINT_MAX>>2 on 32-bits architecture
+	while (q <= n)
+		q <<= 2;
+	while (q != 1) {
+		q >>= 2;
+		h = p + q;
+		p >>= 1;
+		if (r >= h) {
+			p += q;
+			r -= h;
+		}
 	}
-    }
-    return p;
+	return p;
 }
 
 
@@ -321,29 +324,31 @@ static uint int_sqrt(uint n)
 */
 void QSimpleRichText::adjustSize()
 {
-    QFontMetrics fm( d->font );
-    int mw =  fm.width( 'x' ) * 80;
-    int w = mw;
-    d->doc->doLayout( 0,w );
-    if ( d->doc->flow()->widthUsed != 0 ) {
-	w = int_sqrt( (5*d->doc->height) / (3*d->doc->flow()->widthUsed ) );
-	d->doc->doLayout( 0, QMIN( w, mw) );
+	QFontMetrics fm(d->font);
+	int mw = fm.width('x') * 80;
+	int w = mw;
+	d->doc->doLayout(0, w);
+	if (d->doc->flow()->widthUsed != 0) {
+		w = int_sqrt((5 * d->doc->height) /
+			     (3 * d->doc->flow()->widthUsed));
+		d->doc->doLayout(0, QMIN(w, mw));
 
-	if ( w*3 < 5*d->doc->flow()->height ) {
-	    w = int_sqrt(6*d->doc->flow()->height/3*d->doc->flow()->widthUsed);
-	    d->doc->doLayout( 0,QMIN(w, mw ) );
+		if (w * 3 < 5 * d->doc->flow()->height) {
+			w = int_sqrt(6 * d->doc->flow()->height / 3 *
+				     d->doc->flow()->widthUsed);
+			d->doc->doLayout(0, QMIN(w, mw));
+		}
 	}
-    }
 }
 
 
 /*!
   Returns whether \a pos is within a text line of the document or not.
  */
-bool QSimpleRichText::inText( const QPoint& pos ) const
+bool QSimpleRichText::inText(const QPoint &pos) const
 {
-    QRichTextIterator it( *d->doc );
-    return it.goTo( pos );
+	QRichTextIterator it(*d->doc);
+	return it.goTo(pos);
 }
 
 #endif // QT_NO_RICHTEXT

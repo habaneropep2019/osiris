@@ -23,40 +23,37 @@
 
 class GLTeapots : public QGLWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
+      public:
+	GLTeapots(QWidget *parent, const char *name);
+	~GLTeapots();
 
-    GLTeapots( QWidget* parent, const char* name );
-    ~GLTeapots();
+      protected:
+	void initializeGL();
+	void paintGL();
+	void resizeGL(int w, int h);
 
-protected:
+	void initializeOverlayGL();
+	void paintOverlayGL();
+	void resizeOverlayGL(int w, int h);
 
-    void		initializeGL();
-    void		paintGL();
-    void		resizeGL( int w, int h );
+	void mousePressEvent(QMouseEvent *e);
+	void mouseMoveEvent(QMouseEvent *e);
+	void mouseReleaseEvent(QMouseEvent *e);
 
-    void		initializeOverlayGL();
-    void		paintOverlayGL();
-    void		resizeOverlayGL( int w, int h );
+	void renderTeapot(GLfloat x, GLfloat y, GLfloat ambr, GLfloat ambg,
+			  GLfloat ambb, GLfloat difr, GLfloat difg,
+			  GLfloat difb, GLfloat specr, GLfloat specg,
+			  GLfloat specb, GLfloat shine);
 
-    void		mousePressEvent( QMouseEvent* e );
-    void		mouseMoveEvent( QMouseEvent* e );
-    void		mouseReleaseEvent( QMouseEvent* e );
+	void teapot();
 
-    void		renderTeapot( GLfloat x, GLfloat y, GLfloat ambr,
-				      GLfloat ambg, GLfloat ambb, GLfloat difr,
-				      GLfloat difg, GLfloat difb, 
-				      GLfloat specr, GLfloat specg, 
-				      GLfloat specb, GLfloat shine );
-
-    void		teapot();
-
-private:
-    GLuint teapotList;
-    QPoint rubberP1;
-    QPoint rubberP2;
-    bool rubberOn;
+      private:
+	GLuint teapotList;
+	QPoint rubberP1;
+	QPoint rubberP2;
+	bool rubberOn;
 };
 
 

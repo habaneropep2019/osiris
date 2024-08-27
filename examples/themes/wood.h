@@ -20,40 +20,39 @@
 
 class NorwegianWoodStyle : public QWindowsStyle
 {
-public:
-    NorwegianWoodStyle( int sbext = -1 );
-    void polish( QApplication*);
-    void polish( QWidget* );
-    void unPolish( QWidget* );
-    void unPolish( QApplication*);
+      public:
+	NorwegianWoodStyle(int sbext = -1);
+	void polish(QApplication *);
+	void polish(QWidget *);
+	void unPolish(QWidget *);
+	void unPolish(QApplication *);
 
-    void drawButton( QPainter *p, int x, int y, int w, int h,
+	void drawButton(QPainter *p, int x, int y, int w, int h,
+			const QColorGroup &g, bool sunken = FALSE,
+			const QBrush *fill = 0);
+	void drawBevelButton(QPainter *p, int x, int y, int w, int h,
 			     const QColorGroup &g, bool sunken = FALSE,
-			     const QBrush *fill = 0 );
-    void drawBevelButton( QPainter *p, int x, int y, int w, int h,
-			  const QColorGroup &g, bool sunken = FALSE,
-			  const QBrush *fill = 0 );
-    QRect buttonRect( int x, int y, int w, int h);
-    void drawButtonMask( QPainter *p, int x, int y, int w, int h);
-    void drawComboButton( QPainter *p, int x, int y, int w, int h,
-				    const QColorGroup &g,
-				    bool /* sunken */,
-				    bool editable,
-				    bool /*enabled */,
-				    const QBrush *fb );
+			     const QBrush *fill = 0);
+	QRect buttonRect(int x, int y, int w, int h);
+	void drawButtonMask(QPainter *p, int x, int y, int w, int h);
+	void drawComboButton(QPainter *p, int x, int y, int w, int h,
+			     const QColorGroup &g, bool /* sunken */,
+			     bool editable, bool /*enabled */,
+			     const QBrush *fb);
 
 
-    void drawPushButton( QPushButton* btn, QPainter *p);
-    void drawPushButtonLabel( QPushButton* btn, QPainter *p);
-    void drawScrollBarControls( QPainter*,  const QScrollBar*, int sliderStart, uint controls, uint activeControl );
+	void drawPushButton(QPushButton *btn, QPainter *p);
+	void drawPushButtonLabel(QPushButton *btn, QPainter *p);
+	void drawScrollBarControls(QPainter *, const QScrollBar *,
+				   int sliderStart, uint controls,
+				   uint activeControl);
 
-private:
-    void drawSemicircleButton(QPainter *p, const QRect &r, int dir, 
-			      bool sunken, const QColorGroup &g );
-    QPalette oldPalette;
-    QPixmap *sunkenDark;
-    QPixmap *sunkenLight;
-
+      private:
+	void drawSemicircleButton(QPainter *p, const QRect &r, int dir,
+				  bool sunken, const QColorGroup &g);
+	QPalette oldPalette;
+	QPixmap *sunkenDark;
+	QPixmap *sunkenLight;
 };
 
 #endif
