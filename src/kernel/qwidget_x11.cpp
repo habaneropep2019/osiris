@@ -249,10 +249,11 @@ void QWidget::create(WId window, bool initializeWindow, bool destroyOldWindow)
 			if (testWFlags(WStyle_NormalBorder) ||
 			    testWFlags(WStyle_DialogBorder)) {
 				; // ok, we already have it
-			} else if (testWFlags(WStyle_NoBorderEx)) { // Style_NoBorderEx,
-								    // sets
-								    // Motif
-								    // hint
+			} else if (testWFlags(
+					   WStyle_NoBorderEx)) { // Style_NoBorderEx,
+								 // sets
+								 // Motif
+								 // hint
 				// ### this should really be WStyle_NoBorder
 				// in 3.0
 				struct {
@@ -297,7 +298,7 @@ void QWidget::create(WId window, bool initializeWindow, bool destroyOldWindow)
 		// do no initialization
 	} else if (popup) { // popup widget
 		XSetTransientForHint(dpy, id, parentw); //?!?! this looks
-							//pointless
+							// pointless
 		wsa.override_redirect = TRUE;
 		wsa.save_under = TRUE;
 		XChangeWindowAttributes(dpy, id,

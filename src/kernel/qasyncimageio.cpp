@@ -1156,7 +1156,7 @@ int QGIFFormat::decode(QImage &img, QImageConsumer *consumer,
 				state = ApplicationExtension;
 				break;
 				///////////////////////////////////////////
-				///Ignored at this time //////
+				/// Ignored at this time //////
 				//           case 0xfe:
 				//                state=CommentExtension;
 				//                break;

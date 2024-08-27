@@ -81,7 +81,7 @@ ListBoxCombo::ListBoxCombo(QWidget *parent, const char *name)
 	lb1->setSelectionMode(QListBox::Multi);
 
 	// ...insert a pixmap item...
-	lb1->insertItem(QPixmap("qtlogo.png"));
+	lb1->insertItem(QPixmap("osirislogo.png"));
 	// ...and 100 text items
 	for (i = 0; i < 100; i++) {
 		str = QString("Listbox Item %1").arg(i);

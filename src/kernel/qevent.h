@@ -56,7 +56,7 @@ class Q_EXPORT QEvent : public Qt // event base class
 		//       it's probably because you're trying to include X11,
 		//       which
 		//	 has a mess of #defines in it.  Put the messy X11
-		//includes
+		// includes
 		//	 *AFTER* the nice clean Qt includes.
 
 		None = 0, // invalid event

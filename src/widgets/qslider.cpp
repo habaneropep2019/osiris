@@ -469,8 +469,8 @@ void QSlider::paintEvent(QPaintEvent *)
 		style().drawSliderGroove(&p, 0, tickOffset, width(),
 					 thickness(), g, mid, Horizontal);
 		// 	    p.fillRect( 0, 0, width(), tickOffset,
-		// g.background() ); 	    p.fillRect( 0, tickOffset + thickness(),
-		// 			width(), height()/*###*/, g.background()
+		// g.background() ); 	    p.fillRect( 0, tickOffset +
+		// thickness(), 			width(), height()/*###*/, g.background()
 		// );
 		erase(0, 0, width(), tickOffset);
 		erase(0, tickOffset + thickness(), width(), height());
@@ -478,8 +478,8 @@ void QSlider::paintEvent(QPaintEvent *)
 		style().drawSliderGroove(&p, tickOffset, 0, thickness(),
 					 height(), g, mid, Vertical);
 		// 	    p.fillRect( 0, 0,  tickOffset, height(),
-		// g.background() ); 	    p.fillRect( tickOffset + thickness(), 0,
-		// 			width()/*###*/, height(), g.background()
+		// g.background() ); 	    p.fillRect( tickOffset +
+		// thickness(), 0, 			width()/*###*/, height(), g.background()
 		// );
 		erase(0, 0, tickOffset, height());
 		erase(tickOffset + thickness(), 0, width() /*###*/, height());

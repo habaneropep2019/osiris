@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 	if (argc > 2)
 		logo_fn = argv[2];
 	else
-		logo_fn = "qtlogo.png";
+		logo_fn = "osirislogo.png";
 
 
 	QCanvas canvas(800, 600);

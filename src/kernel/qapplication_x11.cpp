@@ -3523,11 +3523,12 @@ void qt_leave_modal(QWidget *widget)
 			qt_modal_stack = 0;
 			QPoint p(QCursor::pos());
 			QWidget *w = QApplication::widgetAt(p.x(), p.y(), TRUE);
-			qt_dispatchEnterLeave(w,
-					      QWidget::find(curWin)); // send
-								      // synthetic
-								      // enter
-								      // event
+			qt_dispatchEnterLeave(
+				w,
+				QWidget::find(curWin)); // send
+							// synthetic
+							// enter
+							// event
 			curWin = w ? w->winId() : 0;
 		}
 	}

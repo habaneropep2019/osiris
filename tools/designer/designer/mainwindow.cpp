@@ -91,7 +91,7 @@ static int forms = 0;
 
 static const char *whatsthis_image[] = {
 	"16 16 3 1",	    " 	c None",	"o	c #000000",
-	"a	c #000080",	    "o        aaaaa  ", "oo      aaa aaa ",
+	"a	c #000080", "o        aaaaa  ", "oo      aaa aaa ",
 	"ooo    aaa   aaa", "oooo   aa     aa", "ooooo  aa     aa",
 	"oooooo  a    aaa", "ooooooo     aaa ", "oooooooo   aaa  ",
 	"ooooooooo aaa   ", "ooooo     aaa   ", "oo ooo          ",

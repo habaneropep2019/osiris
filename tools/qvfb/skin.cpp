@@ -34,8 +34,8 @@ Skin::Skin(QVFb *p, const QString &skinFile, int &viewW, int &viewH)
 		ts >> areas[i].y2;
 		//	Debug the skin file parsing
 		//	printf("read: -%s- -%i- -%i- -%i- -%i- -%i-\n",
-		//areas[i].name.latin1(), 	    areas[i].keyCode, areas[i].x1,
-		//areas[i].y1, areas[i].x2, areas[i].y2 );
+		// areas[i].name.latin1(), 	    areas[i].keyCode,
+		// areas[i].x1, areas[i].y1, areas[i].x2, areas[i].y2 );
 	}
 
 	parent = p;
@@ -100,8 +100,8 @@ void Skin::mousePressEvent(QMouseEvent *e)
 				if (view)
 					view->skinKeyPressEvent(&keyEvent);
 				//		Debug message to be sure we are
-				//clicking the right areas 		printf("%s
-				//clicked\n", areas[i].name);
+				// clicking the right areas printf("%s
+				// clicked\n", areas[i].name);
 				ButtonAreas *ba = &areas[buttonIndex];
 				repaint(ba->x1, ba->y1, ba->x2 - ba->x1,
 					ba->y2 - ba->y1, FALSE);
@@ -110,8 +110,8 @@ void Skin::mousePressEvent(QMouseEvent *e)
 		}
 
 		//	This is handy for finding the areas to define rectangles
-		//for new skins 	printf("Clicked in %i,%i\n",  e->pos().x(),
-		//e->pos().y());
+		// for new skins 	printf("Clicked in %i,%i\n",
+		// e->pos().x(), e->pos().y());
 		clickPos = e->pos();
 	}
 }

@@ -261,11 +261,11 @@ class Q_EXPORT QStyle : public QObject
 				   bool dis) = 0;
 	virtual void polishPopupMenu(QPopupMenu *) = 0;
 
-	virtual int extraPopupMenuItemWidth(bool checkable, int maxpmw,
-					    QMenuItem *mi,
-					    const QFontMetrics &fm) = 0; // ###
-									 // const
-									 // 3.0
+	virtual int
+	extraPopupMenuItemWidth(bool checkable, int maxpmw, QMenuItem *mi,
+				const QFontMetrics &fm) = 0; // ###
+							     // const
+							     // 3.0
 	virtual int
 	popupSubmenuIndicatorWidth(const QFontMetrics &fm) = 0; // ### const 3.0
 	virtual int

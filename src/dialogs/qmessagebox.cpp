@@ -652,7 +652,7 @@ void QMessageBox::init(int button0, int button1, int button2)
 # else
 		*translatedTextAboutQt = tr(
 			"<h3>About Osiris</h3>"
-			"<p>This program uses Osiris version 2.4.1, a multiplatform C++ "
+			"<p>This program uses Osiris version 2.4.2, a multiplatform C++ "
 			"GUI toolkit based on Qt 2.3.2 from Trolltech. "
 			"Osiris runs on *nix systems using the X11 windowing system.</p>"
 			"<p>See <tt>https://centre.libranext.com/libranext/osiris/</tt> for more "

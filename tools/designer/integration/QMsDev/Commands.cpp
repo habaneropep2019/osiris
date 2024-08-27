@@ -513,7 +513,7 @@ void CCommands::addMOC(CComQIPtr<IBuildProject, &IID_IBuildProject> pProject,
 	// CANTDO: add dependency to .moc-file
 	if (specialFile) {
 		//	    VERIFY_OK(pConfig->AddFileDependency(
-		//CComBSTR(mocfile), CComBSTR(filepath+file)));
+		// CComBSTR(mocfile), CComBSTR(filepath+file)));
 	}
 }
 
