@@ -145,7 +145,8 @@ void Config::write(const QString &fn)
 	QTextStream s(&f);
 	QMap<QString, ConfigGroup>::Iterator g_it = groups.begin();
 	for (; g_it != groups.end(); ++g_it) {
-		s << "[" << g_it.key() << "]" << "\n";
+		s << "[" << g_it.key() << "]"
+		  << "\n";
 		ConfigGroup::Iterator e_it = (*g_it).begin();
 		for (; e_it != (*g_it).end(); ++e_it)
 			s << e_it.key() << " = " << *e_it << "\n";

@@ -1224,9 +1224,3 @@ pixmaps_install_dir = designer_assets_install_dir / 'pixmaps'
 install_subdir('tools/designer/pics/large', install_dir : pixmaps_install_dir, strip_directory : false)
 install_subdir('tools/designer/pics/mini', install_dir : pixmaps_install_dir, strip_directory : false)
 install_subdir('tools/designer/pics/small', install_dir : pixmaps_install_dir, strip_directory : false)
-
-designer_docs_install_dir = designer_assets_install_dir / 'doc/html/'
-designer_tools_install_dir = designer_assets_install_dir / 'tools/'
-
-install_subdir('doc/html/designer', install_dir : designer_docs_install_dir, strip_directory : true)
-install_subdir('tools/designer', install_dir : designer_tools_install_dir, strip_directory : true)

@@ -37,10 +37,6 @@
 #include <stdlib.h>
 #include <signal.h>
 
-#ifndef DESIGNER_INSTALL_PREFIX
-# error DESIGNER_INSTALL_PREFIX needs to be defined in build so that assets paths are known
-#endif
-
 #if defined(_OS_SCO_) && defined(raise)
 # undef raise // fix for broken signal.h on SCO OpenServer 5.0.5
 #endif
