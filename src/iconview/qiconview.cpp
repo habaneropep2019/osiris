@@ -2261,7 +2261,7 @@ void QIconViewItem::checkRect()
 
 /*! \fn void  QIconView::onItem( QIconViewItem *i )
   This signal is emitted, when the user moves the mouse cursor onto an item.
-  It�s only emitted once per item.
+  It's only emitted once per item.
 */
 
 /*! \fn void  QIconView::onViewport()
@@ -3503,7 +3503,7 @@ void QIconView::clear()
 	d->drawDragShapes = FALSE;
 
 	resizeContents(0, 0);
-	// maybe we don�t need this update, so delay it
+	// maybe we don't need this update, so delay it
 	d->fullRedrawTimer->start(0, TRUE);
 
 	d->cleared = TRUE;
