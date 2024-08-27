@@ -268,7 +268,7 @@ class Q_EXPORT QMultiLineEdit : public QTableView
 # endif
 	struct QMultiLineEditRow {
 		QMultiLineEditRow(QString string, int width, bool nl = TRUE)
-			: s(string), w(width), newline(nl) {};
+			: s(string), w(width), newline(nl){};
 		QString s;
 		int w;
 		bool newline;

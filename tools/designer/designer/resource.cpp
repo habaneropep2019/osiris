@@ -485,8 +485,7 @@ void Resource::saveObject(QObject *obj, QDesignerGridLayout *grid,
 				continue; // we don't know this widget
 			ts << makeIndent(indent) << "<widget>" << endl;
 			++indent;
-			ts << makeIndent(indent) << "<class>"
-			   << "QWidget"
+			ts << makeIndent(indent) << "<class>" << "QWidget"
 			   << "</class>" << endl;
 
 			ts << makeIndent(indent) << "<property stdset=\"1\">"
@@ -501,8 +500,7 @@ void Resource::saveObject(QObject *obj, QDesignerGridLayout *grid,
 
 			ts << makeIndent(indent) << "<attribute>" << endl;
 			indent++;
-			ts << makeIndent(indent) << "<name>"
-			   << "title"
+			ts << makeIndent(indent) << "<name>" << "title"
 			   << "</name>" << endl;
 			ts << makeIndent(indent) << "<string>"
 			   << entitize(tw->tabLabel((QWidget *)it.current()))
@@ -532,8 +530,7 @@ void Resource::saveObject(QObject *obj, QDesignerGridLayout *grid,
 				continue; // we don't know this widget
 			ts << makeIndent(indent) << "<widget>" << endl;
 			++indent;
-			ts << makeIndent(indent) << "<class>"
-			   << "QWidget"
+			ts << makeIndent(indent) << "<class>" << "QWidget"
 			   << "</class>" << endl;
 
 			ts << makeIndent(indent) << "<property stdset=\"1\">"
@@ -548,8 +545,7 @@ void Resource::saveObject(QObject *obj, QDesignerGridLayout *grid,
 
 			ts << makeIndent(indent) << "<attribute>" << endl;
 			indent++;
-			ts << makeIndent(indent) << "<name>"
-			   << "title"
+			ts << makeIndent(indent) << "<name>" << "title"
 			   << "</name>" << endl;
 			ts << makeIndent(indent) << "<string>"
 			   << entitize(wiz->title((QWidget *)it.current()))
@@ -792,8 +788,7 @@ void Resource::saveObjectProperties(QObject *w, QTextStream &ts, int indent)
 				changed << "sizeHint";
 		}
 	} else if (w->inherits("QLayout")) { // #### should be cleaner (RS)
-		changed << "margin"
-			<< "spacing";
+		changed << "margin" << "spacing";
 	}
 
 	if (w == formwindow->mainContainer()) {

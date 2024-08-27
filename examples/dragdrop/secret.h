@@ -22,7 +22,7 @@ class SecretDrag : public QStoredDrag
 {
       public:
 	SecretDrag(uchar, QWidget *parent = 0, const char *name = 0);
-	~SecretDrag() {};
+	~SecretDrag(){};
 
 	static bool canDecode(QDragMoveEvent *e);
 	static bool decode(QDropEvent *e, QString &s);

@@ -88,6 +88,7 @@ static const char *egcsWorkaround = "%x  %X";
 
 static QFileIconProvider *fileIconProvider = 0;
 
+// clang-format off
 
 /* XPM */
 static const char *const start_xpm[] = {
@@ -182,8 +183,8 @@ static const char *const cdtoparent_xpm[] = {
 
 /* XPM */
 static const char *const newfolder_xpm[] = {
-	"15 14 4 1",	    " 	c None",      ".	c #000000",
-	"+	c #FFFF00", "@	c #FFFFFF",   "          .    ",
+	"15 14 4 1",	    " 	c None",       ".	c #000000",
+	"+	c #FFFF00", "@	c #FFFFFF",    "          .    ",
 	"               ",  "          .    ", "       .     . ",
 	"  ....  . . .  ",  " .+@+@.  . .   ", "..........  . .",
 	".@+@+@+@+@..   ",  ".+@+@+@+@+. .  ", ".@+@+@+@+@.  . ",
@@ -228,6 +229,8 @@ static const char *const back_xpm[] = {
 	".....#.......", "....##.......", "...#a#.......", "..#aa########",
 	".#aaaaaaaaaa#", "#aaaaaaaaaaa#", ".#aaaaaaaaaa#", "..#aa########",
 	"...#a#.......", "....##.......", ".....#......."};
+
+// clang-format on
 
 static QPixmap *openFolderIcon = 0;
 static QPixmap *closedFolderIcon = 0;

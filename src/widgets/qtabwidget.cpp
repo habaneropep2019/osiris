@@ -137,8 +137,8 @@ class QTabWidgetData
       public:
 	QTabWidgetData()
 		: tabs(0), stack(0), dirty(TRUE), pos(QTabWidget::Top),
-		  shape(QTabWidget::Rounded) {};
-	~QTabWidgetData() {};
+		  shape(QTabWidget::Rounded){};
+	~QTabWidgetData(){};
 	QTabBar *tabs;
 	QWidgetStack *stack;
 	bool dirty;

@@ -23,6 +23,8 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 
+// clang-format off
+
 static const char *cdtoparent_xpm[] = {
 	"15 13 3 1",	   ". c None",	      "* c #000000",
 	"a c #ffff99",	   "..*****........", ".*aaaaa*.......",
@@ -32,13 +34,15 @@ static const char *cdtoparent_xpm[] = {
 	"*aaaaaaaaaaaaa*", "***************"};
 
 static const char *newfolder_xpm[] = {
-	"15 14 4 1",	    " 	c None",      ".	c #000000",
-	"+	c #FFFF00", "@	c #FFFFFF",   "          .    ",
+	"15 14 4 1",	    " 	c None",       ".	c #000000",
+	"+	c #FFFF00", "@	c #FFFFFF",    "          .    ",
 	"               ",  "          .    ", "       .     . ",
 	"  ....  . . .  ",  " .+@+@.  . .   ", "..........  . .",
 	".@+@+@+@+@..   ",  ".+@+@+@+@+. .  ", ".@+@+@+@+@.  . ",
 	".+@+@+@+@+.    ",  ".@+@+@+@+@.    ", ".+@+@+@+@+.    ",
 	"...........    "};
+
+// clang-format on
 
 FileMainWindow::FileMainWindow() : QMainWindow()
 {

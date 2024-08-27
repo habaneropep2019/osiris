@@ -7117,7 +7117,7 @@ class QBidiState
 	unsigned char level;
 	signed char override;
 
-	QBidiState(unsigned char l, signed char o) : level(l), override(o) {};
+	QBidiState(unsigned char l, signed char o) : level(l), override(o){};
 };
 
 // matrix for resolving neutral types

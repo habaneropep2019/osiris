@@ -125,6 +125,8 @@ const bool win32 = TRUE;
 #  define BUTTON_HEIGHT 14
 #  define RANGE 16
 
+// clang-format off
+
 static const char *const close_xpm[] = {
 	"12 12 2 1",	"# c #000000",	". c None",	"............",
 	"............", "..##....##..", "...##..##...", "....####....",
@@ -169,7 +171,7 @@ static const char *const unshade_xpm[] = {
 	"...#####....", "....###.....", ".....#......", "............",
 	"............", "............", "............"};
 
-
+// clang-format on
 
 # else // !_WS_WIN_
 
@@ -178,6 +180,8 @@ const bool win32 = FALSE;
 #  define BUTTON_WIDTH 16
 #  define BUTTON_HEIGHT 14
 #  define RANGE 16
+
+// clang-format off
 
 static const char *const close_xpm[] = {
 	"12 12 2 1",	"       s None  c None", ".      c black",
@@ -227,6 +231,7 @@ static const char *const unshade_xpm[] = {
 	".#.......#..", ".#.......#..", ".#.......#..", ".#.......#..",
 	".#########..", "............", "............"};
 
+// clang-format on
 
 # endif // !_WS_WIN_
 

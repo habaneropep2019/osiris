@@ -405,7 +405,7 @@ class Q_EXPORT QTableHeader : public QHeader
 	enum SectionState { Normal, Bold, Selected };
 
 	QTableHeader(int, QTable *t, QWidget *parent = 0, const char *name = 0);
-	~QTableHeader() {};
+	~QTableHeader(){};
 	void addLabel(const QString &s, int size);
 
 	void setSectionState(int s, SectionState state);

@@ -1,3 +1,6 @@
+
+// clang-format off
+
 static const char *const maximize_xpm[] = {
 	"12 12 2 1",	"# c #000000",	". c None",	"............",
 	"............", ".##########.", ".##########.", ".#........#.",
@@ -17,7 +20,7 @@ static const char *const normalize_xpm[] = {
 	"..######.#..", "..#....###..", "..#....#....", "..#....#....",
 	"..######....", "............", "............"};
 
-
+// clang-format on
 
 #include "trayicon.h"
 

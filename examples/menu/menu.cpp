@@ -16,6 +16,8 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 
+// clang-format off
+
 /* XPM */
 static const char *p1_xpm[] = {"16 16 3 1",
 			       " 	c None",
@@ -82,6 +84,7 @@ static const char *p3_xpm[] = {"16 16 3 1",
 			       "                ",
 			       "                "};
 
+// clang-format on
 
 /*
   Auxiliary class to provide fancy menu items with different
@@ -91,7 +94,7 @@ static const char *p3_xpm[] = {"16 16 3 1",
 class MyMenuItem : public QCustomMenuItem
 {
       public:
-	MyMenuItem(const QString &s, const QFont &f) : string(s), font(f) {};
+	MyMenuItem(const QString &s, const QFont &f) : string(s), font(f){};
 	~MyMenuItem()
 	{
 	}

@@ -73,7 +73,7 @@ class MyWhatsThis : public QWhatsThis
 	{
 		listbox = lb;
 	};
-	~MyWhatsThis() {};
+	~MyWhatsThis(){};
 
 
 	QString text(const QPoint &p)
@@ -95,7 +95,7 @@ class MyWhatsThis : public QWhatsThis
 class MyMenuItem : public QCustomMenuItem
 {
       public:
-	MyMenuItem(const QString &s, const QFont &f) : string(s), font(f) {};
+	MyMenuItem(const QString &s, const QFont &f) : string(s), font(f){};
 	~MyMenuItem()
 	{
 	}

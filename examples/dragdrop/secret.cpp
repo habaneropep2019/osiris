@@ -60,6 +60,7 @@ SecretSource::~SecretSource()
 {
 }
 
+// clang-format off
 /* XPM */
 static const char *picture_xpm[] = {
 	"16 16 3 1",	    " 	c None",	".	c #000000",
@@ -69,6 +70,8 @@ static const char *picture_xpm[] = {
 	".XXXXXXXXXXXXX. ", ".XXXXXX.XXXXXX. ", " .XX.XX.XX.XX.  ",
 	" .XXX..X..XXX.  ", "  .XXXXXXXXX.   ", "   ..XXXXX..    ",
 	"     .....      ", "                "};
+
+// clang-format on
 
 void SecretSource::mousePressEvent(QMouseEvent * /*e*/)
 {

@@ -110,7 +110,7 @@ struct QListViewPrivate {
 	{
 	      public:
 		Pending(int level, int ypos, QListViewItem *item)
-			: l(level), y(ypos), i(item) {};
+			: l(level), y(ypos), i(item){};
 
 		int l; // level of this item; root is -1 or 0
 		int y; // level of this item in the tree
@@ -1649,7 +1649,7 @@ void QListViewPrivate::Root::setup()
 
 /*! \fn void  QListView::onItem( QListViewItem *i )
   This signal is emitted, when the user moves the mouse cursor onto an item.
-  It´s only emitted once per item.
+  It's only emitted once per item.
 */
 
 /*! \fn void  QListView::onViewport()
@@ -4565,6 +4565,7 @@ void QListView::repaintItem(const QListViewItem *item) const
   </ul>
 */
 
+// clang-format off
 /* XPM */
 static const char *const def_item_xpm[] = {
 	"16 16 4 1",	       " 	c None",	      ".	c #000000000000",
@@ -4575,7 +4576,7 @@ static const char *const def_item_xpm[] = {
 	" .XXXXXXXX.oo   ",    " ..........oo   ",    "   oooooooooo   ",
 	"   oooooooooo   ",    "                ",    "                "};
 
-
+// clang-format on
 
 
 static QPixmap *defaultIcon = 0;

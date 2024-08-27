@@ -610,7 +610,7 @@ int QListBoxPixmap::width(const QListBox *lb) const
   Also a listbox can display items arranged in a tree. But this is
   quite limited, and if you really want to display and work with
   a tree, you should use a QListView. The tree stuff in the QListBox
-  is only supported because it´s needed in comboboxes.
+  is only supported because it's needed in comboboxes.
 
   The list box items can be accessed both as QListBoxItem objects
   (recommended) and using integer indexes (the original QListBox
@@ -715,7 +715,7 @@ int QListBoxPixmap::width(const QListBox *lb) const
 
 /*! \fn void  QListBox::onItem( QListBoxItem *i )
   This signal is emitted, when the user moves the mouse cursor onto an item.
-  It´s only emitted once per item.
+  It's only emitted once per item.
 */
 
 /*! \fn void  QListBox::onViewport()

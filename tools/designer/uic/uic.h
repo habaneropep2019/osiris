@@ -101,7 +101,7 @@ class Uic : public Qt
 		Buddy(const QString &k, const QString &b) : key(k), buddy(b)
 		{
 		}
-		Buddy() {}; // for valuelist
+		Buddy(){}; // for valuelist
 		QString key;
 		QString buddy;
 		bool operator==(const Buddy &other) const
