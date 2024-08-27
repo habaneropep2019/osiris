@@ -34,6 +34,8 @@
 
 #include "../pics/images.h"
 
+// clang-format off
+
 static const char *logo_xpm[] = {
 	/* width height num_colors chars_per_pixel */
 	"21 16 213 2",
@@ -266,6 +268,8 @@ static const char *logo_xpm[] = {
 	"+ + 9 / ; @+#+$+%+&+e *+=+-+;+>+,+'+)+, # ",
 	"# + > % & !+~+{+]+^+/+(+_+) Q.:+<+[+$ R # ",
 	"7 + > }+# % k |+8 + > + * $ _ / , 7 8 ] - "};
+
+// clang-format on
 
 static ImageIconProvider *imageIconProvider = 0;
 static PixmapChooser *pixmapChooser = 0;

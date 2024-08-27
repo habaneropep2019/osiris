@@ -24,6 +24,8 @@
 #include <qapplication.h>
 #include <qheader.h>
 
+// clang-format off
+
 static const char *folder_closed_xpm[] = {
 	"16 16 9 1",	    "g c #808080",	"b c #c0c000",
 	"e c #c0c0c0",	    "# c #000000",	"c c #ffff00",
@@ -67,6 +69,8 @@ static const char *pix_file[] = {
 	".#a#aab#bbbab##.", "#a#aaa#bcbbbbbb#", "#ccdc#bcbbcbbb#.",
 	".##c#bcbbcabb#..", "...#acbacbbbe...", "..#aaaacaba#....",
 	"...##aaaaa#.....", ".....##aa#......", ".......##......."};
+
+// clang-format on
 
 QPixmap *folderLocked = 0;
 QPixmap *folderClosed = 0;

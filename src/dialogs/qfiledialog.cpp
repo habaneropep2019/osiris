@@ -88,6 +88,7 @@ static const char *egcsWorkaround = "%x  %X";
 
 static QFileIconProvider *fileIconProvider = 0;
 
+// clang-format off
 
 /* XPM */
 static const char *const start_xpm[] = {
@@ -228,6 +229,8 @@ static const char *const back_xpm[] = {
 	".....#.......", "....##.......", "...#a#.......", "..#aa########",
 	".#aaaaaaaaaa#", "#aaaaaaaaaaa#", ".#aaaaaaaaaa#", "..#aa########",
 	"...#a#.......", "....##.......", ".....#......."};
+
+// clang-format on
 
 static QPixmap *openFolderIcon = 0;
 static QPixmap *closedFolderIcon = 0;

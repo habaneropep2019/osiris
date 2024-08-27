@@ -23,6 +23,8 @@
 #include "qscrollbar.h"
 #include <limits.h>
 
+// clang-format off
+
 /* XPM */
 static const char *polish_xpm[] = {
 	/* width height num_colors chars_per_pixel */
@@ -358,6 +360,8 @@ static const char *button_xpm[] = {
 	"#P.Q.ga5#sba.sbAbV.wbS#u#z#GbVbVbaaT.SbKa5a5bS#F.ebL#EbD#b#u#u#Y#H.1#Tbebd.W#7bd.1bS#0beaL.T#Ebn#Y.g.S#y#u#0aobe.w.1azbs#Bbrb4a7a0au.K#Pay.I.O.Z.4.y.ebLbR#..P#z.8bV#0bVbn.w#s#sbAbH#ZbL.4.9.kbc",
 	".1buaPa5#z.Y.O#ubV#sbVbV.1#z#D.wba.Z.4bA.8.e.KbA.4#t.UbL#s#zbbbe#b#b#ran.b.W#7.1#8#G#0#HbKb7.gaV#BbT.K#r#Dby#H.m.1.1be#u#B.1.wbe#P.S#z.wbSbi.n.ZbK.4.e.8aI.Z.6.K#u#GbV#0bV#s.w.w.e#Z#Z.K.4aT.k.1",
 	".rb..g.e#s.YaPbV#z.wbnbV.wbn#Dbn.OaP.4.y.4#N.K.K#T#t.U.Q#z.w#F#YazanaNan.bap#Ga0az#0#P#b#KbR.Z#aaz#ibK#h#u.wbC#B#b.1bebs#B#D#baLbcbA.k#P#G#E#S#2.K.8bAbL.Tbw.6.K#G#0.wbVbVbV#s#s.e.Oba.K.4aT.k.0"};
+
+// clang-format on
 
 NorwegianWoodStyle::NorwegianWoodStyle(int sbext) : QWindowsStyle()
 {

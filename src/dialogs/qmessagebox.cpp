@@ -53,6 +53,8 @@
 // palette.  The "question mark" icon, which Microsoft recommends not
 // using but a lot of people still use, is left out.
 
+// clang-format off
+
 /* XPM */
 static const char *const information_xpm[] = {
 	"32 32 5 1",
@@ -247,8 +249,7 @@ static const char *const qtlogo_xpm[] = {
 	"/$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$/",
 };
 
-
-
+// clang-format on
 
 // BEING REVISED: paul
 /*!

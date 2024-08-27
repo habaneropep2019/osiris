@@ -13,6 +13,8 @@
 #include <qpixmap.h>
 #include <qvaluelist.h>
 
+//clang-format off
+
 /* XPM */
 static const char *closed_xpm[] = {
 	"15 15 6 1",	   ". c None",	      "b c #ffff00",
@@ -32,6 +34,8 @@ static const char *file_xpm[] = {
 	".aaaaaaaaaabc", ".aaaaaaaaaabc", ".aaaaaaaaaabc", ".aaaaaaaaaabc",
 	".aaaaaaaaaabc", ".aaaaaaaaaabc", ".aaaaaaaaaabc", ".bbbbbbbbbbbc",
 	"ccccccccccccc"};
+
+//clang-format on
 
 QPixmap *folderIcon = 0;
 QPixmap *fileIcon = 0;

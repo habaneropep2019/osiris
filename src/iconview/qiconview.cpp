@@ -69,6 +69,8 @@
 
 # define RECT_EXTENSION 300
 
+// clang-format off
+
 static const char *const unknown_xpm[] = {"32 32 11 1",
 					  "c c #ffffff",
 					  "g c #c0c0c0",
@@ -113,6 +115,8 @@ static const char *const unknown_xpm[] = {"32 32 11 1",
 					  "..................##dddeb#####..",
 					  "....................##d#b###....",
 					  "......................####......"};
+
+// clang-format on
 
 static QPixmap *unknown_icon = 0;
 static QPixmap *qiv_buffer_pixmap = 0;
@@ -2257,7 +2261,7 @@ void QIconViewItem::checkRect()
 
 /*! \fn void  QIconView::onItem( QIconViewItem *i )
   This signal is emitted, when the user moves the mouse cursor onto an item.
-  It´s only emitted once per item.
+  Itï¿½s only emitted once per item.
 */
 
 /*! \fn void  QIconView::onViewport()
@@ -3499,7 +3503,7 @@ void QIconView::clear()
 	d->drawDragShapes = FALSE;
 
 	resizeContents(0, 0);
-	// maybe we don´t need this update, so delay it
+	// maybe we donï¿½t need this update, so delay it
 	d->fullRedrawTimer->start(0, TRUE);
 
 	d->cleared = TRUE;

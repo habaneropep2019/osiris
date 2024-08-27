@@ -97,6 +97,8 @@ struct QStoredDragData {
 // These pixmaps approximate the images in the Windows User Interface
 // Guidelines.
 
+// clang-format off
+
 /* XPM */
 static const char *const move_xpm[] = {
 	"11 20 3 1",	    ".	c None",
@@ -230,6 +232,8 @@ static const char *const link_xpm[] = {"24 30 3 1",
 				       "............. XXX XXXXX ",
 				       "............. XXXXXXXXX ",
 				       ".............           "};
+
+// clang-format on
 
 # ifndef QT_NO_DRAGANDDROP
 

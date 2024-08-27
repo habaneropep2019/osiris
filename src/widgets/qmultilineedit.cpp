@@ -185,6 +185,8 @@ class QInsTextCmd : public QDelTextCmd
   <img src=qmlined-m.png> <img src=qmlined-w.png>
 */
 
+// clang-format off
+
 static const char *const arrow_xpm[] = {"     8     8        2            1",
 					". c None",
 					"# c #000000",
@@ -196,6 +198,8 @@ static const char *const arrow_xpm[] = {"     8     8        2            1",
 					".#####..",
 					".####...",
 					".#####.."};
+
+// clang-format on
 
 enum {
 	IdUndo,

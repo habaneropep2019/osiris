@@ -11,6 +11,8 @@
 #include "imagefip.h"
 #include <qimage.h>
 
+// clang-format off
+
 /* XPM */
 static const char *image_xpm[] = {
 	"17 15 9 1",	     " 	c #7F7F7F",	  ".	c #FFFFFF",
@@ -22,6 +24,8 @@ static const char *image_xpm[] = {
 	" .O##$#$XX+o+....", " .O#$$$$$+.o+....", " .O##$$##O.o+....",
 	" .OOOOOOOO.o+....", " ..........o+....", " ooooooooooo+....",
 	"+++++++++++++...."};
+
+// clang-format on
 
 ImageIconProvider::ImageIconProvider(QWidget *parent, const char *name)
 	: QFileIconProvider(parent, name), imagepm(image_xpm)

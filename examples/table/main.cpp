@@ -10,6 +10,8 @@
 
 // Qt logo
 
+// clang-format off
+
 static const char *qtlogo_xpm[] = {
 	"45 36 13 1",
 	"  c #000000",
@@ -61,6 +63,8 @@ static const char *qtlogo_xpm[] = {
 	"+++++++++++++++++++++++++.      .++++++++++++",
 	"++++++++++++++++++++++++++.O  O.+++++++++++++",
 	"+++++++++++++++++++++++++++++++++++++++++++++"};
+
+// clang-format on
 
 #include <qtable.h>
 #include <qapplication.h>
