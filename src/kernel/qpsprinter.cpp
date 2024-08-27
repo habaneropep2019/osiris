@@ -6218,8 +6218,7 @@ void QPSPrinter::emitHeader(bool finished)
 		stream << "\n%%Pages: " << pageCount << "\n%%DocumentFonts: "
 		       << fontsUsed.simplifyWhiteSpace();
 	else
-		stream << "\n%%Pages: (atend)"
-		       << "\n%%DocumentFonts: (atend)";
+		stream << "\n%%Pages: (atend)" << "\n%%DocumentFonts: (atend)";
 	stream << "\n%%EndComments\n";
 
 	if (printer->numCopies() > 1)

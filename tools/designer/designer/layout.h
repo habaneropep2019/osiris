@@ -170,9 +170,9 @@ class QDesignerGridLayout : public QGridLayout
 {
 	Q_OBJECT
       public:
-	QDesignerGridLayout(QWidget *parent) : QGridLayout(parent) {};
+	QDesignerGridLayout(QWidget *parent) : QGridLayout(parent){};
 	QDesignerGridLayout(QLayout *parentLayout)
-		: QGridLayout(parentLayout) {};
+		: QGridLayout(parentLayout){};
 
 	void addWidget(QWidget *, int row, int col, int align = 0);
 	void addMultiCellWidget(QWidget *, int fromRow, int toRow, int fromCol,

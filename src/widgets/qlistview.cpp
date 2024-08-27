@@ -110,7 +110,7 @@ struct QListViewPrivate {
 	{
 	      public:
 		Pending(int level, int ypos, QListViewItem *item)
-			: l(level), y(ypos), i(item) {};
+			: l(level), y(ypos), i(item){};
 
 		int l; // level of this item; root is -1 or 0
 		int y; // level of this item in the tree

@@ -71,7 +71,7 @@
 class QFontDialogPrivate
 {
       public:
-	QFontDialogPrivate() {};
+	QFontDialogPrivate(){};
 	QLabel *familyAccel;
 	QLineEdit *familyEdit;
 	QListBox *familyList;

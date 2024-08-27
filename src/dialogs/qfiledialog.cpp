@@ -182,8 +182,8 @@ static const char *const cdtoparent_xpm[] = {
 
 /* XPM */
 static const char *const newfolder_xpm[] = {
-	"15 14 4 1",	    " 	c None",      ".	c #000000",
-	"+	c #FFFF00", "@	c #FFFFFF",   "          .    ",
+	"15 14 4 1",	    " 	c None",       ".	c #000000",
+	"+	c #FFFF00", "@	c #FFFFFF",    "          .    ",
 	"               ",  "          .    ", "       .     . ",
 	"  ....  . . .  ",  " .+@+@.  . .   ", "..........  . .",
 	".@+@+@+@+@..   ",  ".+@+@+@+@+. .  ", ".@+@+@+@+@.  . ",

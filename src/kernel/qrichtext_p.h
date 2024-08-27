@@ -78,7 +78,7 @@ class QTextTable;
 class QtTriple
 {
       public:
-	QtTriple(int a_ = 0, int b_ = 0, int c_ = 0) : a(a_), b(b_), c(c_) {};
+	QtTriple(int a_ = 0, int b_ = 0, int c_ = 0) : a(a_), b(b_), c(c_){};
 	int a, b, c;
 };
 bool operator!=(const QtTriple &t1, const QtTriple &t2);
@@ -153,7 +153,7 @@ class QTextOptions
       public:
 	QTextOptions(const QBrush *p = 0, QColor lc = Qt::blue, bool lu = TRUE)
 		: paper(p), linkColor(lc), linkUnderline(lu), offsetx(0),
-		  offsety(0) {};
+		  offsety(0){};
 	const QBrush *paper;
 	QColor linkColor;
 	bool linkUnderline;
@@ -285,8 +285,8 @@ class QTextRichString
 {
 	friend class QRichTextFormatter;
 	struct Item {
-		Item() : width(-1), newline(0), format(0) {};
-		~Item() {};
+		Item() : width(-1), newline(0), format(0){};
+		~Item(){};
 		int base;
 		signed int width:30;
 		uint newline:1;

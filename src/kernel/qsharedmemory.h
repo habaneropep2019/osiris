@@ -10,9 +10,9 @@
 class QSharedMemory
 {
       public:
-	QSharedMemory() {};
+	QSharedMemory(){};
 	QSharedMemory(int, QString);
-	~QSharedMemory() {};
+	~QSharedMemory(){};
 
 	bool create();
 	void destroy();

@@ -164,7 +164,7 @@ class Q_EXPORT QMouseEvent : public QEvent
 	QMouseEvent(Type type, const QPoint &pos, const QPoint &globalPos,
 		    int button, int state)
 		: QEvent(type), p(pos), g(globalPos), b(button),
-		  s((ushort)state) {};
+		  s((ushort)state){};
 
 	const QPoint &pos() const
 	{
@@ -667,7 +667,7 @@ class Q_EXPORT QCustomEvent : public QEvent
 {
       public:
 	QCustomEvent(int type);
-	QCustomEvent(Type type, void *data) : QEvent(type), d(data) {};
+	QCustomEvent(Type type, void *data) : QEvent(type), d(data){};
 	void *data() const
 	{
 		return d;

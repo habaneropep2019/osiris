@@ -55,7 +55,7 @@ class QMultiLineEditCommand
 {
       public:
 	enum Commands { Invalid, Begin, End, Insert, Delete };
-	virtual ~QMultiLineEditCommand() {};
+	virtual ~QMultiLineEditCommand(){};
 	virtual Commands type()
 	{
 		return Invalid;

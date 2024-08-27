@@ -91,7 +91,7 @@ static const char *p3_xpm[] = {"16 16 3 1",
 class MyMenuItem : public QCustomMenuItem
 {
       public:
-	MyMenuItem(const QString &s, const QFont &f) : string(s), font(f) {};
+	MyMenuItem(const QString &s, const QFont &f) : string(s), font(f){};
 	~MyMenuItem()
 	{
 	}

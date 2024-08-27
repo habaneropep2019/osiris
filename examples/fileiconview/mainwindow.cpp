@@ -32,8 +32,8 @@ static const char *cdtoparent_xpm[] = {
 	"*aaaaaaaaaaaaa*", "***************"};
 
 static const char *newfolder_xpm[] = {
-	"15 14 4 1",	    " 	c None",      ".	c #000000",
-	"+	c #FFFF00", "@	c #FFFFFF",   "          .    ",
+	"15 14 4 1",	    " 	c None",       ".	c #000000",
+	"+	c #FFFF00", "@	c #FFFFFF",    "          .    ",
 	"               ",  "          .    ", "       .     . ",
 	"  ....  . . .  ",  " .+@+@.  . .   ", "..........  . .",
 	".@+@+@+@+@..   ",  ".+@+@+@+@+. .  ", ".@+@+@+@+@.  . ",
