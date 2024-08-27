@@ -46,7 +46,7 @@ file_list = [
     'marble.xpm',
     'metal.xpm',
     'qt.bmp',
-    'qtlogo.png',
+    'osirislogo.png',
     'stone1.xpm',
     'stonebright.xpm',
     'stonedark.xpm',

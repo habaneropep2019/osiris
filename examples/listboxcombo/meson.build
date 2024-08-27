@@ -22,7 +22,7 @@ executable('listboxcombo',
             link_with : [default_osirislib],
 )
 
-install_data('fileopen.xpm', 'qtlogo.png',
+install_data('fileopen.xpm', 'osirislogo.png',
              install_dir : examples_install_dir + '/listboxcombo',
              install_tag : 'bin-example',
 )

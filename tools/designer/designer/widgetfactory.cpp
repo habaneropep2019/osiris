@@ -541,7 +541,7 @@ QWidget *WidgetFactory::createWidget(const QString &className, QWidget *parent,
 		QDesignerLabel *l = new QDesignerLabel(parent, name);
 		if (init) {
 			l->setPixmap(PixmapChooser::loadPixmap(
-				"qtlogo.png", PixmapChooser::NoSize));
+				"osirislogo.png", PixmapChooser::NoSize));
 			l->setScaledContents(TRUE);
 			MetaDataBase::addEntry(l);
 			MetaDataBase::setPropertyChanged(l, "pixmap", TRUE);
