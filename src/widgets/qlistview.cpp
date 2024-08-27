@@ -1649,7 +1649,7 @@ void QListViewPrivate::Root::setup()
 
 /*! \fn void  QListView::onItem( QListViewItem *i )
   This signal is emitted, when the user moves the mouse cursor onto an item.
-  It´s only emitted once per item.
+  It's only emitted once per item.
 */
 
 /*! \fn void  QListView::onViewport()
