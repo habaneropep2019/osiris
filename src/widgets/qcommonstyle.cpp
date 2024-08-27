@@ -605,7 +605,7 @@ void QStyle::drawMenuBarItem(QPainter *p, int x, int y, int w, int h,
 		//    } else if ( inherits("QSGIStyle" ) ) {
 		//	QSGIStyle* sg = (QSGIStyle*) this;
 		//	sg->drawMenuBarItem( p, x, y, w, h, mi, g, enabled,
-		//active );
+		// active );
 	} else {
 		drawItem(p, x, y, w, h,
 			 AlignCenter | ShowPrefix | DontClip | SingleLine, g,

@@ -555,8 +555,9 @@ void QMotifStyle::drawTab(QPainter *p, const QTabBar *tb, QTab *t,
 					    QColorGroup::Background));
 			p->setPen(tb->colorGroup().background());
 			// 	    p->drawLine( r.left()+1, r.bottom(),
-			// r.right()-2, r.bottom() ); 	    if (o) 		p->drawLine(
-			// r.left()+1, r.bottom()-1, r.right()-2, r.bottom()-1
+			// r.right()-2, r.bottom() ); 	    if (o)
+			// p->drawLine( r.left()+1, r.bottom()-1, r.right()-2,
+			// r.bottom()-1
 			// );
 			p->drawLine(r.left() + 1, r.bottom(), r.left() + 1,
 				    r.top() + 2);

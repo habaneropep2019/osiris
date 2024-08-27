@@ -360,7 +360,7 @@ QImage QVFbView::getBuffer(const QRect &r, int &leading) const
 					qGreen(gammatable[(s >> gsh) & gmax]),
 					qBlue(gammatable[(s >> bsh) & bmax]));
 				//*dptr++ =
-				//qRgb(((s>>rsh)&rmax)*255/rmax,((s>>gsh)&gmax)*255/gmax,((s>>bsh)&bmax)*255/bmax);
+				// qRgb(((s>>rsh)&rmax)*255/rmax,((s>>gsh)&gmax)*255/gmax,((s>>bsh)&bmax)*255/bmax);
 			}
 		}
 		leading = 0;

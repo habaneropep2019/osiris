@@ -3409,12 +3409,15 @@ void QPSPrinterFontTTF::download_sfnts(QTextStream &s)
 									tables
 								      */
 	if (count == 9) {
-		sfnts_pputUSHORT(7, s, string_len, line_len, in_string); /* searchRange
-									  */
-		sfnts_pputUSHORT(3, s, string_len, line_len, in_string); /* entrySelector
-									  */
-		sfnts_pputUSHORT(81, s, string_len, line_len, in_string); /* rangeShift
-									   */
+		sfnts_pputUSHORT(7, s, string_len, line_len,
+				 in_string); /* searchRange
+					      */
+		sfnts_pputUSHORT(3, s, string_len, line_len,
+				 in_string); /* entrySelector
+					      */
+		sfnts_pputUSHORT(81, s, string_len, line_len,
+				 in_string); /* rangeShift
+					      */
 	} else {
 		qWarning("Fewer than 9 tables selected");
 	}

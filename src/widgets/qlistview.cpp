@@ -4566,27 +4566,14 @@ void QListView::repaintItem(const QListViewItem *item) const
 */
 
 /* XPM */
-static const char *const def_item_xpm[] = {"16 16 4 1",
-					   " 	c None",
-					   ".	c #000000000000",
-					   "X	c #FFFFFFFF0000",
-					   "o	c #C71BC30BC71B",
-					   "                ",
-					   "                ",
-					   " ..........     ",
-					   " .XXXXXXXX.     ",
-					   " .XXXXXXXX.oo   ",
-					   " .XXXXXXXX.oo   ",
-					   " .XXXXXXXX.oo   ",
-					   " .XXXXXXXX.oo   ",
-					   " .XXXXXXXX.oo   ",
-					   " .XXXXXXXX.oo   ",
-					   " .XXXXXXXX.oo   ",
-					   " ..........oo   ",
-					   "   oooooooooo   ",
-					   "   oooooooooo   ",
-					   "                ",
-					   "                "};
+static const char *const def_item_xpm[] = {
+	"16 16 4 1",	       " 	c None",	      ".	c #000000000000",
+	"X	c #FFFFFFFF0000", "o	c #C71BC30BC71B", "                ",
+	"                ",    " ..........     ",    " .XXXXXXXX.     ",
+	" .XXXXXXXX.oo   ",    " .XXXXXXXX.oo   ",    " .XXXXXXXX.oo   ",
+	" .XXXXXXXX.oo   ",    " .XXXXXXXX.oo   ",    " .XXXXXXXX.oo   ",
+	" .XXXXXXXX.oo   ",    " ..........oo   ",    "   oooooooooo   ",
+	"   oooooooooo   ",    "                ",    "                "};
 
 
 
@@ -4956,9 +4943,9 @@ void QCheckListItem::paintCell(QPainter *p, const QColorGroup &cg, int column,
 				//			p->setPen( blue );
 				p->drawPolyline(a);
 				//		a.setPoints( QCOORDARRLEN(pts5),
-				//pts5 ); 		a.translate( x, y ); 	QColor fillColor
-				//= isDown() ? g.background() : g.base();
-				//	p->setPen( fillColor );
+				// pts5 ); 		a.translate( x, y );
+				// QColor fillColor = isDown() ? g.background()
+				//: g.base(); 	p->setPen( fillColor );
 				//	p->setBrush( fillColor );
 				//	p->drawPolygon( a );
 				if (on) {

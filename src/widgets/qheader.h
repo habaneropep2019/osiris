@@ -130,9 +130,10 @@ class Q_EXPORT QHeader : public QWidget
 
 	void paintSection(QPainter *p, int index, QRect fr); // ### const QRect&
 							     // ## virtual 3.0
-	void paintSectionLabel(QPainter *p, int index, const QRect &fr); // ##
-									 // virtual
-									 // 3.0
+	void paintSectionLabel(QPainter *p, int index,
+			       const QRect &fr); // ##
+						 // virtual
+						 // 3.0
 
 	void mousePressEvent(QMouseEvent *);
 	void mouseReleaseEvent(QMouseEvent *);

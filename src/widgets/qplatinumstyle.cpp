@@ -732,9 +732,9 @@ void QPlatinumStyle::drawScrollBarControls(QPainter *p, const QScrollBar *sb,
 		sliderR.setRect(sliderStart, b, sliderLength, sliderW);
 		// 	subPageR.setRect( subB.right() + 1, b,
 		// 			  sliderStart - subB.right() - 1 ,
-		// sliderW ); 	addPageR.setRect( sliderEnd, b, addX - sliderEnd,
-		// sliderW ); 	sliderR .setRect( sliderStart, b, sliderLength,
-		// sliderW );
+		// sliderW ); 	addPageR.setRect( sliderEnd, b, addX -
+		// sliderEnd, sliderW ); 	sliderR .setRect( sliderStart,
+		// b, sliderLength, sliderW );
 
 	} else {
 		subPageR.setRect(b, b + 1, sliderW, sliderStart - b - 1);

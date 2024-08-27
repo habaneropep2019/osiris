@@ -3043,9 +3043,9 @@ void QPainter::drawText(int x, int y, const QString &str, int len)
 			QWMatrix mat2;
 			if (txop == TxScale) {
 				double newSize = m22() * cfont.pointSizeFloat();
-				newSize = QMAX(6.0,
-					       QMIN(newSize, 72.0)); // empirical
-								     // values
+				newSize = QMAX(6.0, QMIN(newSize,
+							 72.0)); // empirical
+								 // values
 				dfont.setPointSizeFloat(newSize);
 				QFontMetrics fm2(dfont);
 				QRect abbox = fm2.boundingRect(str, len);
@@ -3075,8 +3075,9 @@ void QPainter::drawText(int x, int y, const QString &str, int len)
 				paint.setFont(dfont);
 				paint.drawText(tx, ty, str, len);
 				paint.end();
-				wx_bm = new QBitmap(bm.xForm(mat2)); // transform
-								     // bitmap
+				wx_bm = new QBitmap(
+					bm.xForm(mat2)); // transform
+							 // bitmap
 				if (wx_bm->isNull()) {
 					delete wx_bm; // nothing to draw
 					return;

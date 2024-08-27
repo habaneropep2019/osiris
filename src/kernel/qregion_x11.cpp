@@ -174,7 +174,7 @@ Region qt_x11_bitmapToRegion(const QBitmap &bitmap)
 
 	// deal with 0<->1 problem (not on X11 anymore)
 	int zero = 0; //(qGray(image.color(0)) < qGray(image.color(1)) ? 0x00 :
-		      //0xff);
+		      // 0xff);
 	bool little = image.bitOrder() == QImage::LittleEndian;
 
 	int x, y;

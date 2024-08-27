@@ -107,11 +107,11 @@ static const char *const move_xpm[] = {
 	" 	c #FFFFFF", // X11 cursor is traditionally white
 	"X	c #000000",
 # endif
-	"  .........",	    " X ........",   " XX .......", " XXX ......",
-	" XXXX .....",	    " XXXXX ....",   " XXXXXX ...", " XXXXXXX ..",
-	" XXXXXXXX .",	    " XXXXXXXXX ",   " XXXXXX    ", " XXX XX ...",
-	" XX  XX ...",	    " X .. XX ..",   "  ... XX ..", " ..... XX .",
-	"...... XX .",	    "....... XX ",   "....... XX ", "........  ."};
+	"  .........",	    " X ........", " XX .......", " XXX ......",
+	" XXXX .....",	    " XXXXX ....", " XXXXXX ...", " XXXXXXX ..",
+	" XXXXXXXX .",	    " XXXXXXXXX ", " XXXXXX    ", " XXX XX ...",
+	" XX  XX ...",	    " X .. XX ..", "  ... XX ..", " ..... XX .",
+	"...... XX .",	    "....... XX ", "....... XX ", "........  ."};
 
 /* XPM */
 static const char *const copy_xpm[] = {"24 30 3 1",
