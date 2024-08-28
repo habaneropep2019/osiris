@@ -1211,6 +1211,28 @@ executable('designer',
             install_dir : install_dir,
 )
 
+#
+# Build and install qembed tool
+#
+
+qembed_source_path = 'tools/qembed'
+qembed_include_directories = [
+    osiris_include_directories,
+]
+qembed_sources = [
+    qembed_source_path / 'qembed.cpp'
+]
+
+executable('qembed',
+            qembed_sources,
+            dependencies : [],
+            include_directories : qembed_include_directories,
+            cpp_args : [],
+            install : true,
+            link_with : [default_osirislib, qutil_lib],
+            install_dir : install_dir,
+)
+
 if get_option('examples').enabled()
     subdir('examples')
 endif
