@@ -87,6 +87,12 @@
 #include <qdir.h>
 #include <stdlib.h>
 
+#ifndef OSIRIS_INSTALL_PREFIX
+# error OSIRIS_INSTALL_PREFIX needs to be set by the build system
+#endif
+
+#define OSIRIS_DOC_PATH OSIRIS_INSTALL_PREFIX "/doc/html"
+
 static int forms = 0;
 
 static const char *whatsthis_image[] = {
@@ -2005,7 +2011,8 @@ void MainWindow::helpContents()
 
 
 	if (propertyDocumentation.isEmpty()) {
-		QString indexFile = documentationPath() + "/propertyindex";
+		const QString indexFile = OSIRIS_DOC_PATH "/propertyindex";
+
 		QFile f(indexFile);
 		if (f.open(IO_ReadOnly)) {
 			QTextStream ts(&f);
