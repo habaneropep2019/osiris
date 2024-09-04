@@ -129,6 +129,7 @@ moc_exe = executable('moc',
             cpp_args : moc_compile_args,
             install : true,
             install_dir : install_dir,
+            install_tag : 'bin-devel',
 )
 
 moc_header_file_roots = [
@@ -1021,6 +1022,7 @@ uic_exe = executable('uic',
             install : true,
             link_with : default_osirislib,
             install_dir : install_dir,
+            install_tag : 'bin-devel',
 )
 
 #
@@ -1231,6 +1233,7 @@ executable('qembed',
             install : true,
             link_with : [default_osirislib, qutil_lib],
             install_dir : install_dir,
+            install_tag : 'bin-devel',
 )
 
 if get_option('examples').enabled()
