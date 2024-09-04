@@ -383,10 +383,6 @@ const QPixmap *ImageIconProvider::pixmap(const QFileInfo &fi)
 	}
 }
 
-#ifndef DESIGNER_INSTALL_PREFIX
-# error DESIGNER_INSTALL_PREFIX should have been defined in the build system
-#endif
-
 PixmapChooser::PixmapChooser()
 {
 	miniPixDir = DESIGNER_INSTALL_PREFIX "/pixmaps/mini/";

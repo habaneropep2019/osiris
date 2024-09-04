@@ -96,10 +96,8 @@ Help::Help(const QString &home, MainWindow *parent, const char *name)
 	browser = new TextBrowser(this);
 	browser->mimeSourceFactory()->setFilePath(home);
 	browser->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-	browser->mimeSourceFactory()->addFilePath(QString(getenv("OSIRISDIR")) +
-						  "/tools/designer/manual");
-	browser->mimeSourceFactory()->addFilePath(QString(getenv("OSIRISDIR")) +
-						  "/doc/html/designer");
+	browser->mimeSourceFactory()->addFilePath(DESIGNER_INSTALL_PREFIX
+						  "/doc/html");
 	browser->mimeSourceFactory()->addFilePath(parent->documentationPath());
 	connect(browser, SIGNAL(textChanged()), this, SLOT(textChanged()));
 

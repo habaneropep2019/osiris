@@ -31,9 +31,9 @@
 
 static QString templatePath(const QString &t)
 {
-	QString path = getenv("OSIRISDIR");
+	QString path = DESIGNER_INSTALL_PREFIX;
 	if (!path.isNull()) {
-		path.append("/tools/designer/templates");
+		path.append("/tools/templates");
 		if (QFileInfo(path).exists())
 			return path;
 	}
