@@ -159,7 +159,7 @@ class QAccelPrivate
 
 static QAccelItem *find_id(QAccelList &list, int id)
 {
-	register QAccelItem *item = list.first();
+	QAccelItem *item = list.first();
 	while (item && item->id != id)
 		item = list.next();
 	return item;
@@ -167,7 +167,7 @@ static QAccelItem *find_id(QAccelList &list, int id)
 
 static QAccelItem *find_key(QAccelList &list, int key, QChar ch)
 {
-	register QAccelItem *item = list.first();
+	QAccelItem *item = list.first();
 	while (item) {
 		int k = item->key;
 		int km = k & Qt::MODIFIER_MASK;

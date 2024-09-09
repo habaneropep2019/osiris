@@ -55,6 +55,10 @@
 # include "qguardedptr.h"
 # include "qfocusdata.h"
 
+#ifdef QT_NO_CURSOR
+#error WhY?
+#endif
+
 // REVISED: arnt
 
 /*!
@@ -2533,6 +2537,7 @@ void QWorkspaceChild::keyPressEvent(QKeyEvent *e)
 				mode = TopLeft;
 # ifndef QT_NO_CURSOR
 			setMouseCursor(mode);
+			qDebug("grabMouse 1\n");
 			grabMouse(cursor());
 # else
 			grabMouse();
@@ -2558,6 +2563,7 @@ void QWorkspaceChild::keyPressEvent(QKeyEvent *e)
 				mode = TopRight;
 # ifndef QT_NO_CURSOR
 			setMouseCursor(mode);
+			qDebug("grabMouse 2\n");
 			grabMouse(cursor());
 # else
 			grabMouse();
@@ -2583,6 +2589,7 @@ void QWorkspaceChild::keyPressEvent(QKeyEvent *e)
 				mode = TopRight;
 # ifndef QT_NO_CURSOR
 			setMouseCursor(mode);
+			qDebug("grabMouse 3\n");
 			grabMouse(cursor());
 # else
 			grabMouse();
@@ -2608,6 +2615,7 @@ void QWorkspaceChild::keyPressEvent(QKeyEvent *e)
 				mode = BottomRight;
 # ifndef QT_NO_CURSOR
 			setMouseCursor(mode);
+			qDebug("grabMouse 4\n");
 			grabMouse(cursor());
 # else
 			grabMouse();
@@ -2697,6 +2705,7 @@ void QWorkspaceChild::doResize()
 	invertedMoveOffset = rect().bottomRight() - moveOffset;
 # ifndef QT_NO_CURSOR
 	setMouseCursor(mode);
+	qDebug("grabMouse 5\n");
 	grabMouse(cursor());
 # else
 	grabMouse();
@@ -2714,6 +2723,7 @@ void QWorkspaceChild::doMove()
 	moveOffset = mapFromGlobal(QCursor::pos());
 	invertedMoveOffset = rect().bottomRight() - moveOffset;
 # ifndef QT_NO_CURSOR
+	qDebug("grabMouse 6\n");
 	grabMouse(SizeAllCursor);
 # else
 	grabMouse();

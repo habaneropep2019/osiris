@@ -333,7 +333,7 @@ bool QBitArray::toggleBit(uint index)
 		return FALSE;
 	}
 #endif
-	register uchar *p = (uchar *)data() + (index >> 3);
+	uchar *p = (uchar *)data() + (index >> 3);
 	uchar b = (1 << (index & 7)); // bit position
 	uchar c = *p & b; // read bit
 	*p ^= b; // toggle bit
@@ -394,8 +394,8 @@ bool QBitArray::toggleBit(uint index)
 QBitArray &QBitArray::operator&=(const QBitArray &a)
 {
 	resize(QMAX(size(), a.size()));
-	register uchar *a1 = (uchar *)data();
-	register uchar *a2 = (uchar *)a.data();
+	uchar *a1 = (uchar *)data();
+	uchar *a2 = (uchar *)a.data();
 	int n = QMIN(QByteArray::size(), a.QByteArray::size());
 	int p = QMAX(QByteArray::size(), a.QByteArray::size()) - n;
 	while (n-- > 0)
@@ -426,8 +426,8 @@ QBitArray &QBitArray::operator&=(const QBitArray &a)
 QBitArray &QBitArray::operator|=(const QBitArray &a)
 {
 	resize(QMAX(size(), a.size()));
-	register uchar *a1 = (uchar *)data();
-	register uchar *a2 = (uchar *)a.data();
+	uchar *a1 = (uchar *)data();
+	uchar *a2 = (uchar *)a.data();
 	int n = QMIN(QByteArray::size(), a.QByteArray::size());
 	while (n-- > 0)
 		*a1++ |= *a2++;
@@ -455,8 +455,8 @@ QBitArray &QBitArray::operator|=(const QBitArray &a)
 QBitArray &QBitArray::operator^=(const QBitArray &a)
 {
 	resize(QMAX(size(), a.size()));
-	register uchar *a1 = (uchar *)data();
-	register uchar *a2 = (uchar *)a.data();
+	uchar *a1 = (uchar *)data();
+	uchar *a2 = (uchar *)a.data();
 	int n = QMIN(QByteArray::size(), a.QByteArray::size());
 	while (n-- > 0)
 		*a1++ ^= *a2++;
@@ -477,8 +477,8 @@ QBitArray &QBitArray::operator^=(const QBitArray &a)
 QBitArray QBitArray::operator~() const
 {
 	QBitArray a(size());
-	register uchar *a1 = (uchar *)data();
-	register uchar *a2 = (uchar *)a.data();
+	uchar *a1 = (uchar *)data();
+	uchar *a2 = (uchar *)a.data();
 	int n = QByteArray::size();
 	while (n--)
 		*a2++ = ~*a1++;

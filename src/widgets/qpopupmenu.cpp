@@ -599,7 +599,7 @@ void QPopupMenu::hilitSig(int id)
 void QPopupMenu::setFirstItemActive()
 {
 	QMenuItemListIt it(*mitems);
-	register QMenuItem *mi;
+	QMenuItem *mi;
 	int ai = 0;
 	while ((mi = it.current())) {
 		++it;
@@ -619,7 +619,7 @@ void QPopupMenu::setFirstItemActive()
 
 void QPopupMenu::hideAllPopups()
 {
-	register QMenuData *top = this; // find top level popup
+	QMenuData *top = this; // find top level popup
 	if (!preventAnimation)
 		QTimer::singleShot(10, this, SLOT(allowAnimation()));
 	preventAnimation = TRUE;
@@ -645,7 +645,7 @@ void QPopupMenu::hidePopups()
 	preventAnimation = TRUE;
 
 	QMenuItemListIt it(*mitems);
-	register QMenuItem *mi;
+	QMenuItem *mi;
 	while ((mi = it.current())) {
 		++it;
 		if (mi->popup() &&
@@ -663,7 +663,7 @@ void QPopupMenu::hidePopups()
 
 bool QPopupMenu::tryMenuBar(QMouseEvent *e)
 {
-	register QMenuData *top = this; // find top level
+	QMenuData *top = this; // find top level
 	while (top->parentMenu)
 		top = top->parentMenu;
 # ifndef QT_NO_MENUBAR
@@ -699,7 +699,7 @@ void QPopupMenu::byeMenuBar()
 {
 	hideAllPopups();
 # ifndef QT_NO_MENUBAR
-	register QMenuData *top = this; // find top level
+	QMenuData *top = this; // find top level
 	while (top->parentMenu)
 		top = top->parentMenu;
 	if (top->isMenuBar)
@@ -789,7 +789,7 @@ void QPopupMenu::updateSize()
 	int height = 0;
 	int max_width = 0;
 	QFontMetrics fm = fontMetrics();
-	register QMenuItem *mi;
+	QMenuItem *mi;
 	maxPMWidth = 0;
 	int maxWidgetWidth = 0;
 	tab = 0;
@@ -944,7 +944,7 @@ void QPopupMenu::updateSize()
 void QPopupMenu::updateAccel(QWidget *parent)
 {
 	QMenuItemListIt it(*mitems);
-	register QMenuItem *mi;
+	QMenuItem *mi;
 
 	if (parent) {
 		delete autoaccel;
@@ -1037,7 +1037,7 @@ void QPopupMenu::enableAccel(bool enable)
 	else
 		accelDisabled = TRUE; // rememeber when updateAccel
 	QMenuItemListIt it(*mitems);
-	register QMenuItem *mi;
+	QMenuItem *mi;
 	while ((mi = it.current())) { // do the same for sub popups
 		++it;
 		if (mi->popup()) // call recursively
@@ -1226,7 +1226,7 @@ void QPopupMenu::mousePressEvent(QMouseEvent *e)
 		}
 		return;
 	}
-	register QMenuItem *mi = mitems->at(item);
+	QMenuItem *mi = mitems->at(item);
 	if (item != actItem) // new item activated
 		setActiveItem(item);
 
@@ -1262,7 +1262,7 @@ void QPopupMenu::mouseReleaseEvent(QMouseEvent *e)
 			return;
 	}
 	if (actItem >= 0) { // selected menu item!
-		register QMenuItem *mi = mitems->at(actItem);
+		QMenuItem *mi = mitems->at(actItem);
 		if (mi->widget()) {
 			QWidget *widgetAt =
 				QApplication::widgetAt(e->globalPos(), TRUE);
@@ -1341,11 +1341,11 @@ void QPopupMenu::mouseMoveEvent(QMouseEvent *e)
 			popupSubMenuLater(style() == WindowsStyle ? 256 : 96,
 					  this);
 	} else { // mouse on valid item
-		// but did not register mouse press
+		// but did not mouse press
 		if ((e->state() & Qt::MouseButtonMask) && !mouseBtDn)
 			mouseBtDn = TRUE; // so mouseReleaseEvent will pop down
 
-		register QMenuItem *mi = mitems->at(item);
+		QMenuItem *mi = mitems->at(item);
 
 		if (mi->widget()) {
 			QWidget *widgetAt =
@@ -1541,7 +1541,7 @@ void QPopupMenu::keyPressEvent(QKeyEvent *e)
 		QChar c = e->text()[0].upper();
 
 		QMenuItemListIt it(*mitems);
-		register QMenuItem *m;
+		QMenuItem *m;
 		int indx = 0;
 		while ((m = it.current())) {
 			++it;
@@ -1584,7 +1584,7 @@ void QPopupMenu::keyPressEvent(QKeyEvent *e)
 	}
 # ifndef QT_NO_MENUBAR
 	if (!ok_key) { // send to menu bar
-		register QMenuData *top = this; // find top level
+		QMenuData *top = this; // find top level
 		while (top->parentMenu)
 			top = top->parentMenu;
 		if (top->isMenuBar)
@@ -1594,7 +1594,7 @@ void QPopupMenu::keyPressEvent(QKeyEvent *e)
 	if (dy && actItem < 0) {
 		setFirstItemActive();
 	} else if (dy) { // highlight next/prev
-		register int i = actItem;
+		int i = actItem;
 		int c = mitems->count();
 		int n = c;
 		while (n--) {
@@ -1820,7 +1820,7 @@ void QPopupMenu::connectModal(QPopupMenu *receiver, bool doConnect)
 			   SLOT(modalActivation(int)));
 
 	QMenuItemListIt it(*mitems);
-	register QMenuItem *mi;
+	QMenuItem *mi;
 	while ((mi = it.current())) {
 		++it;
 		if (mi->popup() && mi->popup() != receiver &&
@@ -1930,12 +1930,12 @@ bool QPopupMenu::customWhatsThis() const
  */
 bool QPopupMenu::focusNextPrevChild(bool next)
 {
-	register QMenuItem *mi;
+	QMenuItem *mi;
 	int dy = next ? 1 : -1;
 	if (dy && actItem < 0) {
 		setFirstItemActive();
 	} else if (dy) { // highlight next/prev
-		register int i = actItem;
+		int i = actItem;
 		int c = mitems->count();
 		int n = c;
 		while (n--) {

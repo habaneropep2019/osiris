@@ -256,17 +256,17 @@ bool QGArray::fill(const char *d, int len, uint sz)
 	if (sz == 1) // 8 bit elements
 		memset(data(), *d, len);
 	else if (sz == 4) { // 32 bit elements
-		register Q_INT32 *x = (Q_INT32 *)data();
+		Q_INT32 *x = (Q_INT32 *)data();
 		Q_INT32 v = *((Q_INT32 *)d);
 		while (len--)
 			*x++ = v;
 	} else if (sz == 2) { // 16 bit elements
-		register Q_INT16 *x = (Q_INT16 *)data();
+		Q_INT16 *x = (Q_INT16 *)data();
 		Q_INT16 v = *((Q_INT16 *)d);
 		while (len--)
 			*x++ = v;
 	} else { // any other size elements
-		register char *x = data();
+		char *x = data();
 		while (len--) { // more complicated
 			memcpy(x, d, sz);
 			x += sz;
@@ -330,7 +330,7 @@ QGArray &QGArray::duplicate(const QGArray &a)
 	if (a.shd == shd) { // a.duplicate(a) !
 		if (shd->count > 1) {
 			shd->count--;
-			register array_data *n = newData();
+			array_data *n = newData();
 			CHECK_PTR(n);
 			if ((n->len = shd->len)) {
 				n->data = NEW(char, n->len);
@@ -529,11 +529,11 @@ int QGArray::find(const char *d, uint index, uint sz) const
 #endif
 		return -1;
 	}
-	register uint i;
+	uint i;
 	uint ii;
 	switch (sz) {
 	case 1: { // 8 bit elements
-		register char *x = data() + index;
+		char *x = data() + index;
 		char v = *d;
 		for (i = index; i < shd->len; i++) {
 			if (*x++ == v)
@@ -542,7 +542,7 @@ int QGArray::find(const char *d, uint index, uint sz) const
 		ii = i;
 	} break;
 	case 2: { // 16 bit elements
-		register Q_INT16 *x = (Q_INT16 *)(data() + index);
+		Q_INT16 *x = (Q_INT16 *)(data() + index);
 		Q_INT16 v = *((Q_INT16 *)d);
 		for (i = index; i < shd->len; i += 2) {
 			if (*x++ == v)
@@ -551,7 +551,7 @@ int QGArray::find(const char *d, uint index, uint sz) const
 		ii = i / 2;
 	} break;
 	case 4: { // 32 bit elements
-		register Q_INT32 *x = (Q_INT32 *)(data() + index);
+		Q_INT32 *x = (Q_INT32 *)(data() + index);
 		Q_INT32 v = *((Q_INT32 *)d);
 		for (i = index; i < shd->len; i += 4) {
 			if (*x++ == v)
@@ -580,11 +580,11 @@ int QGArray::find(const char *d, uint index, uint sz) const
 
 int QGArray::contains(const char *d, uint sz) const
 {
-	register uint i = shd->len;
+	uint i = shd->len;
 	int count = 0;
 	switch (sz) {
 	case 1: { // 8 bit elements
-		register char *x = data();
+		char *x = data();
 		char v = *d;
 		while (i--) {
 			if (*x++ == v)
@@ -592,7 +592,7 @@ int QGArray::contains(const char *d, uint sz) const
 		}
 	} break;
 	case 2: { // 16 bit elements
-		register Q_INT16 *x = (Q_INT16 *)data();
+		Q_INT16 *x = (Q_INT16 *)data();
 		Q_INT16 v = *((Q_INT16 *)d);
 		i /= 2;
 		while (i--) {
@@ -601,7 +601,7 @@ int QGArray::contains(const char *d, uint sz) const
 		}
 	} break;
 	case 4: { // 32 bit elements
-		register Q_INT32 *x = (Q_INT32 *)data();
+		Q_INT32 *x = (Q_INT32 *)data();
 		Q_INT32 v = *((Q_INT32 *)d);
 		i /= 4;
 		while (i--) {

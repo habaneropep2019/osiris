@@ -435,7 +435,7 @@ void QWidget::destroy(bool destroyWindow, bool destroySubWindows)
 		clearWState(WState_Created);
 		if (children()) {
 			QObjectListIt it(*children());
-			register QObject *obj;
+			QObject *obj;
 			while ((obj = it.current())) { // destroy all widget
 						       // children
 				++it;
@@ -2054,7 +2054,7 @@ void QWidget::scroll(int dx, int dy, const QRect &r)
 	if (!valid_rect && children()) { // scroll children
 		QPoint pd(dx, dy);
 		QObjectListIt it(*children());
-		register QObject *object;
+		QObject *object;
 		while (it) { // move all children
 			object = it.current();
 			if (object->isWidgetType()) {
