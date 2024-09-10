@@ -19,7 +19,7 @@
 - [ ] Platform Tests OK
 	- [ ] X11
 	- [ ] XWayland
-	- [ ] Wayland
+	- [~] Wayland
 - [ ] `clang-format` run
 - [ ] `Changelog.md` updated
 - [ ] Documentation updated (as needed)
