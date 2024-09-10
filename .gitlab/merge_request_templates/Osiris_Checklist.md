@@ -2,8 +2,20 @@
 
 - [ ] Test Builds Passed
 	- [ ] amd64
+		- [ ] clang
+			- [ ] Debian 12 - Clang 16
+			- [ ] Fedora 40 - Clang 18
+		- [ ] GCC
+			- [ ] Debian 12 - GCC 14.2.0
+			- [ ] Fedora 40 - GCC 14.2.1
 	- [ ] i386
-	- [ ] arm64
+		- [ ] clang
+			- [ ] Debian 12 - Clang 16
+			- [ ] Fedora 40 - Clang 18
+		- [ ] GCC
+			- [ ] Debian 12 - GCC 14.2.0
+			- [ ] Fedora 40 - GCC 14.2.1
+	- [ ] arm64 (Debian 12 - Any/All CC)
 - [ ] Platform Tests OK
 	- [ ] X11
 	- [ ] XWayland
