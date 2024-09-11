@@ -1299,7 +1299,7 @@ void qt_init_internal(int *argcptr, char **argv, Display *display)
 
 #if defined(DEBUG) && defined(_OS_LINUX_)
 		if (!appNoGrab && !appDoGrab) {
-			QCString s;
+			QString s;
 			s.sprintf("/proc/%d/cmdline", getppid());
 			QFile f(s);
 			if (f.open(IO_ReadOnly)) {
