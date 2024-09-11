@@ -104,6 +104,15 @@ QFile::QFile(const QString &name) : fn(name)
 	init();
 }
 
+/*!
+  Constructs a QFile with a file name \e name.
+  \sa setName()
+*/
+
+QFile::QFile(const QCString &name) : fn(name.data())
+{
+	init();
+}
 
 /*!
   Destructs a QFile.  Calls close().

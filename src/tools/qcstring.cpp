@@ -566,7 +566,6 @@ QCString::QCString(const char *str, uint maxsize)
 
 bool QCString::resize(uint len)
 {
-	detach();
 	uint oldlen = length();
 	if (!QByteArray::resize(len))
 		return FALSE;
@@ -618,14 +617,20 @@ bool QCString::resize(uint len)
  */
 QCString &QCString::sprintf(const char *format, ...)
 {
-	detach();
 	va_list ap;
 	va_start(ap, format);
-	if (size() < 256)
+	if (size() < 256) {
 		QByteArray::resize(256); // make string big enough
+	}
+
 	vsnprintf(data(), size(), format, ap);
-	resize(qstrlen(data()) + 1); // truncate
 	va_end(ap);
+
+	if (resize(qstrlen(data()) + 1) == FALSE) // truncate
+	{
+		qDebug("QCString::sprintf: Failed to resize string");
+	}
+
 	return *this;
 }
 /*

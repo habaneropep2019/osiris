@@ -52,6 +52,7 @@ class Q_EXPORT QFile : public QIODevice // file I/O device class
       public:
 	QFile();
 	QFile(const QString &name);
+	QFile(const QCString &name);
 	~QFile();
 
 	QString name() const;
