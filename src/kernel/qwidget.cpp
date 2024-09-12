@@ -837,7 +837,7 @@ void QWidget::destroyMapper()
 	QWidgetIntDictIt it(*((QWidgetIntDict *)mapper));
 	QWidgetMapper *myMapper = mapper;
 	mapper = 0;
-	register QWidget *w;
+	QWidget *w;
 	while ((w = it.current())) { // remove parents widgets
 		++it;
 		if (!w->parentObj) // widget is a parent
@@ -3344,7 +3344,7 @@ void QWidget::show()
 
 	if (children()) {
 		QObjectListIt it(*children());
-		register QObject *object;
+		QObject *object;
 		QWidget *widget;
 		while (it) { // show all widget children
 			object = it.current(); //   (except popups and other
@@ -3481,7 +3481,7 @@ void QWidget::sendShowEventsToChildren(bool spontaneous)
 {
 	if (children()) {
 		QObjectListIt it(*children());
-		register QObject *object;
+		QObject *object;
 		QWidget *widget;
 		while (it) {
 			object = it.current();
@@ -3506,7 +3506,7 @@ void QWidget::sendHideEventsToChildren(bool spontaneous)
 {
 	if (children()) {
 		QObjectListIt it(*children());
-		register QObject *object;
+		QObject *object;
 		QWidget *widget;
 		while (it) {
 			object = it.current();

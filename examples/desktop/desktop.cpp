@@ -54,7 +54,7 @@ void poly()
 	int head = 0;
 	int tail = -maxcurves + 2;
 	QPointArray *a = new QPointArray[maxcurves];
-	register QPointArray *p;
+	QPointArray *p;
 	QRect r = d->rect(); // desktop rectangle
 
 	int i;

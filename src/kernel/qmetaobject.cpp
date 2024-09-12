@@ -327,7 +327,7 @@ int QMetaObject::numSlots(bool super) const // number of slots
 	if (!super)
 		return slotDict ? slotDict->count() : 0;
 	int n = 0;
-	register QMetaObject *meta = (QMetaObject *)this;
+	QMetaObject *meta = (QMetaObject *)this;
 	while (meta) { // for all super classes...
 		if (meta->slotDict)
 			n += meta->slotDict->count();
@@ -348,7 +348,7 @@ int QMetaObject::numSignals(bool super) const // number of signals
 	if (!super)
 		return signalDict ? signalDict->count() : 0;
 	int n = 0;
-	register QMetaObject *meta = (QMetaObject *)this;
+	QMetaObject *meta = (QMetaObject *)this;
 	while (meta) { // for all super classes...
 		if (meta->signalDict)
 			n += meta->signalDict->count();
@@ -466,7 +466,7 @@ void QMetaObject::set_slot_access(QMetaData::Access *access)
  */
 QMetaData::Access QMetaObject::slot_access(int index, bool super)
 {
-	register QMetaObject *meta = (QMetaObject *)this;
+	QMetaObject *meta = (QMetaObject *)this;
 	QMetaData::Access *md;
 	QMemberDict *dict;
 	for (;;) {
@@ -580,7 +580,7 @@ QMetaData *QMetaObject::mdata(int code, const char *name, bool super) const
  */
 QMetaData *QMetaObject::mdata(int code, int index, bool super) const
 {
-	register QMetaObject *meta = (QMetaObject *)this;
+	QMetaObject *meta = (QMetaObject *)this;
 	QMetaData *md;
 	QMemberDict *dict;
 	for (;;) {

@@ -576,7 +576,7 @@ void QMenuBar::openActPopup()
 void QMenuBar::hidePopups()
 {
 	QMenuItemListIt it(*mitems);
-	register QMenuItem *mi;
+	QMenuItem *mi;
 	while ((mi = it.current())) {
 		++it;
 		if (mi->popup()) {
@@ -1037,7 +1037,7 @@ void QMenuBar::keyPressEvent(QKeyEvent *e)
 	}
 
 	if (dx) { // highlight next/prev
-		register int i = actItem;
+		int i = actItem;
 		int c = mitems->count();
 		int n = c;
 		while (n--) {
@@ -1059,7 +1059,7 @@ void QMenuBar::keyPressEvent(QKeyEvent *e)
 		QChar c = e->text()[0].upper();
 
 		QMenuItemListIt it(*mitems);
-		register QMenuItem *m;
+		QMenuItem *m;
 		int indx = 0;
 		while ((m = it.current())) {
 			++it;
@@ -1212,7 +1212,7 @@ void QMenuBar::setupAccelerators()
 	autoaccel = 0;
 
 	QMenuItemListIt it(*mitems);
-	register QMenuItem *mi;
+	QMenuItem *mi;
 	while ((mi = it.current())) {
 		++it;
 		if (!mi->isEnabled()) // ### when we have a good solution for

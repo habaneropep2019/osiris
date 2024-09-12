@@ -2098,7 +2098,7 @@ void QApplication::setOverrideCursor(const QCursor &cursor, bool replace)
 
 	QWidget *amw = activeModalWidget();
 	QWidgetIntDictIt it(*((QWidgetIntDict *)QWidget::mapper));
-	register QWidget *w;
+	QWidget *w;
 	while ((w = it.current())) { // for all widgets that have
 		if (w->testWState(WState_OwnCursor) &&
 		    (!amw || !w->isVisible() ||
@@ -2128,7 +2128,7 @@ void QApplication::restoreOverrideCursor()
 	app_cursor = cursorStack->last();
 	if (QWidget::mapper != 0 && !closingDown()) {
 		QWidgetIntDictIt it(*((QWidgetIntDict *)QWidget::mapper));
-		register QWidget *w;
+		QWidget *w;
 		while ((w = it.current())) { // set back to original cursors
 			if (w->testWState(WState_OwnCursor))
 				XDefineCursor(w->x11Display(), w->winId(),
@@ -2194,7 +2194,7 @@ void QApplication::setGlobalMouseTracking(bool enable)
 	}
 	if (tellAllWidgets) {
 		QWidgetIntDictIt it(*((QWidgetIntDict *)QWidget::mapper));
-		register QWidget *w;
+		QWidget *w;
 		while ((w = it.current())) {
 			if (app_tracking > 0) { // switch on
 				if (!w->testWState(WState_MouseTracking)) {
@@ -3873,7 +3873,7 @@ static void repairTimer(const timeval &time) // repair broken timer
 	if (!timerList) // not initialized
 		return;
 	timeval diff = watchtime - time;
-	register TimerInfo *t = timerList->first();
+	TimerInfo *t = timerList->first();
 	while (t) { // repair all timers
 		t->timeout = t->timeout - diff;
 		t = timerList->next();
@@ -3936,7 +3936,7 @@ int qt_activate_timers()
 	timeval currentTime;
 	int maxcount = timerList->count();
 	int n_act = 0;
-	register TimerInfo *t;
+	TimerInfo *t;
 	while (maxcount--) { // avoid starvation
 		getTime(currentTime); // get current time
 		if (first) {
@@ -4017,7 +4017,7 @@ int qStartTimer(int interval, QObject *obj)
 
 bool qKillTimer(int id)
 {
-	register TimerInfo *t;
+	TimerInfo *t;
 	if (!timerList || id <= 0 || id > (int)timerBitVec->size() ||
 	    !timerBitVec->testBit(id - 1))
 		return FALSE; // not init'd or invalid timer
@@ -4033,7 +4033,7 @@ bool qKillTimer(int id)
 
 bool qKillTimer(QObject *obj)
 {
-	register TimerInfo *t;
+	TimerInfo *t;
 	if (!timerList) // not initialized
 		return FALSE;
 	t = timerList->first();

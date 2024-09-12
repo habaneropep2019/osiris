@@ -170,8 +170,8 @@ QPointArray::QPointArray(int nPoints, const QCOORD *points)
 
 void QPointArray::translate(int dx, int dy)
 {
-	register QPoint *p = data();
-	register int i = size();
+	QPoint *p = data();
+	int i = size();
 	QPoint pt(dx, dy);
 	while (i--) {
 		*p += pt;
@@ -371,7 +371,7 @@ QRect QPointArray::boundingRect() const
 {
 	if (isEmpty())
 		return QRect(0, 0, 0, 0); // null rectangle
-	register QPoint *pd = data();
+	QPoint *pd = data();
 	int minx, maxx, miny, maxy;
 	minx = maxx = pd->x();
 	miny = maxy = pd->y();
@@ -893,7 +893,7 @@ QPointArray QPointArray::quadBezier() const
 	if (m < 2) // at least two points
 		m = 2;
 	QPointArray p(m); // p = Bezier point array
-	register QPointData *pd = p.data();
+	QPointData *pd = p.data();
 
 	float x0 = xvec[0], y0 = yvec[0];
 	float dt = 1.0F / m;
@@ -974,7 +974,7 @@ QPointArray QPointArray::quadBezier() const
 
 QDataStream &operator<<(QDataStream &s, const QPointArray &a)
 {
-	register uint i;
+	uint i;
 	uint len = a.size();
 	s << len; // write size of array
 	for (i = 0; i < len; i++) // write each point
@@ -991,7 +991,7 @@ QDataStream &operator<<(QDataStream &s, const QPointArray &a)
 
 QDataStream &operator>>(QDataStream &s, QPointArray &a)
 {
-	register uint i;
+	uint i;
 	uint len;
 	s >> len; // read size of array
 	if (!a.resize(len)) // no memory

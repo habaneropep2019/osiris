@@ -365,7 +365,7 @@ QAction::~QAction()
  */
 void QAction::setIconSet(const QIconSet &icon)
 {
-	register QIconSet *i = d->iconset;
+	QIconSet *i = d->iconset;
 	d->iconset = new QIconSet(icon);
 	delete i;
 	d->update(QActionPrivate::Icons);

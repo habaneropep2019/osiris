@@ -384,7 +384,7 @@ QObject::~QObject()
 	}
 	if (parentObj) // remove it from parent object
 		parentObj->removeChild(this);
-	register QObject *obj;
+	QObject *obj;
 	if (senderObjects) { // disconnect from senders
 		QObjectList *tmp = senderObjects;
 		senderObjects = 0;
@@ -400,7 +400,7 @@ QObject::~QObject()
 		QConnectionList *clist;
 		while ((clist = it.current())) { // for each signal...
 			++it;
-			register QConnection *c;
+			QConnection *c;
 			QConnectionListIt cit(*clist);
 			while ((c = cit.current())) { // for each connected
 						      // slot...
@@ -767,7 +767,7 @@ bool QObject::activate_filters(QEvent *e)
 	if (!eventFilters) // no event filter
 		return FALSE;
 	QObjectListIt it(*eventFilters);
-	register QObject *obj = it.current();
+	QObject *obj = it.current();
 	while (obj) { // send to all filters
 		++it; //   until one returns TRUE
 		if (obj->eventFilter(this, e)) {
@@ -1749,7 +1749,7 @@ bool QObject::disconnect(const QObject *sender, const char *signal,
 	}
 
 	QConnectionList *clist;
-	register QConnection *c;
+	QConnection *c;
 	if (signal == 0) { // any/all signals
 		QSignalDictIt it(*(s->connections));
 		while ((clist = it.current())) { // for all signals...
@@ -1860,7 +1860,7 @@ void QObject::cleanupEventFilter()
 
 QMetaObject *QObject::queryMetaObject() const
 {
-	register QObject *x = (QObject *)this; // fake const
+	QObject *x = (QObject *)this; // fake const
 	QMetaObject *m = x->metaObject();
 	if (!m) { // not meta object
 		x->initMetaObject(); //   then try to create it
@@ -2029,8 +2029,8 @@ void QObject::activate_signal(const char *signal)
 	typedef void (QObject::*RT)();
 	RT r;
 	QConnectionListIt it(*clist);
-	register QConnection *c;
-	register QObject *object;
+	QConnection *c;
+	QObject *object;
 	while ((c = it.current())) {
 		++it;
 		object = c->object();
@@ -2071,8 +2071,8 @@ void QObject::activate_signal(const char *signal)
 		 RT0 r0;                                                     \
 		 RT1 r1;                                                     \
 		 QConnectionListIt it(*clist);                               \
-		 register QConnection *c;                                    \
-		 register QObject *object;                                   \
+		 QConnection *c;                                    \
+		 QObject *object;                                   \
 		 while ((c = it.current())) {                                \
 			 ++it;                                               \
 			 object = c->object();                               \
@@ -2100,8 +2100,8 @@ void QObject::activate_signal(const char *signal)
 		 RT0 r0;                                             \
 		 RT1 r1;                                             \
 		 QConnectionListIt it(*clist);                       \
-		 register QConnection *c;                            \
-		 register QObject *object;                           \
+		 QConnection *c;                            \
+		 QObject *object;                           \
 		 while ((c = it.current())) {                        \
 			 ++it;                                       \
 			 object = c->object();                       \
@@ -2221,7 +2221,7 @@ void QObject::dumpObjectInfo()
 			qDebug("\t%s", it.currentKey());
 			n++;
 			++it;
-			register QConnection *c;
+			QConnection *c;
 			QConnectionListIt cit(*clist);
 			while ((c = cit.current())) {
 				++cit;

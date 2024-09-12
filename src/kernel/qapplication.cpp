@@ -945,7 +945,7 @@ void QApplication::setStyle(QStyle *style)
 		if (is_app_running && !is_app_closing) {
 			QWidgetIntDictIt it(
 				*((QWidgetIntDict *)QWidget::mapper));
-			register QWidget *w;
+			QWidget *w;
 			while ((w = it.current())) { // for all widgets...
 				++it;
 				if (!w->testWFlags(WType_Desktop) && // except
@@ -977,7 +977,7 @@ void QApplication::setStyle(QStyle *style)
 		if (is_app_running && !is_app_closing) {
 			QWidgetIntDictIt it(
 				*((QWidgetIntDict *)QWidget::mapper));
-			register QWidget *w;
+			QWidget *w;
 			while ((w = it.current())) { // for all widgets...
 				++it;
 				if (!w->testWFlags(WType_Desktop)) { // except
@@ -1221,7 +1221,7 @@ void QApplication::setPalette(const QPalette &palette, bool informWidgets,
 	if (informWidgets && is_app_running && !is_app_closing) {
 		QEvent e(QEvent::ApplicationPaletteChange);
 		QWidgetIntDictIt it(*((QWidgetIntDict *)QWidget::mapper));
-		register QWidget *w;
+		QWidget *w;
 		while ((w = it.current())) { // for all widgets...
 			++it;
 			if (all || (!className && w->isTopLevel()) ||
@@ -1306,7 +1306,7 @@ void QApplication::setFont(const QFont &font, bool informWidgets,
 	if (informWidgets && is_app_running && !is_app_closing) {
 		QEvent e(QEvent::ApplicationFontChange);
 		QWidgetIntDictIt it(*((QWidgetIntDict *)QWidget::mapper));
-		register QWidget *w;
+		QWidget *w;
 		while ((w = it.current())) { // for all widgets...
 			++it;
 			if (all || (!className && w->isTopLevel()) ||
@@ -1672,7 +1672,7 @@ bool QApplication::notify(QObject *receiver, QEvent *event)
 
 	if (eventFilters) {
 		QObjectListIt it(*eventFilters);
-		register QObject *obj;
+		QObject *obj;
 		while ((obj = it.current()) != 0) { // send to all filters
 			++it; //   until one returns TRUE
 			if (obj->eventFilter(receiver, event))
@@ -2390,7 +2390,7 @@ void QApplication::setActiveWindow(QWidget *act)
 #ifndef QT_NO_PALETTE
 	// ### in 3.0, propagate activated event to all children
 	QWidgetIntDictIt it(*((QWidgetIntDict *)QWidget::mapper));
-	register QWidget *w;
+	QWidget *w;
 	while ((w = it.current())) { // for all widgets...
 		++it;
 		if (w->topLevelWidget() == old_active ||

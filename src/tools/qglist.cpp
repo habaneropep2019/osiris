@@ -281,7 +281,7 @@ QLNode *QGList::locate(uint index)
 		curNode = firstNode;
 		curIndex = 0;
 	}
-	register QLNode *node;
+	QLNode *node;
 	int distance = index - curIndex; // node distance to cur node
 	bool forward; // direction to traverse
 
@@ -328,7 +328,7 @@ QLNode *QGList::locate(uint index)
 void QGList::inSort(QCollection::Item d)
 {
 	int index = 0;
-	register QLNode *n = firstNode;
+	QLNode *n = firstNode;
 	while (n && compareItems(n->data, d) < 0) { // find position in list
 		n = n->next;
 		index++;
@@ -344,7 +344,7 @@ void QGList::inSort(QCollection::Item d)
 
 void QGList::prepend(QCollection::Item d)
 {
-	register QLNode *n = new QLNode(newItem(d));
+	QLNode *n = new QLNode(newItem(d));
 	CHECK_PTR(n);
 	n->prev = 0;
 	if ((n->next = firstNode)) // list is not empty
@@ -364,7 +364,7 @@ void QGList::prepend(QCollection::Item d)
 
 void QGList::append(QCollection::Item d)
 {
-	register QLNode *n = new QLNode(newItem(d));
+	QLNode *n = new QLNode(newItem(d));
 	CHECK_PTR(n);
 	n->next = 0;
 	if ((n->prev = lastNode)) // list is not empty
@@ -395,7 +395,7 @@ bool QGList::insertAt(uint index, QCollection::Item d)
 	if (!nextNode) // illegal position
 		return FALSE;
 	QLNode *prevNode = nextNode->prev;
-	register QLNode *n = new QLNode(newItem(d));
+	QLNode *n = new QLNode(newItem(d));
 	CHECK_PTR(n);
 	nextNode->prev = n;
 	prevNode->next = n;
@@ -438,7 +438,7 @@ QLNode *QGList::unlink()
 {
 	if (curNode == 0) // null current node
 		return 0;
-	register QLNode *n = curNode; // unlink this node
+	QLNode *n = curNode; // unlink this node
 	if (n == firstNode) { // removing first node ?
 		if ((firstNode = n->next)) {
 			firstNode->prev = 0;
@@ -652,7 +652,7 @@ QCollection::Item QGList::takeLast()
 
 void QGList::clear()
 {
-	register QLNode *n = firstNode;
+	QLNode *n = firstNode;
 
 	firstNode = lastNode = curNode = 0; // initialize list
 	numNodes = 0;
@@ -683,7 +683,7 @@ void QGList::clear()
 
 int QGList::findRef(QCollection::Item d, bool fromStart)
 {
-	register QLNode *n;
+	QLNode *n;
 	int index;
 	if (fromStart) { // start from first node
 		n = firstNode;
@@ -708,7 +708,7 @@ int QGList::findRef(QCollection::Item d, bool fromStart)
 
 int QGList::find(QCollection::Item d, bool fromStart)
 {
-	register QLNode *n;
+	QLNode *n;
 	int index;
 	if (fromStart) { // start from first node
 		n = firstNode;
@@ -734,7 +734,7 @@ int QGList::find(QCollection::Item d, bool fromStart)
 
 uint QGList::containsRef(QCollection::Item d) const
 {
-	register QLNode *n = firstNode;
+	QLNode *n = firstNode;
 	uint count = 0;
 	while (n) { // for all nodes...
 		if (n->data == d) // count # exact matches
@@ -751,7 +751,7 @@ uint QGList::containsRef(QCollection::Item d) const
 
 uint QGList::contains(QCollection::Item d) const
 {
-	register QLNode *n = firstNode;
+	QLNode *n = firstNode;
 	uint count = 0;
 	QGList *that = (QGList *)this; // mutable for compareItems()
 	while (n) { // for all nodes...
@@ -877,7 +877,7 @@ void QGList::toVector(QGVector *vector) const
 	vector->clear();
 	if (!vector->resize(count()))
 		return;
-	register QLNode *n = firstNode;
+	QLNode *n = firstNode;
 	uint i = 0;
 	while (n) {
 		vector->insert(i, n->data);

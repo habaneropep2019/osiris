@@ -163,7 +163,7 @@ QMenuData::QMenuData()
 
 QMenuData::~QMenuData()
 {
-	register QMenuItem *mi = mitems->first();
+	QMenuItem *mi = mitems->first();
 	while (mi) {
 		if (mi->popup_menu) // reset parent pointer for all
 			mi->popup_menu->parentMenu = 0; //   child menus
@@ -244,7 +244,7 @@ int QMenuData::insertAny(const QString *text, const QPixmap *pixmap,
 	if (id < 0) // -2, -3 etc.
 		id = get_seq_id();
 
-	register QMenuItem *mi = new QMenuItem;
+	QMenuItem *mi = new QMenuItem;
 	CHECK_PTR(mi);
 	mi->ident = id;
 	if (widget != 0) {
@@ -710,7 +710,7 @@ void QMenuData::removeItemAt(int index)
 
 void QMenuData::clear()
 {
-	register QMenuItem *mi = mitems->first();
+	QMenuItem *mi = mitems->first();
 	while (mi) {
 		if (mi->popup_menu)
 			menuDelPopup(mi->popup_menu);
@@ -898,7 +898,7 @@ void QMenuData::changeItem(int id, const QPixmap &pixmap)
 	QMenuData *parent;
 	QMenuItem *mi = findItem(id, &parent);
 	if (mi) { // item found
-		register QPixmap *i = mi->pixmap_data;
+		QPixmap *i = mi->pixmap_data;
 		bool fast_refresh = i != 0 && i->width() == pixmap.width() &&
 				    i->height() == pixmap.height() &&
 				    !mi->text();
@@ -947,7 +947,7 @@ void QMenuData::changeItemIconSet(int id, const QIconSet &icon)
 	QMenuData *parent;
 	QMenuItem *mi = findItem(id, &parent);
 	if (mi) { // item found
-		register QIconSet *i = mi->iconset_data;
+		QIconSet *i = mi->iconset_data;
 		bool fast_refresh = i != 0;
 		mi->iconset_data = new QIconSet(icon);
 		delete i; // old mi->iconset_data, could be &icon

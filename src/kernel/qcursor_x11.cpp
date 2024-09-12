@@ -472,7 +472,7 @@ void QCursor::update() const
 {
 	if (!initialized)
 		initialize();
-	register QCursorData *d = data; // cheat const!
+	QCursorData *d = data; // cheat const!
 	if (d->hcurs) // already loaded
 		return;
 
