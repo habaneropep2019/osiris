@@ -129,6 +129,7 @@ moc_exe = executable('moc',
             cpp_args : moc_compile_args,
             install : true,
             install_dir : install_dir,
+            install_tag : 'bin-devel',
 )
 
 moc_header_file_roots = [
@@ -1021,6 +1022,7 @@ uic_exe = executable('uic',
             install : true,
             link_with : default_osirislib,
             install_dir : install_dir,
+            install_tag : 'bin-devel',
 )
 
 #
@@ -1209,6 +1211,29 @@ executable('designer',
             install : true,
             link_with : [default_osirislib, qutil_lib],
             install_dir : install_dir,
+)
+
+#
+# Build and install qembed tool
+#
+
+qembed_source_path = 'tools/qembed'
+qembed_include_directories = [
+    osiris_include_directories,
+]
+qembed_sources = [
+    qembed_source_path / 'qembed.cpp'
+]
+
+executable('qembed',
+            qembed_sources,
+            dependencies : [],
+            include_directories : qembed_include_directories,
+            cpp_args : [],
+            install : true,
+            link_with : [default_osirislib, qutil_lib],
+            install_dir : install_dir,
+            install_tag : 'bin-devel',
 )
 
 if get_option('examples').enabled()
