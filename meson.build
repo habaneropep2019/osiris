@@ -42,6 +42,7 @@ install_dir = get_option('prefix') / 'bin'
 lib_install_dir = get_option('prefix') / 'lib'
 include_install_dir = get_option('prefix') / 'include/osiris'
 
+osiris_assets_install_dir = get_option('prefix') / 'share/osiris'
 designer_assets_install_dir = get_option('prefix') / 'share/designer'
 
 dialog_header_path = 'src/dialogs'
@@ -1199,6 +1200,7 @@ designer_sources += generated_moc_files
 designer_sources += generated_ui_files
 
 designer_defines = [
+    '-DOSIRIS_INSTALL_PREFIX="' + osiris_assets_install_dir + '"',
     '-DDESIGNER_INSTALL_PREFIX="' + designer_assets_install_dir + '"',
     '-DDESIGNER=1',
 ]
@@ -1246,12 +1248,34 @@ endif
 
 pixmaps_install_dir = designer_assets_install_dir / 'pixmaps'
 
-install_subdir('tools/designer/pics/large', install_dir : pixmaps_install_dir, strip_directory : false)
-install_subdir('tools/designer/pics/mini', install_dir : pixmaps_install_dir, strip_directory : false)
-install_subdir('tools/designer/pics/small', install_dir : pixmaps_install_dir, strip_directory : false)
+install_subdir('tools/designer/pics/large',
+                install_dir : pixmaps_install_dir,
+                install_tag : 'runtime',
+                strip_directory : false,
+)
+install_subdir('tools/designer/pics/mini',
+                install_dir : pixmaps_install_dir,
+                install_tag : 'runtime',
+                strip_directory : false,
+)
+install_subdir('tools/designer/pics/small',
+                install_dir : pixmaps_install_dir,
+                install_tag : 'runtime',
+                strip_directory : false,
+)
 
 designer_docs_install_dir = designer_assets_install_dir / 'doc/html/'
-designer_tools_install_dir = designer_assets_install_dir / 'tools/'
 
-install_subdir('doc/html/designer', install_dir : designer_docs_install_dir, strip_directory : true)
-install_subdir('tools/designer', install_dir : designer_tools_install_dir, strip_directory : true)
+install_subdir('doc/html/designer',
+                install_dir : designer_docs_install_dir,
+                install_tag : 'runtime',
+                strip_directory : true,
+)
+
+osiris_docs_install_dir = osiris_assets_install_dir / 'doc/html/'
+
+install_subdir('doc/html/osiris',
+                install_dir : osiris_docs_install_dir,
+                install_tag : 'runtime',
+                strip_directory : true,
+)
