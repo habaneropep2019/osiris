@@ -88,7 +88,7 @@ A lot of ports to other platforms are inherited from the original Qt code. These
 
 #### What about Wayland support?
 
-Wayland support is planned for the 2.5.x series. There is no ETA however. Applications ported to Osiris should work properly under XWayland however, with the exception being window managers. Patches/PRs are welcome.
+Wayland support is planned for the 2.5.x series. There is no ETA however. Applications ported to Osiris should work properly under XWayland however, ~~with the exception being window managers~~ window managers/DEs will run in XWayland with some caveats. Patches/PRs are welcome.
 
 You can run Osiris using XWayland without problems.
 
