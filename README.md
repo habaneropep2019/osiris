@@ -152,6 +152,7 @@ sudo ninja install
 Then, you need to set up the environment. Usually adding the following to your `.profile`, logging out, and logging back in again is sufficient. This should be done for both root _and_ any local users who will be using Osiris.
 
 ```
+OSIRISDIR="/opt/osiris"
 PATH="$PATH:$OSIRISDIR/bin"
 MANPATH="$MANPATH:$OSIRISDIR/doc/man"
 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$OSIRISDIR/lib"
