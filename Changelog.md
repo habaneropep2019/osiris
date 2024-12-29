@@ -13,6 +13,7 @@ Osiris 2.4.2 is mostly a maintenance release, although the build system changed 
 - Compiles as C++11 by default now
 - Designer pixmap assets are now configured to reside in `<PREFIX>/share/designer/pixmaps/`, fixing bug #10
 - Added `linter.sh` to check source code for license identifiers and run the formatter
+- Updated dependency requirements for various distributions
 
 
 #### Osiris 2.4.1

@@ -6,15 +6,15 @@ Osiris is a graphical toolkit for X11-based Linux and Unix platforms.
 
 ## About
 
-Osiris is actually a fork of the Qt toolkit, from version 2.3.2. Osiris is largely source compatible (but not binary compatible) with Qt 2.3.2 (with the exception of some naming conventions potentially changing). This means that you can compile legacy applications built originally for Qt2 using Osiris. In addition, porting from Qt1 takes very little work.
+Osiris is a fork of the Qt toolkit, from version 2.3.2. Osiris is largely source compatible (but not binary compatible) with Qt 2.3.2 (with the exception of some naming conventions potentially changing). This means that you can compile legacy applications built originally for Qt2 using Osiris. In addition, porting from Qt1 takes very little work.
 
 Osiris was previously part of ZFreeKit.
 
 #### But why not use modern Qt?
 
-Good question. If you're asking that, chances are that you SHOULD use modern Qt. Qt6 is a masterful toolkit. It's high-quality, robust, and the documentation is second to none. Osiris is not meant to be a competitor nor a replacement for modern Qt.
+If you're writing an application from scratch, the general answer is you should use Qt 6. It's a quality product, and the documentation is second to none.
 
-Fun fact: If you've traversed the code, you'd be surprised to find that more code than you'd expect from legacy Qt versions is still present in modern versions. No need to fix what isn't broken.
+But if your application was originally written for Qt versions 1 or 2, then Osiris is the answer. It's pretty straightforward to revive an old program using Osiris. Technically, you could port to Qt6, but with the exception of some extremely simple applications, you'll likely save a lot of time simply porting to Osiris instead.
 
 #### But why Osiris?
 
@@ -88,7 +88,7 @@ A lot of ports to other platforms are inherited from the original Qt code. These
 
 #### What about Wayland support?
 
-Wayland support is planned, eventually. There is no ETA however. Applications ported to Osiris should work properly under XWayland however, with the exception being window managers. Patches/PRs are welcome.
+Wayland support is planned for the 2.5.x series. There is no ETA however. Applications ported to Osiris should work properly under XWayland however, with the exception being window managers. Patches/PRs are welcome.
 
 You can run Osiris using XWayland without problems.
 
@@ -110,7 +110,18 @@ Getting the clipboard implemented correctly under X11 is ridiculously complicate
 
 **Notes for Ubuntu systems:** You will need to install the following packages to build Osiris: `libx11-dev gawk bison flex build-essential libjpeg62-dev libxext-dev libxft-dev libglu1-mesa-dev libxmu-dev`
 
-The default behavior is to install Osiris to `/opt`. Examples and tutorials are built, but are installed to the source working directory. It is not currently recommended to install Osiris to `/usr`.
+**Notes for Debian 12 and up:** You will need to install the following packages to build Osiris: `xorg-dev libglu1-mesa-dev libjpeg-dev`
+
+**Notes for Fedora 40 and up:** To get the build dependencies, run the following commands:
+```
+sudo dnf install xorg-x11-drv-libinput xorg-x11-server-common xorg-x11-server-Xorg
+
+sudo dnf group install "C Development Tools and Libraries" "Development Tools" "X Software Development"
+
+sudo dnf install meson mesa-libGLU-devel
+```
+
+The default behavior is to install Osiris to `/opt`. Examples and tutorials are built, but are installed to the source working directory. It is not currently recommended to install Osiris to any other directory.
 
 To build Osiris, checkout or download a release, and from the source directory run:
 
@@ -160,7 +171,8 @@ Credits to the following are due because they have either contributed directly t
 - Helio Chissini de Castro
 - The Trinity Desktop Environment project
 - Keith Chambers
+- Alec Bloss
 
 ## Development
 
-Osiris now enforces a code style similar to what is used for the Linux Kernel and git-scm. This is styled in `.clang-format`. A script `recurs_clang-format.sh` is provided and should be run prior to every commit.
+Osiris now enforces a code style similar to what is used for the Linux Kernel and git-scm. This is styled in `.clang-format`. A script `recurs_clang-format.sh` is provided and should be run prior to every commit. C++11 is also enforced at build time now.
