@@ -33,57 +33,60 @@ class MainWindow;
 
 class FormListItem : public QListViewItem
 {
-public:
-    FormListItem( QListView *parent, const QString &form, const QString &file, FormWindow *fw );
+      public:
+	FormListItem(QListView *parent, const QString &form,
+		     const QString &file, FormWindow *fw);
 
-    FormWindow *formWindow() const { return formwindow; }
+	FormWindow *formWindow() const
+	{
+		return formwindow;
+	}
 
-    void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );
-    void updateBackColor();
+	void paintCell(QPainter *p, const QColorGroup &cg, int column,
+		       int width, int align);
+	void updateBackColor();
 
-private:
-    FormWindow *formwindow;
-    QColor backgroundColor();
-    QColor backColor;
-
+      private:
+	FormWindow *formwindow;
+	QColor backgroundColor();
+	QColor backColor;
 };
 
 class FormList : public QListView
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    FormList( QWidget *parent , MainWindow *mw );
-    void addForm( FormWindow *fw );
-    void closed( FormWindow *fw );
+      public:
+	FormList(QWidget *parent, MainWindow *mw);
+	void addForm(FormWindow *fw);
+	void closed(FormWindow *fw);
 
-    void contentsDropEvent( QDropEvent *e );
-    void contentsDragEnterEvent( QDragEnterEvent *e );
-    void contentsDragMoveEvent( QDragMoveEvent *e );
+	void contentsDropEvent(QDropEvent *e);
+	void contentsDragEnterEvent(QDragEnterEvent *e);
+	void contentsDragMoveEvent(QDragMoveEvent *e);
 
-public slots:
-    void modificationChanged( bool m, FormWindow *fw );
-    void fileNameChanged( const QString &s, FormWindow *fw );
-    void activeFormChanged( FormWindow *fw );
-    void nameChanged( FormWindow *fw );
+      public slots:
+	void modificationChanged(bool m, FormWindow *fw);
+	void fileNameChanged(const QString &s, FormWindow *fw);
+	void activeFormChanged(FormWindow *fw);
+	void nameChanged(FormWindow *fw);
 
-protected:
-    void resizeEvent( QResizeEvent *e );
-    void closeEvent( QCloseEvent *e );
-    
-signals:
-    void hidden();
+      protected:
+	void resizeEvent(QResizeEvent *e);
+	void closeEvent(QCloseEvent *e);
 
-private slots:
-    void updateHeader();
-    void itemClicked( QListViewItem *i );
+      signals:
+	void hidden();
 
-private:
-    FormListItem *findItem( FormWindow *fw );
+      private slots:
+	void updateHeader();
+	void itemClicked(QListViewItem *i);
 
-private:
-    MainWindow *mainWindow;
-    
+      private:
+	FormListItem *findItem(FormWindow *fw);
+
+      private:
+	MainWindow *mainWindow;
 };
 
 #endif

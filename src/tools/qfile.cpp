@@ -37,17 +37,17 @@
 
 #include "qglobal.h"
 #if defined(_OS_WIN32_)
-#ifdef UNICODE
-#ifndef _UNICODE
-#define _UNICODE
-#endif
-#endif
+# ifdef UNICODE
+#  ifndef _UNICODE
+#   define _UNICODE
+#  endif
+# endif
 #endif
 
 #include "qfile.h"
 #include "qfiledefs_p.h"
 
-extern bool qt_file_access( const QString& fn, int t );
+extern bool qt_file_access(const QString &fn, int t);
 
 // NOT REVISED
 /*!
@@ -91,7 +91,7 @@ extern bool qt_file_access( const QString& fn, int t );
 
 QFile::QFile()
 {
-    init();
+	init();
 }
 
 /*!
@@ -99,10 +99,9 @@ QFile::QFile()
   \sa setName()
 */
 
-QFile::QFile( const QString &name )
-    : fn(name)
+QFile::QFile(const QString &name) : fn(name)
 {
-    init();
+	init();
 }
 
 
@@ -112,7 +111,7 @@ QFile::QFile( const QString &name )
 
 QFile::~QFile()
 {
-    close();
+	close();
 }
 
 
@@ -123,13 +122,13 @@ QFile::~QFile()
 
 void QFile::init()
 {
-    setFlags( IO_Direct );
-    setStatus( IO_Ok );
-    fh	   = 0;
-    fd	   = 0;
-    length = 0;
-    ioIndex = 0;
-    ext_f  = FALSE;				// not an external file handle
+	setFlags(IO_Direct);
+	setStatus(IO_Ok);
+	fh = 0;
+	fd = 0;
+	length = 0;
+	ioIndex = 0;
+	ext_f = FALSE; // not an external file handle
 }
 
 
@@ -164,15 +163,15 @@ void QFile::init()
   \sa name(), QFileInfo, QDir
 */
 
-void QFile::setName( const QString &name )
+void QFile::setName(const QString &name)
 {
-    if ( isOpen() ) {
+	if (isOpen()) {
 #if defined(CHECK_STATE)
-	qWarning( "QFile::setName: File is open" );
+		qWarning("QFile::setName: File is open");
 #endif
-	close();
-    }
-    fn = name;
+		close();
+	}
+	fn = name;
 }
 
 /*!
@@ -182,16 +181,16 @@ void QFile::setName( const QString &name )
 
 bool QFile::exists() const
 {
-    return qt_file_access( fn, F_OK );
+	return qt_file_access(fn, F_OK);
 }
 
 /*!
   Returns TRUE if the file given by \e fileName exists, otherwise FALSE.
 */
 
-bool QFile::exists( const QString &fileName )
+bool QFile::exists(const QString &fileName)
 {
-    return qt_file_access( fileName, F_OK );
+	return qt_file_access(fileName, F_OK);
 }
 
 
@@ -204,12 +203,13 @@ bool QFile::exists( const QString &fileName )
 
 bool QFile::remove()
 {
-    close();
-    return remove( fn );
+	close();
+	return remove(fn);
 }
 
-#if defined(_OS_MAC_) || defined(_OS_MSDOS_) || defined(_OS_WIN32_) || defined(_OS_OS2_)
-# define HAS_TEXT_FILEMODE			// has translate/text filemode
+#if defined(_OS_MAC_) || defined(_OS_MSDOS_) || defined(_OS_WIN32_) || \
+	defined(_OS_OS2_)
+# define HAS_TEXT_FILEMODE // has translate/text filemode
 #endif
 #if defined(O_NONBLOCK)
 # define HAS_ASYNC_FILEMODE
@@ -227,8 +227,8 @@ bool QFile::remove()
 
 void QFile::flush()
 {
-    if ( isOpen() && fh )			// can only flush open/buffered
-	fflush( fh );				//   file
+	if (isOpen() && fh) // can only flush open/buffered
+		fflush(fh); //   file
 }
 
 /*!
@@ -238,17 +238,17 @@ void QFile::flush()
 
 bool QFile::atEnd() const
 {
-    if ( !isOpen() ) {
+	if (!isOpen()) {
 #if defined(CHECK_STATE)
-	qWarning( "QFile::atEnd: File is not open" );
+		qWarning("QFile::atEnd: File is not open");
 #endif
-	return FALSE;
-    }
-    if ( isDirectAccess() && !isTranslated() ) {
-	if ( at() < length )
-	    return FALSE;
-    }
-    return QIODevice::atEnd();
+		return FALSE;
+	}
+	if (isDirectAccess() && !isTranslated()) {
+		if (at() < length)
+			return FALSE;
+	}
+	return QIODevice::atEnd();
 }
 
 /*!
@@ -265,36 +265,36 @@ bool QFile::atEnd() const
   \sa readBlock(), QTextStream::readLine()
 */
 
-int QFile::readLine( char *p, uint maxlen )
+int QFile::readLine(char *p, uint maxlen)
 {
-    if ( maxlen == 0 )				// application bug?
-	return 0;
+	if (maxlen == 0) // application bug?
+		return 0;
 #if defined(CHECK_STATE)
-    CHECK_PTR( p );
-    if ( !isOpen() ) {				// file not open
-	qWarning( "QFile::readLine: File not open" );
-	return -1;
-    }
-    if ( !isReadable() ) {			// reading not permitted
-	qWarning( "QFile::readLine: Read operation not permitted" );
-	return -1;
-    }
-#endif
-    int nread;					// number of bytes read
-    if ( isRaw() ) {				// raw file
-	nread = QIODevice::readLine( p, maxlen );
-    } else {					// buffered file
-	p = fgets( p, maxlen, fh );
-	if ( p ) {
-	    nread = qstrlen( p );
-	    if ( !isSequentialAccess() )
-		ioIndex += nread;
-	} else {
-	    nread = -1;
-	    setStatus(IO_ReadError);
+	CHECK_PTR(p);
+	if (!isOpen()) { // file not open
+		qWarning("QFile::readLine: File not open");
+		return -1;
 	}
-    }
-    return nread;
+	if (!isReadable()) { // reading not permitted
+		qWarning("QFile::readLine: Read operation not permitted");
+		return -1;
+	}
+#endif
+	int nread; // number of bytes read
+	if (isRaw()) { // raw file
+		nread = QIODevice::readLine(p, maxlen);
+	} else { // buffered file
+		p = fgets(p, maxlen, fh);
+		if (p) {
+			nread = qstrlen(p);
+			if (!isSequentialAccess())
+				ioIndex += nread;
+		} else {
+			nread = -1;
+			setStatus(IO_ReadError);
+		}
+	}
+	return nread;
 }
 
 
@@ -314,15 +314,15 @@ int QFile::readLine( char *p, uint maxlen )
   \sa readBlock(), QTextStream::readLine()
 */
 
-int QFile::readLine( QString& s, uint maxlen )
+int QFile::readLine(QString &s, uint maxlen)
 {
-    QByteArray ba(maxlen);
-    int l = readLine(ba.data(),maxlen);
-    if ( l >= 0 ) {
-	ba.truncate(l);
-	s = QString(ba);
-    }
-    return l;
+	QByteArray ba(maxlen);
+	int l = readLine(ba.data(), maxlen);
+	if (l >= 0) {
+		ba.truncate(l);
+		s = QString(ba);
+	}
+	return l;
 }
 
 
@@ -338,36 +338,36 @@ int QFile::readLine( QString& s, uint maxlen )
 int QFile::getch()
 {
 #if defined(CHECK_STATE)
-    if ( !isOpen() ) {				// file not open
-	qWarning( "QFile::getch: File not open" );
-	return EOF;
-    }
-    if ( !isReadable() ) {			// reading not permitted
-	qWarning( "QFile::getch: Read operation not permitted" );
-	return EOF;
-    }
+	if (!isOpen()) { // file not open
+		qWarning("QFile::getch: File not open");
+		return EOF;
+	}
+	if (!isReadable()) { // reading not permitted
+		qWarning("QFile::getch: Read operation not permitted");
+		return EOF;
+	}
 #endif
 
-    int ch;
+	int ch;
 
-    if ( !ungetchBuffer.isEmpty() ) {
-	int len = ungetchBuffer.length();
-	ch = ungetchBuffer[ len-1 ];
-	ungetchBuffer.truncate( len - 1 );
+	if (!ungetchBuffer.isEmpty()) {
+		int len = ungetchBuffer.length();
+		ch = ungetchBuffer[len - 1];
+		ungetchBuffer.truncate(len - 1);
+		return ch;
+	}
+
+	if (isRaw()) { // raw file (inefficient)
+		char buf[1];
+		ch = readBlock(buf, 1) == 1 ? buf[0] : EOF;
+	} else { // buffered file
+		if ((ch = getc(fh)) != EOF)
+			if (!isSequentialAccess())
+				ioIndex++;
+			else
+				setStatus(IO_ReadError);
+	}
 	return ch;
-    }
-
-    if ( isRaw() ) {				// raw file (inefficient)
-	char buf[1];
-	ch = readBlock( buf, 1 ) == 1 ? buf[0] : EOF;
-    } else {					// buffered file
-	if ( (ch = getc( fh )) != EOF )
-	    if ( !isSequentialAccess() )
-		ioIndex++;
-	else
-	    setStatus(IO_ReadError);
-    }
-    return ch;
 }
 
 /*!
@@ -385,33 +385,33 @@ int QFile::getch()
   \sa getch(), ungetch()
 */
 
-int QFile::putch( int ch )
+int QFile::putch(int ch)
 {
 #if defined(CHECK_STATE)
-    if ( !isOpen() ) {				// file not open
-	qWarning( "QFile::putch: File not open" );
-	return EOF;
-    }
-    if ( !isWritable() ) {			// writing not permitted
-	qWarning( "QFile::putch: Write operation not permitted" );
-	return EOF;
-    }
-#endif
-    if ( isRaw() ) {				// raw file (inefficient)
-	char buf[1];
-	buf[0] = ch;
-	ch = writeBlock( buf, 1 ) == 1 ? ch : EOF;
-    } else {					// buffered file
-	if ( (ch = putc( ch, fh )) != EOF ) {
-	    if ( !isSequentialAccess() )
-		ioIndex++;
-	    if ( ioIndex > length )		// update file length
-		length = ioIndex;
-	} else {
-	    setStatus(IO_WriteError);
+	if (!isOpen()) { // file not open
+		qWarning("QFile::putch: File not open");
+		return EOF;
 	}
-    }
-    return ch;
+	if (!isWritable()) { // writing not permitted
+		qWarning("QFile::putch: Write operation not permitted");
+		return EOF;
+	}
+#endif
+	if (isRaw()) { // raw file (inefficient)
+		char buf[1];
+		buf[0] = ch;
+		ch = writeBlock(buf, 1) == 1 ? ch : EOF;
+	} else { // buffered file
+		if ((ch = putc(ch, fh)) != EOF) {
+			if (!isSequentialAccess())
+				ioIndex++;
+			if (ioIndex > length) // update file length
+				length = ioIndex;
+		} else {
+			setStatus(IO_WriteError);
+		}
+	}
+	return ch;
 }
 
 /*!
@@ -425,49 +425,49 @@ int QFile::putch( int ch )
   \sa getch(), putch()
 */
 
-int QFile::ungetch( int ch )
+int QFile::ungetch(int ch)
 {
 #if defined(CHECK_STATE)
-    if ( !isOpen() ) {				// file not open
-	qWarning( "QFile::ungetch: File not open" );
-	return EOF;
-    }
-    if ( !isReadable() ) {			// reading not permitted
-	qWarning( "QFile::ungetch: Read operation not permitted" );
-	return EOF;
-    }
+	if (!isOpen()) { // file not open
+		qWarning("QFile::ungetch: File not open");
+		return EOF;
+	}
+	if (!isReadable()) { // reading not permitted
+		qWarning("QFile::ungetch: Read operation not permitted");
+		return EOF;
+	}
 #endif
-    if ( ch == EOF )				// cannot unget EOF
-	return ch;
+	if (ch == EOF) // cannot unget EOF
+		return ch;
 
-    if ( isSequentialAccess() && !fh) {
-	// pipe or similar => we cannot ungetch, so do it manually
-	ungetchBuffer +=ch;
-	return ch;
-    }
+	if (isSequentialAccess() && !fh) {
+		// pipe or similar => we cannot ungetch, so do it manually
+		ungetchBuffer += ch;
+		return ch;
+	}
 
-    if ( isRaw() ) {				// raw file (very inefficient)
-	char buf[1];
-	at( ioIndex-1 );
-	buf[0] = ch;
-	if ( writeBlock(buf, 1) == 1 )
-	    at ( ioIndex-1 );
-	else
-	    ch = EOF;
-    } else {					// buffered file
-	if ( (ch = ungetc(ch, fh)) != EOF )
-	    if ( !isSequentialAccess() )
-		ioIndex--;
-	else
-	    setStatus( IO_ReadError );
-    }
-    return ch;
+	if (isRaw()) { // raw file (very inefficient)
+		char buf[1];
+		at(ioIndex - 1);
+		buf[0] = ch;
+		if (writeBlock(buf, 1) == 1)
+			at(ioIndex - 1);
+		else
+			ch = EOF;
+	} else { // buffered file
+		if ((ch = ungetc(ch, fh)) != EOF)
+			if (!isSequentialAccess())
+				ioIndex--;
+			else
+				setStatus(IO_ReadError);
+	}
+	return ch;
 }
 
 
-static QCString locale_encoder( const QString &fileName )
+static QCString locale_encoder(const QString &fileName)
 {
-    return fileName.local8Bit();
+	return fileName.local8Bit();
 }
 
 
@@ -495,9 +495,9 @@ static QFile::EncoderFn encoder = locale_encoder;
   \sa decodeName()
 */
 
-QCString QFile::encodeName( const QString &fileName )
+QCString QFile::encodeName(const QString &fileName)
 {
-    return (*encoder)(fileName);
+	return (*encoder)(fileName);
 }
 
 /*!
@@ -512,15 +512,14 @@ QCString QFile::encodeName( const QString &fileName )
 
   \sa encodeName()
 */
-void QFile::setEncodingFunction( EncoderFn f )
+void QFile::setEncodingFunction(EncoderFn f)
 {
-    encoder = f;
+	encoder = f;
 }
 
-static
-QString locale_decoder( const QCString &localFileName )
+static QString locale_decoder(const QCString &localFileName)
 {
-    return QString::fromLocal8Bit(localFileName);
+	return QString::fromLocal8Bit(localFileName);
 }
 
 static QFile::DecoderFn decoder = locale_decoder;
@@ -530,9 +529,9 @@ static QFile::DecoderFn decoder = locale_decoder;
 
   \sa setDecodingFunction()
 */
-QString QFile::decodeName( const QCString &localFileName )
+QString QFile::decodeName(const QCString &localFileName)
 {
-    return (*decoder)(localFileName);
+	return (*decoder)(localFileName);
 }
 
 /*!
@@ -548,7 +547,7 @@ QString QFile::decodeName( const QCString &localFileName )
   \sa encodeName(), decodeName()
 */
 
-void QFile::setDecodingFunction( DecoderFn f )
+void QFile::setDecodingFunction(DecoderFn f)
 {
-    decoder = f;
+	decoder = f;
 }

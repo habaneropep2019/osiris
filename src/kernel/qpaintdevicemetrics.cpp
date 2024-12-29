@@ -71,9 +71,9 @@
 /*!
   Constructs a metric for the paint device \e pd.
 */
-QPaintDeviceMetrics::QPaintDeviceMetrics( const QPaintDevice *pd )
+QPaintDeviceMetrics::QPaintDeviceMetrics(const QPaintDevice *pd)
 {
-    pdev = (QPaintDevice *)pd;
+	pdev = (QPaintDevice *)pd;
 }
 
 

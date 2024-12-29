@@ -35,144 +35,164 @@ class QPaintEvent;
 
 class Layout : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    Layout( const QWidgetList &wl, QWidget *p, FormWindow *fw, QWidget *lb, bool doSetup = TRUE );
-    virtual ~Layout() {}
+      public:
+	Layout(const QWidgetList &wl, QWidget *p, FormWindow *fw, QWidget *lb,
+	       bool doSetup = TRUE);
+	virtual ~Layout()
+	{
+	}
 
-    virtual void doLayout() = 0;
-    virtual void undoLayout();
-    virtual void breakLayout();
-    virtual bool prepareLayout( bool &needMove, bool &needReparent );
-    virtual void finishLayout( bool needMove, QLayout *layout );
+	virtual void doLayout() = 0;
+	virtual void undoLayout();
+	virtual void breakLayout();
+	virtual bool prepareLayout(bool &needMove, bool &needReparent);
+	virtual void finishLayout(bool needMove, QLayout *layout);
 
-protected:
-    QWidgetList widgets;
-    QWidget *parent;
-    QPoint startPoint;
-    QMap<QGuardedPtr<QWidget>, QRect> geometries;
-    QWidget *layoutBase;
-    FormWindow *formWindow;
-    QRect oldGeometry;
-    bool isBreak;
+      protected:
+	QWidgetList widgets;
+	QWidget *parent;
+	QPoint startPoint;
+	QMap<QGuardedPtr<QWidget>, QRect> geometries;
+	QWidget *layoutBase;
+	FormWindow *formWindow;
+	QRect oldGeometry;
+	bool isBreak;
 
-protected:
-    virtual void setup();
+      protected:
+	virtual void setup();
 
-protected slots:
-    void widgetDestroyed();
-
+      protected slots:
+	void widgetDestroyed();
 };
 
 class HorizontalLayout : public Layout
 {
-public:
-    HorizontalLayout( const QWidgetList &wl, QWidget *p, FormWindow *fw, QWidget *lb, bool doSetup = TRUE );
+      public:
+	HorizontalLayout(const QWidgetList &wl, QWidget *p, FormWindow *fw,
+			 QWidget *lb, bool doSetup = TRUE);
 
-    void doLayout();
+	void doLayout();
 
-protected:
-    void setup();
-
+      protected:
+	void setup();
 };
 
 class VerticalLayout : public Layout
 {
-public:
-    VerticalLayout( const QWidgetList &wl, QWidget *p, FormWindow *fw, QWidget *lb, bool doSetup = TRUE );
+      public:
+	VerticalLayout(const QWidgetList &wl, QWidget *p, FormWindow *fw,
+		       QWidget *lb, bool doSetup = TRUE);
 
-    void doLayout();
+	void doLayout();
 
-protected:
-    void setup();
-
+      protected:
+	void setup();
 };
 
 class Grid;
 
 class GridLayout : public Layout
 {
-public:
-    GridLayout( const QWidgetList &wl, QWidget *p, FormWindow *fw, QWidget *lb, const QSize &res, bool doSetup = TRUE );
-    ~GridLayout();
+      public:
+	GridLayout(const QWidgetList &wl, QWidget *p, FormWindow *fw,
+		   QWidget *lb, const QSize &res, bool doSetup = TRUE);
+	~GridLayout();
 
-    void doLayout();
+	void doLayout();
 
-protected:
-    void setup();
+      protected:
+	void setup();
 
-protected:
-    void buildGrid();
-    QSize resolution;
-    Grid* grid;
-
+      protected:
+	void buildGrid();
+	QSize resolution;
+	Grid *grid;
 };
 
 class Spacer : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-    Q_OVERRIDE( QCString name )
-    Q_PROPERTY( Orientation orientation READ orientation WRITE setOrientation )
-    Q_ENUMS( SizeType )
-    Q_PROPERTY( SizeType sizeType READ sizeType WRITE setSizeType )
-    Q_PROPERTY( QSize sizeHint READ sizeHint WRITE resize DESIGNABLE false )
+	Q_OVERRIDE(QCString name)
+	Q_PROPERTY(Orientation orientation READ orientation WRITE setOrientation)
+	Q_ENUMS(SizeType)
+	Q_PROPERTY(SizeType sizeType READ sizeType WRITE setSizeType)
+	Q_PROPERTY(QSize sizeHint READ sizeHint WRITE resize DESIGNABLE false)
 
-private:
-    enum { HSize = 6, HMask = 0x3f, VMask = HMask << HSize,
-	   MayGrow = 1, ExpMask = 2, MayShrink = 4 };
+      private:
+	enum {
+		HSize = 6,
+		HMask = 0x3f,
+		VMask = HMask << HSize,
+		MayGrow = 1,
+		ExpMask = 2,
+		MayShrink = 4
+	};
 
-public:
-    enum SizeType { Fixed = 0,
-		    Minimum = MayGrow,
-		    Maximum = MayShrink,
-		    Preferred = MayGrow|MayShrink ,
-		    MinimumExpanding = Minimum|ExpMask,
-		    Expanding = MinimumExpanding|MayShrink };
+      public:
+	enum SizeType {
+		Fixed = 0,
+		Minimum = MayGrow,
+		Maximum = MayShrink,
+		Preferred = MayGrow | MayShrink,
+		MinimumExpanding = Minimum | ExpMask,
+		Expanding = MinimumExpanding | MayShrink
+	};
 
-    Spacer( QWidget *parent, const char *name );
+	Spacer(QWidget *parent, const char *name);
 
-    QSize minimumSize() const;
-    QSize sizeHint() const;
-    void setSizeType( SizeType t );
-    SizeType sizeType() const;
-    int alignment() const;
-    Orientation orientation() const;
-    void setOrientation( Orientation o );
-    void setAutoResize( bool b ) { ar = b; };
-    void resize( const QSize &s ) { QWidget::resize( s ); }
+	QSize minimumSize() const;
+	QSize sizeHint() const;
+	void setSizeType(SizeType t);
+	SizeType sizeType() const;
+	int alignment() const;
+	Orientation orientation() const;
+	void setOrientation(Orientation o);
+	void setAutoResize(bool b)
+	{
+		ar = b;
+	};
+	void resize(const QSize &s)
+	{
+		QWidget::resize(s);
+	}
 
-protected:
-    void paintEvent( QPaintEvent *e );
-    void updateMask();
-    Qt::Orientation orient;
-    bool ar;
-
+      protected:
+	void paintEvent(QPaintEvent *e);
+	void updateMask();
+	Qt::Orientation orient;
+	bool ar;
 };
 
 class QDesignerGridLayout : public QGridLayout
 {
-   Q_OBJECT
-public:
-    QDesignerGridLayout( QWidget *parent ) : QGridLayout( parent ){};
-    QDesignerGridLayout( QLayout *parentLayout ) : QGridLayout( parentLayout ){};
+	Q_OBJECT
+      public:
+	QDesignerGridLayout(QWidget *parent) : QGridLayout(parent){};
+	QDesignerGridLayout(QLayout *parentLayout)
+		: QGridLayout(parentLayout){};
 
-    void addWidget( QWidget *, int row, int col, int align = 0 );
-    void addMultiCellWidget( QWidget *, int fromRow, int toRow,
-			       int fromCol, int toCol, int align = 0 );
+	void addWidget(QWidget *, int row, int col, int align = 0);
+	void addMultiCellWidget(QWidget *, int fromRow, int toRow, int fromCol,
+				int toCol, int align = 0);
 
-    struct Item
-    {
-	Item(): row(0), column(0),rowspan(1),colspan(1){}
-	Item( int r, int c, int rs, int cs): row(r), column(c), rowspan(rs), colspan(cs){}
-	int row;
-	int column;
-	int rowspan;
-	int colspan;
-    };
+	struct Item {
+		Item() : row(0), column(0), rowspan(1), colspan(1)
+		{
+		}
+		Item(int r, int c, int rs, int cs)
+			: row(r), column(c), rowspan(rs), colspan(cs)
+		{
+		}
+		int row;
+		int column;
+		int rowspan;
+		int colspan;
+	};
 
-    QMap<QWidget*, Item> items;
+	QMap<QWidget *, Item> items;
 };
 
 

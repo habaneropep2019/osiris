@@ -1,7 +1,7 @@
 #ifndef QT_H
 #endif // QT_H
 #ifndef QT_NO_CODECS
-#define QT_NO_CODECS
+# define QT_NO_CODECS
 #endif
 #define QT_NO_UNICODETABLES
 #define QT_NO_IMAGEIO_BMP
@@ -29,13 +29,13 @@
 #define QT_NO_ACTION
 #define QT_NO_STYLE_MOTIF
 #define QT_NO_STYLE_PLATINUM
-//#define QT_NO_FILEDIALOG
+// #define QT_NO_FILEDIALOG
 #define QT_NO_FONTDIALOG
 #define QT_NO_PRINTDIALOG
-//#define QT_NO_COLORDIALOG
+// #define QT_NO_COLORDIALOG
 #define QT_NO_INPUTDIALOG
-//#define QT_NO_MESSAGEBOX
+// #define QT_NO_MESSAGEBOX
 #define QT_NO_PROGRESSDIALOG
-//#define QT_NO_TABDIALOG
+// #define QT_NO_TABDIALOG
 #define QT_NO_WIZARD
 #define QT_NO_EFFECTS

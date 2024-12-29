@@ -12,27 +12,27 @@
 #include "qlineedit.h"
 #include "qpushbutton.h"
 
-MotorValidator::MotorValidator( QSpinBox * parent, const char * name )
-    : QValidator( parent, name )
+MotorValidator::MotorValidator(QSpinBox *parent, const char *name)
+	: QValidator(parent, name)
 {
-    // just some random junk.
-    b = 0;
-    t = 42;
-    s = 2;
+	// just some random junk.
+	b = 0;
+	t = 42;
+	s = 2;
 }
 
 
 MotorValidator::~MotorValidator()
 {
-    // nothing.  wow. programming qt is easy.
+	// nothing.  wow. programming qt is easy.
 }
 
 
-void MotorValidator::setRange( int bottom, int top, int step )
+void MotorValidator::setRange(int bottom, int top, int step)
 {
-    b = bottom;
-    t = top;
-    s = step;
+	b = bottom;
+	t = top;
+	s = step;
 }
 
 
@@ -40,14 +40,14 @@ void MotorValidator::setRange( int bottom, int top, int step )
 // integer in the range b to t which can be described as n*s+b for
 // some integer n.
 
-QValidator::State MotorValidator::validate( QString & motorSize, int & ) const
+QValidator::State MotorValidator::validate(QString &motorSize, int &) const
 {
-    bool ok;
-    long int tmp = motorSize.toLong( &ok );
-    if ( !ok )
-        return QValidator::Invalid;
-    else if ( tmp < b || tmp > t || ((tmp-b)%s) != 0 )
-        return QValidator::Valid;
-    else
-        return QValidator::Acceptable;
+	bool ok;
+	long int tmp = motorSize.toLong(&ok);
+	if (!ok)
+		return QValidator::Invalid;
+	else if (tmp < b || tmp > t || ((tmp - b) % s) != 0)
+		return QValidator::Valid;
+	else
+		return QValidator::Acceptable;
 }

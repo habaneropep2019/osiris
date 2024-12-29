@@ -12,14 +12,14 @@
 
 #include "composer.h"
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    Composer c;
-    a.setMainWidget( &c );
-    c.resize( 400, 500 );
-    c.setCaption("Qt Example - Mail");
-    c.show();
-    return a.exec();
+	Composer c;
+	a.setMainWidget(&c);
+	c.resize(400, 500);
+	c.setCaption("Qt Example - Mail");
+	c.show();
+	return a.exec();
 }

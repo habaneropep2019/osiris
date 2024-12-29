@@ -15,23 +15,32 @@
 #include <qspinbox.h>
 
 
-class MotorValidator: public QValidator
+class MotorValidator : public QValidator
 {
-    Q_OBJECT
-public:
-    MotorValidator( QSpinBox * parent, const char * name );
-    ~MotorValidator();
+	Q_OBJECT
+      public:
+	MotorValidator(QSpinBox *parent, const char *name);
+	~MotorValidator();
 
-    void setRange( int bottom, int top, int step );
+	void setRange(int bottom, int top, int step);
 
-    int bottom() { return b; }
-    int top() { return t; }
-    int step() { return s; }
+	int bottom()
+	{
+		return b;
+	}
+	int top()
+	{
+		return t;
+	}
+	int step()
+	{
+		return s;
+	}
 
-    QValidator::State validate( QString &, int & ) const;
+	QValidator::State validate(QString &, int &) const;
 
-private:
-    int b, t, s;
+      private:
+	int b, t, s;
 };
 
 

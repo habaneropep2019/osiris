@@ -20,55 +20,61 @@
 
 class ShowNextPiece : public QFrame
 {
-    Q_OBJECT
-    friend class QTetrix;
+	Q_OBJECT
+	friend class QTetrix;
 
-public:
-    ShowNextPiece(QWidget *parent = 0, const char *name = 0);
-public slots:
-    void drawNextSquare(int x, int y, QColor *color);
-signals:
-    void update();
+      public:
+	ShowNextPiece(QWidget *parent = 0, const char *name = 0);
+      public slots:
+	void drawNextSquare(int x, int y, QColor *color);
+      signals:
+	void update();
 
-private:
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
+      private:
+	void paintEvent(QPaintEvent *);
+	void resizeEvent(QResizeEvent *);
 
-    int blockWidth, blockHeight;
-    int xOffset, yOffset;
+	int blockWidth, blockHeight;
+	int xOffset, yOffset;
 };
 
 class QTetrix : public QWidget
 {
-    Q_OBJECT
-public:
-    QTetrix(QWidget *parent = 0, const char *name = 0);
-    void startGame() { board->startGame(); }
+	Q_OBJECT
+      public:
+	QTetrix(QWidget *parent = 0, const char *name = 0);
+	void startGame()
+	{
+		board->startGame();
+	}
 
-public slots:
-    void gameOver();
-    void quit();
+      public slots:
+	void gameOver();
+	void quit();
 
-private:
-    void keyPressEvent(QKeyEvent *e) { board->keyPressEvent(e); }
+      private:
+	void keyPressEvent(QKeyEvent *e)
+	{
+		board->keyPressEvent(e);
+	}
 
-    QTetrixBoard *board;
-    ShowNextPiece *showNext;
+	QTetrixBoard *board;
+	ShowNextPiece *showNext;
 #ifndef QT_NO_LCDNUMBER
-    QLCDNumber *showScore;
-    QLCDNumber *showLevel;
-    QLCDNumber *showLines;
+	QLCDNumber *showScore;
+	QLCDNumber *showLevel;
+	QLCDNumber *showLines;
 #else
-    QLabel *showScore;
-    QLabel *showLevel;
-    QLabel *showLines;
+	QLabel *showScore;
+	QLabel *showLevel;
+	QLabel *showLines;
 #endif
-    QPushButton *quitButton;
-    QPushButton *startButton;
-    QPushButton *pauseButton;
+	QPushButton *quitButton;
+	QPushButton *startButton;
+	QPushButton *pauseButton;
 };
 
 void drawTetrixButton(QPainter *, int x, int y, int w, int h,
-                      const QColor *color);
+		      const QColor *color);
 
 #endif

@@ -39,43 +39,75 @@
 #define QSTRVEC_H
 
 #ifndef QT_H
-#include "qstring.h"
-#include "qvector.h"
-#include "qdatastream.h"
+# include "qstring.h"
+# include "qvector.h"
+# include "qdatastream.h"
 #endif // QT_H
 
 class Q_EXPORT QStrVec : public QVector<char>
 {
-public:
-    QStrVec()  { dc = TRUE; }
-    QStrVec( uint size, bool deepc = TRUE ) : QVector<char>(size) {dc=deepc;}
-   ~QStrVec()  { clear(); }
-private:
-    Item	 newItem( Item d )	{ return dc ? qstrdup( (const char*)d ) : d; }
-    void deleteItem( Item d )	{ if ( dc ) delete[] (char*)d; }
-    int	 compareItems( Item s1, Item s2 )
-				{ return qstrcmp((const char*)s1,
-						(const char*)s2); }
+      public:
+	QStrVec()
+	{
+		dc = TRUE;
+	}
+	QStrVec(uint size, bool deepc = TRUE) : QVector<char>(size)
+	{
+		dc = deepc;
+	}
+	~QStrVec()
+	{
+		clear();
+	}
+
+      private:
+	Item newItem(Item d)
+	{
+		return dc ? qstrdup((const char *)d) : d;
+	}
+	void deleteItem(Item d)
+	{
+		if (dc)
+			delete[] (char *)d;
+	}
+	int compareItems(Item s1, Item s2)
+	{
+		return qstrcmp((const char *)s1, (const char *)s2);
+	}
 #ifndef QT_NO_DATASTREAM
-    QDataStream &read( QDataStream &s, Item &d )
-				{ s >> (char *&)d; return s; }
-    QDataStream &write( QDataStream &s, Item d ) const
-				{ return s << (const char*)d; }
+	QDataStream &read(QDataStream &s, Item &d)
+	{
+		s >> (char *&)d;
+		return s;
+	}
+	QDataStream &write(QDataStream &s, Item d) const
+	{
+		return s << (const char *)d;
+	}
 #endif
-    bool dc;
+	bool dc;
 };
 
 
-class Q_EXPORT QStrIVec : public QStrVec	// case insensitive string vec
+class Q_EXPORT QStrIVec : public QStrVec // case insensitive string vec
 {
-public:
-    QStrIVec() {}
-    QStrIVec( uint size, bool dc = TRUE ) : QStrVec( size, dc ) {}
-   ~QStrIVec() { clear(); }
-private:
-    int	 compareItems( Item s1, Item s2 )
-				{ return qstricmp((const char*)s1,
-						 (const char*)s2); }
+      public:
+	QStrIVec()
+	{
+	}
+	QStrIVec(uint size, bool dc = TRUE) : QStrVec(size, dc)
+	{
+	}
+	~QStrIVec()
+	{
+		clear();
+	}
+
+      private:
+	int compareItems(Item s1, Item s2)
+	{
+		return qstricmp((const char *)s1, (const char *)s2);
+	}
 };
 
 

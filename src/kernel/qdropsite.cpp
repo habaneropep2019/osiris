@@ -37,7 +37,7 @@
 
 #ifndef QT_NO_DRAGANDDROP
 
-#include "qwidget.h"
+# include "qwidget.h"
 
 
 // NOT REVISED
@@ -62,9 +62,9 @@
   Pass <tt>this</tt> as the \a parent parameter.
   This enables dropping by calling QWidget::setAcceptDrops(TRUE).
 */
-QDropSite::QDropSite( QWidget* self )
+QDropSite::QDropSite(QWidget *self)
 {
-    self->setAcceptDrops( TRUE );
+	self->setAcceptDrops(TRUE);
 }
 
 /*!

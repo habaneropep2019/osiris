@@ -39,12 +39,12 @@
 
 #ifndef QT_NO_ACCEL
 
-#include "qapplication.h"
-#include "qwidget.h"
-#include "qlist.h"
-#include "qsignal.h"
-#include "qwhatsthis.h"
-#include "qguardedptr.h"
+# include "qapplication.h"
+# include "qwidget.h"
+# include "qlist.h"
+# include "qsignal.h"
+# include "qwhatsthis.h"
+# include "qguardedptr.h"
 
 // REVISED: paul
 /*!
@@ -115,75 +115,95 @@
 */
 
 
-struct QAccelItem {				// internal accelerator item
-    QAccelItem( int k, int i )
-	{ key=k; id=i; enabled=TRUE; signal=0; }
-   ~QAccelItem()	       { delete signal; }
-    int		id;
-    int		key;
-    bool	enabled;
-    QSignal    *signal;
-    QString whatsthis;
+struct QAccelItem { // internal accelerator item
+	QAccelItem(int k, int i)
+	{
+		key = k;
+		id = i;
+		enabled = TRUE;
+		signal = 0;
+	}
+	~QAccelItem()
+	{
+		delete signal;
+	}
+	int id;
+	int key;
+	bool enabled;
+	QSignal *signal;
+	QString whatsthis;
 };
 
 
 typedef QList<QAccelItem> QAccelList; // internal accelerator list
 
 
-class QAccelPrivate {
-public:
-    QAccelPrivate() { aitems.setAutoDelete( TRUE ); ignorewhatsthis = FALSE;}
-    ~QAccelPrivate() {}
-    QAccelList aitems;
-    bool enabled;
-    QGuardedPtr<QWidget> tlw;
-    QGuardedPtr<QWidget> watch;
-    bool ignorewhatsthis;
+class QAccelPrivate
+{
+      public:
+	QAccelPrivate()
+	{
+		aitems.setAutoDelete(TRUE);
+		ignorewhatsthis = FALSE;
+	}
+	~QAccelPrivate()
+	{
+	}
+	QAccelList aitems;
+	bool enabled;
+	QGuardedPtr<QWidget> tlw;
+	QGuardedPtr<QWidget> watch;
+	bool ignorewhatsthis;
 };
 
 
-static QAccelItem *find_id( QAccelList &list, int id )
+static QAccelItem *find_id(QAccelList &list, int id)
 {
-    register QAccelItem *item = list.first();
-    while ( item && item->id != id )
-	item = list.next();
-    return item;
+	QAccelItem *item = list.first();
+	while (item && item->id != id)
+		item = list.next();
+	return item;
 }
 
-static QAccelItem *find_key( QAccelList &list, int key, QChar ch )
+static QAccelItem *find_key(QAccelList &list, int key, QChar ch)
 {
-    register QAccelItem *item = list.first();
-    while ( item ) {
-	int k = item->key;
-	int km = k & Qt::MODIFIER_MASK;
-	QChar kc = QChar(k & 0xffff);
-	if ( k & Qt::UNICODE_ACCEL )
-	{
-	    if ( km ) {
-		// Modifiers must match...
-		QChar c;
-		if ( (key & Qt::CTRL) && (ch < ' ') )
-		    c = ch.unicode()+'@'+' '; // Ctrl-A is ASCII 001, etc.
-		else
-		    c = ch;
-		if ( kc.lower() == c.lower()
-		  && (key & Qt::MODIFIER_MASK) == km )
-		    break;
-		else if ( kc.lower() == c.lower()
-		    && (key & (Qt::MODIFIER_MASK^Qt::SHIFT)) == km )
-		    break;
-	    } else {
-		// No modifiers requested, ignore Shift but require others...
-		if ( kc == ch
-		  && (key & (Qt::MODIFIER_MASK^Qt::SHIFT)) == km )
-		    break;
-	    }
-	} else if ( k == key ) {
-	    break;
+	QAccelItem *item = list.first();
+	while (item) {
+		int k = item->key;
+		int km = k & Qt::MODIFIER_MASK;
+		QChar kc = QChar(k & 0xffff);
+		if (k & Qt::UNICODE_ACCEL) {
+			if (km) {
+				// Modifiers must match...
+				QChar c;
+				if ((key & Qt::CTRL) && (ch < ' '))
+					c = ch.unicode() + '@' + ' '; // Ctrl-A
+								      // is
+								      // ASCII
+								      // 001,
+								      // etc.
+				else
+					c = ch;
+				if (kc.lower() == c.lower() &&
+				    (key & Qt::MODIFIER_MASK) == km)
+					break;
+				else if (kc.lower() == c.lower() &&
+					 (key & (Qt::MODIFIER_MASK ^
+						 Qt::SHIFT)) == km)
+					break;
+			} else {
+				// No modifiers requested, ignore Shift but
+				// require others...
+				if (kc == ch && (key & (Qt::MODIFIER_MASK ^
+							Qt::SHIFT)) == km)
+					break;
+			}
+		} else if (k == key) {
+			break;
+		}
+		item = list.next();
 	}
-	item = list.next();
-    }
-    return item;
+	return item;
 }
 
 
@@ -192,20 +212,20 @@ static QAccelItem *find_key( QAccelList &list, int key, QChar ch )
   accelerator operates on \a parent.
 */
 
-QAccel::QAccel( QWidget *parent, const char *name )
-    : QObject( parent, name )
+QAccel::QAccel(QWidget *parent, const char *name) : QObject(parent, name)
 {
-    d = new QAccelPrivate;
-    d->enabled = TRUE;
-    d->watch = parent;
-    if ( d->watch ) {				// install event filter
-	d->tlw = d->watch->topLevelWidget();
-	d->tlw->installEventFilter( this );
-    } else {
-#if defined(CHECK_NULL)
-	qWarning( "QAccel: An accelerator must have a parent or a watch widget" );
-#endif
-    }
+	d = new QAccelPrivate;
+	d->enabled = TRUE;
+	d->watch = parent;
+	if (d->watch) { // install event filter
+		d->tlw = d->watch->topLevelWidget();
+		d->tlw->installEventFilter(this);
+	} else {
+# if defined(CHECK_NULL)
+		qWarning(
+			"QAccel: An accelerator must have a parent or a watch widget");
+# endif
+	}
 }
 
 /*!
@@ -214,20 +234,21 @@ QAccel::QAccel( QWidget *parent, const char *name )
 
   This constructor is not needed for normal application programming.
 */
-QAccel::QAccel( QWidget* watch, QObject *parent, const char *name )
-    : QObject( parent, name )
+QAccel::QAccel(QWidget *watch, QObject *parent, const char *name)
+	: QObject(parent, name)
 {
-    d = new QAccelPrivate;
-    d->enabled = TRUE;
-    d->watch = watch;
-    if ( watch ) {				// install event filter
-	d->tlw = d->watch->topLevelWidget();
-	d->tlw->installEventFilter( this );
-    } else {
-#if defined(CHECK_NULL)
-	qWarning( "QAccel: An accelerator must have a parent or a watch widget" );
-#endif
-    }
+	d = new QAccelPrivate;
+	d->enabled = TRUE;
+	d->watch = watch;
+	if (watch) { // install event filter
+		d->tlw = d->watch->topLevelWidget();
+		d->tlw->installEventFilter(this);
+	} else {
+# if defined(CHECK_NULL)
+		qWarning(
+			"QAccel: An accelerator must have a parent or a watch widget");
+# endif
+	}
 }
 
 /*!
@@ -236,7 +257,7 @@ QAccel::QAccel( QWidget* watch, QObject *parent, const char *name )
 
 QAccel::~QAccel()
 {
-    delete d;
+	delete d;
 }
 
 
@@ -254,7 +275,7 @@ QAccel::~QAccel()
 
 bool QAccel::isEnabled() const
 {
-    return d->enabled;
+	return d->enabled;
 }
 
 
@@ -269,9 +290,9 @@ bool QAccel::isEnabled() const
   \sa isEnabled(), setItemEnabled()
 */
 
-void QAccel::setEnabled( bool enable )
+void QAccel::setEnabled(bool enable)
 {
-    d->enabled = enable;
+	d->enabled = enable;
 }
 
 
@@ -281,14 +302,14 @@ void QAccel::setEnabled( bool enable )
 
 uint QAccel::count() const
 {
-    return d->aitems.count();
+	return d->aitems.count();
 }
 
 
 static int get_seq_id()
 {
-    static int seq_no = -2;  // -1 is used as return value in findKey()
-    return seq_no--;
+	static int seq_no = -2; // -1 is used as return value in findKey()
+	return seq_no--;
 }
 
 /*!
@@ -310,22 +331,22 @@ static int get_seq_id()
   \endcode
 */
 
-int QAccel::insertItem( int key, int id )
+int QAccel::insertItem(int key, int id)
 {
-    if ( id == -1 )
-	id = get_seq_id();
-    d->aitems.insert( 0, new QAccelItem(key,id) );
-    return id;
+	if (id == -1)
+		id = get_seq_id();
+	d->aitems.insert(0, new QAccelItem(key, id));
+	return id;
 }
 
 /*!
   Removes the accelerator item with the identifier \a id.
 */
 
-void QAccel::removeItem( int id )
+void QAccel::removeItem(int id)
 {
-    if ( find_id( d->aitems, id) )
-	d->aitems.remove();
+	if (find_id(d->aitems, id))
+		d->aitems.remove();
 }
 
 
@@ -335,7 +356,7 @@ void QAccel::removeItem( int id )
 
 void QAccel::clear()
 {
-    d->aitems.clear();
+	d->aitems.clear();
 }
 
 
@@ -344,10 +365,10 @@ void QAccel::clear()
   or zero if the id cannot be found.
 */
 
-int QAccel::key( int id )
+int QAccel::key(int id)
 {
-    QAccelItem *item = find_id( d->aitems, id);
-    return item ? item->key : 0;
+	QAccelItem *item = find_id(d->aitems, id);
+	return item ? item->key : 0;
 }
 
 
@@ -356,10 +377,10 @@ int QAccel::key( int id )
   -1 if the item cannot be found.
 */
 
-int QAccel::findKey( int key ) const
+int QAccel::findKey(int key) const
 {
-    QAccelItem *item = find_key( d->aitems, key, QChar(key & 0xffff) );
-    return item ? item->id : -1;
+	QAccelItem *item = find_key(d->aitems, key, QChar(key & 0xffff));
+	return item ? item->id : -1;
 }
 
 
@@ -369,10 +390,10 @@ int QAccel::findKey( int key ) const
   \sa setItemEnabled(), isEnabled()
 */
 
-bool QAccel::isItemEnabled( int id ) const
+bool QAccel::isItemEnabled(int id) const
 {
-    QAccelItem *item = find_id( d->aitems, id);
-    return item ? item->enabled : FALSE;
+	QAccelItem *item = find_id(d->aitems, id);
+	return item ? item->enabled : FALSE;
 }
 
 
@@ -385,11 +406,11 @@ bool QAccel::isItemEnabled( int id ) const
   \sa isItemEnabled(), isEnabled()
 */
 
-void QAccel::setItemEnabled( int id, bool enable )
+void QAccel::setItemEnabled(int id, bool enable)
 {
-    QAccelItem *item = find_id( d->aitems, id);
-    if ( item )
-	item->enabled = enable;
+	QAccelItem *item = find_id(d->aitems, id);
+	if (item)
+		item->enabled = enable;
 }
 
 
@@ -405,17 +426,17 @@ void QAccel::setItemEnabled( int id, bool enable )
   \sa disconnectItem()
 */
 
-bool QAccel::connectItem( int id, const QObject *receiver, const char *member )
+bool QAccel::connectItem(int id, const QObject *receiver, const char *member)
 {
-    QAccelItem *item = find_id( d->aitems, id);
-    if ( item ) {
-	if ( !item->signal ) {
-	    item->signal = new QSignal;
-	    CHECK_PTR( item->signal );
+	QAccelItem *item = find_id(d->aitems, id);
+	if (item) {
+		if (!item->signal) {
+			item->signal = new QSignal;
+			CHECK_PTR(item->signal);
+		}
+		return item->signal->connect(receiver, member);
 	}
-	return item->signal->connect( receiver, member );
-    }
-    return FALSE;
+	return FALSE;
 }
 
 /*!
@@ -424,13 +445,12 @@ bool QAccel::connectItem( int id, const QObject *receiver, const char *member )
   \sa connectItem()
 */
 
-bool QAccel::disconnectItem( int id, const QObject *receiver,
-			     const char *member )
+bool QAccel::disconnectItem(int id, const QObject *receiver, const char *member)
 {
-    QAccelItem *item = find_id( d->aitems, id);
-    if ( item && item->signal )
-	return item->signal->disconnect( receiver, member );
-    return FALSE;
+	QAccelItem *item = find_id(d->aitems, id);
+	if (item && item->signal)
+		return item->signal->disconnect(receiver, member);
+	return FALSE;
 }
 
 
@@ -442,19 +462,19 @@ bool QAccel::disconnectItem( int id, const QObject *receiver,
 
 void QAccel::repairEventFilter()
 {
-    QWidget *ntlw;
-    if ( d->watch )
-	ntlw = d->watch->topLevelWidget();
-    else
-	ntlw = 0;
+	QWidget *ntlw;
+	if (d->watch)
+		ntlw = d->watch->topLevelWidget();
+	else
+		ntlw = 0;
 
-    if ( (QWidget*) d->tlw != ntlw ) {
-	if ( d->tlw )
-	    d->tlw->removeEventFilter( this );
-	d->tlw = ntlw;
-	if ( d->tlw )
-	    d->tlw->installEventFilter( this );
-    }
+	if ((QWidget *)d->tlw != ntlw) {
+		if (d->tlw)
+			d->tlw->removeEventFilter(this);
+		d->tlw = ntlw;
+		if (d->tlw)
+			d->tlw->installEventFilter(this);
+	}
 }
 
 
@@ -462,49 +482,49 @@ void QAccel::repairEventFilter()
   Processes accelerator events intended for the top level widget.
 */
 
-bool QAccel::eventFilter( QObject *o, QEvent *e )
+bool QAccel::eventFilter(QObject *o, QEvent *e)
 {
-    if ( e->type() == QEvent::Reparent && d->watch == o ) {
-	repairEventFilter();
-    } else  if ( d->enabled &&
-	 ( e->type() == QEvent::Accel ||
-	   e->type() == QEvent::AccelAvailable) &&
-	 d->watch && d->watch->isVisible() ) {
-	QKeyEvent *k = (QKeyEvent *)e;
-	int key = k->key();
-	if ( k->state() & ShiftButton )
-	    key |= SHIFT;
-	if ( k->state() & ControlButton )
-	    key |= CTRL;
-	if ( k->state() & AltButton )
-	    key |= ALT;
-	QAccelItem *item = find_key( d->aitems, key, k->text()[0] );
-	if ( key == Key_unknown )
-	    item = 0;
-#ifndef QT_NO_WHATSTHIS
-	bool b = QWhatsThis::inWhatsThisMode();
-#else
-	bool b = FALSE;
-#endif
-	if ( item && ( item->enabled || b )) {
-	    if (e->type() == QEvent::Accel) {
-		if ( b && !d->ignorewhatsthis ) {
-#ifndef QT_NO_WHATSTHIS
-		    QWhatsThis::leaveWhatsThisMode( item->whatsthis );
-#endif
+	if (e->type() == QEvent::Reparent && d->watch == o) {
+		repairEventFilter();
+	} else if (d->enabled &&
+		   (e->type() == QEvent::Accel ||
+		    e->type() == QEvent::AccelAvailable) &&
+		   d->watch && d->watch->isVisible()) {
+		QKeyEvent *k = (QKeyEvent *)e;
+		int key = k->key();
+		if (k->state() & ShiftButton)
+			key |= SHIFT;
+		if (k->state() & ControlButton)
+			key |= CTRL;
+		if (k->state() & AltButton)
+			key |= ALT;
+		QAccelItem *item = find_key(d->aitems, key, k->text()[0]);
+		if (key == Key_unknown)
+			item = 0;
+# ifndef QT_NO_WHATSTHIS
+		bool b = QWhatsThis::inWhatsThisMode();
+# else
+		bool b = FALSE;
+# endif
+		if (item && (item->enabled || b)) {
+			if (e->type() == QEvent::Accel) {
+				if (b && !d->ignorewhatsthis) {
+# ifndef QT_NO_WHATSTHIS
+					QWhatsThis::leaveWhatsThisMode(
+						item->whatsthis);
+# endif
+				} else if (item->enabled) {
+					if (item->signal)
+						item->signal->activate();
+					else
+						emit activated(item->id);
+				}
+			}
+			k->accept();
+			return TRUE;
 		}
-		else if ( item->enabled ){
-		    if ( item->signal )
-			item->signal->activate();
-		    else
-			emit activated( item->id );
-		}
-	    }
-	    k->accept();
-	    return TRUE;
 	}
-    }
-    return QObject::eventFilter( o, e );
+	return QObject::eventFilter(o, e);
 }
 
 
@@ -524,54 +544,52 @@ bool QAccel::eventFilter( QObject *o, QEvent *e )
   languages.
 */
 
-int QAccel::shortcutKey( const QString &str )
+int QAccel::shortcutKey(const QString &str)
 {
-    int p = 0;
-    while ( p >= 0 ) {
-	p = str.find( '&', p ) + 1;
-	if ( p <= 0 || p >= (int)str.length() )
-	    return 0;
-	if ( str[p] != '&' ) {
-	    QChar c = str[p];
-	    if ( c.isPrint() ) {
-		c = c.upper();
-		return c.unicode() + ALT + UNICODE_ACCEL;
-	    }
+	int p = 0;
+	while (p >= 0) {
+		p = str.find('&', p) + 1;
+		if (p <= 0 || p >= (int)str.length())
+			return 0;
+		if (str[p] != '&') {
+			QChar c = str[p];
+			if (c.isPrint()) {
+				c = c.upper();
+				return c.unicode() + ALT + UNICODE_ACCEL;
+			}
+		}
+		p++;
 	}
-	p++;
-    }
-    return 0;
+	return 0;
 }
 
 static struct {
-    int key;
-    const char* name;
-} keyname[] = {
-    { Qt::Key_Space,	QT_TRANSLATE_NOOP( "QAccel", "Space" ) },
-    { Qt::Key_Escape,	QT_TRANSLATE_NOOP( "QAccel", "Esc" ) },
-    { Qt::Key_Tab,	QT_TRANSLATE_NOOP( "QAccel", "Tab" ) },
-    { Qt::Key_Backtab,	QT_TRANSLATE_NOOP( "QAccel", "Backtab" ) },
-    { Qt::Key_Backspace,	QT_TRANSLATE_NOOP( "QAccel", "Backspace" ) },
-    { Qt::Key_Return,	QT_TRANSLATE_NOOP( "QAccel", "Return" ) },
-    { Qt::Key_Enter,	QT_TRANSLATE_NOOP( "QAccel", "Enter" ) },
-    { Qt::Key_Insert,	QT_TRANSLATE_NOOP( "QAccel", "Ins" ) },
-    { Qt::Key_Delete,	QT_TRANSLATE_NOOP( "QAccel", "Del" ) },
-    { Qt::Key_Pause,	QT_TRANSLATE_NOOP( "QAccel", "Pause" ) },
-    { Qt::Key_Print,	QT_TRANSLATE_NOOP( "QAccel", "Print" ) },
-    { Qt::Key_SysReq,	QT_TRANSLATE_NOOP( "QAccel", "SysReq" ) },
-    { Qt::Key_Home,	QT_TRANSLATE_NOOP( "QAccel", "Home" ) },
-    { Qt::Key_End,	QT_TRANSLATE_NOOP( "QAccel", "End" ) },
-    { Qt::Key_Left,	QT_TRANSLATE_NOOP( "QAccel", "Left" ) },
-    { Qt::Key_Up,		QT_TRANSLATE_NOOP( "QAccel", "Up" ) },
-    { Qt::Key_Right,	QT_TRANSLATE_NOOP( "QAccel", "Right" ) },
-    { Qt::Key_Down,	QT_TRANSLATE_NOOP( "QAccel", "Down" ) },
-    { Qt::Key_Prior,	QT_TRANSLATE_NOOP( "QAccel", "PgUp" ) },
-    { Qt::Key_Next,	QT_TRANSLATE_NOOP( "QAccel", "PgDown" ) },
-    { Qt::Key_CapsLock,	QT_TRANSLATE_NOOP( "QAccel", "CapsLock" ) },
-    { Qt::Key_NumLock,	QT_TRANSLATE_NOOP( "QAccel", "NumLock" ) },
-    { Qt::Key_ScrollLock,	QT_TRANSLATE_NOOP( "QAccel", "ScrollLock" ) },
-    { 0, 0 }
-};
+	int key;
+	const char *name;
+} keyname[] = {{Qt::Key_Space, QT_TRANSLATE_NOOP("QAccel", "Space")},
+	       {Qt::Key_Escape, QT_TRANSLATE_NOOP("QAccel", "Esc")},
+	       {Qt::Key_Tab, QT_TRANSLATE_NOOP("QAccel", "Tab")},
+	       {Qt::Key_Backtab, QT_TRANSLATE_NOOP("QAccel", "Backtab")},
+	       {Qt::Key_Backspace, QT_TRANSLATE_NOOP("QAccel", "Backspace")},
+	       {Qt::Key_Return, QT_TRANSLATE_NOOP("QAccel", "Return")},
+	       {Qt::Key_Enter, QT_TRANSLATE_NOOP("QAccel", "Enter")},
+	       {Qt::Key_Insert, QT_TRANSLATE_NOOP("QAccel", "Ins")},
+	       {Qt::Key_Delete, QT_TRANSLATE_NOOP("QAccel", "Del")},
+	       {Qt::Key_Pause, QT_TRANSLATE_NOOP("QAccel", "Pause")},
+	       {Qt::Key_Print, QT_TRANSLATE_NOOP("QAccel", "Print")},
+	       {Qt::Key_SysReq, QT_TRANSLATE_NOOP("QAccel", "SysReq")},
+	       {Qt::Key_Home, QT_TRANSLATE_NOOP("QAccel", "Home")},
+	       {Qt::Key_End, QT_TRANSLATE_NOOP("QAccel", "End")},
+	       {Qt::Key_Left, QT_TRANSLATE_NOOP("QAccel", "Left")},
+	       {Qt::Key_Up, QT_TRANSLATE_NOOP("QAccel", "Up")},
+	       {Qt::Key_Right, QT_TRANSLATE_NOOP("QAccel", "Right")},
+	       {Qt::Key_Down, QT_TRANSLATE_NOOP("QAccel", "Down")},
+	       {Qt::Key_Prior, QT_TRANSLATE_NOOP("QAccel", "PgUp")},
+	       {Qt::Key_Next, QT_TRANSLATE_NOOP("QAccel", "PgDown")},
+	       {Qt::Key_CapsLock, QT_TRANSLATE_NOOP("QAccel", "CapsLock")},
+	       {Qt::Key_NumLock, QT_TRANSLATE_NOOP("QAccel", "NumLock")},
+	       {Qt::Key_ScrollLock, QT_TRANSLATE_NOOP("QAccel", "ScrollLock")},
+	       {0, 0}};
 
 /*!
    Creates an accelerator string for the key \a k.
@@ -580,50 +598,49 @@ static struct {
 
    \sa stringToKey()
 */
-QString QAccel::keyToString( int k )
+QString QAccel::keyToString(int k)
 {
-    QString s;
-    if ( (k & CTRL) == CTRL ) {
-	s += tr( "Ctrl" );
-    }
-    if ( (k & ALT) == ALT ) {
-	if ( !s.isEmpty() )
-	    s += tr( "+" );
-	s += tr( "Alt" );
-    }
-    if ( (k & SHIFT) == SHIFT ) {
-	if ( !s.isEmpty() )
-	    s += tr( "+" );
-	s += tr( "Shift" );
-    }
-    k &= ~(SHIFT | CTRL | ALT);
-    QString p;
-    if ( (k & UNICODE_ACCEL) == UNICODE_ACCEL ) {
-	p = QChar(k & 0xffff);
-    } else if ( k >= Key_F1 && k <= Key_F24 ) {
-	p = tr( "F%1" ).arg(k - Key_F1 + 1);
-    } else if ( k > Key_Space && k <= Key_AsciiTilde ) {
-	p.sprintf( "%c", k );
-    } else {
-	int i=0;
-	while (keyname[i].name) {
-	    if ( k == keyname[i].key ) {
-		p = tr(keyname[i].name);
-		break;
-	    }
-	    ++i;
+	QString s;
+	if ((k & CTRL) == CTRL) {
+		s += tr("Ctrl");
 	}
-	if ( !keyname[i].name )
-	    p.sprintf( "<%d?>", k );
-
-    }
-    if ( s.isEmpty() )
-	s = p;
-    else {
-	s += tr( "+" );
-	s += p;
-    }
-    return s;
+	if ((k & ALT) == ALT) {
+		if (!s.isEmpty())
+			s += tr("+");
+		s += tr("Alt");
+	}
+	if ((k & SHIFT) == SHIFT) {
+		if (!s.isEmpty())
+			s += tr("+");
+		s += tr("Shift");
+	}
+	k &= ~(SHIFT | CTRL | ALT);
+	QString p;
+	if ((k & UNICODE_ACCEL) == UNICODE_ACCEL) {
+		p = QChar(k & 0xffff);
+	} else if (k >= Key_F1 && k <= Key_F24) {
+		p = tr("F%1").arg(k - Key_F1 + 1);
+	} else if (k > Key_Space && k <= Key_AsciiTilde) {
+		p.sprintf("%c", k);
+	} else {
+		int i = 0;
+		while (keyname[i].name) {
+			if (k == keyname[i].key) {
+				p = tr(keyname[i].name);
+				break;
+			}
+			++i;
+		}
+		if (!keyname[i].name)
+			p.sprintf("<%d?>", k);
+	}
+	if (s.isEmpty())
+		s = p;
+	else {
+		s += tr("+");
+		s += p;
+	}
+	return s;
 }
 
 /*!
@@ -642,44 +659,43 @@ QString QAccel::keyToString( int k )
 	    QAccel::stringToKey(tr("Ctrl+O")) );
    \endcode
 */
-int QAccel::stringToKey( const QString & s )
+int QAccel::stringToKey(const QString &s)
 {
-    int k = 0;
-    int p = s.findRev('+',s.length()-2); // -2 so that Ctrl++ works
-    QString name;
-    if ( p > 0 ) {
-	name = s.mid(p+1);
-    } else {
-	name = s;
-    }
-    int fnum;
-    if ( name.length() == 1 ) {
-	k = name[0].unicode() | UNICODE_ACCEL;
-    } else if ( name[0] == 'F' && (fnum=name.mid(1).toInt()) ) {
-	k = Key_F1 + fnum - 1;
-    } else {
-	for (int tran=0; tran<=1; tran++) {
-	    for (int i=0; keyname[i].name; i++) {
-		if ( tran ? name == tr(keyname[i].name)
-			  : name == keyname[i].name )
-		{
-		    k = keyname[i].key;
-		    goto done;
-		}
-	    }
+	int k = 0;
+	int p = s.findRev('+', s.length() - 2); // -2 so that Ctrl++ works
+	QString name;
+	if (p > 0) {
+		name = s.mid(p + 1);
+	} else {
+		name = s;
 	}
-    }
+	int fnum;
+	if (name.length() == 1) {
+		k = name[0].unicode() | UNICODE_ACCEL;
+	} else if (name[0] == 'F' && (fnum = name.mid(1).toInt())) {
+		k = Key_F1 + fnum - 1;
+	} else {
+		for (int tran = 0; tran <= 1; tran++) {
+			for (int i = 0; keyname[i].name; i++) {
+				if (tran ? name == tr(keyname[i].name) :
+					   name == keyname[i].name) {
+					k = keyname[i].key;
+					goto done;
+				}
+			}
+		}
+	}
 done:
-    if ( p > 0 ) {
-	QString sl = s.lower();
-	if ( sl.contains("ctrl+") || sl.contains(tr("ctrl")+"+") )
-	    k |= CTRL;
-	if ( sl.contains("shift+") || sl.contains(tr("shift")+"+") )
-	    k |= SHIFT;
-	if ( sl.contains("alt+") || sl.contains(tr("alt")+"+") )
-	    k |= ALT;
-    }
-    return k;
+	if (p > 0) {
+		QString sl = s.lower();
+		if (sl.contains("ctrl+") || sl.contains(tr("ctrl") + "+"))
+			k |= CTRL;
+		if (sl.contains("shift+") || sl.contains(tr("shift") + "+"))
+			k |= SHIFT;
+		if (sl.contains("alt+") || sl.contains(tr("alt") + "+"))
+			k |= ALT;
+	}
+	return k;
 }
 
 
@@ -694,12 +710,11 @@ done:
 
   \sa whatsThis(), QWhatsThis::inWhatsThisMode(), QMenuData::setWhatsThis()
  */
-void QAccel::setWhatsThis( int id, const QString& text )
+void QAccel::setWhatsThis(int id, const QString &text)
 {
-
-    QAccelItem *item = find_id( d->aitems, id);
-    if ( item )
-	item->whatsthis = text;
+	QAccelItem *item = find_id(d->aitems, id);
+	if (item)
+		item->whatsthis = text;
 }
 
 /*!
@@ -708,23 +723,22 @@ void QAccel::setWhatsThis( int id, const QString& text )
 
   \sa setWhatsThis()
  */
-QString QAccel::whatsThis( int id ) const
+QString QAccel::whatsThis(int id) const
 {
-
-    QAccelItem *item = find_id( d->aitems, id);
-    return item? item->whatsthis : QString::null;
+	QAccelItem *item = find_id(d->aitems, id);
+	return item ? item->whatsthis : QString::null;
 }
 
 /*!\internal */
-void QAccel::setIgnoreWhatsThis( bool b)
+void QAccel::setIgnoreWhatsThis(bool b)
 {
-    d->ignorewhatsthis = b;
+	d->ignorewhatsthis = b;
 }
 
 /*!\internal */
 bool QAccel::ignoreWhatsThis() const
 {
-    return d->ignorewhatsthis;
+	return d->ignorewhatsthis;
 }
 
 

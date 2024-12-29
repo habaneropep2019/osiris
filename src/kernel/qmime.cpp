@@ -37,13 +37,13 @@
 
 #ifndef QT_NO_MIME
 
-#include "qmap.h"
-#include "qstringlist.h"
-#include "qfileinfo.h"
-#include "qdir.h"
-#include "qdragobject.h"
-#include "qapplication.h" // ### for now
-#include "qclipboard.h" // ### for now
+# include "qmap.h"
+# include "qstringlist.h"
+# include "qfileinfo.h"
+# include "qdir.h"
+# include "qdragobject.h"
+# include "qapplication.h" // ### for now
+# include "qclipboard.h" // ### for now
 
 // NOT REVISED
 /*!
@@ -62,7 +62,9 @@
 /*!
   Provided to ensure subclasses destruct correctly.
 */
-QMimeSource::~QMimeSource() {}
+QMimeSource::~QMimeSource()
+{
+}
 
 /*!
   \fn QByteArray QMimeSource::encodedData(const char*) const
@@ -84,14 +86,14 @@ QMimeSource::~QMimeSource() {}
   canDecode() functions such as QTextDrag::canDecode()
   and QImageDrag::canDecode().
 */
-bool QMimeSource::provides(const char* mimeType) const
+bool QMimeSource::provides(const char *mimeType) const
 {
-    const char* fmt;
-    for (int i=0; (fmt = format(i)); i++) {
-	if ( !qstricmp(mimeType,fmt) )
-	    return TRUE;
-    }
-    return FALSE;
+	const char *fmt;
+	for (int i = 0; (fmt = format(i)); i++) {
+		if (!qstricmp(mimeType, fmt))
+			return TRUE;
+	}
+	return FALSE;
 }
 
 
@@ -103,27 +105,27 @@ bool QMimeSource::provides(const char* mimeType) const
 
 
 
-class QMimeSourceFactoryData {
-public:
-    QMimeSourceFactoryData() :
-	last(0)
-    {
-    }
-
-    ~QMimeSourceFactoryData()
-    {
-	QMap<QString, QMimeSource*>::Iterator it = stored.begin();
-	while ( it != stored.end() ) {
-	    delete *it;
-	    ++it;
+class QMimeSourceFactoryData
+{
+      public:
+	QMimeSourceFactoryData() : last(0)
+	{
 	}
-	delete last;
-    }
 
-    QMap<QString, QMimeSource*> stored;
-    QMap<QString, QString> extensions;
-    QStringList path;
-    QMimeSource* last;
+	~QMimeSourceFactoryData()
+	{
+		QMap<QString, QMimeSource *>::Iterator it = stored.begin();
+		while (it != stored.end()) {
+			delete *it;
+			++it;
+		}
+		delete last;
+	}
+
+	QMap<QString, QMimeSource *> stored;
+	QMap<QString, QString> extensions;
+	QStringList path;
+	QMimeSource *last;
 };
 
 
@@ -170,8 +172,8 @@ public:
   into the factory with a unique name:
 
   \code
-  QMimeSourceFactory::defaultFactory()->setImage( "myimage", QImage(myimage_data) );
-  \endcode
+  QMimeSourceFactory::defaultFactory()->setImage( "myimage",
+  QImage(myimage_data) ); \endcode
 
   Now you can create a rich text QLabel with
 
@@ -187,15 +189,14 @@ public:
   Constructs a QMimeSourceFactory which has no file path and no stored
   content.
 */
-QMimeSourceFactory::QMimeSourceFactory() :
-    d(new QMimeSourceFactoryData)
+QMimeSourceFactory::QMimeSourceFactory() : d(new QMimeSourceFactoryData)
 {
-    // add some reasonable defaults
-    setExtensionType("htm", "text/html;charset=iso8859-1");
-    setExtensionType("html", "text/html;charset=iso8859-1");
-    setExtensionType("txt", "text/plain");
-    setExtensionType("xml", "text/xml;charset=UTF-8");
-    setExtensionType("jpg", "image/jpeg"); // support misspelled jpeg files
+	// add some reasonable defaults
+	setExtensionType("htm", "text/html;charset=iso8859-1");
+	setExtensionType("html", "text/html;charset=iso8859-1");
+	setExtensionType("txt", "text/plain");
+	setExtensionType("xml", "text/xml;charset=UTF-8");
+	setExtensionType("jpg", "image/jpeg"); // support misspelled jpeg files
 }
 
 /*!
@@ -203,35 +204,35 @@ QMimeSourceFactory::QMimeSourceFactory() :
 */
 QMimeSourceFactory::~QMimeSourceFactory()
 {
-    delete d;
+	delete d;
 }
 
-static QMimeSource* data_internal(const QString& abs_name,
-				  const QMap<QString, QString> extensions )
+static QMimeSource *data_internal(const QString &abs_name,
+				  const QMap<QString, QString> extensions)
 {
-    QMimeSource* r = 0;
-    QFileInfo fi(abs_name);
-    if ( fi.isReadable() ) {
+	QMimeSource *r = 0;
+	QFileInfo fi(abs_name);
+	if (fi.isReadable()) {
+		// get the right mimetype
+		QString e = fi.extension(FALSE);
+		QCString mimetype = "application/octet-stream";
+		const char *imgfmt;
+		if (extensions.contains(e))
+			mimetype = extensions[e].latin1();
+		else if ((imgfmt = QImage::imageFormat(abs_name)))
+			mimetype =
+				QCString("image/") + QCString(imgfmt).lower();
 
-	// get the right mimetype
-	QString e = fi.extension(FALSE);
-	QCString mimetype = "application/octet-stream";
-	const char* imgfmt;
-	if ( extensions.contains(e) )
-	    mimetype = extensions[e].latin1();
-	else if ( ( imgfmt = QImage::imageFormat( abs_name ) ) )
-	    mimetype = QCString("image/")+QCString(imgfmt).lower();
-
-	QFile f(abs_name);
-	if ( f.open(IO_ReadOnly) ) {
-	    QByteArray ba(f.size());
-	    f.readBlock(ba.data(), ba.size());
-	    QStoredDrag* sr = new QStoredDrag( mimetype );
-	    sr->setEncodedData( ba );
-	    r = sr;
+		QFile f(abs_name);
+		if (f.open(IO_ReadOnly)) {
+			QByteArray ba(f.size());
+			f.readBlock(ba.data(), ba.size());
+			QStoredDrag *sr = new QStoredDrag(mimetype);
+			sr->setEncodedData(ba);
+			r = sr;
+		}
 	}
-    }
-    return r;
+	return r;
 }
 
 
@@ -276,34 +277,32 @@ static QMimeSource* data_internal(const QString& abs_name,
   the mime source factory for accessing URL referenced data over a
   network.
 */
-const QMimeSource* QMimeSourceFactory::data(const QString& abs_name) const
+const QMimeSource *QMimeSourceFactory::data(const QString &abs_name) const
 {
-    if ( d->stored.contains(abs_name) )
-	return d->stored[abs_name];
+	if (d->stored.contains(abs_name))
+		return d->stored[abs_name];
 
-    QMimeSource* r = 0;
-    QStringList::Iterator it;
-    if ( abs_name[0] == '/'
-#ifdef _WS_WIN_
+	QMimeSource *r = 0;
+	QStringList::Iterator it;
+	if (abs_name[0] == '/'
+# ifdef _WS_WIN_
 	    || abs_name[0] && abs_name[1] == ':'
-#endif
-    )
-    {
-	// handle absolute file names directly
-	r = data_internal( abs_name, d->extensions );
-    }
-    else { // check list of paths
-	for ( it = d->path.begin(); !r && it != d->path.end(); ++it ) {
-	    QString filename = *it;
-	    if ( filename[(int)filename.length()-1] != '/' )
-		filename += '/';
-	    filename += abs_name;
-	    r = data_internal( filename, d->extensions );
+# endif
+	) {
+		// handle absolute file names directly
+		r = data_internal(abs_name, d->extensions);
+	} else { // check list of paths
+		for (it = d->path.begin(); !r && it != d->path.end(); ++it) {
+			QString filename = *it;
+			if (filename[(int)filename.length() - 1] != '/')
+				filename += '/';
+			filename += abs_name;
+			r = data_internal(filename, d->extensions);
+		}
 	}
-    }
-    delete d->last;
-    d->last = r;
-    return r;
+	delete d->last;
+	d->last = r;
+	return r;
 }
 
 /*!
@@ -312,9 +311,9 @@ const QMimeSource* QMimeSourceFactory::data(const QString& abs_name) const
 
   \sa filePath()
 */
-void QMimeSourceFactory::setFilePath( const QStringList& path )
+void QMimeSourceFactory::setFilePath(const QStringList &path)
 {
-    d->path = path;
+	d->path = path;
 }
 
 /*!
@@ -322,7 +321,7 @@ void QMimeSourceFactory::setFilePath( const QStringList& path )
 */
 QStringList QMimeSourceFactory::filePath() const
 {
-  return d->path;
+	return d->path;
 }
 
 /*!
@@ -330,18 +329,19 @@ QStringList QMimeSourceFactory::filePath() const
 
   \sa setFilePath()
 */
-void QMimeSourceFactory::addFilePath( const QString& p )
+void QMimeSourceFactory::addFilePath(const QString &p)
 {
-  d->path += p;
+	d->path += p;
 }
 
 /*!
   Sets the MIME-type to be associated with a filename extension.  This
   determines the MIME-type for files found via a path set by setFilePath().
 */
-void QMimeSourceFactory::setExtensionType( const QString& ext, const char* mimetype )
+void QMimeSourceFactory::setExtensionType(const QString &ext,
+					  const char *mimetype)
 {
-    d->extensions.replace(ext, mimetype);
+	d->extensions.replace(ext, mimetype);
 }
 
 /*!
@@ -349,31 +349,32 @@ void QMimeSourceFactory::setExtensionType( const QString& ext, const char* mimet
   to an absolute name, interpreted within the context of the data
   item named \a context (this must be an absolute name).
 */
-QString QMimeSourceFactory::makeAbsolute(const QString& abs_or_rel_name, const QString& context) const
+QString QMimeSourceFactory::makeAbsolute(const QString &abs_or_rel_name,
+					 const QString &context) const
 {
-    if ( context.isNull() ||
-	 !(context[0] == '/'
-#ifdef _WS_WIN_
-	 || ( context[0] && context[1] == ':')
-#endif
-	   ))
-	return abs_or_rel_name;
-    if ( abs_or_rel_name.isEmpty() )
-	return context;
-    QFileInfo c( context );
-    QFileInfo r( c.dir(TRUE), abs_or_rel_name );
-    return r.absFilePath();
+	if (context.isNull() || !(context[0] == '/'
+# ifdef _WS_WIN_
+				  || (context[0] && context[1] == ':')
+# endif
+					  ))
+		return abs_or_rel_name;
+	if (abs_or_rel_name.isEmpty())
+		return context;
+	QFileInfo c(context);
+	QFileInfo r(c.dir(TRUE), abs_or_rel_name);
+	return r.absFilePath();
 }
 
 /*!
   A convenience function. See data(const QString& abs_name).
 */
-const QMimeSource* QMimeSourceFactory::data(const QString& abs_or_rel_name, const QString& context) const
+const QMimeSource *QMimeSourceFactory::data(const QString &abs_or_rel_name,
+					    const QString &context) const
 {
-    const QMimeSource* r = data(makeAbsolute(abs_or_rel_name,context));
-    if ( !r && !d->path.isEmpty() )
-	r = data(abs_or_rel_name);
-    return r;
+	const QMimeSource *r = data(makeAbsolute(abs_or_rel_name, context));
+	if (!r && !d->path.isEmpty())
+		r = data(abs_or_rel_name);
+	return r;
 }
 
 
@@ -383,9 +384,9 @@ const QMimeSource* QMimeSourceFactory::data(const QString& abs_or_rel_name, cons
 
   Equivalent to setData(abs_name, new QTextDrag(text)).
 */
-void QMimeSourceFactory::setText( const QString& abs_name, const QString& text )
+void QMimeSourceFactory::setText(const QString &abs_name, const QString &text)
 {
-    setData(abs_name, new QTextDrag(text));
+	setData(abs_name, new QTextDrag(text));
 }
 
 /*!
@@ -394,18 +395,19 @@ void QMimeSourceFactory::setText( const QString& abs_name, const QString& text )
 
   Equivalent to setData(abs_name, new QImageDrag(image)).
 */
-void QMimeSourceFactory::setImage( const QString& abs_name, const QImage& image )
+void QMimeSourceFactory::setImage(const QString &abs_name, const QImage &image)
 {
-    setData(abs_name, new QImageDrag(image));
+	setData(abs_name, new QImageDrag(image));
 }
 
 /*!
   Sets \a pixmap to be the data item associated with
   the absolute name \a abs_name.
 */
-void QMimeSourceFactory::setPixmap( const QString& abs_name, const QPixmap& pixmap )
+void QMimeSourceFactory::setPixmap(const QString &abs_name,
+				   const QPixmap &pixmap)
 {
-    setData(abs_name, new QImageDrag(pixmap.convertToImage()));
+	setData(abs_name, new QImageDrag(pixmap.convertToImage()));
 }
 
 /*!
@@ -414,20 +416,20 @@ void QMimeSourceFactory::setPixmap( const QString& abs_name, const QPixmap& pixm
   transferred to the factory - do not delete or access the pointer after
   passing it to this function.
 */
-void QMimeSourceFactory::setData( const QString& abs_name, QMimeSource* data )
+void QMimeSourceFactory::setData(const QString &abs_name, QMimeSource *data)
 {
-    if ( d->stored.contains(abs_name) )
-	delete d->stored[abs_name];
-    d->stored.replace(abs_name,data);
+	if (d->stored.contains(abs_name))
+		delete d->stored[abs_name];
+	d->stored.replace(abs_name, data);
 }
 
 
 
-static QMimeSourceFactory* defaultfactory = 0;
+static QMimeSourceFactory *defaultfactory = 0;
 void qt_cleanup_defaultfactory()
 {
-    delete defaultfactory;
-    defaultfactory = 0;
+	delete defaultfactory;
+	defaultfactory = 0;
 }
 
 /*!
@@ -440,13 +442,13 @@ void qt_cleanup_defaultfactory()
 
   \sa setDefaultFactory()
  */
-QMimeSourceFactory* QMimeSourceFactory::defaultFactory()
+QMimeSourceFactory *QMimeSourceFactory::defaultFactory()
 {
-    if (!defaultfactory) {
-	defaultfactory = new QMimeSourceFactory();
-	qAddPostRoutine( qt_cleanup_defaultfactory );
-    }
-    return defaultfactory;
+	if (!defaultfactory) {
+		defaultfactory = new QMimeSourceFactory();
+		qAddPostRoutine(qt_cleanup_defaultfactory);
+	}
+	return defaultfactory;
 }
 
 /*!
@@ -455,11 +457,11 @@ QMimeSourceFactory* QMimeSourceFactory::defaultFactory()
 
   \sa defaultFactory()
  */
-void QMimeSourceFactory::setDefaultFactory( QMimeSourceFactory* factory)
+void QMimeSourceFactory::setDefaultFactory(QMimeSourceFactory *factory)
 {
-    if ( defaultfactory != factory )
-	delete defaultfactory;
-    defaultfactory = factory;
+	if (defaultfactory != factory)
+		delete defaultfactory;
+	defaultfactory = factory;
 }
 
 #endif // QT_NO_MIME

@@ -24,51 +24,48 @@
 
 #include "mywidget.h"
 
-MyWidget::MyWidget( QWidget* parent, const char* name )
-	: QMainWindow( parent, name )
+MyWidget::MyWidget(QWidget *parent, const char *name)
+	: QMainWindow(parent, name)
 {
-    QVBox* central = new QVBox(this);
-    central->setMargin( 5 ); 
-    central->setSpacing( 5 ); 
-    setCentralWidget(central);
+	QVBox *central = new QVBox(this);
+	central->setMargin(5);
+	central->setSpacing(5);
+	setCentralWidget(central);
 
-    QPopupMenu* file = new QPopupMenu(this);
-    file->insertItem( tr("E&xit"), qApp, SLOT(quit()),
-            QAccel::stringToKey(tr("Ctrl+Q")) );
-    menuBar()->insertItem( tr("&File"), file );
+	QPopupMenu *file = new QPopupMenu(this);
+	file->insertItem(tr("E&xit"), qApp, SLOT(quit()),
+			 QAccel::stringToKey(tr("Ctrl+Q")));
+	menuBar()->insertItem(tr("&File"), file);
 
-    setCaption( tr( "Internationalization Example" ) ); 
+	setCaption(tr("Internationalization Example"));
 
-    QString l;
-    statusBar()->message( tr("Language: English") );
+	QString l;
+	statusBar()->message(tr("Language: English"));
 
-    ( void )new QLabel( tr( "The Main Window" ), central ); 
+	(void)new QLabel(tr("The Main Window"), central);
 
-    QButtonGroup* gbox = new QButtonGroup( 1, QGroupBox::Horizontal, 
-				      tr( "View" ), central ); 
-    (void)new QRadioButton( tr( "Perspective" ), gbox ); 
-    (void)new QRadioButton( tr( "Isometric" ), gbox ); 
-    (void)new QRadioButton( tr( "Oblique" ), gbox ); 
+	QButtonGroup *gbox =
+		new QButtonGroup(1, QGroupBox::Horizontal, tr("View"), central);
+	(void)new QRadioButton(tr("Perspective"), gbox);
+	(void)new QRadioButton(tr("Isometric"), gbox);
+	(void)new QRadioButton(tr("Oblique"), gbox);
 
-    initChoices(central); 
+	initChoices(central);
 }
 
-static const char* choices[] = {
-    QT_TRANSLATE_NOOP( "MyWidget", "First" ), 
-    QT_TRANSLATE_NOOP( "MyWidget", "Second" ), 
-    QT_TRANSLATE_NOOP( "MyWidget", "Third" ), 
-    0
-}; 
+static const char *choices[] = {QT_TRANSLATE_NOOP("MyWidget", "First"),
+				QT_TRANSLATE_NOOP("MyWidget", "Second"),
+				QT_TRANSLATE_NOOP("MyWidget", "Third"), 0};
 
-void MyWidget::initChoices(QWidget* parent)
+void MyWidget::initChoices(QWidget *parent)
 {
-    QListBox* lb = new QListBox( parent ); 
-    for ( int i = 0; choices[i]; i++ )
-	lb->insertItem( tr( choices[i] ) ); 
+	QListBox *lb = new QListBox(parent);
+	for (int i = 0; choices[i]; i++)
+		lb->insertItem(tr(choices[i]));
 }
 
-void MyWidget::closeEvent(QCloseEvent* e)
+void MyWidget::closeEvent(QCloseEvent *e)
 {
-    QWidget::closeEvent(e);
-    emit closed();
+	QWidget::closeEvent(e);
+	emit closed();
 }

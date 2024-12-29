@@ -17,32 +17,32 @@ class QMultiLineEdit;
 class QToolBar;
 class QPopupMenu;
 
-class ApplicationWindow: public QMainWindow
+class ApplicationWindow : public QMainWindow
 {
-    Q_OBJECT
-public:
-    ApplicationWindow();
-    ~ApplicationWindow();
-    
-protected:
-    void closeEvent( QCloseEvent* );
+	Q_OBJECT
+      public:
+	ApplicationWindow();
+	~ApplicationWindow();
 
-private slots:
-    void newDoc();
-    void load();
-    void load( const char *fileName );
-    void save();
-    void saveAs();
-    void print();
+      protected:
+	void closeEvent(QCloseEvent *);
 
-    void about();
-    void aboutQt();
+      private slots:
+	void newDoc();
+	void load();
+	void load(const char *fileName);
+	void save();
+	void saveAs();
+	void print();
 
-private:
-    QPrinter *printer;
-    QMultiLineEdit *e;
-    QToolBar *fileTools;
-    QString filename;
+	void about();
+	void aboutQt();
+
+      private:
+	QPrinter *printer;
+	QMultiLineEdit *e;
+	QToolBar *fileTools;
+	QString filename;
 };
 
 

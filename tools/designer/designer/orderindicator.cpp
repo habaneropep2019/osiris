@@ -27,14 +27,14 @@
 #include <qbitmap.h>
 #include <qapplication.h>
 
-OrderIndicator::OrderIndicator( int i, QWidget* w, FormWindow *fw )
-    : QWidget( fw, "order_indicator", WMouseNoMask ), formWindow( fw )
+OrderIndicator::OrderIndicator(int i, QWidget *w, FormWindow *fw)
+	: QWidget(fw, "order_indicator", WMouseNoMask), formWindow(fw)
 {
-    order = -1;
-    widget = w;
-    setBackgroundMode( NoBackground );
-    setAutoMask( TRUE );
-    setOrder( i, w );
+	order = -1;
+	widget = w;
+	setBackgroundMode(NoBackground);
+	setAutoMask(TRUE);
+	setOrder(i, w);
 }
 
 
@@ -43,64 +43,65 @@ OrderIndicator::~OrderIndicator()
 }
 
 
-void OrderIndicator::setOrder( int i, QWidget* wid )
+void OrderIndicator::setOrder(int i, QWidget *wid)
 {
-    if ( widget != wid )
-	return;
-    if ( !wid->isVisibleTo( formWindow ) ) {
-	hide();
-	return;
-    }
+	if (widget != wid)
+		return;
+	if (!wid->isVisibleTo(formWindow)) {
+		hide();
+		return;
+	}
 
-    if ( order == i ) {
+	if (order == i) {
+		show();
+		raise();
+		return;
+	}
+	order = i;
+	int w = fontMetrics().width(QString::number(i)) + 10;
+	int h = fontMetrics().lineSpacing() * 3 / 2;
+	QFont f(font());
+	f.setBold(TRUE);
+	setFont(f);
+	resize(QMAX(w, h), h);
+	update(); // in case the size didn't change
+	reposition();
 	show();
 	raise();
-	return;
-    }
-    order = i;
-    int w = fontMetrics().width( QString::number( i ) ) + 10;
-    int h = fontMetrics().lineSpacing() * 3 / 2;
-    QFont f( font() );
-    f.setBold( TRUE );
-    setFont( f );
-    resize( QMAX( w, h ), h );
-    update(); // in case the size didn't change
-    reposition();
-    show();
-    raise();
 }
 
 void OrderIndicator::reposition()
 {
-    QPoint p =parentWidget()->mapFromGlobal( widget->mapToGlobal( widget->rect().topLeft() ) );
-    move( p - QPoint( width()/3, height()/3 ) );
+	QPoint p = parentWidget()->mapFromGlobal(
+		widget->mapToGlobal(widget->rect().topLeft()));
+	move(p - QPoint(width() / 3, height() / 3));
 }
 
 
-void OrderIndicator::paintEvent( QPaintEvent * )
+void OrderIndicator::paintEvent(QPaintEvent *)
 {
-    QPainter p( this );
-    p.setPen( white );
-    p.setBrush( blue );
-    p.drawEllipse( rect() );
-    p.drawText( rect(), AlignCenter, QString::number( order ) );
+	QPainter p(this);
+	p.setPen(white);
+	p.setBrush(blue);
+	p.drawEllipse(rect());
+	p.drawText(rect(), AlignCenter, QString::number(order));
 }
 
 
 void OrderIndicator::updateMask()
 {
-    QBitmap bm( size() );
-    bm.fill( color0 );
-    {
-	QPainter p( &bm, this );
-	p.setPen( color1 );
-	p.setBrush( color1 );
-	p.drawEllipse( rect() );
-    }
-    setMask( bm );
+	QBitmap bm(size());
+	bm.fill(color0);
+	{
+		QPainter p(&bm, this);
+		p.setPen(color1);
+		p.setBrush(color1);
+		p.drawEllipse(rect());
+	}
+	setMask(bm);
 }
 
-void OrderIndicator::mousePressEvent( QMouseEvent *e )
+void OrderIndicator::mousePressEvent(QMouseEvent *e)
 {
-    QApplication::sendEvent( widget, e );
+	QApplication::sendEvent(widget, e);
 }

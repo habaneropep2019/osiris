@@ -39,67 +39,68 @@
 #define QPICTURE_H
 
 #ifndef QT_H
-#include "qpaintdevice.h"
-#include "qbuffer.h"
+# include "qpaintdevice.h"
+# include "qbuffer.h"
 #endif // QT_H
 
 #ifndef QT_NO_PICTURE
 
-class Q_EXPORT QPicture : public QPaintDevice		// picture class
+class Q_EXPORT QPicture : public QPaintDevice // picture class
 {
-public:
-    QPicture( int formatVersion = 0 );
-   ~QPicture();
+      public:
+	QPicture(int formatVersion = 0);
+	~QPicture();
 
-    bool	isNull() const;
+	bool isNull() const;
 
-    uint	size() const;
-    const char* data() const;
-    virtual void setData( const char* data, uint size );
+	uint size() const;
+	const char *data() const;
+	virtual void setData(const char *data, uint size);
 
-    bool	play( QPainter * );
+	bool play(QPainter *);
 
-    bool	load( const QString &fileName );
-    bool	save( const QString &fileName );
+	bool load(const QString &fileName);
+	bool save(const QString &fileName);
 
-    QPicture& operator= (const QPicture&);
+	QPicture &operator=(const QPicture &);
 
-    friend Q_EXPORT QDataStream &operator<<( QDataStream &, const QPicture & );
-    friend Q_EXPORT QDataStream &operator>>( QDataStream &, QPicture & );
+	friend Q_EXPORT QDataStream &operator<<(QDataStream &,
+						const QPicture &);
+	friend Q_EXPORT QDataStream &operator>>(QDataStream &, QPicture &);
 
-protected:
-    bool	cmd( int, QPainter *, QPDevCmdParam * );
-    int		metric( int ) const;
+      protected:
+	bool cmd(int, QPainter *, QPDevCmdParam *);
+	int metric(int) const;
 
-private:
-    bool	exec( QPainter *, QDataStream &, int );
-    void	resetFormat();
-    QBuffer	pictb;
-    int		trecs;
-    bool	formatOk;
-    int		formatMajor;
-    int		formatMinor;
+      private:
+	bool exec(QPainter *, QDataStream &, int);
+	void resetFormat();
+	QBuffer pictb;
+	int trecs;
+	bool formatOk;
+	int formatMajor;
+	int formatMinor;
 
-private:       // Disabled copy constructor
-#if defined(Q_DISABLE_COPY)
-    QPicture( const QPicture & );
-#endif
+      private: // Disabled copy constructor
+# if defined(Q_DISABLE_COPY)
+	QPicture(const QPicture &);
+# endif
 };
 
 
 inline bool QPicture::isNull() const
 {
-    return pictb.buffer().isNull();
+	return pictb.buffer().isNull();
 }
 
 inline uint QPicture::size() const
 {
-    return pictb.buffer().size();
+	return pictb.buffer().size();
 }
 
-inline const char* QPicture::data() const
+inline const char *QPicture::data() const
 {
-    return pictb.buffer().data();
+	return pictb.buffer().data();
 }
 
 
@@ -107,8 +108,8 @@ inline const char* QPicture::data() const
   QPicture stream functions
  *****************************************************************************/
 
-Q_EXPORT QDataStream &operator<<( QDataStream &, const QPicture & );
-Q_EXPORT QDataStream &operator>>( QDataStream &, QPicture & );
+Q_EXPORT QDataStream &operator<<(QDataStream &, const QPicture &);
+Q_EXPORT QDataStream &operator>>(QDataStream &, QPicture &);
 
 #endif // QT_NO_PICTURE
 

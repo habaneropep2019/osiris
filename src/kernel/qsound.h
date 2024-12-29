@@ -38,7 +38,7 @@
 #define QSOUND_H
 
 #ifndef QT_H
-#include "qobject.h"
+# include "qobject.h"
 #endif // QT_H
 
 #ifndef QT_NO_SOUND
@@ -47,20 +47,22 @@ class QSoundData;
 class QAuServer;
 class QAuBucket;
 
-class Q_EXPORT QSound : public QObject {
-    Q_OBJECT
-public:
-    static bool available();
-    static void play(const QString& filename);
+class Q_EXPORT QSound : public QObject
+{
+	Q_OBJECT
+      public:
+	static bool available();
+	static void play(const QString &filename);
 
-    QSound(const QString& filename, QObject* parent=0, const char* name=0);
-    ~QSound();
+	QSound(const QString &filename, QObject *parent = 0,
+	       const char *name = 0);
+	~QSound();
 
-public slots:
-    void play();
+      public slots:
+	void play();
 
-private:
-    QSoundData* d;
+      private:
+	QSoundData *d;
 };
 
 
@@ -72,18 +74,19 @@ private:
 
   QAuBucket is whatever you want.
 */
-class QAuServer : public QObject {
-    Q_OBJECT
+class QAuServer : public QObject
+{
+	Q_OBJECT
 
-public:
-    QAuServer(QObject* parent, const char* name);
-    ~QAuServer();
+      public:
+	QAuServer(QObject *parent, const char *name);
+	~QAuServer();
 
-    virtual void play(const QString& filename);
-    virtual void play(QAuBucket* id)=0;
-    virtual QAuBucket* newBucket(const QString& filename)=0;
-    virtual void deleteBucket(QAuBucket* id)=0;
-    virtual bool okay()=0;
+	virtual void play(const QString &filename);
+	virtual void play(QAuBucket *id) = 0;
+	virtual QAuBucket *newBucket(const QString &filename) = 0;
+	virtual void deleteBucket(QAuBucket *id) = 0;
+	virtual bool okay() = 0;
 };
 
 #endif // QT_NO_SOUND

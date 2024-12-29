@@ -31,36 +31,35 @@ class FormWindow;
 
 class ConnectionEditor : public ConnectionEditorBase
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    ConnectionEditor( QWidget *parent, QObject* sender, QObject* receiver, FormWindow *fw );
-    ~ConnectionEditor();
+      public:
+	ConnectionEditor(QWidget *parent, QObject *sender, QObject *receiver,
+			 FormWindow *fw);
+	~ConnectionEditor();
 
 
-protected:
-    void signalChanged();
-    void connectClicked();
-    void disconnectClicked();
-    void okClicked();
-    void cancelClicked();
-    void slotsChanged();
-    void connectionsChanged();
-    void addSlotClicked();
-    
-private:
-    bool ignoreSlot( const char* ) const;
-    struct Connection
-    {
-	QCString signal, slot;
-    };
+      protected:
+	void signalChanged();
+	void connectClicked();
+	void disconnectClicked();
+	void okClicked();
+	void cancelClicked();
+	void slotsChanged();
+	void connectionsChanged();
+	void addSlotClicked();
 
-    QMap<QListViewItem*, Connection> connections;
-    QValueList<MetaDataBase::Connection> oldConnections;
-    QObject* sender;
-    QObject* receiver;
-    FormWindow *formWindow;
+      private:
+	bool ignoreSlot(const char *) const;
+	struct Connection {
+		QCString signal, slot;
+	};
 
+	QMap<QListViewItem *, Connection> connections;
+	QValueList<MetaDataBase::Connection> oldConnections;
+	QObject *sender;
+	QObject *receiver;
+	FormWindow *formWindow;
 };
 
 #endif

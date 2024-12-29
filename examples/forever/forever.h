@@ -23,16 +23,18 @@ const int numColors = 120;
 
 class Forever : public QWidget
 {
-    Q_OBJECT
-public:
-    Forever( QWidget *parent=0, const char *name=0 );
-protected:
-    void	timerEvent( QTimerEvent * );
-private slots:
-    void	updateCaption();
-private:
-    int		rectangles;
-    QColor	colors[numColors];
+	Q_OBJECT
+      public:
+	Forever(QWidget *parent = 0, const char *name = 0);
+
+      protected:
+	void timerEvent(QTimerEvent *);
+      private slots:
+	void updateCaption();
+
+      private:
+	int rectangles;
+	QColor colors[numColors];
 };
 
 

@@ -39,9 +39,9 @@
 #define QSTRLIST_H
 
 #ifndef QT_H
-#include "qstring.h"
-#include "qlist.h"
-#include "qdatastream.h"
+# include "qstring.h"
+# include "qlist.h"
+# include "qdatastream.h"
 #endif // QT_H
 
 
@@ -50,59 +50,86 @@ template class Q_EXPORT QList<char>;
 template class Q_EXPORT QListIterator<char>;
 #endif
 
-typedef QList<char>		QStrListBase;
-typedef QListIterator<char>	QStrListIterator;
+typedef QList<char> QStrListBase;
+typedef QListIterator<char> QStrListIterator;
 
 
 class Q_EXPORT QStrList : public QStrListBase
 {
-public:
-    QStrList( bool deepCopies=TRUE ) { dc = deepCopies; del_item = deepCopies; }
-    QStrList( const QStrList & );
-   ~QStrList()			{ clear(); }
-    QStrList& operator=( const QStrList & );
+      public:
+	QStrList(bool deepCopies = TRUE)
+	{
+		dc = deepCopies;
+		del_item = deepCopies;
+	}
+	QStrList(const QStrList &);
+	~QStrList()
+	{
+		clear();
+	}
+	QStrList &operator=(const QStrList &);
 
-private:
-    QCollection::Item newItem( QCollection::Item d ) { return dc ? qstrdup( (const char*)d ) : d; }
-    void deleteItem( QCollection::Item d ) { if ( del_item ) delete[] (char*)d; }
-    int compareItems( QCollection::Item s1, QCollection::Item s2 ) { return qstrcmp((const char*)s1,
-							 (const char*)s2); }
+      private:
+	QCollection::Item newItem(QCollection::Item d)
+	{
+		return dc ? qstrdup((const char *)d) : d;
+	}
+	void deleteItem(QCollection::Item d)
+	{
+		if (del_item)
+			delete[] (char *)d;
+	}
+	int compareItems(QCollection::Item s1, QCollection::Item s2)
+	{
+		return qstrcmp((const char *)s1, (const char *)s2);
+	}
 #ifndef QT_NO_DATASTREAM
-    QDataStream &read( QDataStream &s, QCollection::Item &d )
-				{ s >> (char *&)d; return s; }
-    QDataStream &write( QDataStream &s, QCollection::Item d ) const
-				{ return s << (const char *)d; }
+	QDataStream &read(QDataStream &s, QCollection::Item &d)
+	{
+		s >> (char *&)d;
+		return s;
+	}
+	QDataStream &write(QDataStream &s, QCollection::Item d) const
+	{
+		return s << (const char *)d;
+	}
 #endif
-    bool  dc;
+	bool dc;
 };
 
 
-class Q_EXPORT QStrIList : public QStrList	// case insensitive string list
+class Q_EXPORT QStrIList : public QStrList // case insensitive string list
 {
-public:
-    QStrIList( bool deepCopies=TRUE ) : QStrList( deepCopies ) {}
-   ~QStrIList()			{ clear(); }
-private:
-    int	  compareItems( QCollection::Item s1, QCollection::Item s2 )
-				{ return qstricmp((const char*)s1,
-						    (const char*)s2); }
+      public:
+	QStrIList(bool deepCopies = TRUE) : QStrList(deepCopies)
+	{
+	}
+	~QStrIList()
+	{
+		clear();
+	}
+
+      private:
+	int compareItems(QCollection::Item s1, QCollection::Item s2)
+	{
+		return qstricmp((const char *)s1, (const char *)s2);
+	}
 };
 
 
-inline QStrList & QStrList::operator=( const QStrList &strList )
+inline QStrList &QStrList::operator=(const QStrList &strList)
 {
-    clear();
-    dc = strList.dc;
-    del_item = dc;
-    QStrListBase::operator=(strList);
-    return *this;
+	clear();
+	dc = strList.dc;
+	del_item = dc;
+	QStrListBase::operator=(strList);
+	return *this;
 }
 
-inline QStrList::QStrList( const QStrList &strList )
-    : QStrListBase( strList )
+inline QStrList::QStrList(const QStrList &strList) : QStrListBase(strList)
 {
-    dc = FALSE;
-    operator=(strList);
+	dc = FALSE;
+	operator=(strList);
 }
 
 

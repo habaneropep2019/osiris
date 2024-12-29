@@ -39,9 +39,9 @@
 #define QWIDGETSTACK_H
 
 #ifndef QT_H
-#include "qframe.h"
-#include "qintdict.h"
-#include "qptrdict.h"
+# include "qframe.h"
+# include "qintdict.h"
+# include "qptrdict.h"
 #endif // QT_H
 
 #ifndef QT_NO_WIDGETSTACK
@@ -50,56 +50,56 @@
 class QWidgetStackPrivate;
 
 
-class Q_EXPORT QWidgetStack: public QFrame
+class Q_EXPORT QWidgetStack : public QFrame
 {
-    Q_OBJECT
-public:
-    QWidgetStack( QWidget * parent = 0, const char *name = 0 );
-    ~QWidgetStack();
+	Q_OBJECT
+      public:
+	QWidgetStack(QWidget *parent = 0, const char *name = 0);
+	~QWidgetStack();
 
-    void addWidget( QWidget *, int );
-    void removeWidget( QWidget * );
+	void addWidget(QWidget *, int);
+	void removeWidget(QWidget *);
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
-    void show();
+	QSize sizeHint() const;
+	QSize minimumSizeHint() const;
+	void show();
 
-    QWidget * widget( int ) const;
-    int id( QWidget * ) const;
+	QWidget *widget(int) const;
+	int id(QWidget *) const;
 
-    QWidget * visibleWidget() const;
+	QWidget *visibleWidget() const;
 
-    void setFrameRect( const QRect & );
+	void setFrameRect(const QRect &);
 
-signals:
-    void aboutToShow( int );
-    void aboutToShow( QWidget * );
+      signals:
+	void aboutToShow(int);
+	void aboutToShow(QWidget *);
 
-public slots:
-    void raiseWidget( int );
-    void raiseWidget( QWidget * );
+      public slots:
+	void raiseWidget(int);
+	void raiseWidget(QWidget *);
 
-protected:
-    void frameChanged();
-    void resizeEvent( QResizeEvent * );
+      protected:
+	void frameChanged();
+	void resizeEvent(QResizeEvent *);
 
-    virtual void setChildGeometries();
-    void childEvent( QChildEvent * );
+	virtual void setChildGeometries();
+	void childEvent(QChildEvent *);
 
-private:
-    bool isMyChild( QWidget * );
+      private:
+	bool isMyChild(QWidget *);
 
-    QWidgetStackPrivate * d;
-    QIntDict<QWidget> * dict;
-    QPtrDict<QWidget> * focusWidgets;
-    QWidget * topWidget;
-    QWidget * invisible;
+	QWidgetStackPrivate *d;
+	QIntDict<QWidget> *dict;
+	QPtrDict<QWidget> *focusWidgets;
+	QWidget *topWidget;
+	QWidget *invisible;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QWidgetStack( const QWidgetStack & );
-    QWidgetStack& operator=( const QWidgetStack & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QWidgetStack(const QWidgetStack &);
+	QWidgetStack &operator=(const QWidgetStack &);
+# endif
 };
 
 #endif // QT_NO_WIDGETSTACK

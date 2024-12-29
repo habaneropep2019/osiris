@@ -38,7 +38,7 @@
 #include "qbitarray.h"
 #include "qdatastream.h"
 
-#define SHBLOCK	 ((bitarr_data*)(sharedBlock()))
+#define SHBLOCK ((bitarr_data *)(sharedBlock()))
 
 
 // NOT REVISED
@@ -119,25 +119,25 @@
   Constructs an empty bit array.
 */
 
-QBitArray::QBitArray() : QByteArray( 0, 0 )
+QBitArray::QBitArray() : QByteArray(0, 0)
 {
-    bitarr_data *x = new bitarr_data;
-    CHECK_PTR( x );
-    x->nbits = 0;
-    setSharedBlock( x );
+	bitarr_data *x = new bitarr_data;
+	CHECK_PTR(x);
+	x->nbits = 0;
+	setSharedBlock(x);
 }
 
 /*!
   Constructs a bit array of \a size bits. The bits are uninitialized.
 */
 
-QBitArray::QBitArray( uint size ) : QByteArray( 0, 0 )
+QBitArray::QBitArray(uint size) : QByteArray(0, 0)
 {
-    bitarr_data *x = new bitarr_data;
-    CHECK_PTR( x );
-    x->nbits = 0;
-    setSharedBlock( x );
-    resize( size );
+	bitarr_data *x = new bitarr_data;
+	CHECK_PTR(x);
+	x->nbits = 0;
+	setSharedBlock(x);
+	resize(size);
 }
 
 /*!
@@ -157,9 +157,9 @@ QBitArray::QBitArray( uint size ) : QByteArray( 0, 0 )
  */
 void QBitArray::pad0()
 {
-    uint sz = size();
-    if ( sz && sz%8 )
-	*(data()+sz/8) &= (1 << (sz%8)) - 1;
+	uint sz = size();
+	if (sz && sz % 8)
+		*(data() + sz / 8) &= (1 << (sz % 8)) - 1;
 }
 
 
@@ -178,18 +178,20 @@ void QBitArray::pad0()
   \sa size()
 */
 
-bool QBitArray::resize( uint size )
+bool QBitArray::resize(uint size)
 {
-    uint s = this->size();
-    if ( !QByteArray::resize( (size+7)/8 ) )
-	return FALSE;				// cannot resize
-    SHBLOCK->nbits = size;
-    if ( size != 0 ) {				// not null array
-	int ds = (int)(size+7)/8 - (int)(s+7)/8;// number of bytes difference
-	if ( ds > 0 )				// expanding array
-	    memset( data() + (s+7)/8, 0, ds );	//   reset new data
-    }
-    return TRUE;
+	uint s = this->size();
+	if (!QByteArray::resize((size + 7) / 8))
+		return FALSE; // cannot resize
+	SHBLOCK->nbits = size;
+	if (size != 0) { // not null array
+		int ds = (int)(size + 7) / 8 - (int)(s + 7) / 8; // number of
+								 // bytes
+								 // difference
+		if (ds > 0) // expanding array
+			memset(data() + (s + 7) / 8, 0, ds); //   reset new data
+	}
+	return TRUE;
 }
 
 
@@ -204,18 +206,18 @@ bool QBitArray::resize( uint size )
   \sa resize()
 */
 
-bool QBitArray::fill( bool v, int size )
+bool QBitArray::fill(bool v, int size)
 {
-    if ( size >= 0 ) {				// resize first
-	if ( !resize( size ) )
-	    return FALSE;			// cannot resize
-    } else {
-	size = this->size();
-    }
-    memset( data(), v ? 0xff : 0, (size+7)/8 ); // set many bytes, fast
-    if ( v )
-	pad0();
-    return TRUE;
+	if (size >= 0) { // resize first
+		if (!resize(size))
+			return FALSE; // cannot resize
+	} else {
+		size = this->size();
+	}
+	memset(data(), v ? 0xff : 0, (size + 7) / 8); // set many bytes, fast
+	if (v)
+		pad0();
+	return TRUE;
 }
 
 
@@ -232,9 +234,9 @@ bool QBitArray::fill( bool v, int size )
 
 void QBitArray::detach()
 {
-    int nbits = SHBLOCK->nbits;
-    this->duplicate( *this );
-    SHBLOCK->nbits = nbits;
+	int nbits = SHBLOCK->nbits;
+	this->duplicate(*this);
+	SHBLOCK->nbits = nbits;
 }
 
 /*!
@@ -244,10 +246,10 @@ void QBitArray::detach()
 
 QBitArray QBitArray::copy() const
 {
-    QBitArray tmp;
-    tmp.duplicate( *this );
-    ((bitarr_data*)(tmp.sharedBlock()))->nbits = SHBLOCK->nbits;
-    return tmp;
+	QBitArray tmp;
+	tmp.duplicate(*this);
+	((bitarr_data *)(tmp.sharedBlock()))->nbits = SHBLOCK->nbits;
+	return tmp;
 }
 
 
@@ -256,15 +258,15 @@ QBitArray QBitArray::copy() const
   \sa setBit(), clearBit()
 */
 
-bool QBitArray::testBit( uint index ) const
+bool QBitArray::testBit(uint index) const
 {
 #if defined(CHECK_RANGE)
-    if ( index >= size() ) {
-	qWarning( "QBitArray::testBit: Index %d out of range", index );
-	return FALSE;
-    }
+	if (index >= size()) {
+		qWarning("QBitArray::testBit: Index %d out of range", index);
+		return FALSE;
+	}
 #endif
-    return (*(data()+(index>>3)) & (1 << (index & 7))) != 0;
+	return (*(data() + (index >> 3)) & (1 << (index & 7))) != 0;
 }
 
 /*!
@@ -272,15 +274,15 @@ bool QBitArray::testBit( uint index ) const
   \sa clearBit() toggleBit()
 */
 
-void QBitArray::setBit( uint index )
+void QBitArray::setBit(uint index)
 {
 #if defined(CHECK_RANGE)
-    if ( index >= size() ) {
-	qWarning( "QBitArray::setBit: Index %d out of range", index );
-	return;
-    }
+	if (index >= size()) {
+		qWarning("QBitArray::setBit: Index %d out of range", index);
+		return;
+	}
 #endif
-    *(data()+(index>>3)) |= (1 << (index & 7));
+	*(data() + (index >> 3)) |= (1 << (index & 7));
 }
 
 /*!
@@ -303,15 +305,15 @@ void QBitArray::setBit( uint index )
   \sa setBit(), toggleBit()
 */
 
-void QBitArray::clearBit( uint index )
+void QBitArray::clearBit(uint index)
 {
 #if defined(CHECK_RANGE)
-    if ( index >= size() ) {
-	qWarning( "QBitArray::clearBit: Index %d out of range", index );
-	return;
-    }
+	if (index >= size()) {
+		qWarning("QBitArray::clearBit: Index %d out of range", index);
+		return;
+	}
 #endif
-    *(data()+(index>>3)) &= ~(1 << (index & 7));
+	*(data() + (index >> 3)) &= ~(1 << (index & 7));
 }
 
 /*!
@@ -323,19 +325,19 @@ void QBitArray::clearBit( uint index )
   \sa setBit(), clearBit()
 */
 
-bool QBitArray::toggleBit( uint index )
+bool QBitArray::toggleBit(uint index)
 {
 #if defined(CHECK_RANGE)
-    if ( index >= size() ) {
-	qWarning( "QBitArray::toggleBit: Index %d out of range", index );
-	return FALSE;
-    }
+	if (index >= size()) {
+		qWarning("QBitArray::toggleBit: Index %d out of range", index);
+		return FALSE;
+	}
 #endif
-    register uchar *p = (uchar *)data() + (index>>3);
-    uchar b = (1 << (index & 7));		// bit position
-    uchar c = *p & b;				// read bit
-    *p ^= b;					// toggle bit
-    return c;
+	uchar *p = (uchar *)data() + (index >> 3);
+	uchar b = (1 << (index & 7)); // bit position
+	uchar c = *p & b; // read bit
+	*p ^= b; // toggle bit
+	return c;
 }
 
 
@@ -389,18 +391,18 @@ bool QBitArray::toggleBit( uint index )
   \sa operator|=(), operator^=(), operator~()
 */
 
-QBitArray &QBitArray::operator&=( const QBitArray &a )
+QBitArray &QBitArray::operator&=(const QBitArray &a)
 {
-    resize( QMAX(size(), a.size()) );
-    register uchar *a1 = (uchar *)data();
-    register uchar *a2 = (uchar *)a.data();
-    int n = QMIN( QByteArray::size(), a.QByteArray::size() );
-    int p = QMAX( QByteArray::size(), a.QByteArray::size() ) - n;
-    while ( n-- > 0 )
-	*a1++ &= *a2++;
-    while ( p-- > 0 )
-	*a1++ = 0;
-    return *this;
+	resize(QMAX(size(), a.size()));
+	uchar *a1 = (uchar *)data();
+	uchar *a2 = (uchar *)a.data();
+	int n = QMIN(QByteArray::size(), a.QByteArray::size());
+	int p = QMAX(QByteArray::size(), a.QByteArray::size()) - n;
+	while (n-- > 0)
+		*a1++ &= *a2++;
+	while (p-- > 0)
+		*a1++ = 0;
+	return *this;
 }
 
 /*!
@@ -421,15 +423,15 @@ QBitArray &QBitArray::operator&=( const QBitArray &a )
   \sa operator&=(), operator^=(), operator~()
 */
 
-QBitArray &QBitArray::operator|=( const QBitArray &a )
+QBitArray &QBitArray::operator|=(const QBitArray &a)
 {
-    resize( QMAX(size(), a.size()) );
-    register uchar *a1 = (uchar *)data();
-    register uchar *a2 = (uchar *)a.data();
-    int n = QMIN( QByteArray::size(), a.QByteArray::size() );
-    while ( n-- > 0 )
-	*a1++ |= *a2++;
-    return *this;
+	resize(QMAX(size(), a.size()));
+	uchar *a1 = (uchar *)data();
+	uchar *a2 = (uchar *)a.data();
+	int n = QMIN(QByteArray::size(), a.QByteArray::size());
+	while (n-- > 0)
+		*a1++ |= *a2++;
+	return *this;
 }
 
 /*!
@@ -450,15 +452,15 @@ QBitArray &QBitArray::operator|=( const QBitArray &a )
   \sa operator&=(), operator|=(), operator~()
 */
 
-QBitArray &QBitArray::operator^=( const QBitArray &a )
+QBitArray &QBitArray::operator^=(const QBitArray &a)
 {
-    resize( QMAX(size(), a.size()) );
-    register uchar *a1 = (uchar *)data();
-    register uchar *a2 = (uchar *)a.data();
-    int n = QMIN( QByteArray::size(), a.QByteArray::size() );
-    while ( n-- > 0 )
-	*a1++ ^= *a2++;
-    return *this;
+	resize(QMAX(size(), a.size()));
+	uchar *a1 = (uchar *)data();
+	uchar *a2 = (uchar *)a.data();
+	int n = QMIN(QByteArray::size(), a.QByteArray::size());
+	while (n-- > 0)
+		*a1++ ^= *a2++;
+	return *this;
 }
 
 /*!
@@ -474,14 +476,14 @@ QBitArray &QBitArray::operator^=( const QBitArray &a )
 
 QBitArray QBitArray::operator~() const
 {
-    QBitArray a( size() );
-    register uchar *a1 = (uchar *)data();
-    register uchar *a2 = (uchar *)a.data();
-    int n = QByteArray::size();
-    while ( n-- )
-	*a2++ = ~*a1++;
-    a.pad0();
-    return a;
+	QBitArray a(size());
+	uchar *a1 = (uchar *)data();
+	uchar *a2 = (uchar *)a.data();
+	int n = QByteArray::size();
+	while (n--)
+		*a2++ = ~*a1++;
+	a.pad0();
+	return a;
 }
 
 
@@ -491,11 +493,11 @@ QBitArray QBitArray::operator~() const
   \sa QBitArray::operator&=()
 */
 
-QBitArray operator&( const QBitArray &a1, const QBitArray &a2 )
+QBitArray operator&(const QBitArray &a1, const QBitArray &a2)
 {
-    QBitArray tmp = a1.copy();
-    tmp &= a2;
-    return tmp;
+	QBitArray tmp = a1.copy();
+	tmp &= a2;
+	return tmp;
 }
 
 /*!
@@ -504,11 +506,11 @@ QBitArray operator&( const QBitArray &a1, const QBitArray &a2 )
   \sa QBitArray::operator|=()
 */
 
-QBitArray operator|( const QBitArray &a1, const QBitArray &a2 )
+QBitArray operator|(const QBitArray &a1, const QBitArray &a2)
 {
-    QBitArray tmp = a1.copy();
-    tmp |= a2;
-    return tmp;
+	QBitArray tmp = a1.copy();
+	tmp |= a2;
+	return tmp;
 }
 
 /*!
@@ -517,11 +519,11 @@ QBitArray operator|( const QBitArray &a1, const QBitArray &a2 )
   \sa QBitArray::operator^()
 */
 
-QBitArray operator^( const QBitArray &a1, const QBitArray &a2 )
+QBitArray operator^(const QBitArray &a1, const QBitArray &a2)
 {
-    QBitArray tmp = a1.copy();
-    tmp ^= a2;
-    return tmp;
+	QBitArray tmp = a1.copy();
+	tmp ^= a2;
+	return tmp;
 }
 
 
@@ -563,13 +565,13 @@ QBitArray operator^( const QBitArray &a1, const QBitArray &a2 )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 #ifndef QT_NO_DATASTREAM
-QDataStream &operator<<( QDataStream &s, const QBitArray &a )
+QDataStream &operator<<(QDataStream &s, const QBitArray &a)
 {
-    Q_UINT32 len = a.size();
-    s << len;					// write size of array
-    if ( len > 0 )				// write data
-	s.writeRawBytes( a.data(), a.QByteArray::size() );
-    return s;
+	Q_UINT32 len = a.size();
+	s << len; // write size of array
+	if (len > 0) // write data
+		s.writeRawBytes(a.data(), a.QByteArray::size());
+	return s;
 }
 
 /*!
@@ -579,19 +581,19 @@ QDataStream &operator<<( QDataStream &s, const QBitArray &a )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator>>( QDataStream &s, QBitArray &a )
+QDataStream &operator>>(QDataStream &s, QBitArray &a)
 {
-    Q_UINT32 len;
-    s >> len;					// read size of array
-    if ( !a.resize( (uint)len ) ) {		// resize array
-#if defined(CHECK_NULL)
-	qWarning( "QDataStream: Not enough memory to read QBitArray" );
-#endif
-	len = 0;
-    }
-    if ( len > 0 )				// read data
-	s.readRawBytes( a.data(), a.QByteArray::size() );
-    return s;
+	Q_UINT32 len;
+	s >> len; // read size of array
+	if (!a.resize((uint)len)) { // resize array
+# if defined(CHECK_NULL)
+		qWarning("QDataStream: Not enough memory to read QBitArray");
+# endif
+		len = 0;
+	}
+	if (len > 0) // read data
+		s.readRawBytes(a.data(), a.QByteArray::size());
+	return s;
 }
 
 #endif // QT_NO_DATASTREAM

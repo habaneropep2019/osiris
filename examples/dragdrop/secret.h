@@ -18,26 +18,28 @@
 #include <qdragobject.h>
 #include <qlabel.h>
 
-class SecretDrag: public QStoredDrag {
-public:
-    SecretDrag( uchar, QWidget * parent = 0, const char * name = 0 );
-    ~SecretDrag() {};
+class SecretDrag : public QStoredDrag
+{
+      public:
+	SecretDrag(uchar, QWidget *parent = 0, const char *name = 0);
+	~SecretDrag(){};
 
-    static bool canDecode( QDragMoveEvent* e );
-    static bool decode( QDropEvent* e, QString& s );
+	static bool canDecode(QDragMoveEvent *e);
+	static bool decode(QDropEvent *e, QString &s);
 };
 
 
-class SecretSource: public QLabel
+class SecretSource : public QLabel
 {
-public:
-    SecretSource( int secret, QWidget *parent = 0, const char * name = 0 );
-    ~SecretSource();
+      public:
+	SecretSource(int secret, QWidget *parent = 0, const char *name = 0);
+	~SecretSource();
 
-protected:
-    void mousePressEvent( QMouseEvent * );
-private:
-    int mySecret;
+      protected:
+	void mousePressEvent(QMouseEvent *);
+
+      private:
+	int mySecret;
 };
 
 #endif

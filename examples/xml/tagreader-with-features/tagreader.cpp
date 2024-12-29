@@ -1,5 +1,6 @@
 /*
-$Id: qt/examples/xml/tagreader-with-features/tagreader.cpp   2.3.2   edited 2001-06-12 $
+$Id: qt/examples/xml/tagreader-with-features/tagreader.cpp   2.3.2   edited
+2001-06-12 $
 */
 
 #include "structureparser.h"
@@ -11,57 +12,61 @@ $Id: qt/examples/xml/tagreader-with-features/tagreader.cpp   2.3.2   edited 2001
 #include <qmainwindow.h>
 #include <qlabel.h>
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication app( argc, argv );      
+	QApplication app(argc, argv);
 
-    QFile xmlFile( argc == 2 ? argv[1] : "fnord.xml" );
-    QXmlInputSource source( xmlFile );
+	QFile xmlFile(argc == 2 ? argv[1] : "fnord.xml");
+	QXmlInputSource source(xmlFile);
 
-    QXmlSimpleReader reader;
+	QXmlSimpleReader reader;
 
-    QGrid * container = new QGrid( 3 );
+	QGrid *container = new QGrid(3);
 
-    QListView * nameSpace = new QListView( container, "table_namespace" );    
-    StructureParser * handlerNamespace = new StructureParser( nameSpace );
-    reader.setContentHandler( handlerNamespace );
-    reader.parse( source );
+	QListView *nameSpace = new QListView(container, "table_namespace");
+	StructureParser *handlerNamespace = new StructureParser(nameSpace);
+	reader.setContentHandler(handlerNamespace);
+	reader.parse(source);
 
-    QListView * namespacePrefix = new QListView( container, "table_namespace_prefix" );    
-    StructureParser * handlerNamespacePrefix = new StructureParser( namespacePrefix );
-    reader.setContentHandler( handlerNamespacePrefix );
-    reader.setFeature( "http://xml.org/sax/features/namespaces", TRUE );
-    reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", TRUE );
-    reader.parse( source );
+	QListView *namespacePrefix =
+		new QListView(container, "table_namespace_prefix");
+	StructureParser *handlerNamespacePrefix =
+		new StructureParser(namespacePrefix);
+	reader.setContentHandler(handlerNamespacePrefix);
+	reader.setFeature("http://xml.org/sax/features/namespaces", TRUE);
+	reader.setFeature("http://xml.org/sax/features/namespace-prefixes",
+			  TRUE);
+	reader.parse(source);
 
-    QListView * prefix = new QListView( container, "table_prefix");    
-    StructureParser * handlerPrefix = new StructureParser( prefix );
-    reader.setContentHandler( handlerPrefix );
-    reader.setFeature( "http://xml.org/sax/features/namespaces", FALSE );
-    reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", TRUE );
-    reader.parse( source );
+	QListView *prefix = new QListView(container, "table_prefix");
+	StructureParser *handlerPrefix = new StructureParser(prefix);
+	reader.setContentHandler(handlerPrefix);
+	reader.setFeature("http://xml.org/sax/features/namespaces", FALSE);
+	reader.setFeature("http://xml.org/sax/features/namespace-prefixes",
+			  TRUE);
+	reader.parse(source);
 
-    QLabel * namespaceLabel = new QLabel( 
-                             "Default:\n"
-                             "http://xml.org/sax/features/namespaces: TRUE\n"
-                             "http://xml.org/sax/features/namespace-prefixes: FALSE\n",
-                             container );
+	QLabel *namespaceLabel = new QLabel(
+		"Default:\n"
+		"http://xml.org/sax/features/namespaces: TRUE\n"
+		"http://xml.org/sax/features/namespace-prefixes: FALSE\n",
+		container);
 
-    QLabel * namespacePrefixLabel = new QLabel( 
-                             "\n"
-                             "http://xml.org/sax/features/namespaces: TRUE\n"
-                             "http://xml.org/sax/features/namespace-prefixes: TRUE\n",
-                             container );
+	QLabel *namespacePrefixLabel = new QLabel(
+		"\n"
+		"http://xml.org/sax/features/namespaces: TRUE\n"
+		"http://xml.org/sax/features/namespace-prefixes: TRUE\n",
+		container);
 
-    QLabel * prefixLabel = new QLabel( 
-                             "\n"
-                             "http://xml.org/sax/features/namespaces: FALSE\n"
-                             "http://xml.org/sax/features/namespace-prefixes: TRUE\n",
-                             container );
+	QLabel *prefixLabel = new QLabel(
+		"\n"
+		"http://xml.org/sax/features/namespaces: FALSE\n"
+		"http://xml.org/sax/features/namespace-prefixes: TRUE\n",
+		container);
 
 
-    app.setMainWidget( container );
-    container->setCaption("Qt Example - XML Tagreader");
-    container->show();
-    return app.exec();      
+	app.setMainWidget(container);
+	container->setCaption("Qt Example - XML Tagreader");
+	container->show();
+	return app.exec();
 }

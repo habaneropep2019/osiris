@@ -14,31 +14,31 @@
 
 class DynamicTip : public QToolTip
 {
-public:
-    DynamicTip( QWidget * parent );
+      public:
+	DynamicTip(QWidget *parent);
 
-protected:
-    void maybeTip( const QPoint & );
+      protected:
+	void maybeTip(const QPoint &);
 };
 
 
 class TellMe : public QWidget
 {
-    Q_OBJECT
-public:
-    TellMe( QWidget * parent = 0, const char * name = 0 );
-    ~TellMe();
+	Q_OBJECT
+      public:
+	TellMe(QWidget *parent = 0, const char *name = 0);
+	~TellMe();
 
-    QRect tip( const QPoint & );
+	QRect tip(const QPoint &);
 
-protected:
-    void paintEvent( QPaintEvent * );
-    void mousePressEvent( QMouseEvent * );
-    void resizeEvent( QResizeEvent * );
+      protected:
+	void paintEvent(QPaintEvent *);
+	void mousePressEvent(QMouseEvent *);
+	void resizeEvent(QResizeEvent *);
 
-private:
-    QRect randomRect();
+      private:
+	QRect randomRect();
 
-    QRect r1, r2, r3;
-    DynamicTip * t;
+	QRect r1, r2, r3;
+	DynamicTip *t;
 };

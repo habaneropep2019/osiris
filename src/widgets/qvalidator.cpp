@@ -37,12 +37,12 @@
 
 #include "qvalidator.h"
 #ifndef QT_NO_VALIDATOR
-#include "qwidget.h"
-#include "qregexp.h"
+# include "qwidget.h"
+# include "qregexp.h"
 
-#include <math.h> // HUGE_VAL
-#include <limits.h> // *_MIN, *_MAX
-#include <ctype.h> // isdigit
+# include <math.h> // HUGE_VAL
+# include <limits.h> // *_MIN, *_MAX
+# include <ctype.h> // isdigit
 
 // NOT REVISED
 /*!
@@ -127,8 +127,8 @@
   the moment there aren't any.
 */
 
-QValidator::QValidator( QWidget * parent, const char *name )
-    : QObject( parent, name )
+QValidator::QValidator(QWidget *parent, const char *name)
+	: QObject(parent, name)
 {
 }
 
@@ -172,7 +172,7 @@ QValidator::~QValidator()
   resulting string is not in the list of known last names.
 */
 
-void QValidator::fixup( QString & ) const
+void QValidator::fixup(QString &) const
 {
 }
 
@@ -195,11 +195,11 @@ void QValidator::fixup( QString & ) const
   Constructs a validator object which accepts all integers.
 */
 
-QIntValidator::QIntValidator( QWidget * parent, const char *name )
-    : QValidator( parent, name )
+QIntValidator::QIntValidator(QWidget *parent, const char *name)
+	: QValidator(parent, name)
 {
-    b = INT_MIN;
-    t = INT_MAX;
+	b = INT_MIN;
+	t = INT_MAX;
 }
 
 
@@ -208,12 +208,12 @@ QIntValidator::QIntValidator( QWidget * parent, const char *name )
   bottom up to and including \a top.
 */
 
-QIntValidator::QIntValidator( int bottom, int top,
-			      QWidget * parent, const char* name )
-    : QValidator( parent, name )
+QIntValidator::QIntValidator(int bottom, int top, QWidget *parent,
+			     const char *name)
+	: QValidator(parent, name)
 {
-    b = bottom;
-    t = top;
+	b = bottom;
+	t = top;
 }
 
 
@@ -224,7 +224,7 @@ QIntValidator::QIntValidator( int bottom, int top,
 
 QIntValidator::~QIntValidator()
 {
-    // nothing
+	// nothing
 }
 
 
@@ -233,19 +233,19 @@ QIntValidator::~QIntValidator()
   and \a Invalid if \a input is not an integer.
 */
 
-QValidator::State QIntValidator::validate( QString & input, int & ) const
+QValidator::State QIntValidator::validate(QString &input, int &) const
 {
-    QRegExp empty( QString::fromLatin1("^ *-? *$") );
-    if ( empty.match( input ) >= 0 )
-	return QValidator::Intermediate;
-    bool ok;
-    long int tmp = input.toLong( &ok );
-    if ( !ok )
-	return QValidator::Invalid;
-    else if ( tmp < b || tmp > t )
-	return QValidator::Intermediate;
-    else
-	return QValidator::Acceptable;
+	QRegExp empty(QString::fromLatin1("^ *-? *$"));
+	if (empty.match(input) >= 0)
+		return QValidator::Intermediate;
+	bool ok;
+	long int tmp = input.toLong(&ok);
+	if (!ok)
+		return QValidator::Invalid;
+	else if (tmp < b || tmp > t)
+		return QValidator::Intermediate;
+	else
+		return QValidator::Acceptable;
 }
 
 
@@ -254,10 +254,10 @@ QValidator::State QIntValidator::validate( QString & input, int & ) const
   including \a top.
 */
 
-void QIntValidator::setRange( int bottom, int top )
+void QIntValidator::setRange(int bottom, int top)
 {
-    b = bottom;
-    t = top;
+	b = bottom;
+	t = top;
 }
 
 /*!
@@ -265,9 +265,9 @@ void QIntValidator::setRange( int bottom, int top )
 
   \sa setRange()
 */
-void QIntValidator::setBottom( int bottom )
+void QIntValidator::setBottom(int bottom)
 {
-    setRange( bottom, top() );
+	setRange(bottom, top());
 }
 
 /*!
@@ -275,9 +275,9 @@ void QIntValidator::setBottom( int bottom )
 
   \sa setRange()
 */
-void QIntValidator::setTop( int top )
+void QIntValidator::setTop(int top)
 {
-    setRange( bottom(), top );
+	setRange(bottom(), top);
 }
 
 /*!
@@ -317,12 +317,12 @@ void QIntValidator::setTop( int top )
   Constructs a validator object which accepts all doubles.
 */
 
-QDoubleValidator::QDoubleValidator( QWidget * parent, const char *name )
-    : QValidator( parent, name )
+QDoubleValidator::QDoubleValidator(QWidget *parent, const char *name)
+	: QValidator(parent, name)
 {
-    b = -HUGE_VAL;
-    t = HUGE_VAL;
-    d = 1000;
+	b = -HUGE_VAL;
+	t = HUGE_VAL;
+	d = 1000;
 }
 
 
@@ -332,13 +332,13 @@ QDoubleValidator::QDoubleValidator( QWidget * parent, const char *name )
   after the decimal point.
 */
 
-QDoubleValidator::QDoubleValidator( double bottom, double top, int decimals,
-				    QWidget * parent, const char* name )
-    : QValidator( parent, name )
+QDoubleValidator::QDoubleValidator(double bottom, double top, int decimals,
+				   QWidget *parent, const char *name)
+	: QValidator(parent, name)
 {
-    b = bottom;
-    t = top;
-    d = decimals;
+	b = bottom;
+	t = top;
+	d = decimals;
 }
 
 
@@ -349,7 +349,7 @@ QDoubleValidator::QDoubleValidator( double bottom, double top, int decimals,
 
 QDoubleValidator::~QDoubleValidator()
 {
-    // nothing
+	// nothing
 }
 
 
@@ -359,46 +359,45 @@ QDoubleValidator::~QDoubleValidator()
   \a Invalid if \a input is not a number.
 */
 
-QValidator::State QDoubleValidator::validate( QString & input, int & ) const
+QValidator::State QDoubleValidator::validate(QString &input, int &) const
 {
-    QRegExp empty( QString::fromLatin1("^ *-?\\.? *$") );
-    if ( empty.match( input ) >= 0 )
-	return QValidator::Intermediate;
-    bool ok = TRUE;
-    double tmp = input.toDouble( &ok );
-    if ( !ok ) {
-	QRegExp expexpexp( QString::fromLatin1("e-?\\d*$"), FALSE );
-	int eeePos = expexpexp.match( input ); // EXPlicit EXPonent regEXP!
-	int nume = input.contains( 'e', FALSE );
-	if ( eeePos > 0 && nume < 2 ) {
-	    QString mantissa = input.left( eeePos );
-	    tmp = mantissa.toDouble( &ok );
-	    if ( !ok )
-		return QValidator::Invalid;
+	QRegExp empty(QString::fromLatin1("^ *-?\\.? *$"));
+	if (empty.match(input) >= 0)
+		return QValidator::Intermediate;
+	bool ok = TRUE;
+	double tmp = input.toDouble(&ok);
+	if (!ok) {
+		QRegExp expexpexp(QString::fromLatin1("e-?\\d*$"), FALSE);
+		int eeePos = expexpexp.match(input); // EXPlicit EXPonent
+						     // regEXP!
+		int nume = input.contains('e', FALSE);
+		if (eeePos > 0 && nume < 2) {
+			QString mantissa = input.left(eeePos);
+			tmp = mantissa.toDouble(&ok);
+			if (!ok)
+				return QValidator::Invalid;
+		} else if (eeePos == 0) {
+			return QValidator::Intermediate;
+		} else {
+			return QValidator::Invalid;
+		}
 	}
-	else if ( eeePos == 0 ) {
-	    return QValidator::Intermediate;
-	}
-	else {
-	    return QValidator::Invalid;
-	}
-    }
 
-    int i = input.find( '.' );
-    if ( i >= 0 ) {
-	// has decimal point, now count digits after that
-	i++;
-	int j = i;
-	while( input[j].isDigit() )
-	    j++;
-	if ( j - i > d )
-	    return QValidator::Intermediate;
-    }
+	int i = input.find('.');
+	if (i >= 0) {
+		// has decimal point, now count digits after that
+		i++;
+		int j = i;
+		while (input[j].isDigit())
+			j++;
+		if (j - i > d)
+			return QValidator::Intermediate;
+	}
 
-    if ( tmp < b || tmp > t )
-	return QValidator::Intermediate;
-    else
-	return QValidator::Acceptable;
+	if (tmp < b || tmp > t)
+		return QValidator::Intermediate;
+	else
+		return QValidator::Acceptable;
 }
 
 
@@ -408,11 +407,11 @@ QValidator::State QDoubleValidator::validate( QString & input, int & ) const
   point.
 */
 
-void QDoubleValidator::setRange( double bottom, double top, int decimals )
+void QDoubleValidator::setRange(double bottom, double top, int decimals)
 {
-    b = bottom;
-    t = top;
-    d = decimals;
+	b = bottom;
+	t = top;
+	d = decimals;
 }
 
 /*!
@@ -421,9 +420,9 @@ void QDoubleValidator::setRange( double bottom, double top, int decimals )
   \sa setRange()
 */
 
-void QDoubleValidator::setBottom( double bottom )
+void QDoubleValidator::setBottom(double bottom)
 {
-    setRange( bottom, top(), decimals() );
+	setRange(bottom, top(), decimals());
 }
 
 /*!
@@ -432,18 +431,18 @@ void QDoubleValidator::setBottom( double bottom )
   \sa setRange()
 */
 
-void QDoubleValidator::setTop( double top )
+void QDoubleValidator::setTop(double top)
 {
-    setRange( bottom(), top, decimals() );
+	setRange(bottom(), top, decimals());
 }
 
 /*!
   Sets the maximum number of digits after the decimal point.
 */
 
-void QDoubleValidator::setDecimals( int decimals )
+void QDoubleValidator::setDecimals(int decimals)
 {
-    setRange( bottom(), top(), decimals );
+	setRange(bottom(), top(), decimals);
 }
 
 /*!

@@ -51,13 +51,13 @@
 #define DESIGNABLE 307
 #define RESET 308
 typedef union {
-    char	char_val;
-    int		int_val;
-    double	double_val;
-    char       *string;
-    Access	access;
-    Function   *function;
-    ArgList    *arg_list;
-    Argument   *arg;
+	char char_val;
+	int int_val;
+	double double_val;
+	char *string;
+	Access access;
+	Function *function;
+	ArgList *arg_list;
+	Argument *arg;
 } YYSTYPE;
 extern YYSTYPE yylval;

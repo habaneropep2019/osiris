@@ -19,29 +19,29 @@ class QButtonGroup;
 #include <qwidget.h>
 
 
-class ListBoxDemo: public QWidget
+class ListBoxDemo : public QWidget
 {
-    Q_OBJECT
-public:
-    ListBoxDemo();
-    ~ListBoxDemo();
+	Q_OBJECT
+      public:
+	ListBoxDemo();
+	~ListBoxDemo();
 
-private slots:
-    void setNumRows();
-    void setNumCols();
-    void setRowsByHeight();
-    void setColsByWidth();
-    void setVariableWidth( bool );
-    void setVariableHeight( bool );
-    void setMultiSelection( bool );
-    void sortAscending();
-    void sortDescending();
-    
-private:
-    QListBox * l;
-    QSpinBox * columns;
-    QSpinBox * rows;
-    QButtonGroup * bg;
+      private slots:
+	void setNumRows();
+	void setNumCols();
+	void setRowsByHeight();
+	void setColsByWidth();
+	void setVariableWidth(bool);
+	void setVariableHeight(bool);
+	void setMultiSelection(bool);
+	void sortAscending();
+	void sortDescending();
+
+      private:
+	QListBox *l;
+	QSpinBox *columns;
+	QSpinBox *rows;
+	QButtonGroup *bg;
 };
 
 

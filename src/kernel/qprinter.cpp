@@ -220,15 +220,16 @@
   \sa printerName()
 */
 
-void QPrinter::setPrinterName( const QString &name )
+void QPrinter::setPrinterName(const QString &name)
 {
-    if ( state != 0 ) {
-#if defined(CHECK_STATE)
-	qWarning( "QPrinter::setPrinterName: Cannot do this during printing" );
-#endif
-	return;
-    }
-    printer_name = name;
+	if (state != 0) {
+# if defined(CHECK_STATE)
+		qWarning(
+			"QPrinter::setPrinterName: Cannot do this during printing");
+# endif
+		return;
+	}
+	printer_name = name;
 }
 
 
@@ -255,15 +256,16 @@ void QPrinter::setPrinterName( const QString &name )
   \sa outputToFile(), setOutputFileName()
 */
 
-void QPrinter::setOutputToFile( bool enable )
+void QPrinter::setOutputToFile(bool enable)
 {
-    if ( state != 0 ) {
-#if defined(CHECK_STATE)
-	qWarning( "QPrinter::setOutputToFile: Cannot do this during printing" );
-#endif
-	return;
-    }
-    output_file = enable;
+	if (state != 0) {
+# if defined(CHECK_STATE)
+		qWarning(
+			"QPrinter::setOutputToFile: Cannot do this during printing");
+# endif
+		return;
+	}
+	output_file = enable;
 }
 
 
@@ -286,16 +288,17 @@ void QPrinter::setOutputToFile( bool enable )
   \sa outputFileName(), setOutputToFile()
 */
 
-void QPrinter::setOutputFileName( const QString &fileName )
+void QPrinter::setOutputFileName(const QString &fileName)
 {
-    if ( state != 0 ) {
-#if defined(CHECK_STATE)
-	qWarning("QPrinter::setOutputFileName: Cannot do this during printing");
-#endif
-	return;
-    }
-    output_filename = fileName;
-    output_file = !output_filename.isEmpty();
+	if (state != 0) {
+# if defined(CHECK_STATE)
+		qWarning(
+			"QPrinter::setOutputFileName: Cannot do this during printing");
+# endif
+		return;
+	}
+	output_filename = fileName;
+	output_file = !output_filename.isEmpty();
 }
 
 
@@ -322,9 +325,9 @@ void QPrinter::setOutputFileName( const QString &fileName )
   \sa printProgram()
 */
 
-void QPrinter::setPrintProgram( const QString &printProg )
+void QPrinter::setPrintProgram(const QString &printProg)
 {
-    print_prog = printProg;
+	print_prog = printProg;
 }
 
 
@@ -338,15 +341,16 @@ void QPrinter::setPrintProgram( const QString &printProg )
   Sets the document name.
 */
 
-void QPrinter::setDocName( const QString &name )
+void QPrinter::setDocName(const QString &name)
 {
-    if ( state != 0 ) {
-#if defined(CHECK_STATE)
-	qWarning( "QPrinter::setDocName: Cannot do this during printing" );
-#endif
-	return;
-    }
-    doc_name = name;
+	if (state != 0) {
+# if defined(CHECK_STATE)
+		qWarning(
+			"QPrinter::setDocName: Cannot do this during printing");
+# endif
+		return;
+	}
+	doc_name = name;
 }
 
 
@@ -367,9 +371,9 @@ void QPrinter::setDocName( const QString &name )
   \sa creator()
 */
 
-void QPrinter::setCreator( const QString &creator )
+void QPrinter::setCreator(const QString &creator)
 {
-    creator_name = creator;
+	creator_name = creator;
 }
 
 
@@ -388,15 +392,15 @@ void QPrinter::setCreator( const QString &creator )
   \c QPrinter::Landscape.
 
   The printer driver reads this setting and prints using the specified
-  orientation.  On Windows however, this setting won't take effect until 
+  orientation.  On Windows however, this setting won't take effect until
   the printer dialog is shown (using QPrinter::setup() ).
 
   \sa orientation()
 */
 
-void QPrinter::setOrientation( Orientation orientation )
+void QPrinter::setOrientation(Orientation orientation)
 {
-    orient = orientation;
+	orient = orientation;
 }
 
 
@@ -409,13 +413,13 @@ void QPrinter::setOrientation( Orientation orientation )
 */
 
 
-static QPrinter::PageSize makepagesize( QPrinter::PageSize ps,
-					QPrinter::PageOrder po,
-					QPrinter::ColorMode cm )
+static QPrinter::PageSize makepagesize(QPrinter::PageSize ps,
+				       QPrinter::PageOrder po,
+				       QPrinter::ColorMode cm)
 {
-    return (QPrinter::PageSize)( ((int)ps & 255) +
-				 ((po == QPrinter::LastPageFirst) ? 256 : 0) +
-				 ((cm == QPrinter::GrayScale) ? 512 : 0) );
+	return (QPrinter::PageSize)(
+		((int)ps & 255) + ((po == QPrinter::LastPageFirst) ? 256 : 0) +
+		((cm == QPrinter::GrayScale) ? 512 : 0));
 }
 
 
@@ -431,15 +435,16 @@ static QPrinter::PageSize makepagesize( QPrinter::PageSize ps,
   \sa pageSize() PageSize setFullPage()
 */
 
-void QPrinter::setPageSize( PageSize newPageSize )
+void QPrinter::setPageSize(PageSize newPageSize)
 {
-    if ( newPageSize > NPageSize ) {
-#if defined(CHECK_STATE)
-	qWarning("QPrinter::SetPageSize: illegal page size %d", newPageSize );
-#endif
-	return;
-    }
-    page_size = makepagesize( newPageSize, pageOrder(), colorMode() );
+	if (newPageSize > NPageSize) {
+# if defined(CHECK_STATE)
+		qWarning("QPrinter::SetPageSize: illegal page size %d",
+			 newPageSize);
+# endif
+		return;
+	}
+	page_size = makepagesize(newPageSize, pageOrder(), colorMode());
 }
 
 
@@ -453,9 +458,9 @@ void QPrinter::setPageSize( PageSize newPageSize )
   user can override in the print dialog when you call setup().
 */
 
-void QPrinter::setPageOrder( PageOrder newPageOrder )
+void QPrinter::setPageOrder(PageOrder newPageOrder)
 {
-    page_size = makepagesize( pageSize(), newPageOrder, colorMode() );
+	page_size = makepagesize(pageSize(), newPageOrder, colorMode());
 }
 
 
@@ -466,10 +471,10 @@ void QPrinter::setPageOrder( PageOrder newPageOrder )
 
 QPrinter::PageOrder QPrinter::pageOrder() const
 {
-    if ( ((int)page_size) & 256 )
-	return QPrinter::LastPageFirst;
-    else
-	return QPrinter::FirstPageFirst;
+	if (((int)page_size) & 256)
+		return QPrinter::LastPageFirst;
+	else
+		return QPrinter::FirstPageFirst;
 }
 
 
@@ -482,9 +487,9 @@ QPrinter::PageOrder QPrinter::pageOrder() const
   \sa colorMode()
 */
 
-void QPrinter::setColorMode( ColorMode newColorMode )
+void QPrinter::setColorMode(ColorMode newColorMode)
 {
-    page_size = makepagesize( pageSize(), pageOrder(), newColorMode );
+	page_size = makepagesize(pageSize(), pageOrder(), newColorMode);
 }
 
 
@@ -496,12 +501,10 @@ void QPrinter::setColorMode( ColorMode newColorMode )
 
 QPrinter::ColorMode QPrinter::colorMode() const
 {
-    if ( ((int)page_size) & 512 )
-	return QPrinter::GrayScale;
-    else
-	return QPrinter::Color;
-
-
+	if (((int)page_size) & 512)
+		return QPrinter::GrayScale;
+	else
+		return QPrinter::Color;
 }
 
 
@@ -536,16 +539,16 @@ QPrinter::ColorMode QPrinter::colorMode() const
   \sa fromPage(), toPage(), setMinMax(), setup()
 */
 
-void QPrinter::setFromTo( int fromPage, int toPage )
+void QPrinter::setFromTo(int fromPage, int toPage)
 {
-    if ( state != 0 ) {
-#if defined(CHECK_STATE)
-	qWarning( "QPrinter::setFromTo: Cannot do this during printing" );
-#endif
-	return;
-    }
-    from_pg = fromPage;
-    to_pg = toPage;
+	if (state != 0) {
+# if defined(CHECK_STATE)
+		qWarning("QPrinter::setFromTo: Cannot do this during printing");
+# endif
+		return;
+	}
+	from_pg = fromPage;
+	to_pg = toPage;
 }
 
 
@@ -571,10 +574,10 @@ void QPrinter::setFromTo( int fromPage, int toPage )
   \sa minPage(), maxPage(), setFromTo(), setup()
 */
 
-void QPrinter::setMinMax( int minPage, int maxPage )
+void QPrinter::setMinMax(int minPage, int maxPage)
 {
-    min_pg = minPage;
-    max_pg = maxPage;
+	min_pg = minPage;
+	max_pg = maxPage;
 }
 
 
@@ -593,9 +596,9 @@ void QPrinter::setMinMax( int minPage, int maxPage )
   \sa numCopies(), setup()
 */
 
-void QPrinter::setNumCopies( int numCopies )
+void QPrinter::setNumCopies(int numCopies)
 {
-    ncopies = numCopies;
+	ncopies = numCopies;
 }
 
 
@@ -612,7 +615,7 @@ Any other value implies to use that value.
 
 QString QPrinter::printerSelectionOption() const
 {
-    return option_string;
+	return option_string;
 }
 
 
@@ -624,9 +627,9 @@ If the printer selection option is changed while the printer is
 active, the current print job may or may not be affected.
 */
 
-void QPrinter::setPrinterSelectionOption( const QString & option )
+void QPrinter::setPrinterSelectionOption(const QString &option)
 {
-    option_string = option;
+	option_string = option;
 }
 
 
@@ -649,9 +652,9 @@ current print job may or may not be affected.
 \sa PageSize setPageSize() QPaintDeviceMetrics fullPage()
 */
 
-void QPrinter::setFullPage( bool fp )
+void QPrinter::setFullPage(bool fp)
 {
-    to_edge = fp;
+	to_edge = fp;
 }
 
 
@@ -666,7 +669,7 @@ See setFullPage() for more detail and some warnings.
 
 bool QPrinter::fullPage() const
 {
-    return to_edge;
+	return to_edge;
 }
 
 #endif // QT_NO_PRINTER

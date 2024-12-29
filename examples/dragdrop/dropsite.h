@@ -21,35 +21,37 @@
 
 class QDragObject;
 
-class DropSite: public QLabel
+class DropSite : public QLabel
 {
-    Q_OBJECT
-public:
-    DropSite( QWidget * parent = 0, const char * name = 0 );
-    ~DropSite();
+	Q_OBJECT
+      public:
+	DropSite(QWidget *parent = 0, const char *name = 0);
+	~DropSite();
 
-signals:
-    void message( const QString& );
+      signals:
+	void message(const QString &);
 
-protected:
-    void dragEnterEvent( QDragEnterEvent * );
-    void dragMoveEvent( QDragMoveEvent * );
-    void dragLeaveEvent( QDragLeaveEvent * );
-    void dropEvent( QDropEvent * );
-    void backgroundColorChange( const QColor& );
+      protected:
+	void dragEnterEvent(QDragEnterEvent *);
+	void dragMoveEvent(QDragMoveEvent *);
+	void dragLeaveEvent(QDragLeaveEvent *);
+	void dropEvent(QDropEvent *);
+	void backgroundColorChange(const QColor &);
 
-    // this is a normal even
-    void mousePressEvent( QMouseEvent * );
+	// this is a normal even
+	void mousePressEvent(QMouseEvent *);
 };
 
-class DragMoviePlayer : public QObject {
-    Q_OBJECT
-    QDragObject* dobj;
-    QMovie movie;
-public:
-    DragMoviePlayer(QDragObject*);
-private slots:
-    void updatePixmap( const QRect& );
+class DragMoviePlayer : public QObject
+{
+	Q_OBJECT
+	QDragObject *dobj;
+	QMovie movie;
+
+      public:
+	DragMoviePlayer(QDragObject *);
+      private slots:
+	void updatePixmap(const QRect &);
 };
 
 

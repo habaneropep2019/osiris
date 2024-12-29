@@ -39,7 +39,7 @@
 #define QPROGRESSBAR_H
 
 #ifndef QT_H
-#include "qframe.h"
+# include "qframe.h"
 #endif // QT_H
 
 #ifndef QT_NO_PROGRESSBAR
@@ -50,80 +50,82 @@ class QProgressBarPrivate;
 
 class Q_EXPORT QProgressBar : public QFrame
 {
-    Q_OBJECT
-    Q_PROPERTY( int totalSteps READ totalSteps WRITE setTotalSteps )
-    Q_PROPERTY( int progress READ progress WRITE setProgress )
-    Q_PROPERTY( bool centerIndicator READ centerIndicator WRITE setCenterIndicator )
-    Q_PROPERTY( bool indicatorFollowsStyle READ indicatorFollowsStyle WRITE setIndicatorFollowsStyle )
-	
-public:
-    QProgressBar( QWidget *parent=0, const char *name=0, WFlags f=0 );
-    QProgressBar( int totalSteps, QWidget *parent=0, const char *name=0,
-		  WFlags f=0 );
+	Q_OBJECT
+	Q_PROPERTY(int totalSteps READ totalSteps WRITE setTotalSteps)
+	Q_PROPERTY(int progress READ progress WRITE setProgress)
+	Q_PROPERTY(bool centerIndicator READ centerIndicator WRITE
+			   setCenterIndicator)
+	Q_PROPERTY(bool indicatorFollowsStyle READ indicatorFollowsStyle WRITE
+			   setIndicatorFollowsStyle)
 
-    int		totalSteps() const;
-    int		progress()   const;
+      public:
+	QProgressBar(QWidget *parent = 0, const char *name = 0, WFlags f = 0);
+	QProgressBar(int totalSteps, QWidget *parent = 0, const char *name = 0,
+		     WFlags f = 0);
 
-    QSize	sizeHint() const;
-    QSizePolicy sizePolicy() const;
-    QSize	minimumSizeHint() const;
+	int totalSteps() const;
+	int progress() const;
 
-    void	setCenterIndicator( bool on );
-    bool	centerIndicator() const;
+	QSize sizeHint() const;
+	QSizePolicy sizePolicy() const;
+	QSize minimumSizeHint() const;
 
-    void        setIndicatorFollowsStyle( bool );
-    bool	indicatorFollowsStyle() const;
+	void setCenterIndicator(bool on);
+	bool centerIndicator() const;
 
-    void	show();
+	void setIndicatorFollowsStyle(bool);
+	bool indicatorFollowsStyle() const;
 
-public slots:
-    void	reset();
-    virtual void setTotalSteps( int totalSteps );
-    virtual void setProgress( int progress );
+	void show();
 
-protected:
-    void	drawContents( QPainter * );
-    void	drawContentsMask( QPainter * );
-    virtual bool setIndicator( QString & progress_str, int progress,
-			       int totalSteps );
-    void styleChange( QStyle& );
+      public slots:
+	void reset();
+	virtual void setTotalSteps(int totalSteps);
+	virtual void setProgress(int progress);
 
-private:
-    int		total_steps;
-    int		progress_val;
-    int		percentage;
-    QString	progress_str;
-    bool        center_indicator;
-    bool        auto_indicator;
-    QProgressBarPrivate * d;
-    void         initFrame();
+      protected:
+	void drawContents(QPainter *);
+	void drawContentsMask(QPainter *);
+	virtual bool setIndicator(QString &progress_str, int progress,
+				  int totalSteps);
+	void styleChange(QStyle &);
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QProgressBar( const QProgressBar & );
-    QProgressBar &operator=( const QProgressBar & );
-#endif
+      private:
+	int total_steps;
+	int progress_val;
+	int percentage;
+	QString progress_str;
+	bool center_indicator;
+	bool auto_indicator;
+	QProgressBarPrivate *d;
+	void initFrame();
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QProgressBar(const QProgressBar &);
+	QProgressBar &operator=(const QProgressBar &);
+# endif
 };
 
 
 inline int QProgressBar::totalSteps() const
 {
-    return total_steps;
+	return total_steps;
 }
 
 inline int QProgressBar::progress() const
 {
-    return progress_val;
+	return progress_val;
 }
 
 inline bool QProgressBar::centerIndicator() const
 {
-    return center_indicator;
+	return center_indicator;
 }
 
 inline bool QProgressBar::indicatorFollowsStyle() const
 {
-    return auto_indicator;
+	return auto_indicator;
 }
 
 

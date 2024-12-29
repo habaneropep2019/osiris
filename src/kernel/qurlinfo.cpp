@@ -39,35 +39,30 @@
 
 #ifndef QT_NO_NETWORKPROTOCOL
 
-#include "qurloperator.h"
-#include "qdir.h"
+# include "qurloperator.h"
+# include "qdir.h"
 
-struct QUrlInfoPrivate
-{
-    QUrlInfoPrivate() :
-	permissions(0),
-	size(0),
-	isDir(FALSE),
-	isFile(TRUE),
-	isSymLink(FALSE),
-	isWritable(TRUE),
-	isReadable(TRUE),
-	isExecutable(FALSE)
-    {}
+struct QUrlInfoPrivate {
+	QUrlInfoPrivate()
+		: permissions(0), size(0), isDir(FALSE), isFile(TRUE),
+		  isSymLink(FALSE), isWritable(TRUE), isReadable(TRUE),
+		  isExecutable(FALSE)
+	{
+	}
 
-    QString name;
-    int permissions;
-    QString owner;
-    QString group;
-    uint size;
-    QDateTime lastModified;
-    QDateTime lastRead;
-    bool isDir;
-    bool isFile;
-    bool isSymLink;
-    bool isWritable;
-    bool isReadable;
-    bool isExecutable;
+	QString name;
+	int permissions;
+	QString owner;
+	QString group;
+	uint size;
+	QDateTime lastModified;
+	QDateTime lastRead;
+	bool isDir;
+	bool isFile;
+	bool isSymLink;
+	bool isWritable;
+	bool isReadable;
+	bool isExecutable;
 };
 
 
@@ -88,7 +83,7 @@ struct QUrlInfoPrivate
 
 QUrlInfo::QUrlInfo()
 {
-    d = new QUrlInfoPrivate;
+	d = new QUrlInfoPrivate;
 }
 
 /*!
@@ -98,49 +93,50 @@ QUrlInfo::QUrlInfo()
   If this is not the case, an empty QUrlInfo object is created.
 */
 
-QUrlInfo::QUrlInfo( const QUrlOperator &path, const QString &file )
+QUrlInfo::QUrlInfo(const QUrlOperator &path, const QString &file)
 {
-    QString file_ = file;
-    if ( file_.isEmpty() )
-	file_ = ".";
-    d = new QUrlInfoPrivate;
-    QUrlInfo inf = path.info( file_ );
-    *d = *inf.d;
+	QString file_ = file;
+	if (file_.isEmpty())
+		file_ = ".";
+	d = new QUrlInfoPrivate;
+	QUrlInfo inf = path.info(file_);
+	*d = *inf.d;
 }
 
 /*!
   Copy constructor.
 */
 
-QUrlInfo::QUrlInfo( const QUrlInfo &ui )
+QUrlInfo::QUrlInfo(const QUrlInfo &ui)
 {
-    d = new QUrlInfoPrivate;
-    *d = *ui.d;
+	d = new QUrlInfoPrivate;
+	*d = *ui.d;
 }
 
 /*!
   Constructs a QUrlInfo object by specifying all information of the URL.
 */
 
-QUrlInfo::QUrlInfo( const QString &name, int permissions, const QString &owner,
-		    const QString &group, uint size, const QDateTime &lastModified,
-		    const QDateTime &lastRead, bool isDir, bool isFile, bool isSymLink,
-		    bool isWritable, bool isReadable, bool isExecutable )
+QUrlInfo::QUrlInfo(const QString &name, int permissions, const QString &owner,
+		   const QString &group, uint size,
+		   const QDateTime &lastModified, const QDateTime &lastRead,
+		   bool isDir, bool isFile, bool isSymLink, bool isWritable,
+		   bool isReadable, bool isExecutable)
 {
-    d = new QUrlInfoPrivate;
-    d->name = name;
-    d->permissions = permissions;
-    d->owner = owner;
-    d->group = group;
-    d->size = size;
-    d->lastModified = lastModified;
-    d->lastRead = lastRead;
-    d->isDir = isDir;
-    d->isFile = isFile;
-    d->isSymLink = isSymLink;
-    d->isWritable = isWritable;
-    d->isReadable = isReadable;
-    d->isExecutable = isExecutable;
+	d = new QUrlInfoPrivate;
+	d->name = name;
+	d->permissions = permissions;
+	d->owner = owner;
+	d->group = group;
+	d->size = size;
+	d->lastModified = lastModified;
+	d->lastRead = lastRead;
+	d->isDir = isDir;
+	d->isFile = isFile;
+	d->isSymLink = isSymLink;
+	d->isWritable = isWritable;
+	d->isReadable = isReadable;
+	d->isExecutable = isExecutable;
 }
 
 
@@ -148,124 +144,125 @@ QUrlInfo::QUrlInfo( const QString &name, int permissions, const QString &owner,
   Constructs a QUrlInfo object by specifying all information of the URL.
 */
 
-QUrlInfo::QUrlInfo( const QUrl &url, int permissions, const QString &owner,
-		    const QString &group, uint size, const QDateTime &lastModified,
-		    const QDateTime &lastRead, bool isDir, bool isFile, bool isSymLink,
-		    bool isWritable, bool isReadable, bool isExecutable )
+QUrlInfo::QUrlInfo(const QUrl &url, int permissions, const QString &owner,
+		   const QString &group, uint size,
+		   const QDateTime &lastModified, const QDateTime &lastRead,
+		   bool isDir, bool isFile, bool isSymLink, bool isWritable,
+		   bool isReadable, bool isExecutable)
 {
-    d = new QUrlInfoPrivate;
-    d->name = QFileInfo( url.path() ).fileName();
-    d->permissions = permissions;
-    d->owner = owner;
-    d->group = group;
-    d->size = size;
-    d->lastModified = lastModified;
-    d->lastRead = lastRead;
-    d->isDir = isDir;
-    d->isFile = isFile;
-    d->isSymLink = isSymLink;
-    d->isWritable = isWritable;
-    d->isReadable = isReadable;
-    d->isExecutable = isExecutable;
+	d = new QUrlInfoPrivate;
+	d->name = QFileInfo(url.path()).fileName();
+	d->permissions = permissions;
+	d->owner = owner;
+	d->group = group;
+	d->size = size;
+	d->lastModified = lastModified;
+	d->lastRead = lastRead;
+	d->isDir = isDir;
+	d->isFile = isFile;
+	d->isSymLink = isSymLink;
+	d->isWritable = isWritable;
+	d->isReadable = isReadable;
+	d->isExecutable = isExecutable;
 }
 
 /*!
   Sets the filename or the URL.
 */
 
-void QUrlInfo::setName( const QString &name )
+void QUrlInfo::setName(const QString &name)
 {
-    d->name = name;
+	d->name = name;
 }
 
 /*!
   Specifies if the URL is a directory.
 */
 
-void QUrlInfo::setDir( bool b )
+void QUrlInfo::setDir(bool b)
 {
-    d->isDir = b;
+	d->isDir = b;
 }
 
 /*!
   Specifies if the URL is a file.
 */
 
-void QUrlInfo::setFile( bool b )
+void QUrlInfo::setFile(bool b)
 {
-    d->isFile = b;
+	d->isFile = b;
 }
 
 /*!
   Specifies if the URL is a symbolic link.
 */
 
-void QUrlInfo::setSymLink( bool b )
+void QUrlInfo::setSymLink(bool b)
 {
-    d->isSymLink = b;
+	d->isSymLink = b;
 }
 
 /*!
   Specifies if the URL is writable.
 */
 
-void QUrlInfo::setWritable( bool b )
+void QUrlInfo::setWritable(bool b)
 {
-    d->isWritable = b;
+	d->isWritable = b;
 }
 
 /*!
   Specifies if the URL is readable.
 */
 
-void QUrlInfo::setReadable( bool b )
+void QUrlInfo::setReadable(bool b)
 {
-    d->isReadable = b;
+	d->isReadable = b;
 }
 
 /*!
   Sets the owner of the URL to \a s.
 */
 
-void QUrlInfo::setOwner( const QString &s )
+void QUrlInfo::setOwner(const QString &s)
 {
-    d->owner = s;
+	d->owner = s;
 }
 
 /*!
   Sets the group if the URL to \a s.
 */
 
-void QUrlInfo::setGroup( const QString &s )
+void QUrlInfo::setGroup(const QString &s)
 {
-    d->group = s;
+	d->group = s;
 }
 
 /*!
   Sets the size of the URL to \a s.
 */
 
-void QUrlInfo::setSize( uint s )
+void QUrlInfo::setSize(uint s)
 {
-    d->size = s;
+	d->size = s;
 }
 
 /*!
   Sets the permissions of the URL to \a p.
 */
 
-void QUrlInfo::setPermissions( int p )
+void QUrlInfo::setPermissions(int p)
 {
-    d->permissions = p;
+	d->permissions = p;
 }
 
 /*!
   Sets the last modification date of the URL to \a dt.
 */
 
-void QUrlInfo::setLastModified( const QDateTime &dt )
+void QUrlInfo::setLastModified(const QDateTime &dt)
 {
-    d->lastModified = dt;
+	d->lastModified = dt;
 }
 
 /*!
@@ -274,17 +271,17 @@ void QUrlInfo::setLastModified( const QDateTime &dt )
 
 QUrlInfo::~QUrlInfo()
 {
-    delete d;
+	delete d;
 }
 
 /*!
   Assings the values of \a ui to this QUrlInfo object.
 */
 
-QUrlInfo &QUrlInfo::operator=( const QUrlInfo &ui )
+QUrlInfo &QUrlInfo::operator=(const QUrlInfo &ui)
 {
-    *d = *ui.d;
-    return *this;
+	*d = *ui.d;
+	return *this;
 }
 
 /*!
@@ -293,7 +290,7 @@ QUrlInfo &QUrlInfo::operator=( const QUrlInfo &ui )
 
 QString QUrlInfo::name() const
 {
-    return d->name;
+	return d->name;
 }
 
 /*!
@@ -302,7 +299,7 @@ QString QUrlInfo::name() const
 
 int QUrlInfo::permissions() const
 {
-    return d->permissions;
+	return d->permissions;
 }
 
 /*!
@@ -311,7 +308,7 @@ int QUrlInfo::permissions() const
 
 QString QUrlInfo::owner() const
 {
-    return d->owner;
+	return d->owner;
 }
 
 /*!
@@ -320,7 +317,7 @@ QString QUrlInfo::owner() const
 
 QString QUrlInfo::group() const
 {
-    return d->group;
+	return d->group;
 }
 
 /*!
@@ -329,7 +326,7 @@ QString QUrlInfo::group() const
 
 uint QUrlInfo::size() const
 {
-    return d->size;
+	return d->size;
 }
 
 /*!
@@ -338,7 +335,7 @@ uint QUrlInfo::size() const
 
 QDateTime QUrlInfo::lastModified() const
 {
-    return d->lastModified;
+	return d->lastModified;
 }
 
 /*!
@@ -347,7 +344,7 @@ QDateTime QUrlInfo::lastModified() const
 
 QDateTime QUrlInfo::lastRead() const
 {
-    return d->lastRead;
+	return d->lastRead;
 }
 
 /*!
@@ -356,7 +353,7 @@ QDateTime QUrlInfo::lastRead() const
 
 bool QUrlInfo::isDir() const
 {
-    return d->isDir;
+	return d->isDir;
 }
 
 /*!
@@ -365,7 +362,7 @@ bool QUrlInfo::isDir() const
 
 bool QUrlInfo::isFile() const
 {
-    return d->isFile;
+	return d->isFile;
 }
 
 /*!
@@ -374,7 +371,7 @@ bool QUrlInfo::isFile() const
 
 bool QUrlInfo::isSymLink() const
 {
-    return d->isSymLink;
+	return d->isSymLink;
 }
 
 /*!
@@ -383,7 +380,7 @@ bool QUrlInfo::isSymLink() const
 
 bool QUrlInfo::isWritable() const
 {
-    return d->isWritable;
+	return d->isWritable;
 }
 
 /*!
@@ -392,7 +389,7 @@ bool QUrlInfo::isWritable() const
 
 bool QUrlInfo::isReadable() const
 {
-    return d->isReadable;
+	return d->isReadable;
 }
 
 /*!
@@ -401,7 +398,7 @@ bool QUrlInfo::isReadable() const
 
 bool QUrlInfo::isExecutable() const
 {
-    return d->isExecutable;
+	return d->isExecutable;
 }
 
 /*!
@@ -410,19 +407,18 @@ bool QUrlInfo::isExecutable() const
   to be one of QDir::Name, QDir::Time and QDir::Size.
 */
 
-bool QUrlInfo::greaterThan( const QUrlInfo &i1, const QUrlInfo &i2,
-			    int sortBy )
+bool QUrlInfo::greaterThan(const QUrlInfo &i1, const QUrlInfo &i2, int sortBy)
 {
-    switch ( sortBy ) {
-    case QDir::Name:
-	return i1.name() > i2.name();
-    case QDir::Time:
-	return i1.lastModified() > i2.lastModified();
-    case QDir::Size:
-	return i1.size() > i2.size();
-    default:
-	return FALSE;
-    }
+	switch (sortBy) {
+	case QDir::Name:
+		return i1.name() > i2.name();
+	case QDir::Time:
+		return i1.lastModified() > i2.lastModified();
+	case QDir::Size:
+		return i1.size() > i2.size();
+	default:
+		return FALSE;
+	}
 }
 
 /*!
@@ -431,10 +427,9 @@ bool QUrlInfo::greaterThan( const QUrlInfo &i1, const QUrlInfo &i2,
   to be one of QDir::Name, QDir::Time and QDir::Size.
 */
 
-bool QUrlInfo::lessThan( const QUrlInfo &i1, const QUrlInfo &i2,
-			 int sortBy )
+bool QUrlInfo::lessThan(const QUrlInfo &i1, const QUrlInfo &i2, int sortBy)
 {
-    return !greaterThan( i1, i2, sortBy );
+	return !greaterThan(i1, i2, sortBy);
 }
 
 /*!
@@ -443,19 +438,18 @@ bool QUrlInfo::lessThan( const QUrlInfo &i1, const QUrlInfo &i2,
   to be one of QDir::Name, QDir::Time and QDir::Size.
 */
 
-bool QUrlInfo::equal( const QUrlInfo &i1, const QUrlInfo &i2,
-		      int sortBy )
+bool QUrlInfo::equal(const QUrlInfo &i1, const QUrlInfo &i2, int sortBy)
 {
-    switch ( sortBy ) {
-    case QDir::Name:
-	return i1.name() == i2.name();
-    case QDir::Time:
-	return i1.lastModified() == i2.lastModified();
-    case QDir::Size:
-	return i1.size() == i2.size();
-    default:
-	return FALSE;
-    }
+	switch (sortBy) {
+	case QDir::Name:
+		return i1.name() == i2.name();
+	case QDir::Time:
+		return i1.lastModified() == i2.lastModified();
+	case QDir::Size:
+		return i1.size() == i2.size();
+	default:
+		return FALSE;
+	}
 }
 
 /*!
@@ -463,21 +457,16 @@ bool QUrlInfo::equal( const QUrlInfo &i1, const QUrlInfo &i2,
   are equal, else FALSE.
 */
 
-bool QUrlInfo::operator==( const QUrlInfo &i ) const
+bool QUrlInfo::operator==(const QUrlInfo &i) const
 {
-    return ( d->name == i.d->name &&
-	     d->permissions == i.d->permissions &&
-	     d->owner == i.d->owner &&
-	     d->group == i.d->group &&
-	     d->size == i.d->size &&
-	     d->lastModified == i.d->lastModified &&
-	     d->lastRead == i.d->lastRead &&
-	     d->isDir == i.d->isDir &&
-	     d->isFile == i.d->isFile &&
-	     d->isSymLink == i.d->isSymLink &&
-	     d->isWritable == i.d->isWritable &&
-	     d->isReadable == i.d->isReadable &&
-	     d->isExecutable == i.d->isExecutable );
+	return (d->name == i.d->name && d->permissions == i.d->permissions &&
+		d->owner == i.d->owner && d->group == i.d->group &&
+		d->size == i.d->size && d->lastModified == i.d->lastModified &&
+		d->lastRead == i.d->lastRead && d->isDir == i.d->isDir &&
+		d->isFile == i.d->isFile && d->isSymLink == i.d->isSymLink &&
+		d->isWritable == i.d->isWritable &&
+		d->isReadable == i.d->isReadable &&
+		d->isExecutable == i.d->isExecutable);
 }
 
 #endif // QT_NO_NETWORKPROTOCOL

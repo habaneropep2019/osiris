@@ -20,22 +20,21 @@ class QProgressBar;
 
 class ProgressBar : public QButtonGroup
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    ProgressBar( QWidget *parent = 0, const char *name = 0 );
+      public:
+	ProgressBar(QWidget *parent = 0, const char *name = 0);
 
-protected:
-    QRadioButton *slow, *normal, *fast;
-    QPushButton *start, *pause, *reset;
-    QProgressBar *progress;
-    QTimer timer;
+      protected:
+	QRadioButton *slow, *normal, *fast;
+	QPushButton *start, *pause, *reset;
+	QProgressBar *progress;
+	QTimer timer;
 
-protected slots:
-    void slotStart();
-    void slotReset();
-    void slotTimeout();
-
+      protected slots:
+	void slotStart();
+	void slotReset();
+	void slotTimeout();
 };
 
 #endif

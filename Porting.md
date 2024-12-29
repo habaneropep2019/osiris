@@ -1,4 +1,4 @@
-# Porting Qt 1.x/2.x applications to Osiris 2.4.1
+# Porting Qt 1.x/2.x applications to Osiris
 
 ## Changes
 
@@ -36,31 +36,3 @@ Expect problems with old CFront-based compilers.
 ## PATCHES
 
 Patches and bug reports are more than welcome. Please submit them on the Osiris project's website, currently [here](https://centre.libranext.com/libranext/osiris)
-
-## PORTING INSTRUCTIONS
-
-In the configs/ directory you will find several build configuration
-files for all platforms previously support by Qt.  Start off with one the
-existing files in configs/, rename it, and change it manually to
-fit your system.  For example you may copy
-	configs/solaris-cc-shared-debug
-to
-	configs/solaris-cxx-shared-debug
-If possible try to modify all four configuration files.
-
-Modify qt/src/tools/qglobal.h as required: you need to ensure that
-_OS_whatever_ is defined.  We've done it for many platforms in the
-past, those should be okay.  If you are using a compiler we don't
-detect it's probably a good idea to add a _CC_whatever_ too (even
-though you don't need it at once).  There are also some size-dependent
-types (Q_UINT32 and so on), make sure they're right for your system.
-
-Some compilers emit bad warnings when they compile Osiris.  If yours does,
-and the code in Osiris is sane, please use a #pragma or two to shut your
-compiler up.  (This is a good reason for wanting the _CC_whatever_
-define above.) Alternatively try using compiler option flags.
-
-You can then make a merge request on the Osiris project site and we'll work to include it in the next release.
-
-For most Unix varieties, that's all.  Some may need some include file
-tweaks.

@@ -20,20 +20,20 @@ class CannonField;
 
 class GameBoard : public QWidget
 {
-    Q_OBJECT
-public:
-    GameBoard( QWidget *parent=0, const char *name=0 );
+	Q_OBJECT
+      public:
+	GameBoard(QWidget *parent = 0, const char *name = 0);
 
-protected slots:
-    void  fire();
-    void  hit();
-    void  missed();
-    void  newGame();
+      protected slots:
+	void fire();
+	void hit();
+	void missed();
+	void newGame();
 
-private:
-    QLCDNumber  *hits;
-    QLCDNumber  *shotsLeft;
-    CannonField *cannonField;
+      private:
+	QLCDNumber *hits;
+	QLCDNumber *shotsLeft;
+	CannonField *cannonField;
 };
 
 

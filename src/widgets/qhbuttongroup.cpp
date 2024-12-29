@@ -58,8 +58,8 @@
 
   The \e parent and \e name arguments are passed to the QWidget constructor.
 */
-QHButtonGroup::QHButtonGroup( QWidget *parent, const char *name )
-    : QButtonGroup( 1, Vertical /* sic! */, parent, name )
+QHButtonGroup::QHButtonGroup(QWidget *parent, const char *name)
+	: QButtonGroup(1, Vertical /* sic! */, parent, name)
 {
 }
 
@@ -69,9 +69,9 @@ QHButtonGroup::QHButtonGroup( QWidget *parent, const char *name )
   The \e parent and \e name arguments are passed to the QWidget constructor.
 */
 
-QHButtonGroup::QHButtonGroup( const QString &title, QWidget *parent,
-			    const char *name )
-    : QButtonGroup( 1, Vertical /* sic! */, title, parent, name )
+QHButtonGroup::QHButtonGroup(const QString &title, QWidget *parent,
+			     const char *name)
+	: QButtonGroup(1, Vertical /* sic! */, title, parent, name)
 {
 }
 

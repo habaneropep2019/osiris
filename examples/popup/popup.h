@@ -21,39 +21,39 @@
 
 class FancyPopup : public QLabel
 {
-    Q_OBJECT
-public:
-    FancyPopup(QWidget *parent = 0, const char *name = 0);
+	Q_OBJECT
+      public:
+	FancyPopup(QWidget *parent = 0, const char *name = 0);
 
-    void popup(QWidget *parent = 0);
+	void popup(QWidget *parent = 0);
 
-protected:
-    virtual void mouseMoveEvent(QMouseEvent *);
-    virtual void mouseReleaseEvent(QMouseEvent *);
-    virtual void closeEvent(QCloseEvent *);
+      protected:
+	virtual void mouseMoveEvent(QMouseEvent *);
+	virtual void mouseReleaseEvent(QMouseEvent *);
+	virtual void closeEvent(QCloseEvent *);
 
-private:
-    QWidget *popupParent;
-    int moves;
+      private:
+	QWidget *popupParent;
+	int moves;
 };
 
 class Frame : public QFrame
 {
-    Q_OBJECT
-public:
-    Frame(QWidget *parent = 0, const char *name = 0);
+	Q_OBJECT
+      public:
+	Frame(QWidget *parent = 0, const char *name = 0);
 
-protected:
-private slots:
-    void button1Clicked();
-    void button2Pressed();
+      protected:
+      private slots:
+	void button1Clicked();
+	void button2Pressed();
 
-private:
-    QPushButton *button1;
-    QPushButton *button2;
+      private:
+	QPushButton *button1;
+	QPushButton *button2;
 
-    QFrame *popup1;
-    FancyPopup *popup2;
+	QFrame *popup1;
+	FancyPopup *popup2;
 };
 
 #endif

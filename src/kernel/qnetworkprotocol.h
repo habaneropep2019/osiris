@@ -39,13 +39,13 @@
 #define QNETWORKPROTOCOL_H
 
 #ifndef QT_H
-#include "qurlinfo.h"
-#include <qstring.h>
-#include <qdict.h>
-#include <qdir.h>
-#include <qstringlist.h>
-#include <qobject.h>
-#include <qqueue.h>
+# include "qurlinfo.h"
+# include <qstring.h>
+# include <qdict.h>
+# include <qdir.h>
+# include <qstringlist.h>
+# include <qobject.h>
+# include <qqueue.h>
 #endif // QT_H
 
 #ifndef QT_NO_NETWORKPROTOCOL
@@ -58,166 +58,155 @@ class QUrlOperator;
 
 class Q_EXPORT QNetworkProtocolFactoryBase
 {
-public:
-   virtual QNetworkProtocol *createObject() = 0;
-
+      public:
+	virtual QNetworkProtocol *createObject() = 0;
 };
 
-template< class Protocol >
+template <class Protocol>
 class QNetworkProtocolFactory : public QNetworkProtocolFactoryBase
 {
-public:
-    QNetworkProtocol *createObject() {
-	return new Protocol;
-    }
-
+      public:
+	QNetworkProtocol *createObject()
+	{
+		return new Protocol;
+	}
 };
 
-typedef QDict< QNetworkProtocolFactoryBase > QNetworkProtocolDict;
+typedef QDict<QNetworkProtocolFactoryBase> QNetworkProtocolDict;
 
 class Q_EXPORT QNetworkProtocol : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    enum State {
-	StWaiting = 0,
-	StInProgress,
-	StDone,
-	StFailed,
-	StStopped
-    };
+      public:
+	enum State { StWaiting = 0, StInProgress, StDone, StFailed, StStopped };
 
-    enum Operation {
-	OpListChildren = 1,
-	OpMkdir = 2,
-	OpRemove = 4,
-	OpRename = 8,
-	OpGet = 32,
-	OpPut = 64
-    };
+	enum Operation {
+		OpListChildren = 1,
+		OpMkdir = 2,
+		OpRemove = 4,
+		OpRename = 8,
+		OpGet = 32,
+		OpPut = 64
+	};
 
-    enum ConnectionState {
-	ConHostFound,
-	ConConnected,
-	ConClosed
-    };
+	enum ConnectionState { ConHostFound, ConConnected, ConClosed };
 
-    enum Error {
-	// no error
-	NoError = 0,
-	// general errors
-	ErrValid,
-	ErrUnknownProtocol,
-	ErrUnsupported,
-	ErrParse,
-	// errors on connect
-	ErrLoginIncorrect,
-	ErrHostNotFound,
-	// protocol errors
-	ErrListChlidren,
-	ErrMkdir,
-	ErrRemove,
-	ErrRename,
-	ErrGet,
-	ErrPut,
-	ErrFileNotExisting,
-	ErrPermissionDenied
-    };
+	enum Error {
+		// no error
+		NoError = 0,
+		// general errors
+		ErrValid,
+		ErrUnknownProtocol,
+		ErrUnsupported,
+		ErrParse,
+		// errors on connect
+		ErrLoginIncorrect,
+		ErrHostNotFound,
+		// protocol errors
+		ErrListChlidren,
+		ErrMkdir,
+		ErrRemove,
+		ErrRename,
+		ErrGet,
+		ErrPut,
+		ErrFileNotExisting,
+		ErrPermissionDenied
+	};
 
-    QNetworkProtocol();
-    virtual ~QNetworkProtocol();
+	QNetworkProtocol();
+	virtual ~QNetworkProtocol();
 
-    virtual void setUrl( QUrlOperator *u );
+	virtual void setUrl(QUrlOperator *u);
 
-    virtual void setAutoDelete( bool b, int i = 10000 );
-    bool autoDelete() const;
+	virtual void setAutoDelete(bool b, int i = 10000);
+	bool autoDelete() const;
 
-    static void registerNetworkProtocol( const QString &protocol,
-					 QNetworkProtocolFactoryBase *protocolFactory );
-    static QNetworkProtocol *getNetworkProtocol( const QString &protocol );
-    static bool hasOnlyLocalFileSystem();
+	static void
+	registerNetworkProtocol(const QString &protocol,
+				QNetworkProtocolFactoryBase *protocolFactory);
+	static QNetworkProtocol *getNetworkProtocol(const QString &protocol);
+	static bool hasOnlyLocalFileSystem();
 
-    virtual int supportedOperations() const;
-    virtual void addOperation( QNetworkOperation *op );
+	virtual int supportedOperations() const;
+	virtual void addOperation(QNetworkOperation *op);
 
-    QUrlOperator *url() const;
-    QNetworkOperation *operationInProgress() const;
-    virtual void clearOperationQueue();
-    virtual void stop();
+	QUrlOperator *url() const;
+	QNetworkOperation *operationInProgress() const;
+	virtual void clearOperationQueue();
+	virtual void stop();
 
-signals:
-    void data( const QByteArray &, QNetworkOperation *res );
-    void connectionStateChanged( int state, const QString &data );
-    void finished( QNetworkOperation *res );
-    void start( QNetworkOperation *res );
-    void newChildren( const QValueList<QUrlInfo> &, QNetworkOperation *res );
-    void newChild( const QUrlInfo &, QNetworkOperation *res );
-    void createdDirectory( const QUrlInfo &, QNetworkOperation *res );
-    void removed( QNetworkOperation *res );
-    void itemChanged( QNetworkOperation *res );
-    void dataTransferProgress( int bytesDone, int bytesTotal, QNetworkOperation *res );
+      signals:
+	void data(const QByteArray &, QNetworkOperation *res);
+	void connectionStateChanged(int state, const QString &data);
+	void finished(QNetworkOperation *res);
+	void start(QNetworkOperation *res);
+	void newChildren(const QValueList<QUrlInfo> &, QNetworkOperation *res);
+	void newChild(const QUrlInfo &, QNetworkOperation *res);
+	void createdDirectory(const QUrlInfo &, QNetworkOperation *res);
+	void removed(QNetworkOperation *res);
+	void itemChanged(QNetworkOperation *res);
+	void dataTransferProgress(int bytesDone, int bytesTotal,
+				  QNetworkOperation *res);
 
-protected:
-    virtual void processOperation( QNetworkOperation *op );
-    virtual void operationListChildren( QNetworkOperation *op );
-    virtual void operationMkDir( QNetworkOperation *op );
-    virtual void operationRemove( QNetworkOperation *op );
-    virtual void operationRename( QNetworkOperation *op );
-    virtual void operationGet( QNetworkOperation *op );
-    virtual void operationPut( QNetworkOperation *op );
-    virtual bool checkConnection( QNetworkOperation *op );
+      protected:
+	virtual void processOperation(QNetworkOperation *op);
+	virtual void operationListChildren(QNetworkOperation *op);
+	virtual void operationMkDir(QNetworkOperation *op);
+	virtual void operationRemove(QNetworkOperation *op);
+	virtual void operationRename(QNetworkOperation *op);
+	virtual void operationGet(QNetworkOperation *op);
+	virtual void operationPut(QNetworkOperation *op);
+	virtual bool checkConnection(QNetworkOperation *op);
 
-private:
-    QNetworkProtocolPrivate *d;
+      private:
+	QNetworkProtocolPrivate *d;
 
-private slots:
-    void processNextOperation( QNetworkOperation *old );
-    void startOps();
-    void emitNewChildren( const QUrlInfo &i, QNetworkOperation *op );
+      private slots:
+	void processNextOperation(QNetworkOperation *old);
+	void startOps();
+	void emitNewChildren(const QUrlInfo &i, QNetworkOperation *op);
 
-    void removeMe();
-
+	void removeMe();
 };
 
 struct QNetworkOperationPrivate;
 class Q_EXPORT QNetworkOperation : public QObject
 {
-    Q_OBJECT
-    friend class QUrlOperator;
+	Q_OBJECT
+	friend class QUrlOperator;
 
-public:
-    QNetworkOperation( QNetworkProtocol::Operation operation,
-		    const QString &arg0, const QString &arg1,
-		    const QString &arg2 );
-    QNetworkOperation( QNetworkProtocol::Operation operation,
-		    const QByteArray &arg0, const QByteArray &arg1,
-		    const QByteArray &arg2 );
-    ~QNetworkOperation();
+      public:
+	QNetworkOperation(QNetworkProtocol::Operation operation,
+			  const QString &arg0, const QString &arg1,
+			  const QString &arg2);
+	QNetworkOperation(QNetworkProtocol::Operation operation,
+			  const QByteArray &arg0, const QByteArray &arg1,
+			  const QByteArray &arg2);
+	~QNetworkOperation();
 
-    void setState( QNetworkProtocol::State state );
-    void setProtocolDetail( const QString &detail );
-    void setErrorCode( int ec );
-    void setArg( int num, const QString &arg );
-    void setRawArg( int num, const QByteArray &arg );
+	void setState(QNetworkProtocol::State state);
+	void setProtocolDetail(const QString &detail);
+	void setErrorCode(int ec);
+	void setArg(int num, const QString &arg);
+	void setRawArg(int num, const QByteArray &arg);
 
-    QNetworkProtocol::Operation operation() const;
-    QNetworkProtocol::State state() const;
-    QString arg( int num ) const;
-    QByteArray rawArg( int num ) const;
-    QString protocolDetail() const;
-    int errorCode() const;
+	QNetworkProtocol::Operation operation() const;
+	QNetworkProtocol::State state() const;
+	QString arg(int num) const;
+	QByteArray rawArg(int num) const;
+	QString protocolDetail() const;
+	int errorCode() const;
 
-    void free();
+	void free();
 
-private slots:
-    void deleteMe();
+      private slots:
+	void deleteMe();
 
-private:
-    QByteArray &raw( int num ) const;
+      private:
+	QByteArray &raw(int num) const;
 
-    QNetworkOperationPrivate *d;
-
+	QNetworkOperationPrivate *d;
 };
 
 #endif // QT_NO_NETWORKPROTOCOL

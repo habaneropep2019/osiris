@@ -11,15 +11,15 @@
 #include "buttongroups.h"
 #include <qapplication.h>
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    ButtonsGroups buttonsgroups;
-    buttonsgroups.resize( 500, 250 );
-    buttonsgroups.setCaption( "Qt Example - Buttongroups" );
-    a.setMainWidget( &buttonsgroups );
-    buttonsgroups.show();
+	ButtonsGroups buttonsgroups;
+	buttonsgroups.resize(500, 250);
+	buttonsgroups.setCaption("Qt Example - Buttongroups");
+	a.setMainWidget(&buttonsgroups);
+	buttonsgroups.show();
 
-    return a.exec();
+	return a.exec();
 }

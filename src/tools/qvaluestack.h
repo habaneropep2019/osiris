@@ -41,70 +41,102 @@
 
 #if 1
 
-#include <stack>		// STL
-template <typename T>
-class Q_EXPORT QValueStack
+# include <stack> // STL
+template <typename T> class Q_EXPORT QValueStack
 {
- private: std::stack<T> st;
+      private:
+	std::stack<T> st;
 
- public:
-   QValueStack() {}
-   ~QValueStack() {}
+      public:
+	QValueStack()
+	{
+	}
+	~QValueStack()
+	{
+	}
 
-   void  push( const T& d ) {
-      st.push(d);
-   }
+	void push(const T &d)
+	{
+		st.push(d);
+	}
 
-   // use QT semantics, hide std::stack
-   const T pop2() const {
-      const T d = st.top();
-      st.pop();
-      return d;
-   }
-   
-   // use QT semantics, hide std::stack
-   T pop2() {
-      T d = st.top();
-      st.pop();
-      return d;
-   }
+	// use QT semantics, hide std::stack
+	const T pop2() const
+	{
+		const T d = st.top();
+		st.pop();
+		return d;
+	}
 
-   T& top() { return st.top();}
-   const T& top() const { st.top(); }
+	// use QT semantics, hide std::stack
+	T pop2()
+	{
+		T d = st.top();
+		st.pop();
+		return d;
+	}
 
-   bool isEmpty() const { return st.empty(); }
+	T &top()
+	{
+		return st.top();
+	}
+	const T &top() const
+	{
+		st.top();
+	}
 
-   int count() const { return st.size(); }
+	bool isEmpty() const
+	{
+		return st.empty();
+	}
 
-   void clear(){
-      while (!st.empty()) {
-	 st.pop();
-      }
-   }
+	int count() const
+	{
+		return st.size();
+	}
+
+	void clear()
+	{
+		while (!st.empty()) {
+			st.pop();
+		}
+	}
 };
 
 // --------- before ---------------------------
 #else
-#ifndef QT_H
-#include "qvaluelist.h"
-#endif // QT_H
+# ifndef QT_H
+#  include "qvaluelist.h"
+# endif // QT_H
 
-template<class T>
-class Q_EXPORT QValueStack : public QValueList<T>
+template <class T> class Q_EXPORT QValueStack : public QValueList<T>
 {
- public:
-   QValueStack() {}
-   ~QValueStack() {}
-   void  push( const T& d ) { append(d); }
-   T pop()
-   {
-      T elem( this->last() );
-      // fail: if ( !this->isEmpty() )   remove( this->fromLast() );
-      return elem;
-   }
-   T& top() { return this->last(); }
-   const T& top() const { return this->last(); }
+      public:
+	QValueStack()
+	{
+	}
+	~QValueStack()
+	{
+	}
+	void push(const T &d)
+	{
+		append(d);
+	}
+	T pop()
+	{
+		T elem(this->last());
+		// fail: if ( !this->isEmpty() )   remove( this->fromLast() );
+		return elem;
+	}
+	T &top()
+	{
+		return this->last();
+	}
+	const T &top() const
+	{
+		return this->last();
+	}
 };
 #endif
 
-#endif  // #define QVALUESTACK_H
+#endif // #define QVALUESTACK_H

@@ -25,17 +25,17 @@
 
 class PreviewStack : public QWidgetStack
 {
-    Q_OBJECT
-public:
-    PreviewStack( QWidget* parent = 0, const char* name = 0 );
-    ~PreviewStack();
+	Q_OBJECT
+      public:
+	PreviewStack(QWidget *parent = 0, const char *name = 0);
+	~PreviewStack();
 
-public:
-    void setPreviewPalette( const QPalette& );
+      public:
+	void setPreviewPalette(const QPalette &);
 
-public slots:
-    void nextWidget();
-    void previousWidget();
+      public slots:
+	void nextWidget();
+	void previousWidget();
 };
 
-#endif //PREVIEWSTACK_H
+#endif // PREVIEWSTACK_H

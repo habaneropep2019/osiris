@@ -48,8 +48,8 @@ static QRegion *empty_region = 0;
 
 static void cleanup_empty_region()
 {
-    delete empty_region;
-    empty_region = 0;
+	delete empty_region;
+	empty_region = 0;
 }
 
 
@@ -60,57 +60,58 @@ static void cleanup_empty_region()
 
 QRegion::QRegion()
 {
-    if ( !empty_region ) {			// avoid too many allocs
-	qAddPostRoutine( cleanup_empty_region );
-	empty_region = new QRegion( TRUE );
-	CHECK_PTR( empty_region );
-    }
-    data = empty_region->data;
-    data->ref();
+	if (!empty_region) { // avoid too many allocs
+		qAddPostRoutine(cleanup_empty_region);
+		empty_region = new QRegion(TRUE);
+		CHECK_PTR(empty_region);
+	}
+	data = empty_region->data;
+	data->ref();
 }
 
 /*!
   Internal constructor that creates a null region.
 */
 
-QRegion::QRegion( bool is_null )
+QRegion::QRegion(bool is_null)
 {
-    data = new QRegionData;
-    CHECK_PTR( data );
-    data->rgn = XCreateRegion();
-    data->is_null = is_null;
+	data = new QRegionData;
+	CHECK_PTR(data);
+	data->rgn = XCreateRegion();
+	data->is_null = is_null;
 }
 
 /*!
 \overload
 
-If the rectangle is invalid, the rectangle will be normalized() before the region is created. This semantics will change in Qt-3
-and an invalid rectangle will construct an empty region.
+If the rectangle is invalid, the rectangle will be normalized() before the
+region is created. This semantics will change in Qt-3 and an invalid rectangle
+will construct an empty region.
 
 \sa QRect::isValid() QRect::normalize()
  */
 
-QRegion::QRegion( const QRect &r, RegionType t )
+QRegion::QRegion(const QRect &r, RegionType t)
 {
-    QRect rr = r.normalize();
-    data = new QRegionData;
-    CHECK_PTR( data );
-    data->is_null = FALSE;
-    if ( t == Rectangle ) {			// rectangular region
-	data->br = r;
-	data->rgn = XCreateRegion();
-	XRectangle xr;
-	xr.x = rr.x();
-	xr.y = rr.y();
-	xr.width  = rr.width();
-	xr.height = rr.height();
-	XUnionRectWithRegion( &xr, data->rgn, data->rgn );
-    } else if ( t == Ellipse ) {		// elliptic region
-	QPointArray a;
-	a.makeEllipse( rr.x(), rr.y(), rr.width(), rr.height() );
-	data->rgn = XPolygonRegion( (XPoint*)a.shortPoints(), a.size(),
-				    EvenOddRule );
-    }
+	QRect rr = r.normalize();
+	data = new QRegionData;
+	CHECK_PTR(data);
+	data->is_null = FALSE;
+	if (t == Rectangle) { // rectangular region
+		data->br = r;
+		data->rgn = XCreateRegion();
+		XRectangle xr;
+		xr.x = rr.x();
+		xr.y = rr.y();
+		xr.width = rr.width();
+		xr.height = rr.height();
+		XUnionRectWithRegion(&xr, data->rgn, data->rgn);
+	} else if (t == Ellipse) { // elliptic region
+		QPointArray a;
+		a.makeEllipse(rr.x(), rr.y(), rr.width(), rr.height());
+		data->rgn = XPolygonRegion((XPoint *)a.shortPoints(), a.size(),
+					   EvenOddRule);
+	}
 }
 
 
@@ -125,23 +126,23 @@ QRegion::QRegion( const QRect &r, RegionType t )
   down painting when used.
 */
 
-QRegion::QRegion( const QPointArray &a, bool winding )
+QRegion::QRegion(const QPointArray &a, bool winding)
 {
-    if (a.size() > 0) {
-    	data = new QRegionData;
-	CHECK_PTR( data );
-	data->is_null = FALSE;
-	data->rgn = XPolygonRegion( (XPoint*)a.shortPoints(), a.size(),
-				    winding ? WindingRule : EvenOddRule );
-    } else {
-	if ( !empty_region ) {
-	    qAddPostRoutine( cleanup_empty_region );
-	    empty_region = new QRegion( TRUE );
-	    CHECK_PTR( empty_region );
+	if (a.size() > 0) {
+		data = new QRegionData;
+		CHECK_PTR(data);
+		data->is_null = FALSE;
+		data->rgn = XPolygonRegion((XPoint *)a.shortPoints(), a.size(),
+					   winding ? WindingRule : EvenOddRule);
+	} else {
+		if (!empty_region) {
+			qAddPostRoutine(cleanup_empty_region);
+			empty_region = new QRegion(TRUE);
+			CHECK_PTR(empty_region);
+		}
+		data = empty_region->data;
+		data->ref();
 	}
-	data = empty_region->data;
-	data->ref();
-    }
 }
 
 
@@ -149,86 +150,87 @@ QRegion::QRegion( const QPointArray &a, bool winding )
   Constructs a new region which is equal to \a r.
 */
 
-QRegion::QRegion( const QRegion &r )
+QRegion::QRegion(const QRegion &r)
 {
-    data = r.data;
-    data->ref();
+	data = r.data;
+	data->ref();
 }
 
-Region qt_x11_bitmapToRegion(const QBitmap& bitmap)
+Region qt_x11_bitmapToRegion(const QBitmap &bitmap)
 {
-    Region region = XCreateRegion();
-    QImage image = bitmap.convertToImage();
+	Region region = XCreateRegion();
+	QImage image = bitmap.convertToImage();
 
-    XRectangle xr;
+	XRectangle xr;
 
-#define AddSpan \
-	{ \
-	    xr.x = prev1; \
-	    xr.y = y; \
-	    xr.width = x-prev1-1; \
-	    xr.height = 1; \
-	    XUnionRectWithRegion( &xr, region, region ); \
+#define AddSpan                                            \
+	{                                                  \
+		xr.x = prev1;                              \
+		xr.y = y;                                  \
+		xr.width = x - prev1 - 1;                  \
+		xr.height = 1;                             \
+		XUnionRectWithRegion(&xr, region, region); \
 	}
 
-    // deal with 0<->1 problem (not on X11 anymore)
-    int zero=0;//(qGray(image.color(0)) < qGray(image.color(1)) ? 0x00 : 0xff);
-    bool little = image.bitOrder() == QImage::LittleEndian;
+	// deal with 0<->1 problem (not on X11 anymore)
+	int zero = 0; //(qGray(image.color(0)) < qGray(image.color(1)) ? 0x00 :
+		      // 0xff);
+	bool little = image.bitOrder() == QImage::LittleEndian;
 
-    int x, y;
-    for (y=0; y<image.height(); y++) {
-	uchar *line = image.scanLine(y);
-	int w = image.width();
-	uchar all=zero;
-	int prev1 = -1;
-	for (x=0; x<w; ) {
-	    uchar byte = line[x/8];
-	    if ( x>w-8 || byte!=all ) {
-		if ( little ) {
-		    for ( int b=8; b>0 && x<w; b-- ) {
-			if ( !(byte&0x01) == !all ) {
-			    // More of the same
+	int x, y;
+	for (y = 0; y < image.height(); y++) {
+		uchar *line = image.scanLine(y);
+		int w = image.width();
+		uchar all = zero;
+		int prev1 = -1;
+		for (x = 0; x < w;) {
+			uchar byte = line[x / 8];
+			if (x > w - 8 || byte != all) {
+				if (little) {
+					for (int b = 8; b > 0 && x < w; b--) {
+						if (!(byte & 0x01) == !all) {
+							// More of the same
+						} else {
+							// A change.
+							if (all != zero) {
+								AddSpan;
+								all = zero;
+							} else {
+								prev1 = x;
+								all = ~zero;
+							}
+						}
+						byte >>= 1;
+						x++;
+					}
+				} else {
+					for (int b = 8; b > 0 && x < w; b--) {
+						if (!(byte & 0x80) == !all) {
+							// More of the same
+						} else {
+							// A change.
+							if (all != zero) {
+								AddSpan;
+								all = zero;
+							} else {
+								prev1 = x;
+								all = ~zero;
+							}
+						}
+						byte <<= 1;
+						x++;
+					}
+				}
 			} else {
-			    // A change.
-			    if ( all!=zero ) {
-				AddSpan;
-				all = zero;
-			    } else {
-				prev1 = x;
-				all = ~zero;
-			    }
+				x += 8;
 			}
-			byte >>= 1;
-			x++;
-		    }
-		} else {
-		    for ( int b=8; b>0 && x<w; b-- ) {
-			if ( !(byte&0x80) == !all ) {
-			    // More of the same
-			} else {
-			    // A change.
-			    if ( all!=zero ) {
-				AddSpan;
-				all = zero;
-			    } else {
-				prev1 = x;
-				all = ~zero;
-			    }
-			}
-			byte <<= 1;
-			x++;
-		    }
 		}
-	    } else {
-		x+=8;
-	    }
+		if (all != zero) {
+			AddSpan;
+		}
 	}
-	if ( all != zero ) {
-	    AddSpan;
-	}
-    }
 
-    return region;
+	return region;
 }
 
 
@@ -244,12 +246,12 @@ Region qt_x11_bitmapToRegion(const QBitmap& bitmap)
   can be done much faster using QPixmap::setMask().
 
 */
-QRegion::QRegion( const QBitmap & bm )
+QRegion::QRegion(const QBitmap &bm)
 {
-    data = new QRegionData;
-    CHECK_PTR( data );
-    data->is_null = FALSE;
-    data->rgn = qt_x11_bitmapToRegion(bm);
+	data = new QRegionData;
+	CHECK_PTR(data);
+	data->is_null = FALSE;
+	data->rgn = qt_x11_bitmapToRegion(bm);
 }
 
 /*!
@@ -258,10 +260,10 @@ QRegion::QRegion( const QBitmap & bm )
 
 QRegion::~QRegion()
 {
-    if ( data->deref() ) {
-	XDestroyRegion( data->rgn );
-	delete data;
-    }
+	if (data->deref()) {
+		XDestroyRegion(data->rgn);
+		delete data;
+	}
 }
 
 
@@ -271,15 +273,15 @@ QRegion::~QRegion()
 
 */
 
-QRegion &QRegion::operator=( const QRegion &r )
+QRegion &QRegion::operator=(const QRegion &r)
 {
-    r.data->ref();				// beware of r = r
-    if ( data->deref() ) {
-	XDestroyRegion( data->rgn );
-	delete data;
-    }
-    data = r.data;
-    return *this;
+	r.data->ref(); // beware of r = r
+	if (data->deref()) {
+		XDestroyRegion(data->rgn);
+		delete data;
+	}
+	data = r.data;
+	return *this;
 }
 
 
@@ -291,9 +293,9 @@ QRegion &QRegion::operator=( const QRegion &r )
 
 QRegion QRegion::copy() const
 {
-    QRegion r( data->is_null );
-    XUnionRegion( data->rgn, r.data->rgn, r.data->rgn );
-    return r;
+	QRegion r(data->is_null);
+	XUnionRegion(data->rgn, r.data->rgn, r.data->rgn);
+	return r;
 }
 
 /*!
@@ -307,7 +309,7 @@ QRegion QRegion::copy() const
 
 bool QRegion::isNull() const
 {
-    return data->is_null;
+	return data->is_null;
 }
 
 
@@ -337,7 +339,7 @@ bool QRegion::isNull() const
 
 bool QRegion::isEmpty() const
 {
-    return data->is_null || XEmptyRegion( data->rgn );
+	return data->is_null || XEmptyRegion(data->rgn);
 }
 
 
@@ -346,9 +348,9 @@ bool QRegion::isEmpty() const
   outside the region.
 */
 
-bool QRegion::contains( const QPoint &p ) const
+bool QRegion::contains(const QPoint &p) const
 {
-    return XPointInRegion( data->rgn, p.x(), p.y() );
+	return XPointInRegion(data->rgn, p.x(), p.y());
 }
 
 /*!
@@ -356,24 +358,25 @@ bool QRegion::contains( const QPoint &p ) const
   completely outside the region.
 */
 
-bool QRegion::contains( const QRect &r ) const
+bool QRegion::contains(const QRect &r) const
 {
-    return XRectInRegion( data->rgn, r.left(), r.top(),
-			  r.width(), r.height() ) != RectangleOut;
+	return XRectInRegion(data->rgn, r.left(), r.top(), r.width(),
+			     r.height()) != RectangleOut;
 }
 
 
 /*!
-  Translates (moves) the region \a dx along the X axis and \a dy along the Y axis.
+  Translates (moves) the region \a dx along the X axis and \a dy along the Y
+  axis.
 */
 
-void QRegion::translate( int dx, int dy )
+void QRegion::translate(int dx, int dy)
 {
-    if ( data == empty_region->data )
-	return;
-    detach();
-    data->br = QRect();
-    XOffsetRegion( data->rgn, dx, dy );
+	if (data == empty_region->data)
+		return;
+	detach();
+	data->br = QRect();
+	XOffsetRegion(data->rgn, dx, dy);
 }
 
 
@@ -385,11 +388,11 @@ void QRegion::translate( int dx, int dy )
   The figure shows the union of two elliptical regions.
 */
 
-QRegion QRegion::unite( const QRegion &r ) const
+QRegion QRegion::unite(const QRegion &r) const
 {
-    QRegion result( FALSE );
-    XUnionRegion( data->rgn, r.data->rgn, result.data->rgn );
-    return result;
+	QRegion result(FALSE);
+	XUnionRegion(data->rgn, r.data->rgn, result.data->rgn);
+	return result;
 }
 
 /*!
@@ -400,11 +403,11 @@ QRegion QRegion::unite( const QRegion &r ) const
   The figure shows the intersection of two elliptical regions.
 */
 
-QRegion QRegion::intersect( const QRegion &r ) const
+QRegion QRegion::intersect(const QRegion &r) const
 {
-    QRegion result( FALSE );
-    XIntersectRegion( data->rgn, r.data->rgn, result.data->rgn );
-    return result;
+	QRegion result(FALSE);
+	XIntersectRegion(data->rgn, r.data->rgn, result.data->rgn);
+	return result;
 }
 
 /*!
@@ -416,11 +419,11 @@ QRegion QRegion::intersect( const QRegion &r ) const
   from the ellipse on the left. (\c left-right )
 */
 
-QRegion QRegion::subtract( const QRegion &r ) const
+QRegion QRegion::subtract(const QRegion &r) const
 {
-    QRegion result( FALSE );
-    XSubtractRegion( data->rgn, r.data->rgn, result.data->rgn );
-    return result;
+	QRegion result(FALSE);
+	XSubtractRegion(data->rgn, r.data->rgn, result.data->rgn);
+	return result;
 }
 
 /*!
@@ -431,11 +434,11 @@ QRegion QRegion::subtract( const QRegion &r ) const
   The figure shows the exclusive or of two elliptical regions.
 */
 
-QRegion QRegion::eor( const QRegion &r ) const
+QRegion QRegion::eor(const QRegion &r) const
 {
-    QRegion result( FALSE );
-    XXorRegion( data->rgn, r.data->rgn, result.data->rgn );
-    return result;
+	QRegion result(FALSE);
+	XXorRegion(data->rgn, r.data->rgn, result.data->rgn);
+	return result;
 }
 
 
@@ -446,11 +449,11 @@ QRegion QRegion::eor( const QRegion &r ) const
 
 QRect QRegion::boundingRect() const
 {
-    if ( !data->br.isNull() )
-	return data->br;
-    XRectangle r;
-    XClipBox( data->rgn, &r );
-    return QRect( r.x, r.y, r.width, r.height );
+	if (!data->br.isNull())
+		return data->br;
+	XRectangle r;
+	XClipBox(data->rgn, &r);
+	return QRect(r.x, r.y, r.width, r.height);
 }
 
 
@@ -459,14 +462,14 @@ QRect QRegion::boundingRect() const
 */
 
 struct BOX {
-    short x1, x2, y1, y2;
+	short x1, x2, y1, y2;
 };
 
 struct _XRegion {
-    long size;
-    long numRects;
-    BOX *rects;
-    BOX  extents;
+	long size;
+	long numRects;
+	BOX *rects;
+	BOX extents;
 };
 
 
@@ -478,13 +481,13 @@ struct _XRegion {
 
 QArray<QRect> QRegion::rects() const
 {
-    QArray<QRect> a( (int)data->rgn->numRects );
-    BOX *r = data->rgn->rects;
-    for ( int i=0; i<(int)a.size(); i++ ) {
-	a[i].setCoords( r->x1, r->y1, r->x2-1, r->y2-1);
-	r++;
-    }
-    return a;
+	QArray<QRect> a((int)data->rgn->numRects);
+	BOX *r = data->rgn->rects;
+	for (int i = 0; i < (int)a.size(); i++) {
+		a[i].setCoords(r->x1, r->y1, r->x2 - 1, r->y2 - 1);
+		r++;
+	}
+	return a;
 }
 
 /*!
@@ -501,12 +504,12 @@ QArray<QRect> QRegion::rects() const
   \internal
   Only some platforms have that restriction (QWS).
 */
-void QRegion::setRects( const QRect *rects, int num )
+void QRegion::setRects(const QRect *rects, int num)
 {
-    // Could be optimized
-    *this = QRegion();
-    for (int i=0; i<num; i++)
-	*this |= rects[i];
+	// Could be optimized
+	*this = QRegion();
+	for (int i = 0; i < num; i++)
+		*this |= rects[i];
 }
 
 /*!
@@ -514,10 +517,9 @@ void QRegion::setRects( const QRect *rects, int num )
   different.
 */
 
-bool QRegion::operator==( const QRegion &r ) const
+bool QRegion::operator==(const QRegion &r) const
 {
-    return data == r.data ?
-	TRUE : XEqualRegion( data->rgn, r.data->rgn );
+	return data == r.data ? TRUE : XEqualRegion(data->rgn, r.data->rgn);
 }
 
 /*!

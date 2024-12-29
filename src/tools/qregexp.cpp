@@ -135,32 +135,32 @@
 // characters in the class are coded as from==to.  Negated classes
 // (e.g. [^a-z]) use CCN instead of CCL.
 
-const uint END	= 0x00000000;
-const uint PWS	= 0x10010000;		// predef charclass: whitespace (\s)
-const uint PDG	= 0x10020000;		// predef charclass: digit (\d)
-const uint CCL	= 0x20010000;		// character class	[]
-const uint CCN	= 0x20020000;		// neg character class	[^]
-const uint CHR	= 0x40000000;		// character
-const uint BOL	= 0x80010000;		// beginning of line	^
-const uint EOL	= 0x80020000;		// end of line		$
-const uint BOW	= 0x80030000;		// beginning of word	\<
-const uint EOW	= 0x80040000;		// end of word		\>
-const uint ANY	= 0x80050000;		// any character	.
-const uint CLO	= 0x80070000;		// Kleene closure	*
-const uint OPT	= 0x80080000;		// Optional closure	?
+const uint END = 0x00000000;
+const uint PWS = 0x10010000; // predef charclass: whitespace (\s)
+const uint PDG = 0x10020000; // predef charclass: digit (\d)
+const uint CCL = 0x20010000; // character class	[]
+const uint CCN = 0x20020000; // neg character class	[^]
+const uint CHR = 0x40000000; // character
+const uint BOL = 0x80010000; // beginning of line	^
+const uint EOL = 0x80020000; // end of line		$
+const uint BOW = 0x80030000; // beginning of word	\<
+const uint EOW = 0x80040000; // end of word		\>
+const uint ANY = 0x80050000; // any character	.
+const uint CLO = 0x80070000; // Kleene closure	*
+const uint OPT = 0x80080000; // Optional closure	?
 
-const uint MCC  = 0x20000000;		// character class bitmask
-const uint MCD  = 0xffff0000;		// code mask
-const uint MVL  = 0x0000ffff;		// value mask
+const uint MCC = 0x20000000; // character class bitmask
+const uint MCD = 0xffff0000; // code mask
+const uint MVL = 0x0000ffff; // value mask
 
 //
 // QRegExp::error codes (internal)
 //
 
-const int PatOk		= 0;			// pattern ok
-const int PatNull	= 1;			// no pattern defined
-const int PatSyntax	= 2;			// pattern syntax error
-const int PatOverflow	= 4;			// pattern too long
+const int PatOk = 0; // pattern ok
+const int PatNull = 1; // no pattern defined
+const int PatSyntax = 2; // pattern syntax error
+const int PatOverflow = 4; // pattern too long
 
 
 /*****************************************************************************
@@ -173,10 +173,10 @@ const int PatOverflow	= 4;			// pattern too long
 
 QRegExp::QRegExp()
 {
-    rxdata = 0;
-    cs = TRUE;
-    wc = FALSE;
-    error = PatOk;
+	rxdata = 0;
+	cs = TRUE;
+	wc = FALSE;
+	error = PatOk;
 }
 
 /*!
@@ -192,13 +192,13 @@ QRegExp::QRegExp()
   \sa setWildcard()
 */
 
-QRegExp::QRegExp( const QString &pattern, bool caseSensitive, bool wildcard )
+QRegExp::QRegExp(const QString &pattern, bool caseSensitive, bool wildcard)
 {
-    rxstring = pattern;
-    rxdata = 0;
-    cs = caseSensitive;
-    wc = wildcard;
-    compile();
+	rxstring = pattern;
+	rxdata = 0;
+	cs = caseSensitive;
+	wc = wildcard;
+	compile();
 }
 
 /*!
@@ -206,13 +206,13 @@ QRegExp::QRegExp( const QString &pattern, bool caseSensitive, bool wildcard )
   \sa operator=(const QRegExp&)
 */
 
-QRegExp::QRegExp( const QRegExp &r )
+QRegExp::QRegExp(const QRegExp &r)
 {
-    rxstring = r.pattern();
-    rxdata = 0;
-    cs = r.caseSensitive();
-    wc = r.wildcard();
-    compile();
+	rxstring = r.pattern();
+	rxdata = 0;
+	cs = r.caseSensitive();
+	wc = r.wildcard();
+	compile();
 }
 
 /*!
@@ -221,8 +221,8 @@ QRegExp::QRegExp( const QRegExp &r )
 
 QRegExp::~QRegExp()
 {
-    if ( rxdata )                      // Avoid purify complaints
-	delete [] rxdata;
+	if (rxdata) // Avoid purify complaints
+		delete[] rxdata;
 }
 
 /*!
@@ -230,13 +230,13 @@ QRegExp::~QRegExp()
   The case sensitivity and wildcard options are copied, as well.
 */
 
-QRegExp &QRegExp::operator=( const QRegExp &r )
+QRegExp &QRegExp::operator=(const QRegExp &r)
 {
-    rxstring = r.rxstring;
-    cs = r.cs;
-    wc = r.wc;
-    compile();
-    return *this;
+	rxstring = r.rxstring;
+	cs = r.cs;
+	wc = r.wc;
+	compile();
+	return *this;
 }
 
 /*!
@@ -247,11 +247,11 @@ QRegExp &QRegExp::operator=( const QRegExp &r )
   The case sensitivity or wildcard options do not change.
 */
 
-QRegExp &QRegExp::operator=( const QString &pattern )
+QRegExp &QRegExp::operator=(const QString &pattern)
 {
-    rxstring = pattern;
-    compile();
-    return *this;
+	rxstring = pattern;
+	compile();
+	return *this;
 }
 
 
@@ -262,9 +262,9 @@ QRegExp &QRegExp::operator=( const QString &pattern )
   case sensitivity options and wildcard options.
 */
 
-bool QRegExp::operator==( const QRegExp &r ) const
+bool QRegExp::operator==(const QRegExp &r) const
 {
-    return rxstring == r.rxstring && cs == r.cs && wc == r.wc;
+	return rxstring == r.rxstring && cs == r.cs && wc == r.wc;
 }
 
 /*!
@@ -307,12 +307,12 @@ bool QRegExp::operator==( const QRegExp &r ) const
   \sa wildcard()
 */
 
-void QRegExp::setWildcard( bool wildcard )
+void QRegExp::setWildcard(bool wildcard)
 {
-    if ( wildcard != wc ) {
-	wc = wildcard;
-	compile();
-    }
+	if (wildcard != wc) {
+		wc = wildcard;
+		compile();
+	}
 }
 
 /*!
@@ -332,12 +332,12 @@ void QRegExp::setWildcard( bool wildcard )
   See also: caseSensitive()
 */
 
-void QRegExp::setCaseSensitive( bool enable )
+void QRegExp::setCaseSensitive(bool enable)
 {
-    if ( cs != enable ) {
-	cs = enable;
-	compile();
-    }
+	if (cs != enable) {
+		cs = enable;
+		compile();
+	}
 }
 
 
@@ -353,9 +353,9 @@ void QRegExp::setCaseSensitive( bool enable )
   The case sensitivity or wildcard options do not change.
 */
 
-static inline bool iswordchar( int x )
+static inline bool iswordchar(int x)
 {
-    return isalnum(x) || x == '_';	//# Only 8-bit support
+	return isalnum(x) || x == '_'; // # Only 8-bit support
 }
 
 
@@ -364,36 +364,36 @@ static inline bool iswordchar( int x )
   Match character class
 */
 
-static bool matchcharclass( uint *rxd, QChar c )
+static bool matchcharclass(uint *rxd, QChar c)
 {
-    uint *d = rxd;
-    uint clcode = *d & MCD;
-    bool neg = clcode == CCN;
-    if ( clcode != CCL && clcode != CCN)
-	qWarning("QRegExp: Internal error, please report to qt-bugs@trolltech.com");
-    uint numFields = *d & MVL;
-    uint cval = (((uint)(c.row())) << 8) | ((uint)c.cell());
-    bool found = FALSE;
-    for ( int i = 0; i < (int)numFields; i++ ) {
-	d++;
-	if ( *d == PWS && c.isSpace() ) {
-	    found = TRUE;
-	    break;
+	uint *d = rxd;
+	uint clcode = *d & MCD;
+	bool neg = clcode == CCN;
+	if (clcode != CCL && clcode != CCN)
+		qWarning(
+			"QRegExp: Internal error, please report to qt-bugs@trolltech.com");
+	uint numFields = *d & MVL;
+	uint cval = (((uint)(c.row())) << 8) | ((uint)c.cell());
+	bool found = FALSE;
+	for (int i = 0; i < (int)numFields; i++) {
+		d++;
+		if (*d == PWS && c.isSpace()) {
+			found = TRUE;
+			break;
+		}
+		if (*d == PDG && c.isDigit()) {
+			found = TRUE;
+			break;
+		} else {
+			uint from = (*d & MCD) >> 16;
+			uint to = *d & MVL;
+			if ((cval >= from) && (cval <= to)) {
+				found = TRUE;
+				break;
+			}
+		}
 	}
-	if ( *d == PDG && c.isDigit() ) {
-	    found = TRUE;
-	    break;
-	}
-	else {
-	    uint from = ( *d & MCD ) >> 16;
-	    uint to = *d & MVL;
-	    if ( (cval >= from) && (cval <= to) ) {
-		found = TRUE;
-		break;
-	    }
-	}
-    }
-    return neg ? !found : found;
+	return neg ? !found : found;
 }
 
 
@@ -402,205 +402,204 @@ static bool matchcharclass( uint *rxd, QChar c )
   Internal: Recursively match string.
 */
 
-static int matchstring( uint *rxd, const QChar *str, uint strlength,
-			const QChar *bol, bool cs )
+static int matchstring(uint *rxd, const QChar *str, uint strlength,
+		       const QChar *bol, bool cs)
 {
-    const QChar *p = str;
-    const QChar *start = p;
-    uint pl = strlength;
-    uint *d = rxd;
+	const QChar *p = str;
+	const QChar *start = p;
+	uint pl = strlength;
+	uint *d = rxd;
 
-    //### in all cases here: handle pl == 0! (don't read past strlen)
-    while ( *d ) {
-	if ( *d & CHR ) {			// match char
-	    if ( !pl )
-		return -1;
-	    QChar c( *d );
-	    if ( !cs && !c.row() ) {		// case insensitive, #Only 8bit
-		if ( p->row() || tolower(p->cell()) != c.cell() )
-		    return -1;
-		p++;
-		pl--;
-	    } else {				// case insensitive
-		if ( *p != c )
-		    return -1;
-		p++;
-		pl--;
-	    }
-	    d++;
-	}
-	else if ( *d & MCC ) {			// match char class
-	    if ( !pl )
-		return -1;
-	    if ( !matchcharclass( d, *p ) )
-		return -1;
-	    p++;
-	    pl--;
-	    d += (*d & MVL) + 1;
-	}
-	else switch ( *d++ ) {
-	    case PWS:				// match whitespace
-		if ( !pl || !p->isSpace() )
-		    return -1;
-		p++;
-		pl--;
-		break;
-	    case PDG:				// match digits
-		if ( !pl || !p->isDigit() )
-		    return -1;
-		p++;
-		pl--;
-		break;
-	    case ANY:				// match anything
-		if ( !pl )
-		    return -1;
-		p++;
-		pl--;
-		break;
-	    case BOL:				// match beginning of line
-		if ( p != bol )
-		    return -1;
-		break;
-	    case EOL:				// match end of line
-		if ( pl )
-		    return -1;
-		break;
-	    case BOW:				// match beginning of word
-		if ( !iswordchar(*p) || (p > bol && iswordchar(*(p-1)) ) )
-		    return -1;
-		break;
-	    case EOW:				// match end of word
-		if ( iswordchar(*p) || p == bol || !iswordchar(*(p-1)) )
-		    return -1;
-		break;
-	    case CLO:				// Kleene closure
-		{
-		const QChar *first_p = p;
-		if ( *d & CHR ) {		// match char
-		    QChar c( *d );
-		    if ( !cs && !c.row() ) {	// case insensitive, #only 8bit
-			while ( pl && !p->row() && tolower(p->cell())==c.cell() ) {
-			    p++;
-			    pl--;
+	// ### in all cases here: handle pl == 0! (don't read past strlen)
+	while (*d) {
+		if (*d & CHR) { // match char
+			if (!pl)
+				return -1;
+			QChar c(*d);
+			if (!cs && !c.row()) { // case insensitive, #Only 8bit
+				if (p->row() || tolower(p->cell()) != c.cell())
+					return -1;
+				p++;
+				pl--;
+			} else { // case insensitive
+				if (*p != c)
+					return -1;
+				p++;
+				pl--;
 			}
-		    }
-		    else {			// case sensitive
-			while ( pl && *p == c ) {
-			    p++;
-			    pl--;
+			d++;
+		} else if (*d & MCC) { // match char class
+			if (!pl)
+				return -1;
+			if (!matchcharclass(d, *p))
+				return -1;
+			p++;
+			pl--;
+			d += (*d & MVL) + 1;
+		} else
+			switch (*d++) {
+			case PWS: // match whitespace
+				if (!pl || !p->isSpace())
+					return -1;
+				p++;
+				pl--;
+				break;
+			case PDG: // match digits
+				if (!pl || !p->isDigit())
+					return -1;
+				p++;
+				pl--;
+				break;
+			case ANY: // match anything
+				if (!pl)
+					return -1;
+				p++;
+				pl--;
+				break;
+			case BOL: // match beginning of line
+				if (p != bol)
+					return -1;
+				break;
+			case EOL: // match end of line
+				if (pl)
+					return -1;
+				break;
+			case BOW: // match beginning of word
+				if (!iswordchar(*p) ||
+				    (p > bol && iswordchar(*(p - 1))))
+					return -1;
+				break;
+			case EOW: // match end of word
+				if (iswordchar(*p) || p == bol ||
+				    !iswordchar(*(p - 1)))
+					return -1;
+				break;
+			case CLO: // Kleene closure
+			{
+				const QChar *first_p = p;
+				if (*d & CHR) { // match char
+					QChar c(*d);
+					if (!cs && !c.row()) { // case
+							       // insensitive,
+							       // #only 8bit
+						while (pl && !p->row() &&
+						       tolower(p->cell()) ==
+							       c.cell()) {
+							p++;
+							pl--;
+						}
+					} else { // case sensitive
+						while (pl && *p == c) {
+							p++;
+							pl--;
+						}
+					}
+					d++;
+				} else if (*d & MCC) { // match char class
+					while (pl && matchcharclass(d, *p)) {
+						p++;
+						pl--;
+					}
+					d += (*d & MVL) + 1;
+				} else if (*d == PWS) {
+					while (pl && p->isSpace()) {
+						p++;
+						pl--;
+					}
+					d++;
+				} else if (*d == PDG) {
+					while (pl && p->isDigit()) {
+						p++;
+						pl--;
+					}
+					d++;
+				} else if (*d == ANY) {
+					p += pl;
+					pl = 0;
+					d++;
+				} else {
+					return -1; // error
+				}
+				d++; // skip CLO's END
+				while (p >= first_p) { // go backwards
+					int end =
+						matchstring(d, p, pl, bol, cs);
+					if (end >= 0)
+						return (p - start) + end;
+					if (!p)
+						return -1;
+					--p;
+					++pl;
+				}
 			}
-		    }
-		    d++;
-		}
-		else if ( *d & MCC ) {			// match char class
-		    while( pl && matchcharclass( d, *p ) ) {
-			p++;
-			pl--;
-		    }
-		    d += (*d & MVL) + 1;
-		}
-		else if ( *d == PWS ) {
-		    while ( pl && p->isSpace() ) {
-			p++;
-			pl--;
-		    }
-		    d++;
-		}
-		else if ( *d == PDG ) {
-		    while ( pl && p->isDigit() ) {
-			p++;
-			pl--;
-		    }
-		    d++;
-		}
-		else if ( *d == ANY ) {
-		    p += pl;
-		    pl = 0;
-		    d++;
-		}
-		else {
-		    return -1;			// error
-		}
-		d++;				// skip CLO's END
-		while ( p >= first_p ) {	// go backwards
-		    int end = matchstring( d, p, pl, bol, cs );
-		    if ( end >= 0 )
-			return ( p - start ) + end;
-		    if ( !p )
-			return -1;
-		    --p;
-		    ++pl;
-		}
-		}
-		return -1;
-	    case OPT:				// optional closure
-		{
-		const QChar *first_p = p;
-		if ( *d & CHR ) {		// match char
-		    QChar c( *d );
-		    if ( !cs && !c.row() ) {	// case insensitive, #only 8bit
-			if ( pl && !p->row() && tolower(p->cell()) == c.cell() ) {
-			    p++;
-			    pl--;
+				return -1;
+			case OPT: // optional closure
+			{
+				const QChar *first_p = p;
+				if (*d & CHR) { // match char
+					QChar c(*d);
+					if (!cs && !c.row()) { // case
+							       // insensitive,
+							       // #only 8bit
+						if (pl && !p->row() &&
+						    tolower(p->cell()) ==
+							    c.cell()) {
+							p++;
+							pl--;
+						}
+					} else { // case sensitive
+						if (pl && *p == c) {
+							p++;
+							pl--;
+						}
+					}
+					d++;
+				} else if (*d & MCC) { // match char class
+					if (pl && matchcharclass(d, *p)) {
+						p++;
+						pl--;
+					}
+					d += (*d & MVL) + 1;
+				} else if (*d == PWS) {
+					if (pl && p->isSpace()) {
+						p++;
+						pl--;
+					}
+					d++;
+				} else if (*d == PDG) {
+					if (pl && p->isDigit()) {
+						p++;
+						pl--;
+					}
+					d++;
+				} else if (*d == ANY) {
+					if (pl) {
+						p++;
+						pl--;
+					}
+					d++;
+				} else {
+					return -1; // error
+				}
+				d++; // skip OPT's END
+				while (p >= first_p) { // go backwards
+					int end =
+						matchstring(d, p, pl, bol, cs);
+					if (end >= 0)
+						return (p - start) + end;
+					if (!p)
+						return -1;
+					--p;
+					++pl;
+				}
 			}
-		    }
-		    else {			// case sensitive
-			if ( pl && *p == c ) {
-			    p++;
-			    pl--;
-			}
-		    }
-		    d++;
-		}
-		else if ( *d & MCC ) {			// match char class
-		    if ( pl && matchcharclass( d, *p ) ) {
-			p++;
-			pl--;
-		    }
-		    d += (*d & MVL) + 1;
-		}
-		else if ( *d == PWS ) {
-		    if ( pl && p->isSpace() ) {
-			p++;
-			pl--;
-		    }
-		    d++;
-		}
-		else if ( *d == PDG ) {
-		    if ( pl && p->isDigit() ) {
-			p++;
-			pl--;
-		    }
-		    d++;
-		}
-		else if ( *d == ANY ) {
-		    if ( pl ) {
-			p++;
-			pl--;
-		    }
-		    d++;
-		}
-		else {
-		    return -1;			// error
-		}
-		d++;				// skip OPT's END
-		while ( p >= first_p ) {	// go backwards
-		    int end = matchstring( d, p, pl, bol, cs );
-		    if ( end >= 0 )
-			return ( p - start ) + end;
-		    if ( !p )
-			return -1;
-		    --p;
-		    ++pl;
-		}
-		}
-		return -1;
+				return -1;
 
-	    default:				// error
-		return -1;
+			default: // error
+				return -1;
+			}
 	}
-    }
-    return p - start;
+	return p - start;
 }
 
 
@@ -615,13 +614,13 @@ static int matchstring( uint *rxd, const QChar *str, uint strlength,
 // Qt 3.0: Remove this?
 
 
-const QChar *QRegExp::matchstr( uint *rxd, const QChar *str, uint strlength,
-				const QChar *bol ) const
+const QChar *QRegExp::matchstr(uint *rxd, const QChar *str, uint strlength,
+			       const QChar *bol) const
 {
-    int len = matchstring( rxd, str, strlength, bol, cs );
-    if ( len < 0 )
-	return 0;
-    return str + len;
+	int len = matchstring(rxd, str, strlength, bol, cs);
+	if (len < 0)
+		return 0;
+	return str + len;
 }
 
 /*!
@@ -645,49 +644,53 @@ const QChar *QRegExp::matchstr( uint *rxd, const QChar *str, uint strlength,
   \note In Qt 3.0, this function will be replaced by find().
 */
 
-int QRegExp::match( const QString &str, int index, int *len,
-		    bool indexIsStart ) const
+int QRegExp::match(const QString &str, int index, int *len,
+		   bool indexIsStart) const
 {
-    if ( !isValid() || isEmpty() )
-	return -1;
-    if ( str.length() < (uint)index )
-	return -1;
-    const QChar *start = str.unicode();
-    const QChar *p = start + index;
-    uint pl = str.length() - index;
-    uint *d  = rxdata;
-    int ep = -1;
+	if (!isValid() || isEmpty())
+		return -1;
+	if (str.length() < (uint)index)
+		return -1;
+	const QChar *start = str.unicode();
+	const QChar *p = start + index;
+	uint pl = str.length() - index;
+	uint *d = rxdata;
+	int ep = -1;
 
-    if ( *d == BOL ) {				// match from beginning of line
-	ep = matchstring( d, p, pl, indexIsStart ? p : start, cs );
-    } else {
-	if ( *d & CHR ) {
-	    QChar c( *d );
-	    if ( !cs && !c.row() ) {		// case sensitive, # only 8bit
-		while ( pl && ( p->row() || tolower(p->cell()) != c.cell() ) ) {
-		    p++;
-		    pl--;
+	if (*d == BOL) { // match from beginning of line
+		ep = matchstring(d, p, pl, indexIsStart ? p : start, cs);
+	} else {
+		if (*d & CHR) {
+			QChar c(*d);
+			if (!cs && !c.row()) { // case sensitive, # only 8bit
+				while (pl && (p->row() ||
+					      tolower(p->cell()) != c.cell())) {
+					p++;
+					pl--;
+				}
+			} else { // case insensitive
+				while (pl && *p != c) {
+					p++;
+					pl--;
+				}
+			}
 		}
-	    } else {				// case insensitive
-		while ( pl && *p != c ) {
-		    p++;
-		    pl--;
+		for (;;) { // regular match
+			ep = matchstring(d, p, pl,
+					 indexIsStart ? start + index : start,
+					 cs);
+			if (ep >= 0)
+				break;
+			if (!pl)
+				break;
+			p++;
+			pl--;
 		}
-	    }
 	}
-	for (;;) {				// regular match
-	    ep = matchstring( d, p, pl, indexIsStart ? start+index : start, cs );
-	    if ( ep >= 0 )
-		break;
-	    if ( !pl )
-		break;
-	    p++;
-	    pl--;
-	}
-    }
-    if ( len )
-	*len = ep >= 0 ? ep : 0;      // No match -> 0, for historical reasons
-    return ep >= 0 ? (int)(p - start) : -1;		// return index;
+	if (len)
+		*len = ep >= 0 ? ep : 0; // No match -> 0, for historical
+					 // reasons
+	return ep >= 0 ? (int)(p - start) : -1; // return index;
 }
 
 /*! \fn int QRegExp::find( const QString& str, int index )
@@ -703,41 +706,41 @@ int QRegExp::match( const QString &str, int index, int *len,
 // Ex:	 *.cpp	==> ^.*\.cpp$
 //
 
-static QString wc2rx( const QString &pattern )
+static QString wc2rx(const QString &pattern)
 {
-    int patlen = (int)pattern.length();
-    QString wcpattern = QString::fromLatin1("^");
+	int patlen = (int)pattern.length();
+	QString wcpattern = QString::fromLatin1("^");
 
-    QChar c;
-    for( int i = 0; i < patlen; i++ ) {
-	c = pattern[i];
-	switch ( (char)c ) {
-	case '*':				// '*' ==> '.*'
-	    wcpattern += '.';
-	    break;
-	case '?':				// '?' ==> '.'
-	    c = '.';
-	    break;
-	case '.':				// quote special regexp chars
-	case '+':
-	case '\\':
-	case '$':
-	case '^':
-	    wcpattern += '\\';
-	    break;
-	case '[':
-	    if ( (char)pattern[i+1] == '^' ) { // don't quote '^' after '['
-		wcpattern += '[';
-		c = pattern[i+1];
-		i++;
-	    }
-	    break;
+	QChar c;
+	for (int i = 0; i < patlen; i++) {
+		c = pattern[i];
+		switch ((char)c) {
+		case '*': // '*' ==> '.*'
+			wcpattern += '.';
+			break;
+		case '?': // '?' ==> '.'
+			c = '.';
+			break;
+		case '.': // quote special regexp chars
+		case '+':
+		case '\\':
+		case '$':
+		case '^':
+			wcpattern += '\\';
+			break;
+		case '[':
+			if ((char)pattern[i + 1] == '^') { // don't quote '^'
+							   // after '['
+				wcpattern += '[';
+				c = pattern[i + 1];
+				i++;
+			}
+			break;
+		}
+		wcpattern += c;
 	}
-	wcpattern += c;
-
-    }
-    wcpattern += '$';
-    return wcpattern;				// return new regexp pattern
+	wcpattern += '$';
+	return wcpattern; // return new regexp pattern
 }
 
 
@@ -745,163 +748,179 @@ static QString wc2rx( const QString &pattern )
 // Internal: Get char value and increment pointer.
 //
 
-static uint char_val( const QChar **str, uint *strlength )   // get char value
+static uint char_val(const QChar **str, uint *strlength) // get char value
 {
-    const QChar *p = *str;
-    uint pl = *strlength;
-    uint len = 1;
-    uint v = 0;
-    if ( (char)*p == '\\' ) {			// escaped code
-	p++;
-	pl--;
-	if ( !pl ) {				// it is just a '\'
-	    (*str)++;
-	    (*strlength)--;
-	    return '\\';
-	}
-	len++;					// length at least 2
-	int i;
-	char c;
-	char ch = tolower((char)*p);
-	switch ( ch ) {
-	    case 'b':  v = '\b';  break;	// bell
-	    case 'f':  v = '\f';  break;	// form feed
-	    case 'n':  v = '\n';  break;	// newline
-	    case 'r':  v = '\r';  break;	// return
-	    case 't':  v = '\t';  break;	// tab
-	    case 's':  v = PWS; break;		// whitespace charclass
-	    case 'd':  v = PDG; break;		// digit charclass
-	    case '<':  v = BOW; break;		// word beginning matcher
-	    case '>':  v = EOW; break;		// word ending matcher
-
-	    case 'x': {				// hex code
+	const QChar *p = *str;
+	uint pl = *strlength;
+	uint len = 1;
+	uint v = 0;
+	if ((char)*p == '\\') { // escaped code
 		p++;
 		pl--;
-		for ( i = 0; (i < 4) && pl; i++ ) {	//up to 4 hex digits
-		    c = tolower((char)*p);
-		    bool a = ( c >= 'a' && c <= 'f' );
-		    if ( (c >= '0' && c <= '9') || a ) {
-			v <<= 4;
-			v += a ? 10 + c - 'a' : c - '0';
-			len++;
-		    }
-		    else {
-			break;
-		    }
-		    p++;
-		    pl--;
+		if (!pl) { // it is just a '\'
+			(*str)++;
+			(*strlength)--;
+			return '\\';
 		}
-	    }
-	    break;
+		len++; // length at least 2
+		int i;
+		char c;
+		char ch = tolower((char)*p);
+		switch (ch) {
+		case 'b':
+			v = '\b';
+			break; // bell
+		case 'f':
+			v = '\f';
+			break; // form feed
+		case 'n':
+			v = '\n';
+			break; // newline
+		case 'r':
+			v = '\r';
+			break; // return
+		case 't':
+			v = '\t';
+			break; // tab
+		case 's':
+			v = PWS;
+			break; // whitespace charclass
+		case 'd':
+			v = PDG;
+			break; // digit charclass
+		case '<':
+			v = BOW;
+			break; // word beginning matcher
+		case '>':
+			v = EOW;
+			break; // word ending matcher
 
-	    default: {
-		if ( ch >= '0' && ch <= '7' ) {	//octal code
-		    len--;
-		    for ( i = 0; (i < 3) && pl; i++ ) {	// up to 3 oct digits
-			c = (char)*p;
-			if ( c >= '0' && c <= '7' ) {
-			    v <<= 3;
-			    v += c - '0';
-			    len++;
-			}
-			else {
-			    break;
-			}
+		case 'x': { // hex code
 			p++;
 			pl--;
-		    }
+			for (i = 0; (i < 4) && pl; i++) { // up to 4 hex digits
+				c = tolower((char)*p);
+				bool a = (c >= 'a' && c <= 'f');
+				if ((c >= '0' && c <= '9') || a) {
+					v <<= 4;
+					v += a ? 10 + c - 'a' : c - '0';
+					len++;
+				} else {
+					break;
+				}
+				p++;
+				pl--;
+			}
+		} break;
+
+		default: {
+			if (ch >= '0' && ch <= '7') { // octal code
+				len--;
+				for (i = 0; (i < 3) && pl; i++) { // up to 3 oct
+								  // digits
+					c = (char)*p;
+					if (c >= '0' && c <= '7') {
+						v <<= 3;
+						v += c - '0';
+						len++;
+					} else {
+						break;
+					}
+					p++;
+					pl--;
+				}
+			} else { // not an octal number
+				v = (((uint)(p->row())) << 8) |
+				    ((uint)p->cell());
+			}
 		}
-		else {				// not an octal number
-		    v = (((uint)(p->row())) << 8) | ((uint)p->cell());
 		}
-	    }
+	} else {
+		v = (((uint)(p->row())) << 8) | ((uint)p->cell());
 	}
-    } else {
-	v = (((uint)(p->row())) << 8) | ((uint)p->cell());
-    }
-    *str += len;
-    *strlength -= len;
-    return v;
+	*str += len;
+	*strlength -= len;
+	return v;
 }
 
 
 #if defined(DEBUG)
-static uint *dump( uint *p )
+static uint *dump(uint *p)
 {
-    while ( *p != END ) {
-	if ( *p & CHR ) {
-	    QChar uc = (QChar)*p;
-	    char c = (char)uc;
-	    uint u = (((uint)(uc.row())) << 8) | ((uint)uc.cell());
-	    qDebug( "\tCHR\tU%04x (%c)", u, (c ? c : ' '));
-	    p++;
+	while (*p != END) {
+		if (*p & CHR) {
+			QChar uc = (QChar)*p;
+			char c = (char)uc;
+			uint u = (((uint)(uc.row())) << 8) | ((uint)uc.cell());
+			qDebug("\tCHR\tU%04x (%c)", u, (c ? c : ' '));
+			p++;
+		} else if (*p & MCC) {
+			uint clcode = *p & MCD;
+			uint numFields = *p & MVL;
+			if (clcode == CCL)
+				qDebug("\tCCL\t%i", numFields);
+			else if (clcode == CCN)
+				qDebug("\tCCN\t%i", numFields);
+			else
+				qDebug("coding error!");
+			for (int i = 0; i < (int)numFields; i++) {
+				p++;
+				if (*p == PWS)
+					qDebug("\t\tPWS");
+				else if (*p == PDG)
+					qDebug("\t\tPDG");
+				else {
+					uint from = (*p & MCD) >> 16;
+					uint to = *p & MVL;
+					char fc = (char)QChar(from);
+					char tc = (char)QChar(to);
+					qDebug("\t\tU%04x (%c) - U%04x (%c)",
+					       from, (fc ? fc : ' '), to,
+					       (tc ? tc : ' '));
+				}
+			}
+			p++;
+		} else
+			switch (*p++) {
+			case PWS:
+				qDebug("\tPWS");
+				break;
+			case PDG:
+				qDebug("\tPDG");
+				break;
+			case BOL:
+				qDebug("\tBOL");
+				break;
+			case EOL:
+				qDebug("\tEOL");
+				break;
+			case BOW:
+				qDebug("\tBOW");
+				break;
+			case EOW:
+				qDebug("\tEOW");
+				break;
+			case ANY:
+				qDebug("\tANY");
+				break;
+			case CLO:
+				qDebug("\tCLO");
+				p = dump(p);
+				break;
+			case OPT:
+				qDebug("\tOPT");
+				p = dump(p);
+				break;
+			}
 	}
-	else if ( *p & MCC ) {
-	    uint clcode = *p & MCD;
-	    uint numFields = *p & MVL;
-	    if ( clcode == CCL )
-		qDebug( "\tCCL\t%i", numFields );
-	    else if ( clcode == CCN )
-		qDebug( "\tCCN\t%i", numFields );
-	    else
-		qDebug("coding error!");
-	    for ( int i = 0; i < (int)numFields; i++ ) {
-		p++;
-		if ( *p == PWS )
-		    qDebug( "\t\tPWS" );
-		else if ( *p == PDG )
-		    qDebug( "\t\tPDG" );
-		else {
-		    uint from = ( *p & MCD ) >> 16;
-		    uint to = *p & MVL;
-		    char fc = (char)QChar(from);
-		    char tc = (char)QChar(to);
-		    qDebug( "\t\tU%04x (%c) - U%04x (%c)", from,
-			   (fc ? fc : ' '), to, (tc ? tc : ' ') );
-		}
-	    }
-	    p++;
-	}
-	else switch ( *p++ ) {
-	    case PWS:
-		qDebug( "\tPWS" );
-		break;
-	    case PDG:
-		qDebug( "\tPDG" );
-		break;
-	    case BOL:
-		qDebug( "\tBOL" );
-		break;
-	    case EOL:
-		qDebug( "\tEOL" );
-		break;
-	    case BOW:
-		qDebug( "\tBOW" );
-		break;
-	    case EOW:
-		qDebug( "\tEOW" );
-		break;
-	    case ANY:
-		qDebug( "\tANY" );
-		break;
-	    case CLO:
-		qDebug( "\tCLO" );
-		p = dump( p );
-		break;
-	    case OPT:
-		qDebug( "\tOPT" );
-		p = dump( p );
-		break;
-	}
-    }
-    qDebug( "\tEND" );
-    return p+1;
+	qDebug("\tEND");
+	return p + 1;
 }
 #endif // DEBUG
 
 
-static const int maxlen = 1024;			// max length of regexp array
-static uint rxarray[ maxlen ];			// tmp regexp array
+static const int maxlen = 1024; // max length of regexp array
+static uint rxarray[maxlen]; // tmp regexp array
 
 /*!
   \internal
@@ -912,180 +931,182 @@ static uint rxarray[ maxlen ];			// tmp regexp array
 
 void QRegExp::compile()
 {
-    if ( rxdata ) {				// delete old data
-	delete [] rxdata;
-	rxdata = 0;
-    }
-    if ( rxstring.isEmpty() ) {			// no regexp pattern set
-	error = PatNull;
-	return;
-    }
+	if (rxdata) { // delete old data
+		delete[] rxdata;
+		rxdata = 0;
+	}
+	if (rxstring.isEmpty()) { // no regexp pattern set
+		error = PatNull;
+		return;
+	}
 
-    error = PatOk;				// assume pattern is ok
+	error = PatOk; // assume pattern is ok
 
-    QString pattern;
-    if ( wc )
-	pattern = wc2rx(rxstring);
-    else
-	pattern = rxstring;
-    const QChar *start = pattern.unicode();	// pattern pointer
-    const QChar *p = start;			// pattern pointer
-    uint pl = pattern.length();
-    uint *d = rxarray;				// data pointer
-    uint *prev_d = 0;
+	QString pattern;
+	if (wc)
+		pattern = wc2rx(rxstring);
+	else
+		pattern = rxstring;
+	const QChar *start = pattern.unicode(); // pattern pointer
+	const QChar *p = start; // pattern pointer
+	uint pl = pattern.length();
+	uint *d = rxarray; // data pointer
+	uint *prev_d = 0;
 
-#define GEN(x)	*d++ = (x)
+#define GEN(x) *d++ = (x)
 
-    while ( pl ) {
-	char ch = (char)*p;
-	switch ( ch ) {
-
-	    case '^':				// beginning of line
-		prev_d = d;
-		GEN( p == start ? BOL : (CHR | ch) );
-		p++;
-		pl--;
-		break;
-
-	    case '$':				// end of line
-		prev_d = d;
-		GEN( pl == 1 ? EOL : (CHR | ch) );
-		p++;
-		pl--;
-		break;
-
-	    case '.':				// any char
-		prev_d = d;
-		GEN( ANY );
-		p++;
-		pl--;
-		break;
-
-	    case '[':				// character class
-		{
-		prev_d = d;
-		p++;
-		pl--;
-		if ( !pl ) {
-		    error = PatSyntax;
-		    return;
-		}
-		bool firstIsEscaped = ( (char)*p == '\\' );
-		uint cch = char_val( &p, &pl );
-		if ( cch == '^' && !firstIsEscaped ) {	// negate!
-		    GEN( CCN );
-		    if ( !pl ) {
-			error = PatSyntax;
-			return;
-		    }
-		    cch = char_val( &p, &pl );
-		} else {
-		    GEN( CCL );
-		}
-		uint numFields = 0;
-		while ( pl ) {
-		    if ((pl>2) && ((char)*p == '-') && ((char)*(p+1) != ']')) {
-			// Found a range
-		       	char_val( &p, &pl ); // Read the '-'
-			uint cch2 = char_val( &p, &pl ); // Read the range end
-			if ( cch > cch2 ) { 		// swap start and stop
-			    int tmp = cch;
-			    cch = cch2;
-			    cch2 = tmp;
-			}
-			GEN( (cch << 16) | cch2 );	// from < to
-			numFields++;
-		    }
-		    else {
-			// Found a single character
-			if ( cch & MCD ) // It's a code; will not be mistaken
-			    GEN( cch );	 // for a range, since from > to
-			else
-			    GEN( (cch << 16) | cch ); // from == to range
-			numFields++;
-		    }
-		    if ( d >= rxarray + maxlen ) {	// pattern too long
-			error = PatOverflow;		
-			return;
-		    }
-		    if ( !pl ) {		// At least ']' should be left
-			error = PatSyntax;
-			return;
-		    }
-		    bool nextIsEscaped = ( (char)*p == '\\' );
-		    cch = char_val( &p, &pl );
-		    if ( cch == (uint)']' && !nextIsEscaped )
+	while (pl) {
+		char ch = (char)*p;
+		switch (ch) {
+		case '^': // beginning of line
+			prev_d = d;
+			GEN(p == start ? BOL : (CHR | ch));
+			p++;
+			pl--;
 			break;
-		    if ( !pl ) {		// End, should have seen ']'
-			error = PatSyntax;
-			return;
-		    }
-		}
-		*prev_d |= numFields;		// Store number of fields
-		}
-		break;
 
-	    case '*':				// Kleene closure, or
-	    case '+':				// positive closure, or
-	    case '?':				// optional closure
-		{
-		if ( prev_d == 0 ) {		// no previous expression
-		    error = PatSyntax;		// empty closure
-		    return;
-		}
-		switch ( *prev_d ) {		// test if invalid closure
-		    case BOL:
-		    case BOW:
-		    case EOW:
-		    case CLO:
-		    case OPT:
-			error = PatSyntax;
-			return;
-		}
-		int ddiff = d - prev_d;
-		if ( *p == '+' ) {		// convert to Kleene closure
-		    if ( d + ddiff >= rxarray + maxlen ) {
-			error = PatOverflow;	// pattern too long
-			return;
-		    }
-		    memcpy( d, prev_d, ddiff*sizeof(uint) );
-		    d += ddiff;
-		    prev_d += ddiff;
-		}
-		memmove( prev_d+1, prev_d, ddiff*sizeof(uint) );
-		*prev_d = ch == '?' ? OPT : CLO;
-		d++;
-		GEN( END );
-		p++;
-		pl--;
-		}
-		break;
+		case '$': // end of line
+			prev_d = d;
+			GEN(pl == 1 ? EOL : (CHR | ch));
+			p++;
+			pl--;
+			break;
 
-	    default:
+		case '.': // any char
+			prev_d = d;
+			GEN(ANY);
+			p++;
+			pl--;
+			break;
+
+		case '[': // character class
 		{
-		prev_d = d;
-		uint cv = char_val( &p, &pl );
-		if ( cv & MCD ) {			// It's a code
-		    GEN( cv );
+			prev_d = d;
+			p++;
+			pl--;
+			if (!pl) {
+				error = PatSyntax;
+				return;
+			}
+			bool firstIsEscaped = ((char)*p == '\\');
+			uint cch = char_val(&p, &pl);
+			if (cch == '^' && !firstIsEscaped) { // negate!
+				GEN(CCN);
+				if (!pl) {
+					error = PatSyntax;
+					return;
+				}
+				cch = char_val(&p, &pl);
+			} else {
+				GEN(CCL);
+			}
+			uint numFields = 0;
+			while (pl) {
+				if ((pl > 2) && ((char)*p == '-') &&
+				    ((char)*(p + 1) != ']')) {
+					// Found a range
+					char_val(&p, &pl); // Read the '-'
+					uint cch2 = char_val(&p, &pl); // Read
+								       // the
+								       // range
+								       // end
+					if (cch > cch2) { // swap start and stop
+						int tmp = cch;
+						cch = cch2;
+						cch2 = tmp;
+					}
+					GEN((cch << 16) | cch2); // from < to
+					numFields++;
+				} else {
+					// Found a single character
+					if (cch & MCD) // It's a code; will not
+						       // be mistaken
+						GEN(cch); // for a range, since
+							  // from > to
+					else
+						GEN((cch << 16) | cch); // from
+									// == to
+									// range
+					numFields++;
+				}
+				if (d >= rxarray + maxlen) { // pattern too long
+					error = PatOverflow;
+					return;
+				}
+				if (!pl) { // At least ']' should be left
+					error = PatSyntax;
+					return;
+				}
+				bool nextIsEscaped = ((char)*p == '\\');
+				cch = char_val(&p, &pl);
+				if (cch == (uint)']' && !nextIsEscaped)
+					break;
+				if (!pl) { // End, should have seen ']'
+					error = PatSyntax;
+					return;
+				}
+			}
+			*prev_d |= numFields; // Store number of fields
+		} break;
+
+		case '*': // Kleene closure, or
+		case '+': // positive closure, or
+		case '?': // optional closure
+		{
+			if (prev_d == 0) { // no previous expression
+				error = PatSyntax; // empty closure
+				return;
+			}
+			switch (*prev_d) { // test if invalid closure
+			case BOL:
+			case BOW:
+			case EOW:
+			case CLO:
+			case OPT:
+				error = PatSyntax;
+				return;
+			}
+			int ddiff = d - prev_d;
+			if (*p == '+') { // convert to Kleene closure
+				if (d + ddiff >= rxarray + maxlen) {
+					error = PatOverflow; // pattern too long
+					return;
+				}
+				memcpy(d, prev_d, ddiff * sizeof(uint));
+				d += ddiff;
+				prev_d += ddiff;
+			}
+			memmove(prev_d + 1, prev_d, ddiff * sizeof(uint));
+			*prev_d = ch == '?' ? OPT : CLO;
+			d++;
+			GEN(END);
+			p++;
+			pl--;
+		} break;
+
+		default: {
+			prev_d = d;
+			uint cv = char_val(&p, &pl);
+			if (cv & MCD) { // It's a code
+				GEN(cv);
+			} else {
+				if (!cs && cv <= 0xff) // #only 8bit support
+					cv = tolower(cv);
+				GEN(CHR | cv);
+			}
 		}
-		else {
-		    if ( !cs && cv <= 0xff )		// #only 8bit support
-			cv = tolower( cv );
-		    GEN( CHR | cv );
 		}
+		if (d >= rxarray + maxlen) { // oops!
+			error = PatOverflow; // pattern too long
+			return;
 		}
 	}
-	if ( d >= rxarray + maxlen ) {		// oops!
-	    error = PatOverflow;		// pattern too long
-	    return;
-	}
-    }
-    GEN( END );
-    int len = d - rxarray;
-    rxdata = new uint[ len ];			// copy from rxarray to rxdata
-    CHECK_PTR( rxdata );
-    memcpy( rxdata, rxarray, len*sizeof(uint) );
+	GEN(END);
+	int len = d - rxarray;
+	rxdata = new uint[len]; // copy from rxarray to rxdata
+	CHECK_PTR(rxdata);
+	memcpy(rxdata, rxarray, len * sizeof(uint));
 #if defined(DEBUG)
-    //dump( rxdata );	// uncomment this line for debugging
+	// dump( rxdata );	// uncomment this line for debugging
 #endif
 }

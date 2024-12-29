@@ -38,27 +38,28 @@
 #include "qwidgetstack.h"
 #ifndef QT_NO_WIDGETSTACK
 
-#include "qobjectlist.h"
-#include "qobjectdict.h"
-#include "qbutton.h"
-#include "qbuttongroup.h"
+# include "qobjectlist.h"
+# include "qobjectdict.h"
+# include "qbutton.h"
+# include "qbuttongroup.h"
 
-#include "qapplication.h"
+# include "qapplication.h"
 
-class QWidgetStackPrivate {
-public:
-    class Invisible: public QWidget
-    {
-    public:
-	Invisible( QWidgetStack * parent ): QWidget( parent )
+class QWidgetStackPrivate
+{
+      public:
+	class Invisible : public QWidget
 	{
-	    setBackgroundMode( NoBackground );
-	}
-	const char * className() const
-	{
-	    return "QWidgetStackPrivate::Invisible";
-	}
-    };
+	      public:
+		Invisible(QWidgetStack *parent) : QWidget(parent)
+		{
+			setBackgroundMode(NoBackground);
+		}
+		const char *className() const
+		{
+			return "QWidgetStackPrivate::Invisible";
+		}
+	};
 };
 
 // NOT REVISED
@@ -99,16 +100,16 @@ public:
 
 /*!  Constructs an empty widget stack. */
 
-QWidgetStack::QWidgetStack( QWidget * parent, const char *name )
-    : QFrame( parent, name )
+QWidgetStack::QWidgetStack(QWidget *parent, const char *name)
+	: QFrame(parent, name)
 {
-    d = 0;
-    dict = new QIntDict<QWidget>;
-    focusWidgets = 0;
-    topWidget = 0;
-    invisible = new QWidgetStackPrivate::Invisible( this );
-    setFontPropagation( AllChildren );
-    setPalettePropagation( AllChildren );
+	d = 0;
+	dict = new QIntDict<QWidget>;
+	focusWidgets = 0;
+	topWidget = 0;
+	invisible = new QWidgetStackPrivate::Invisible(this);
+	setFontPropagation(AllChildren);
+	setPalettePropagation(AllChildren);
 }
 
 
@@ -116,12 +117,12 @@ QWidgetStack::QWidgetStack( QWidget * parent, const char *name )
 
 QWidgetStack::~QWidgetStack()
 {
-    delete focusWidgets;
-    focusWidgets = 0;
-    delete d;
-    d = 0;
-    delete dict;
-    dict = 0;
+	delete focusWidgets;
+	focusWidgets = 0;
+	delete d;
+	d = 0;
+	delete dict;
+	dict = 0;
 }
 
 
@@ -130,31 +131,32 @@ QWidgetStack::~QWidgetStack()
   If \a w is not a child of \c this, QWidgetStack moves it using
   reparent().
 
-  Note that the added children are initially hidden. After you have added the widgets
-  you want to the stack, you may want to call raiseWidget() on one of them.
+  Note that the added children are initially hidden. After you have added the
+  widgets you want to the stack, you may want to call raiseWidget() on one of
+  them.
 */
 
-void QWidgetStack::addWidget( QWidget * w, int id )
+void QWidgetStack::addWidget(QWidget *w, int id)
 {
-    if ( !w || w == invisible )
-	return;
+	if (!w || w == invisible)
+		return;
 
-    dict->insert( id+1, w );
+	dict->insert(id + 1, w);
 
-    // preserve existing focus
-    QWidget * f = w->focusWidget();
-    while( f && f != w )
-	f = f->parentWidget();
-    if ( f ) {
-	if ( !focusWidgets )
-	    focusWidgets = new QPtrDict<QWidget>( 17 );
-	focusWidgets->replace( w, w->focusWidget() );
-    }
+	// preserve existing focus
+	QWidget *f = w->focusWidget();
+	while (f && f != w)
+		f = f->parentWidget();
+	if (f) {
+		if (!focusWidgets)
+			focusWidgets = new QPtrDict<QWidget>(17);
+		focusWidgets->replace(w, w->focusWidget());
+	}
 
-    w->hide();
-    if ( w->parent() != this )
-	w->reparent( this, 0, contentsRect().topLeft(), FALSE );
-    w->setGeometry( contentsRect() );
+	w->hide();
+	if (w->parent() != this)
+		w->reparent(this, 0, contentsRect().topLeft(), FALSE);
+	w->setGeometry(contentsRect());
 }
 
 
@@ -162,153 +164,163 @@ void QWidgetStack::addWidget( QWidget * w, int id )
   w. If \a w is the currently visible widget, no other widget is
   substituted. \sa visibleWidget() raiseWidget() */
 
-void QWidgetStack::removeWidget( QWidget * w )
+void QWidgetStack::removeWidget(QWidget *w)
 {
-    if ( !w )
-	return;
-    int i = id( w );
-    if ( i != -1 )
-	dict->take( i+1 );
-    if ( w == topWidget )
-	topWidget = 0;
-    if ( dict->isEmpty() )
-	invisible->hide(); // let background shine through again
+	if (!w)
+		return;
+	int i = id(w);
+	if (i != -1)
+		dict->take(i + 1);
+	if (w == topWidget)
+		topWidget = 0;
+	if (dict->isEmpty())
+		invisible->hide(); // let background shine through again
 }
 
 
 /*!  Raises \a id to the top of the widget stack. \sa visibleWidget() */
 
-void QWidgetStack::raiseWidget( int id )
+void QWidgetStack::raiseWidget(int id)
 {
-    if ( id == -1 )
-	return;
-    QWidget * w = dict->find( id+1 );
-    if ( w )
-	raiseWidget( w );
+	if (id == -1)
+		return;
+	QWidget *w = dict->find(id + 1);
+	if (w)
+		raiseWidget(w);
 }
 
 
 /*!  Raises \a w to the top of the widget stack. */
 
-void QWidgetStack::raiseWidget( QWidget * w )
+void QWidgetStack::raiseWidget(QWidget *w)
 {
-    if ( !w || !isMyChild( w ) )
-	return;
+	if (!w || !isMyChild(w))
+		return;
 
-    topWidget = w;
-    if ( !isVisible() )
-	return;
+	topWidget = w;
+	if (!isVisible())
+		return;
 
-    if ( !invisible->isVisible() ) {
-	invisible->setGeometry( contentsRect() );
-	invisible->lower();
-	invisible->show();
-	QApplication::sendPostedEvents( invisible, QEvent::ShowWindowRequest );
-    }
+	if (!invisible->isVisible()) {
+		invisible->setGeometry(contentsRect());
+		invisible->lower();
+		invisible->show();
+		QApplication::sendPostedEvents(invisible,
+					       QEvent::ShowWindowRequest);
+	}
 
-    // try to move focus onto the incoming widget if focus
-    // was somewhere on the outgoing widget.
-    QWidget * f = w->focusWidget();
-    while ( f && f->parent() != this )
-	f = f->parentWidget();
-    if ( f && f->parent() == this ) {
-	if ( !focusWidgets )
-	    focusWidgets = new QPtrDict<QWidget>( 17 );
-	focusWidgets->replace( f, f->focusWidget() );
-	f->focusWidget()->clearFocus();
-	if ( w->focusPolicy() != QWidget::NoFocus ) {
-	    f = w;
-	} else {
-	    // look for the best focus widget we can find
-	    // best == what we had (which may be deleted)
-	    f = focusWidgets->find( w );
-	    if ( f )
-		focusWidgets->take( w );
-	    // second best == selected button from button group
-	    QWidget * fb = 0;
-	    // third best == whatever candidate we see first
-	    QWidget * fc = 0;
-	    bool done = FALSE;
-	    const QObjectList * c = w->children();
-	    if ( c ) {
-		QObjectListIt it( *c );
-		QObject * wc;
-		while( !done && (wc=it.current()) != 0 ) {
-		    ++it;
-		    if ( wc->isWidgetType() ) {
-			if ( f == wc ) {
-			    done = TRUE;
-			} else if ( (((QWidget *)wc)->focusPolicy()&QWidget::TabFocus)
-				    == QWidget::TabFocus ) {
-			    QButton * b = (QButton *)wc;
-			    if ( wc->inherits( "QButton" ) &&
-				 b->group() && b->isOn() &&
-				 b->group()->isExclusive() &&
-				 ( fc == 0 ||
-				   !fc->inherits( "QButton" ) ||
-				   ((QButton*)fc)->group() == b->group() ) )
-				fb = b;
-			    else if ( !fc )
-				fc = (QWidget*)wc;
+	// try to move focus onto the incoming widget if focus
+	// was somewhere on the outgoing widget.
+	QWidget *f = w->focusWidget();
+	while (f && f->parent() != this)
+		f = f->parentWidget();
+	if (f && f->parent() == this) {
+		if (!focusWidgets)
+			focusWidgets = new QPtrDict<QWidget>(17);
+		focusWidgets->replace(f, f->focusWidget());
+		f->focusWidget()->clearFocus();
+		if (w->focusPolicy() != QWidget::NoFocus) {
+			f = w;
+		} else {
+			// look for the best focus widget we can find
+			// best == what we had (which may be deleted)
+			f = focusWidgets->find(w);
+			if (f)
+				focusWidgets->take(w);
+			// second best == selected button from button group
+			QWidget *fb = 0;
+			// third best == whatever candidate we see first
+			QWidget *fc = 0;
+			bool done = FALSE;
+			const QObjectList *c = w->children();
+			if (c) {
+				QObjectListIt it(*c);
+				QObject *wc;
+				while (!done && (wc = it.current()) != 0) {
+					++it;
+					if (wc->isWidgetType()) {
+						if (f == wc) {
+							done = TRUE;
+						} else if ((((QWidget *)wc)
+								    ->focusPolicy() &
+							    QWidget::TabFocus) ==
+							   QWidget::TabFocus) {
+							QButton *b =
+								(QButton *)wc;
+							if (wc->inherits(
+								    "QButton") &&
+							    b->group() &&
+							    b->isOn() &&
+							    b->group()
+								    ->isExclusive() &&
+							    (fc == 0 ||
+							     !fc->inherits(
+								     "QButton") ||
+							     ((QButton *)fc)->group() ==
+								     b->group()))
+								fb = b;
+							else if (!fc)
+								fc = (QWidget *)
+									wc;
+						}
+					}
+				}
+				// f exists iff done
+				if (!done) {
+					if (fb)
+						f = fb;
+					else if (fc)
+						f = fc;
+					else
+						f = 0;
+				}
 			}
-		    }
 		}
-		// f exists iff done
-		if ( !done ) {
-		    if ( fb )
-			f = fb;
-		    else if ( fc )
-			f = fc;
-		    else
-			f = 0;
+	}
+
+	const QObjectList *c = children();
+	QObjectListIt it(*c);
+	QObject *o;
+
+	while ((o = it.current()) != 0) {
+		++it;
+		if (o->isWidgetType() && o != w && o != invisible)
+			((QWidget *)o)->hide();
+	}
+	if (f)
+		f->setFocus();
+
+	if (isVisible()) {
+		emit aboutToShow(w);
+		if (receivers(SIGNAL(aboutToShow(int)))) {
+			int i = id(w);
+			if (i >= 0)
+				emit aboutToShow(i);
 		}
-	    }
 	}
-    }
 
-    const QObjectList * c = children();
-    QObjectListIt it( *c );
-    QObject * o;
-
-    while( (o=it.current()) != 0 ) {
-	++it;
-	if ( o->isWidgetType() && o != w && o != invisible )
-	    ((QWidget *)o)->hide();
-    }
-    if ( f )
-	f->setFocus();
-
-    if ( isVisible() ) {
-	emit aboutToShow( w );
-	if ( receivers( SIGNAL(aboutToShow(int)) ) ) {
-	    int i = id( w );
-	    if ( i >= 0 )
-		emit aboutToShow( i );
-	}
-    }
-
-    w->setGeometry( invisible->geometry() );
-    w->show();
-    QApplication::sendPostedEvents( w, QEvent::ShowWindowRequest );
+	w->setGeometry(invisible->geometry());
+	w->show();
+	QApplication::sendPostedEvents(w, QEvent::ShowWindowRequest);
 }
 
 
 /*!  Returns TRUE if \a w is a child of this widget, else FALSE. */
 
-bool QWidgetStack::isMyChild( QWidget * w )
+bool QWidgetStack::isMyChild(QWidget *w)
 {
-    const QObjectList * c = children();
-    if ( !c || !w || w == invisible )
-	return FALSE;
-    QObjectListIt it( *c );
-    QObject * o;
+	const QObjectList *c = children();
+	if (!c || !w || w == invisible)
+		return FALSE;
+	QObjectListIt it(*c);
+	QObject *o;
 
-    while( (o=it.current()) != 0 ) {
-	++it;
-	if ( o->isWidgetType() && o == w )
-	    return TRUE;
-    }
-    return FALSE;
+	while ((o = it.current()) != 0) {
+		++it;
+		if (o->isWidgetType() && o == w)
+			return TRUE;
+	}
+	return FALSE;
 }
 
 
@@ -316,17 +328,17 @@ bool QWidgetStack::isMyChild( QWidget * w )
 
 void QWidgetStack::frameChanged()
 {
-    QFrame::frameChanged();
-    setChildGeometries();
+	QFrame::frameChanged();
+	setChildGeometries();
 }
 
 
 /*! \reimp */
 
-void QWidgetStack::setFrameRect( const QRect & r )
+void QWidgetStack::setFrameRect(const QRect &r)
 {
-    QFrame::setFrameRect( r );
-    setChildGeometries();
+	QFrame::setFrameRect(r);
+	setChildGeometries();
 }
 
 
@@ -334,37 +346,37 @@ void QWidgetStack::setFrameRect( const QRect & r )
 
 void QWidgetStack::setChildGeometries()
 {
-    invisible->setGeometry( contentsRect() );
-    if ( topWidget )
-	topWidget->setGeometry( invisible->geometry() );
+	invisible->setGeometry(contentsRect());
+	if (topWidget)
+		topWidget->setGeometry(invisible->geometry());
 }
 
 
 /*! \reimp */
 void QWidgetStack::show()
 {
-    //  Reimplemented in order to set the children's geometries
-    //  appropriately.
-    if ( !isVisible() && children() ) {
-	setChildGeometries();
+	//  Reimplemented in order to set the children's geometries
+	//  appropriately.
+	if (!isVisible() && children()) {
+		setChildGeometries();
 
-	const QObjectList * c = children();
-	QObjectListIt it( *c );
-	QObject * o;
+		const QObjectList *c = children();
+		QObjectListIt it(*c);
+		QObject *o;
 
-	while( (o=it.current()) != 0 ) {
-	    ++it;
-	    if ( o->isWidgetType() )
-		if ( o == topWidget )
-		    ((QWidget *)o)->show();
-		else if ( o == invisible && topWidget != 0 )
-		    ((QWidget *)o)->show();
-		else
-		    ((QWidget *)o)->hide();
+		while ((o = it.current()) != 0) {
+			++it;
+			if (o->isWidgetType())
+				if (o == topWidget)
+					((QWidget *)o)->show();
+				else if (o == invisible && topWidget != 0)
+					((QWidget *)o)->show();
+				else
+					((QWidget *)o)->hide();
+		}
 	}
-    }
 
-    QFrame::show();
+	QFrame::show();
 }
 
 
@@ -375,9 +387,9 @@ void QWidgetStack::show()
   \sa id() addWidget()
 */
 
-QWidget * QWidgetStack::widget( int id ) const
+QWidget *QWidgetStack::widget(int id) const
 {
-    return id != -1 ? dict->find( id+1 ) : 0;
+	return id != -1 ? dict->find(id + 1) : 0;
 }
 
 
@@ -387,15 +399,15 @@ QWidget * QWidgetStack::widget( int id ) const
   \sa widget() addWidget()
 */
 
-int QWidgetStack::id( QWidget * widget ) const
+int QWidgetStack::id(QWidget *widget) const
 {
-    if ( !widget || !dict )
-	return -1;
+	if (!widget || !dict)
+		return -1;
 
-    QIntDictIterator<QWidget> it( *dict );
-    while ( it.current() && it.current() != widget )
-	++it;
-    return it.current() == widget ? it.currentKey()-1 : -1;
+	QIntDictIterator<QWidget> it(*dict);
+	while (it.current() && it.current() != widget)
+		++it;
+	return it.current() == widget ? it.currentKey() - 1 : -1;
 }
 
 
@@ -405,9 +417,9 @@ int QWidgetStack::id( QWidget * widget ) const
   \sa aboutToShow() id() raiseWidget()
 */
 
-QWidget * QWidgetStack::visibleWidget() const
+QWidget *QWidgetStack::visibleWidget() const
 {
-    return topWidget;
+	return topWidget;
 }
 
 
@@ -428,10 +440,10 @@ QWidget * QWidgetStack::visibleWidget() const
 
 /*! \reimp */
 
-void QWidgetStack::resizeEvent( QResizeEvent * e )
+void QWidgetStack::resizeEvent(QResizeEvent *e)
 {
-    QFrame::resizeEvent( e );
-    setChildGeometries();
+	QFrame::resizeEvent(e);
+	setChildGeometries();
 }
 
 
@@ -439,56 +451,58 @@ void QWidgetStack::resizeEvent( QResizeEvent * e )
 
 QSize QWidgetStack::sizeHint() const
 {
-    constPolish();
+	constPolish();
 
-    QSize size(0,0);
-    if ( children() ) {
-	const QObjectList * c = children();
-	QObjectListIt it( *c );
-	QObject * o;
+	QSize size(0, 0);
+	if (children()) {
+		const QObjectList *c = children();
+		QObjectListIt it(*c);
+		QObject *o;
 
-	while( (o=it.current()) != 0 ) {
-	    ++it;
-	    if ( o->isWidgetType() && o != invisible ) {
-		QWidget *w = (QWidget*)o;
-		size = size.expandedTo( w->sizeHint() )
-		       .expandedTo(w->minimumSize());
-	    }
+		while ((o = it.current()) != 0) {
+			++it;
+			if (o->isWidgetType() && o != invisible) {
+				QWidget *w = (QWidget *)o;
+				size = size.expandedTo(w->sizeHint())
+					       .expandedTo(w->minimumSize());
+			}
+		}
 	}
-    }
-    if ( size.isNull() )
-	return QSize(100,50); //### is this a sensible default???
-    return QSize( size.width() + 2*frameWidth(), size.height() + 2*frameWidth() );
+	if (size.isNull())
+		return QSize(100, 50); // ### is this a sensible default???
+	return QSize(size.width() + 2 * frameWidth(),
+		     size.height() + 2 * frameWidth());
 }
 
 
 /*! \reimp */
 QSize QWidgetStack::minimumSizeHint() const
 {
-    constPolish();
+	constPolish();
 
-    QSize size(0,0);
-    if ( children() ) {
-	const QObjectList * c = children();
-	QObjectListIt it( *c );
-	QObject * o;
+	QSize size(0, 0);
+	if (children()) {
+		const QObjectList *c = children();
+		QObjectListIt it(*c);
+		QObject *o;
 
-	while( (o=it.current()) != 0 ) {
-	    ++it;
-	    if ( o->isWidgetType() &&  o != invisible ) {
-		    QWidget *w = (QWidget*)o;
-		    size = size.expandedTo( w->minimumSizeHint())
-					    .expandedTo(w->minimumSize());
-	    }
+		while ((o = it.current()) != 0) {
+			++it;
+			if (o->isWidgetType() && o != invisible) {
+				QWidget *w = (QWidget *)o;
+				size = size.expandedTo(w->minimumSizeHint())
+					       .expandedTo(w->minimumSize());
+			}
+		}
 	}
-    }
-    return QSize( size.width() + 2*frameWidth(), size.height() + 2*frameWidth() );
+	return QSize(size.width() + 2 * frameWidth(),
+		     size.height() + 2 * frameWidth());
 }
 
 /*! \reimp  */
-void QWidgetStack::childEvent( QChildEvent * e)
+void QWidgetStack::childEvent(QChildEvent *e)
 {
-    if ( e->child()->isWidgetType() && e->removed() )
-	removeWidget( (QWidget*) e->child() );
+	if (e->child()->isWidgetType() && e->removed())
+		removeWidget((QWidget *)e->child());
 }
 #endif

@@ -18,21 +18,21 @@ class QPushButton;
 
 class MyRichText : public QVBox
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    MyRichText( const QStringList &s, QWidget *parent = 0, const char *name = 0 );
+      public:
+	MyRichText(const QStringList &s, QWidget *parent = 0,
+		   const char *name = 0);
 
-protected:
-    QTextView *view;
-    QPushButton *bClose, *bNext, *bPrev;
-    QStringList sayings;
-    int num;
+      protected:
+	QTextView *view;
+	QPushButton *bClose, *bNext, *bPrev;
+	QStringList sayings;
+	int num;
 
-protected slots:
-    void prev();
-    void next();
-
+      protected slots:
+	void prev();
+	void next();
 };
 
 #endif

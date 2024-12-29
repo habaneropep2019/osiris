@@ -32,69 +32,69 @@ class Help;
 
 class HelpNavigationListItem : public QListBoxText
 {
-public:
-    HelpNavigationListItem( QListBox *ls, const QString &txt );
+      public:
+	HelpNavigationListItem(QListBox *ls, const QString &txt);
 
-    void addLink( const QString &link );
-    QStringList links() const { return linkList; }
+	void addLink(const QString &link);
+	QStringList links() const
+	{
+		return linkList;
+	}
 
-private:
-    QStringList linkList;
-
+      private:
+	QStringList linkList;
 };
 
 class HelpNavigationContentsItem : public QListViewItem
 {
-public:
-    HelpNavigationContentsItem( QListView *v, QListViewItem *after );
-    HelpNavigationContentsItem( QListViewItem *v, QListViewItem *after );
+      public:
+	HelpNavigationContentsItem(QListView *v, QListViewItem *after);
+	HelpNavigationContentsItem(QListViewItem *v, QListViewItem *after);
 
-    void setLink( const QString &lnk );
-    QString link() const;
+	void setLink(const QString &lnk);
+	QString link() const;
 
-private:
-    QString theLink;
-
+      private:
+	QString theLink;
 };
 
 class HelpDialog : public HelpDialogBase
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    HelpDialog( QWidget *parent, MainWindow *mw, Help *h );
-    QString titleOfLink( const QString &link );
-    bool eventFilter( QObject *, QEvent * );
+      public:
+	HelpDialog(QWidget *parent, MainWindow *mw, Help *h);
+	QString titleOfLink(const QString &link);
+	bool eventFilter(QObject *, QEvent *);
 
-protected slots:
-    void loadIndexFile();
-    void currentTabChanged( const QString &s );
-    void currentIndexChanged( QListBoxItem *i );
-    void showTopic();
-    void searchInIndex( const QString &s );
-    void addBookmark();
-    void removeBookmark();
-    void currentBookmarkChanged( QListViewItem *i );
-    void currentContentsChanged( QListViewItem *i );
-    
-signals:
-    void showLink( const QString &s, const QString& t );
+      protected slots:
+	void loadIndexFile();
+	void currentTabChanged(const QString &s);
+	void currentIndexChanged(QListBoxItem *i);
+	void showTopic();
+	void searchInIndex(const QString &s);
+	void addBookmark();
+	void removeBookmark();
+	void currentBookmarkChanged(QListViewItem *i);
+	void currentContentsChanged(QListViewItem *i);
 
-private:
-    void showIndexTopic();
-    void showBookmarkTopic();
-    void insertBookmarks();
-    void insertContents();
-    void setupTitleMap();
-    void saveBookmarks();
-    void showContentsTopic();
+      signals:
+	void showLink(const QString &s, const QString &t);
 
-private:
-    MainWindow *mainWindow;
-    QMap<QString, QString> titleMap;
-    bool indexDone, bookmarksInserted, contentsDone, contentsInserted;
-    Help *help;
+      private:
+	void showIndexTopic();
+	void showBookmarkTopic();
+	void insertBookmarks();
+	void insertContents();
+	void setupTitleMap();
+	void saveBookmarks();
+	void showContentsTopic();
 
+      private:
+	MainWindow *mainWindow;
+	QMap<QString, QString> titleMap;
+	bool indexDone, bookmarksInserted, contentsDone, contentsInserted;
+	Help *help;
 };
 
 #endif

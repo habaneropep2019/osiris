@@ -45,177 +45,178 @@ class QValidator;
 
 
 #ifndef QT_H
-#include "qwidget.h"
-#include "qstring.h"
-#include "qclipboard.h"
+# include "qwidget.h"
+# include "qstring.h"
+# include "qclipboard.h"
 #endif // QT_H
 
 #ifndef QT_NO_LINEEDIT
 
 class Q_EXPORT QLineEdit : public QWidget
 {
-    Q_OBJECT
-    Q_ENUMS( EchoMode )
-    Q_PROPERTY( QString text READ text WRITE setText )
-    Q_PROPERTY( int maxLength READ maxLength WRITE setMaxLength )
-    Q_PROPERTY( bool frame READ frame WRITE setFrame )
-    Q_PROPERTY( EchoMode echoMode READ echoMode WRITE setEchoMode )
-    Q_PROPERTY( QString displayText READ displayText )
-    Q_PROPERTY( int cursorPosition READ cursorPosition WRITE setCursorPosition )
-    Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
-    Q_PROPERTY( bool edited READ edited WRITE setEdited )
-    Q_PROPERTY( bool hasMarkedText READ hasMarkedText )
-    Q_PROPERTY( QString markedText READ markedText )
-	
-public:
-    QLineEdit( QWidget *parent, const char *name=0 );
-    QLineEdit( const QString &, QWidget *parent, const char *name=0 );
-   ~QLineEdit();
+	Q_OBJECT
+	Q_ENUMS(EchoMode)
+	Q_PROPERTY(QString text READ text WRITE setText)
+	Q_PROPERTY(int maxLength READ maxLength WRITE setMaxLength)
+	Q_PROPERTY(bool frame READ frame WRITE setFrame)
+	Q_PROPERTY(EchoMode echoMode READ echoMode WRITE setEchoMode)
+	Q_PROPERTY(QString displayText READ displayText)
+	Q_PROPERTY(
+		int cursorPosition READ cursorPosition WRITE setCursorPosition)
+	Q_PROPERTY(Alignment alignment READ alignment WRITE setAlignment)
+	Q_PROPERTY(bool edited READ edited WRITE setEdited)
+	Q_PROPERTY(bool hasMarkedText READ hasMarkedText)
+	Q_PROPERTY(QString markedText READ markedText)
 
-    QString text() const;
+      public:
+	QLineEdit(QWidget *parent, const char *name = 0);
+	QLineEdit(const QString &, QWidget *parent, const char *name = 0);
+	~QLineEdit();
 
-    QString displayText() const;
+	QString text() const;
 
-    int		maxLength()	const;
-    virtual void setMaxLength( int );
+	QString displayText() const;
 
-    virtual void setFrame( bool );
-    bool	frame() const;
+	int maxLength() const;
+	virtual void setMaxLength(int);
 
-    enum	EchoMode { Normal, NoEcho, Password };
-    virtual void setEchoMode( EchoMode );
-    EchoMode 	echoMode() const;
-#if OSIRIS_VERSION >= 300
-#error "Make setReadOnly virtual"
-#endif
-    void setReadOnly( bool );
-    bool isReadOnly() const;
+	virtual void setFrame(bool);
+	bool frame() const;
 
-    virtual void setValidator( const QValidator * );
-    const QValidator * validator() const;
+	enum EchoMode { Normal, NoEcho, Password };
+	virtual void setEchoMode(EchoMode);
+	EchoMode echoMode() const;
+# if OSIRIS_VERSION >= 300
+#  error "Make setReadOnly virtual"
+# endif
+	void setReadOnly(bool);
+	bool isReadOnly() const;
 
-    QSize	sizeHint() const;
-    QSize	minimumSizeHint() const;
-    QSizePolicy sizePolicy() const;
+	virtual void setValidator(const QValidator *);
+	const QValidator *validator() const;
 
-    virtual void setEnabled( bool );
-    virtual void setFont( const QFont & );
-    virtual void setPalette( const QPalette & );
-    virtual void setSelection( int, int );
+	QSize sizeHint() const;
+	QSize minimumSizeHint() const;
+	QSizePolicy sizePolicy() const;
 
-    virtual void setCursorPosition( int );
-    int		cursorPosition() const;
+	virtual void setEnabled(bool);
+	virtual void setFont(const QFont &);
+	virtual void setPalette(const QPalette &);
+	virtual void setSelection(int, int);
 
-    bool	validateAndSet( const QString &, int, int, int );
+	virtual void setCursorPosition(int);
+	int cursorPosition() const;
 
-#ifndef QT_NO_CLIPBOARD
-    void	cut();
-    void	copy(QClipboard::Mode mode = QClipboard::Clipboard) const;
-    void	paste(QClipboard::Mode mode = QClipboard::Clipboard);
-#endif
+	bool validateAndSet(const QString &, int, int, int);
 
-    void setAlignment( int flag );
-    int alignment() const;
+# ifndef QT_NO_CLIPBOARD
+	void cut();
+	void copy(QClipboard::Mode mode = QClipboard::Clipboard) const;
+	void paste(QClipboard::Mode mode = QClipboard::Clipboard);
+# endif
 
-    void	cursorLeft( bool mark, int steps = 1 );
-    void	cursorRight( bool mark, int steps = 1 );
-    void	cursorWordForward( bool mark );
-    void	cursorWordBackward( bool mark );
-    void	backspace();
-    void	del();
-    void	home( bool mark );
-    void	end( bool mark );
+	void setAlignment(int flag);
+	int alignment() const;
 
-    void	setEdited( bool );
-    bool	edited() const;
+	void cursorLeft(bool mark, int steps = 1);
+	void cursorRight(bool mark, int steps = 1);
+	void cursorWordForward(bool mark);
+	void cursorWordBackward(bool mark);
+	void backspace();
+	void del();
+	void home(bool mark);
+	void end(bool mark);
 
-    bool	hasMarkedText() const;
-    QString	markedText() const;
-#if defined(Q_INCOMPATIBLE_3_0_ADDONS)
-    bool 	getSelection( int *start, int *end );
-    void 	setPasswordChar( QChar c );
-    QChar 	passwordChar() const;
-#endif    
+	void setEdited(bool);
+	bool edited() const;
 
-public slots:
-    virtual void setText( const QString &);
+	bool hasMarkedText() const;
+	QString markedText() const;
+# if defined(Q_INCOMPATIBLE_3_0_ADDONS)
+	bool getSelection(int *start, int *end);
+	void setPasswordChar(QChar c);
+	QChar passwordChar() const;
+# endif
 
-    void	selectAll();
-    void	deselect();
+      public slots:
+	virtual void setText(const QString &);
 
-    void	clearValidator();
+	void selectAll();
+	void deselect();
 
-    void	insert( const QString &);
+	void clearValidator();
 
-    void	clear();
+	void insert(const QString &);
 
-signals:
-    void	textChanged( const QString &);
-    void	returnPressed();
+	void clear();
 
-protected:
-    bool	event( QEvent * );
-    void	mousePressEvent( QMouseEvent * );
-    void	mouseMoveEvent( QMouseEvent * );
-    void	mouseReleaseEvent( QMouseEvent * );
-    void	mouseDoubleClickEvent( QMouseEvent * );
-    void	keyPressEvent( QKeyEvent * );
-    void	focusInEvent( QFocusEvent * );
-    void	focusOutEvent( QFocusEvent * );
-    void	paintEvent( QPaintEvent * );
-    void	resizeEvent( QResizeEvent * );
-    void	leaveEvent( QEvent * );
-#ifndef QT_NO_DRAGANDDROP
-    void	dragEnterEvent( QDragEnterEvent * );
-    void	dropEvent( QDropEvent * );
-#endif
+      signals:
+	void textChanged(const QString &);
+	void returnPressed();
 
-    void	repaintArea( int, int );
+      protected:
+	bool event(QEvent *);
+	void mousePressEvent(QMouseEvent *);
+	void mouseMoveEvent(QMouseEvent *);
+	void mouseReleaseEvent(QMouseEvent *);
+	void mouseDoubleClickEvent(QMouseEvent *);
+	void keyPressEvent(QKeyEvent *);
+	void focusInEvent(QFocusEvent *);
+	void focusOutEvent(QFocusEvent *);
+	void paintEvent(QPaintEvent *);
+	void resizeEvent(QResizeEvent *);
+	void leaveEvent(QEvent *);
+# ifndef QT_NO_DRAGANDDROP
+	void dragEnterEvent(QDragEnterEvent *);
+	void dropEvent(QDropEvent *);
+# endif
 
-private slots:
-    void	clipboardChanged();
-    void	blinkSlot();
-    void	dragScrollSlot();
-#ifndef QT_NO_DRAGANDDROP
-    void 	doDrag();
-#endif
+	void repaintArea(int, int);
 
-private:
-    // kept
-    void	newMark( int pos, bool copy=TRUE );
-    void	markWord( int pos );
-    int		lastCharVisible() const;
-    int		minMark() const;
-    int		maxMark() const;
-    int		frameW() const;
+      private slots:
+	void clipboardChanged();
+	void blinkSlot();
+	void dragScrollSlot();
+# ifndef QT_NO_DRAGANDDROP
+	void doDrag();
+# endif
 
-    void	init();
+      private:
+	// kept
+	void newMark(int pos, bool copy = TRUE);
+	void markWord(int pos);
+	int lastCharVisible() const;
+	int minMark() const;
+	int maxMark() const;
+	int frameW() const;
 
-    QString	tbuf;
-    QLineEditPrivate * d;
-    int		cursorPos;
-    int		offset;
-    int		maxLen;
-    int		markAnchor;
-    int		markDrag;
-    bool	cursorOn;
-    bool	dragScrolling;
-    bool	scrollingLeft;
-    int		alignmentFlag;
-    bool	ed;
+	void init();
 
-    void updateOffset();
-    int xPosToCursorPos( int ) const;
-    void blinkOn();
-    void makePixmap() const;
-    void undoInternal();
-    void redoInternal();
+	QString tbuf;
+	QLineEditPrivate *d;
+	int cursorPos;
+	int offset;
+	int maxLen;
+	int markAnchor;
+	int markDrag;
+	bool cursorOn;
+	bool dragScrolling;
+	bool scrollingLeft;
+	int alignmentFlag;
+	bool ed;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QLineEdit( const QLineEdit & );
-    QLineEdit &operator=( const QLineEdit & );
-#endif
+	void updateOffset();
+	int xPosToCursorPos(int) const;
+	void blinkOn();
+	void makePixmap() const;
+	void undoInternal();
+	void redoInternal();
+
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QLineEdit(const QLineEdit &);
+	QLineEdit &operator=(const QLineEdit &);
+# endif
 };
 
 #endif // QT_NO_LINEEDIT

@@ -14,7 +14,7 @@ CXXFLAGS=	-pipe -Wall -W -O2 -DNO_DEBUG
 INCPATH	=	-I$(OSIRISDIR)/include
 LINK	=	g++
 LFLAGS	=	
-LIBS	=	$(SUBLIBS) -L$(OSIRISDIR)/lib -L/usr/X11R6/lib -lqt -lXext -lX11 -lm
+LIBS	=	$(SUBLIBS) -L$(OSIRISDIR)/lib -L/usr/X11R6/lib -losiris -lXext -lX11 -lm
 MOC	=	$(OSIRISDIR)/bin/moc
 UIC	=	$(OSIRISDIR)/bin/uic
 

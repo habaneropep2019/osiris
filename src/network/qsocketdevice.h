@@ -39,104 +39,113 @@
 #define QSOCKETDEVICE_H
 
 #ifndef QT_H
-#include "qiodevice.h"
-#include "qstring.h"
-#include "qhostaddress.h"
+# include "qiodevice.h"
+# include "qstring.h"
+# include "qhostaddress.h"
 #endif // QT_H
 
 #ifndef QT_NO_NETWORK
 class QSocketDevicePrivate;
 
 
-class  Q_EXPORT QSocketDevice: public QIODevice
+class Q_EXPORT QSocketDevice : public QIODevice
 {
-public:
-    enum Type { Stream, Datagram };
+      public:
+	enum Type { Stream, Datagram };
 
-    QSocketDevice( Type type = Stream );
-    QSocketDevice( int socket, Type type );
-    virtual ~QSocketDevice();
+	QSocketDevice(Type type = Stream);
+	QSocketDevice(int socket, Type type);
+	virtual ~QSocketDevice();
 
-    bool	 isValid() const;
-    Type	 type() const;
-    int		 socket() const;
-    virtual void setSocket( int socket, Type type );
+	bool isValid() const;
+	Type type() const;
+	int socket() const;
+	virtual void setSocket(int socket, Type type);
 
-    bool	 open( int mode );
-    void	 close();
-    void	 flush();
+	bool open(int mode);
+	void close();
+	void flush();
 
-    // Implementation of QIODevice abstract virtual functions
-    uint	 size() const;
-    int		 at() const;
-    bool	 at( int );
-    bool	 atEnd() const;
+	// Implementation of QIODevice abstract virtual functions
+	uint size() const;
+	int at() const;
+	bool at(int);
+	bool atEnd() const;
 
-    bool	 blocking() const;
-    virtual void setBlocking( bool );
+	bool blocking() const;
+	virtual void setBlocking(bool);
 
-    bool	 addressReusable() const;
-    virtual void setAddressReusable( bool );
+	bool addressReusable() const;
+	virtual void setAddressReusable(bool);
 
-    int		 receiveBufferSize() const;
-    virtual void setReceiveBufferSize( uint );
-    int		 sendBufferSize() const;
-    virtual void setSendBufferSize( uint );
+	int receiveBufferSize() const;
+	virtual void setReceiveBufferSize(uint);
+	int sendBufferSize() const;
+	virtual void setSendBufferSize(uint);
 
-    virtual bool connect( const QHostAddress &, Q_UINT16 );
+	virtual bool connect(const QHostAddress &, Q_UINT16);
 
-    virtual bool bind( const QHostAddress &, Q_UINT16 );
-    virtual bool listen( int backlog );
-    virtual int	 accept();
+	virtual bool bind(const QHostAddress &, Q_UINT16);
+	virtual bool listen(int backlog);
+	virtual int accept();
 
-    int		 bytesAvailable() const;
-    int		 waitForMore( int msecs ) const;
-    int		 readBlock( char *data, uint maxlen );
-    int		 writeBlock( const char *data, uint len );
-    virtual int  writeBlock( const char *data, uint len,
-			    const QHostAddress & host, Q_UINT16 port );
+	int bytesAvailable() const;
+	int waitForMore(int msecs) const;
+	int readBlock(char *data, uint maxlen);
+	int writeBlock(const char *data, uint len);
+	virtual int writeBlock(const char *data, uint len,
+			       const QHostAddress &host, Q_UINT16 port);
 
-    int		 getch();
-    int		 putch( int );
-    int		 ungetch(int);
+	int getch();
+	int putch(int);
+	int ungetch(int);
 
-    Q_UINT16	 port() const;
-    Q_UINT16	 peerPort() const;
-    QHostAddress address() const;
-    QHostAddress peerAddress() const;
+	Q_UINT16 port() const;
+	Q_UINT16 peerPort() const;
+	QHostAddress address() const;
+	QHostAddress peerAddress() const;
 
-    enum Error { NoError, AlreadyBound, Inaccessible, NoResources,
-		 Bug, Impossible, NoFiles, ConnectionRefused,
-		 NetworkFailure, UnknownError };
-    Error 	 error() const;
+	enum Error {
+		NoError,
+		AlreadyBound,
+		Inaccessible,
+		NoResources,
+		Bug,
+		Impossible,
+		NoFiles,
+		ConnectionRefused,
+		NetworkFailure,
+		UnknownError
+	};
+	Error error() const;
 
-protected:
-    void setError( Error err );
+      protected:
+	void setError(Error err);
 
-private:
-    int fd;
-    Type t;
-    Q_UINT16 p;
-    QHostAddress a;
-    Q_UINT16 pp;
-    QHostAddress pa;
-    QSocketDevice::Error e;
-    QSocketDevicePrivate * d;
+      private:
+	int fd;
+	Type t;
+	Q_UINT16 p;
+	QHostAddress a;
+	Q_UINT16 pp;
+	QHostAddress pa;
+	QSocketDevice::Error e;
+	QSocketDevicePrivate *d;
 
-    enum Option { Broadcast, ReceiveBuffer, ReuseAddress, SendBuffer };
+	enum Option { Broadcast, ReceiveBuffer, ReuseAddress, SendBuffer };
 
-    int		 option( Option ) const;
-    virtual void setOption( Option, int );
+	int option(Option) const;
+	virtual void setOption(Option, int);
 
-    void	 fetchConnectionParameters();
+	void fetchConnectionParameters();
 
-    static void init();
+	static void init();
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QSocketDevice( const QSocketDevice & );
-    QSocketDevice &operator=( const QSocketDevice & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QSocketDevice(const QSocketDevice &);
+	QSocketDevice &operator=(const QSocketDevice &);
+# endif
 };
 
 #endif // QT_NO_NETWORK

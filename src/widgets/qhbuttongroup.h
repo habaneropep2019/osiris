@@ -39,24 +39,25 @@
 #define QHBUTTONGROUP_H
 
 #ifndef QT_H
-#include "qbuttongroup.h"
+# include "qbuttongroup.h"
 #endif // QT_H
 
 #ifndef QT_NO_HBUTTONGROUP
 
 class Q_EXPORT QHButtonGroup : public QButtonGroup
 {
-    Q_OBJECT
-public:
-    QHButtonGroup( QWidget *parent=0, const char *name=0 );
-    QHButtonGroup( const QString &title, QWidget *parent=0, const char* name=0 );
-   ~QHButtonGroup();
+	Q_OBJECT
+      public:
+	QHButtonGroup(QWidget *parent = 0, const char *name = 0);
+	QHButtonGroup(const QString &title, QWidget *parent = 0,
+		      const char *name = 0);
+	~QHButtonGroup();
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QHButtonGroup( const QHButtonGroup & );
-    QHButtonGroup &operator=( const QHButtonGroup & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QHButtonGroup(const QHButtonGroup &);
+	QHButtonGroup &operator=(const QHButtonGroup &);
+# endif
 };
 
 

@@ -37,19 +37,19 @@
 
 #include "qslider.h"
 #ifndef QT_NO_SLIDER
-#include "qpainter.h"
-#include "qdrawutil.h"
-#include "qtimer.h"
-#include "qbitmap.h"
-#include "qapplication.h"
+# include "qpainter.h"
+# include "qdrawutil.h"
+# include "qtimer.h"
+# include "qbitmap.h"
+# include "qapplication.h"
 
 static const int motifBorder = 2;
 static const int thresholdTime = 500;
-static const int repeatTime    = 100;
+static const int repeatTime = 100;
 
 static const bool funnyWindowsStyle = FALSE;
 
-static int sliderStartVal = 0; //##### class member?
+static int sliderStartVal = 0; // ##### class member?
 
 
 // NOT REVISED
@@ -106,11 +106,10 @@ static int sliderStartVal = 0; //##### class member?
   The \e parent and \e name arguments are sent to the QWidget constructor.
 */
 
-QSlider::QSlider( QWidget *parent, const char *name )
-    : QWidget( parent, name  )
+QSlider::QSlider(QWidget *parent, const char *name) : QWidget(parent, name)
 {
-    orient = Vertical;
-    init();
+	orient = Vertical;
+	init();
 }
 
 /*!
@@ -121,11 +120,11 @@ QSlider::QSlider( QWidget *parent, const char *name )
   The \e parent and \e name arguments are sent to the QWidget constructor.
 */
 
-QSlider::QSlider( Orientation orientation, QWidget *parent, const char *name )
-    : QWidget( parent, name )
+QSlider::QSlider(Orientation orientation, QWidget *parent, const char *name)
+	: QWidget(parent, name)
 {
-    orient = orientation;
-    init();
+	orient = orientation;
+	init();
 }
 
 /*!
@@ -140,31 +139,30 @@ QSlider::QSlider( Orientation orientation, QWidget *parent, const char *name )
   The \e parent and \e name arguments are sent to the QWidget constructor.
 */
 
-QSlider::QSlider( int minValue, int maxValue, int pageStep,
-		  int value, Orientation orientation,
-		  QWidget *parent, const char *name )
-    : QWidget( parent, name ),
-      QRangeControl( minValue, maxValue, 1, pageStep, value )
+QSlider::QSlider(int minValue, int maxValue, int pageStep, int value,
+		 Orientation orientation, QWidget *parent, const char *name)
+	: QWidget(parent, name),
+	  QRangeControl(minValue, maxValue, 1, pageStep, value)
 {
-    orient = orientation;
-    init();
-    sliderVal = value;
+	orient = orientation;
+	init();
+	sliderVal = value;
 }
 
 
 void QSlider::init()
 {
-    extra = 0;
-    timer = 0;
-    sliderPos = 0;
-    sliderVal = 0;
-    clickOffset = 0;
-    state = Idle;
-    track = TRUE;
-    ticks = NoMarks;
-    tickInt = 0;
-    setFocusPolicy( TabFocus  );
-    initTicks();
+	extra = 0;
+	timer = 0;
+	sliderPos = 0;
+	sliderVal = 0;
+	clickOffset = 0;
+	state = Idle;
+	track = TRUE;
+	ticks = NoMarks;
+	tickInt = 0;
+	setFocusPolicy(TabFocus);
+	initTicks();
 }
 
 
@@ -174,14 +172,14 @@ void QSlider::init()
 
 void QSlider::initTicks()
 {
-    int space = (orient == Horizontal) ? height() : width();
-    if ( ticks == Both ) {
-	tickOffset = ( space - thickness() ) / 2;
-    } else if ( ticks == Above ) {
-	tickOffset = space - thickness();
-    } else {
-	tickOffset = 0;
-    }
+	int space = (orient == Horizontal) ? height() : width();
+	if (ticks == Both) {
+		tickOffset = (space - thickness()) / 2;
+	} else if (ticks == Above) {
+		tickOffset = space - thickness();
+	} else {
+		tickOffset = 0;
+	}
 }
 
 
@@ -198,9 +196,9 @@ void QSlider::initTicks()
   \sa tracking()
 */
 
-void QSlider::setTracking( bool enable )
+void QSlider::setTracking(bool enable)
 {
-    track = enable;
+	track = enable;
 }
 
 
@@ -240,10 +238,10 @@ void QSlider::setTracking( bool enable )
   Calculates slider position corresponding to value \a v.
 */
 
-int QSlider::positionFromValue( int v ) const
+int QSlider::positionFromValue(int v) const
 {
-    int  a = available();
-    return QRangeControl::positionFromValue( v, a );
+	int a = available();
+	return QRangeControl::positionFromValue(v, a);
 }
 
 /*!
@@ -252,30 +250,30 @@ int QSlider::positionFromValue( int v ) const
 
 int QSlider::available() const
 {
-    int a;
-    switch ( (GUIStyle)style() ) {
-    case WindowsStyle:
-	a = (orient == Horizontal) ? width() - style().sliderLength()
-	    : height() - style().sliderLength();
-	break;
-    default:
-    case MotifStyle:
-	a = (orient == Horizontal) ? width() -style().sliderLength() - 2*motifBorder
-	    : height() - style().sliderLength() - 2*motifBorder;
-	break;
-    }
-    return a;
+	int a;
+	switch ((GUIStyle)style()) {
+	case WindowsStyle:
+		a = (orient == Horizontal) ? width() - style().sliderLength() :
+					     height() - style().sliderLength();
+		break;
+	default:
+	case MotifStyle:
+		a = (orient == Horizontal) ?
+			    width() - style().sliderLength() - 2 * motifBorder :
+			    height() - style().sliderLength() - 2 * motifBorder;
+		break;
+	}
+	return a;
 }
 
 /*!
   Calculates value corresponding to slider position \a p.
 */
 
-int QSlider::valueFromPosition( int p ) const
+int QSlider::valueFromPosition(int p) const
 {
-    int a = available();
-    return QRangeControl::valueFromPosition( p, a );
-
+	int a = available();
+	return QRangeControl::valueFromPosition(p, a);
 }
 
 /*!
@@ -284,10 +282,10 @@ int QSlider::valueFromPosition( int p ) const
 
 void QSlider::rangeChange()
 {
-    int newPos = positionFromValue( value() );
-    if ( newPos != sliderPos ) {
-	reallyMoveSlider( newPos );
-    }
+	int newPos = positionFromValue(value());
+	if (newPos != sliderPos) {
+		reallyMoveSlider(newPos);
+	}
 }
 
 /*!
@@ -296,23 +294,23 @@ void QSlider::rangeChange()
 
 void QSlider::valueChange()
 {
-    if ( sliderVal != value() ) {
-	int newPos = positionFromValue( value() );
-	sliderVal = value();
-	reallyMoveSlider( newPos );
-    }
-    emit valueChanged(value());
+	if (sliderVal != value()) {
+		int newPos = positionFromValue(value());
+		sliderVal = value();
+		reallyMoveSlider(newPos);
+	}
+	emit valueChanged(value());
 }
 
 
 /*!\reimp
-*/
-void QSlider::resizeEvent( QResizeEvent * )
+ */
+void QSlider::resizeEvent(QResizeEvent *)
 {
-    rangeChange();
-    initTicks();
-    if ( autoMask() )
-	updateMask();
+	rangeChange();
+	initTicks();
+	if (autoMask())
+		updateMask();
 }
 
 
@@ -322,9 +320,9 @@ void QSlider::resizeEvent( QResizeEvent * )
   Sets the background color to the mid color for Motif style sliders.
 */
 
-void QSlider::setPalette( const QPalette &p )
+void QSlider::setPalette(const QPalette &p)
 {
-    QWidget::setPalette( p );
+	QWidget::setPalette(p);
 }
 
 
@@ -335,11 +333,11 @@ void QSlider::setPalette( const QPalette &p )
   \sa orientation()
 */
 
-void QSlider::setOrientation( Orientation orientation )
+void QSlider::setOrientation(Orientation orientation)
 {
-    orient = orientation;
-    rangeChange();
-    update();
+	orient = orientation;
+	rangeChange();
+	update();
 }
 
 
@@ -357,27 +355,31 @@ void QSlider::setOrientation( Orientation orientation )
 
 QRect QSlider::sliderRect() const
 {
-    QRect r;
-    switch ( (GUIStyle)style() ) {
-    case WindowsStyle:
-	if (orient == Horizontal )
-	    r.setRect( sliderPos, tickOffset,
-		       style().sliderLength(), thickness()  );
-	else
-	    r.setRect ( tickOffset, sliderPos,
-			thickness(), style().sliderLength()  );
-	break;
-    default:
-    case MotifStyle:
-	if (orient == Horizontal )
-	    r.setRect ( sliderPos + motifBorder, tickOffset + motifBorder,
-			style().sliderLength(), thickness() - 2 * motifBorder );
-	else
-	    r.setRect ( tickOffset + motifBorder, sliderPos + motifBorder,
-			thickness() - 2 * motifBorder, style().sliderLength() );
-	break;
-    }
-    return r;
+	QRect r;
+	switch ((GUIStyle)style()) {
+	case WindowsStyle:
+		if (orient == Horizontal)
+			r.setRect(sliderPos, tickOffset, style().sliderLength(),
+				  thickness());
+		else
+			r.setRect(tickOffset, sliderPos, thickness(),
+				  style().sliderLength());
+		break;
+	default:
+	case MotifStyle:
+		if (orient == Horizontal)
+			r.setRect(sliderPos + motifBorder,
+				  tickOffset + motifBorder,
+				  style().sliderLength(),
+				  thickness() - 2 * motifBorder);
+		else
+			r.setRect(tickOffset + motifBorder,
+				  sliderPos + motifBorder,
+				  thickness() - 2 * motifBorder,
+				  style().sliderLength());
+		break;
+	}
+	return r;
 }
 
 
@@ -392,42 +394,42 @@ QRect QSlider::sliderRect() const
   \sa setAutoMask(), updateMask()
 */
 
-void QSlider::paintSlider( QPainter *p, const QColorGroup &g, const QRect &r )
-{ //####### should this one be removed? private? non-virtual?
-    QPoint bo = p->brushOrigin();
-    p->setBrushOrigin(r.topLeft());
+void QSlider::paintSlider(QPainter *p, const QColorGroup &g, const QRect &r)
+{ // ####### should this one be removed? private? non-virtual?
+	QPoint bo = p->brushOrigin();
+	p->setBrushOrigin(r.topLeft());
 
-    style().drawSlider( p, r.x(), r.y(), r.width(), r.height(), g, orient,
-			ticks & Above, ticks & Below );
-    p->setBrushOrigin(bo);
+	style().drawSlider(p, r.x(), r.y(), r.width(), r.height(), g, orient,
+			   ticks & Above, ticks & Below);
+	p->setBrushOrigin(bo);
 }
 
 /*!
   Performs the actual moving of the slider.
 */
 
-void QSlider::reallyMoveSlider( int newPos )
+void QSlider::reallyMoveSlider(int newPos)
 {
-    QRect oldR = sliderRect();
-    sliderPos = newPos;
-    QRect newR = sliderRect();
-    //since sliderRect isn't virtual, I know that oldR and newR
-    // are the same size.
-    if ( orient == Horizontal ) {
-	if ( oldR.left() < newR.left() )
-	    oldR.setRight( QMIN ( oldR.right(), newR.left()));
-	else           //oldR.right() >= newR.right()
-	    oldR.setLeft( QMAX ( oldR.left(), newR.right()));
-    } else {
-	if ( oldR.top() < newR.top() )
-	    oldR.setBottom( QMIN ( oldR.bottom(), newR.top()));
-	else           //oldR.bottom() >= newR.bottom()
-	    oldR.setTop( QMAX ( oldR.top(), newR.bottom()));
-    }
-    repaint( oldR );
-    repaint( newR, FALSE );
-    if ( autoMask() )
-	updateMask();
+	QRect oldR = sliderRect();
+	sliderPos = newPos;
+	QRect newR = sliderRect();
+	// since sliderRect isn't virtual, I know that oldR and newR
+	//  are the same size.
+	if (orient == Horizontal) {
+		if (oldR.left() < newR.left())
+			oldR.setRight(QMIN(oldR.right(), newR.left()));
+		else // oldR.right() >= newR.right()
+			oldR.setLeft(QMAX(oldR.left(), newR.right()));
+	} else {
+		if (oldR.top() < newR.top())
+			oldR.setBottom(QMIN(oldR.bottom(), newR.top()));
+		else // oldR.bottom() >= newR.bottom()
+			oldR.setTop(QMAX(oldR.top(), newR.bottom()));
+	}
+	repaint(oldR);
+	repaint(newR, FALSE);
+	if (autoMask())
+		updateMask();
 }
 
 /*!\obsolete
@@ -437,80 +439,86 @@ void QSlider::reallyMoveSlider( int newPos )
   the center of the groove.
 */
 
-void QSlider::drawWinGroove( QPainter *p, QCOORD c )
+void QSlider::drawWinGroove(QPainter *p, QCOORD c)
 {
-    if ( orient == Horizontal ) {
-	qDrawWinPanel( p, 0, c - 2,  width(), 4, colorGroup(), TRUE );
-	p->setPen( colorGroup().foreground() );
-	p->drawLine( 1, c - 1, width() - 3, c - 1 );
-    } else {
-	qDrawWinPanel( p, c - 2, 0, 4, height(), colorGroup(), TRUE );
-	p->setPen( colorGroup().foreground() );
-	p->drawLine( c - 1, 1, c - 1, height() - 3 );
-    }
+	if (orient == Horizontal) {
+		qDrawWinPanel(p, 0, c - 2, width(), 4, colorGroup(), TRUE);
+		p->setPen(colorGroup().foreground());
+		p->drawLine(1, c - 1, width() - 3, c - 1);
+	} else {
+		qDrawWinPanel(p, c - 2, 0, 4, height(), colorGroup(), TRUE);
+		p->setPen(colorGroup().foreground());
+		p->drawLine(c - 1, 1, c - 1, height() - 3);
+	}
 }
 
 
 /*!\reimp
-*/
-void QSlider::paintEvent( QPaintEvent * )
+ */
+void QSlider::paintEvent(QPaintEvent *)
 {
+	QPainter p(this);
+	const QRect &sliderR = sliderRect();
+	const QColorGroup &g = colorGroup();
+	int mid = thickness() / 2;
+	if (ticks & Above)
+		mid += style().sliderLength() / 8;
+	if (ticks & Below)
+		mid -= style().sliderLength() / 8;
+	if (orient == Horizontal) {
+		style().drawSliderGroove(&p, 0, tickOffset, width(),
+					 thickness(), g, mid, Horizontal);
+		// 	    p.fillRect( 0, 0, width(), tickOffset,
+		// g.background() ); 	    p.fillRect( 0, tickOffset +
+		// thickness(), 			width(),
+		// height()/*###*/, g.background()
+		// );
+		erase(0, 0, width(), tickOffset);
+		erase(0, tickOffset + thickness(), width(), height());
+	} else {
+		style().drawSliderGroove(&p, tickOffset, 0, thickness(),
+					 height(), g, mid, Vertical);
+		// 	    p.fillRect( 0, 0,  tickOffset, height(),
+		// g.background() ); 	    p.fillRect( tickOffset +
+		// thickness(), 0, 			width()/*###*/,
+		// height(), g.background()
+		// );
+		erase(0, 0, tickOffset, height());
+		erase(tickOffset + thickness(), 0, width() /*###*/, height());
+	}
 
-    QPainter p( this );
-    const QRect & sliderR = sliderRect();
-    const QColorGroup & g = colorGroup();
-    int mid = thickness()/2;
-    if ( ticks & Above )
-	mid += style().sliderLength() / 8;
-    if ( ticks & Below )
-	mid -= style().sliderLength() / 8;
-    if ( orient == Horizontal ) {
-	style().drawSliderGroove(&p, 0, tickOffset, width(), thickness(),
-				     g, mid, Horizontal );
-// 	    p.fillRect( 0, 0, width(), tickOffset, g.background() );
-// 	    p.fillRect( 0, tickOffset + thickness(),
-// 			width(), height()/*###*/, g.background() );
-	erase( 0, 0, width(), tickOffset );
-	erase( 0, tickOffset + thickness(), width(), height() );
-    }
-    else {
-	style().drawSliderGroove( &p, tickOffset, 0, thickness(), height(),
-				      g, mid, Vertical );
-// 	    p.fillRect( 0, 0,  tickOffset, height(), g.background() );
-// 	    p.fillRect( tickOffset + thickness(), 0,
-// 			width()/*###*/, height(), g.background() );
-	erase( 0, 0,  tickOffset, height() );
-	erase( tickOffset + thickness(), 0, width()/*###*/, height() );
-    }
+	int interval = tickInt;
+	if (interval <= 0) {
+		interval = lineStep();
+		if (positionFromValue(interval) - positionFromValue(0) < 3)
+			interval = pageStep();
+	}
+	if (ticks & Above)
+		drawTicks(&p, g, 0, tickOffset - 2, interval);
 
-    int interval = tickInt;
-    if ( interval <= 0 ) {
-	interval = lineStep();
-	if ( positionFromValue( interval ) - positionFromValue( 0 ) < 3 )
-	    interval = pageStep();
-    }
-    if ( ticks & Above )
-	drawTicks( &p, g, 0, tickOffset - 2, interval );
-
-    if ( ticks & Below ) {
-	int avail = (orient == Horizontal) ? height() : width();
-	avail -= tickOffset + thickness();
-	drawTicks( &p, g, tickOffset + thickness() + 1, avail - 2, interval );
-    }
-    if ( hasFocus() ) {
-	QRect r;
-	if ( orient == Horizontal )
-	    r.setRect( 0, tickOffset-1, width(), thickness()+2 );
-	else
-	    r.setRect( tickOffset-1, 0, thickness()+2, height() );
-	r = r.intersect( rect() );
-	if (style() == MotifStyle)
-	    style().drawFocusRect(&p, QRect(r.x()+1, r.y()+1, r.width()-2, r.height()-2), g);
-	else
-	    style().drawFocusRect(&p, r, g);
-    }
-    paintSlider( &p, g, sliderR );
-
+	if (ticks & Below) {
+		int avail = (orient == Horizontal) ? height() : width();
+		avail -= tickOffset + thickness();
+		drawTicks(&p, g, tickOffset + thickness() + 1, avail - 2,
+			  interval);
+	}
+	if (hasFocus()) {
+		QRect r;
+		if (orient == Horizontal)
+			r.setRect(0, tickOffset - 1, width(), thickness() + 2);
+		else
+			r.setRect(tickOffset - 1, 0, thickness() + 2, height());
+		r = r.intersect(rect());
+		if (style() == MotifStyle)
+			style().drawFocusRect(&p,
+					      QRect(r.x() + 1, r.y() + 1,
+						    r.width() - 2,
+						    r.height() - 2),
+					      g);
+		else
+			style().drawFocusRect(&p, r, g);
+	}
+	paintSlider(&p, g, sliderR);
 }
 
 
@@ -523,153 +531,161 @@ void QSlider::paintEvent( QPaintEvent * )
 */
 void QSlider::updateMask()
 {
-    QBitmap bm( size() );
-    bm.fill( color0 );
+	QBitmap bm(size());
+	bm.fill(color0);
 
-    {
-	QPainter p( &bm, this );
-	QRect sliderR = sliderRect();
-	QColorGroup g(color1, color1, color1, color1, color1, color1, color1, color1, color0);
-	int mid = tickOffset + thickness()/2;
-	if ( ticks & Above )
-	    mid += style().sliderLength() / 8;
-	if ( ticks & Below )
-	    mid -= style().sliderLength() / 8;
-	if ( orient == Horizontal ) {
-	    style().drawSliderGrooveMask(&p, 0, tickOffset, width(), thickness(),
-					 mid, Horizontal );
-	}
-	else {
-	    style().drawSliderGrooveMask( &p, tickOffset, 0, thickness(), height(),
-					  mid, Vertical );
-	}
-	style().drawSliderMask( &p, sliderR.x(), sliderR.y(),
-				sliderR.width(), sliderR.height(),
-				orient, ticks & Above, ticks & Below );
+	{
+		QPainter p(&bm, this);
+		QRect sliderR = sliderRect();
+		QColorGroup g(color1, color1, color1, color1, color1, color1,
+			      color1, color1, color0);
+		int mid = tickOffset + thickness() / 2;
+		if (ticks & Above)
+			mid += style().sliderLength() / 8;
+		if (ticks & Below)
+			mid -= style().sliderLength() / 8;
+		if (orient == Horizontal) {
+			style().drawSliderGrooveMask(&p, 0, tickOffset, width(),
+						     thickness(), mid,
+						     Horizontal);
+		} else {
+			style().drawSliderGrooveMask(&p, tickOffset, 0,
+						     thickness(), height(), mid,
+						     Vertical);
+		}
+		style().drawSliderMask(&p, sliderR.x(), sliderR.y(),
+				       sliderR.width(), sliderR.height(),
+				       orient, ticks & Above, ticks & Below);
 
-	int interval = tickInt;
-	if ( interval <= 0 ) {
-	    interval = lineStep();
-	    if ( positionFromValue( interval ) - positionFromValue( 0 ) < 3 )
-		interval = pageStep();
-	}
-	if ( ticks & Above )
-	    drawTicks( &p, g, 0, tickOffset - 2, interval );
+		int interval = tickInt;
+		if (interval <= 0) {
+			interval = lineStep();
+			if (positionFromValue(interval) - positionFromValue(0) <
+			    3)
+				interval = pageStep();
+		}
+		if (ticks & Above)
+			drawTicks(&p, g, 0, tickOffset - 2, interval);
 
-	if ( ticks & Below ) {
-	    int avail = (orient == Horizontal) ? height() : width();
-	    avail -= tickOffset + thickness();
-	    drawTicks( &p, g, tickOffset + thickness() + 1, avail - 2, interval );
+		if (ticks & Below) {
+			int avail = (orient == Horizontal) ? height() : width();
+			avail -= tickOffset + thickness();
+			drawTicks(&p, g, tickOffset + thickness() + 1,
+				  avail - 2, interval);
+		}
 	}
-
-    }
-    setMask( bm );
+	setMask(bm);
 }
 
 /*!\reimp
-*/
-void QSlider::mousePressEvent( QMouseEvent *e )
+ */
+void QSlider::mousePressEvent(QMouseEvent *e)
 {
-    resetState();
-    sliderStartVal = sliderVal;
-    QRect r = sliderRect();
+	resetState();
+	sliderStartVal = sliderVal;
+	QRect r = sliderRect();
 
-    if ( e->button() == RightButton ) {
-	return;
-    } else if ( r.contains( e->pos() ) ) {
-	state = Dragging;
-	clickOffset = (QCOORD)( goodPart( e->pos() ) - sliderPos );
-	emit sliderPressed();
-    } else if ( e->button() == MidButton ||
-		(funnyWindowsStyle && style() == WindowsStyle) ) {
-	int pos = goodPart( e->pos() );
-	moveSlider( pos - slideLength() / 2 );
-	state = Dragging;
-	clickOffset = slideLength() / 2;
-    } else if ( orient == Horizontal && e->pos().x() < r.left() //### goodPart
-		|| orient == Vertical && e->pos().y() < r.top() ) {
-	state = TimingDown;
-	subtractPage();
-	if ( !timer )
-	    timer = new QTimer( this );
-	connect( timer, SIGNAL(timeout()), SLOT(repeatTimeout()) );
-	timer->start( thresholdTime, TRUE );
-    } else if ( orient == Horizontal && e->pos().x() > r.right() //### goodPart
-		|| orient == Vertical && e->pos().y() > r.bottom() ) {
-	state = TimingUp;
-	addPage();
-	if ( !timer )
-	    timer = new QTimer( this );
-	connect( timer, SIGNAL(timeout()), SLOT(repeatTimeout()) );
-	timer->start( thresholdTime, TRUE );
-    }
-}
-
-/*!\reimp
-*/
-void QSlider::mouseMoveEvent( QMouseEvent *e )
-{
-    if ( state != Dragging )
-	return;
-
-    if ( style() == WindowsStyle ) {
-	QRect r = rect();
-	int m = style().maximumSliderDragDistance();
-	if ( m >= 0 ) {
-	    if ( orientation() == Horizontal )
-		r.setRect( r.x() - m, r.y() - 2*m/3,
-			   r.width() + 2*m, r.height() + 3*m );
-	    else
-		r.setRect( r.x() - 2*m/3, r.y() - m,
-			   r.width() + 3*m, r.height() + 2*m );
-	    if ( !r.contains( e->pos() ) ) {
-		moveSlider( positionFromValue( sliderStartVal) );
+	if (e->button() == RightButton) {
 		return;
-	    }
+	} else if (r.contains(e->pos())) {
+		state = Dragging;
+		clickOffset = (QCOORD)(goodPart(e->pos()) - sliderPos);
+		emit sliderPressed();
+	} else if (e->button() == MidButton ||
+		   (funnyWindowsStyle && style() == WindowsStyle)) {
+		int pos = goodPart(e->pos());
+		moveSlider(pos - slideLength() / 2);
+		state = Dragging;
+		clickOffset = slideLength() / 2;
+	} else if (orient == Horizontal && e->pos().x() < r.left() // ###
+								   // goodPart
+		   || orient == Vertical && e->pos().y() < r.top()) {
+		state = TimingDown;
+		subtractPage();
+		if (!timer)
+			timer = new QTimer(this);
+		connect(timer, SIGNAL(timeout()), SLOT(repeatTimeout()));
+		timer->start(thresholdTime, TRUE);
+	} else if (orient == Horizontal && e->pos().x() > r.right() // ###
+								    // goodPart
+		   || orient == Vertical && e->pos().y() > r.bottom()) {
+		state = TimingUp;
+		addPage();
+		if (!timer)
+			timer = new QTimer(this);
+		connect(timer, SIGNAL(timeout()), SLOT(repeatTimeout()));
+		timer->start(thresholdTime, TRUE);
 	}
-    }
-
-    int pos = goodPart( e->pos() );
-    moveSlider( pos - clickOffset );
 }
 
 /*!\reimp
-*/
-void QSlider::wheelEvent( QWheelEvent * e){
-    static float offset = 0;
-    static QSlider* offset_owner = 0;
-    if (offset_owner != this){
-	offset_owner = this;
-	offset = 0;
-    }
-    offset += -e->delta()*QMAX(pageStep(),lineStep())/120;
-    if (QABS(offset)<1)
-	return;
-    setValue( value() + int(offset) );
-    offset -= int(offset);
-    e->accept();
-}
-
-
-/*!\reimp
-*/
-void QSlider::mouseReleaseEvent( QMouseEvent * )
+ */
+void QSlider::mouseMoveEvent(QMouseEvent *e)
 {
-    resetState();
+	if (state != Dragging)
+		return;
+
+	if (style() == WindowsStyle) {
+		QRect r = rect();
+		int m = style().maximumSliderDragDistance();
+		if (m >= 0) {
+			if (orientation() == Horizontal)
+				r.setRect(r.x() - m, r.y() - 2 * m / 3,
+					  r.width() + 2 * m,
+					  r.height() + 3 * m);
+			else
+				r.setRect(r.x() - 2 * m / 3, r.y() - m,
+					  r.width() + 3 * m,
+					  r.height() + 2 * m);
+			if (!r.contains(e->pos())) {
+				moveSlider(positionFromValue(sliderStartVal));
+				return;
+			}
+		}
+	}
+
+	int pos = goodPart(e->pos());
+	moveSlider(pos - clickOffset);
 }
 
 /*!\reimp
-*/
-void QSlider::focusInEvent( QFocusEvent * e)
+ */
+void QSlider::wheelEvent(QWheelEvent *e)
 {
-    QWidget::focusInEvent( e );
+	static float offset = 0;
+	static QSlider *offset_owner = 0;
+	if (offset_owner != this) {
+		offset_owner = this;
+		offset = 0;
+	}
+	offset += -e->delta() * QMAX(pageStep(), lineStep()) / 120;
+	if (QABS(offset) < 1)
+		return;
+	setValue(value() + int(offset));
+	offset -= int(offset);
+	e->accept();
+}
+
+
+/*!\reimp
+ */
+void QSlider::mouseReleaseEvent(QMouseEvent *)
+{
+	resetState();
 }
 
 /*!\reimp
-*/
-void QSlider::focusOutEvent( QFocusEvent * e )
+ */
+void QSlider::focusInEvent(QFocusEvent *e)
 {
-    QWidget::focusOutEvent( e );
+	QWidget::focusInEvent(e);
+}
+
+/*!\reimp
+ */
+void QSlider::focusOutEvent(QFocusEvent *e)
+{
+	QWidget::focusOutEvent(e);
 }
 
 /*!
@@ -677,33 +693,33 @@ void QSlider::focusOutEvent( QFocusEvent * e )
   \a pos. Performs snapping.
 */
 
-void QSlider::moveSlider( int pos )
+void QSlider::moveSlider(int pos)
 {
-    int  a = available();
-    int newPos = QMIN( a, QMAX( 0, pos ) );
-    int newVal = valueFromPosition( newPos );
-    if ( sliderVal != newVal ) {
-	sliderVal = newVal;
-	emit sliderMoved( sliderVal );
-    }
-    if ( tracking() && sliderVal != value() ) {
-	setValue( sliderVal );
-	// ### Why do we emit the valueChanged signal here?  It will get emitted in 
-	// valueChange() anyway...
-	//emit valueChanged( sliderVal );
-    }
+	int a = available();
+	int newPos = QMIN(a, QMAX(0, pos));
+	int newVal = valueFromPosition(newPos);
+	if (sliderVal != newVal) {
+		sliderVal = newVal;
+		emit sliderMoved(sliderVal);
+	}
+	if (tracking() && sliderVal != value()) {
+		setValue(sliderVal);
+		// ### Why do we emit the valueChanged signal here?  It will get
+		// emitted in valueChange() anyway...
+		// emit valueChanged( sliderVal );
+	}
 
-    switch ( (GUIStyle)style() ) {
-    case WindowsStyle:
-	newPos = positionFromValue( newVal );
-	break;
-    default:
-    case MotifStyle:
-	break;
-    }
+	switch ((GUIStyle)style()) {
+	case WindowsStyle:
+		newPos = positionFromValue(newVal);
+		break;
+	default:
+	case MotifStyle:
+		break;
+	}
 
-    if ( sliderPos != newPos )
-	reallyMoveSlider( newPos );
+	if (sliderPos != newPos)
+		reallyMoveSlider(newPos);
 }
 
 
@@ -713,66 +729,66 @@ void QSlider::moveSlider( int pos )
 
 void QSlider::resetState()
 {
-    if ( timer ) {
-	timer->stop();
-	timer->disconnect();
-    }
-    switch ( state ) {
-    case TimingUp:
-    case TimingDown:
-	break;
-    case Dragging: {
-	setValue( valueFromPosition( sliderPos ) );
-	emit sliderReleased();
-	break;
-    }
-    case Idle:
-	break;
-    default:
-	qWarning("QSlider: (%s) in wrong state", name( "unnamed" ) );
-    }
-    state = Idle;
+	if (timer) {
+		timer->stop();
+		timer->disconnect();
+	}
+	switch (state) {
+	case TimingUp:
+	case TimingDown:
+		break;
+	case Dragging: {
+		setValue(valueFromPosition(sliderPos));
+		emit sliderReleased();
+		break;
+	}
+	case Idle:
+		break;
+	default:
+		qWarning("QSlider: (%s) in wrong state", name("unnamed"));
+	}
+	state = Idle;
 }
 
 
 /*!\reimp
-*/
-void QSlider::keyPressEvent( QKeyEvent *e )
+ */
+void QSlider::keyPressEvent(QKeyEvent *e)
 {
-    bool sloppy = ( style() == MotifStyle );
-    switch ( e->key() ) {
-    case Key_Left:
-	if ( sloppy || orient == Horizontal )
-	    subtractLine();
-	break;
-    case Key_Right:
-	if ( sloppy || orient == Horizontal )
-	    addLine();
-	break;
-    case Key_Up:
-	if ( sloppy || orient == Vertical )
-	    subtractLine();
-	break;
-    case Key_Down:
-	if ( sloppy || orient == Vertical )
-	    addLine();
-	break;
-    case Key_Prior:
-	subtractPage();
-	break;
-    case Key_Next:
-	addPage();
-	break;
-    case Key_Home:
-	setValue( minValue() );
-	break;
-    case Key_End:
-	setValue( maxValue() );
-	break;
-    default:
-	e->ignore();
-	return;
-    }
+	bool sloppy = (style() == MotifStyle);
+	switch (e->key()) {
+	case Key_Left:
+		if (sloppy || orient == Horizontal)
+			subtractLine();
+		break;
+	case Key_Right:
+		if (sloppy || orient == Horizontal)
+			addLine();
+		break;
+	case Key_Up:
+		if (sloppy || orient == Vertical)
+			subtractLine();
+		break;
+	case Key_Down:
+		if (sloppy || orient == Vertical)
+			addLine();
+		break;
+	case Key_Prior:
+		subtractPage();
+		break;
+	case Key_Next:
+		addPage();
+		break;
+	case Key_Home:
+		setValue(minValue());
+		break;
+	case Key_End:
+		setValue(maxValue());
+		break;
+	default:
+		e->ignore();
+		return;
+	}
 }
 
 
@@ -782,13 +798,13 @@ void QSlider::keyPressEvent( QKeyEvent *e )
 
 int QSlider::slideLength() const
 {
-    switch ( (GUIStyle)style() ) {
-    case WindowsStyle:
-	return style().sliderLength();
-    default:
-    case MotifStyle:
-	return style().sliderLength();
-    }
+	switch ((GUIStyle)style()) {
+	case WindowsStyle:
+		return style().sliderLength();
+	default:
+	case MotifStyle:
+		return style().sliderLength();
+	}
 }
 
 
@@ -796,9 +812,9 @@ int QSlider::slideLength() const
   Makes QRangeControl::setValue() available as a slot.
 */
 
-void QSlider::setValue( int value )
+void QSlider::setValue(int value)
 {
-    QRangeControl::setValue( value );
+	QRangeControl::setValue(value);
 }
 
 
@@ -808,7 +824,7 @@ void QSlider::setValue( int value )
 
 void QSlider::addStep()
 {
-    addPage();
+	addPage();
 }
 
 
@@ -818,7 +834,7 @@ void QSlider::addStep()
 
 void QSlider::subtractStep()
 {
-    subtractPage();
+	subtractPage();
 }
 
 
@@ -828,13 +844,13 @@ void QSlider::subtractStep()
 
 void QSlider::repeatTimeout()
 {
-    ASSERT( timer );
-    timer->disconnect();
-    if ( state == TimingDown )
-	connect( timer, SIGNAL(timeout()), SLOT(subtractStep()) );
-    else if ( state == TimingUp )
-	connect( timer, SIGNAL(timeout()), SLOT(addStep()) );
-    timer->start( repeatTime, FALSE );
+	ASSERT(timer);
+	timer->disconnect();
+	if (state == TimingDown)
+		connect(timer, SIGNAL(timeout()), SLOT(subtractStep()));
+	else if (state == TimingUp)
+		connect(timer, SIGNAL(timeout()), SLOT(addStep()));
+	timer->start(repeatTime, FALSE);
 }
 
 
@@ -842,31 +858,33 @@ void QSlider::repeatTimeout()
   Returns the relevant dimension of \a p.
 */
 
-int QSlider::goodPart( const QPoint &p ) const
+int QSlider::goodPart(const QPoint &p) const
 {
-    return (orient == Horizontal) ?  p.x() : p.y();
+	return (orient == Horizontal) ? p.x() : p.y();
 }
 
 /*!\reimp
-*/
+ */
 QSize QSlider::sizeHint() const
 {
-    constPolish();
-    const int length = 84;
-    //    int thick = style() == MotifStyle ? 24 : 16;
-    int thick = style().sliderThickness();
-    const int tickSpace = 5;
+	constPolish();
+	const int length = 84;
+	//    int thick = style() == MotifStyle ? 24 : 16;
+	int thick = style().sliderThickness();
+	const int tickSpace = 5;
 
-    if ( ticks & Above )
-	thick += tickSpace;
-    if ( ticks & Below )
-	thick += tickSpace;
-    if ( style() == WindowsStyle && ticks != Both && ticks != NoMarks )
-	thick += style().sliderLength() / 4;	    // pointed slider
-    if ( orient == Horizontal )
-	return QSize( length, thick ).expandedTo( QApplication::globalStrut() );
-    else
-	return QSize( thick, length ).expandedTo( QApplication::globalStrut() );
+	if (ticks & Above)
+		thick += tickSpace;
+	if (ticks & Below)
+		thick += tickSpace;
+	if (style() == WindowsStyle && ticks != Both && ticks != NoMarks)
+		thick += style().sliderLength() / 4; // pointed slider
+	if (orient == Horizontal)
+		return QSize(length, thick)
+			.expandedTo(QApplication::globalStrut());
+	else
+		return QSize(thick, length)
+			.expandedTo(QApplication::globalStrut());
 }
 
 
@@ -877,26 +895,26 @@ QSize QSlider::sizeHint() const
 
 QSize QSlider::minimumSizeHint() const
 {
-    QSize s = sizeHint();
-    int length = style().sliderLength();
-    if ( orient == Horizontal )
-	s.setWidth( length );
-    else
-	s.setHeight( length );
+	QSize s = sizeHint();
+	int length = style().sliderLength();
+	if (orient == Horizontal)
+		s.setWidth(length);
+	else
+		s.setHeight(length);
 
-    return s;
+	return s;
 }
 
 
 
 /*!\reimp
-*/
+ */
 QSizePolicy QSlider::sizePolicy() const
 {
-    if ( orient == Horizontal )
-	return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    else
-	return QSizePolicy(  QSizePolicy::Fixed, QSizePolicy::Expanding );
+	if (orient == Horizontal)
+		return QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	else
+		return QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
 }
 
 
@@ -910,24 +928,24 @@ QSizePolicy QSlider::sizePolicy() const
 
 int QSlider::thickness() const
 {
-    int space = (orient == Horizontal) ? height() : width();
-    int n = 0;
-    if ( ticks & Above )
-	n++;
-    if ( ticks & Below )
-	n++;
-    if ( !n )
-	return space;
+	int space = (orient == Horizontal) ? height() : width();
+	int n = 0;
+	if (ticks & Above)
+		n++;
+	if (ticks & Below)
+		n++;
+	if (!n)
+		return space;
 
-    int thick = 6;	// Magic constant to get 5 + 16 + 5
-    if ( style() == WindowsStyle && ticks != Both && ticks != NoMarks ) {
-	thick += style().sliderLength() / 4;
-    }
-    space -= thick;
-    //### the two sides may be unequal in size
-    if ( space > 0 )
-	thick += ( space * 2 ) / ( n + 2 );
-    return thick;
+	int thick = 6; // Magic constant to get 5 + 16 + 5
+	if (style() == WindowsStyle && ticks != Both && ticks != NoMarks) {
+		thick += style().sliderLength() / 4;
+	}
+	space -= thick;
+	// ### the two sides may be unequal in size
+	if (space > 0)
+		thick += (space * 2) / (n + 2);
+	return thick;
 }
 
 /*! \obsolete
@@ -938,9 +956,9 @@ int QSlider::thickness() const
   second argument.
 */
 
-void QSlider::drawTicks( QPainter *p, int dist, int w, int i ) const
+void QSlider::drawTicks(QPainter *p, int dist, int w, int i) const
 {
-    drawTicks( p, colorGroup(), dist, w, i);
+	drawTicks(p, colorGroup(), dist, w, i);
 }
 
 /*!
@@ -953,22 +971,22 @@ void QSlider::drawTicks( QPainter *p, int dist, int w, int i ) const
   \sa setAutoMask(), updateMask()
 */
 
-void QSlider::drawTicks( QPainter *p, const QColorGroup& g, int dist, int w,
-			 int i ) const
+void QSlider::drawTicks(QPainter *p, const QColorGroup &g, int dist, int w,
+			int i) const
 {
-    p->setPen( g.foreground() );
-    int v = minValue();
-    int fudge = slideLength() / 2 + 1;
-    if(!i) 
-	i = 1;
-    while ( v <= maxValue() + 1 ) {
-	int pos = positionFromValue( v ) + fudge;
-	if ( orient == Horizontal )
-	    p->drawLine( pos, dist, pos, dist + w );
-	else
-	    p->drawLine( dist, pos, dist + w, pos );
-	v += i;
-    }
+	p->setPen(g.foreground());
+	int v = minValue();
+	int fudge = slideLength() / 2 + 1;
+	if (!i)
+		i = 1;
+	while (v <= maxValue() + 1) {
+		int pos = positionFromValue(v) + fudge;
+		if (orient == Horizontal)
+			p->drawLine(pos, dist, pos, dist + w);
+		else
+			p->drawLine(dist, pos, dist + w, pos);
+		v += i;
+	}
 }
 
 
@@ -987,13 +1005,13 @@ void QSlider::drawTicks( QPainter *p, const QColorGroup& g, int dist, int w,
   \sa tickmarks(), setTickInterval()
 */
 
-void QSlider::setTickmarks( TickSetting s )
+void QSlider::setTickmarks(TickSetting s)
 {
-    ticks = s;
-    initTicks();
-    update();
-    if ( autoMask() )
-	updateMask();
+	ticks = s;
+	initTicks();
+	update();
+	if (autoMask())
+		updateMask();
 }
 
 
@@ -1019,12 +1037,12 @@ void QSlider::setTickmarks( TickSetting s )
   \sa tickInterval(), QRangeControl::lineStep(), QRangeControl::pageStep()
 */
 
-void QSlider::setTickInterval( int i )
+void QSlider::setTickInterval(int i)
 {
-    tickInt = QMAX( 0, i );
-    update();
-    if ( autoMask() )
-	updateMask();
+	tickInt = QMAX(0, i);
+	update();
+	if (autoMask())
+		updateMask();
 }
 
 
@@ -1039,9 +1057,9 @@ void QSlider::setTickInterval( int i )
 /*!
   \reimp
  */
-void QSlider::styleChange( QStyle& old )
+void QSlider::styleChange(QStyle &old)
 {
-    QWidget::styleChange( old );
+	QWidget::styleChange(old);
 }
 
 /*!
@@ -1049,7 +1067,7 @@ void QSlider::styleChange( QStyle& old )
 */
 int QSlider::minValue() const
 {
-    return QRangeControl::minValue();
+	return QRangeControl::minValue();
 }
 
 /*!
@@ -1057,7 +1075,7 @@ int QSlider::minValue() const
 */
 int QSlider::maxValue() const
 {
-    return QRangeControl::maxValue();
+	return QRangeControl::maxValue();
 }
 
 /*!
@@ -1066,9 +1084,9 @@ int QSlider::maxValue() const
 
   \sa setRange()
 */
-void QSlider::setMinValue( int i )
+void QSlider::setMinValue(int i)
 {
-    setRange( i, maxValue() );
+	setRange(i, maxValue());
 }
 
 /*!
@@ -1077,9 +1095,9 @@ void QSlider::setMinValue( int i )
 
   \sa setRange()
 */
-void QSlider::setMaxValue( int i )
+void QSlider::setMaxValue(int i)
 {
-    setRange( minValue(), i );
+	setRange(minValue(), i);
 }
 
 /*!
@@ -1087,7 +1105,7 @@ void QSlider::setMaxValue( int i )
 */
 int QSlider::lineStep() const
 {
-    return QRangeControl::lineStep();
+	return QRangeControl::lineStep();
 }
 
 /*!
@@ -1095,7 +1113,7 @@ int QSlider::lineStep() const
 */
 int QSlider::pageStep() const
 {
-    return QRangeControl::pageStep();
+	return QRangeControl::pageStep();
 }
 
 /*!
@@ -1106,9 +1124,9 @@ int QSlider::pageStep() const
 
   \sa lineStep() QRangeControl::setSteps() setPageStep() setRange()
 */
-void QSlider::setLineStep( int i )
+void QSlider::setLineStep(int i)
 {
-    setSteps( i, pageStep() );
+	setSteps(i, pageStep());
 }
 
 /*!
@@ -1119,9 +1137,9 @@ void QSlider::setLineStep( int i )
 
   \sa pageStep() QRangeControl::setSteps() setLineStep() setRange()
 */
-void QSlider::setPageStep( int i )
+void QSlider::setPageStep(int i)
 {
-    setSteps( lineStep(), i );
+	setSteps(lineStep(), i);
 }
 
 /*!
@@ -1129,6 +1147,6 @@ void QSlider::setPageStep( int i )
 */
 int QSlider::value() const
 {
-    return QRangeControl::value();
+	return QRangeControl::value();
 }
 #endif

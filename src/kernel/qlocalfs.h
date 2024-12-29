@@ -39,32 +39,31 @@
 #define QLOCALFS_H
 
 #ifndef QT_H
-#include "qnetworkprotocol.h"
-#include "qdir.h"
+# include "qnetworkprotocol.h"
+# include "qdir.h"
 #endif // QT_H
 
 #ifndef QT_NO_NETWORKPROTOCOL
 
 class Q_EXPORT QLocalFs : public QNetworkProtocol
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    QLocalFs();
-    virtual int supportedOperations() const;
+      public:
+	QLocalFs();
+	virtual int supportedOperations() const;
 
-protected:
-    virtual void operationListChildren( QNetworkOperation *op );
-    virtual void operationMkDir( QNetworkOperation *op );
-    virtual void operationRemove( QNetworkOperation *op );
-    virtual void operationRename( QNetworkOperation *op );
-    virtual void operationGet( QNetworkOperation *op );
-    virtual void operationPut( QNetworkOperation *op );
+      protected:
+	virtual void operationListChildren(QNetworkOperation *op);
+	virtual void operationMkDir(QNetworkOperation *op);
+	virtual void operationRemove(QNetworkOperation *op);
+	virtual void operationRename(QNetworkOperation *op);
+	virtual void operationGet(QNetworkOperation *op);
+	virtual void operationPut(QNetworkOperation *op);
 
-private:
-    int calcBlockSize( int totalSize ) const;
-    QDir dir;
-
+      private:
+	int calcBlockSize(int totalSize) const;
+	QDir dir;
 };
 
 #endif // QT_NO_NETWORKPROTOCOL

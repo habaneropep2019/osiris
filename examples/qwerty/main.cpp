@@ -12,27 +12,27 @@
 #include "qwerty.h"
 
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    
-    bool small =  qApp->desktop()->size().width() < 450 
-		  || qApp->desktop()->size().height() < 450;
-    
-    int i;
-    for ( i= argc <= 1 ? 0 : 1; i<argc; i++ ) {
-	Editor *e = new Editor;
-	e->setCaption("Qt Example - QWERTY");
-	if ( i > 0 )
-	    e->load( argv[i] );
-	if ( small ) {
-	    e->showMaximized();
-	} else {
-	    e->resize( 400, 400 );
-	    e->show();
+
+	bool small = qApp->desktop()->size().width() < 450 ||
+		     qApp->desktop()->size().height() < 450;
+
+	int i;
+	for (i = argc <= 1 ? 0 : 1; i < argc; i++) {
+		Editor *e = new Editor;
+		e->setCaption("Qt Example - QWERTY");
+		if (i > 0)
+			e->load(argv[i]);
+		if (small) {
+			e->showMaximized();
+		} else {
+			e->resize(400, 400);
+			e->show();
+		}
 	}
-    }
-    a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
-    return a.exec();
+	a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
+	return a.exec();
 }

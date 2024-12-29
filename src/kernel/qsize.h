@@ -39,55 +39,55 @@
 #define QSIZE_H
 
 #ifndef QT_H
-#include "qpoint.h"
+# include "qpoint.h"
 #endif // QT_H
 
 
 class Q_EXPORT QSize
 {
-public:
-    QSize();
-    QSize( int w, int h );
+      public:
+	QSize();
+	QSize(int w, int h);
 
-    bool   isNull()	const;
-    bool   isEmpty()	const;
-    bool   isValid()	const;
+	bool isNull() const;
+	bool isEmpty() const;
+	bool isValid() const;
 
-    int	   width()	const;
-    int	   height()	const;
-    void   setWidth( int w );
-    void   setHeight( int h );
-    void   transpose();
+	int width() const;
+	int height() const;
+	void setWidth(int w);
+	void setHeight(int h);
+	void transpose();
 
-    QSize expandedTo( const QSize & ) const;
-    QSize boundedTo( const QSize & ) const;
+	QSize expandedTo(const QSize &) const;
+	QSize boundedTo(const QSize &) const;
 
-    QCOORD &rwidth();
-    QCOORD &rheight();
+	QCOORD &rwidth();
+	QCOORD &rheight();
 
-    QSize &operator+=( const QSize & );
-    QSize &operator-=( const QSize & );
-    QSize &operator*=( int c );
-    QSize &operator*=( double c );
-    QSize &operator/=( int c );
-    QSize &operator/=( double c );
+	QSize &operator+=(const QSize &);
+	QSize &operator-=(const QSize &);
+	QSize &operator*=(int c);
+	QSize &operator*=(double c);
+	QSize &operator/=(int c);
+	QSize &operator/=(double c);
 
-    friend inline bool	operator==( const QSize &, const QSize & );
-    friend inline bool	operator!=( const QSize &, const QSize & );
-    friend inline QSize operator+( const QSize &, const QSize & );
-    friend inline QSize operator-( const QSize &, const QSize & );
-    friend inline QSize operator*( const QSize &, int );
-    friend inline QSize operator*( int, const QSize & );
-    friend inline QSize operator*( const QSize &, double );
-    friend inline QSize operator*( double, const QSize & );
-    friend inline QSize operator/( const QSize &, int );
-    friend inline QSize operator/( const QSize &, double );
+	friend inline bool operator==(const QSize &, const QSize &);
+	friend inline bool operator!=(const QSize &, const QSize &);
+	friend inline QSize operator+(const QSize &, const QSize &);
+	friend inline QSize operator-(const QSize &, const QSize &);
+	friend inline QSize operator*(const QSize &, int);
+	friend inline QSize operator*(int, const QSize &);
+	friend inline QSize operator*(const QSize &, double);
+	friend inline QSize operator*(double, const QSize &);
+	friend inline QSize operator/(const QSize &, int);
+	friend inline QSize operator/(const QSize &, double);
 
-private:
-    static void warningDivByZero();
+      private:
+	static void warningDivByZero();
 
-    QCOORD wd;
-    QCOORD ht;
+	QCOORD wd;
+	QCOORD ht;
 };
 
 
@@ -95,8 +95,8 @@ private:
   QSize stream functions
  *****************************************************************************/
 
-Q_EXPORT QDataStream &operator<<( QDataStream &, const QSize & );
-Q_EXPORT QDataStream &operator>>( QDataStream &, QSize & );
+Q_EXPORT QDataStream &operator<<(QDataStream &, const QSize &);
+Q_EXPORT QDataStream &operator>>(QDataStream &, QSize &);
 
 
 /*****************************************************************************
@@ -104,120 +104,177 @@ Q_EXPORT QDataStream &operator>>( QDataStream &, QSize & );
  *****************************************************************************/
 
 inline QSize::QSize()
-{ wd = ht = -1; }
+{
+	wd = ht = -1;
+}
 
-inline QSize::QSize( int w, int h )
-{ wd=(QCOORD)w; ht=(QCOORD)h; }
+inline QSize::QSize(int w, int h)
+{
+	wd = (QCOORD)w;
+	ht = (QCOORD)h;
+}
 
 inline bool QSize::isNull() const
-{ return wd==0 && ht==0; }
+{
+	return wd == 0 && ht == 0;
+}
 
 inline bool QSize::isEmpty() const
-{ return wd<1 || ht<1; }
+{
+	return wd < 1 || ht < 1;
+}
 
 inline bool QSize::isValid() const
-{ return wd>=0 && ht>=0; }
+{
+	return wd >= 0 && ht >= 0;
+}
 
 inline int QSize::width() const
-{ return wd; }
+{
+	return wd;
+}
 
 inline int QSize::height() const
-{ return ht; }
+{
+	return ht;
+}
 
-inline void QSize::setWidth( int w )
-{ wd=(QCOORD)w; }
+inline void QSize::setWidth(int w)
+{
+	wd = (QCOORD)w;
+}
 
-inline void QSize::setHeight( int h )
-{ ht=(QCOORD)h; }
+inline void QSize::setHeight(int h)
+{
+	ht = (QCOORD)h;
+}
 
 inline QCOORD &QSize::rwidth()
-{ return wd; }
+{
+	return wd;
+}
 
 inline QCOORD &QSize::rheight()
-{ return ht; }
+{
+	return ht;
+}
 
-inline QSize &QSize::operator+=( const QSize &s )
-{ wd+=s.wd; ht+=s.ht; return *this; }
+inline QSize &QSize::operator+=(const QSize &s)
+{
+	wd += s.wd;
+	ht += s.ht;
+	return *this;
+}
 
-inline QSize &QSize::operator-=( const QSize &s )
-{ wd-=s.wd; ht-=s.ht; return *this; }
+inline QSize &QSize::operator-=(const QSize &s)
+{
+	wd -= s.wd;
+	ht -= s.ht;
+	return *this;
+}
 
-inline QSize &QSize::operator*=( int c )
-{ wd*=(QCOORD)c; ht*=(QCOORD)c; return *this; }
+inline QSize &QSize::operator*=(int c)
+{
+	wd *= (QCOORD)c;
+	ht *= (QCOORD)c;
+	return *this;
+}
 
-inline QSize &QSize::operator*=( double c )
-{ wd=(QCOORD)(wd*c); ht=(QCOORD)(ht*c); return *this; }
+inline QSize &QSize::operator*=(double c)
+{
+	wd = (QCOORD)(wd * c);
+	ht = (QCOORD)(ht * c);
+	return *this;
+}
 
-inline bool operator==( const QSize &s1, const QSize &s2 )
-{ return s1.wd == s2.wd && s1.ht == s2.ht; }
+inline bool operator==(const QSize &s1, const QSize &s2)
+{
+	return s1.wd == s2.wd && s1.ht == s2.ht;
+}
 
-inline bool operator!=( const QSize &s1, const QSize &s2 )
-{ return s1.wd != s2.wd || s1.ht != s2.ht; }
+inline bool operator!=(const QSize &s1, const QSize &s2)
+{
+	return s1.wd != s2.wd || s1.ht != s2.ht;
+}
 
-inline QSize operator+( const QSize & s1, const QSize & s2 )
-{ return QSize(s1.wd+s2.wd, s1.ht+s2.ht); }
+inline QSize operator+(const QSize &s1, const QSize &s2)
+{
+	return QSize(s1.wd + s2.wd, s1.ht + s2.ht);
+}
 
-inline QSize operator-( const QSize &s1, const QSize &s2 )
-{ return QSize(s1.wd-s2.wd, s1.ht-s2.ht); }
+inline QSize operator-(const QSize &s1, const QSize &s2)
+{
+	return QSize(s1.wd - s2.wd, s1.ht - s2.ht);
+}
 
-inline QSize operator*( const QSize &s, int c )
-{ return QSize(s.wd*c, s.ht*c); }
+inline QSize operator*(const QSize &s, int c)
+{
+	return QSize(s.wd * c, s.ht * c);
+}
 
-inline QSize operator*( int c, const QSize &s )
-{  return QSize(s.wd*c, s.ht*c); }
+inline QSize operator*(int c, const QSize &s)
+{
+	return QSize(s.wd * c, s.ht * c);
+}
 
-inline QSize operator*( const QSize &s, double c )
-{ return QSize((QCOORD)(s.wd*c), (QCOORD)(s.ht*c)); }
+inline QSize operator*(const QSize &s, double c)
+{
+	return QSize((QCOORD)(s.wd * c), (QCOORD)(s.ht * c));
+}
 
-inline QSize operator*( double c, const QSize &s )
-{ return QSize((QCOORD)(s.wd*c), (QCOORD)(s.ht*c)); }
+inline QSize operator*(double c, const QSize &s)
+{
+	return QSize((QCOORD)(s.wd * c), (QCOORD)(s.ht * c));
+}
 
-inline QSize &QSize::operator/=( int c )
+inline QSize &QSize::operator/=(int c)
 {
 #if defined(CHECK_MATH)
-    if ( c == 0 )
-	warningDivByZero();
+	if (c == 0)
+		warningDivByZero();
 #endif
-    wd/=(QCOORD)c; ht/=(QCOORD)c;
-    return *this;
+	wd /= (QCOORD)c;
+	ht /= (QCOORD)c;
+	return *this;
 }
 
-inline QSize &QSize::operator/=( double c )
+inline QSize &QSize::operator/=(double c)
 {
 #if defined(CHECK_MATH)
-    if ( c == 0.0 )
-	warningDivByZero();
+	if (c == 0.0)
+		warningDivByZero();
 #endif
-    wd=(QCOORD)(wd/c); ht=(QCOORD)(ht/c);
-    return *this;
+	wd = (QCOORD)(wd / c);
+	ht = (QCOORD)(ht / c);
+	return *this;
 }
 
-inline QSize operator/( const QSize &s, int c )
+inline QSize operator/(const QSize &s, int c)
 {
 #if defined(CHECK_MATH)
-    if ( c == 0 )
-	QSize::warningDivByZero();
+	if (c == 0)
+		QSize::warningDivByZero();
 #endif
-    return QSize(s.wd/c, s.ht/c);
+	return QSize(s.wd / c, s.ht / c);
 }
 
-inline QSize operator/( const QSize &s, double c )
+inline QSize operator/(const QSize &s, double c)
 {
 #if defined(CHECK_MATH)
-    if ( c == 0.0 )
-	QSize::warningDivByZero();
+	if (c == 0.0)
+		QSize::warningDivByZero();
 #endif
-    return QSize((QCOORD)(s.wd/c), (QCOORD)(s.ht/c));
+	return QSize((QCOORD)(s.wd / c), (QCOORD)(s.ht / c));
 }
 
-inline QSize QSize::expandedTo( const QSize & otherSize ) const
+inline QSize QSize::expandedTo(const QSize &otherSize) const
 {
-    return QSize( QMAX(wd,otherSize.wd), QMAX(ht,otherSize.ht) );
+	return QSize(QMAX(wd, otherSize.wd), QMAX(ht, otherSize.ht));
 }
 
-inline QSize QSize::boundedTo( const QSize & otherSize ) const
+inline QSize QSize::boundedTo(const QSize &otherSize) const
 {
-    return QSize( QMIN(wd,otherSize.wd), QMIN(ht,otherSize.ht) );
+	return QSize(QMIN(wd, otherSize.wd), QMIN(ht, otherSize.ht));
 }
 
 

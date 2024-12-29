@@ -38,7 +38,7 @@
 #include "qglobal.h"
 
 #if defined(_OS_SUN_)
-#define readlink _qt_hide_readlink
+# define readlink _qt_hide_readlink
 #endif
 
 #include <pwd.h>
@@ -50,23 +50,23 @@
 #include "qdir.h"
 
 #if defined(_OS_SUN_)
-#undef readlink
-extern "C" int readlink( const char *, void *, uint );
+# undef readlink
+extern "C" int readlink(const char *, void *, uint);
 #endif
 
 
-void QFileInfo::slashify( QString& )
+void QFileInfo::slashify(QString &)
 {
-    return;
+	return;
 }
 
 
-void QFileInfo::makeAbs( QString & )
+void QFileInfo::makeAbs(QString &)
 {
-    return;
+	return;
 }
 
-extern bool qt_file_access( const QString& fn, int t );
+extern bool qt_file_access(const QString &fn, int t);
 
 /*!
   Returns TRUE if we are pointing to a real file.
@@ -74,9 +74,9 @@ extern bool qt_file_access( const QString& fn, int t );
 */
 bool QFileInfo::isFile() const
 {
-    if ( !fic || !cache )
-	doStat();
-    return fic ? (fic->st.st_mode & STAT_MASK) == STAT_REG : FALSE;
+	if (!fic || !cache)
+		doStat();
+	return fic ? (fic->st.st_mode & STAT_MASK) == STAT_REG : FALSE;
 }
 
 /*!
@@ -87,9 +87,9 @@ bool QFileInfo::isFile() const
 
 bool QFileInfo::isDir() const
 {
-    if ( !fic || !cache )
-	doStat();
-    return fic ? (fic->st.st_mode & STAT_MASK) == STAT_DIR : FALSE;
+	if (!fic || !cache)
+		doStat();
+	return fic ? (fic->st.st_mode & STAT_MASK) == STAT_DIR : FALSE;
 }
 
 /*!
@@ -99,9 +99,9 @@ bool QFileInfo::isDir() const
 
 bool QFileInfo::isSymLink() const
 {
-    if ( !fic || !cache )
-	doStat();
-    return fic ? fic->isSymLink : FALSE;
+	if (!fic || !cache)
+		doStat();
+	return fic ? fic->isSymLink : FALSE;
 }
 
 
@@ -118,23 +118,23 @@ bool QFileInfo::isSymLink() const
 
 QString QFileInfo::readLink() const
 {
-    QString r;
+	QString r;
 
 #if defined(_OS_UNIX_) && !defined(_OS_OS2EMX_)
-    char s[PATH_MAX+1];
-    if ( !isSymLink() )
-	return QString();
-    int len = readlink( QFile::encodeName(fn).data(), s, PATH_MAX );
-    if ( len >= 0 ) {
-	s[len] = '\0';
-	r = QFile::decodeName(s);
-    }
+	char s[PATH_MAX + 1];
+	if (!isSymLink())
+		return QString();
+	int len = readlink(QFile::encodeName(fn).data(), s, PATH_MAX);
+	if (len >= 0) {
+		s[len] = '\0';
+		r = QFile::decodeName(s);
+	}
 #endif
 
-    return r;
+	return r;
 }
 
-static const uint nobodyID = (uint) -2;
+static const uint nobodyID = (uint)-2;
 
 /*!
   Returns the owner of the file.
@@ -149,10 +149,10 @@ static const uint nobodyID = (uint) -2;
 
 QString QFileInfo::owner() const
 {
-    passwd *pw = getpwuid( ownerId() );
-    if ( pw )
-	return QFile::decodeName( pw->pw_name );
-    return QString::null;
+	passwd *pw = getpwuid(ownerId());
+	if (pw)
+		return QFile::decodeName(pw->pw_name);
+	return QString::null;
 }
 
 /*!
@@ -165,11 +165,11 @@ QString QFileInfo::owner() const
 
 uint QFileInfo::ownerId() const
 {
-    if ( !fic || !cache )
-	doStat();
-    if ( fic )
-	return fic->st.st_uid;
-    return nobodyID;
+	if (!fic || !cache)
+		doStat();
+	if (fic)
+		return fic->st.st_uid;
+	return nobodyID;
 }
 
 /*!
@@ -186,10 +186,10 @@ uint QFileInfo::ownerId() const
 
 QString QFileInfo::group() const
 {
-    struct group *gr = getgrgid( groupId() );
-    if ( gr )
-	return QFile::decodeName( gr->gr_name );
-    return QString::null;
+	struct group *gr = getgrgid(groupId());
+	if (gr)
+		return QFile::decodeName(gr->gr_name);
+	return QString::null;
 }
 
 /*!
@@ -203,11 +203,11 @@ QString QFileInfo::group() const
 
 uint QFileInfo::groupId() const
 {
-    if ( !fic || !cache )
-	doStat();
-    if ( fic )
-	return fic->st.st_gid;
-    return nobodyID;
+	if (!fic || !cache)
+		doStat();
+	if (fic)
+		return fic->st.st_gid;
+	return nobodyID;
 }
 
 
@@ -233,41 +233,41 @@ uint QFileInfo::groupId() const
   \sa isReadable(), isWritable(), isExecutable()
 */
 
-bool QFileInfo::permission( int permissionSpec ) const
+bool QFileInfo::permission(int permissionSpec) const
 {
-    if ( !fic || !cache )
-	doStat();
-    if ( fic ) {
-	uint mask = 0;
-	if ( permissionSpec & ReadUser)
-	    mask |= S_IRUSR;
-	if ( permissionSpec & WriteUser)
-	    mask |= S_IWUSR;
-	if ( permissionSpec & ExeUser)
-	    mask |= S_IXUSR;
-	if ( permissionSpec & ReadGroup)
-	    mask |= S_IRGRP;
-	if ( permissionSpec & WriteGroup)
-	    mask |= S_IWGRP;
-	if ( permissionSpec & ExeGroup)
-	    mask |= S_IXGRP;
-	if ( permissionSpec & ReadOther)
-	    mask |= S_IROTH;
-	if ( permissionSpec & WriteOther)
-	    mask |= S_IWOTH;
-	if ( permissionSpec & ExeOther)
-	    mask |= S_IXOTH;
-	if ( mask ) {
-	   return (fic->st.st_mode & mask) == mask;
-	} else {
+	if (!fic || !cache)
+		doStat();
+	if (fic) {
+		uint mask = 0;
+		if (permissionSpec & ReadUser)
+			mask |= S_IRUSR;
+		if (permissionSpec & WriteUser)
+			mask |= S_IWUSR;
+		if (permissionSpec & ExeUser)
+			mask |= S_IXUSR;
+		if (permissionSpec & ReadGroup)
+			mask |= S_IRGRP;
+		if (permissionSpec & WriteGroup)
+			mask |= S_IWGRP;
+		if (permissionSpec & ExeGroup)
+			mask |= S_IXGRP;
+		if (permissionSpec & ReadOther)
+			mask |= S_IROTH;
+		if (permissionSpec & WriteOther)
+			mask |= S_IWOTH;
+		if (permissionSpec & ExeOther)
+			mask |= S_IXOTH;
+		if (mask) {
+			return (fic->st.st_mode & mask) == mask;
+		} else {
 #if defined(CHECK_NULL)
-	   qWarning( "QFileInfo::permission: permissionSpec is 0" );
+			qWarning("QFileInfo::permission: permissionSpec is 0");
 #endif
-	   return TRUE;
+			return TRUE;
+		}
+	} else {
+		return FALSE;
 	}
-    } else {
-	return FALSE;
-    }
 }
 
 /*!
@@ -277,12 +277,12 @@ bool QFileInfo::permission( int permissionSpec ) const
 
 uint QFileInfo::size() const
 {
-    if ( !fic || !cache )
-	doStat();
-    if ( fic )
-	return (uint)fic->st.st_size;
-    else
-	return 0;
+	if (!fic || !cache)
+		doStat();
+	if (fic)
+		return (uint)fic->st.st_size;
+	else
+		return 0;
 }
 
 
@@ -293,12 +293,12 @@ uint QFileInfo::size() const
 
 QDateTime QFileInfo::lastModified() const
 {
-    QDateTime dt;
-    if ( !fic || !cache )
-	doStat();
-    if ( fic )
-	dt.setTime_t( fic->st.st_mtime );
-    return dt;
+	QDateTime dt;
+	if (!fic || !cache)
+		doStat();
+	if (fic)
+		dt.setTime_t(fic->st.st_mtime);
+	return dt;
 }
 
 /*!
@@ -312,39 +312,39 @@ QDateTime QFileInfo::lastModified() const
 
 QDateTime QFileInfo::lastRead() const
 {
-    QDateTime dt;
-    if ( !fic || !cache )
-	doStat();
-    if ( fic )
-	dt.setTime_t( fic->st.st_atime );
-    return dt;
+	QDateTime dt;
+	if (!fic || !cache)
+		doStat();
+	if (fic)
+		dt.setTime_t(fic->st.st_atime);
+	return dt;
 }
 
 
 void QFileInfo::doStat() const
 {
-    QFileInfo *that = ((QFileInfo*)this);	// mutable function
-    if ( !that->fic )
-	that->fic = new QFileInfoCache;
-    STATBUF *b = &that->fic->st;
-    that->fic->isSymLink = FALSE;
+	QFileInfo *that = ((QFileInfo *)this); // mutable function
+	if (!that->fic)
+		that->fic = new QFileInfoCache;
+	STATBUF *b = &that->fic->st;
+	that->fic->isSymLink = FALSE;
 
 #if defined(_OS_UNIX_) && defined(S_IFLNK)
-    if ( ::lstat(QFile::encodeName(fn),b) == 0 ) {
-	if ( S_ISLNK( b->st_mode ) )
-	    that->fic->isSymLink = TRUE;
-	else
-	    return;
-    }
+	if (::lstat(QFile::encodeName(fn), b) == 0) {
+		if (S_ISLNK(b->st_mode))
+			that->fic->isSymLink = TRUE;
+		else
+			return;
+	}
 #endif
-    int r;
+	int r;
 
-    r = STAT( QFile::encodeName(fn), b );
+	r = STAT(QFile::encodeName(fn), b);
 
-    if ( r != 0 && !that->fic->isSymLink ) {
-	delete that->fic;
-	that->fic = 0;
-    }
+	if (r != 0 && !that->fic->isSymLink) {
+		delete that->fic;
+		that->fic = 0;
+	}
 }
 
 /*!
@@ -355,21 +355,21 @@ void QFileInfo::doStat() const
   \sa dir(), filePath(), fileName(), isRelative()
 */
 #ifndef QT_NO_DIR
-QString QFileInfo::dirPath( bool absPath ) const
+QString QFileInfo::dirPath(bool absPath) const
 {
-    QString s;
-    if ( absPath )
-	s = absFilePath();
-    else
-	s = fn;
-    int pos = s.findRev( '/' );
-    if ( pos == -1 ) {
-	return QString::fromLatin1(".");
-    } else {
-	if ( pos == 0 )
-	    return QString::fromLatin1( "/" );
-	return s.left( pos );
-    }
+	QString s;
+	if (absPath)
+		s = absFilePath();
+	else
+		s = fn;
+	int pos = s.findRev('/');
+	if (pos == -1) {
+		return QString::fromLatin1(".");
+	} else {
+		if (pos == 0)
+			return QString::fromLatin1("/");
+		return s.left(pos);
+	}
 }
 #endif
 /*!
@@ -386,12 +386,12 @@ QString QFileInfo::dirPath( bool absPath ) const
 
 QString QFileInfo::fileName() const
 {
-    int p = fn.findRev( '/' );
-    if ( p == -1 ) {
-	return fn;
-    } else {
-	return fn.mid(p+1);
-    }
+	int p = fn.findRev('/');
+	if (p == -1) {
+		return fn;
+	} else {
+		return fn.mid(p + 1);
+	}
 }
 
 /*!
@@ -409,17 +409,16 @@ QString QFileInfo::fileName() const
 #ifndef QT_NO_DIR
 QString QFileInfo::absFilePath() const
 {
-    if ( QDir::isRelativePath(fn) ) {
-	QString tmp = QDir::currentDirPath();
-	tmp += '/';
-	tmp += fn;
-	makeAbs( tmp );
-	return QDir::cleanDirPath( tmp );
-    } else {
-	QString tmp = fn;
-	makeAbs( tmp );
-	return QDir::cleanDirPath( tmp );
-    }
-
+	if (QDir::isRelativePath(fn)) {
+		QString tmp = QDir::currentDirPath();
+		tmp += '/';
+		tmp += fn;
+		makeAbs(tmp);
+		return QDir::cleanDirPath(tmp);
+	} else {
+		QString tmp = fn;
+		makeAbs(tmp);
+		return QDir::cleanDirPath(tmp);
+	}
 }
 #endif

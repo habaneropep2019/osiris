@@ -39,60 +39,80 @@
 #define QFONTINFO_H
 
 #ifndef QT_H
-#include "qfont.h"
+# include "qfont.h"
 #endif // QT_H
 
 
 class Q_EXPORT QFontInfo
 {
-public:
-    QFontInfo( const QFont & );
-    QFontInfo( const QFontInfo & );
-   ~QFontInfo();
+      public:
+	QFontInfo(const QFont &);
+	QFontInfo(const QFontInfo &);
+	~QFontInfo();
 
-    QFontInfo	       &operator=( const QFontInfo & );
+	QFontInfo &operator=(const QFontInfo &);
 
-    QString   	        family()	const;
-    int			pointSize()	const;
-    bool		italic()	const;
-    int			weight()	const;
-    bool		bold()		const;
-    bool		underline()	const;
-    bool		strikeOut()	const;
-    bool		fixedPitch()	const;
-    QFont::StyleHint	styleHint()	const;
-    QFont::CharSet	charSet()	const;
-    bool		rawMode()	const;
+	QString family() const;
+	int pointSize() const;
+	bool italic() const;
+	int weight() const;
+	bool bold() const;
+	bool underline() const;
+	bool strikeOut() const;
+	bool fixedPitch() const;
+	QFont::StyleHint styleHint() const;
+	QFont::CharSet charSet() const;
+	bool rawMode() const;
 
-    bool		exactMatch()	const;
+	bool exactMatch() const;
 
-#if 1	/* OBSOLETE */
-    const QFont &font() const;
+#if 1 /* OBSOLETE */
+	const QFont &font() const;
 #endif
 
-private:
-    QFontInfo( const QPainter * );
-    static void reset( const QPainter * );
-    const QFontDef *spec() const;
+      private:
+	QFontInfo(const QPainter *);
+	static void reset(const QPainter *);
+	const QFontDef *spec() const;
 
-    QFontInternal *fin;
-    QPainter      *painter;
-    int		   flags;
+	QFontInternal *fin;
+	QPainter *painter;
+	int flags;
 
-    bool    underlineFlag()  const { return (flags & 0x1) != 0; }
-    bool    strikeOutFlag()  const { return (flags & 0x2) != 0; }
-    bool    exactMatchFlag() const { return (flags & 0x4) != 0; }
-    void    setUnderlineFlag()	   { flags |= 0x1; }
-    void    setStrikeOutFlag()	   { flags |= 0x2; }
-    void    setExactMatchFlag()	   { flags |= 0x4; }
+	bool underlineFlag() const
+	{
+		return (flags & 0x1) != 0;
+	}
+	bool strikeOutFlag() const
+	{
+		return (flags & 0x2) != 0;
+	}
+	bool exactMatchFlag() const
+	{
+		return (flags & 0x4) != 0;
+	}
+	void setUnderlineFlag()
+	{
+		flags |= 0x1;
+	}
+	void setStrikeOutFlag()
+	{
+		flags |= 0x2;
+	}
+	void setExactMatchFlag()
+	{
+		flags |= 0x4;
+	}
 
-    friend class QWidget;
-    friend class QPainter;
+	friend class QWidget;
+	friend class QPainter;
 };
 
 
 inline bool QFontInfo::bold() const
-{ return weight() > QFont::Normal; }
+{
+	return weight() > QFont::Normal;
+}
 
 
 #endif // QFONTINFO_H

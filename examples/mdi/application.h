@@ -21,54 +21,54 @@ class QWorkspace;
 class QPopupMenu;
 class QMovie;
 
-class MDIWindow: public QMainWindow
+class MDIWindow : public QMainWindow
 {
-    Q_OBJECT
-public:
-    MDIWindow( QWidget* parent, const char* name, int wflags );
-    ~MDIWindow();
+	Q_OBJECT
+      public:
+	MDIWindow(QWidget *parent, const char *name, int wflags);
+	~MDIWindow();
 
-    void load( const QString& fn );
-    void save();
-    void saveAs();
-    void print( QPrinter* );
+	void load(const QString &fn);
+	void save();
+	void saveAs();
+	void print(QPrinter *);
 
-signals:
-    void message(const QString&, int );
+      signals:
+	void message(const QString &, int);
 
-private:
-    QMultiLineEdit* medit;
-    QMovie * mmovie;
-    QString filename;
+      private:
+	QMultiLineEdit *medit;
+	QMovie *mmovie;
+	QString filename;
 };
 
 
-class ApplicationWindow: public QMainWindow
+class ApplicationWindow : public QMainWindow
 {
-    Q_OBJECT
-public:
-    ApplicationWindow();
-    ~ApplicationWindow();
+	Q_OBJECT
+      public:
+	ApplicationWindow();
+	~ApplicationWindow();
 
-private slots:
-    MDIWindow* newDoc();
-    void load();
-    void save();
-    void saveAs();
-    void print();
-    void closeWindow();
+      private slots:
+	MDIWindow *newDoc();
+	void load();
+	void save();
+	void saveAs();
+	void print();
+	void closeWindow();
 
-    void about();
-    void aboutQt();
+	void about();
+	void aboutQt();
 
-    void windowsMenuAboutToShow();
-    void windowsMenuActivated( int id );
+	void windowsMenuAboutToShow();
+	void windowsMenuActivated(int id);
 
-private:
-    QPrinter *printer;
-    QWorkspace* ws;
-    QToolBar *fileTools;
-    QPopupMenu* windowsMenu;
+      private:
+	QPrinter *printer;
+	QWorkspace *ws;
+	QToolBar *fileTools;
+	QPopupMenu *windowsMenu;
 };
 
 

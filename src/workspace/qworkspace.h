@@ -39,8 +39,8 @@
 #define QWORKSPACE_H
 
 #ifndef QT_H
-#include <qwidget.h>
-#include <qwidgetlist.h>
+# include <qwidget.h>
+# include <qwidgetlist.h>
 #endif // QT_H
 
 #ifndef QT_NO_WORKSPACE
@@ -52,67 +52,67 @@ class QShowEvent;
 
 class Q_EXPORT QWorkspace : public QWidget
 {
-    Q_OBJECT
-public:
-    QWorkspace( QWidget *parent=0, const char *name=0 );
-    ~QWorkspace();
+	Q_OBJECT
+      public:
+	QWorkspace(QWidget *parent = 0, const char *name = 0);
+	~QWorkspace();
 
-    QWidget* activeWindow() const;
-    QWidgetList windowList() const;
+	QWidget *activeWindow() const;
+	QWidgetList windowList() const;
 
-    QSizePolicy sizePolicy() const;
-    QSize sizeHint() const;
+	QSizePolicy sizePolicy() const;
+	QSize sizeHint() const;
 
-signals:
-    void windowActivated( QWidget* w);
+      signals:
+	void windowActivated(QWidget *w);
 
-public slots:
-    void cascade();
-    void tile();
+      public slots:
+	void cascade();
+	void tile();
 
-protected:
-    void childEvent( QChildEvent * );
-    void resizeEvent( QResizeEvent * );
-    bool eventFilter( QObject *, QEvent * );
-    void showEvent( QShowEvent *e );
+      protected:
+	void childEvent(QChildEvent *);
+	void resizeEvent(QResizeEvent *);
+	bool eventFilter(QObject *, QEvent *);
+	void showEvent(QShowEvent *e);
 
-private slots:
-    void closeActiveWindow();
-    void closeAllWindows();
-    void normalizeActiveWindow();
-    void minimizeActiveWindow();
-    void showOperationMenu();
-    void popupOperationMenu( const QPoint& );
-    void operationMenuActivated( int );
-    void operationMenuAboutToShow();
-    void toolMenuAboutToShow();
-    void activateNextWindow();
-    void activatePreviousWindow();
+      private slots:
+	void closeActiveWindow();
+	void closeAllWindows();
+	void normalizeActiveWindow();
+	void minimizeActiveWindow();
+	void showOperationMenu();
+	void popupOperationMenu(const QPoint &);
+	void operationMenuActivated(int);
+	void operationMenuAboutToShow();
+	void toolMenuAboutToShow();
+	void activateNextWindow();
+	void activatePreviousWindow();
 
-private:
-    void insertIcon( QWidget* w);
-    void removeIcon( QWidget* w);
-    void place( QWidget* );
+      private:
+	void insertIcon(QWidget *w);
+	void removeIcon(QWidget *w);
+	void place(QWidget *);
 
-    QWorkspaceChild* findChild( QWidget* w);
-    void showMaximizeControls();
-    void hideMaximizeControls();
-    void activateWindow( QWidget* w, bool change_focus = TRUE );
-    void showWindow( QWidget* w);
-    void maximizeWindow( QWidget* w);
-    void minimizeWindow( QWidget* w);
-    void normalizeWindow( QWidget* w);
+	QWorkspaceChild *findChild(QWidget *w);
+	void showMaximizeControls();
+	void hideMaximizeControls();
+	void activateWindow(QWidget *w, bool change_focus = TRUE);
+	void showWindow(QWidget *w);
+	void maximizeWindow(QWidget *w);
+	void minimizeWindow(QWidget *w);
+	void normalizeWindow(QWidget *w);
 
-    QPopupMenu* popup;
-    QWorkspaceData* d;
+	QPopupMenu *popup;
+	QWorkspaceData *d;
 
-    friend class QWorkspaceChild;
+	friend class QWorkspaceChild;
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QWorkspace( const QWorkspace & );
-    QWorkspace& operator=( const QWorkspace & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QWorkspace(const QWorkspace &);
+	QWorkspace &operator=(const QWorkspace &);
+# endif
 };
 
 

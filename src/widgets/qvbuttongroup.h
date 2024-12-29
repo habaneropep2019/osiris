@@ -39,24 +39,25 @@
 #define QVBUTTONGROUP_H
 
 #ifndef QT_H
-#include "qbuttongroup.h"
+# include "qbuttongroup.h"
 #endif // QT_H
 
 #ifndef QT_NO_VBUTTONGROUP
 
 class Q_EXPORT QVButtonGroup : public QButtonGroup
 {
-    Q_OBJECT
-public:
-    QVButtonGroup( QWidget *parent=0, const char *name=0 );
-    QVButtonGroup( const QString &title, QWidget *parent=0, const char* name=0 );
-   ~QVButtonGroup();
+	Q_OBJECT
+      public:
+	QVButtonGroup(QWidget *parent = 0, const char *name = 0);
+	QVButtonGroup(const QString &title, QWidget *parent = 0,
+		      const char *name = 0);
+	~QVButtonGroup();
 
-private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QVButtonGroup( const QVButtonGroup & );
-    QVButtonGroup &operator=( const QVButtonGroup & );
-#endif
+      private: // Disabled copy constructor and operator=
+# if defined(Q_DISABLE_COPY)
+	QVButtonGroup(const QVButtonGroup &);
+	QVButtonGroup &operator=(const QVButtonGroup &);
+# endif
 };
 
 

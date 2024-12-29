@@ -39,42 +39,86 @@
 #define QQUEUE_H
 
 #ifndef QT_H
-#include "qglist.h"
+# include "qglist.h"
 #endif // QT_H
 
 
-template<class type> class QQueue : private QGList
+template <class type> class QQueue : private QGList
 {
-public:
-    QQueue()				{}
-    QQueue( const QQueue<type> &q ) : QGList(q) {}
-   ~QQueue()				{ clear(); }
-    QQueue<type>& operator=(const QQueue<type> &q)
-			{ return (QQueue<type>&)QGList::operator=(q); }
-    bool  autoDelete() const		{ return QCollection::autoDelete(); }
-    void  setAutoDelete( bool del )	{ QCollection::setAutoDelete(del); }
-    uint  count()   const		{ return QGList::count(); }
-    bool  isEmpty() const		{ return QGList::count() == 0; }
-    void  enqueue( const type *d )	{ QGList::append(Item(d)); }
-    type *dequeue()			{ return (type *)QGList::takeFirst();}
-    bool  remove()			{ return QGList::removeFirst(); }
-    void  clear()			{ QGList::clear(); }
-    type *head()    const		{ return (type *)QGList::cfirst(); }
-	  operator type *() const	{ return (type *)QGList::cfirst(); }
-    type *current() const		{ return (type *)QGList::cfirst(); }
-private:
-    void  deleteItem( Item d );
+      public:
+	QQueue()
+	{
+	}
+	QQueue(const QQueue<type> &q) : QGList(q)
+	{
+	}
+	~QQueue()
+	{
+		clear();
+	}
+	QQueue<type> &operator=(const QQueue<type> &q)
+	{
+		return (QQueue<type> &)QGList::operator=(q);
+	}
+	bool autoDelete() const
+	{
+		return QCollection::autoDelete();
+	}
+	void setAutoDelete(bool del)
+	{
+		QCollection::setAutoDelete(del);
+	}
+	uint count() const
+	{
+		return QGList::count();
+	}
+	bool isEmpty() const
+	{
+		return QGList::count() == 0;
+	}
+	void enqueue(const type *d)
+	{
+		QGList::append(Item(d));
+	}
+	type *dequeue()
+	{
+		return (type *)QGList::takeFirst();
+	}
+	bool remove()
+	{
+		return QGList::removeFirst();
+	}
+	void clear()
+	{
+		QGList::clear();
+	}
+	type *head() const
+	{
+		return (type *)QGList::cfirst();
+	}
+	operator type *() const
+	{
+		return (type *)QGList::cfirst();
+	}
+	type *current() const
+	{
+		return (type *)QGList::cfirst();
+	}
+
+      private:
+	void deleteItem(Item d);
 };
 
 #if defined(Q_DELETING_VOID_UNDEFINED)
-template<> inline void QQueue<void>::deleteItem( Item )
+template <> inline void QQueue<void>::deleteItem(Item)
 {
 }
 #endif
 
-template<class type> inline void QQueue<type>::deleteItem( QCollection::Item d )
+template <class type> inline void QQueue<type>::deleteItem(QCollection::Item d)
 {
-    if ( del_item ) delete (type *)d;
+	if (del_item)
+		delete (type *)d;
 }
 
 

@@ -39,20 +39,20 @@
 #define QPIXMAPCACHE_H
 
 #ifndef QT_H
-#include "qpixmap.h"
+# include "qpixmap.h"
 #endif // QT_H
 
 
-class Q_EXPORT QPixmapCache				// global pixmap cache
+class Q_EXPORT QPixmapCache // global pixmap cache
 {
-public:
-    static  int		cacheLimit();
-    static  void	setCacheLimit( int );
-    static  QPixmap    *find( const QString &key );
-    static  bool	find( const QString &key, QPixmap& );
-    static  bool	insert( const QString &key, QPixmap * );
-    static  void	insert( const QString &key, const QPixmap& );
-    static  void	clear();
+      public:
+	static int cacheLimit();
+	static void setCacheLimit(int);
+	static QPixmap *find(const QString &key);
+	static bool find(const QString &key, QPixmap &);
+	static bool insert(const QString &key, QPixmap *);
+	static void insert(const QString &key, const QPixmap &);
+	static void clear();
 };
 
 

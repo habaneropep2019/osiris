@@ -9,12 +9,11 @@
 #include "mydialogimpl.h"
 #include <qmessagebox.h>
 
-MyDialogImpl::MyDialogImpl()
-    : MyDialog()
+MyDialogImpl::MyDialogImpl() : MyDialog()
 {
 }
 
 void MyDialogImpl::upClicked()
 {
-    QMessageBox::information( this, tr( "Message" ), tr( "Item-Up clicked!" ) );
+	QMessageBox::information(this, tr("Message"), tr("Item-Up clicked!"));
 }

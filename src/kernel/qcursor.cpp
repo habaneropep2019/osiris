@@ -39,9 +39,9 @@
 
 #ifndef QT_NO_CURSOR
 
-#include "qbitmap.h"
-#include "qimage.h"
-#include "qdatastream.h"
+# include "qbitmap.h"
+# include "qimage.h"
+# include "qdatastream.h"
 
 
 // NOT REVISED
@@ -101,7 +101,7 @@
   QCursor stream functions
  *****************************************************************************/
 
-#ifndef QT_NO_DATASTREAM
+# ifndef QT_NO_DATASTREAM
 
 
 /*!
@@ -111,14 +111,14 @@
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator<<( QDataStream &s, const QCursor &c )
+QDataStream &operator<<(QDataStream &s, const QCursor &c)
 {
-    s << (Q_INT16)c.shape();			// write shape id to stream
-    if ( c.shape() == BitmapCursor ) {		// bitmap cursor
-	s << *c.bitmap() << *c.mask();
-	s << c.hotSpot();
-    }
-    return s;
+	s << (Q_INT16)c.shape(); // write shape id to stream
+	if (c.shape() == BitmapCursor) { // bitmap cursor
+		s << *c.bitmap() << *c.mask();
+		s << c.hotSpot();
+	}
+	return s;
 }
 
 /*!
@@ -128,21 +128,21 @@ QDataStream &operator<<( QDataStream &s, const QCursor &c )
   \sa \link datastreamformat.html Format of the QDataStream operators \endlink
 */
 
-QDataStream &operator>>( QDataStream &s, QCursor &c )
+QDataStream &operator>>(QDataStream &s, QCursor &c)
 {
-    Q_INT16 shape;
-    s >> shape;					// read shape id from stream
-    if ( shape == BitmapCursor ) {		// read bitmap cursor
-	QBitmap bm, bmm;
-	QPoint	hot;
-	s >> bm >> bmm >> hot;
-	c = QCursor( bm, bmm, hot.x(), hot.y() );
-    } else {
-	c.setShape( (int)shape );		// create cursor with shape
-    }
-    return s;
+	Q_INT16 shape;
+	s >> shape; // read shape id from stream
+	if (shape == BitmapCursor) { // read bitmap cursor
+		QBitmap bm, bmm;
+		QPoint hot;
+		s >> bm >> bmm >> hot;
+		c = QCursor(bm, bmm, hot.x(), hot.y());
+	} else {
+		c.setShape((int)shape); // create cursor with shape
+	}
+	return s;
 }
-#endif // QT_NO_DATASTREAM
+# endif // QT_NO_DATASTREAM
 
 
 /*! Constructs a custom pixmap cursor.
@@ -165,29 +165,28 @@ QDataStream &operator>>( QDataStream &s, QCursor &c )
   \sa QPixmap::QPixmap(), QPixmap::setMask()
 */
 
-QCursor::QCursor( const QPixmap &pixmap, int hotX, int hotY )
+QCursor::QCursor(const QPixmap &pixmap, int hotX, int hotY)
 {
-    QImage img = pixmap.convertToImage().
-		    convertDepth( 8, Qt::ThresholdDither|Qt::AvoidDither );
-    QBitmap bm;
-    bm.convertFromImage( img, Qt::ThresholdDither|Qt::AvoidDither );
-    QBitmap bmm;
-    if ( bm.mask() ) {
-	bmm = *bm.mask();
-	QBitmap nullBm;
-	bm.setMask( nullBm );
-    }
-    else if ( pixmap.mask() ) {
-	QImage mimg = pixmap.mask()->convertToImage().
-	              convertDepth( 8, Qt::ThresholdDither|Qt::AvoidDither );
-	bmm.convertFromImage( mimg, Qt::ThresholdDither|Qt::AvoidDither );
-    }
-    else {
-	bmm.resize( bm.size() );
-	bmm.fill( Qt::color1 );
-    }
+	QImage img = pixmap.convertToImage().convertDepth(
+		8, Qt::ThresholdDither | Qt::AvoidDither);
+	QBitmap bm;
+	bm.convertFromImage(img, Qt::ThresholdDither | Qt::AvoidDither);
+	QBitmap bmm;
+	if (bm.mask()) {
+		bmm = *bm.mask();
+		QBitmap nullBm;
+		bm.setMask(nullBm);
+	} else if (pixmap.mask()) {
+		QImage mimg = pixmap.mask()->convertToImage().convertDepth(
+			8, Qt::ThresholdDither | Qt::AvoidDither);
+		bmm.convertFromImage(mimg,
+				     Qt::ThresholdDither | Qt::AvoidDither);
+	} else {
+		bmm.resize(bm.size());
+		bmm.fill(Qt::color1);
+	}
 
-    setBitmap(bm,bmm,hotX,hotY);
+	setBitmap(bm, bmm, hotX, hotY);
 }
 
 
@@ -222,12 +221,9 @@ QCursor::QCursor( const QPixmap &pixmap, int hotX, int hotY )
   \sa QBitmap::QBitmap(), QBitmap::setMask()
 */
 
-QCursor::QCursor( const QBitmap &bitmap, const QBitmap &mask,
-		  int hotX, int hotY )
+QCursor::QCursor(const QBitmap &bitmap, const QBitmap &mask, int hotX, int hotY)
 {
-    setBitmap(bitmap,mask,hotX,hotY);
+	setBitmap(bitmap, mask, hotX, hotY);
 }
 
 #endif // QT_NO_CURSOR
-
-

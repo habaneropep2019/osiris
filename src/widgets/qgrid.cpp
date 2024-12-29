@@ -34,8 +34,8 @@
 
 #include "qgrid.h"
 #ifndef QT_NO_GRID
-#include "qlayout.h"
-#include "qapplication.h"
+# include "qlayout.h"
+# include "qapplication.h"
 
 // NOT REVISED
 /*!
@@ -66,19 +66,19 @@
   \c Horizontal, \a n specifies the number of columns. If \a dir is \c Vertical,
   \a n specifies the number of rows.
  */
-QGrid::QGrid( int n, Direction dir, QWidget *parent, const char *name, WFlags f )
-    :QFrame( parent, name, f )
+QGrid::QGrid(int n, Direction dir, QWidget *parent, const char *name, WFlags f)
+	: QFrame(parent, name, f)
 {
-    int nCols, nRows;
-    if ( dir == Horizontal ) {
-	nCols = n;
-	nRows = -1;
-    } else {
-	nCols = -1;
-	nRows = n;
-    }
-    lay = new QGridLayout( this, nRows, nCols, 0, 0, name );
-    lay->setAutoAdd( TRUE );
+	int nCols, nRows;
+	if (dir == Horizontal) {
+		nCols = n;
+		nRows = -1;
+	} else {
+		nCols = -1;
+		nRows = n;
+	}
+	lay = new QGridLayout(this, nRows, nCols, 0, 0, name);
+	lay->setAutoAdd(TRUE);
 }
 
 
@@ -87,11 +87,11 @@ QGrid::QGrid( int n, Direction dir, QWidget *parent, const char *name, WFlags f 
   Constructs a grid widget with parent \a parent and name \a name.
   \a n specifies the number of columns.
  */
-QGrid::QGrid( int n, QWidget *parent, const char *name, WFlags f )
-    :QFrame( parent, name, f )
+QGrid::QGrid(int n, QWidget *parent, const char *name, WFlags f)
+	: QFrame(parent, name, f)
 {
-    lay = new QGridLayout( this, -1, n, 0, 0, name );
-    lay->setAutoAdd( TRUE );
+	lay = new QGridLayout(this, -1, n, 0, 0, name);
+	lay->setAutoAdd(TRUE);
 }
 
 
@@ -99,10 +99,10 @@ QGrid::QGrid( int n, QWidget *parent, const char *name, WFlags f )
   Sets the spacing between children to \a space.
 */
 
-void QGrid::setSpacing( int space )
+void QGrid::setSpacing(int space)
 {
-    if ( layout() )
-	layout()->setSpacing( space );
+	if (layout())
+		layout()->setSpacing(space);
 }
 
 
@@ -110,9 +110,9 @@ void QGrid::setSpacing( int space )
  */
 void QGrid::frameChanged()
 {
-    if ( !layout() )
-	return;
-    layout()->setMargin( frameWidth() );
+	if (!layout())
+		return;
+	layout()->setMargin(frameWidth());
 }
 
 
@@ -122,8 +122,8 @@ void QGrid::frameChanged()
 
 QSize QGrid::sizeHint() const
 {
-    QWidget *mThis = (QWidget*)this;
-    QApplication::sendPostedEvents( mThis, QEvent::ChildInserted );
-    return QFrame::sizeHint();
+	QWidget *mThis = (QWidget *)this;
+	QApplication::sendPostedEvents(mThis, QEvent::ChildInserted);
+	return QFrame::sizeHint();
 }
 #endif

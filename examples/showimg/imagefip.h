@@ -15,15 +15,15 @@
 
 class ImageIconProvider : public QFileIconProvider
 {
-    Q_OBJECT
-    QStrList fmts;
-    QPixmap imagepm;
+	Q_OBJECT
+	QStrList fmts;
+	QPixmap imagepm;
 
-public:
-    ImageIconProvider( QWidget *parent=0, const char *name=0 );
-    ~ImageIconProvider();
+      public:
+	ImageIconProvider(QWidget *parent = 0, const char *name = 0);
+	~ImageIconProvider();
 
-    const QPixmap * pixmap( const QFileInfo &fi );
+	const QPixmap *pixmap(const QFileInfo &fi);
 };
 
 

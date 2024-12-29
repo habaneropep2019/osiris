@@ -18,20 +18,19 @@ class QLabel;
 
 class ListBoxCombo : public QVBox
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    ListBoxCombo( QWidget *parent = 0, const char *name = 0 );
+      public:
+	ListBoxCombo(QWidget *parent = 0, const char *name = 0);
 
-protected:
-    QListBox *lb1, *lb2;
-    QLabel *label1, *label2;
+      protected:
+	QListBox *lb1, *lb2;
+	QLabel *label1, *label2;
 
-protected slots:
-    void slotLeft2Right();
-    void slotCombo1Activated( const QString &s );
-    void slotCombo2Activated( const QString &s );
-
+      protected slots:
+	void slotLeft2Right();
+	void slotCombo1Activated(const QString &s);
+	void slotCombo2Activated(const QString &s);
 };
 
 #endif

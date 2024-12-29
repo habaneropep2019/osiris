@@ -39,8 +39,8 @@
 #define QOBJECTLIST_H
 
 #ifndef QT_H
-#include "qobject.h"
-#include "qlist.h"
+# include "qobject.h"
+# include "qlist.h"
 #endif // QT_H
 
 
@@ -52,20 +52,33 @@ template class Q_EXPORT QListIterator<QObject>;
 
 class Q_EXPORT QObjectList : public QList<QObject>
 {
-public:
-    QObjectList() : QList<QObject>() {}
-    QObjectList( const QObjectList &list ) : QList<QObject>(list) {}
-   ~QObjectList() { clear(); }
-    QObjectList &operator=(const QObjectList &list)
-	{ return (QObjectList&)QList<QObject>::operator=(list); }
+      public:
+	QObjectList() : QList<QObject>()
+	{
+	}
+	QObjectList(const QObjectList &list) : QList<QObject>(list)
+	{
+	}
+	~QObjectList()
+	{
+		clear();
+	}
+	QObjectList &operator=(const QObjectList &list)
+	{
+		return (QObjectList &)QList<QObject>::operator=(list);
+	}
 };
 
 class Q_EXPORT QObjectListIt : public QListIterator<QObject>
 {
-public:
-    QObjectListIt( const QObjectList &l ) : QListIterator<QObject>(l) {}
-    QObjectListIt &operator=(const QObjectListIt &i)
-	{ return (QObjectListIt&)QListIterator<QObject>::operator=(i); }
+      public:
+	QObjectListIt(const QObjectList &l) : QListIterator<QObject>(l)
+	{
+	}
+	QObjectListIt &operator=(const QObjectListIt &i)
+	{
+		return (QObjectListIt &)QListIterator<QObject>::operator=(i);
+	}
 };
 
 

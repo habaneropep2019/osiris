@@ -22,33 +22,31 @@
 
 class GLTexobj : public QGLWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
+      public:
+	GLTexobj(QWidget *parent, const char *name);
+	~GLTexobj();
 
-    GLTexobj( QWidget* parent, const char* name );
-    ~GLTexobj();
+      public slots:
 
-public slots:
+	void setXRotation(int degrees);
+	void setYRotation(int degrees);
+	void setZRotation(int degrees);
+	void toggleAnimation();
 
-    void		setXRotation( int degrees );
-    void		setYRotation( int degrees );
-    void		setZRotation( int degrees );
-    void		toggleAnimation();
+      protected:
+	void initializeGL();
+	void paintGL();
+	void resizeGL(int w, int h);
 
-protected:
+	virtual GLuint makeObject(const QImage &tex1, const QImage &tex2);
 
-    void		initializeGL();
-    void		paintGL();
-    void		resizeGL( int w, int h );
-
-    virtual GLuint 	makeObject( const QImage& tex1, const QImage& tex2 );
-
-private:
-    bool animation;
-    GLuint object;
-    GLfloat xRot, yRot, zRot, scale;
-    QTimer* timer;
+      private:
+	bool animation;
+	GLuint object;
+	GLfloat xRot, yRot, zRot, scale;
+	QTimer *timer;
 };
 
 

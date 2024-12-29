@@ -39,7 +39,7 @@
 #include "qevent.h"
 
 
-extern bool qt_set_socket_handler( int, int, QObject *, bool );
+extern bool qt_set_socket_handler(int, int, QObject *, bool);
 
 
 // NOT REVISED
@@ -150,18 +150,18 @@ extern bool qt_set_socket_handler( int, int, QObject *, bool );
   \sa setEnabled(), isEnabled()
 */
 
-QSocketNotifier::QSocketNotifier( int socket, Type type, QObject *parent,
-				  const char *name )
-    : QObject( parent, name )
+QSocketNotifier::QSocketNotifier(int socket, Type type, QObject *parent,
+				 const char *name)
+	: QObject(parent, name)
 {
 #if defined(CHECK_RANGE)
-    if ( socket < 0 )
-	qWarning( "QSocketNotifier: Invalid socket specified" );
+	if (socket < 0)
+		qWarning("QSocketNotifier: Invalid socket specified");
 #endif
-    sockfd = socket;
-    sntype = type;
-    snenabled = TRUE;
-    qt_set_socket_handler( sockfd, sntype, this, TRUE );
+	sockfd = socket;
+	sntype = type;
+	snenabled = TRUE;
+	qt_set_socket_handler(sockfd, sntype, this, TRUE);
 }
 
 /*!
@@ -170,7 +170,7 @@ QSocketNotifier::QSocketNotifier( int socket, Type type, QObject *parent,
 
 QSocketNotifier::~QSocketNotifier()
 {
-    setEnabled( FALSE );
+	setEnabled(FALSE);
 }
 
 
@@ -231,27 +231,27 @@ QSocketNotifier::~QSocketNotifier()
   \sa isEnabled(), activated()
 */
 
-void QSocketNotifier::setEnabled( bool enable )
+void QSocketNotifier::setEnabled(bool enable)
 {
-    if ( sockfd < 0 )
-	return;
-    if ( snenabled == enable )			// no change
-	return;
-    snenabled = enable;
-    qt_set_socket_handler( sockfd, sntype, this, snenabled );
+	if (sockfd < 0)
+		return;
+	if (snenabled == enable) // no change
+		return;
+	snenabled = enable;
+	qt_set_socket_handler(sockfd, sntype, this, snenabled);
 }
 
 
 /*!\reimp
-*/
-bool QSocketNotifier::event( QEvent *e )
+ */
+bool QSocketNotifier::event(QEvent *e)
 {
-    // Emits the activated() signal when a \c QEvent::SockAct is
-    // received.
-    QObject::event( e );			// will activate filters
-    if ( e->type() == QEvent::SockAct ) {
-	emit activated( sockfd );
-	return TRUE;
-    }
-    return FALSE;
+	// Emits the activated() signal when a \c QEvent::SockAct is
+	// received.
+	QObject::event(e); // will activate filters
+	if (e->type() == QEvent::SockAct) {
+		emit activated(sockfd);
+		return TRUE;
+	}
+	return FALSE;
 }

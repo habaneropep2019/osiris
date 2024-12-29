@@ -13,8 +13,7 @@
 
 HttpDaemon::HttpDaemon(QObject *parent) : QServerSocket(8080, 1, parent)
 {
-	if (!ok())
-	{
+	if (!ok()) {
 		qWarning("Failed to bind to port 8080");
 		exit(1);
 	}
@@ -32,11 +31,10 @@ void HttpDaemon::newConnection(int socket)
 void HttpDaemon::readClient()
 {
 	QSocket *socket = (QSocket *)sender();
-	if (socket->canReadLine())
-	{
-		QStringList tokens = QStringList::split(QRegExp("[ \n\r][ \n\r]*"), socket->readLine());
-		if (tokens[0] == "GET")
-		{
+	if (socket->canReadLine()) {
+		QStringList tokens = QStringList::split(
+			QRegExp("[ \n\r][ \n\r]*"), socket->readLine());
+		if (tokens[0] == "GET") {
 			QTextStream os(socket);
 			os << "<h1>Nothing to see here</h1>\n";
 			socket->close();

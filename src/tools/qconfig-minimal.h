@@ -1,14 +1,15 @@
 #define NO_CHECK
 #ifndef QT_H
 #endif // QT_H
-#if !defined(QT_NO_QWS_DEPTH_16) ||  !defined(QT_NO_QWS_DEPTH_8) || !defined(QT_NO_QWS_DEPTH_32) || !defined(QT_NO_QWS_VGA_16)  
-//We only need 1-bit support if we have a 1-bit screen
-#define QT_NO_QWS_DEPTH_1
+#if !defined(QT_NO_QWS_DEPTH_16) || !defined(QT_NO_QWS_DEPTH_8) || \
+	!defined(QT_NO_QWS_DEPTH_32) || !defined(QT_NO_QWS_VGA_16)
+// We only need 1-bit support if we have a 1-bit screen
+# define QT_NO_QWS_DEPTH_1
 #endif
 #define QT_NO_PALETTE
 #define QT_NO_ACTION
 #ifndef QT_NO_CODECS // moc?
-#define QT_NO_TEXTCODEC
+# define QT_NO_TEXTCODEC
 #endif
 #define QT_NO_UNICODETABLES
 #define QT_NO_IMAGEIO_BMP

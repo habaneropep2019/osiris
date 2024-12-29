@@ -39,7 +39,7 @@
 #define QVARIANT_H
 
 #ifndef QT_H
-#include "qstring.h"
+# include "qstring.h"
 #endif // QT_H
 
 #ifndef QT_NO_VARIANT
@@ -77,244 +77,244 @@ template <class Key, class T> class QMapConstIterator;
 
 class Q_EXPORT QVariant
 {
-public:
-    enum Type {
-	Invalid,
-	Map,
-	List,
-	String,
-	StringList,
-	Font,
-	Pixmap,
-	Brush,
-	Rect,
-	Size,
-	Color,
-	Palette,
-	ColorGroup,
-	IconSet,
-	Point,
-	Image,
-	Int,
-	UInt,
-	Bool,
-	Double,
-	CString,
-	PointArray,
-	Region,
-	Bitmap,
-	Cursor,
-	SizePolicy
-    };
+      public:
+	enum Type {
+		Invalid,
+		Map,
+		List,
+		String,
+		StringList,
+		Font,
+		Pixmap,
+		Brush,
+		Rect,
+		Size,
+		Color,
+		Palette,
+		ColorGroup,
+		IconSet,
+		Point,
+		Image,
+		Int,
+		UInt,
+		Bool,
+		Double,
+		CString,
+		PointArray,
+		Region,
+		Bitmap,
+		Cursor,
+		SizePolicy
+	};
 
-    QVariant();
-    ~QVariant();
-    QVariant( const QVariant& );
-    QVariant( QDataStream& s );
+	QVariant();
+	~QVariant();
+	QVariant(const QVariant &);
+	QVariant(QDataStream &s);
 
-    QVariant( const QString& );
-    QVariant( const QCString& );
-    QVariant( const char* );
-    QVariant( const QStringList& );
-    QVariant( const QFont& );
-    QVariant( const QPixmap& );
-    QVariant( const QImage& );
-    QVariant( const QBrush& );
-    QVariant( const QPoint& );
-    QVariant( const QRect& );
-    QVariant( const QSize& );
-    QVariant( const QColor& );
-    QVariant( const QPalette& );
-    QVariant( const QColorGroup& );
-    QVariant( const QIconSet& );
-    QVariant( const QPointArray& );
-    QVariant( const QRegion& );
-    QVariant( const QBitmap& );
-    QVariant( const QCursor& );
-    QVariant( const QValueList<QVariant>& );
-    QVariant( const QMap<QString,QVariant>& );
-    QVariant( int );
-    QVariant( uint );
-    // ### Problems on some compilers ?
-    QVariant( bool, int );
-    QVariant( double );
-    QVariant( QSizePolicy );
+	QVariant(const QString &);
+	QVariant(const QCString &);
+	QVariant(const char *);
+	QVariant(const QStringList &);
+	QVariant(const QFont &);
+	QVariant(const QPixmap &);
+	QVariant(const QImage &);
+	QVariant(const QBrush &);
+	QVariant(const QPoint &);
+	QVariant(const QRect &);
+	QVariant(const QSize &);
+	QVariant(const QColor &);
+	QVariant(const QPalette &);
+	QVariant(const QColorGroup &);
+	QVariant(const QIconSet &);
+	QVariant(const QPointArray &);
+	QVariant(const QRegion &);
+	QVariant(const QBitmap &);
+	QVariant(const QCursor &);
+	QVariant(const QValueList<QVariant> &);
+	QVariant(const QMap<QString, QVariant> &);
+	QVariant(int);
+	QVariant(uint);
+	// ### Problems on some compilers ?
+	QVariant(bool, int);
+	QVariant(double);
+	QVariant(QSizePolicy);
 
-    QVariant& operator= ( const QVariant& );
-    bool operator==( const QVariant& ) const;
-    bool operator!=( const QVariant& ) const;
+	QVariant &operator=(const QVariant &);
+	bool operator==(const QVariant &) const;
+	bool operator!=(const QVariant &) const;
 
-    Type type() const;
-    const char* typeName() const;
+	Type type() const;
+	const char *typeName() const;
 
-    bool canCast( Type ) const;
+	bool canCast(Type) const;
 
-    bool isValid() const;
+	bool isValid() const;
 
-    void clear();
+	void clear();
 
-    const QString toString() const;
-    const QCString toCString() const;
-    const QStringList toStringList() const;
-    const QFont toFont() const;
-    const QPixmap toPixmap() const;
-    const QImage toImage() const;
-    const QBrush toBrush() const;
-    const QPoint toPoint() const;
-    const QRect toRect() const;
-    const QSize toSize() const;
-    const QColor toColor() const;
-    const QPalette toPalette() const;
-    const QColorGroup toColorGroup() const;
-    const QIconSet toIconSet() const;
-    const QPointArray toPointArray() const;
-    const QBitmap toBitmap() const;
-    const QRegion toRegion() const;
-    const QCursor toCursor() const;
-    int toInt() const;
-    uint toUInt() const;
-    bool toBool() const;
-    double toDouble() const;
-    const QValueList<QVariant> toList() const;
-    const QMap<QString,QVariant> toMap() const;
-    QSizePolicy toSizePolicy() const;
+	const QString toString() const;
+	const QCString toCString() const;
+	const QStringList toStringList() const;
+	const QFont toFont() const;
+	const QPixmap toPixmap() const;
+	const QImage toImage() const;
+	const QBrush toBrush() const;
+	const QPoint toPoint() const;
+	const QRect toRect() const;
+	const QSize toSize() const;
+	const QColor toColor() const;
+	const QPalette toPalette() const;
+	const QColorGroup toColorGroup() const;
+	const QIconSet toIconSet() const;
+	const QPointArray toPointArray() const;
+	const QBitmap toBitmap() const;
+	const QRegion toRegion() const;
+	const QCursor toCursor() const;
+	int toInt() const;
+	uint toUInt() const;
+	bool toBool() const;
+	double toDouble() const;
+	const QValueList<QVariant> toList() const;
+	const QMap<QString, QVariant> toMap() const;
+	QSizePolicy toSizePolicy() const;
 
-    QValueListConstIterator<QVariant> listBegin() const;
-    QValueListConstIterator<QVariant> listEnd() const;
-    QValueListConstIterator<QString> stringListBegin() const;
-    QValueListConstIterator<QString> stringListEnd() const;
-    QMapConstIterator<QString,QVariant> mapBegin() const;
-    QMapConstIterator<QString,QVariant> mapEnd() const;
-    QMapConstIterator<QString,QVariant> mapFind( const QString& ) const;
+	QValueListConstIterator<QVariant> listBegin() const;
+	QValueListConstIterator<QVariant> listEnd() const;
+	QValueListConstIterator<QString> stringListBegin() const;
+	QValueListConstIterator<QString> stringListEnd() const;
+	QMapConstIterator<QString, QVariant> mapBegin() const;
+	QMapConstIterator<QString, QVariant> mapEnd() const;
+	QMapConstIterator<QString, QVariant> mapFind(const QString &) const;
 
-    QString& asString();
-    QCString& asCString();
-    QStringList& asStringList();
-    QFont& asFont();
-    QPixmap& asPixmap();
-    QImage& asImage();
-    QBrush& asBrush();
-    QPoint& asPoint();
-    QRect& asRect();
-    QSize& asSize();
-    QColor& asColor();
-    QPalette& asPalette();
-    QColorGroup& asColorGroup();
-    QIconSet& asIconSet();
-    QPointArray& asPointArray();
-    QBitmap& asBitmap();
-    QRegion& asRegion();
-    QCursor& asCursor();
-    int& asInt();
-    uint& asUInt();
-    bool& asBool();
-    double& asDouble();
-    QValueList<QVariant>& asList();
-    QMap<QString,QVariant>& asMap();
-    QSizePolicy& asSizePolicy();
+	QString &asString();
+	QCString &asCString();
+	QStringList &asStringList();
+	QFont &asFont();
+	QPixmap &asPixmap();
+	QImage &asImage();
+	QBrush &asBrush();
+	QPoint &asPoint();
+	QRect &asRect();
+	QSize &asSize();
+	QColor &asColor();
+	QPalette &asPalette();
+	QColorGroup &asColorGroup();
+	QIconSet &asIconSet();
+	QPointArray &asPointArray();
+	QBitmap &asBitmap();
+	QRegion &asRegion();
+	QCursor &asCursor();
+	int &asInt();
+	uint &asUInt();
+	bool &asBool();
+	double &asDouble();
+	QValueList<QVariant> &asList();
+	QMap<QString, QVariant> &asMap();
+	QSizePolicy &asSizePolicy();
 
-    void load( QDataStream& );
-    void save( QDataStream& ) const;
+	void load(QDataStream &);
+	void save(QDataStream &) const;
 
-    static const char* typeToName( Type typ );
-    static Type nameToType( const char* name );
+	static const char *typeToName(Type typ);
+	static Type nameToType(const char *name);
 
-private:
-    void detach();
+      private:
+	void detach();
 
-    QVariantPrivate* d;
+	QVariantPrivate *d;
 };
 
 class QVariantPrivate : public QShared
 {
-public:
-    QVariantPrivate();
-    QVariantPrivate( QVariantPrivate* );
-    ~QVariantPrivate();
+      public:
+	QVariantPrivate();
+	QVariantPrivate(QVariantPrivate *);
+	~QVariantPrivate();
 
-    void clear();
+	void clear();
 
-    QVariant::Type typ;
-    union
-    {
-	uint u;
-	int i;
-	bool b;
-	double d;
-	void *ptr;
-    } value;
+	QVariant::Type typ;
+	union {
+		uint u;
+		int i;
+		bool b;
+		double d;
+		void *ptr;
+	} value;
 };
 
 // These header files are down here for GCC 2.7.* compatibility
-#ifndef QT_H
-#include "qvaluelist.h"
-#include "qstringlist.h"
-#include "qmap.h"
-#endif // QT_H
+# ifndef QT_H
+#  include "qvaluelist.h"
+#  include "qstringlist.h"
+#  include "qmap.h"
+# endif // QT_H
 
 inline QVariant::Type QVariant::type() const
 {
-    return d->typ;
+	return d->typ;
 }
 
 inline bool QVariant::isValid() const
 {
-    return (d->typ != Invalid);
+	return (d->typ != Invalid);
 }
 
 inline QValueListConstIterator<QString> QVariant::stringListBegin() const
 {
-    if ( d->typ != StringList )
-	return QValueListConstIterator<QString>();
-    return ((const QStringList*)d->value.ptr)->begin();
+	if (d->typ != StringList)
+		return QValueListConstIterator<QString>();
+	return ((const QStringList *)d->value.ptr)->begin();
 }
 
 inline QValueListConstIterator<QString> QVariant::stringListEnd() const
 {
-    if ( d->typ != StringList )
-	return QValueListConstIterator<QString>();
-    return ((const QStringList*)d->value.ptr)->end();
+	if (d->typ != StringList)
+		return QValueListConstIterator<QString>();
+	return ((const QStringList *)d->value.ptr)->end();
 }
 
 inline QValueListConstIterator<QVariant> QVariant::listBegin() const
 {
-    if ( d->typ != List )
-	return QValueListConstIterator<QVariant>();
-    return ((const QValueList<QVariant>*)d->value.ptr)->begin();
+	if (d->typ != List)
+		return QValueListConstIterator<QVariant>();
+	return ((const QValueList<QVariant> *)d->value.ptr)->begin();
 }
 
 inline QValueListConstIterator<QVariant> QVariant::listEnd() const
 {
-    if ( d->typ != List )
-	return QValueListConstIterator<QVariant>();
-    return ((const QValueList<QVariant>*)d->value.ptr)->end();
+	if (d->typ != List)
+		return QValueListConstIterator<QVariant>();
+	return ((const QValueList<QVariant> *)d->value.ptr)->end();
 }
 
-inline QMapConstIterator<QString,QVariant> QVariant::mapBegin() const
+inline QMapConstIterator<QString, QVariant> QVariant::mapBegin() const
 {
-    if ( d->typ != Map )
-	return QMapConstIterator<QString,QVariant>();
-    return ((const QMap<QString,QVariant>*)d->value.ptr)->begin();
+	if (d->typ != Map)
+		return QMapConstIterator<QString, QVariant>();
+	return ((const QMap<QString, QVariant> *)d->value.ptr)->begin();
 }
 
-inline QMapConstIterator<QString,QVariant> QVariant::mapEnd() const
+inline QMapConstIterator<QString, QVariant> QVariant::mapEnd() const
 {
-    if ( d->typ != Map )
-	return QMapConstIterator<QString,QVariant>();
-    return ((const QMap<QString,QVariant>*)d->value.ptr)->end();
+	if (d->typ != Map)
+		return QMapConstIterator<QString, QVariant>();
+	return ((const QMap<QString, QVariant> *)d->value.ptr)->end();
 }
 
-inline QMapConstIterator<QString,QVariant> QVariant::mapFind( const QString& key ) const
+inline QMapConstIterator<QString, QVariant>
+QVariant::mapFind(const QString &key) const
 {
-    if ( d->typ != Map )
-	return QMapConstIterator<QString,QVariant>();
-    return ((const QMap<QString,QVariant>*)d->value.ptr)->find( key );
+	if (d->typ != Map)
+		return QMapConstIterator<QString, QVariant>();
+	return ((const QMap<QString, QVariant> *)d->value.ptr)->find(key);
 }
 
-Q_EXPORT QDataStream& operator>> ( QDataStream& s, QVariant& p );
-Q_EXPORT QDataStream& operator<< ( QDataStream& s, const QVariant& p );
-Q_EXPORT QDataStream& operator>> ( QDataStream& s, QVariant::Type& p );
-Q_EXPORT QDataStream& operator<< ( QDataStream& s, const QVariant::Type p );
+Q_EXPORT QDataStream &operator>>(QDataStream &s, QVariant &p);
+Q_EXPORT QDataStream &operator<<(QDataStream &s, const QVariant &p);
+Q_EXPORT QDataStream &operator>>(QDataStream &s, QVariant::Type &p);
+Q_EXPORT QDataStream &operator<<(QDataStream &s, const QVariant::Type p);
 
 #endif // QT_NO_VARIANT
 

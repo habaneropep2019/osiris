@@ -11,14 +11,14 @@
 #include "progressbar.h"
 #include <qapplication.h>
 
-int main(int argc,char **argv)
+int main(int argc, char **argv)
 {
-    QApplication a(argc,argv);
+	QApplication a(argc, argv);
 
-    ProgressBar progressbar;
-    progressbar.setCaption("Qt Example - ProgressBar");
-    a.setMainWidget(&progressbar);
-    progressbar.show();
+	ProgressBar progressbar;
+	progressbar.setCaption("Qt Example - ProgressBar");
+	a.setMainWidget(&progressbar);
+	progressbar.show();
 
-    return a.exec();
+	return a.exec();
 }

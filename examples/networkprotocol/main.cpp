@@ -15,19 +15,21 @@
 #include "nntp.h"
 #include "view.h"
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    qInitNetworkProtocols();
-    QNetworkProtocol::registerNetworkProtocol( "http", new QNetworkProtocolFactory<Http> );
-    QNetworkProtocol::registerNetworkProtocol( "nntp", new QNetworkProtocolFactory<Nntp> );
-    
-    View v;
-    v.resize( 600, 600 );
-    v.setCaption("Qt Example - Network Protocols");
-    v.show();
-    a.setMainWidget( &v );
-    
-    return a.exec();
+	qInitNetworkProtocols();
+	QNetworkProtocol::registerNetworkProtocol(
+		"http", new QNetworkProtocolFactory<Http>);
+	QNetworkProtocol::registerNetworkProtocol(
+		"nntp", new QNetworkProtocolFactory<Nntp>);
+
+	View v;
+	v.resize(600, 600);
+	v.setCaption("Qt Example - Network Protocols");
+	v.show();
+	a.setMainWidget(&v);
+
+	return a.exec();
 }

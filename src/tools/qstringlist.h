@@ -39,9 +39,9 @@
 #define QSTRINGLIST_H
 
 #ifndef QT_H
-#include "qvaluelist.h"
-#include "qstring.h"
-#include "qregexp.h"
+# include "qvaluelist.h"
+# include "qstring.h"
+# include "qregexp.h"
 #endif // QT_H
 
 #ifndef QT_NO_STRINGLIST
@@ -50,32 +50,47 @@ class QStrList;
 
 class Q_EXPORT QStringList : public QValueList<QString>
 {
-public:
-    QStringList() { }
-    QStringList( const QStringList& l ) : QValueList<QString>(l) { }
-    QStringList( const QValueList<QString>& l ) : QValueList<QString>(l) { }
-    QStringList( const QString& i ) { append(i); }
-#ifndef QT_NO_CAST_ASCII
-    QStringList( const char* i ) { append(i); }
-#endif
+      public:
+	QStringList()
+	{
+	}
+	QStringList(const QStringList &l) : QValueList<QString>(l)
+	{
+	}
+	QStringList(const QValueList<QString> &l) : QValueList<QString>(l)
+	{
+	}
+	QStringList(const QString &i)
+	{
+		append(i);
+	}
+# ifndef QT_NO_CAST_ASCII
+	QStringList(const char *i)
+	{
+		append(i);
+	}
+# endif
 
-    static QStringList fromStrList(const QStrList&);
+	static QStringList fromStrList(const QStrList &);
 
-    void sort();
+	void sort();
 
-    static QStringList split( const QString &sep, const QString &str, bool allowEmptyEntries = FALSE );
-    static QStringList split(  const QChar &sep, const QString &str, bool allowEmptyEntries = FALSE );
-    static QStringList split(  const QRegExp &sep, const QString &str, bool allowEmptyEntries = FALSE );
-    QString join( const QString &sep ) const;
+	static QStringList split(const QString &sep, const QString &str,
+				 bool allowEmptyEntries = FALSE);
+	static QStringList split(const QChar &sep, const QString &str,
+				 bool allowEmptyEntries = FALSE);
+	static QStringList split(const QRegExp &sep, const QString &str,
+				 bool allowEmptyEntries = FALSE);
+	QString join(const QString &sep) const;
 
-    QStringList grep( const QString &str, bool cs = TRUE ) const;
-    QStringList grep( const QRegExp &expr ) const;
+	QStringList grep(const QString &str, bool cs = TRUE) const;
+	QStringList grep(const QRegExp &expr) const;
 };
 
-#ifndef QT_NO_DATASTREAM
+# ifndef QT_NO_DATASTREAM
 class QDataStream;
-extern Q_EXPORT QDataStream &operator>>( QDataStream &, QStringList& );
-extern Q_EXPORT QDataStream &operator<<( QDataStream &, const QStringList& );
-#endif
+extern Q_EXPORT QDataStream &operator>>(QDataStream &, QStringList &);
+extern Q_EXPORT QDataStream &operator<<(QDataStream &, const QStringList &);
+# endif
 #endif // QT_NO_STRINGLIST
 #endif // QSTRINGLIST_H

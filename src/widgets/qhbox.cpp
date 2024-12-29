@@ -33,9 +33,9 @@
 
 #include "qhbox.h"
 #ifndef QT_NO_HBOX
-#include "qlayout.h"
-#include "qapplication.h"
-#include "qobjectlist.h"
+# include "qlayout.h"
+# include "qapplication.h"
+# include "qobjectlist.h"
 
 // NOT REVISED
 /*!
@@ -59,11 +59,11 @@
 /*!
   Constructs an hbox widget with parent \a parent and name \a name
  */
-QHBox::QHBox( QWidget *parent, const char *name, WFlags f,  bool allowLines  )
-    :QFrame( parent, name, f, allowLines )
+QHBox::QHBox(QWidget *parent, const char *name, WFlags f, bool allowLines)
+	: QFrame(parent, name, f, allowLines)
 {
-    lay = new QHBoxLayout( this, frameWidth(), frameWidth(), name );
-    lay->setAutoAdd( TRUE );
+	lay = new QHBoxLayout(this, frameWidth(), frameWidth(), name);
+	lay->setAutoAdd(TRUE);
 }
 
 
@@ -75,22 +75,23 @@ QHBox::QHBox( QWidget *parent, const char *name, WFlags f,  bool allowLines  )
   to use it directly.
 */
 
-QHBox::QHBox( bool horizontal, QWidget *parent , const char *name, WFlags f, bool allowLines )
-    :QFrame( parent, name, f, allowLines )
+QHBox::QHBox(bool horizontal, QWidget *parent, const char *name, WFlags f,
+	     bool allowLines)
+	: QFrame(parent, name, f, allowLines)
 {
-    lay = new QBoxLayout( this,
-		       horizontal ? QBoxLayout::LeftToRight : QBoxLayout::Down,
-			  frameWidth(), frameWidth(), name );
-    lay->setAutoAdd( TRUE );
+	lay = new QBoxLayout(
+		this, horizontal ? QBoxLayout::LeftToRight : QBoxLayout::Down,
+		frameWidth(), frameWidth(), name);
+	lay->setAutoAdd(TRUE);
 }
 
 /*!\reimp
  */
 void QHBox::frameChanged()
 {
-    if ( !layout() )
-	return;
-    layout()->setMargin( frameWidth() );
+	if (!layout())
+		return;
+	layout()->setMargin(frameWidth());
 }
 
 
@@ -98,10 +99,10 @@ void QHBox::frameChanged()
   Sets the spacing between children to \a space.
 */
 
-void QHBox::setSpacing( int space )
+void QHBox::setSpacing(int space)
 {
-    if ( layout() ) // ### why not use this->lay?
-	layout()->setSpacing( space );
+	if (layout()) // ### why not use this->lay?
+		layout()->setSpacing(space);
 }
 
 
@@ -111,19 +112,19 @@ void QHBox::setSpacing( int space )
 
 QSize QHBox::sizeHint() const
 {
-    QWidget *mThis = (QWidget*)this;
-    QApplication::sendPostedEvents( mThis, QEvent::ChildInserted );
-    return QFrame::sizeHint();
+	QWidget *mThis = (QWidget *)this;
+	QApplication::sendPostedEvents(mThis, QEvent::ChildInserted);
+	return QFrame::sizeHint();
 }
 
 /*!
   Sets the stretch factor of \a w to \a stretch.
   \sa QBoxLayout::setStretchFactor()
 */
-bool QHBox::setStretchFactor( QWidget* w, int stretch )
+bool QHBox::setStretchFactor(QWidget *w, int stretch)
 {
-    QWidget *mThis = (QWidget*)this;
-    QApplication::sendPostedEvents( mThis, QEvent::ChildInserted );
-    return lay->setStretchFactor( w, stretch );
+	QWidget *mThis = (QWidget *)this;
+	QApplication::sendPostedEvents(mThis, QEvent::ChildInserted);
+	return lay->setStretchFactor(w, stretch);
 }
 #endif

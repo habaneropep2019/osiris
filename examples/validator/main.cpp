@@ -11,11 +11,12 @@
 #include <qapplication.h>
 #include "vw.h"
 
-int main( int argc, char ** argv ) {
-    QApplication a( argc, argv );
-    VW mw;
-    a.setMainWidget( &mw );
-    mw.setCaption( "Qt Example - Validators" );
-    mw.show();
-    return a.exec();
+int main(int argc, char **argv)
+{
+	QApplication a(argc, argv);
+	VW mw;
+	a.setMainWidget(&mw);
+	mw.setCaption("Qt Example - Validators");
+	mw.show();
+	return a.exec();
 }

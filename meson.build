@@ -1,13 +1,16 @@
 project('osiris', 'cpp',
-        default_options : ['prefix=/opt'],
+        default_options : ['prefix=/opt/osiris', 'cpp_std=c++11'],
         license : 'GPL-2.0-only',
         license_files: ['LICENSE.GPL'],
-        version : '2.4.1',
+        version : '2.4.2',
 )
+
+osiris_install_prefix = get_option('prefix')
 
 project_defines = [
     '-DQT_NO_IMAGEIO_MNG',
     '-DQT_NO_SM_SUPPORT',
+    '-DOSIRIS_INSTALL_PREFIX=' + osiris_install_prefix,
 ]
 
 build_multithread = get_option('multi-thread').enabled()
@@ -35,8 +38,12 @@ else
     project_defines += '-DQT_NO_XKB'
 endif
 
-install_dir = get_option('prefix') / 'osiris/bin'
-lib_install_dir = get_option('prefix') / 'osiris/lib'
+install_dir = get_option('prefix') / 'bin'
+lib_install_dir = get_option('prefix') / 'lib'
+include_install_dir = get_option('prefix') / 'include/osiris'
+
+osiris_assets_install_dir = get_option('prefix') / 'share/osiris'
+designer_assets_install_dir = get_option('prefix') / 'share/designer'
 
 dialog_header_path = 'src/dialogs'
 kernel_header_path = 'src/kernel'
@@ -123,6 +130,7 @@ moc_exe = executable('moc',
             cpp_args : moc_compile_args,
             install : true,
             install_dir : install_dir,
+            install_tag : 'bin-devel',
 )
 
 moc_header_file_roots = [
@@ -329,7 +337,6 @@ kernel_sources = [
     kernel_source_path / 'qregion_x11.cpp',
     kernel_source_path / 'qsound_x11.cpp',
     kernel_source_path / 'qwidget_x11.cpp',
-    kernel_source_path / 'qnpsupport.cpp',
     kernel_source_path / 'qwidgetcreate_x11.cpp',
     kernel_source_path / 'qabstractlayout.cpp',
     kernel_source_path / 'qaccel.cpp',
@@ -551,6 +558,9 @@ osiris_sources += xml_sources
 osiris_sources += opengl_sources
 osiris_sources += moc_generated_files
 
+osiris_lib_version = meson.project_version()
+osiris_lib_postfix = osiris_lib_version
+
 default_osirislib = []
 
 if get_option('single-thread').enabled()
@@ -561,6 +571,8 @@ if get_option('single-thread').enabled()
                                dependencies : osiris_deps,
                                install : true,
                                install_dir : lib_install_dir,
+                               version : osiris_lib_version,
+                               soversion : osiris_lib_postfix,
     )
     default_osirislib = osirislib
 endif
@@ -575,6 +587,8 @@ if get_option('multi-thread').enabled()
                                   dependencies : osiris_deps,
                                   install : true,
                                   install_dir : lib_install_dir,
+                                  version : osiris_lib_version,
+                                  soversion : osiris_lib_postfix,
     )
     default_osirislib = osirislib_mt
 endif
@@ -945,7 +959,7 @@ if unix_os_list.contains(build_machine.system())
     osiris_includes += unix_headers
 endif
 
-install_headers(osiris_includes, install_dir : get_option('prefix') / 'osiris/include')
+install_headers(osiris_includes, install_dir : include_install_dir)
 
 #
 # Build and install qutil library
@@ -979,6 +993,8 @@ qutil_lib = shared_library('qutil',
                             link_with : default_osirislib,
                             install : true,
                             install_dir : lib_install_dir,
+                            version : osiris_lib_version,
+                            soversion : osiris_lib_postfix,
 )
 
 #
@@ -1007,6 +1023,7 @@ uic_exe = executable('uic',
             install : true,
             link_with : default_osirislib,
             install_dir : install_dir,
+            install_tag : 'bin-devel',
 )
 
 #
@@ -1182,7 +1199,11 @@ designer_sources = [
 designer_sources += generated_moc_files
 designer_sources += generated_ui_files
 
-designer_defines = []
+designer_defines = [
+    '-DOSIRIS_INSTALL_PREFIX="' + osiris_assets_install_dir + '"',
+    '-DDESIGNER_INSTALL_PREFIX="' + designer_assets_install_dir + '"',
+    '-DDESIGNER=1',
+]
 
 executable('designer',
             designer_sources,
@@ -1194,6 +1215,29 @@ executable('designer',
             install_dir : install_dir,
 )
 
+#
+# Build and install qembed tool
+#
+
+qembed_source_path = 'tools/qembed'
+qembed_include_directories = [
+    osiris_include_directories,
+]
+qembed_sources = [
+    qembed_source_path / 'qembed.cpp'
+]
+
+executable('qembed',
+            qembed_sources,
+            dependencies : [],
+            include_directories : qembed_include_directories,
+            cpp_args : [],
+            install : true,
+            link_with : [default_osirislib, qutil_lib],
+            install_dir : install_dir,
+            install_tag : 'bin-devel',
+)
+
 if get_option('examples').enabled()
     subdir('examples')
 endif
@@ -1201,3 +1245,37 @@ endif
 if get_option('tutorial').enabled()
     subdir('tutorial')
 endif
+
+pixmaps_install_dir = designer_assets_install_dir / 'pixmaps'
+
+install_subdir('tools/designer/pics/large',
+                install_dir : pixmaps_install_dir,
+                install_tag : 'runtime',
+                strip_directory : false,
+)
+install_subdir('tools/designer/pics/mini',
+                install_dir : pixmaps_install_dir,
+                install_tag : 'runtime',
+                strip_directory : false,
+)
+install_subdir('tools/designer/pics/small',
+                install_dir : pixmaps_install_dir,
+                install_tag : 'runtime',
+                strip_directory : false,
+)
+
+designer_docs_install_dir = designer_assets_install_dir / 'doc/html/'
+
+install_subdir('doc/html/designer',
+                install_dir : designer_docs_install_dir,
+                install_tag : 'runtime',
+                strip_directory : true,
+)
+
+osiris_docs_install_dir = osiris_assets_install_dir / 'doc/html/'
+
+install_subdir('doc/html/osiris',
+                install_dir : osiris_docs_install_dir,
+                install_tag : 'runtime',
+                strip_directory : true,
+)

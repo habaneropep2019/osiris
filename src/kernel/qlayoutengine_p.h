@@ -1,7 +1,7 @@
 /****************************************************************************
 ** $Id: qt/src/kernel/qlayoutengine_p.h   2.3.2   edited 2001-01-26 $
 **
-** Internal header file. 
+** Internal header file.
 **
 ** Created : 981027
 **
@@ -54,32 +54,40 @@
 
 
 #ifndef QT_H
-#include "qabstractlayout.h"
+# include "qabstractlayout.h"
 #endif // QT_H
 #ifndef QT_NO_LAYOUT
-struct QLayoutStruct
-{
-    void init() { stretch = 0; initParameters(); }
-    void initParameters() { minimumSize = sizeHint = 0;
-    maximumSize = QWIDGETSIZE_MAX; expansive = FALSE; empty = TRUE; }
-    //permanent storage:
-    int stretch;
-    //parameters:
-    QCOORD sizeHint;
-    QCOORD maximumSize;
-    QCOORD minimumSize;
-    bool expansive;
-    bool empty;
-    //temporary storage:
-    bool done;
-    //result:
-    int pos;
-    int size;
+struct QLayoutStruct {
+	void init()
+	{
+		stretch = 0;
+		initParameters();
+	}
+	void initParameters()
+	{
+		minimumSize = sizeHint = 0;
+		maximumSize = QWIDGETSIZE_MAX;
+		expansive = FALSE;
+		empty = TRUE;
+	}
+	// permanent storage:
+	int stretch;
+	// parameters:
+	QCOORD sizeHint;
+	QCOORD maximumSize;
+	QCOORD minimumSize;
+	bool expansive;
+	bool empty;
+	// temporary storage:
+	bool done;
+	// result:
+	int pos;
+	int size;
 };
 
 
-void qGeomCalc( QArray<QLayoutStruct> &chain, int start, int count, int pos,
-		      int space, int spacer );
+void qGeomCalc(QArray<QLayoutStruct> &chain, int start, int count, int pos,
+	       int space, int spacer);
 
 
 
@@ -89,20 +97,20 @@ void qGeomCalc( QArray<QLayoutStruct> &chain, int start, int count, int pos,
 
   Expansive boxes win over non-expansive boxes.
 */
-static inline void qMaxExpCalc( QCOORD & max, bool &exp,
-			       QCOORD boxmax, bool boxexp )
+static inline void qMaxExpCalc(QCOORD &max, bool &exp, QCOORD boxmax,
+			       bool boxexp)
 {
-    if ( exp ) {
-	if ( boxexp )
-	    max = QMAX( max, boxmax );
-    } else {
-	if ( boxexp )
-	    max = boxmax;
-	else
-	    max = QMIN( max, boxmax );
-    }
-    exp = exp || boxexp;
+	if (exp) {
+		if (boxexp)
+			max = QMAX(max, boxmax);
+	} else {
+		if (boxexp)
+			max = boxmax;
+		else
+			max = QMIN(max, boxmax);
+	}
+	exp = exp || boxexp;
 }
 
-#endif //QT_NO_LAYOUT
+#endif // QT_NO_LAYOUT
 #endif

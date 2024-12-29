@@ -25,6 +25,7 @@ class QWidget;
 #include <qstring.h>
 
 void qt_init_kde_widget_database();
-QWidget *qt_create_kde_widget( const QString &className, QWidget *parent, const char *name, bool init );
+QWidget *qt_create_kde_widget(const QString &className, QWidget *parent,
+			      const char *name, bool init);
 
 #endif

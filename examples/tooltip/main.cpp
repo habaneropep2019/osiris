@@ -11,14 +11,14 @@
 #include <qapplication.h>
 #include "tooltip.h"
 
-int main( int argc, char ** argv ) 
+int main(int argc, char **argv)
 {
-    QApplication a( argc, argv );
+	QApplication a(argc, argv);
 
-    TellMe mw;
-    mw.setCaption( "Qt Example - Dynamic Tool Tips" );
-    a.setMainWidget( &mw );
-    mw.show();
-    
-    return a.exec();
+	TellMe mw;
+	mw.setCaption("Qt Example - Dynamic Tool Tips");
+	a.setMainWidget(&mw);
+	mw.show();
+
+	return a.exec();
 }

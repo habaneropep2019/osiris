@@ -18,7 +18,7 @@
 **
 **********************************************************************/
 
-#include <qvariant.h>  // HP-UX compiler needs this here
+#include <qvariant.h> // HP-UX compiler needs this here
 #include "styledbutton.h"
 #include "pixmapchooser.h"
 #include "formwindow.h"
@@ -28,163 +28,169 @@
 #include <qpainter.h>
 #include <qimage.h>
 
-StyledButton::StyledButton(QWidget* parent, const char* name)
-    : QButton( parent, name ), pix( 0 ), spix( 0 ), s( 0 ), formWindow( 0 )
+StyledButton::StyledButton(QWidget *parent, const char *name)
+	: QButton(parent, name), pix(0), spix(0), s(0), formWindow(0)
 {
-    setMinimumSize( minimumSizeHint() );
+	setMinimumSize(minimumSizeHint());
 
-    connect( this, SIGNAL(clicked()), SLOT(onEditor()));
+	connect(this, SIGNAL(clicked()), SLOT(onEditor()));
 
-    setEditor( ColorEditor );
+	setEditor(ColorEditor);
 }
 
-StyledButton::StyledButton( const QBrush& b, QWidget* parent, const char* name, WFlags f )
-    : QButton( parent, name, f ), spix( 0 ), s( 0 ), formWindow( 0 )
+StyledButton::StyledButton(const QBrush &b, QWidget *parent, const char *name,
+			   WFlags f)
+	: QButton(parent, name, f), spix(0), s(0), formWindow(0)
 {
-    col = b.color();
-    pix = b.pixmap();
-    setMinimumSize( minimumSizeHint() );
+	col = b.color();
+	pix = b.pixmap();
+	setMinimumSize(minimumSizeHint());
 }
 
 StyledButton::~StyledButton()
 {
 }
 
-void StyledButton::setEditor( EditorType e )
+void StyledButton::setEditor(EditorType e)
 {
-    if ( edit == e )
-	return;
+	if (edit == e)
+		return;
 
-    edit = e;
-    update();
+	edit = e;
+	update();
 }
 
 StyledButton::EditorType StyledButton::editor() const
 {
-    return edit;
+	return edit;
 }
 
-void StyledButton::setColor( const QColor& c )
+void StyledButton::setColor(const QColor &c)
 {
-    col = c;
-    update();
+	col = c;
+	update();
 }
 
-void StyledButton::setPixmap( const QPixmap & pm )
+void StyledButton::setPixmap(const QPixmap &pm)
 {
-    if ( !pm.isNull() ) {
-	delete pix;
-	pix = new QPixmap( pm );
-    } else {
-	delete pix;
-	pix = 0;
-    }
-    scalePixmap();
+	if (!pm.isNull()) {
+		delete pix;
+		pix = new QPixmap(pm);
+	} else {
+		delete pix;
+		pix = 0;
+	}
+	scalePixmap();
 }
 
 QColor StyledButton::color() const
 {
-    return col;
+	return col;
 }
 
-QPixmap* StyledButton::pixmap() const
+QPixmap *StyledButton::pixmap() const
 {
-    return pix;
+	return pix;
 }
 
 bool StyledButton::scale() const
 {
-    return s;
+	return s;
 }
 
-void StyledButton::setScale( bool on )
+void StyledButton::setScale(bool on)
 {
-    if ( s == on )
-	return;
+	if (s == on)
+		return;
 
-    s = on;
-    scalePixmap();
+	s = on;
+	scalePixmap();
 }
 
 QSize StyledButton::sizeHint() const
 {
-    return QSize( 50, 25 );
+	return QSize(50, 25);
 }
 
 QSize StyledButton::minimumSizeHint() const
 {
-    return QSize( 50, 25 );
+	return QSize(50, 25);
 }
 
 void StyledButton::scalePixmap()
 {
-    delete spix;
+	delete spix;
 
-    if ( pix ) {
-	spix = new QPixmap( width()/2, height()/2 );
-	QImage img = pix->convertToImage();
+	if (pix) {
+		spix = new QPixmap(width() / 2, height() / 2);
+		QImage img = pix->convertToImage();
 
-	spix->convertFromImage( s? img.smoothScale( width()/2, height()/2 ) : img );
-    } else {
-	spix = 0;
-    }
+		spix->convertFromImage(
+			s ? img.smoothScale(width() / 2, height() / 2) : img);
+	} else {
+		spix = 0;
+	}
 
-    update();
+	update();
 }
 
-void StyledButton::resizeEvent( QResizeEvent* e )
+void StyledButton::resizeEvent(QResizeEvent *e)
 {
-    scalePixmap();
-    QButton::resizeEvent( e );
+	scalePixmap();
+	QButton::resizeEvent(e);
 }
 
-void StyledButton::drawButton( QPainter *paint )
+void StyledButton::drawButton(QPainter *paint)
 {
-    style().drawBevelButton( paint, 0, 0, width(), height(), colorGroup(), isDown() );
-    drawButtonLabel( paint );
-    if ( hasFocus() ) {
- 	style().drawFocusRect( paint, style().bevelButtonRect( 0, 0, width(), height()),
-			       colorGroup(), &colorGroup().button() );
-    }
+	style().drawBevelButton(paint, 0, 0, width(), height(), colorGroup(),
+				isDown());
+	drawButtonLabel(paint);
+	if (hasFocus()) {
+		style().drawFocusRect(
+			paint, style().bevelButtonRect(0, 0, width(), height()),
+			colorGroup(), &colorGroup().button());
+	}
 }
 
-void StyledButton::drawButtonLabel( QPainter *paint )
+void StyledButton::drawButtonLabel(QPainter *paint)
 {
-    QColor pen = isEnabled() ?
-		 hasFocus() ? palette().active().buttonText() : palette().inactive().buttonText()
-		 : palette().disabled().buttonText();
-    paint->setPen( pen );
-    if ( edit == PixmapEditor && spix ) {
-	paint->setBrush( QBrush( col, *spix ) );
-	paint->setBrushOrigin( width()/4, height()/4 );
-    } else
-	paint->setBrush( QBrush( col ) );
+	QColor pen = isEnabled() ? hasFocus() ?
+				   palette().active().buttonText() :
+				   palette().inactive().buttonText() :
+				   palette().disabled().buttonText();
+	paint->setPen(pen);
+	if (edit == PixmapEditor && spix) {
+		paint->setBrush(QBrush(col, *spix));
+		paint->setBrushOrigin(width() / 4, height() / 4);
+	} else
+		paint->setBrush(QBrush(col));
 
-    paint->drawRect( width()/4, height()/4, width()/2, height()/2 );
+	paint->drawRect(width() / 4, height() / 4, width() / 2, height() / 2);
 }
 
 void StyledButton::onEditor()
 {
-    switch (edit) {
-    case ColorEditor: {
-	QColor c = QColorDialog::getColor( palette().active().background(), this );
-	if ( c.isValid() ) {
-	    setColor( c );
-	    emit changed();
+	switch (edit) {
+	case ColorEditor: {
+		QColor c = QColorDialog::getColor(
+			palette().active().background(), this);
+		if (c.isValid()) {
+			setColor(c);
+			emit changed();
+		}
+	} break;
+	case PixmapEditor: {
+		QPixmap p;
+		if (pixmap())
+			p = qChoosePixmap(this, formWindow, *pixmap());
+		else
+			p = qChoosePixmap(this, formWindow, QPixmap());
+		if (!p.isNull()) {
+			setPixmap(p);
+			emit changed();
+		}
+	} break;
+	default:
+		break;
 	}
-    } break;
-    case PixmapEditor: {
-	QPixmap p;
-        if ( pixmap() )
-		p = qChoosePixmap( this, formWindow, *pixmap() );
-        else
-		p = qChoosePixmap( this, formWindow, QPixmap() );
-	if ( !p.isNull() ) {
-	    setPixmap( p );
-	    emit changed();
-	}
-    } break;
-    default:
-	break;
-    }
 }

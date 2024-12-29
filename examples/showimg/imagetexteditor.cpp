@@ -22,52 +22,48 @@
 #include <qpushbutton.h>
 
 
-ImageTextEditor::ImageTextEditor( QImage& i, QWidget *parent, const char *name, WFlags f ) :
-    QDialog(parent,name,TRUE,f),
-    image(i)
+ImageTextEditor::ImageTextEditor(QImage &i, QWidget *parent, const char *name,
+				 WFlags f)
+	: QDialog(parent, name, TRUE, f), image(i)
 {
-    QVBoxLayout* vbox = new QVBoxLayout(this,8);
-    vbox->setAutoAdd(TRUE);
+	QVBoxLayout *vbox = new QVBoxLayout(this, 8);
+	vbox->setAutoAdd(TRUE);
 
-    QGrid* controls = new QGrid(3,QGrid::Horizontal,this);
-    controls->setSpacing(8);
-    QLabel* l;
-    l=new QLabel("Language",controls); l->setAlignment(AlignCenter);
-    l=new QLabel("Key",controls); l->setAlignment(AlignCenter);
-    (void)new QLabel("",controls); // dummy
-    languages = new QComboBox(controls);
-    keys = new QComboBox(controls);
-    QPushButton* remove = new QPushButton("Remove",controls);
+	QGrid *controls = new QGrid(3, QGrid::Horizontal, this);
+	controls->setSpacing(8);
+	QLabel *l;
+	l = new QLabel("Language", controls);
+	l->setAlignment(AlignCenter);
+	l = new QLabel("Key", controls);
+	l->setAlignment(AlignCenter);
+	(void)new QLabel("", controls); // dummy
+	languages = new QComboBox(controls);
+	keys = new QComboBox(controls);
+	QPushButton *remove = new QPushButton("Remove", controls);
 
-    newlang = new QLineEdit(controls);
-    newkey = new QLineEdit(controls);
-    QPushButton* add = new QPushButton("Add",controls);
+	newlang = new QLineEdit(controls);
+	newkey = new QLineEdit(controls);
+	QPushButton *add = new QPushButton("Add", controls);
 
-    text = new QMultiLineEdit(this);
+	text = new QMultiLineEdit(this);
 
-    QHBox* hbox = new QHBox(this);
-    QPushButton* cancel = new QPushButton("Cancel",hbox);
-    QPushButton* ok = new QPushButton("OK",hbox);
+	QHBox *hbox = new QHBox(this);
+	QPushButton *cancel = new QPushButton("Cancel", hbox);
+	QPushButton *ok = new QPushButton("OK", hbox);
 
-    connect(add,SIGNAL(clicked()),
-	this,SLOT(addText()));
+	connect(add, SIGNAL(clicked()), this, SLOT(addText()));
 
-    connect(remove,SIGNAL(clicked()),
-	this,SLOT(removeText()));
+	connect(remove, SIGNAL(clicked()), this, SLOT(removeText()));
 
-    connect(ok,SIGNAL(clicked()),
-	this,SLOT(accept()));
+	connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
 
-    connect(cancel,SIGNAL(clicked()),
-	this,SLOT(reject()));
+	connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
 
-    connect(languages,SIGNAL(activated(int)),
-	this,SLOT(updateText()));
+	connect(languages, SIGNAL(activated(int)), this, SLOT(updateText()));
 
-    connect(keys,SIGNAL(activated(int)),
-	this,SLOT(updateText()));
+	connect(keys, SIGNAL(activated(int)), this, SLOT(updateText()));
 
-    imageChanged();
+	imageChanged();
 }
 
 ImageTextEditor::~ImageTextEditor()
@@ -76,67 +72,68 @@ ImageTextEditor::~ImageTextEditor()
 
 void ImageTextEditor::imageChanged()
 {
-    languages->clear();
-    keys->clear();
-    text->clear();
-    languages->insertItem("<any>");
+	languages->clear();
+	keys->clear();
+	text->clear();
+	languages->insertItem("<any>");
 
-    languages->insertStringList(image.textLanguages());
-    keys->insertStringList(image.textKeys());
+	languages->insertStringList(image.textLanguages());
+	keys->insertStringList(image.textKeys());
 
-    updateText();
+	updateText();
 }
 
 void ImageTextEditor::accept()
 {
-    storeText();
-    QDialog::accept();
+	storeText();
+	QDialog::accept();
 }
 
 void ImageTextEditor::updateText()
 {
-    storeText();
-    newlang->setText(languages->currentText());
-    newkey->setText(keys->currentText());
-    QString t = image.text(currKey(),currLang());
+	storeText();
+	newlang->setText(languages->currentText());
+	newkey->setText(keys->currentText());
+	QString t = image.text(currKey(), currLang());
 
-    text->setText(t);
+	text->setText(t);
 }
 
 QString ImageTextEditor::currKey()
 {
-    return newkey->text();
+	return newkey->text();
 }
 
 QString ImageTextEditor::currLang()
 {
-    QString l = newlang->text();
-    if ( l=="<any>" )
-	l = QString::null;
-    return l;
+	QString l = newlang->text();
+	if (l == "<any>")
+		l = QString::null;
+	return l;
 }
 
 QString ImageTextEditor::currText()
 {
-    QString t = text->text();
-    if ( t.isNull() ) t = "";
-    return t;
+	QString t = text->text();
+	if (t.isNull())
+		t = "";
+	return t;
 }
 
 
 void ImageTextEditor::removeText()
 {
-    image.setText(currKey(),currLang(),QString::null);
+	image.setText(currKey(), currLang(), QString::null);
 }
 
 void ImageTextEditor::addText()
 {
-    storeText();
+	storeText();
 }
 
 void ImageTextEditor::storeText()
 {
-    if ( currKey().length() > 0 ) {
-	image.setText(currKey(),currLang(),currText());
-    }
+	if (currKey().length() > 0) {
+		image.setText(currKey(), currLang(), currText());
+	}
 }

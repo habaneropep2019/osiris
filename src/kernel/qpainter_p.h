@@ -54,10 +54,10 @@
 #ifndef QT_H
 #endif // QT_H
 
-void qt_format_text( const QFontMetrics& fm, int x, int y, int w, int h,
-		     int tf, const QString& str, int len, QRect *brect,
-		     int tabstops, int* tabarray, int tabarraylen,
-		     char **internal, QPainter* painter );
+void qt_format_text(const QFontMetrics &fm, int x, int y, int w, int h, int tf,
+		    const QString &str, int len, QRect *brect, int tabstops,
+		    int *tabarray, int tabarraylen, char **internal,
+		    QPainter *painter);
 
 
 #endif

@@ -35,19 +35,19 @@
 
 #include "qwhatsthis.h"
 #ifndef QT_NO_WHATSTHIS
-#include "qapplication.h"
-#include "qpaintdevicemetrics.h"
-#include "qpixmap.h"
-#include "qpainter.h"
-#include "qtimer.h"
-#include "qptrdict.h"
-#include "qtoolbutton.h"
-#include "qshared.h"
-#include "qcursor.h"
-#include "qbitmap.h"
-#include "qtooltip.h"
-#include "qsimplerichtext.h"
-#include "qstylesheet.h"
+# include "qapplication.h"
+# include "qpaintdevicemetrics.h"
+# include "qpixmap.h"
+# include "qpainter.h"
+# include "qtimer.h"
+# include "qptrdict.h"
+# include "qtoolbutton.h"
+# include "qshared.h"
+# include "qcursor.h"
+# include "qbitmap.h"
+# include "qtooltip.h"
+# include "qsimplerichtext.h"
+# include "qstylesheet.h"
 
 // REVISED: warwick
 /*!
@@ -109,530 +109,523 @@
 */
 
 // a special button
-class QWhatsThisButton: public QToolButton
+class QWhatsThisButton : public QToolButton
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    QWhatsThisButton( QWidget * parent, const char * name );
-    ~QWhatsThisButton();
+      public:
+	QWhatsThisButton(QWidget *parent, const char *name);
+	~QWhatsThisButton();
 
-public slots:
-    void mouseReleased();
-
+      public slots:
+	void mouseReleased();
 };
 
-class QWhatsThisPrivate: public QObject
+class QWhatsThisPrivate : public QObject
 {
-    Q_OBJECT
-public:
+	Q_OBJECT
+      public:
+	// an item for storing texts
+	struct WhatsThisItem : public QShared {
+		WhatsThisItem() : QShared()
+		{
+			whatsthis = 0;
+		}
+		~WhatsThisItem();
+		QString s;
+		QWhatsThis *whatsthis;
+	};
 
-    // an item for storing texts
-    struct WhatsThisItem: public QShared
-    {
-	WhatsThisItem(): QShared() { whatsthis = 0; }
-	~WhatsThisItem();
-	QString s;
-	QWhatsThis* whatsthis;
-    };
+	// the (these days pretty small) state machine
+	enum State { Inactive, Waiting };
 
-    // the (these days pretty small) state machine
-    enum State { Inactive, Waiting };
+	QWhatsThisPrivate();
+	~QWhatsThisPrivate();
 
-    QWhatsThisPrivate();
-    ~QWhatsThisPrivate();
+	bool eventFilter(QObject *, QEvent *);
 
-    bool eventFilter( QObject *, QEvent * );
+	WhatsThisItem *newItem(QWidget *widget);
+	void add(QWidget *widget, QWhatsThis *special);
+	void add(QWidget *widget, const QString &text);
 
-    WhatsThisItem* newItem( QWidget * widget );
-    void add( QWidget * widget, QWhatsThis* special );
-    void add( QWidget * widget, const QString& text );
+	// say it.
+	void say(QWidget *, const QString &, const QPoint &);
+	void say_helper(QWidget *, const QPoint &ppos, bool);
 
-    // say it.
-    void say( QWidget *, const QString&, const QPoint&  );
-    void say_helper(QWidget*,const QPoint& ppos,bool);
+	// setup and teardown
+	static void tearDownWhatsThis();
+	static void setUpWhatsThis();
 
-    // setup and teardown
-    static void tearDownWhatsThis();
-    static void setUpWhatsThis();
+	void leaveWhatsThisMode();
 
-    void leaveWhatsThisMode();
+	// variables
+	QWidget *whatsThat;
+	QPtrDict<WhatsThisItem> *dict;
+	QPtrDict<QWidget> *tlw;
+	QPtrDict<QWhatsThisButton> *buttons;
+	State state;
 
-    // variables
-    QWidget * whatsThat;
-    QPtrDict<WhatsThisItem> * dict;
-    QPtrDict<QWidget> * tlw;
-    QPtrDict<QWhatsThisButton> * buttons;
-    State state;
+# ifndef QT_NO_CURSOR
+	QCursor *cursor;
+# endif
 
-#ifndef QT_NO_CURSOR
-    QCursor * cursor;
-#endif
+	QString currentText;
 
-    QString currentText;
-
-private slots:
-    void cleanupWidget()
-    {
-	const QObject* o = sender();
-	if ( o->isWidgetType() ) // sanity
-	    QWhatsThis::remove((QWidget*)o);
-    }
+      private slots:
+	void cleanupWidget()
+	{
+		const QObject *o = sender();
+		if (o->isWidgetType()) // sanity
+			QWhatsThis::remove((QWidget *)o);
+	}
 };
 
 
 // static, but static the less-typing way
-static QWhatsThisPrivate * wt = 0;
+static QWhatsThisPrivate *wt = 0;
 
 
 // the item
 QWhatsThisPrivate::WhatsThisItem::~WhatsThisItem()
 {
-    if ( count )
-	qFatal( "Internal error #10%d in What's This", count );
+	if (count)
+		qFatal("Internal error #10%d in What's This", count);
 }
 
 
-static const char * button_image[] = {
-"16 16 3 1",
-" 	c None",
-"o	c #000000",
-"a	c #000080",
-"o        aaaaa  ",
-"oo      aaa aaa ",
-"ooo    aaa   aaa",
-"oooo   aa     aa",
-"ooooo  aa     aa",
-"oooooo  a    aaa",
-"ooooooo     aaa ",
-"oooooooo   aaa  ",
-"ooooooooo aaa   ",
-"ooooo     aaa   ",
-"oo ooo          ",
-"o  ooo    aaa   ",
-"    ooo   aaa   ",
-"    ooo         ",
-"     ooo        ",
-"     ooo        "};
+static const char *button_image[] = {
+	"16 16 3 1",	    " 	c None",	"o	c #000000",
+	"a	c #000080", "o        aaaaa  ", "oo      aaa aaa ",
+	"ooo    aaa   aaa", "oooo   aa     aa", "ooooo  aa     aa",
+	"oooooo  a    aaa", "ooooooo     aaa ", "oooooooo   aaa  ",
+	"ooooooooo aaa   ", "ooooo     aaa   ", "oo ooo          ",
+	"o  ooo    aaa   ", "    ooo   aaa   ", "    ooo         ",
+	"     ooo        ", "     ooo        "};
 
-#ifndef QT_NO_CURSOR
+# ifndef QT_NO_CURSOR
 
-#define cursor_bits_width 32
-#define cursor_bits_height 32
+#  define cursor_bits_width 32
+#  define cursor_bits_height 32
 static unsigned char cursor_bits_bits[] = {
-  0x01, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x05, 0xf0, 0x07, 0x00,
-  0x09, 0x18, 0x0e, 0x00, 0x11, 0x1c, 0x0e, 0x00, 0x21, 0x1c, 0x0e, 0x00,
-  0x41, 0x1c, 0x0e, 0x00, 0x81, 0x1c, 0x0e, 0x00, 0x01, 0x01, 0x07, 0x00,
-  0x01, 0x82, 0x03, 0x00, 0xc1, 0xc7, 0x01, 0x00, 0x49, 0xc0, 0x01, 0x00,
-  0x95, 0xc0, 0x01, 0x00, 0x93, 0xc0, 0x01, 0x00, 0x21, 0x01, 0x00, 0x00,
-  0x20, 0xc1, 0x01, 0x00, 0x40, 0xc2, 0x01, 0x00, 0x40, 0x02, 0x00, 0x00,
-  0x80, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, };
+	0x01, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x05, 0xf0, 0x07, 0x00,
+	0x09, 0x18, 0x0e, 0x00, 0x11, 0x1c, 0x0e, 0x00, 0x21, 0x1c, 0x0e, 0x00,
+	0x41, 0x1c, 0x0e, 0x00, 0x81, 0x1c, 0x0e, 0x00, 0x01, 0x01, 0x07, 0x00,
+	0x01, 0x82, 0x03, 0x00, 0xc1, 0xc7, 0x01, 0x00, 0x49, 0xc0, 0x01, 0x00,
+	0x95, 0xc0, 0x01, 0x00, 0x93, 0xc0, 0x01, 0x00, 0x21, 0x01, 0x00, 0x00,
+	0x20, 0xc1, 0x01, 0x00, 0x40, 0xc2, 0x01, 0x00, 0x40, 0x02, 0x00, 0x00,
+	0x80, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
 
-#define cursor_mask_width 32
-#define cursor_mask_height 32
+#  define cursor_mask_width 32
+#  define cursor_mask_height 32
 static unsigned char cursor_mask_bits[] = {
-  0x01, 0x00, 0x00, 0x00, 0x03, 0xf0, 0x07, 0x00, 0x07, 0xf8, 0x0f, 0x00,
-  0x0f, 0xfc, 0x1f, 0x00, 0x1f, 0x3e, 0x1f, 0x00, 0x3f, 0x3e, 0x1f, 0x00,
-  0x7f, 0x3e, 0x1f, 0x00, 0xff, 0x3e, 0x1f, 0x00, 0xff, 0x9d, 0x0f, 0x00,
-  0xff, 0xc3, 0x07, 0x00, 0xff, 0xe7, 0x03, 0x00, 0x7f, 0xe0, 0x03, 0x00,
-  0xf7, 0xe0, 0x03, 0x00, 0xf3, 0xe0, 0x03, 0x00, 0xe1, 0xe1, 0x03, 0x00,
-  0xe0, 0xe1, 0x03, 0x00, 0xc0, 0xe3, 0x03, 0x00, 0xc0, 0xe3, 0x03, 0x00,
-  0x80, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, };
+	0x01, 0x00, 0x00, 0x00, 0x03, 0xf0, 0x07, 0x00, 0x07, 0xf8, 0x0f, 0x00,
+	0x0f, 0xfc, 0x1f, 0x00, 0x1f, 0x3e, 0x1f, 0x00, 0x3f, 0x3e, 0x1f, 0x00,
+	0x7f, 0x3e, 0x1f, 0x00, 0xff, 0x3e, 0x1f, 0x00, 0xff, 0x9d, 0x0f, 0x00,
+	0xff, 0xc3, 0x07, 0x00, 0xff, 0xe7, 0x03, 0x00, 0x7f, 0xe0, 0x03, 0x00,
+	0xf7, 0xe0, 0x03, 0x00, 0xf3, 0xe0, 0x03, 0x00, 0xe1, 0xe1, 0x03, 0x00,
+	0xe0, 0xe1, 0x03, 0x00, 0xc0, 0xe3, 0x03, 0x00, 0xc0, 0xe3, 0x03, 0x00,
+	0x80, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
 
-#endif
+# endif
 
 
 // the button class
-QWhatsThisButton::QWhatsThisButton( QWidget * parent, const char * name )
-    : QToolButton( parent, name )
+QWhatsThisButton::QWhatsThisButton(QWidget *parent, const char *name)
+	: QToolButton(parent, name)
 {
-    QPixmap p( button_image );
-    setPixmap( p );
-    setToggleButton( TRUE );
-    setAutoRaise( TRUE );
-    setFocusPolicy( NoFocus );
-    setTextLabel( tr( "What's this?" ) );
-    wt->buttons->insert( (void *)this, this );
-    connect( this, SIGNAL( released() ),
-	     this, SLOT( mouseReleased() ) );
+	QPixmap p(button_image);
+	setPixmap(p);
+	setToggleButton(TRUE);
+	setAutoRaise(TRUE);
+	setFocusPolicy(NoFocus);
+	setTextLabel(tr("What's this?"));
+	wt->buttons->insert((void *)this, this);
+	connect(this, SIGNAL(released()), this, SLOT(mouseReleased()));
 }
 
 
 QWhatsThisButton::~QWhatsThisButton()
 {
-    if ( wt && wt->buttons )
-	wt->buttons->take( (void *)this );
+	if (wt && wt->buttons)
+		wt->buttons->take((void *)this);
 }
 
 
 void QWhatsThisButton::mouseReleased()
 {
-    if ( wt->state == QWhatsThisPrivate::Inactive && isOn() ) {
-	QWhatsThisPrivate::setUpWhatsThis();
-#ifndef QT_NO_CURSOR
-	QApplication::setOverrideCursor( *wt->cursor, FALSE );
-#endif
-	wt->state = QWhatsThisPrivate::Waiting;
-	qApp->installEventFilter( wt );
-    }
+	if (wt->state == QWhatsThisPrivate::Inactive && isOn()) {
+		QWhatsThisPrivate::setUpWhatsThis();
+# ifndef QT_NO_CURSOR
+		QApplication::setOverrideCursor(*wt->cursor, FALSE);
+# endif
+		wt->state = QWhatsThisPrivate::Waiting;
+		qApp->installEventFilter(wt);
+	}
 }
 
 
 // the what's this manager class
-QWhatsThisPrivate::QWhatsThisPrivate()
-    : QObject( 0, "global what's this object" )
+QWhatsThisPrivate::QWhatsThisPrivate() : QObject(0, "global what's this object")
 {
-    qAddPostRoutine( tearDownWhatsThis );
-    whatsThat = 0;
-    dict = new QPtrDict<QWhatsThisPrivate::WhatsThisItem>;
-    tlw = new QPtrDict<QWidget>;
-    wt = this;
-    buttons = new QPtrDict<QWhatsThisButton>;
-    state = Inactive;
-#ifndef QT_NO_CURSOR
-    cursor = new QCursor( QBitmap( cursor_bits_width, cursor_bits_height,
-				   cursor_bits_bits, TRUE ),
-			  QBitmap( cursor_mask_width, cursor_mask_height,
-				   cursor_mask_bits, TRUE ),
-			  1, 1 );
-#endif
+	qAddPostRoutine(tearDownWhatsThis);
+	whatsThat = 0;
+	dict = new QPtrDict<QWhatsThisPrivate::WhatsThisItem>;
+	tlw = new QPtrDict<QWidget>;
+	wt = this;
+	buttons = new QPtrDict<QWhatsThisButton>;
+	state = Inactive;
+# ifndef QT_NO_CURSOR
+	cursor = new QCursor(QBitmap(cursor_bits_width, cursor_bits_height,
+				     cursor_bits_bits, TRUE),
+			     QBitmap(cursor_mask_width, cursor_mask_height,
+				     cursor_mask_bits, TRUE),
+			     1, 1);
+# endif
 }
 
 QWhatsThisPrivate::~QWhatsThisPrivate()
 {
-#ifndef QT_NO_CURSOR
-    if ( state == Waiting )
-	QApplication::restoreOverrideCursor();
-#endif
+# ifndef QT_NO_CURSOR
+	if (state == Waiting)
+		QApplication::restoreOverrideCursor();
+# endif
 
-    // the two straight-and-simple dicts
-    delete tlw;
-    delete buttons;
+	// the two straight-and-simple dicts
+	delete tlw;
+	delete buttons;
 
-    // then delete the complex one.
-    QPtrDictIterator<WhatsThisItem> it( *dict );
-    WhatsThisItem * i;
-    QWidget * w;
-    while( (i=it.current()) != 0 ) {
-	w = (QWidget *)it.currentKey();
-	++it;
-	dict->take( w );
-	i->deref();
-	if ( !i->count )
-	    delete i;
-    }
-    delete dict;
-#ifndef QT_NO_CURSOR
-    delete cursor;
-#endif
-    delete whatsThat;
+	// then delete the complex one.
+	QPtrDictIterator<WhatsThisItem> it(*dict);
+	WhatsThisItem *i;
+	QWidget *w;
+	while ((i = it.current()) != 0) {
+		w = (QWidget *)it.currentKey();
+		++it;
+		dict->take(w);
+		i->deref();
+		if (!i->count)
+			delete i;
+	}
+	delete dict;
+# ifndef QT_NO_CURSOR
+	delete cursor;
+# endif
+	delete whatsThat;
 
-    // and finally lose wt
-    wt = 0;
+	// and finally lose wt
+	wt = 0;
 }
 
-bool QWhatsThisPrivate::eventFilter( QObject * o, QEvent * e )
+bool QWhatsThisPrivate::eventFilter(QObject *o, QEvent *e)
 {
-    if ( !o || !e )
-	return FALSE;
-
-    if ( o == whatsThat ) {
-	if (e->type() == QEvent::MouseButtonPress  ||
-	    e->type() == QEvent::KeyPress ) {
-	    whatsThat->hide();
-	    return TRUE;
-	}
-#ifdef _WS_QWS_
-       else if ( e->type() == QEvent::Paint ) {
-	   wt->say_helper(0,QPoint(0,0),FALSE);
-       }
-#endif
-	return FALSE;
-    }
-
-    switch( state ) {
-    case Waiting:
-	if ( e->type() == QEvent::MouseButtonPress && o->isWidgetType() ) {
-	    QWidget * w = (QWidget *) o;
-	    if ( ( (QMouseEvent*)e)->button() == RightButton )
-		return FALSE; // ignore RMB
-	    if ( w->customWhatsThis() )
+	if (!o || !e)
 		return FALSE;
-	    QWhatsThisPrivate::WhatsThisItem * i = 0;
-	    while( w && !i ) {
-		i = dict->find( w );
-		if ( !i )
-		    w = w->parentWidget();
-	    }
 
-	    leaveWhatsThisMode();
-	    if (!i )
-		return TRUE;
-	    QPoint pos =  ((QMouseEvent*)e)->pos();
-	    if ( i->whatsthis )
-		say( w, i->whatsthis->text( pos ), w->mapToGlobal(pos) );
-	    else
-		say( w, i->s, w->mapToGlobal(pos) );
-	    return TRUE;
-	} else if ( e->type() == QEvent::MouseButtonRelease ) {
-	    if ( ( (QMouseEvent*)e)->button() == RightButton )
-		return FALSE; // ignore RMB
-	    return !o->isWidgetType() || !((QWidget*)o)->customWhatsThis();
-	} else if ( e->type() == QEvent::MouseMove ) {
-	    return !o->isWidgetType() || !((QWidget*)o)->customWhatsThis();
-	} else if ( e->type() == QEvent::KeyPress ) {
-	    QKeyEvent* kev = (QKeyEvent*)e;
-
-	    if (kev->key() == Qt::Key_Escape) {
-		leaveWhatsThisMode();
-		return TRUE;
-	    }
-	    else if ( kev->key() == Key_Menu ||
-		      ( kev->key() == Key_F10 && kev->state() == ShiftButton ) )
-		return FALSE; // ignore these keys, they are used for context menus
-	    else if ( kev->state() == kev->stateAfter() &&
-		      kev->key() != Key_Meta )  // not a modifier key
-		leaveWhatsThisMode();
-
-	} else if ( e->type() == QEvent::MouseButtonDblClick ) {
-	    return TRUE;
+	if (o == whatsThat) {
+		if (e->type() == QEvent::MouseButtonPress ||
+		    e->type() == QEvent::KeyPress) {
+			whatsThat->hide();
+			return TRUE;
+		}
+# ifdef _WS_QWS_
+		else if (e->type() == QEvent::Paint) {
+			wt->say_helper(0, QPoint(0, 0), FALSE);
+		}
+# endif
+		return FALSE;
 	}
-	break;
-    case Inactive:
- 	if ( e->type() == QEvent::Accel &&
- 	     ((QKeyEvent *)e)->key() == Key_F1 &&
- 	     o->isWidgetType() &&
- 	     ((QKeyEvent *)e)->state() == ShiftButton ) {
- 	    QWidget * w = ((QWidget *)o)->focusWidget();
- 	    QWhatsThisPrivate::WhatsThisItem *i = w ? dict->find(w) : 0;
- 	    if ( i && !i->s.isNull() ) {
-		if ( i->whatsthis )
-		    say( w, i->whatsthis->text( QPoint(0,0) ),
-			 w->mapToGlobal( w->rect().center() ) );
-		else
-		    say( w, i->s, w->mapToGlobal( w->rect().center() ));
-		((QKeyEvent *)e)->accept();
-		return TRUE;
- 	    }
- 	}
-	break;
-    }
-    return FALSE;
+
+	switch (state) {
+	case Waiting:
+		if (e->type() == QEvent::MouseButtonPress &&
+		    o->isWidgetType()) {
+			QWidget *w = (QWidget *)o;
+			if (((QMouseEvent *)e)->button() == RightButton)
+				return FALSE; // ignore RMB
+			if (w->customWhatsThis())
+				return FALSE;
+			QWhatsThisPrivate::WhatsThisItem *i = 0;
+			while (w && !i) {
+				i = dict->find(w);
+				if (!i)
+					w = w->parentWidget();
+			}
+
+			leaveWhatsThisMode();
+			if (!i)
+				return TRUE;
+			QPoint pos = ((QMouseEvent *)e)->pos();
+			if (i->whatsthis)
+				say(w, i->whatsthis->text(pos),
+				    w->mapToGlobal(pos));
+			else
+				say(w, i->s, w->mapToGlobal(pos));
+			return TRUE;
+		} else if (e->type() == QEvent::MouseButtonRelease) {
+			if (((QMouseEvent *)e)->button() == RightButton)
+				return FALSE; // ignore RMB
+			return !o->isWidgetType() ||
+			       !((QWidget *)o)->customWhatsThis();
+		} else if (e->type() == QEvent::MouseMove) {
+			return !o->isWidgetType() ||
+			       !((QWidget *)o)->customWhatsThis();
+		} else if (e->type() == QEvent::KeyPress) {
+			QKeyEvent *kev = (QKeyEvent *)e;
+
+			if (kev->key() == Qt::Key_Escape) {
+				leaveWhatsThisMode();
+				return TRUE;
+			} else if (kev->key() == Key_Menu ||
+				   (kev->key() == Key_F10 &&
+				    kev->state() == ShiftButton))
+				return FALSE; // ignore these keys, they are
+					      // used for context menus
+			else if (kev->state() == kev->stateAfter() &&
+				 kev->key() != Key_Meta) // not a modifier key
+				leaveWhatsThisMode();
+
+		} else if (e->type() == QEvent::MouseButtonDblClick) {
+			return TRUE;
+		}
+		break;
+	case Inactive:
+		if (e->type() == QEvent::Accel &&
+		    ((QKeyEvent *)e)->key() == Key_F1 && o->isWidgetType() &&
+		    ((QKeyEvent *)e)->state() == ShiftButton) {
+			QWidget *w = ((QWidget *)o)->focusWidget();
+			QWhatsThisPrivate::WhatsThisItem *i =
+				w ? dict->find(w) : 0;
+			if (i && !i->s.isNull()) {
+				if (i->whatsthis)
+					say(w, i->whatsthis->text(QPoint(0, 0)),
+					    w->mapToGlobal(w->rect().center()));
+				else
+					say(w, i->s,
+					    w->mapToGlobal(w->rect().center()));
+				((QKeyEvent *)e)->accept();
+				return TRUE;
+			}
+		}
+		break;
+	}
+	return FALSE;
 }
 
 
 
 void QWhatsThisPrivate::setUpWhatsThis()
 {
-    if ( !wt )
-	wt = new QWhatsThisPrivate();
+	if (!wt)
+		wt = new QWhatsThisPrivate();
 }
 
 
 void QWhatsThisPrivate::tearDownWhatsThis()
 {
-    delete wt;
-    wt = 0;
+	delete wt;
+	wt = 0;
 }
 
 
 
 void QWhatsThisPrivate::leaveWhatsThisMode()
 {
-    if ( state == Waiting ) {
-	QPtrDictIterator<QWhatsThisButton> it( *(wt->buttons) );
-	QWhatsThisButton * b;
-	while( (b=it.current()) != 0 ) {
-	    ++it;
-	    b->setOn( FALSE );
+	if (state == Waiting) {
+		QPtrDictIterator<QWhatsThisButton> it(*(wt->buttons));
+		QWhatsThisButton *b;
+		while ((b = it.current()) != 0) {
+			++it;
+			b->setOn(FALSE);
+		}
+# ifndef QT_NO_CURSOR
+		QApplication::restoreOverrideCursor();
+# endif
+		state = Inactive;
+		qApp->removeEventFilter(this);
 	}
-#ifndef QT_NO_CURSOR
-	QApplication::restoreOverrideCursor();
-#endif
-	state = Inactive;
-	qApp->removeEventFilter( this );
-    }
 }
 
 
 
-void QWhatsThisPrivate::say_helper(QWidget* widget,const QPoint& ppos,bool init)
+void QWhatsThisPrivate::say_helper(QWidget *widget, const QPoint &ppos,
+				   bool init)
 {
-    const int shadowWidth = 6;   // also used as '5' and '6' and even '8' below
-    const int vMargin = 8;
-    const int hMargin = 12;
+	const int shadowWidth = 6; // also used as '5' and '6' and even '8'
+				   // below
+	const int vMargin = 8;
+	const int hMargin = 12;
 
-    if ( currentText.isEmpty() )
-	return;
+	if (currentText.isEmpty())
+		return;
 
-    QRect r;
-#ifndef QT_NO_RICHTEXT
-    QSimpleRichText* doc = 0;
+	QRect r;
+# ifndef QT_NO_RICHTEXT
+	QSimpleRichText *doc = 0;
 
-    if ( QStyleSheet::mightBeRichText( currentText ) ) {
-	doc = new QSimpleRichText( currentText, whatsThat->font() );
-	doc->adjustSize();
-	r.setRect( 0, 0, doc->width(), doc->height() );
-    }
-    else
-#endif
-    {
-	int sw = QApplication::desktop()->width() / 3;
-	if ( sw < 200 )
-	    sw = 200;
-	else if ( sw > 300 )
-	    sw = 300;
+	if (QStyleSheet::mightBeRichText(currentText)) {
+		doc = new QSimpleRichText(currentText, whatsThat->font());
+		doc->adjustSize();
+		r.setRect(0, 0, doc->width(), doc->height());
+	} else
+# endif
+	{
+		int sw = QApplication::desktop()->width() / 3;
+		if (sw < 200)
+			sw = 200;
+		else if (sw > 300)
+			sw = 300;
 
-	r = whatsThat->fontMetrics().boundingRect( 0, 0, sw, 1000,
-			    AlignLeft + AlignTop + WordBreak + ExpandTabs,
-			    currentText );
-    }
-
-    int w = r.width() + 2*hMargin;
-    int h = r.height() + 2*vMargin;
-
-    if ( init ) {
-	// okay, now to find a suitable location
-
-	int x;
-
-	// first try locating the widget immediately above/below,
-	// with nice alignment if possible.
-	QPoint pos;
-	if ( widget )
-	    pos = widget->mapToGlobal( QPoint( 0,0 ) );
-
-	if ( widget && w > widget->width() + 16 )
-		x = pos.x() + widget->width()/2 - w/2;
-	else
-	    x = ppos.x() - w/2;
-
-	// squeeze it in if that would result in part of what's this
-	// being only partially visible
-	if ( x + w > QApplication::desktop()->width() )
-	    x = (widget? (QMIN(QApplication::desktop()->width(),
-			      pos.x() + widget->width())
-			 ) : QApplication::desktop()->width() )
-		- w;
-
-	int sx = QApplication::desktop()->x();
-	int sy = QApplication::desktop()->y();
-	if ( x < sx )
-	    x = sx;
-
-	int y;
-	if ( widget && h > widget->height() + 16 ) {
-	    y = pos.y() + widget->height() + 2; // below, two pixels spacing
-	    // what's this is above or below, wherever there's most space
-	    if ( y + h + 10 > QApplication::desktop()->height() )
-		y = pos.y() + 2 - shadowWidth - h; // above, overlap
+		r = whatsThat->fontMetrics().boundingRect(
+			0, 0, sw, 1000,
+			AlignLeft + AlignTop + WordBreak + ExpandTabs,
+			currentText);
 	}
-	y = ppos.y() + 2;
 
-	// squeeze it in if that would result in part of what's this
-	// being only partially visible
-	if ( y + h > QApplication::desktop()->height() )
-	    y = ( widget ? (QMIN(QApplication::desktop()->height(),
-				 pos.y() + widget->height())
-			    ) : QApplication:: desktop()->height() )
-		- h;
-	if ( y < sy )
-	    y = sy;
-	
-	whatsThat->setGeometry( x, y, w + shadowWidth, h + shadowWidth );
-	whatsThat->show();
-    }
+	int w = r.width() + 2 * hMargin;
+	int h = r.height() + 2 * vMargin;
 
-    // now for super-clever shadow stuff.  super-clever mostly in
-    // how many window system problems it skirts around.
+	if (init) {
+		// okay, now to find a suitable location
 
-    QPainter p( whatsThat );
-    p.setPen( whatsThat->colorGroup().foreground() );
-    p.drawRect( 0, 0, w, h );
-    p.setPen( whatsThat->colorGroup().mid() );
-    p.setBrush( whatsThat->colorGroup().background() );
-    p.drawRect( 1, 1, w-2, h-2 );
-    p.setPen( whatsThat->colorGroup().foreground() );
+		int x;
 
-#ifndef QT_NO_RICHTEXT
-    if ( doc ) {
-	doc->draw( &p, hMargin, vMargin, r, whatsThat->colorGroup(), 0 );
-	delete doc;
-    }
-    else
-#endif
-    {
-	p.drawText( hMargin, vMargin, r.width(), r.height(),
-		    AlignLeft + AlignTop + WordBreak + ExpandTabs,
-		    currentText );
-    }
-    p.setPen( whatsThat->colorGroup().shadow() );
+		// first try locating the widget immediately above/below,
+		// with nice alignment if possible.
+		QPoint pos;
+		if (widget)
+			pos = widget->mapToGlobal(QPoint(0, 0));
 
-    p.drawPoint( w + 5, 6 );
-    p.drawLine( w + 3, 6,
-		w + 5, 8 );
-    p.drawLine( w + 1, 6,
-		w + 5, 10 );
-    int i;
-    for( i=7; i < h; i += 2 )
-	p.drawLine( w, i,
-		    w + 5, i + 5 );
-    for( i = w - i + h; i > 6; i -= 2 )
-	p.drawLine( i, h,
-		    i + 5, h + 5 );
-    for( ; i > 0 ; i -= 2 )
-	p.drawLine( 6, h + 6 - i,
-		    i + 5, h + 5 );
+		if (widget && w > widget->width() + 16)
+			x = pos.x() + widget->width() / 2 - w / 2;
+		else
+			x = ppos.x() - w / 2;
+
+		// squeeze it in if that would result in part of what's this
+		// being only partially visible
+		if (x + w > QApplication::desktop()->width())
+			x = (widget ? (QMIN(QApplication::desktop()->width(),
+					    pos.x() + widget->width())) :
+				      QApplication::desktop()->width()) -
+			    w;
+
+		int sx = QApplication::desktop()->x();
+		int sy = QApplication::desktop()->y();
+		if (x < sx)
+			x = sx;
+
+		int y;
+		if (widget && h > widget->height() + 16) {
+			y = pos.y() + widget->height() + 2; // below, two pixels
+							    // spacing
+			// what's this is above or below, wherever there's most
+			// space
+			if (y + h + 10 > QApplication::desktop()->height())
+				y = pos.y() + 2 - shadowWidth - h; // above,
+								   // overlap
+		}
+		y = ppos.y() + 2;
+
+		// squeeze it in if that would result in part of what's this
+		// being only partially visible
+		if (y + h > QApplication::desktop()->height())
+			y = (widget ? (QMIN(QApplication::desktop()->height(),
+					    pos.y() + widget->height())) :
+				      QApplication::desktop()->height()) -
+			    h;
+		if (y < sy)
+			y = sy;
+
+		whatsThat->setGeometry(x, y, w + shadowWidth, h + shadowWidth);
+		whatsThat->show();
+	}
+
+	// now for super-clever shadow stuff.  super-clever mostly in
+	// how many window system problems it skirts around.
+
+	QPainter p(whatsThat);
+	p.setPen(whatsThat->colorGroup().foreground());
+	p.drawRect(0, 0, w, h);
+	p.setPen(whatsThat->colorGroup().mid());
+	p.setBrush(whatsThat->colorGroup().background());
+	p.drawRect(1, 1, w - 2, h - 2);
+	p.setPen(whatsThat->colorGroup().foreground());
+
+# ifndef QT_NO_RICHTEXT
+	if (doc) {
+		doc->draw(&p, hMargin, vMargin, r, whatsThat->colorGroup(), 0);
+		delete doc;
+	} else
+# endif
+	{
+		p.drawText(hMargin, vMargin, r.width(), r.height(),
+			   AlignLeft + AlignTop + WordBreak + ExpandTabs,
+			   currentText);
+	}
+	p.setPen(whatsThat->colorGroup().shadow());
+
+	p.drawPoint(w + 5, 6);
+	p.drawLine(w + 3, 6, w + 5, 8);
+	p.drawLine(w + 1, 6, w + 5, 10);
+	int i;
+	for (i = 7; i < h; i += 2)
+		p.drawLine(w, i, w + 5, i + 5);
+	for (i = w - i + h; i > 6; i -= 2)
+		p.drawLine(i, h, i + 5, h + 5);
+	for (; i > 0; i -= 2)
+		p.drawLine(6, h + 6 - i, i + 5, h + 5);
 }
 
 
-void QWhatsThisPrivate::say( QWidget * widget, const QString &text, const QPoint& ppos)
+void QWhatsThisPrivate::say(QWidget *widget, const QString &text,
+			    const QPoint &ppos)
 {
-    currentText = text;
+	currentText = text;
 
-    // make the widget, and set it up
-    if ( !whatsThat ) {
-	whatsThat = new QWidget( 0, "automatic what's this? widget",
-				 WType_Popup );
-	whatsThat->setBackgroundMode( QWidget::NoBackground );
-	whatsThat->setPalette( QToolTip::palette(), TRUE );
-	whatsThat->installEventFilter( this );
-    }
-    say_helper(widget,ppos,TRUE);
+	// make the widget, and set it up
+	if (!whatsThat) {
+		whatsThat = new QWidget(0, "automatic what's this? widget",
+					WType_Popup);
+		whatsThat->setBackgroundMode(QWidget::NoBackground);
+		whatsThat->setPalette(QToolTip::palette(), TRUE);
+		whatsThat->installEventFilter(this);
+	}
+	say_helper(widget, ppos, TRUE);
 }
 
-QWhatsThisPrivate::WhatsThisItem* QWhatsThisPrivate::newItem( QWidget * widget )
+QWhatsThisPrivate::WhatsThisItem *QWhatsThisPrivate::newItem(QWidget *widget)
 {
-    WhatsThisItem * i = dict->find( (void *)widget );
-    if ( i )
-	QWhatsThis::remove( widget );
-    i = new WhatsThisItem;
-    dict->insert( (void *)widget, i );
-    QWidget * t = widget->topLevelWidget();
-    if ( !tlw->find( (void *)t ) ) {
-	tlw->insert( (void *)t, t );
-	t->installEventFilter( this );
-    }
-    connect( widget, SIGNAL(destroyed()), this, SLOT(cleanupWidget()) );
-    return i;
+	WhatsThisItem *i = dict->find((void *)widget);
+	if (i)
+		QWhatsThis::remove(widget);
+	i = new WhatsThisItem;
+	dict->insert((void *)widget, i);
+	QWidget *t = widget->topLevelWidget();
+	if (!tlw->find((void *)t)) {
+		tlw->insert((void *)t, t);
+		t->installEventFilter(this);
+	}
+	connect(widget, SIGNAL(destroyed()), this, SLOT(cleanupWidget()));
+	return i;
 }
 
-void QWhatsThisPrivate::add( QWidget * widget, QWhatsThis* special )
+void QWhatsThisPrivate::add(QWidget *widget, QWhatsThis *special)
 {
-    newItem( widget )->whatsthis = special;
+	newItem(widget)->whatsthis = special;
 }
 
-void QWhatsThisPrivate::add( QWidget * widget, const QString &text )
+void QWhatsThisPrivate::add(QWidget *widget, const QString &text)
 {
-    newItem( widget )->s = text;
+	newItem(widget)->s = text;
 }
 
 
@@ -648,10 +641,10 @@ void QWhatsThisPrivate::add( QWidget * widget, const QString &text )
 
   \sa remove()
 */
-void QWhatsThis::add( QWidget * widget, const QString &text )
+void QWhatsThis::add(QWidget *widget, const QString &text)
 {
-    QWhatsThisPrivate::setUpWhatsThis();
-    wt->add(widget,text);
+	QWhatsThisPrivate::setUpWhatsThis();
+	wt->add(widget, text);
 }
 
 
@@ -660,18 +653,18 @@ void QWhatsThis::add( QWidget * widget, const QString &text )
   automatically if the widget is destroyed.
   \sa add()
 */
-void QWhatsThis::remove( QWidget * widget )
+void QWhatsThis::remove(QWidget *widget)
 {
-    QWhatsThisPrivate::setUpWhatsThis();
-    QWhatsThisPrivate::WhatsThisItem * i = wt->dict->find( (void *)widget );
-    if ( !i )
-	return;
+	QWhatsThisPrivate::setUpWhatsThis();
+	QWhatsThisPrivate::WhatsThisItem *i = wt->dict->find((void *)widget);
+	if (!i)
+		return;
 
-    wt->dict->take( (void *)widget );
+	wt->dict->take((void *)widget);
 
-    i->deref();
-    if ( !i->count )
-	delete i;
+	i->deref();
+	if (!i->count)
+		delete i;
 }
 
 
@@ -681,13 +674,13 @@ void QWhatsThis::remove( QWidget * widget )
 
   \sa add()
 */
-QString QWhatsThis::textFor( QWidget * widget, const QPoint& pos)
+QString QWhatsThis::textFor(QWidget *widget, const QPoint &pos)
 {
-    QWhatsThisPrivate::setUpWhatsThis();
-    QWhatsThisPrivate::WhatsThisItem * i = wt->dict->find( widget );
-    if (!i)
-	return QString::null;
-    return i->whatsthis? i->whatsthis->text( pos ) : i->s;
+	QWhatsThisPrivate::setUpWhatsThis();
+	QWhatsThisPrivate::WhatsThisItem *i = wt->dict->find(widget);
+	if (!i)
+		return QString::null;
+	return i->whatsthis ? i->whatsthis->text(pos) : i->s;
 }
 
 
@@ -699,11 +692,10 @@ QString QWhatsThis::textFor( QWidget * widget, const QPoint& pos)
      (void)QWhatsThis::whatsThisButton( my_help_tool_bar );
   \endcode
 */
-QToolButton * QWhatsThis::whatsThisButton( QWidget * parent )
+QToolButton *QWhatsThis::whatsThisButton(QWidget *parent)
 {
-    QWhatsThisPrivate::setUpWhatsThis();
-    return new QWhatsThisButton( parent,
-				 "automatic what's this? button" );
+	QWhatsThisPrivate::setUpWhatsThis();
+	return new QWhatsThisButton(parent, "automatic what's this? button");
 }
 
 
@@ -785,10 +777,10 @@ RzkopxCUA4ByAFAOAMoBQDkAKAcA5QCgHACUA4ByAP4PEPjyFx6Cy2AAAAAASUVORK5CYII=
   this QWhatsThis will be called to provide the appropriate text,
   rather than using text assigned by add().
 */
-QWhatsThis::QWhatsThis( QWidget * widget)
+QWhatsThis::QWhatsThis(QWidget *widget)
 {
-    QWhatsThisPrivate::setUpWhatsThis();
-    wt->add(widget,this);
+	QWhatsThisPrivate::setUpWhatsThis();
+	wt->add(widget, this);
 }
 
 
@@ -807,9 +799,9 @@ QWhatsThis::~QWhatsThis()
 
   The default implementation returns QString::null.
 */
-QString QWhatsThis::text( const QPoint & )
+QString QWhatsThis::text(const QPoint &)
 {
-    return QString::null;
+	return QString::null;
 }
 
 
@@ -829,14 +821,14 @@ QString QWhatsThis::text( const QPoint & )
 
 void QWhatsThis::enterWhatsThisMode()
 {
-    QWhatsThisPrivate::setUpWhatsThis();
-    if ( wt->state == QWhatsThisPrivate::Inactive ) {
-#ifndef QT_NO_CURSOR
-	QApplication::setOverrideCursor( *wt->cursor, FALSE );
-#endif
-	wt->state = QWhatsThisPrivate::Waiting;
-	qApp->installEventFilter( wt );
-    }
+	QWhatsThisPrivate::setUpWhatsThis();
+	if (wt->state == QWhatsThisPrivate::Inactive) {
+# ifndef QT_NO_CURSOR
+		QApplication::setOverrideCursor(*wt->cursor, FALSE);
+# endif
+		wt->state = QWhatsThisPrivate::Waiting;
+		qApp->installEventFilter(wt);
+	}
 }
 
 
@@ -847,9 +839,9 @@ void QWhatsThis::enterWhatsThisMode()
  */
 bool QWhatsThis::inWhatsThisMode()
 {
-    if (!wt)
-	return FALSE;
-    return wt->state == QWhatsThisPrivate::Waiting;
+	if (!wt)
+		return FALSE;
+	return wt->state == QWhatsThisPrivate::Waiting;
 }
 
 
@@ -867,15 +859,15 @@ bool QWhatsThis::inWhatsThisMode()
 
 \sa inWhatsThisMode(), enterWhatsThisMode()
 */
-void QWhatsThis::leaveWhatsThisMode( const QString& text, const QPoint& pos )
+void QWhatsThis::leaveWhatsThisMode(const QString &text, const QPoint &pos)
 {
-    if ( !inWhatsThisMode() )
-	return;
+	if (!inWhatsThisMode())
+		return;
 
-    wt->leaveWhatsThisMode();
-    if ( !text.isNull() )
-	wt->say( 0, text, pos );
+	wt->leaveWhatsThisMode();
+	if (!text.isNull())
+		wt->say(0, text, pos);
 }
 
-#include "qwhatsthis.moc"
+# include "qwhatsthis.moc"
 #endif
