@@ -40,6 +40,7 @@
 #include "qstring.h"
 #include "qdatastream.h"
 #include <ctype.h>
+#include <algorithm>
 
 
 // NOT REVISED
@@ -905,43 +906,51 @@ void QGDict::clear()
 void QGDict::statistics() const
 {
 #if defined(DEBUG)
-	QString line;
-	line.fill('-', 60);
 	double real, ideal;
-	qDebug(line.ascii());
+	qDebug("------------------------------------------------------------");
 	qDebug("DICTIONARY STATISTICS:");
 	if (count() == 0) {
 		qDebug("Empty!");
-		qDebug(line.ascii());
+		qDebug("------------------------------------------------------------");
 		return;
 	}
 	real = 0.0;
 	ideal = (float)count() / (2.0 * size()) * (count() + 2.0 * size() - 1);
-	uint i = 0;
-	while (i < size()) {
+
+	const int qdict_size = static_cast<int>(size());
+
+	for (int i = 0; i < qdict_size; i++) {
+
 		QBaseBucket *n = vec[i];
-		int b = 0;
+
+		int bucket_count = 0;
 		while (n) { // count number of buckets
-			b++;
+			bucket_count++;
 			n = n->getNext();
 		}
-		real = real + (double)b * ((double)b + 1.0) / 2.0;
-		char buf[80], *pbuf;
-		if (b > 78)
-			b = 78;
-		pbuf = buf;
-		while (b--)
-			*pbuf++ = '*';
-		*pbuf = '\0';
-		qDebug(buf);
-		i++;
+
+		real = real + (double)bucket_count * ((double)bucket_count + 1.0) / 2.0;
+
+		if (bucket_count > 0)
+		{
+			constexpr int buffer_capacity = 80;
+			char buffer[buffer_capacity] = {0};
+
+			constexpr int max_bucket_count = buffer_capacity - 1;
+			bucket_count = std::min<int>(bucket_count, max_bucket_count);
+
+			memset(buffer, '*', bucket_count);
+			buffer[bucket_count] = '\0';
+
+			qDebug("%s", buffer);
+		}
 	}
 	qDebug("Array size = %d", size());
 	qDebug("# items    = %d", count());
 	qDebug("Real dist  = %g", real);
 	qDebug("Rand dist  = %g", ideal);
 	qDebug("Real/Rand  = %g", real / ideal);
-	qDebug(line.ascii());
+	qDebug("------------------------------------------------------------");
 #endif // DEBUG
 }
 
