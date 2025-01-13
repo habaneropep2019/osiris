@@ -2,6 +2,12 @@
 
 # Osiris releases
 
+#### Osiris 2.4.3
+
+Osiris 2.4.3 is a maintenance release, with some minor security fixes.
+
+- Fixed a potential string format security flaw in `qgcache`, `qgdict`, and `qxml`
+
 #### Osiris 2.4.2
 
 Osiris 2.4.2 is mostly a maintenance release, although the build system changed from Makefiles to Meson.
