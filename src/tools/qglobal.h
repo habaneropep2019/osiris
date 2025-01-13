@@ -39,8 +39,8 @@
 #define QGLOBAL_H
 
 
-#define OSIRIS_VERSION 242
-#define OSIRIS_VERSION_STR "2.4.2"
+#define OSIRIS_VERSION 243
+#define OSIRIS_VERSION_STR "2.4.3"
 
 
 //

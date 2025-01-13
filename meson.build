@@ -2,7 +2,7 @@ project('osiris', 'cpp',
         default_options : ['prefix=/opt/osiris', 'cpp_std=c++11'],
         license : 'GPL-2.0-only',
         license_files: ['LICENSE.GPL'],
-        version : '2.4.2',
+        version : '2.4.3',
 )
 
 osiris_install_prefix = get_option('prefix')
