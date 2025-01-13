@@ -7,6 +7,8 @@ project('osiris', 'cpp',
 
 osiris_install_prefix = get_option('prefix')
 
+osiris_cpp_flags = [ '-Werror=format-security' ]
+
 project_defines = [
     '-DQT_NO_IMAGEIO_MNG',
     '-DQT_NO_SM_SUPPORT',
@@ -566,7 +568,7 @@ default_osirislib = []
 if get_option('single-thread').enabled()
     osirislib = shared_library('osiris',
                                osiris_sources,
-                               cpp_args : project_defines,
+                               cpp_args : project_defines + osiris_cpp_flags,
                                include_directories : osiris_include_directories,
                                dependencies : osiris_deps,
                                install : true,
@@ -582,7 +584,7 @@ if get_option('multi-thread').enabled()
     defines += '-DQT_THREAD_SUPPORT'
     osirislib_mt = shared_library('osiris-mt',
                                   osiris_sources,
-                                  cpp_args : defines,
+                                  cpp_args : defines + osiris_cpp_flags,
                                   include_directories : osiris_include_directories,
                                   dependencies : osiris_deps,
                                   install : true,

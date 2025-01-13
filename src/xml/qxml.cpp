@@ -2021,9 +2021,11 @@ bool QXmlSimpleReader::feature(const QString &name, bool *ok) const
 		   "http://trolltech.com/xml/features/report-start-end-entity") {
 		return d->reportEntities;
 	} else {
-		qWarning("Unknown feature " + name);
-		if (ok != 0)
+		const QString message = "Unknown feature " + name;
+		qWarning("%s", message.latin1());
+		if (ok != 0) {
 			*ok = FALSE;
+		}
 	}
 	return FALSE;
 }
@@ -2059,7 +2061,8 @@ void QXmlSimpleReader::setFeature(const QString &name, bool value)
 		   "http://trolltech.com/xml/features/report-start-end-entity") {
 		d->reportEntities = value;
 	} else {
-		qWarning("Unknown feature " + name);
+		const QString message = "Unknown feature " + name;
+		qWarning("%s", message.latin1());
 	}
 }
 
