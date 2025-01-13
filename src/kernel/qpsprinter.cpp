@@ -2487,7 +2487,7 @@ class QPSPrinterFontTTF : public QPSPrinterFontPrivate
 	USHORT unicode_for_glyph(int glyphindex);
 	int topost(FWord x)
 	{
-		return (int)(((int)(x) * 1000 + HUPM) / unitsPerEm);
+		return (int)(((int)(x)*1000 + HUPM) / unitsPerEm);
 	}
 
 # ifdef Q_PRINTER_USE_TYPE42
@@ -5701,14 +5701,13 @@ static QByteArray compress(const QImage &image, bool gray)
 # define WIDTH(w) (float)(w)
 # define HEIGHT(h) (float)(h)
 
-# define POINT(index)                \
-	 XCOORD(p[index].point->x()) \
-		 << ' ' << YCOORD(p[index].point->y()) << ' '
-# define RECT(index)                                                     \
-	 XCOORD(p[index].rect->normalize().x())                          \
-		 << ' ' << YCOORD(p[index].rect->normalize().y()) << ' ' \
-		 << WIDTH(p[index].rect->normalize().width()) << ' '     \
-		 << HEIGHT(p[index].rect->normalize().height()) << ' '
+# define POINT(index) \
+  XCOORD(p[index].point->x()) << ' ' << YCOORD(p[index].point->y()) << ' '
+# define RECT(index)                                              \
+  XCOORD(p[index].rect->normalize().x())                          \
+	  << ' ' << YCOORD(p[index].rect->normalize().y()) << ' ' \
+	  << WIDTH(p[index].rect->normalize().width()) << ' '     \
+	  << HEIGHT(p[index].rect->normalize().height()) << ' '
 # define INT_ARG(index) p[index].ival << ' '
 
 static char returnbuffer[13];
@@ -6218,7 +6217,8 @@ void QPSPrinter::emitHeader(bool finished)
 		stream << "\n%%Pages: " << pageCount << "\n%%DocumentFonts: "
 		       << fontsUsed.simplifyWhiteSpace();
 	else
-		stream << "\n%%Pages: (atend)" << "\n%%DocumentFonts: (atend)";
+		stream << "\n%%Pages: (atend)"
+		       << "\n%%DocumentFonts: (atend)";
 	stream << "\n%%EndComments\n";
 
 	if (printer->numCopies() > 1)

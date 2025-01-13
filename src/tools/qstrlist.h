@@ -77,7 +77,7 @@ class Q_EXPORT QStrList : public QStrListBase
 	void deleteItem(QCollection::Item d)
 	{
 		if (del_item)
-			delete[] (char *)d;
+			delete[](char *) d;
 	}
 	int compareItems(QCollection::Item s1, QCollection::Item s2)
 	{

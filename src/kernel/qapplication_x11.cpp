@@ -1663,11 +1663,11 @@ void qt_cleanup()
 		XFreeColormap(QPaintDevice::x11AppDisplay(),
 			      QPaintDevice::x11AppColormap());
 
-#define CLEANUP_GC(g)               \
-	if (g) {                    \
-		XFreeGC(appDpy, g); \
-		g = 0;              \
-	}
+#define CLEANUP_GC(g) \
+ if (g) {             \
+  XFreeGC(appDpy, g); \
+  g = 0;              \
+ }
 	CLEANUP_GC(app_gc_ro);
 	CLEANUP_GC(app_gc_ro_m);
 	CLEANUP_GC(app_gc_tmp);
@@ -3008,7 +3008,7 @@ int QApplication::x11ProcessEvent(XEvent *event)
 				if (clipboard()->receivers(
 					    SIGNAL(dataChanged())) &&
 				    qt_check_selection_sentinel(event))
-					emit clipboard() -> dataChanged();
+					emit clipboard()->dataChanged();
 			} else if (event->xproperty.atom == qt_input_encoding) {
 				qt_set_input_encoding();
 			} else if (obey_desktop_settings) {

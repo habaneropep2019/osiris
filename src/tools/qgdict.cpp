@@ -729,7 +729,7 @@ bool QGDict::remove_ascii(const char *key, QCollection::Item item)
 	QAsciiBucket *n = unlink_ascii(key, item);
 	if (n) {
 		if (copyk)
-			delete[] (char *)n->getKey();
+			delete[](char *) n->getKey();
 		deleteItem(n->getData());
 		delete n;
 	}
@@ -787,7 +787,7 @@ QCollection::Item QGDict::take_ascii(const char *key)
 	Item d;
 	if (n) {
 		if (copyk)
-			delete[] (char *)n->getKey();
+			delete[](char *) n->getKey();
 		d = n->getData();
 		delete n;
 	} else {
@@ -858,7 +858,7 @@ void QGDict::clear()
 					QAsciiBucket *next =
 						(QAsciiBucket *)n->getNext();
 					if (copyk)
-						delete[] (char *)n->getKey();
+						delete[](char *) n->getKey();
 					deleteItem(n->getData());
 					delete n;
 					n = next;
@@ -920,7 +920,6 @@ void QGDict::statistics() const
 	const int qdict_size = static_cast<int>(size());
 
 	for (int i = 0; i < qdict_size; i++) {
-
 		QBaseBucket *n = vec[i];
 
 		int bucket_count = 0;
@@ -929,15 +928,16 @@ void QGDict::statistics() const
 			n = n->getNext();
 		}
 
-		real = real + (double)bucket_count * ((double)bucket_count + 1.0) / 2.0;
+		real = real + (double)bucket_count *
+				      ((double)bucket_count + 1.0) / 2.0;
 
-		if (bucket_count > 0)
-		{
+		if (bucket_count > 0) {
 			constexpr int buffer_capacity = 80;
 			char buffer[buffer_capacity] = {0};
 
 			constexpr int max_bucket_count = buffer_capacity - 1;
-			bucket_count = std::min<int>(bucket_count, max_bucket_count);
+			bucket_count =
+				std::min<int>(bucket_count, max_bucket_count);
 
 			memset(buffer, '*', bucket_count);
 			buffer[bucket_count] = '\0';

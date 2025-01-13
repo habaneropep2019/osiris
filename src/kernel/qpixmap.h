@@ -228,7 +228,7 @@ class Q_EXPORT QPixmap : public QPaintDevice, public Qt
 		bool hasAlpha;
 #endif
 		Optimization optim;
-	} *data;
+	} * data;
 
       private:
 	QPixmap(int w, int h, int depth, bool, Optimization);

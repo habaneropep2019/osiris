@@ -55,9 +55,9 @@
 # include "qguardedptr.h"
 # include "qfocusdata.h"
 
-#ifdef QT_NO_CURSOR
-#error WhY?
-#endif
+# ifdef QT_NO_CURSOR
+#  error WhY?
+# endif
 
 // REVISED: arnt
 

@@ -425,7 +425,7 @@ struct Q_EXPORT QStringData : public QShared {
 	~QStringData()
 	{
 		if (unicode)
-			delete[] ((char *)unicode);
+			delete[]((char *)unicode);
 		if (ascii)
 			delete[] ascii;
 	}

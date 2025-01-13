@@ -1032,7 +1032,7 @@ void *QPointArray::shortPoints(int index, int nPoints) const
 	uint i = nPoints < 0 ? size() : nPoints;
 	if (splen < i) {
 		if (sp)
-			delete[] ((QShortPoint *)sp);
+			delete[]((QShortPoint *)sp);
 		sp = new QShortPoint[i];
 		splen = i;
 	}
@@ -1056,7 +1056,7 @@ void *QPointArray::shortPoints(int index, int nPoints) const
 void QPointArray::cleanBuffers()
 {
 	if (sp)
-		delete[] ((QShortPoint *)sp);
+		delete[]((QShortPoint *)sp);
 	sp = 0;
 	splen = 0;
 }

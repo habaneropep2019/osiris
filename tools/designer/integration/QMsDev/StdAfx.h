@@ -47,21 +47,18 @@ extern CComModule _Module;
 void GetLastErrorDescription(CComBSTR &bstr); // In QMsDev.cpp definiert
 
 # ifdef _DEBUG
-#  define VERIFY_OK(f)                                                         \
-	  {                                                                    \
-		  HRESULT hr = (f);                                            \
-		  if (hr != S_OK) {                                            \
-			  if (FAILED(hr)) {                                    \
-				  CComBSTR bstr;                               \
-				  GetLastErrorDescription(bstr);               \
-				  _RPTF2(_CRT_ASSERT,                          \
-					 "Object call returned %lx\n\n%S", hr, \
-					 (BSTR)bstr);                          \
-			  } else                                               \
-				  _RPTF1(_CRT_ASSERT,                          \
-					 "Object call returned %lx", hr);      \
-		  }                                                            \
-	  }
+#  define VERIFY_OK(f)                                                       \
+   {                                                                         \
+    HRESULT hr = (f);                                                        \
+    if (hr != S_OK) {                                                        \
+     if (FAILED(hr)) {                                                       \
+      CComBSTR bstr;                                                         \
+      GetLastErrorDescription(bstr);                                         \
+      _RPTF2(_CRT_ASSERT, "Object call returned %lx\n\n%S", hr, (BSTR)bstr); \
+     } else                                                                  \
+      _RPTF1(_CRT_ASSERT, "Object call returned %lx", hr);                   \
+    }                                                                        \
+   }
 
 # else //_DEBUG
 

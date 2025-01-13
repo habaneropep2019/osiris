@@ -1129,37 +1129,37 @@ bool QPixmap::convertFromImage(const QImage &img, int conversion_flags)
 			dst = newbits + xi->bytes_per_line * y;
 			p = (QRgb *)src;
 
-#define GET_RGB                                                     \
-	r = qRed(*p);                                               \
-	g = qGreen(*p);                                             \
-	b = qBlue(*p++);                                            \
-	r = red_shift > 0 ? r << red_shift : r >> -red_shift;       \
-	g = green_shift > 0 ? g << green_shift : g >> -green_shift; \
-	b = blue_shift > 0 ? b << blue_shift : b >> -blue_shift;
+#define GET_RGB                                              \
+ r = qRed(*p);                                               \
+ g = qGreen(*p);                                             \
+ b = qBlue(*p++);                                            \
+ r = red_shift > 0 ? r << red_shift : r >> -red_shift;       \
+ g = green_shift > 0 ? g << green_shift : g >> -green_shift; \
+ b = blue_shift > 0 ? b << blue_shift : b >> -blue_shift;
 
-#define GET_PIXEL                                                            \
-	if (d8)                                                              \
-		pixel = pix[*src++];                                         \
-	else {                                                               \
-		GET_RGB                                                      \
-		pixel = (b & blue_mask) | (g & green_mask) | (r & red_mask); \
-	}
+#define GET_PIXEL                                              \
+ if (d8)                                                       \
+  pixel = pix[*src++];                                         \
+ else {                                                        \
+  GET_RGB                                                      \
+  pixel = (b & blue_mask) | (g & green_mask) | (r & red_mask); \
+ }
 
-#define GET_PIXEL_DITHER_TC                                                  \
-	r = qRed(*p);                                                        \
-	g = qGreen(*p);                                                      \
-	b = qBlue(*p++);                                                     \
-	int thres = D[x % 16][y % 16];                                       \
-	if (r <= (255 - (1 << (8 - rbits))) && ((r << rbits) & 255) > thres) \
-		r += (1 << (8 - rbits));                                     \
-	if (g <= (255 - (1 << (8 - gbits))) && ((g << gbits) & 255) > thres) \
-		g += (1 << (8 - gbits));                                     \
-	if (b <= (255 - (1 << (8 - bbits))) && ((b << bbits) & 255) > thres) \
-		b += (1 << (8 - bbits));                                     \
-	r = red_shift > 0 ? r << red_shift : r >> -red_shift;                \
-	g = green_shift > 0 ? g << green_shift : g >> -green_shift;          \
-	b = blue_shift > 0 ? b << blue_shift : b >> -blue_shift;             \
-	pixel = (b & blue_mask) | (g & green_mask) | (r & red_mask);
+#define GET_PIXEL_DITHER_TC                                           \
+ r = qRed(*p);                                                        \
+ g = qGreen(*p);                                                      \
+ b = qBlue(*p++);                                                     \
+ int thres = D[x % 16][y % 16];                                       \
+ if (r <= (255 - (1 << (8 - rbits))) && ((r << rbits) & 255) > thres) \
+  r += (1 << (8 - rbits));                                            \
+ if (g <= (255 - (1 << (8 - gbits))) && ((g << gbits) & 255) > thres) \
+  g += (1 << (8 - gbits));                                            \
+ if (b <= (255 - (1 << (8 - bbits))) && ((b << bbits) & 255) > thres) \
+  b += (1 << (8 - bbits));                                            \
+ r = red_shift > 0 ? r << red_shift : r >> -red_shift;                \
+ g = green_shift > 0 ? g << green_shift : g >> -green_shift;          \
+ b = blue_shift > 0 ? b << blue_shift : b >> -blue_shift;             \
+ pixel = (b & blue_mask) | (g & green_mask) | (r & red_mask);
 
 			int x;
 			if (dither_tc) {
@@ -1808,14 +1808,14 @@ QPixmap QPixmap::xForm(const QWMatrix &matrix) const
 		} else if (msbfirst) { // mono bitmap MSB first
 			while (p < maxp) {
 #undef IWX
-#define IWX(b)                                                       \
-	if (trigx < maxws && trigy < maxhs) {                        \
-		if (*(sptr + sbpl * (trigy >> 16) + (trigx >> 19)) & \
-		    (1 << (7 - ((trigx >> 16) & 7))))                \
-			*p |= b;                                     \
-	}                                                            \
-	trigx += m11;                                                \
-	trigy += m12;
+#define IWX(b)                                         \
+ if (trigx < maxws && trigy < maxhs) {                 \
+  if (*(sptr + sbpl * (trigy >> 16) + (trigx >> 19)) & \
+      (1 << (7 - ((trigx >> 16) & 7))))                \
+   *p |= b;                                            \
+ }                                                     \
+ trigx += m11;                                         \
+ trigy += m12;
 				// END OF MACRO
 				IWX(1);
 				IWX(2);
@@ -1830,14 +1830,14 @@ QPixmap QPixmap::xForm(const QWMatrix &matrix) const
 		} else { // mono bitmap LSB first
 			while (p < maxp) {
 #undef IWX
-#define IWX(b)                                                       \
-	if (trigx < maxws && trigy < maxhs) {                        \
-		if (*(sptr + sbpl * (trigy >> 16) + (trigx >> 19)) & \
-		    (1 << ((trigx >> 16) & 7)))                      \
-			*p |= b;                                     \
-	}                                                            \
-	trigx += m11;                                                \
-	trigy += m12;
+#define IWX(b)                                         \
+ if (trigx < maxws && trigy < maxhs) {                 \
+  if (*(sptr + sbpl * (trigy >> 16) + (trigx >> 19)) & \
+      (1 << ((trigx >> 16) & 7)))                      \
+   *p |= b;                                            \
+ }                                                     \
+ trigx += m11;                                         \
+ trigy += m12;
 				// END OF MACRO
 				IWX(1);
 				IWX(2);

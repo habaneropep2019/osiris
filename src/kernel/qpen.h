@@ -93,7 +93,7 @@ class Q_EXPORT QPen : public Qt
 		uint width;
 		QColor color;
 		Q_UINT16 linest;
-	} *data;
+	} * data;
 };
 
 

@@ -274,13 +274,13 @@ struct QMultiLineData {
 };
 
 
-# define CLEAR_UNDO                         \
-	 {                                  \
-		 d->undoList.clear();       \
-		 emit undoAvailable(FALSE); \
-		 d->redoList.clear();       \
-		 emit redoAvailable(FALSE); \
-	 }
+# define CLEAR_UNDO           \
+  {                           \
+   d->undoList.clear();       \
+   emit undoAvailable(FALSE); \
+   d->redoList.clear();       \
+   emit redoAvailable(FALSE); \
+  }
 
 void QMultiLineEdit::addUndoCmd(QMultiLineEditCommand *c)
 {
@@ -3502,15 +3502,15 @@ void QMultiLineEdit::cursorWordBackward(bool mark)
 	d->blinkTimer->start(QApplication::cursorFlashTime() / 2, FALSE);
 }
 
-# define DO_BREAK                            \
-	 {                                   \
-		 doBreak = TRUE;             \
-		 if (lastSpace > a) {        \
-			 i = lastSpace;      \
-			 linew = lastw;      \
-		 } else                      \
-			 i = QMAX(a, i - 1); \
-	 }
+# define DO_BREAK       \
+  {                     \
+   doBreak = TRUE;      \
+   if (lastSpace > a) { \
+    i = lastSpace;      \
+    linew = lastw;      \
+   } else               \
+    i = QMAX(a, i - 1); \
+  }
 
 void QMultiLineEdit::wrapLine(int line, int removed)
 {

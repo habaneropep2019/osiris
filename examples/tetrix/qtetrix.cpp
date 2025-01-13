@@ -80,12 +80,12 @@ QTetrix::QTetrix(QWidget *parent, const char *name) : QWidget(parent, name)
 		(((double)t.hour()) + t.minute() + t.second()) /
 		(24 + 60 + 60));
 
-#define ADD_LABEL(str, x, y, w, h)                               \
-	{                                                        \
-		QLabel *label = new QLabel(str, this);           \
-		label->setGeometry(x, y, w, h);                  \
-		label->setAlignment(AlignCenter | AlignVCenter); \
-	}
+#define ADD_LABEL(str, x, y, w, h)                 \
+ {                                                 \
+  QLabel *label = new QLabel(str, this);           \
+  label->setGeometry(x, y, w, h);                  \
+  label->setAlignment(AlignCenter | AlignVCenter); \
+ }
 
 	ADD_LABEL("NEXT", 50, 10, 78, 30);
 	ADD_LABEL("SCORE", 330, 10, 178, 30);

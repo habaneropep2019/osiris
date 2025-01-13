@@ -2062,13 +2062,13 @@ void QPainter::drawRoundRect(int x, int y, int w, int h, int xRnd, int yRnd)
 			ds = 0;
 		}
 #define SET_ARC(px, py, w, h, a1, a2) \
-	a->x = px;                    \
-	a->y = py;                    \
-	a->width = w;                 \
-	a->height = h;                \
-	a->angle1 = a1;               \
-	a->angle2 = a2;               \
-	a++
+ a->x = px;                           \
+ a->y = py;                           \
+ a->width = w;                        \
+ a->height = h;                       \
+ a->angle1 = a1;                      \
+ a->angle2 = a2;                      \
+ a++
 		XArc arcs[4];
 		XArc *a = arcs;
 		SET_ARC(x + w - rx2, y, rx2, ry2, 0, 90 * 64);
@@ -2078,11 +2078,11 @@ void QPainter::drawRoundRect(int x, int y, int w, int h, int xRnd, int yRnd)
 		XFillArcs(dpy, hd, gc_brush, arcs, 4);
 #undef SET_ARC
 #define SET_RCT(px, py, w, h) \
-	r->x = px;            \
-	r->y = py;            \
-	r->width = w;         \
-	r->height = h;        \
-	r++
+ r->x = px;                   \
+ r->y = py;                   \
+ r->width = w;                \
+ r->height = h;               \
+ r++
 		XRectangle rects[3];
 		XRectangle *r = rects;
 		SET_RCT(x + rx, y + dp, w - rx2, ry);
@@ -2093,13 +2093,13 @@ void QPainter::drawRoundRect(int x, int y, int w, int h, int xRnd, int yRnd)
 	}
 	if (cpen.style() != NoPen) { // draw outline
 #define SET_ARC(px, py, w, h, a1, a2) \
-	a->x = px;                    \
-	a->y = py;                    \
-	a->width = w;                 \
-	a->height = h;                \
-	a->angle1 = a1;               \
-	a->angle2 = a2;               \
-	a++
+ a->x = px;                           \
+ a->y = py;                           \
+ a->width = w;                        \
+ a->height = h;                       \
+ a->angle1 = a1;                      \
+ a->angle2 = a2;                      \
+ a++
 		XArc arcs[4];
 		XArc *a = arcs;
 		SET_ARC(x + w - rx2, y, rx2, ry2, 0, 90 * 64);
@@ -2109,11 +2109,11 @@ void QPainter::drawRoundRect(int x, int y, int w, int h, int xRnd, int yRnd)
 		XDrawArcs(dpy, hd, gc, arcs, 4);
 #undef SET_ARC
 #define SET_SEG(xp1, yp1, xp2, yp2) \
-	s->x1 = xp1;                \
-	s->y1 = yp1;                \
-	s->x2 = xp2;                \
-	s->y2 = yp2;                \
-	s++
+ s->x1 = xp1;                       \
+ s->y1 = yp1;                       \
+ s->x2 = xp2;                       \
+ s->y2 = yp2;                       \
+ s++
 		XSegment segs[4];
 		XSegment *s = segs;
 		SET_SEG(x + rx, y, x + w - rx, y);

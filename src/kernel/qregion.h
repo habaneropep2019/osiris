@@ -140,7 +140,7 @@ class Q_EXPORT QRegion
 		void *rgn;
 #endif
 		bool is_null;
-	} *data;
+	} * data;
 };
 
 

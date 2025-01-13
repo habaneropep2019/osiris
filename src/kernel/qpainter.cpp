@@ -2330,7 +2330,7 @@ void qt_format_text(const QFontMetrics &fm, int x, int y, int w, int h, int tf,
 	int minrightbearing = 0;
 
 #define ENCCHAR(x) (((x).cell() << LO_SHIFT) | ((x).row() << HI_SHIFT))
-#define DECCHAR(x) QChar(((x) & LO) >> LO_SHIFT, ((x) & HI) >> HI_SHIFT)
+#define DECCHAR(x) QChar(((x)&LO) >> LO_SHIFT, ((x)&HI) >> HI_SHIFT)
 #define CWIDTH(x) fm.width(DECCHAR(x)) // Could cache, but put that it in fm
 #define ISPRINT(x) ((x).row() || (x).cell() > ' ')
 	// ##### should use (unicode) QChar::isPrint() -- WWA to AG

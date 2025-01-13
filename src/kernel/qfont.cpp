@@ -1147,17 +1147,25 @@ static void cleanupFontSubst()
 
 static void initFontSubst() // create substitution dict
 {
-	static const char *initTbl[] = {// default substitutions
+	static const char *initTbl[] = { // default substitutions
 #if defined(_WS_X11_)
-					"arial",   "helvetica",
-					"helv",	   "helvetica",
-					"tms rmn", "times",
+		"arial",
+		"helvetica",
+		"helv",
+		"helvetica",
+		"tms rmn",
+		"times",
 #elif defined(_WS_WIN_)
-					"times",     "Times New Roman",
-					"courier",   "Courier New",
-					"helvetica", "Arial",
+		"times",
+		"Times New Roman",
+		"courier",
+		"Courier New",
+		"helvetica",
+		"Arial",
 #endif
-					0,	   0};
+		0,
+		0
+	};
 
 	if (fontSubst)
 		return;

@@ -507,33 +507,33 @@ QString QRichText::context() const
 	return contxt;
 }
 
-# define ENSURE_ENDTOKEN                                                    \
-	 if (curstyle->displayMode() == QStyleSheetItem::DisplayBlock ||    \
-	     curstyle->displayMode() == QStyleSheetItem::DisplayListItem) { \
-		 (dummy ? dummy : current)->text.append("\n", fmt);         \
-	 }
+# define ENSURE_ENDTOKEN                                             \
+  if (curstyle->displayMode() == QStyleSheetItem::DisplayBlock ||    \
+      curstyle->displayMode() == QStyleSheetItem::DisplayListItem) { \
+   (dummy ? dummy : current)->text.append("\n", fmt);                \
+  }
 
-# define CLOSE_TAG                                       \
-	 (void)eatSpace(doc, pos);                       \
-	 int recoverPos = pos;                           \
-	 valid = (hasPrefix(doc, pos, QChar('<')) &&     \
-		  hasPrefix(doc, pos + 1, QChar('/')) && \
-		  eatCloseTag(doc, pos, tagname));       \
-	 if (!valid) {                                   \
-		 pos = recoverPos;                       \
-		 valid = TRUE;                           \
-		 return TRUE;                            \
-	 }
+# define CLOSE_TAG                                \
+  (void)eatSpace(doc, pos);                       \
+  int recoverPos = pos;                           \
+  valid = (hasPrefix(doc, pos, QChar('<')) &&     \
+	   hasPrefix(doc, pos + 1, QChar('/')) && \
+	   eatCloseTag(doc, pos, tagname));       \
+  if (!valid) {                                   \
+   pos = recoverPos;                              \
+   valid = TRUE;                                  \
+   return TRUE;                                   \
+  }
 
-# define PROVIDE_DUMMY                                                         \
-	 if (current->child && !dummy) {                                       \
-		 dummy = new QTextParagraph(current, formats, fmt, nullstyle); \
-		 QTextParagraph *it = current->child;                          \
-		 while (it->next)                                              \
-			 it = it->next;                                        \
-		 it->next = dummy;                                             \
-		 dummy->prev = it;                                             \
-	 }
+# define PROVIDE_DUMMY                                           \
+  if (current->child && !dummy) {                                \
+   dummy = new QTextParagraph(current, formats, fmt, nullstyle); \
+   QTextParagraph *it = current->child;                          \
+   while (it->next)                                              \
+    it = it->next;                                               \
+   it->next = dummy;                                             \
+   dummy->prev = it;                                             \
+  }
 
 void QRichText::append(const QString &txt, const QMimeSourceFactory *factory,
 		       const QStyleSheet *sheet)

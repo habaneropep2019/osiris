@@ -91,7 +91,9 @@ Uic::Uic(QTextStream &outStream, QDomDocument doc, bool decl, bool subcl,
 {
 	item_used = cg_used = pal_used = 0;
 
-	layouts << "hbox" << "vbox" << "grid";
+	layouts << "hbox"
+		<< "vbox"
+		<< "grid";
 	tags = layouts;
 	tags << "widget";
 

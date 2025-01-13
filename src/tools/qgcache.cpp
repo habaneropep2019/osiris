@@ -535,7 +535,7 @@ QCollection::Item QGCache::take_other(const char *key)
 		tCost -= ci->cost;
 		lruList->take(ci); // take from list
 		if (copyk)
-			delete[] (char *)ci->key;
+			delete[](char *) ci->key;
 		delete ci;
 	} else {
 		d = 0;
@@ -561,7 +561,7 @@ void QGCache::clear()
 		case AsciiKey:
 			dict->remove_ascii(ci);
 			if (copyk)
-				delete[] (char *)ci->key;
+				delete[](char *) ci->key;
 			break;
 		case IntKey:
 			dict->remove_int(ci);
@@ -663,7 +663,7 @@ bool QGCache::makeRoomFor(int cost, int priority)
 		case AsciiKey:
 			dict->remove_ascii(ci);
 			if (copyk)
-				delete[] (char *)ci->key;
+				delete[](char *) ci->key;
 			break;
 		case IntKey:
 			dict->remove_int(ci);

@@ -395,8 +395,7 @@ void QButtonGroup::buttonClicked()
 # if defined(CHECK_NULL)
 	ASSERT(bt->inherits("QButton"));
 # endif
-	for (QButtonItem *i = buttons->first(); i;
-	     i = buttons->next()) {
+	for (QButtonItem *i = buttons->first(); i; i = buttons->next()) {
 		if (bt == i->button) { // button was clicked
 			id = i->id;
 			break;

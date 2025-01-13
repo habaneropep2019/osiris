@@ -2308,10 +2308,10 @@ const QTextCodec *QFontMetrics::mapper() const
 #undef FT_TYPE
 #ifdef QT_XFT
 # define FT_TYPE XftFont
-# define FT                                                        \
-	 (painter ? (painter->cfont.handle(),                      \
-		     (XftFont *)painter->cfont.d->fin->ftfont()) : \
-		    fin->ftfont())
+# define FT                                                 \
+  (painter ? (painter->cfont.handle(),                      \
+	      (XftFont *)painter->cfont.d->fin->ftfont()) : \
+	     fin->ftfont())
 #else
 # define FT_TYPE void
 # define FT ((FT_TYPE *)0)
