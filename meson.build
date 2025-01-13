@@ -1281,3 +1281,11 @@ install_subdir('doc/html/osiris',
                 install_tag : 'runtime',
                 strip_directory : true,
 )
+
+pkg_mod = import('pkgconfig')
+pkg_mod.generate(libraries : [osirislib_mt, osirislib, qutil_lib],
+                version : meson.project_version(),
+                name : 'osiris',
+                filebase : 'osiris',
+                subdirs : 'osiris',
+                description : 'Osiris is a C++ GUI Toolkit forked from Qt 2.3.2')
