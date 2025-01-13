@@ -12,13 +12,26 @@
 
 set -e # Exit if a command fails
 
+# Well the build system won't create directories necessarily. So check if
+# directory exists, and if not, create it
+
+if [ ! -d "${DESTDIR}/etc/ld.so.conf.d" ]
+then
+    mkdir "${DESTDIR}/etc/ld.so.conf.d"
+fi
+
+if [ ! -d "${DESTDIR}/etc/profile.d" ]
+then
+    mkdir "${DESTDIR}/etc/profile.d"
+fi
+
 # Generate the ldconfig file
 
-echo "${MESON_INSTALL_PREFIX}/lib" > ${DESTDIR}/etc/ld.so.conf.d/osiris.conf
+echo "${MESON_INSTALL_PREFIX}/lib" > "${DESTDIR}/etc/ld.so.conf.d/osiris.conf"
 
 # Generate the profile file
 
-echo '#!/bin/bash' > ${DESTDIR}/etc/profile.d/osiris.sh
-echo "${MESON_INSTALL_PREFIX}/bin" >> ${DESTDIR}/etc/profile.d/osiris.sh
-chmod +x ${DESTDIR}/etc/profile.d/osiris.sh
+echo '#!/bin/bash' > "${DESTDIR}/etc/profile.d/osiris.sh"
+echo "${MESON_INSTALL_PREFIX}/bin" >> "${DESTDIR}/etc/profile.d/osiris.sh"
+chmod +x "${DESTDIR}/etc/profile.d/osiris.sh"
 
