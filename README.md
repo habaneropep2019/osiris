@@ -149,22 +149,12 @@ sudo ninja install
 ```
 
 
-Then, you need to set up the environment. Usually adding the following to your `.profile`, logging out, and logging back in again is sufficient. This should be done for both root _and_ any local users who will be using Osiris.
+**New for 2.4.3:** ldconfig and PATH are now configured automatically! A script is run during the installation step that generates and installs two files:
 
-```
-OSIRISDIR="/opt/osiris"
-PATH="$PATH:$OSIRISDIR/bin"
-MANPATH="$MANPATH:$OSIRISDIR/doc/man"
-LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$OSIRISDIR/lib"
-export OSIRISDIR PATH MANPATH LD_LIBRARY_PATH
-```
+- `/etc/ld.so.conf.d/osiris`
+- `/etc/profile.d/osiris.sh`
 
-You should also make `ldconfig` aware of Osiris libraries:
-
-```
-sudo echo "/opt/osiris/lib" > /etc/ld.so.conf.d/osiris.conf
-sudo ldconfig -v
-```
+The first one tells the library loader where the Osiris libraries are installed. The second one adds the installation location of Osiris to the environment variable `PATH`, so applications can find Osiris tools. All you need to do is either run `ldconfig` as root, logging out of all sessions, and logging back in again (or simply rebooting).
 
 #### Debugging
 

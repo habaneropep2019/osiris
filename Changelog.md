@@ -7,6 +7,8 @@
 Osiris 2.4.3 is a maintenance release, with some minor security fixes.
 
 - Fixed a potential string format security flaw in `qgcache`, `qgdict`, and `qxml`
+- meson now generates a pkg-config file
+- meson now runs a script to generate osiris.conf (for /etc/ld.so.conf.d/) and osiris.sh (for /etc/profile.d/). This makes building and installation easier.
 
 #### Osiris 2.4.2
 
