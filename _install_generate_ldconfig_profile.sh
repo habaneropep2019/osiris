@@ -17,12 +17,12 @@ set -e # Exit if a command fails
 
 if [ ! -d "${DESTDIR}/etc/ld.so.conf.d" ]
 then
-    mkdir "${DESTDIR}/etc/ld.so.conf.d"
+    mkdir -p "${DESTDIR}/etc/ld.so.conf.d"
 fi
 
 if [ ! -d "${DESTDIR}/etc/profile.d" ]
 then
-    mkdir "${DESTDIR}/etc/profile.d"
+    mkdir -p "${DESTDIR}/etc/profile.d"
 fi
 
 # Generate the ldconfig file
