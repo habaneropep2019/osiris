@@ -1289,3 +1289,5 @@ pkg_mod.generate(libraries : [osirislib_mt, osirislib, qutil_lib],
                 filebase : 'osiris',
                 subdirs : 'osiris',
                 description : 'Osiris is a C++ GUI Toolkit forked from Qt 2.3.2')
+
+meson.add_install_script('_install_generate_ldconfig_profile.sh')
