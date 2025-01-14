@@ -2,6 +2,16 @@
 
 # Osiris releases
 
+#### Osiris 2.4.3
+
+Osiris 2.4.3 is a maintenance release, with some minor security fixes.
+
+- Fixed a potential string format security flaw in `qgcache`, `qgdict`, and `qxml`
+- meson now generates a pkg-config file
+- meson now runs a script to generate osiris.conf (for /etc/ld.so.conf.d/) and osiris.sh (for /etc/profile.d/). This makes building and installation easier.
+- Packages now available for Ubuntu amd64 and arm64 (also known as aarch64)
+- Packages now available for Debian amd64, i386, and arm64
+
 #### Osiris 2.4.2
 
 Osiris 2.4.2 is mostly a maintenance release, although the build system changed from Makefiles to Meson.

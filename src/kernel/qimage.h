@@ -245,7 +245,7 @@ class Q_EXPORT QImage
 #endif
 		bool bits_mine; // this allocated bits
 		bool ctbl_mine; // this allocated ctbl
-	} *data;
+	} * data;
 #ifndef QT_NO_IMAGE_TEXT
 	QImageDataMisc &misc() const;
 #endif

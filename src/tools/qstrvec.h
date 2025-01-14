@@ -68,7 +68,7 @@ class Q_EXPORT QStrVec : public QVector<char>
 	void deleteItem(Item d)
 	{
 		if (dc)
-			delete[] (char *)d;
+			delete[](char *) d;
 	}
 	int compareItems(Item s1, Item s2)
 	{

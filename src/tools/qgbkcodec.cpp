@@ -79,9 +79,8 @@
 
 # define IsLatin(c) (((c) <= 0x80))
 # define IsFirstByte(c) (((c) >= 0x81) && ((c) <= 0xFE))
-# define IsSecondByte(c)                      \
-	 ((((c) >= 0x40) && ((c) <= 0x7E)) || \
-	  ((((c) >= 0x80) && ((c) <= 0xFE))))
+# define IsSecondByte(c) \
+  ((((c) >= 0x40) && ((c) <= 0x7E)) || ((((c) >= 0x80) && ((c) <= 0xFE))))
 # define QValidChar(u) ((u) ? QChar((ushort)(u)) : QChar::replacement)
 
 static unsigned int qt_GBKToUnicode(unsigned int code);

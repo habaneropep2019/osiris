@@ -171,11 +171,11 @@
 
 # if defined(CHECK_STATE)
 #  undef CHECK_STREAM_PRECOND
-#  define CHECK_STREAM_PRECOND                        \
-	  if (!dev) {                                 \
-		  qWarning("QDataStream: No device"); \
-		  return *this;                       \
-	  }
+#  define CHECK_STREAM_PRECOND          \
+   if (!dev) {                          \
+    qWarning("QDataStream: No device"); \
+    return *this;                       \
+   }
 # else
 #  define CHECK_STREAM_PRECOND
 # endif

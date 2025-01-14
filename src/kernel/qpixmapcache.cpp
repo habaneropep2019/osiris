@@ -95,9 +95,10 @@ class QPMCache : public QObject, public QCache<QPixmap>
 {
       public:
 	QPMCache()
-		: QObject(0, "global pixmap cache"),
-		  QCache<QPixmap>(cache_limit * 1024, cache_size), id(0), ps(0),
-		  t(FALSE)
+		: QObject(0, "global pixmap cache"), QCache<QPixmap>(
+							     cache_limit * 1024,
+							     cache_size),
+		  id(0), ps(0), t(FALSE)
 	{
 		qAddPostRoutine(cleanup_pixmap_cache);
 		setAutoDelete(TRUE);

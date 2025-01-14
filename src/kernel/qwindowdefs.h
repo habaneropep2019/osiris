@@ -169,7 +169,7 @@ Q_EXPORT void qRemovePostRoutine(Q_CleanUpFunction);
 // ### remove 3.0
 Q_EXPORT void *qt_find_obj_child(QObject *, const char *, const char *);
 #define Q_CHILD(parent, type, name) \
-	((type *)qt_find_obj_child(parent, #type, name))
+ ((type *)qt_find_obj_child(parent, #type, name))
 
 
 #endif // QWINDOWDEFS_H

@@ -7370,7 +7370,7 @@ QString QString::visual(int index, int len)
 // "delete unicode" statement in ~QStringData() in qstring.h correspondingly!
 
 #define QT_ALLOC_QCHAR_VEC(N) (QChar *)new char[sizeof(QChar) * (N)]
-#define QT_DELETE_QCHAR_VEC(P) delete[] ((char *)(P))
+#define QT_DELETE_QCHAR_VEC(P) delete[]((char *)(P))
 
 
 /*!
@@ -10590,11 +10590,11 @@ const void *qt_winTchar(const QString &str_in, bool addnul)
 
 	const QChar *uc = str.unicode();
 
-#  define EXTEND                                              \
-	  if (str.length() > buflen) {                        \
-		  delete buf;                                 \
-		  buf = new TCHAR[buflen = str.length() + 1]; \
-	  }
+#  define EXTEND                                \
+   if (str.length() > buflen) {                 \
+    delete buf;                                 \
+    buf = new TCHAR[buflen = str.length() + 1]; \
+   }
 
 #  if defined(_WS_X11_) || defined(_OS_WIN32_BYTESWAP_)
 	EXTEND

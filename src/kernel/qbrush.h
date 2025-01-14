@@ -87,7 +87,7 @@ class Q_EXPORT QBrush : public Qt
 		BrushStyle style;
 		QColor color;
 		QPixmap *pixmap;
-	} *data;
+	} * data;
 };
 
 

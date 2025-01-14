@@ -102,13 +102,65 @@ As of April 2024, work on Pysiris has begun, although no release date is availab
 
 Getting the clipboard implemented correctly under X11 is ridiculously complicated. Osiris has some partial fixes to improve X11 clipboard functionality over Qt2.3.2, but it's still not perfect. For now, clipboard functionality is still on the to-do list, although it's not top priority unless we get a lot of users needing it for their applications. The reason being that the clipboard will be re-implemented when Wayland support happens, so it's not currently worth spending a lot of time on.
 
+## Packages for Supported Distributions
+
+**New for 2.4.3**: Packages are now available for some distributions!
+
+#### Ubuntu Instructions
+
+Supported architectures: `amd64`, `arm64`
+
+*Note on supported architectures:* The `arm64` port isn't as well tested as the others, due to not having a good ARM board on hand right now. Please file a bug report if you have any issues.
+
+Supported releases: **noble**
+
+To add the official Libranext Pub-Package repository for Ubuntu, run the following commands (substituting your distribution codename):
+
+```
+sudo echo 'deb https://debpkg.libranext.com/pub/ubuntu <your distribution here> main' > /etc/apt/sources.list.d/libranext-pub.list
+wget https://debpkg.libranext.com/pub/ubuntu/pool/main/libranext-debpkg-keyring_2025_all.deb
+sudo dpkg -i libranext-debpkg-keyring_2025_all.deb
+sudo apt update
+```
+
+After adding the repository, run the following commands to install Osiris:
+
+```
+sudo apt install osiris originator osiris-dev-tools osiris-dev osiris-doc originator-doc
+```
+
+#### Debian Instructions
+
+Supported architectures: `amd64`, `i386`, `arm64`
+
+*Notes on supported architectures:* 
+- The `i386` packages were built for Pentium II or higher machines. If you need support for Pentium machines, you should compile Osiris per the build instructions below.
+- The `arm64` port isn't as well tested as the others, due to not having a good ARM board on hand right now. Please file a bug report if you have any issues.
+
+Supported releases: **bookworm**
+
+To add the official Libranext Pub-Package repository for Debian, run the following commands as root (substituting your distribution codename):
+
+```
+echo 'deb https://debpkg.libranext.com/pub/debian <your distribution here> main' > /etc/apt/sources.list.d/libranext-pub.list
+wget https://debpkg.libranext.com/pub/debian/pool/main/libranext-debpkg-keyring_2025_all.deb
+dpkg -i libranext-debpkg-keyring_2025_all.deb
+apt update
+```
+
+After adding the repository, run the following commands to install Osiris:
+
+```
+apt install osiris originator osiris-dev-tools osiris-dev osiris-doc originator-doc
+```
+
 ## Building and debugging
 
 #### Building a release version on Linux platforms
 
 **New for 2.4.2:** The build system has changed to Meson, so it's even easier to compile and install Osiris.
 
-**Notes for Ubuntu systems:** You will need to install the following packages to build Osiris: `libx11-dev gawk bison flex build-essential libjpeg62-dev libxext-dev libxft-dev libglu1-mesa-dev libxmu-dev`
+**Notes for Ubuntu systems:** You will need to install the following packages to build Osiris: `libx11-dev gawk bison flex build-essential libjpeg62-dev libxext-dev libxft-dev libglu1-mesa-dev libxmu-dev meson libjpeg-dev`
 
 **Notes for Debian 12 and up:** Unfortunately, the `meson` package in Debian stable is too old. You will need to install Meson from Debian backports. Run the following commands as root:
 ```
@@ -149,22 +201,12 @@ sudo ninja install
 ```
 
 
-Then, you need to set up the environment. Usually adding the following to your `.profile`, logging out, and logging back in again is sufficient. This should be done for both root _and_ any local users who will be using Osiris.
+**New for 2.4.3:** ldconfig and PATH are now configured automatically! A script is run during the installation step that generates and installs two files:
 
-```
-OSIRISDIR="/opt/osiris"
-PATH="$PATH:$OSIRISDIR/bin"
-MANPATH="$MANPATH:$OSIRISDIR/doc/man"
-LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$OSIRISDIR/lib"
-export OSIRISDIR PATH MANPATH LD_LIBRARY_PATH
-```
+- `/etc/ld.so.conf.d/osiris`
+- `/etc/profile.d/osiris.sh`
 
-You should also make `ldconfig` aware of Osiris libraries:
-
-```
-sudo echo "/opt/osiris/lib" > /etc/ld.so.conf.d/osiris.conf
-sudo ldconfig -v
-```
+The first one tells the library loader where the Osiris libraries are installed. The second one adds the installation location of Osiris to the environment variable `PATH`, so applications can find Osiris tools. All you need to do is either run `ldconfig` as root, logging out of all sessions, and logging back in again (or simply rebooting).
 
 #### Debugging
 

@@ -39,8 +39,8 @@
 #define QGLOBAL_H
 
 
-#define OSIRIS_VERSION 242
-#define OSIRIS_VERSION_STR "2.4.2"
+#define OSIRIS_VERSION 243
+#define OSIRIS_VERSION_STR "2.4.3"
 
 
 //
@@ -607,14 +607,13 @@ Q_EXPORT void fatal(const char *, ...) // print fatal message and exit
 #if !defined(ASSERT)
 # if defined(CHECK_STATE)
 #  if defined(QT_FATAL_ASSERT)
-#   define ASSERT(x)        \
-	   ((x) ? (void)0 : \
-		  qFatal("ASSERT: \"%s\" in %s (%d)", #x, __FILE__, __LINE__))
+#   define ASSERT(x) \
+    ((x) ? (void)0 : \
+	   qFatal("ASSERT: \"%s\" in %s (%d)", #x, __FILE__, __LINE__))
 #  else
-#   define ASSERT(x)                                                  \
-	   ((x) ? (void)0 :                                           \
-		  qWarning("ASSERT: \"%s\" in %s (%d)", #x, __FILE__, \
-			   __LINE__))
+#   define ASSERT(x) \
+    ((x) ? (void)0 : \
+	   qWarning("ASSERT: \"%s\" in %s (%d)", #x, __FILE__, __LINE__))
 #  endif
 # else
 #  define ASSERT(x)

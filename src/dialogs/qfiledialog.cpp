@@ -3152,9 +3152,9 @@ void QFileDialog::updateGeometries()
 	QSize r, t;
 
 	// we really should have a QSize::unite()
-# define RM                                      \
-	 r.setWidth(QMAX(r.width(), t.width())); \
-	 r.setHeight(QMAX(r.height(), t.height()))
+# define RM                               \
+  r.setWidth(QMAX(r.width(), t.width())); \
+  r.setHeight(QMAX(r.height(), t.height()))
 
 	// labels first
 	r = d->pathL->sizeHint();

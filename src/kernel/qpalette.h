@@ -231,7 +231,7 @@ class Q_EXPORT QPalette
 		QColorGroup active;
 		int ser_no;
 		QColorGroup inactive;
-	} *data;
+	} * data;
 	static QPalData *defPalData;
 	static void cleanupDefPal();
 };

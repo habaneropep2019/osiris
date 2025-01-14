@@ -238,12 +238,12 @@ void MetalStyle::drawMetalButton(QPainter *p, int x, int y, int w, int h,
 		y2 = y2 - 2;
 		// Note that x2/y2 mean something else from this point down...
 
-#define DRAWLINE                                     \
-	if (horz)                                    \
-		p->drawLine(x1, y1 + i, x2, y1 + i); \
-	else                                         \
-		p->drawLine(x1 + i, y1, x1 + i, y2); \
-	i++;
+#define DRAWLINE                       \
+ if (horz)                             \
+  p->drawLine(x1, y1 + i, x2, y1 + i); \
+ else                                  \
+  p->drawLine(x1 + i, y1, x1 + i, y2); \
+ i++;
 
 	if (!sunken) {
 		p->setPen(highlight);

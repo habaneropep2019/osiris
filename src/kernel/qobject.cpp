@@ -372,7 +372,7 @@ QObject::~QObject()
 	wasDeleted = 1;
 	emit destroyed();
 	if (objname)
-		delete[] (char *)objname;
+		delete[](char *) objname;
 	objname = 0;
 	if (pendTimer) // might be pending timers
 		qKillTimer(this);
@@ -596,7 +596,7 @@ const char *QObject::name(const char *defaultName) const
 void QObject::setName(const char *name)
 {
 	if (objname)
-		delete[] (char *)objname;
+		delete[](char *) objname;
 	objname = name ? qstrdup(name) : 0;
 }
 
@@ -2058,63 +2058,63 @@ void QObject::activate_signal(const char *signal)
 
 
 #ifdef Q_FP_CCAST_BROKEN
-# define ACTIVATE_SIGNAL_WITH_PARAM(FNAME, TYPE)                             \
-	 void QObject::FNAME(const char *signal, TYPE param)                 \
-	 {                                                                   \
-		 if (!connections)                                           \
-			 return;                                             \
-		 QConnectionList *clist = connections->find(signal);         \
-		 if (!clist || signalsBlocked())                             \
-			 return;                                             \
-		 typedef void (QObject::*RT0)();                             \
-		 typedef void (QObject::*RT1)(TYPE);                         \
-		 RT0 r0;                                                     \
-		 RT1 r1;                                                     \
-		 QConnectionListIt it(*clist);                               \
-		 QConnection *c;                                    \
-		 QObject *object;                                   \
-		 while ((c = it.current())) {                                \
-			 ++it;                                               \
-			 object = c->object();                               \
-			 object->sigSender = this;                           \
-			 if (c->numArgs()) {                                 \
-				 r1 = reinterpret_cast<RT1>(*(c->member())); \
-				 (object->*r1)(param);                       \
-			 } else {                                            \
-				 r0 = reinterpret_cast<RT0>(*(c->member())); \
-				 (object->*r0)();                            \
-			 }                                                   \
-		 }                                                           \
-	 }
+# define ACTIVATE_SIGNAL_WITH_PARAM(FNAME, TYPE)       \
+  void QObject::FNAME(const char *signal, TYPE param)  \
+  {                                                    \
+   if (!connections)                                   \
+    return;                                            \
+   QConnectionList *clist = connections->find(signal); \
+   if (!clist || signalsBlocked())                     \
+    return;                                            \
+   typedef void (QObject::*RT0)();                     \
+   typedef void (QObject::*RT1)(TYPE);                 \
+   RT0 r0;                                             \
+   RT1 r1;                                             \
+   QConnectionListIt it(*clist);                       \
+   QConnection *c;                                     \
+   QObject *object;                                    \
+   while ((c = it.current())) {                        \
+    ++it;                                              \
+    object = c->object();                              \
+    object->sigSender = this;                          \
+    if (c->numArgs()) {                                \
+     r1 = reinterpret_cast<RT1>(*(c->member()));       \
+     (object->*r1)(param);                             \
+    } else {                                           \
+     r0 = reinterpret_cast<RT0>(*(c->member()));       \
+     (object->*r0)();                                  \
+    }                                                  \
+   }                                                   \
+  }
 #else
-# define ACTIVATE_SIGNAL_WITH_PARAM(FNAME, TYPE)                     \
-	 void QObject::FNAME(const char *signal, TYPE param)         \
-	 {                                                           \
-		 if (!connections)                                   \
-			 return;                                     \
-		 QConnectionList *clist = connections->find(signal); \
-		 if (!clist || signalsBlocked())                     \
-			 return;                                     \
-		 typedef void (QObject::*RT0)();                     \
-		 typedef void (QObject::*RT1)(TYPE);                 \
-		 RT0 r0;                                             \
-		 RT1 r1;                                             \
-		 QConnectionListIt it(*clist);                       \
-		 QConnection *c;                            \
-		 QObject *object;                           \
-		 while ((c = it.current())) {                        \
-			 ++it;                                       \
-			 object = c->object();                       \
-			 object->sigSender = this;                   \
-			 if (c->numArgs()) {                         \
-				 r1 = (RT1) * (c->member());         \
-				 (object->*r1)(param);               \
-			 } else {                                    \
-				 r0 = (RT0) * (c->member());         \
-				 (object->*r0)();                    \
-			 }                                           \
-		 }                                                   \
-	 }
+# define ACTIVATE_SIGNAL_WITH_PARAM(FNAME, TYPE)       \
+  void QObject::FNAME(const char *signal, TYPE param)  \
+  {                                                    \
+   if (!connections)                                   \
+    return;                                            \
+   QConnectionList *clist = connections->find(signal); \
+   if (!clist || signalsBlocked())                     \
+    return;                                            \
+   typedef void (QObject::*RT0)();                     \
+   typedef void (QObject::*RT1)(TYPE);                 \
+   RT0 r0;                                             \
+   RT1 r1;                                             \
+   QConnectionListIt it(*clist);                       \
+   QConnection *c;                                     \
+   QObject *object;                                    \
+   while ((c = it.current())) {                        \
+    ++it;                                              \
+    object = c->object();                              \
+    object->sigSender = this;                          \
+    if (c->numArgs()) {                                \
+     r1 = (RT1) * (c->member());                       \
+     (object->*r1)(param);                             \
+    } else {                                           \
+     r0 = (RT0) * (c->member());                       \
+     (object->*r0)();                                  \
+    }                                                  \
+   }                                                   \
+  }
 #endif
 
 // We don't want to duplicate too much text so...

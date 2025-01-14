@@ -163,14 +163,14 @@ Region qt_x11_bitmapToRegion(const QBitmap &bitmap)
 
 	XRectangle xr;
 
-#define AddSpan                                            \
-	{                                                  \
-		xr.x = prev1;                              \
-		xr.y = y;                                  \
-		xr.width = x - prev1 - 1;                  \
-		xr.height = 1;                             \
-		XUnionRectWithRegion(&xr, region, region); \
-	}
+#define AddSpan                              \
+ {                                           \
+  xr.x = prev1;                              \
+  xr.y = y;                                  \
+  xr.width = x - prev1 - 1;                  \
+  xr.height = 1;                             \
+  XUnionRectWithRegion(&xr, region, region); \
+ }
 
 	// deal with 0<->1 problem (not on X11 anymore)
 	int zero = 0; //(qGray(image.color(0)) < qGray(image.color(1)) ? 0x00 :

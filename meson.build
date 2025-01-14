@@ -2,10 +2,12 @@ project('osiris', 'cpp',
         default_options : ['prefix=/opt/osiris', 'cpp_std=c++11'],
         license : 'GPL-2.0-only',
         license_files: ['LICENSE.GPL'],
-        version : '2.4.2',
+        version : '2.4.3',
 )
 
 osiris_install_prefix = get_option('prefix')
+
+osiris_cpp_flags = [ '-Werror=format-security' ]
 
 project_defines = [
     '-DQT_NO_IMAGEIO_MNG',
@@ -566,7 +568,7 @@ default_osirislib = []
 if get_option('single-thread').enabled()
     osirislib = shared_library('osiris',
                                osiris_sources,
-                               cpp_args : project_defines,
+                               cpp_args : project_defines + osiris_cpp_flags,
                                include_directories : osiris_include_directories,
                                dependencies : osiris_deps,
                                install : true,
@@ -582,7 +584,7 @@ if get_option('multi-thread').enabled()
     defines += '-DQT_THREAD_SUPPORT'
     osirislib_mt = shared_library('osiris-mt',
                                   osiris_sources,
-                                  cpp_args : defines,
+                                  cpp_args : defines + osiris_cpp_flags,
                                   include_directories : osiris_include_directories,
                                   dependencies : osiris_deps,
                                   install : true,
@@ -1279,3 +1281,13 @@ install_subdir('doc/html/osiris',
                 install_tag : 'runtime',
                 strip_directory : true,
 )
+
+pkg_mod = import('pkgconfig')
+pkg_mod.generate(libraries : [osirislib_mt, osirislib, qutil_lib],
+                version : meson.project_version(),
+                name : 'osiris',
+                filebase : 'osiris',
+                subdirs : 'osiris',
+                description : 'Osiris is a C++ GUI Toolkit forked from Qt 2.3.2')
+
+meson.add_install_script('_install_generate_ldconfig_profile.sh')

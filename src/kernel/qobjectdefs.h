@@ -48,9 +48,9 @@
 // Only Q_OBJECT is used by the compiler.
 
 #ifndef QT_NO_TRANSLATION
-# define QT_TR_FUNCTION                   \
-	 static QString tr(const char *); \
-	 static QString tr(const char *, const char *);
+# define QT_TR_FUNCTION            \
+  static QString tr(const char *); \
+  static QString tr(const char *, const char *);
 #else
 # define QT_TR_FUNCTION // inherit the one from QObject
 #endif
@@ -79,20 +79,20 @@
 # define Q_SETS(x)
 
 /* tmake ignore Q_OBJECT */
-# define Q_OBJECT                                \
-       public:                                   \
-	 QMetaObject *metaObject() const         \
-	 {                                       \
-		 return staticMetaObject();      \
-	 }                                       \
-	 const char *className() const;          \
-	 static QMetaObject *staticMetaObject(); \
-	 QT_TR_FUNCTION                          \
-       protected:                                \
-	 void initMetaObject();                  \
-                                                 \
-       private:                                  \
-	 static QMetaObject *metaObj;
+# define Q_OBJECT                         \
+public:                                   \
+  QMetaObject *metaObject() const         \
+  {                                       \
+   return staticMetaObject();             \
+  }                                       \
+  const char *className() const;          \
+  static QMetaObject *staticMetaObject(); \
+  QT_TR_FUNCTION                          \
+protected:                                \
+  void initMetaObject();                  \
+                                          \
+private:                                  \
+  static QMetaObject *metaObj;
 
 /* tmake ignore Q_OBJECT */
 # define Q_OBJECT_FAKE Q_OBJECT
@@ -102,18 +102,18 @@
 // macro for naming members
 #if defined(_OLD_CPP_)
 # define METHOD(a) \
-	 "0"       \
-	 "a"
+  "0"              \
+  "a"
 # define SLOT(a) \
-	 "1"     \
-	 "a"
+  "1"            \
+  "a"
 # define SIGNAL(a) \
-	 "2"       \
-	 "a"
+  "2"              \
+  "a"
 #else
-# define METHOD(a) "0" #a
-# define SLOT(a) "1" #a
-# define SIGNAL(a) "2" #a
+# define METHOD(a) "0" # a
+# define SLOT(a) "1" # a
+# define SIGNAL(a) "2" # a
 #endif
 
 #define METHOD_CODE 0 // member type codes

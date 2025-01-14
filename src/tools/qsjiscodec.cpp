@@ -91,7 +91,7 @@ static const uchar Esc = 0x1b;
 
 # define IsKana(c) (((c) >= 0xa1) && ((c) <= 0xdf))
 # define IsSjisChar1(c) \
-	 ((((c) >= 0x81) && ((c) <= 0x9f)) || (((c) >= 0xe0) && ((c) <= 0xfc)))
+  ((((c) >= 0x81) && ((c) <= 0x9f)) || (((c) >= 0xe0) && ((c) <= 0xfc)))
 # define IsSjisChar2(c) (((c) >= 0x40) && ((c) != 0x7f) && ((c) <= 0xfc))
 # define IsUserDefinedChar1(c) (((c) >= 0xf0) && ((c) <= 0xfc))
 

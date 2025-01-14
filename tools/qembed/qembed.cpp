@@ -195,7 +195,8 @@ int main(int argc, char **argv)
 		Embed *e = list.first();
 		while (e) {
 			out << "    { " << e->size << ", " << e->cname
-			    << "_data, " << "\"" << e->name << "\" },\n";
+			    << "_data, "
+			    << "\"" << e->name << "\" },\n";
 			e = list.next();
 		}
 		out << "    { 0, 0, 0 }\n};\n";
@@ -237,8 +238,9 @@ int main(int argc, char **argv)
 		EmbedImage *e = list_image.first();
 		while (e) {
 			out << "    { " << e->width << ", " << e->height << ", "
-			    << e->depth << ", " << "(const unsigned char*)"
-			    << e->cname << "_data, " << e->numColors << ", ";
+			    << e->depth << ", "
+			    << "(const unsigned char*)" << e->cname << "_data, "
+			    << e->numColors << ", ";
 			if (e->numColors)
 				out << e->cname << "_ctable, ";
 			else

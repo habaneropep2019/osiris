@@ -1553,15 +1553,15 @@ QSizePolicy QVariant::toSizePolicy() const
 }
 
 
-# define Q_VARIANT_AS(f)                            \
-	 Q##f &QVariant::as##f()                    \
-	 {                                          \
-		 if (d->typ != f)                   \
-			 *this = QVariant(to##f()); \
-		 else                               \
-			 detach();                  \
-		 return *((Q##f *)d->value.ptr);    \
-	 }
+# define Q_VARIANT_AS(f)           \
+  Q##f &QVariant::as##f()          \
+  {                                \
+   if (d->typ != f)                \
+    *this = QVariant(to##f());     \
+   else                            \
+    detach();                      \
+   return *((Q##f *)d->value.ptr); \
+  }
 
 Q_VARIANT_AS(String)
 Q_VARIANT_AS(CString)

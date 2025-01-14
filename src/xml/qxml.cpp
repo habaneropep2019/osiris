@@ -48,7 +48,7 @@
 # define XMLERR_TAGMISMATCH "tag mismatch"
 # define XMLERR_UNEXPECTEDEOF "unexpected end of file"
 # define XMLERR_FINISHEDPARSINGWHILENOTEOF \
-	 "parsing is finished but end of file is not reached"
+  "parsing is finished but end of file is not reached"
 # define XMLERR_LETTEREXPECTED "letter is expected"
 # define XMLERR_ERRORPARSINGELEMENT "error while parsing element"
 # define XMLERR_ERRORPARSINGPROLOG "error while parsing prolog"
@@ -66,40 +66,40 @@
 # define XMLERR_ERRORPARSINGREFERENCE "error while parsing reference"
 # define XMLERR_ERRORPARSINGPI "error while parsing processing instruction"
 # define XMLERR_ERRORPARSINGATTLISTDECL \
-	 "error while parsing attribute list declaration"
+  "error while parsing attribute list declaration"
 # define XMLERR_ERRORPARSINGATTTYPE \
-	 "error while parsing attribute type declaration"
+  "error while parsing attribute type declaration"
 # define XMLERR_ERRORPARSINGATTVALUE \
-	 "error while parsing attribute value declaration"
+  "error while parsing attribute value declaration"
 # define XMLERR_ERRORPARSINGELEMENTDECL \
-	 "error while parsing element declaration"
+  "error while parsing element declaration"
 # define XMLERR_ERRORPARSINGENTITYDECL "error while parsing entity declaration"
 # define XMLERR_ERRORPARSINGNOTATIONDECL \
-	 "error while parsing notation declaration"
+  "error while parsing notation declaration"
 # define XMLERR_ERRORPARSINGEXTERNALID "error while parsing external id"
 # define XMLERR_ERRORPARSINGCOMMENT "error while parsing comment"
 # define XMLERR_ERRORPARSINGENTITYVALUE \
-	 "error while parsing entity value declaration"
+  "error while parsing entity value declaration"
 # define XMLERR_CDSECTHEADEREXPECTED "expected the header for a cdata section"
 # define XMLERR_MORETHANONEDOCTYPE "more than one document type definition"
 # define XMLERR_ERRORPARSINGDOCTYPE \
-	 "error while parsing document type definition"
+  "error while parsing document type definition"
 # define XMLERR_INVALIDNAMEFORPI "invalid name for processing instruction"
 # define XMLERR_VERSIONEXPECTED \
-	 "version expected while reading the XML declaration"
+  "version expected while reading the XML declaration"
 # define XMLERR_EDECLORSDDECLEXPECTED \
-	 "EDecl or SDDecl expected while reading the XML declaration"
+  "EDecl or SDDecl expected while reading the XML declaration"
 # define XMLERR_SDDECLEXPECTED \
-	 "SDDecl expected while reading the XML declaration"
+  "SDDecl expected while reading the XML declaration"
 # define XMLERR_WRONGVALUEFORSDECL "wrong value for standalone declaration"
 # define XMLERR_UNPARSEDENTITYREFERENCE \
-	 "unparsed entity reference in wrong context"
+  "unparsed entity reference in wrong context"
 # define XMLERR_INTERNALGENERALENTITYINDTD \
-	 "internal general entity reference not allowed in DTD"
+  "internal general entity reference not allowed in DTD"
 # define XMLERR_EXTERNALGENERALENTITYINDTD \
-	 "external parsed general entity reference not allowed in DTD"
+  "external parsed general entity reference not allowed in DTD"
 # define XMLERR_EXTERNALGENERALENTITYINAV \
-	 "external parsed general entity reference not allowed in attribute value"
+  "external parsed general entity reference not allowed in attribute value"
 
 
 // the constants for the lookup table
@@ -2021,9 +2021,11 @@ bool QXmlSimpleReader::feature(const QString &name, bool *ok) const
 		   "http://trolltech.com/xml/features/report-start-end-entity") {
 		return d->reportEntities;
 	} else {
-		qWarning("Unknown feature " + name);
-		if (ok != 0)
+		const QString message = "Unknown feature " + name;
+		qWarning("%s", message.latin1());
+		if (ok != 0) {
 			*ok = FALSE;
+		}
 	}
 	return FALSE;
 }
@@ -2059,7 +2061,8 @@ void QXmlSimpleReader::setFeature(const QString &name, bool value)
 		   "http://trolltech.com/xml/features/report-start-end-entity") {
 		d->reportEntities = value;
 	} else {
-		qWarning("Unknown feature " + name);
+		const QString message = "Unknown feature " + name;
+		qWarning("%s", message.latin1());
 	}
 }
 

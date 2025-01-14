@@ -1341,7 +1341,7 @@ static bool convert_32_to_8(const QImage *src, QImage *dst,
 			} else if ((conversion_flags & Qt::Dither_Mask) ==
 				   Qt::OrderedDither) {
 # define DITHER(p, d, m) \
-	 ((uchar)((((256 * (m) + (m) + 1)) * (p) + (d)) / 65536))
+  ((uchar)((((256 * (m) + (m) + 1)) * (p) + (d)) / 65536))
 
 				int x = 0;
 				while (p < end) {

@@ -285,7 +285,7 @@ class QIconViewPrivate
 		ItemContainer *p, *n;
 		QRect rect;
 		QList<QIconViewItem> items;
-	} *firstContainer, *lastContainer;
+	} * firstContainer, *lastContainer;
 
 	struct SortableItem {
 		QIconViewItem *item;

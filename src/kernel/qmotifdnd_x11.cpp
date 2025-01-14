@@ -225,13 +225,12 @@ typedef struct {
 
 /* message_type is data[0] of the client_message
    this return 1 (receiver bit up) or 0 (initiator) */
-# define DND_GET_EVENT_TYPE(message_type)                  \
-	 ((char)(((message_type) & DND_EVENT_TYPE_MASK) >> \
-		 DND_EVENT_TYPE_SHIFT))
+# define DND_GET_EVENT_TYPE(message_type) \
+  ((char)(((message_type)&DND_EVENT_TYPE_MASK) >> DND_EVENT_TYPE_SHIFT))
 
 /* event_type can be 0 (initiator) or 1 (receiver) */
 # define DND_SET_EVENT_TYPE(event_type) \
-	 (((BYTE)(event_type) << DND_EVENT_TYPE_SHIFT) & DND_EVENT_TYPE_MASK)
+  (((BYTE)(event_type) << DND_EVENT_TYPE_SHIFT) & DND_EVENT_TYPE_MASK)
 
 
 # define DND_OPERATION_MASK ((CARD16)0x000F)
@@ -243,62 +242,59 @@ typedef struct {
 # define DND_COMPLETION_MASK ((CARD16)0xF000)
 # define DND_COMPLETION_SHIFT 12
 
-# define DND_GET_OPERATION(flags)                           \
-	 ((unsigned char)(((flags) & DND_OPERATION_MASK) >> \
-			  DND_OPERATION_SHIFT))
+# define DND_GET_OPERATION(flags) \
+  ((unsigned char)(((flags)&DND_OPERATION_MASK) >> DND_OPERATION_SHIFT))
 
 # define DND_SET_OPERATION(operation) \
-	 (((CARD16)(operation) << DND_OPERATION_SHIFT) & DND_OPERATION_MASK)
+  (((CARD16)(operation) << DND_OPERATION_SHIFT) & DND_OPERATION_MASK)
 
 # define DND_GET_STATUS(flags) \
-	 ((unsigned char)(((flags) & DND_STATUS_MASK) >> DND_STATUS_SHIFT))
+  ((unsigned char)(((flags)&DND_STATUS_MASK) >> DND_STATUS_SHIFT))
 
 # define DND_SET_STATUS(status) \
-	 (((CARD16)(status) << DND_STATUS_SHIFT) & DND_STATUS_MASK)
+  (((CARD16)(status) << DND_STATUS_SHIFT) & DND_STATUS_MASK)
 
-# define DND_GET_OPERATIONS(flags)                           \
-	 ((unsigned char)(((flags) & DND_OPERATIONS_MASK) >> \
-			  DND_OPERATIONS_SHIFT))
+# define DND_GET_OPERATIONS(flags) \
+  ((unsigned char)(((flags)&DND_OPERATIONS_MASK) >> DND_OPERATIONS_SHIFT))
 
 # define DND_SET_OPERATIONS(operation) \
-	 (((CARD16)(operation) << DND_OPERATIONS_SHIFT) & DND_OPERATIONS_MASK)
+  (((CARD16)(operation) << DND_OPERATIONS_SHIFT) & DND_OPERATIONS_MASK)
 
-# define DND_GET_COMPLETION(flags)                           \
-	 ((unsigned char)(((flags) & DND_COMPLETION_MASK) >> \
-			  DND_COMPLETION_SHIFT))
+# define DND_GET_COMPLETION(flags) \
+  ((unsigned char)(((flags)&DND_COMPLETION_MASK) >> DND_COMPLETION_SHIFT))
 
 # define DND_SET_COMPLETION(completion) \
-	 (((CARD16)(completion) << DND_COMPLETION_SHIFT) & DND_COMPLETION_MASK)
+  (((CARD16)(completion) << DND_COMPLETION_SHIFT) & DND_COMPLETION_MASK)
 
 
-# define SWAP4BYTES(l)                         \
-	 {                                     \
-		 struct {                      \
-			 unsigned t:32;        \
-		 } bit32;                      \
-		 char n, *tp = (char *)&bit32; \
-		 bit32.t = l;                  \
-		 n = tp[0];                    \
-		 tp[0] = tp[3];                \
-		 tp[3] = n;                    \
-		 n = tp[1];                    \
-		 tp[1] = tp[2];                \
-		 tp[2] = n;                    \
-		 l = bit32.t;                  \
-	 }
+# define SWAP4BYTES(l)           \
+  {                              \
+   struct {                      \
+    unsigned t:32;               \
+   } bit32;                      \
+   char n, *tp = (char *)&bit32; \
+   bit32.t = l;                  \
+   n = tp[0];                    \
+   tp[0] = tp[3];                \
+   tp[3] = n;                    \
+   n = tp[1];                    \
+   tp[1] = tp[2];                \
+   tp[2] = n;                    \
+   l = bit32.t;                  \
+  }
 
-# define SWAP2BYTES(s)                         \
-	 {                                     \
-		 struct {                      \
-			 unsigned t:16;        \
-		 } bit16;                      \
-		 char n, *tp = (char *)&bit16; \
-		 bit16.t = s;                  \
-		 n = tp[0];                    \
-		 tp[0] = tp[1];                \
-		 tp[1] = n;                    \
-		 s = bit16.t;                  \
-	 }
+# define SWAP2BYTES(s)           \
+  {                              \
+   struct {                      \
+    unsigned t:16;               \
+   } bit16;                      \
+   char n, *tp = (char *)&bit16; \
+   bit16.t = s;                  \
+   n = tp[0];                    \
+   tp[0] = tp[1];                \
+   tp[1] = n;                    \
+   s = bit16.t;                  \
+  }
 
 
 /** Private extern functions */
