@@ -32,6 +32,6 @@ echo "${MESON_INSTALL_PREFIX}/lib" > "${DESTDIR}/etc/ld.so.conf.d/osiris.conf"
 # Generate the profile file
 
 echo '#!/bin/bash' > "${DESTDIR}/etc/profile.d/osiris.sh"
-echo "${MESON_INSTALL_PREFIX}/bin" >> "${DESTDIR}/etc/profile.d/osiris.sh"
+echo "export PATH=\$PATH:${MESON_INSTALL_PREFIX}/bin" >> "${DESTDIR}/etc/profile.d/osiris.sh"
 chmod +x "${DESTDIR}/etc/profile.d/osiris.sh"
 

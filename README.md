@@ -108,7 +108,7 @@ Getting the clipboard implemented correctly under X11 is ridiculously complicate
 
 **New for 2.4.2:** The build system has changed to Meson, so it's even easier to compile and install Osiris.
 
-**Notes for Ubuntu systems:** You will need to install the following packages to build Osiris: `libx11-dev gawk bison flex build-essential libjpeg62-dev libxext-dev libxft-dev libglu1-mesa-dev libxmu-dev`
+**Notes for Ubuntu systems:** You will need to install the following packages to build Osiris: `libx11-dev gawk bison flex build-essential libjpeg62-dev libxext-dev libxft-dev libglu1-mesa-dev libxmu-dev meson libjpeg-dev`
 
 **Notes for Debian 12 and up:** Unfortunately, the `meson` package in Debian stable is too old. You will need to install Meson from Debian backports. Run the following commands as root:
 ```
