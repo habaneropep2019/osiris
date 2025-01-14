@@ -129,7 +129,7 @@ sudo apt install osiris originator osiris-dev-tools osiris-dev osiris-doc origin
 
 #### Debian Instructions
 
-Supported architectures: `amd64`
+Supported architectures: `amd64`, `i386`
 
 Supported releases: **bookworm**
 
