@@ -129,9 +129,11 @@ sudo apt install osiris originator osiris-dev-tools osiris-dev osiris-doc origin
 
 #### Debian Instructions
 
-Supported architectures: `amd64`, `i386`
+Supported architectures: `amd64`, `i386`, `arm64`
 
-*Note on supported architectures:* The `i386` packages were built for Pentium II or higher machines. If you need support for Pentium machines, you should compile Osiris per the build instructions below.
+*Notes on supported architectures:* 
+- The `i386` packages were built for Pentium II or higher machines. If you need support for Pentium machines, you should compile Osiris per the build instructions below.
+- The `arm64` port isn't as well tested as the others, due to not having a good ARM board on hand right now. Please file a bug report if you have any issues.
 
 Supported releases: **bookworm**
 
