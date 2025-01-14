@@ -131,6 +131,8 @@ sudo apt install osiris originator osiris-dev-tools osiris-dev osiris-doc origin
 
 Supported architectures: `amd64`, `i386`
 
+*Note on supported architectures:* The `i386` packages were built for Pentium II or higher machines. If you need support for Pentium machines, you should compile Osiris per the build instructions below.
+
 Supported releases: **bookworm**
 
 To add the official Libranext Pub-Package repository for Debian, run the following commands as root (substituting your distribution codename):
