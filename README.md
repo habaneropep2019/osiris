@@ -108,7 +108,11 @@ Getting the clipboard implemented correctly under X11 is ridiculously complicate
 
 #### Ubuntu Instructions
 
-To add the official Libranext Pub-Package repository for Ubuntu, run the following commands:
+Supported architectures: `amd64`
+
+Supported releases: **noble**
+
+To add the official Libranext Pub-Package repository for Ubuntu, run the following commands (substituting your distribution codename):
 
 ```
 sudo echo 'deb https://debpkg.libranext.com/pub/ubuntu <your distribution here> main' > /etc/apt/sources.list.d/libranext-pub.list
@@ -121,6 +125,27 @@ After adding the repository, run the following commands to install Osiris:
 
 ```
 sudo apt install osiris originator osiris-dev-tools osiris-dev osiris-doc originator-doc
+```
+
+#### Debian Instructions
+
+Supported architectures: `amd64`
+
+Supported releases: **bookworm**
+
+To add the official Libranext Pub-Package repository for Debian, run the following commands as root (substituting your distribution codename):
+
+```
+echo 'deb https://debpkg.libranext.com/pub/debian <your distribution here> main' > /etc/apt/sources.list.d/libranext-pub.list
+wget https://debpkg.libranext.com/pub/debian/pool/main/libranext-debpkg-keyring_2025_all.deb
+dpkg -i libranext-debpkg-keyring_2025_all.deb
+apt update
+```
+
+After adding the repository, run the following commands to install Osiris:
+
+```
+apt install osiris originator osiris-dev-tools osiris-dev osiris-doc originator-doc
 ```
 
 ## Building and debugging
