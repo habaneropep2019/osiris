@@ -108,7 +108,9 @@ Getting the clipboard implemented correctly under X11 is ridiculously complicate
 
 #### Ubuntu Instructions
 
-Supported architectures: `amd64`
+Supported architectures: `amd64`, `arm64`
+
+*Note on supported architectures:* The `arm64` port isn't as well tested as the others, due to not having a good ARM board on hand right now. Please file a bug report if you have any issues.
 
 Supported releases: **noble**
 
