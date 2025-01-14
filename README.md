@@ -102,6 +102,27 @@ As of April 2024, work on Pysiris has begun, although no release date is availab
 
 Getting the clipboard implemented correctly under X11 is ridiculously complicated. Osiris has some partial fixes to improve X11 clipboard functionality over Qt2.3.2, but it's still not perfect. For now, clipboard functionality is still on the to-do list, although it's not top priority unless we get a lot of users needing it for their applications. The reason being that the clipboard will be re-implemented when Wayland support happens, so it's not currently worth spending a lot of time on.
 
+## Packages for Supported Distributions
+
+**New for 2.4.3**: Packages are now available for some distributions!
+
+#### Ubuntu Instructions
+
+To add the official Libranext Pub-Package repository for Ubuntu, run the following commands:
+
+```
+sudo echo 'deb https://debpkg.libranext.com/pub/ubuntu <your distribution here> main' > /etc/apt/sources.list.d/libranext-pub.list
+wget https://debpkg.libranext.com/pub/ubuntu/pool/main/libranext-debpkg-keyring_2025_all.deb
+sudo dpkg -i libranext-debpkg-keyring_2025_all.deb
+sudo apt update
+```
+
+After adding the repository, run the following commands to install Osiris:
+
+```
+sudo apt install osiris originator osiris-dev-tools osiris-dev osiris-doc originator-doc
+```
+
 ## Building and debugging
 
 #### Building a release version on Linux platforms
