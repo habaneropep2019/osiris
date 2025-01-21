@@ -46,6 +46,10 @@ It's important to note that some files may be (or have been) replaced with new o
 
 Osiris is distributed and modified under the terms of the GNU GPL version 2 (with the exception of some individual files that may be more permissively licensed). As of version 2.4.1 or newer, files and/or changes that are only available under GPLv2 are used (modern `libpng` support, for example), effectively preventing compilation of Osiris as we distribute it under any of the other licenses.
 
+### Licensing of documentation
+
+Specifically, the new Markdown documentation (`doc/md`) is MIT-licensed.
+
 #### About using Osiris under a Qt commercial license
 
 The Osiris project nor Libranext Computer Systems play any part in the commerical licensing of Qt. Please refer to your specific license and/or contract terms. We can not help you with that. The vanilla source code can be found here as the first commit of code, or the tag Qt2.3.2-vanilla. Later commits have introduced files and/or changes that are not available under a Qt commercial license. It is your responsibility to audit source code to ensure license compatability. We do not provide support or licensing for any Qt products, and are not affiliated with Qt in any way.
