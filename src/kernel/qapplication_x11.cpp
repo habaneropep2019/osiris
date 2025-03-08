@@ -35,6 +35,20 @@
 **
 **********************************************************************/
 
+/****************************************************************************
+ * Sections marked as backported from TQt3 were obtained from the
+ * Trinty Desktop Project
+ * Based on Commit(s): 4c88497ef34c59f17a5e64bf65e97b9476353ca8
+ * Taken from Trinity CGit at
+ * https://mirror.git.trinitydesktop.org/cgit/tqt3/
+ *
+ * The TQt3 code is GPLv2/3 or later. The backport modifications
+ * are released under the same license.
+ *
+ * Backported by Alec A Bloss.
+**********************************************************************/
+
+
 // NOT REVISED
 
 #define select _qt_hide_select
@@ -328,6 +342,14 @@ static short mouseXPos, mouseYPos; // mouse pres position in act window
 static short mouseGlobalXPos, mouseGlobalYPos; // global mouse press position
 
 extern QWidgetList *qt_modal_stack; // stack of modal widgets
+
+// Backported from TQt3
+
+static bool ignoreNextMouseReleaseEvent = FALSE; // ignore the next mouse release
+												// event if return from a modal
+												// widget
+// end backport
+
 static QWidget *popupButtonFocus = 0;
 static QWidget *popupOfPopupButtonFocus = 0;
 static bool popupCloseDownMode = FALSE;
@@ -413,7 +435,8 @@ static int composingKeycode = 0;
 static QTextCodec *input_mapper = 0;
 
 QObject *qt_clipboard = 0;
-Time qt_x_time = CurrentTime;
+Q_EXPORT Time qt_x_time = CurrentTime;
+Q_EXPORT Time qt_x_user_time = CurrentTime;
 extern bool qt_check_selection_sentinel(XEvent *); // def in qclipboard_x11
 
 static void qt_save_rootinfo();
@@ -2920,31 +2943,42 @@ unrecognized widget.
 
 \sa x11EventFilter()
 */
+
+// This section was backported from TQt3
 int QApplication::x11ProcessEvent(XEvent *event)
 {
-	switch (event->type) {
-	case ButtonPress:
-	case ButtonRelease:
-		qt_x_time = event->xbutton.time;
-		break;
-	case MotionNotify:
-		qt_x_time = event->xmotion.time;
-		break;
-	case XKeyPress:
-	case XKeyRelease:
-		qt_x_time = event->xkey.time;
-		break;
-	case PropertyNotify:
-		qt_x_time = event->xproperty.time;
-		break;
-	case EnterNotify:
-	case LeaveNotify:
-		qt_x_time = event->xcrossing.time;
-		qt_x_time = event->xcrossing.time;
-		break;
-	default:
-		break;
-	}
+    switch ( event->type ) {
+    case ButtonPress:
+	ignoreNextMouseReleaseEvent = FALSE;
+	qt_x_user_time = event->xbutton.time;
+	// fallthrough intended
+    case ButtonRelease:
+	qt_x_time = event->xbutton.time;
+	break;
+    case MotionNotify:
+	qt_x_time = event->xmotion.time;
+	break;
+    case XKeyPress:
+	qt_x_user_time = event->xkey.time;
+	// fallthrough intended
+    case XKeyRelease:
+	qt_x_time = event->xkey.time;
+	break;
+    case PropertyNotify:
+	qt_x_time = event->xproperty.time;
+	break;
+    case EnterNotify:
+    case LeaveNotify:
+	qt_x_time = event->xcrossing.time;
+	break;
+    case SelectionClear:
+	qt_x_time = event->xselectionclear.time;
+	break;
+    default:
+	break;
+    }
+
+// end backport
 
 	if (qt_x11EventFilter(event)) // send through app filter
 		return 1;
@@ -3138,8 +3172,16 @@ int QApplication::x11ProcessEvent(XEvent *event)
 	if (widget->x11Event(event)) // send through widget filter
 		return 1;
 
+	// backported fixes from TQt3
+
 	switch (event->type) {
 	case ButtonPress: // mouse event
+		if ( ignoreNextMouseReleaseEvent ) {
+	    ignoreNextMouseReleaseEvent = FALSE;
+	    break;
+	}
+	// fall through intended
+	// end backport
 	case ButtonRelease:
 	case MotionNotify:
 		widget->translateMouseEvent(event);
@@ -3512,6 +3554,9 @@ void qt_enter_modal(QWidget *widget)
 		QEvent e(QEvent::Leave);
 		QApplication::sendEvent(w, &e);
 	}
+	// backported from TQt3
+	ignoreNextMouseReleaseEvent = FALSE;
+	// end backport
 }
 
 
