@@ -1068,38 +1068,41 @@ void QWidget::setMouseTracking(bool enable)
   \sa releaseMouse(), grabKeyboard(), releaseKeyboard()
 */
 
+// backported fixes from TQt3
+
 void QWidget::grabMouse()
 {
-	if (!qt_nograb()) {
-		if (mouseGrb)
-			mouseGrb->releaseMouse();
+    if ( isVisible() && !qt_nograb() ) {
+	if ( mouseGrb )
+	    mouseGrb->releaseMouse();
 #if defined(CHECK_STATE)
-		int status =
+	int status =
 #endif
-			XGrabPointer(x11Display(), winId(), False,
-				     (uint)(ButtonPressMask |
-					    ButtonReleaseMask |
-					    PointerMotionMask |
-					    EnterWindowMask | LeaveWindowMask),
-				     GrabModeAsync, GrabModeAsync, None, None,
-				     qt_x_time);
+	    XGrabPointer( x11Display(), winId(), False,
+			  (uint)( ButtonPressMask | ButtonReleaseMask |
+				  PointerMotionMask | EnterWindowMask |
+				  LeaveWindowMask ),
+			  GrabModeAsync, GrabModeAsync,
+			  None, None, CurrentTime ); // For whatever reason, qt_x_time doesn't work here.
+										// I've spent hours on this one. qt_x_time increments seemingly correctly.
+										// Yet, it always results in a GrabInvalidTime
+										// CurrentTime should be sufficient. Credit to kdchambers for exploring this solution.
 #if defined(CHECK_STATE)
-		if (status) {
-			const char *s = status == GrabNotViewable ?
-						"\"GrabNotViewable\"" :
-					status == AlreadyGrabbed ?
-						"\"AlreadyGrabbed\"" :
-					status == GrabFrozen ?
-						"\"GrabFrozen\"" :
-					status == GrabInvalidTime ?
-						"\"GrabInvalidTime\"" :
-						"<?>";
-			qWarning("Grabbing the mouse failed with %s", s);
-		}
-#endif
-		mouseGrb = this;
+	if ( status ) {
+	    const char *s =
+		status == GrabNotViewable ? "\"GrabNotViewable\"" :
+		status == AlreadyGrabbed  ? "\"AlreadyGrabbed\"" :
+		status == GrabFrozen      ? "\"GrabFrozen\"" :
+		status == GrabInvalidTime ? "\"GrabInvalidTime\"" :
+		"<?>";
+	    qWarning( "Grabbing the mouse failed with %s", s );
 	}
+#endif
+	mouseGrb = this;
+    }
 }
+
+//end backport
 
 /*!
   Grabs the mouse input and changes the cursor shape.
