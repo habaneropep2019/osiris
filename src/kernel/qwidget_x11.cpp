@@ -47,7 +47,7 @@
  * are released under the same license.
  *
  * Backported by Alec A Bloss.
-**********************************************************************/
+ **********************************************************************/
 
 #include "qapplication.h"
 #include "qpaintdevicemetrics.h"
@@ -1072,37 +1072,46 @@ void QWidget::setMouseTracking(bool enable)
 
 void QWidget::grabMouse()
 {
-    if ( isVisible() && !qt_nograb() ) {
-	if ( mouseGrb )
-	    mouseGrb->releaseMouse();
+	if (isVisible() && !qt_nograb()) {
+		if (mouseGrb)
+			mouseGrb->releaseMouse();
 #if defined(CHECK_STATE)
-	int status =
+		int status =
 #endif
-	    XGrabPointer( x11Display(), winId(), False,
-			  (uint)( ButtonPressMask | ButtonReleaseMask |
-				  PointerMotionMask | EnterWindowMask |
-				  LeaveWindowMask ),
-			  GrabModeAsync, GrabModeAsync,
-			  None, None, CurrentTime ); // For whatever reason, qt_x_time doesn't work here.
-										// I've spent hours on this one. qt_x_time increments seemingly correctly.
-										// Yet, it always results in a GrabInvalidTime
-										// CurrentTime should be sufficient. Credit to kdchambers for exploring this solution.
+			XGrabPointer(
+				x11Display(), winId(), False,
+				(uint)(ButtonPressMask | ButtonReleaseMask |
+				       PointerMotionMask | EnterWindowMask |
+				       LeaveWindowMask),
+				GrabModeAsync, GrabModeAsync, None, None,
+				CurrentTime); // For whatever reason, qt_x_time
+					      // doesn't work here. I've spent
+					      // hours on this one. qt_x_time
+					      // increments seemingly correctly.
+					      // Yet, it always results in a
+					      // GrabInvalidTime CurrentTime
+					      // should be sufficient. Credit to
+					      // kdchambers for exploring this
+					      // solution.
 #if defined(CHECK_STATE)
-	if ( status ) {
-	    const char *s =
-		status == GrabNotViewable ? "\"GrabNotViewable\"" :
-		status == AlreadyGrabbed  ? "\"AlreadyGrabbed\"" :
-		status == GrabFrozen      ? "\"GrabFrozen\"" :
-		status == GrabInvalidTime ? "\"GrabInvalidTime\"" :
-		"<?>";
-	    qWarning( "Grabbing the mouse failed with %s", s );
+		if (status) {
+			const char *s = status == GrabNotViewable ?
+						"\"GrabNotViewable\"" :
+					status == AlreadyGrabbed ?
+						"\"AlreadyGrabbed\"" :
+					status == GrabFrozen ?
+						"\"GrabFrozen\"" :
+					status == GrabInvalidTime ?
+						"\"GrabInvalidTime\"" :
+						"<?>";
+			qWarning("Grabbing the mouse failed with %s", s);
+		}
+#endif
+		mouseGrb = this;
 	}
-#endif
-	mouseGrb = this;
-    }
 }
 
-//end backport
+// end backport
 
 /*!
   Grabs the mouse input and changes the cursor shape.
@@ -1120,33 +1129,40 @@ void QWidget::grabMouse()
 
 void QWidget::grabMouse(const QCursor &cursor)
 {
-    if ( !qt_nograb() ) {
-	if ( mouseGrb != this ) {
-	    if ( mouseGrb ) {
-		mouseGrb->releaseMouse();
-	    }
+	if (!qt_nograb()) {
+		if (mouseGrb != this) {
+			if (mouseGrb) {
+				mouseGrb->releaseMouse();
+			}
 #if defined(CHECK_STATE)
-	    int status =
+			int status =
 #endif
-	        XGrabPointer( x11Display(), winId(), False,
-		    (uint)(ButtonPressMask | ButtonReleaseMask |
-		    PointerMotionMask | EnterWindowMask | LeaveWindowMask),
-		    GrabModeAsync, GrabModeAsync,
-		    None, cursor.handle(), qt_x_time );
+				XGrabPointer(x11Display(), winId(), False,
+					     (uint)(ButtonPressMask |
+						    ButtonReleaseMask |
+						    PointerMotionMask |
+						    EnterWindowMask |
+						    LeaveWindowMask),
+					     GrabModeAsync, GrabModeAsync, None,
+					     cursor.handle(), qt_x_time);
 #if defined(CHECK_STATE)
-	    if ( status ) {
-	        const char *s =
-		    status == GrabNotViewable ? "\"GrabNotViewable\"" :
-		    status == AlreadyGrabbed  ? "\"AlreadyGrabbed\"" :
-		    status == GrabFrozen      ? "\"GrabFrozen\"" :
-		    status == GrabInvalidTime ? "\"GrabInvalidTime\"" :
-						"<?>";
-	        qWarning( "Grabbing the mouse failed with %s", s );
-	    }
+			if (status) {
+				const char *s = status == GrabNotViewable ?
+							"\"GrabNotViewable\"" :
+						status == AlreadyGrabbed ?
+							"\"AlreadyGrabbed\"" :
+						status == GrabFrozen ?
+							"\"GrabFrozen\"" :
+						status == GrabInvalidTime ?
+							"\"GrabInvalidTime\"" :
+							"<?>";
+				qWarning("Grabbing the mouse failed with %s",
+					 s);
+			}
 #endif
-	    mouseGrb = this;
+			mouseGrb = this;
+		}
 	}
-    }
 }
 
 
@@ -1180,15 +1196,16 @@ void QWidget::releaseMouse()
 
 void QWidget::grabKeyboard()
 {
-    if ( !qt_nograb() ) {
-	if ( keyboardGrb != this ) {
-	    if ( keyboardGrb ) {
-		keyboardGrb->releaseKeyboard();
-	    }
-	    XGrabKeyboard( x11Display(), winid, False, GrabModeAsync, GrabModeAsync, qt_x_time );
-	    keyboardGrb = this;
+	if (!qt_nograb()) {
+		if (keyboardGrb != this) {
+			if (keyboardGrb) {
+				keyboardGrb->releaseKeyboard();
+			}
+			XGrabKeyboard(x11Display(), winid, False, GrabModeAsync,
+				      GrabModeAsync, qt_x_time);
+			keyboardGrb = this;
+		}
 	}
-    }
 }
 
 // end backport

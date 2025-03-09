@@ -46,7 +46,7 @@
  * are released under the same license.
  *
  * Backported by Alec A Bloss.
-**********************************************************************/
+ **********************************************************************/
 
 
 // NOT REVISED
@@ -345,9 +345,9 @@ extern QWidgetList *qt_modal_stack; // stack of modal widgets
 
 // Backported from TQt3
 
-static bool ignoreNextMouseReleaseEvent = FALSE; // ignore the next mouse release
-												// event if return from a modal
-												// widget
+static bool ignoreNextMouseReleaseEvent = FALSE; // ignore the next mouse
+						 // release event if return from
+						 // a modal widget
 // end backport
 
 static QWidget *popupButtonFocus = 0;
@@ -2947,38 +2947,38 @@ unrecognized widget.
 // This section was backported from TQt3
 int QApplication::x11ProcessEvent(XEvent *event)
 {
-    switch ( event->type ) {
-    case ButtonPress:
-	ignoreNextMouseReleaseEvent = FALSE;
-	qt_x_user_time = event->xbutton.time;
-	// fallthrough intended
-    case ButtonRelease:
-	qt_x_time = event->xbutton.time;
-	break;
-    case MotionNotify:
-	qt_x_time = event->xmotion.time;
-	break;
-    case XKeyPress:
-	qt_x_user_time = event->xkey.time;
-	// fallthrough intended
-    case XKeyRelease:
-	qt_x_time = event->xkey.time;
-	break;
-    case PropertyNotify:
-	qt_x_time = event->xproperty.time;
-	break;
-    case EnterNotify:
-    case LeaveNotify:
-	qt_x_time = event->xcrossing.time;
-	break;
-    case SelectionClear:
-	qt_x_time = event->xselectionclear.time;
-	break;
-    default:
-	break;
-    }
+	switch (event->type) {
+	case ButtonPress:
+		ignoreNextMouseReleaseEvent = FALSE;
+		qt_x_user_time = event->xbutton.time;
+		// fallthrough intended
+	case ButtonRelease:
+		qt_x_time = event->xbutton.time;
+		break;
+	case MotionNotify:
+		qt_x_time = event->xmotion.time;
+		break;
+	case XKeyPress:
+		qt_x_user_time = event->xkey.time;
+		// fallthrough intended
+	case XKeyRelease:
+		qt_x_time = event->xkey.time;
+		break;
+	case PropertyNotify:
+		qt_x_time = event->xproperty.time;
+		break;
+	case EnterNotify:
+	case LeaveNotify:
+		qt_x_time = event->xcrossing.time;
+		break;
+	case SelectionClear:
+		qt_x_time = event->xselectionclear.time;
+		break;
+	default:
+		break;
+	}
 
-// end backport
+	// end backport
 
 	if (qt_x11EventFilter(event)) // send through app filter
 		return 1;
@@ -3176,10 +3176,10 @@ int QApplication::x11ProcessEvent(XEvent *event)
 
 	switch (event->type) {
 	case ButtonPress: // mouse event
-		if ( ignoreNextMouseReleaseEvent ) {
-	    ignoreNextMouseReleaseEvent = FALSE;
-	    break;
-	}
+		if (ignoreNextMouseReleaseEvent) {
+			ignoreNextMouseReleaseEvent = FALSE;
+			break;
+		}
 	// fall through intended
 	// end backport
 	case ButtonRelease:
