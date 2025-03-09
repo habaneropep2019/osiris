@@ -1130,7 +1130,7 @@ void QWidget::grabMouse(const QCursor &cursor)
 		    PointerMotionMask | EnterWindowMask | LeaveWindowMask),
 		    GrabModeAsync, GrabModeAsync,
 		    None, cursor.handle(), qt_x_time );
-#if defined(QT_CHECK_STATE)
+#if defined(CHECK_STATE)
 	    if ( status ) {
 	        const char *s =
 		    status == GrabNotViewable ? "\"GrabNotViewable\"" :
@@ -1138,7 +1138,7 @@ void QWidget::grabMouse(const QCursor &cursor)
 		    status == GrabFrozen      ? "\"GrabFrozen\"" :
 		    status == GrabInvalidTime ? "\"GrabInvalidTime\"" :
 						"<?>";
-	        tqWarning( "Grabbing the mouse failed with %s", s );
+	        qWarning( "Grabbing the mouse failed with %s", s );
 	    }
 #endif
 	    mouseGrb = this;
