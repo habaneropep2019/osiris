@@ -731,6 +731,7 @@ tools_headers = [
     tools_header_path / 'qeuckrcodec.h',
     tools_header_path / 'qfile.h',
     tools_header_path / 'qfileinfo.h',
+    tools_header_path / 'qfiledefs_p.h',
     tools_header_path / 'qkoi8codec.h',
     tools_header_path / 'qfeatures.h',
     tools_header_path / 'qgarray.h',
