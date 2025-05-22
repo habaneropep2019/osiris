@@ -166,7 +166,14 @@ apt install osiris originator osiris-dev-tools osiris-dev osiris-doc originator-
 
 **Notes for Ubuntu systems:** You will need to install the following packages to build Osiris: `libx11-dev gawk bison flex build-essential libjpeg62-dev libxext-dev libxft-dev libglu1-mesa-dev libxmu-dev meson libjpeg-dev`
 
-**Notes for Debian 12 and up:** Unfortunately, the `meson` package in Debian stable is too old. You will need to install Meson from Debian backports. Run the following commands as root:
+**Notes for Debian 13:** Given Trixie is in RC at the time of writing this, it's possible these instructions may change (though it's not terribly likely). Please report a bug if you have any issues.
+
+Meson is now new enough to not require backports. Run the following command to install the required dependencies:
+```
+apt install xorg-dev libglu1-mesa-dev libjpeg-dev meson zlib1g-dev
+```
+
+**Notes for Debian 12:** Unfortunately, the `meson` package in Debian stable is too old. You will need to install Meson from Debian backports. Run the following commands as root:
 ```
 echo "deb http://deb.debian.org/debian bookworm-backports main" >> /etc/apt/sources.list.d/backports.list
 apt update
