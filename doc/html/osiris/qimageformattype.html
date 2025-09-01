@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QImageFormatType Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -30,13 +30,13 @@ Factory that makes <a href="qimageformat.html">QImageFormat</a> objects.
 <p><a href="qimageformattype-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">virtual <a href="#a05742"><b>~QImageFormatType</b></a> () </div>
-<li><div class="fn">virtual QImageFormat* <a href="#4fa43c"><b>decoderFor</b></a> ( const uchar * buffer, int length ) </div>
-<li><div class="fn">virtual const char* <a href="#69a58a"><b>formatName</b></a> () const</div>
+<li><div class="fn">virtualÂ <a href="#a05742"><b>~QImageFormatType</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ QImageFormat*Â <a href="#4fa43c"><b>decoderFor</b></a>Â (Â constÂ ucharÂ *Â buffer, intÂ lengthÂ )Â </div>
+<li><div class="fn">virtualÂ constÂ char*Â <a href="#69a58a"><b>formatName</b></a>Â ()Â const</div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><div class="fn"><a href="#f1202f"><b>QImageFormatType</b></a> () </div>
+<li><div class="fn"><a href="#f1202f"><b>QImageFormatType</b></a>Â ()Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 Factory that makes <a href="qimageformat.html">QImageFormat</a> objects.
@@ -56,17 +56,17 @@ last will override the earlier one, thus you can override current
 and future built-in formats.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="f1202f"></a>QImageFormatType::QImageFormatType () <code>[protected]</code></h3>
+<h3 class="fn"><a name="f1202f"></a>QImageFormatType::QImageFormatTypeÂ () <code>[protected]</code></h3>
 <p>Constructs a factory.  It automatically registers itself with <a href="qimagedecoder.html">QImageDecoder</a>.
-<h3 class="fn"><a name="a05742"></a>QImageFormatType::~QImageFormatType () <code>[virtual]</code></h3>
+<h3 class="fn"><a name="a05742"></a>QImageFormatType::~QImageFormatTypeÂ () <code>[virtual]</code></h3>
 <p>Destroys a factory.  It automatically unregisters itself from <a href="qimagedecoder.html">QImageDecoder</a>.
-<h3 class="fn">virtual <a href="qimageformat.html">QImageFormat</a>* <a name="4fa43c"></a>QImageFormatType::decoderFor ( const uchar * buffer, int length ) <code>[virtual]</code></h3>
+<h3 class="fn">virtualÂ <a href="qimageformat.html">QImageFormat</a>*Â <a name="4fa43c"></a>QImageFormatType::decoderForÂ (Â constÂ ucharÂ *Â buffer, intÂ lengthÂ ) <code>[virtual]</code></h3>
 <p>Returns a decoder for decoding an image which starts with the give bytes.
 This function should only return a decoder if it is definite that the
 decoder applies to data with the given header.  Returns 0 if there is
 insufficient data in the header to make a positive identification,
 or if the data is not recognized.
-<h3 class="fn">virtual const char* <a name="69a58a"></a>QImageFormatType::formatName () const <code>[virtual]</code></h3>
+<h3 class="fn">virtualÂ constÂ char*Â <a name="69a58a"></a>QImageFormatType::formatNameÂ ()Â const <code>[virtual]</code></h3>
 <p>Returns the name of the format supported by decoders from this factory.
 The string is statically allocated.
 <hr><p>
@@ -80,6 +80,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

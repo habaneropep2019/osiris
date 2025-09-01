@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QDataSink Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,10 +32,10 @@ Inherits <a href="qasyncio.html">QAsyncIO</a>.
 <p><a href="qdatasink-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">virtual int <a href="#2dd8b7"><b>readyToReceive</b></a> () </div>
-<li><div class="fn">virtual void <a href="#4a6064"><b>receive</b></a> ( const uchar *, int count ) </div>
-<li><div class="fn">virtual void <a href="#e0c9df"><b>eof</b></a> () </div>
-<li><div class="fn">void <a href="#746b3e"><b>maybeReady</b></a> () </div>
+<li><div class="fn">virtualÂ intÂ <a href="#2dd8b7"><b>readyToReceive</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#4a6064"><b>receive</b></a>Â (Â constÂ ucharÂ *, intÂ countÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#e0c9df"><b>eof</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#746b3e"><b>maybeReady</b></a>Â ()Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QDataSink class is an asynchronous consumer of data.
@@ -48,16 +48,16 @@ is currently able to process.
 <p>See also  <a href="qasyncio.html">QAsyncIO</a>, <a href="qdatasource.html">QDataSource</a> and <a href="qdatapump.html">QDataPump</a>.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn">void <a name="e0c9df"></a>QDataSink::eof () <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="e0c9df"></a>QDataSink::eofÂ () <code>[virtual]</code></h3>
 <p>This function will be called when no more data is available for
 processing.
-<h3 class="fn">void <a name="746b3e"></a>QDataSink::maybeReady ()</h3>
+<h3 class="fn">voidÂ <a name="746b3e"></a>QDataSink::maybeReadyÂ ()</h3>
 <p>This should be called whenever <a href="#2dd8b7">readyToReceive</a>() might have become non-zero.
 It is merely calls <a href="qasyncio.html#ba677b">QAsyncIO::ready</a>() if readyToReceive() is non-zero.
-<h3 class="fn">int <a name="2dd8b7"></a>QDataSink::readyToReceive () <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="2dd8b7"></a>QDataSink::readyToReceiveÂ () <code>[virtual]</code></h3>
 <p>The data sink should return a value indicating how much data it is ready
 to consume.  This may be 0.
-<h3 class="fn">void <a name="4a6064"></a>QDataSink::receive ( const uchar *, int count ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="4a6064"></a>QDataSink::receiveÂ (Â constÂ ucharÂ *, intÂ countÂ ) <code>[virtual]</code></h3>
 <p>This function is called to provide data for the data sink.  The count
 will be no more than the amount indicated by the most recent call to
 <a href="#2dd8b7">readyToReceive</a>().  The sink must use all the provided data.
@@ -72,6 +72,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

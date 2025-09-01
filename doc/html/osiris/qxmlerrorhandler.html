@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QXmlErrorHandler Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -31,10 +31,10 @@ The QXmlErrorHandler class provides an interface to report errors in XML data.
 <p><a href="qxmlerrorhandler-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">virtual bool <a href="#c25b05"><b>warning</b></a> ( const QXmlParseException &amp; exception ) </div>
-<li><div class="fn">virtual bool <a href="#2d6c2b"><b>error</b></a> ( const QXmlParseException &amp; exception ) </div>
-<li><div class="fn">virtual bool <a href="#9c13b2"><b>fatalError</b></a> ( const QXmlParseException &amp; exception ) </div>
-<li><div class="fn">virtual QString <a href="#6bc894"><b>errorString</b></a> () </div>
+<li><div class="fn">virtualÂ boolÂ <a href="#c25b05"><b>warning</b></a>Â (Â constÂ QXmlParseExceptionÂ &amp;Â exceptionÂ )Â </div>
+<li><div class="fn">virtualÂ boolÂ <a href="#2d6c2b"><b>error</b></a>Â (Â constÂ QXmlParseExceptionÂ &amp;Â exceptionÂ )Â </div>
+<li><div class="fn">virtualÂ boolÂ <a href="#9c13b2"><b>fatalError</b></a>Â (Â constÂ QXmlParseExceptionÂ &amp;Â exceptionÂ )Â </div>
+<li><div class="fn">virtualÂ QStringÂ <a href="#6bc894"><b>errorString</b></a>Â ()Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QXmlErrorHandler class provides an interface to report errors in XML data.
@@ -46,7 +46,7 @@ customized error handling, you should subclass this class.
 <p>See also  <a href="qxmldtdhandler.html">QXmlDTDHandler</a>, <a href="qxmldeclhandler.html">QXmlDeclHandler</a>, <a href="qxmlcontenthandler.html">QXmlContentHandler</a>, <a href="qxmlentityresolver.html">QXmlEntityResolver</a> and <a href="qxmllexicalhandler.html">QXmlLexicalHandler</a>.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn">bool <a name="2d6c2b"></a>QXmlErrorHandler::error ( const <a href="qxmlparseexception.html">QXmlParseException</a> &amp; exception ) <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="2d6c2b"></a>QXmlErrorHandler::errorÂ (Â constÂ <a href="qxmlparseexception.html">QXmlParseException</a>Â &amp;Â exceptionÂ ) <code>[virtual]</code></h3>
 <p>A reader might use this function to report a recoverable error. A recoverable
 error corresponds to the definiton of "error" in section 1.2 of the XML 1.0
 specification.
@@ -56,15 +56,15 @@ function.
 an error. The reader will use the function <a href="#6bc894">errorString</a>() to get the error
 message that will be used for reporting the error.
 <p>Reimplemented in <a href="qxmldefaulthandler.html#bf6948">QXmlDefaultHandler</a>.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="6bc894"></a>QXmlErrorHandler::errorString () <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="6bc894"></a>QXmlErrorHandler::errorStringÂ () <code>[virtual]</code></h3>
 <p>The reader calls this function to get an error string if any of the handler
 functions returns FALSE to him.
-<h3 class="fn">bool <a name="9c13b2"></a>QXmlErrorHandler::fatalError ( const <a href="qxmlparseexception.html">QXmlParseException</a> &amp; exception ) <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="9c13b2"></a>QXmlErrorHandler::fatalErrorÂ (Â constÂ <a href="qxmlparseexception.html">QXmlParseException</a>Â &amp;Â exceptionÂ ) <code>[virtual]</code></h3>
 <p>A reader must use this function to report a non-recoverable error.
 <p>If this function returns TRUE the reader might try to go on parsing and
 reporting further errors; but no regular parsing events are reported.
 <p>Reimplemented in <a href="qxmldefaulthandler.html#a69b0a">QXmlDefaultHandler</a>.
-<h3 class="fn">bool <a name="c25b05"></a>QXmlErrorHandler::warning ( const <a href="qxmlparseexception.html">QXmlParseException</a> &amp; exception ) <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="c25b05"></a>QXmlErrorHandler::warningÂ (Â constÂ <a href="qxmlparseexception.html">QXmlParseException</a>Â &amp;Â exceptionÂ ) <code>[virtual]</code></h3>
 <p>A reader might use this function to report a warning. Warnings are conditions
 that are not errors or fatal errors as defined by the XML 1.0 specification.
 <p>If this function returns FALSE the reader will stop parsing and will report
@@ -82,6 +82,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

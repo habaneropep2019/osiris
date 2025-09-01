@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QWMatrix Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -30,29 +30,29 @@ The QWMatrix class specifies 2D transformations of a coordinate system.
 <p><a href="qwmatrix-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#5b24cf"><b>QWMatrix</b></a> () </div>
-<li><div class="fn"><a href="#1ee86a"><b>QWMatrix</b></a> ( double m11, double m12, double m21, double m22, double dx, double dy ) </div>
-<li><div class="fn">void <a href="#758626"><b>setMatrix</b></a> ( double m11, double m12, double m21, double m22, double dx, double dy ) </div>
-<li><div class="fn">double <a href="#b24a8d"><b>m11</b></a> () const</div>
-<li><div class="fn">double <a href="#f60706"><b>m12</b></a> () const</div>
-<li><div class="fn">double <a href="#3da1aa"><b>m21</b></a> () const</div>
-<li><div class="fn">double <a href="#5ceba1"><b>m22</b></a> () const</div>
-<li><div class="fn">double <a href="#58f7fe"><b>dx</b></a> () const</div>
-<li><div class="fn">double <a href="#600479"><b>dy</b></a> () const</div>
-<li><div class="fn">void <a href="#c5581f"><b>map</b></a> ( int x, int y, int * tx, int * ty ) const</div>
-<li><div class="fn">void <a href="#83c725"><b>map</b></a> ( double x, double y, double * tx, double * ty ) const</div>
-<li><div class="fn">QPoint <a href="#fe18db"><b>map</b></a> ( const QPoint &amp; ) const</div>
-<li><div class="fn">QRect <a href="#a5969f"><b>map</b></a> ( const QRect &amp; ) const</div>
-<li><div class="fn">QPointArray <a href="#95bc92"><b>map</b></a> ( const QPointArray &amp; ) const</div>
-<li><div class="fn">void <a href="#e13f59"><b>reset</b></a> () </div>
-<li><div class="fn">QWMatrix&amp; <a href="#e4b716"><b>translate</b></a> ( double dx, double dy ) </div>
-<li><div class="fn">QWMatrix&amp; <a href="#41a356"><b>scale</b></a> ( double sx, double sy ) </div>
-<li><div class="fn">QWMatrix&amp; <a href="#b99fbb"><b>shear</b></a> ( double sh, double sv ) </div>
-<li><div class="fn">QWMatrix&amp; <a href="#71020d"><b>rotate</b></a> ( double a ) </div>
-<li><div class="fn">QWMatrix <a href="#4b7815"><b>invert</b></a> ( bool * = 0 ) const</div>
-<li><div class="fn">bool <a href="#1a89f8"><b>operator==</b></a> ( const QWMatrix &amp; ) const</div>
-<li><div class="fn">bool <a href="#4d0879"><b>operator!=</b></a> ( const QWMatrix &amp; ) const</div>
-<li><div class="fn">QWMatrix&amp; <a href="#9915db"><b>operator*=</b></a> ( const QWMatrix &amp; ) </div>
+<li><div class="fn"><a href="#5b24cf"><b>QWMatrix</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#1ee86a"><b>QWMatrix</b></a>Â (Â doubleÂ m11, doubleÂ m12, doubleÂ m21, doubleÂ m22, doubleÂ dx, doubleÂ dyÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#758626"><b>setMatrix</b></a>Â (Â doubleÂ m11, doubleÂ m12, doubleÂ m21, doubleÂ m22, doubleÂ dx, doubleÂ dyÂ )Â </div>
+<li><div class="fn">doubleÂ <a href="#b24a8d"><b>m11</b></a>Â ()Â const</div>
+<li><div class="fn">doubleÂ <a href="#f60706"><b>m12</b></a>Â ()Â const</div>
+<li><div class="fn">doubleÂ <a href="#3da1aa"><b>m21</b></a>Â ()Â const</div>
+<li><div class="fn">doubleÂ <a href="#5ceba1"><b>m22</b></a>Â ()Â const</div>
+<li><div class="fn">doubleÂ <a href="#58f7fe"><b>dx</b></a>Â ()Â const</div>
+<li><div class="fn">doubleÂ <a href="#600479"><b>dy</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#c5581f"><b>map</b></a>Â (Â intÂ x, intÂ y, intÂ *Â tx, intÂ *Â tyÂ )Â const</div>
+<li><div class="fn">voidÂ <a href="#83c725"><b>map</b></a>Â (Â doubleÂ x, doubleÂ y, doubleÂ *Â tx, doubleÂ *Â tyÂ )Â const</div>
+<li><div class="fn">QPointÂ <a href="#fe18db"><b>map</b></a>Â (Â constÂ QPointÂ &amp;Â )Â const</div>
+<li><div class="fn">QRectÂ <a href="#a5969f"><b>map</b></a>Â (Â constÂ QRectÂ &amp;Â )Â const</div>
+<li><div class="fn">QPointArrayÂ <a href="#95bc92"><b>map</b></a>Â (Â constÂ QPointArrayÂ &amp;Â )Â const</div>
+<li><div class="fn">voidÂ <a href="#e13f59"><b>reset</b></a>Â ()Â </div>
+<li><div class="fn">QWMatrix&amp;Â <a href="#e4b716"><b>translate</b></a>Â (Â doubleÂ dx, doubleÂ dyÂ )Â </div>
+<li><div class="fn">QWMatrix&amp;Â <a href="#41a356"><b>scale</b></a>Â (Â doubleÂ sx, doubleÂ syÂ )Â </div>
+<li><div class="fn">QWMatrix&amp;Â <a href="#b99fbb"><b>shear</b></a>Â (Â doubleÂ sh, doubleÂ svÂ )Â </div>
+<li><div class="fn">QWMatrix&amp;Â <a href="#71020d"><b>rotate</b></a>Â (Â doubleÂ aÂ )Â </div>
+<li><div class="fn">QWMatrixÂ <a href="#4b7815"><b>invert</b></a>Â (Â boolÂ *Â =Â 0Â )Â const</div>
+<li><div class="fn">boolÂ <a href="#1a89f8"><b>operator==</b></a>Â (Â constÂ QWMatrixÂ &amp;Â )Â const</div>
+<li><div class="fn">boolÂ <a href="#4d0879"><b>operator!=</b></a>Â (Â constÂ QWMatrixÂ &amp;Â )Â const</div>
+<li><div class="fn">QWMatrix&amp;Â <a href="#9915db"><b>operator*=</b></a>Â (Â constÂ QWMatrixÂ &amp;Â )Â </div>
 </ul>
 <h2>Related Functions</h2>
 (Note that these are not member functions.)
@@ -145,60 +145,60 @@ build a QWMatrix and call <a href="qpainter.html#862c4d">QPainter::setWorldMatri
  <a href="movies-main-cpp.html#QWMatrix">movies/main.cpp</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="5b24cf"></a>QWMatrix::QWMatrix ()</h3>
+<h3 class="fn"><a name="5b24cf"></a>QWMatrix::QWMatrixÂ ()</h3>
 <p>Constructs an identity matrix.  All elements are set to zero,
 except <em>m11</em> and <em>m22</em> (scaling) which are set to 1.
-<h3 class="fn"><a name="1ee86a"></a>QWMatrix::QWMatrix ( double m11, double m12, double m21, double m22, double dx, double dy )</h3>
+<h3 class="fn"><a name="1ee86a"></a>QWMatrix::QWMatrixÂ (Â doubleÂ m11, doubleÂ m12, doubleÂ m21, doubleÂ m22, doubleÂ dx, doubleÂ dyÂ )</h3>
 <p>Constructs a matrix with the specified elements.
-<h3 class="fn">double <a name="58f7fe"></a>QWMatrix::dx () const</h3>
+<h3 class="fn">doubleÂ <a name="58f7fe"></a>QWMatrix::dxÂ ()Â const</h3>
 <p>Returns the horizontal translation.
-<h3 class="fn">double <a name="600479"></a>QWMatrix::dy () const</h3>
+<h3 class="fn">doubleÂ <a name="600479"></a>QWMatrix::dyÂ ()Â const</h3>
 <p>Returns the vertical translation.
-<h3 class="fn">QWMatrix <a name="4b7815"></a>QWMatrix::invert ( bool * invertible = 0 ) const</h3>
+<h3 class="fn">QWMatrixÂ <a name="4b7815"></a>QWMatrix::invertÂ (Â boolÂ *Â invertibleÂ =Â 0Â )Â const</h3>
 <p>Returns the inverted matrix.
 <p>If the matrix is singular (not invertible), then the identity matrix is
 returned.
 <p>If <em>*invertible</em> is not null, then the value of <em>*invertible</em> will
 be set to TRUE or FALSE to tell if the matrix is invertible or not.
-<h3 class="fn">double <a name="b24a8d"></a>QWMatrix::m11 () const</h3>
+<h3 class="fn">doubleÂ <a name="b24a8d"></a>QWMatrix::m11Â ()Â const</h3>
 <p>Returns the X scaling factor.
-<h3 class="fn">double <a name="f60706"></a>QWMatrix::m12 () const</h3>
+<h3 class="fn">doubleÂ <a name="f60706"></a>QWMatrix::m12Â ()Â const</h3>
 <p>Returns the vertical shearing factor.
-<h3 class="fn">double <a name="3da1aa"></a>QWMatrix::m21 () const</h3>
+<h3 class="fn">doubleÂ <a name="3da1aa"></a>QWMatrix::m21Â ()Â const</h3>
 <p>Returns the horizontal shearing factor.
-<h3 class="fn">double <a name="5ceba1"></a>QWMatrix::m22 () const</h3>
+<h3 class="fn">doubleÂ <a name="5ceba1"></a>QWMatrix::m22Â ()Â const</h3>
 <p>Returns the Y scaling factor.
-<h3 class="fn"><a href="qpoint.html">QPoint</a> <a name="fe18db"></a>QWMatrix::map ( const <a href="qpoint.html">QPoint</a> &amp; p ) const</h3>
+<h3 class="fn"><a href="qpoint.html">QPoint</a>Â <a name="fe18db"></a>QWMatrix::mapÂ (Â constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â pÂ )Â const</h3>
 <p>Returns the transformed <em>p.</em>
-<h3 class="fn"><a href="qpointarray.html">QPointArray</a> <a name="95bc92"></a>QWMatrix::map ( const <a href="qpointarray.html">QPointArray</a> &amp; a ) const</h3>
+<h3 class="fn"><a href="qpointarray.html">QPointArray</a>Â <a name="95bc92"></a>QWMatrix::mapÂ (Â constÂ <a href="qpointarray.html">QPointArray</a>Â &amp;Â aÂ )Â const</h3>
 <p>Returns the point array <em>a</em> transformed by calling map for each point.
-<h3 class="fn"><a href="qrect.html">QRect</a> <a name="a5969f"></a>QWMatrix::map ( const <a href="qrect.html">QRect</a> &amp; r ) const</h3>
+<h3 class="fn"><a href="qrect.html">QRect</a>Â <a name="a5969f"></a>QWMatrix::mapÂ (Â constÂ <a href="qrect.html">QRect</a>Â &amp;Â rÂ )Â const</h3>
 <p>Returns the transformed rectangle <em>r.</em>
 <p>If rotation or shearing has been specified, then the bounding rectangle
 will be returned.
-<h3 class="fn">void <a name="83c725"></a>QWMatrix::map ( double x, double y, double * tx, double * ty ) const</h3>
+<h3 class="fn">voidÂ <a name="83c725"></a>QWMatrix::mapÂ (Â doubleÂ x, doubleÂ y, doubleÂ *Â tx, doubleÂ *Â tyÂ )Â const</h3>
 <p>Transforms <em>(x,y)</em> to <em>(*tx,*ty),</em> using the formulae:
 <p><pre>    *tx = m11*x + m21*y + dx
     *ty = m22*y + m12*x + dy
 </pre>
 <p>Examples:
  <a href="xform-xform-cpp.html#map">xform/xform.cpp</a>
-<h3 class="fn">void <a name="c5581f"></a>QWMatrix::map ( int x, int y, int * tx, int * ty ) const</h3>
+<h3 class="fn">voidÂ <a name="c5581f"></a>QWMatrix::mapÂ (Â intÂ x, intÂ y, intÂ *Â tx, intÂ *Â tyÂ )Â const</h3>
 <p>Transforms <em>(x,y)</em> to <em>(*tx,*ty),</em> using the formulae:
 <p><pre>    *tx = m11*x + m21*y + dx  --  (rounded to the nearest integer)
     *ty = m22*y + m12*x + dy  --  (rounded to the nearest integer)
 </pre>
-<h3 class="fn">bool <a name="4d0879"></a>QWMatrix::operator!= ( const QWMatrix &amp; m ) const</h3>
+<h3 class="fn">boolÂ <a name="4d0879"></a>QWMatrix::operator!=Â (Â constÂ QWMatrixÂ &amp;Â mÂ )Â const</h3>
 <p>Returns TRUE if this matrix is not equal to <em>m.</em>
-<h3 class="fn">QWMatrix &amp; <a name="9915db"></a>QWMatrix::operator*= ( const QWMatrix &amp; m )</h3>
+<h3 class="fn">QWMatrixÂ &amp;Â <a name="9915db"></a>QWMatrix::operator*=Â (Â constÂ QWMatrixÂ &amp;Â mÂ )</h3>
 <p>Returns the result of multiplying this matrix with <em>m.</em>
-<h3 class="fn">bool <a name="1a89f8"></a>QWMatrix::operator== ( const QWMatrix &amp; m ) const</h3>
+<h3 class="fn">boolÂ <a name="1a89f8"></a>QWMatrix::operator==Â (Â constÂ QWMatrixÂ &amp;Â mÂ )Â const</h3>
 <p>Returns TRUE if this matrix is equal to <em>m.</em>
-<h3 class="fn">void <a name="e13f59"></a>QWMatrix::reset ()</h3>
+<h3 class="fn">voidÂ <a name="e13f59"></a>QWMatrix::resetÂ ()</h3>
 <p>Resets the matrix to an identity matrix.
 <p>All elements are set to zero, except <em>m11</em> and <em>m22</em> (scaling)
 that are set to 1.
-<h3 class="fn">QWMatrix &amp; <a name="71020d"></a>QWMatrix::rotate ( double a )</h3>
+<h3 class="fn">QWMatrixÂ &amp;Â <a name="71020d"></a>QWMatrix::rotateÂ (Â doubleÂ aÂ )</h3>
 <p>Rotates the coordinate system <em>a</em> degrees counterclockwise.
 <p>Returns a reference to the matrix.
 <p>See also  <a href="#e4b716">translate</a>(), <a href="#41a356">scale</a>() and <a href="#b99fbb">shear</a>().
@@ -206,7 +206,7 @@ that are set to 1.
  <a href="xform-xform-cpp.html#rotate">xform/xform.cpp</a>
  <a href="drawdemo-drawdemo-cpp.html#rotate">drawdemo/drawdemo.cpp</a>
  <a href="desktop-desktop-cpp.html#rotate">desktop/desktop.cpp</a>
-<h3 class="fn">QWMatrix &amp; <a name="41a356"></a>QWMatrix::scale ( double sx, double sy )</h3>
+<h3 class="fn">QWMatrixÂ &amp;Â <a name="41a356"></a>QWMatrix::scaleÂ (Â doubleÂ sx, doubleÂ syÂ )</h3>
 <p>Scales the coordinate system unit by <em>sx</em> horizontally and <em>sy</em>
 vertically.
 <p>Returns a reference to the matrix.
@@ -215,16 +215,16 @@ vertically.
  <a href="qtimage-qtimage-cpp.html#scale">qtimage/qtimage.cpp</a>
  <a href="xform-xform-cpp.html#scale">xform/xform.cpp</a>
  <a href="movies-main-cpp.html#scale">movies/main.cpp</a>
-<h3 class="fn">void <a name="758626"></a>QWMatrix::setMatrix ( double m11, double m12, double m21, double m22, double dx, double dy )</h3>
+<h3 class="fn">voidÂ <a name="758626"></a>QWMatrix::setMatrixÂ (Â doubleÂ m11, doubleÂ m12, doubleÂ m21, doubleÂ m22, doubleÂ dx, doubleÂ dyÂ )</h3>
 <p>Sets the matrix elements to the specified values.
-<h3 class="fn">QWMatrix &amp; <a name="b99fbb"></a>QWMatrix::shear ( double sh, double sv )</h3>
+<h3 class="fn">QWMatrixÂ &amp;Â <a name="b99fbb"></a>QWMatrix::shearÂ (Â doubleÂ sh, doubleÂ svÂ )</h3>
 <p>Shears the coordinate system  by <em>sh</em> horizontally and <em>sv</em> vertically.
 <p>Returns a reference to the matrix.
 <p>See also  <a href="#e4b716">translate</a>(), <a href="#41a356">scale</a>() and <a href="#71020d">rotate</a>().
 <p>Examples:
  <a href="xform-xform-cpp.html#shear">xform/xform.cpp</a>
  <a href="drawdemo-drawdemo-cpp.html#shear">drawdemo/drawdemo.cpp</a>
-<h3 class="fn">QWMatrix &amp; <a name="e4b716"></a>QWMatrix::translate ( double dx, double dy )</h3>
+<h3 class="fn">QWMatrixÂ &amp;Â <a name="e4b716"></a>QWMatrix::translateÂ (Â doubleÂ dx, doubleÂ dyÂ )</h3>
 <p>Moves the coordinate system <em>dx</em> along the X-axis and <em>dy</em>
 along the Y-axis.
 <p>Returns a reference to the matrix.
@@ -257,6 +257,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

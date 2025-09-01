@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QWaitCondition Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,12 +32,12 @@ Inherits <a href="qt.html">Qt</a>.
 <p><a href="qwaitcondition-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#eee0a1"><b>QWaitCondition</b></a> () </div>
-<li><div class="fn">virtual <a href="#ee5dc6"><b>~QWaitCondition</b></a> () </div>
-<li><div class="fn">bool <a href="#d24199"><b>wait</b></a> ( unsigned long time = ULONG_MAX ) </div>
-<li><div class="fn">bool <a href="#e72dde"><b>wait</b></a> ( QMutex * mutex, unsigned long time = ULONG_MAX ) </div>
-<li><div class="fn">void <a href="#57c32e"><b>wakeOne</b></a> () </div>
-<li><div class="fn">void <a href="#3b1793"><b>wakeAll</b></a> () </div>
+<li><div class="fn"><a href="#eee0a1"><b>QWaitCondition</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ <a href="#ee5dc6"><b>~QWaitCondition</b></a>Â ()Â </div>
+<li><div class="fn">boolÂ <a href="#d24199"><b>wait</b></a>Â (Â unsignedÂ longÂ timeÂ =Â ULONG_MAXÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#e72dde"><b>wait</b></a>Â (Â QMutexÂ *Â mutex, unsignedÂ longÂ timeÂ =Â ULONG_MAXÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#57c32e"><b>wakeOne</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#3b1793"><b>wakeAll</b></a>Â ()Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QWaitCondition class allows waiting/waking for conditions between threads
@@ -109,11 +109,11 @@ attempt to change the value of the same variable simultaneously
 are unpredictable.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="eee0a1"></a>QWaitCondition::QWaitCondition ()</h3>
+<h3 class="fn"><a name="eee0a1"></a>QWaitCondition::QWaitConditionÂ ()</h3>
 <p>Constructs a new event signalling object.
-<h3 class="fn"><a name="ee5dc6"></a>QWaitCondition::~QWaitCondition () <code>[virtual]</code></h3>
+<h3 class="fn"><a name="ee5dc6"></a>QWaitCondition::~QWaitConditionÂ () <code>[virtual]</code></h3>
 <p>Deletes the event signalling object.
-<h3 class="fn">bool <a name="e72dde"></a>QWaitCondition::wait ( <a href="qmutex.html">QMutex</a> * mutex, unsigned long time = ULONG_MAX )</h3>
+<h3 class="fn">boolÂ <a name="e72dde"></a>QWaitCondition::waitÂ (Â <a href="qmutex.html">QMutex</a>Â *Â mutex, unsignedÂ longÂ timeÂ =Â ULONG_MAXÂ )</h3>
 <p>Release the locked <em>mutex</em> and wait on the thread event object. The
 <em>mutex</em> must be initially locked by the calling thread.  If <em>mutex</em>
 is not in a locked state, this function returns immediately.  The
@@ -131,7 +131,7 @@ wait timed out.
 provided to allow the atomic transition from the locked state to the
 wait state.
 <p>See also  <a href="#57c32e">wakeOne</a>() and <a href="#3b1793">wakeAll</a>().
-<h3 class="fn">bool <a name="d24199"></a>QWaitCondition::wait ( unsigned long time = ULONG_MAX )</h3>
+<h3 class="fn">boolÂ <a name="d24199"></a>QWaitCondition::waitÂ (Â unsignedÂ longÂ timeÂ =Â ULONG_MAXÂ )</h3>
 <p>Wait on the thread event object. The thread calling this will block
 until one of 2 conditions is met:
 <ul>
@@ -143,12 +143,12 @@ signalled).  This function will return FALSE if the
 wait timed out.
 </ul>
 <p>See also  <a href="#57c32e">wakeOne</a>() and <a href="#3b1793">wakeAll</a>().
-<h3 class="fn">void <a name="3b1793"></a>QWaitCondition::wakeAll ()</h3>
+<h3 class="fn">voidÂ <a name="3b1793"></a>QWaitCondition::wakeAllÂ ()</h3>
 <p>This wakes all threads waiting on the QWaitCondition.  The order in
 which the threads are woken up depends on the operating system's
 scheduling policies, and cannot be controlled or predicted.
 <p>See also  <a href="#57c32e">wakeOne</a>().
-<h3 class="fn">void <a name="57c32e"></a>QWaitCondition::wakeOne ()</h3>
+<h3 class="fn">voidÂ <a name="57c32e"></a>QWaitCondition::wakeOneÂ ()</h3>
 <p>This wakes one thread waiting on the QWaitCondition.  The thread that
 woken up depends on the operating system's scheduling policies, and
 cannot be controlled or predicted.
@@ -164,6 +164,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QMetaProperty Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -30,27 +30,27 @@ The QMetaProperty class stores meta data about a property.
 <p><a href="qmetaproperty-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><b>QMetaProperty</b> () (internal)</div>
-<li><div class="fn"><b>~QMetaProperty</b> () (internal)</div>
-<li><div class="fn">const char* <a href="#53b6f5"><b>type</b></a> () const</div>
-<li><div class="fn">const char* <a href="#7cd19b"><b>name</b></a> () const</div>
-<li><div class="fn">bool <a href="#321ceb"><b>writable</b></a> () const</div>
-<li><div class="fn">bool <b>writeable</b> () const</div>
-<li><div class="fn">bool <b>isValid</b> () const (internal)</div>
-<li><div class="fn">bool <a href="#714204"><b>isSetType</b></a> () const</div>
-<li><div class="fn">bool <a href="#a4ef0b"><b>isEnumType</b></a> () const</div>
-<li><div class="fn">QStrList <a href="#b5f959"><b>enumKeys</b></a> () const</div>
-<li><div class="fn">int <a href="#bce997"><b>keyToValue</b></a> ( const char * key ) const</div>
-<li><div class="fn">const char* <a href="#0110d3"><b>valueToKey</b></a> ( int value ) const</div>
-<li><div class="fn">int <a href="#c82d03"><b>keysToValue</b></a> ( const QStrList &amp; keys ) const</div>
-<li><div class="fn">QStrList <a href="#03038c"><b>valueToKeys</b></a> ( int value ) const</div>
-<li><div class="fn">bool <a href="#a694ca"><b>stored</b></a> ( QObject * ) const</div>
-<li><div class="fn">bool <a href="#d5aedf"><b>designable</b></a> () const</div>
-<li><div class="fn">enum <a href="#Specification"><b>Specification</b></a> { Unspecified, Class, Reference, Pointer, ConstCharStar }</div>
-<li><div class="fn">enum <a href="#Flags"><b>Flags</b></a> { UnresolvedEnum = 0x00000001, UnresolvedSet = 0x00000002, UnresolvedEnumOrSet = 0x00000004, UnresolvedStored = 0x00000008, UnresolvedDesignable = 0x00000010, NotDesignable = 0x00000020, NotStored = 0x00000040, StdSet = 0x00000080 }</div>
-<li><div class="fn">bool <a href="#caa3ce"><b>testFlags</b></a> ( uint f ) const</div>
-<li><div class="fn">void <a href="#fe9ab3"><b>setFlags</b></a> ( uint f ) </div>
-<li><div class="fn">void <a href="#90e616"><b>clearFlags</b></a> ( uint f ) </div>
+<li><div class="fn"><b>QMetaProperty</b>Â ()Â (internal)</div>
+<li><div class="fn"><b>~QMetaProperty</b>Â ()Â (internal)</div>
+<li><div class="fn">constÂ char*Â <a href="#53b6f5"><b>type</b></a>Â ()Â const</div>
+<li><div class="fn">constÂ char*Â <a href="#7cd19b"><b>name</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#321ceb"><b>writable</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <b>writeable</b>Â ()Â const</div>
+<li><div class="fn">boolÂ <b>isValid</b>Â ()Â constÂ (internal)</div>
+<li><div class="fn">boolÂ <a href="#714204"><b>isSetType</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#a4ef0b"><b>isEnumType</b></a>Â ()Â const</div>
+<li><div class="fn">QStrListÂ <a href="#b5f959"><b>enumKeys</b></a>Â ()Â const</div>
+<li><div class="fn">intÂ <a href="#bce997"><b>keyToValue</b></a>Â (Â constÂ charÂ *Â keyÂ )Â const</div>
+<li><div class="fn">constÂ char*Â <a href="#0110d3"><b>valueToKey</b></a>Â (Â intÂ valueÂ )Â const</div>
+<li><div class="fn">intÂ <a href="#c82d03"><b>keysToValue</b></a>Â (Â constÂ QStrListÂ &amp;Â keysÂ )Â const</div>
+<li><div class="fn">QStrListÂ <a href="#03038c"><b>valueToKeys</b></a>Â (Â intÂ valueÂ )Â const</div>
+<li><div class="fn">boolÂ <a href="#a694ca"><b>stored</b></a>Â (Â QObjectÂ *Â )Â const</div>
+<li><div class="fn">boolÂ <a href="#d5aedf"><b>designable</b></a>Â ()Â const</div>
+<li><div class="fn">enumÂ <a href="#Specification"><b>Specification</b></a>Â {Â Unspecified, Class, Reference, Pointer, ConstCharStarÂ }</div>
+<li><div class="fn">enumÂ <a href="#Flags"><b>Flags</b></a>Â {Â UnresolvedEnumÂ =Â 0x00000001, UnresolvedSetÂ =Â 0x00000002, UnresolvedEnumOrSetÂ =Â 0x00000004, UnresolvedStoredÂ =Â 0x00000008, UnresolvedDesignableÂ =Â 0x00000010, NotDesignableÂ =Â 0x00000020, NotStoredÂ =Â 0x00000040, StdSetÂ =Â 0x00000080Â }</div>
+<li><div class="fn">boolÂ <a href="#caa3ce"><b>testFlags</b></a>Â (Â uintÂ fÂ )Â const</div>
+<li><div class="fn">voidÂ <a href="#fe9ab3"><b>setFlags</b></a>Â (Â uintÂ fÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#90e616"><b>clearFlags</b></a>Â (Â uintÂ fÂ )Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QMetaProperty class stores meta data about a property.
@@ -74,57 +74,57 @@ For internal use only.
 <h3 class="fn"><a name="Specification">QMetaProperty::Specification</a></h3>
 For internal use only.
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn">void <a name="90e616"></a>QMetaProperty::clearFlags ( uint f )</h3>
+<h3 class="fn">voidÂ <a name="90e616"></a>QMetaProperty::clearFlagsÂ (Â uintÂ fÂ )</h3>
 <p>For internal use only.
-<h3 class="fn">bool <a name="d5aedf"></a>QMetaProperty::designable () const</h3>
+<h3 class="fn">boolÂ <a name="d5aedf"></a>QMetaProperty::designableÂ ()Â const</h3>
 <p>Returns whether the property is considered to be designable or not.
-<h3 class="fn"><a href="qstrlist.html">QStrList</a> <a name="b5f959"></a>QMetaProperty::enumKeys () const</h3>
+<h3 class="fn"><a href="qstrlist.html">QStrList</a>Â <a name="b5f959"></a>QMetaProperty::enumKeysÂ ()Â const</h3>
 <p>Returns the possible enumeration keys if this property is an
 enumeration type (or a set type).
 <p>See also  <a href="#a4ef0b">isEnumType</a>().
-<h3 class="fn">bool <a name="a4ef0b"></a>QMetaProperty::isEnumType () const</h3>
+<h3 class="fn">boolÂ <a name="a4ef0b"></a>QMetaProperty::isEnumTypeÂ ()Â const</h3>
 <p>Returns whether the property's type is an enumeration value.
 <p>See also  <a href="#714204">isSetType</a>() and <a href="#b5f959">enumKeys</a>().
-<h3 class="fn">bool <a name="714204"></a>QMetaProperty::isSetType () const</h3>
+<h3 class="fn">boolÂ <a name="714204"></a>QMetaProperty::isSetTypeÂ ()Â const</h3>
 <p>Returns whether the property's type is an enumeration value that is
 used as set, i.e. the enumeration values can be or'ed together.  A
 set type is implicitely also an enum type.
 <p>See also  <a href="#a4ef0b">isEnumType</a>() and <a href="#b5f959">enumKeys</a>().
-<h3 class="fn">int <a name="bce997"></a>QMetaProperty::keyToValue ( const char * key ) const</h3>
+<h3 class="fn">intÂ <a name="bce997"></a>QMetaProperty::keyToValueÂ (Â constÂ charÂ *Â keyÂ )Â const</h3>
 <p>Converts the enumeration key <em>key</em> to its integer
 value.
 <p>For set types, use <a href="#c82d03">keysToValue</a>().
 <p>See also  <a href="#0110d3">valueToKey</a>(), <a href="#714204">isSetType</a>() and <a href="#c82d03">keysToValue</a>().
-<h3 class="fn">int <a name="c82d03"></a>QMetaProperty::keysToValue ( const <a href="qstrlist.html">QStrList</a> &amp; keys ) const</h3>
+<h3 class="fn">intÂ <a name="c82d03"></a>QMetaProperty::keysToValueÂ (Â constÂ <a href="qstrlist.html">QStrList</a>Â &amp;Â keysÂ )Â const</h3>
 <p>Converts the list of keys <em>keys</em> to their combined integer
 value.
 <p>See also  <a href="#714204">isSetType</a>(), <a href="#0110d3">valueToKey</a>() and keysToValue().
-<h3 class="fn">const char* <a name="7cd19b"></a>QMetaProperty::name () const</h3>
+<h3 class="fn">constÂ char*Â <a name="7cd19b"></a>QMetaProperty::nameÂ ()Â const</h3>
 <p>Returns the name of the property.
-<h3 class="fn">void <a name="fe9ab3"></a>QMetaProperty::setFlags ( uint f )</h3>
+<h3 class="fn">voidÂ <a name="fe9ab3"></a>QMetaProperty::setFlagsÂ (Â uintÂ fÂ )</h3>
 <p>For internal use only.
-<h3 class="fn">bool <a name="a694ca"></a>QMetaProperty::stored ( <a href="qobject.html">QObject</a> * o ) const</h3>
+<h3 class="fn">boolÂ <a name="a694ca"></a>QMetaProperty::storedÂ (Â <a href="qobject.html">QObject</a>Â *Â oÂ )Â const</h3>
 <p>Returns whether the property shall be stored for object <em>o</em> or
 not.
-<h3 class="fn">bool <a name="caa3ce"></a>QMetaProperty::testFlags ( uint f ) const</h3>
+<h3 class="fn">boolÂ <a name="caa3ce"></a>QMetaProperty::testFlagsÂ (Â uintÂ fÂ )Â const</h3>
 <p>For internal use only.
-<h3 class="fn">const char* <a name="53b6f5"></a>QMetaProperty::type () const</h3>
+<h3 class="fn">constÂ char*Â <a name="53b6f5"></a>QMetaProperty::typeÂ ()Â const</h3>
 <p>Returns the type of the property.
-<h3 class="fn">const char* <a name="0110d3"></a>QMetaProperty::valueToKey ( int value ) const</h3>
+<h3 class="fn">constÂ char*Â <a name="0110d3"></a>QMetaProperty::valueToKeyÂ (Â intÂ valueÂ )Â const</h3>
 <p>Converts the enumeration value <em>value</em> to its literal key.
 <p>For set types, use <a href="#03038c">valueToKeys</a>().
 <p>See also  valueToKey(), <a href="#714204">isSetType</a>() and <a href="#03038c">valueToKeys</a>().
-<h3 class="fn"><a href="qstrlist.html">QStrList</a> <a name="03038c"></a>QMetaProperty::valueToKeys ( int value ) const</h3>
+<h3 class="fn"><a href="qstrlist.html">QStrList</a>Â <a name="03038c"></a>QMetaProperty::valueToKeysÂ (Â intÂ valueÂ )Â const</h3>
 <p>Converts the set value <em>value</em> to a list of keys.
 <p>See also  <a href="#714204">isSetType</a>(), <a href="#0110d3">valueToKey</a>() and valueToKeys().
-<h3 class="fn">bool <a name="321ceb"></a>QMetaProperty::writable () const</h3>
+<h3 class="fn">boolÂ <a name="321ceb"></a>QMetaProperty::writableÂ ()Â const</h3>
 <p>Returns whether the property is writable or not.
 <p>See also  <a href="#af964d">isValid</a>().
-<h3 class="fn"><a name="1ef13f"></a>QMetaProperty::QMetaProperty ()</h3>
+<h3 class="fn"><a name="1ef13f"></a>QMetaProperty::QMetaPropertyÂ ()</h3>
 <p>For internal use only.
-<h3 class="fn"><a name="b86f69"></a>QMetaProperty::~QMetaProperty ()</h3>
+<h3 class="fn"><a name="b86f69"></a>QMetaProperty::~QMetaPropertyÂ ()</h3>
 <p>For internal use only.
-<h3 class="fn">bool <a name="af964d"></a>QMetaProperty::isValid () const</h3>
+<h3 class="fn">boolÂ <a name="af964d"></a>QMetaProperty::isValidÂ ()Â const</h3>
 <p>For internal use only.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
@@ -137,6 +137,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

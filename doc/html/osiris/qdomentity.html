@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QDomEntity Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,15 +32,15 @@ Inherits <a href="qdomnode.html">QDomNode</a>.
 <p><a href="qdomentity-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#109aa2"><b>QDomEntity</b></a> () </div>
-<li><div class="fn"><a href="#12bd17"><b>QDomEntity</b></a> ( const QDomEntity &amp; x ) </div>
-<li><div class="fn">QDomEntity&amp; <a href="#bdf161"><b>operator=</b></a> ( const QDomEntity &amp; ) </div>
-<li><div class="fn"><a href="#9feb10"><b>~QDomEntity</b></a> () </div>
-<li><div class="fn">virtual QString <a href="#457a03"><b>publicId</b></a> () const</div>
-<li><div class="fn">virtual QString <a href="#81110e"><b>systemId</b></a> () const</div>
-<li><div class="fn">virtual QString <a href="#95f6a8"><b>notationName</b></a> () const</div>
-<li><div class="fn">virtual QDomNode::NodeType <a href="#e7b74c"><b>nodeType</b></a> () const</div>
-<li><div class="fn">virtual bool <a href="#8f848b"><b>isEntity</b></a> () const</div>
+<li><div class="fn"><a href="#109aa2"><b>QDomEntity</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#12bd17"><b>QDomEntity</b></a>Â (Â constÂ QDomEntityÂ &amp;Â xÂ )Â </div>
+<li><div class="fn">QDomEntity&amp;Â <a href="#bdf161"><b>operator=</b></a>Â (Â constÂ QDomEntityÂ &amp;Â )Â </div>
+<li><div class="fn"><a href="#9feb10"><b>~QDomEntity</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ QStringÂ <a href="#457a03"><b>publicId</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ QStringÂ <a href="#81110e"><b>systemId</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ QStringÂ <a href="#95f6a8"><b>notationName</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ QDomNode::NodeTypeÂ <a href="#e7b74c"><b>nodeType</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ boolÂ <a href="#8f848b"><b>isEntity</b></a>Â ()Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QDomEntity class represents an XML entity.
@@ -59,31 +59,31 @@ For a more general introduction of the DOM implementation see the
 <a href="qdomdocument.html">QDomDocument</a> documentation.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="109aa2"></a>QDomEntity::QDomEntity ()</h3>
+<h3 class="fn"><a name="109aa2"></a>QDomEntity::QDomEntityÂ ()</h3>
 <p>Constructs an empty entity.
-<h3 class="fn"><a name="12bd17"></a>QDomEntity::QDomEntity ( const QDomEntity &amp; x )</h3>
+<h3 class="fn"><a name="12bd17"></a>QDomEntity::QDomEntityÂ (Â constÂ QDomEntityÂ &amp;Â xÂ )</h3>
 <p>Copy constructor.
 <p>The data of the copy is shared: modifying one will also change the other. If
 you want to make a real copy, use <a href="qdomnode.html#8f17f1">cloneNode</a>() instead.
-<h3 class="fn"><a name="9feb10"></a>QDomEntity::~QDomEntity ()</h3>
+<h3 class="fn"><a name="9feb10"></a>QDomEntity::~QDomEntityÂ ()</h3>
 <p>Destructor.
-<h3 class="fn">bool <a name="8f848b"></a>QDomEntity::isEntity () const <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="8f848b"></a>QDomEntity::isEntityÂ ()Â const <code>[virtual]</code></h3>
 <p>Returns TRUE.
 <p>Reimplemented from <a href="qdomnode.html#7d3017">QDomNode.</a>
-<h3 class="fn">QDomNode::NodeType <a name="e7b74c"></a>QDomEntity::nodeType() const <code>[virtual]</code></h3>
+<h3 class="fn">QDomNode::NodeTypeÂ <a name="e7b74c"></a>QDomEntity::nodeType()Â const <code>[virtual]</code></h3>
 <p>Returns <code>EntityNode.</code>
 <p>Reimplemented from <a href="qdomnode.html#46495e">QDomNode.</a>
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="95f6a8"></a>QDomEntity::notationName () const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="95f6a8"></a>QDomEntity::notationNameÂ ()Â const <code>[virtual]</code></h3>
 <p>For unparsed entities this function returns the name of the notation for the
 entity. For parsed entities this function returns QString::null.
-<h3 class="fn">QDomEntity&amp; <a name="bdf161"></a>QDomEntity::operator= ( const QDomEntity &amp; x )</h3>
+<h3 class="fn">QDomEntity&amp;Â <a name="bdf161"></a>QDomEntity::operator=Â (Â constÂ QDomEntityÂ &amp;Â xÂ )</h3>
 <p>Assignment operator.
 <p>The data of the copy is shared: modifying one will also change the other. If
 you want to make a real copy, use <a href="qdomnode.html#8f17f1">cloneNode</a>() instead.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="457a03"></a>QDomEntity::publicId () const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="457a03"></a>QDomEntity::publicIdÂ ()Â const <code>[virtual]</code></h3>
 <p>Returns the public identifier associated with this entity.
 If the public identifier was not specified QString::null is returned.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="81110e"></a>QDomEntity::systemId () const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="81110e"></a>QDomEntity::systemIdÂ ()Â const <code>[virtual]</code></h3>
 <p>Returns the system identifier associated with this entity.
 If the system identifier was not specified QString::null is returned.
 <hr><p>
@@ -97,6 +97,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

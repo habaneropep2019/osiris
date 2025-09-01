@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QCanvasView Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,15 +32,15 @@ Inherits <a href="qscrollview.html">QScrollView</a>.
 <p><a href="qcanvasview-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#71b77a"><b>QCanvasView</b></a> ( QCanvas * viewing=0, QWidget * parent=0, const char * name=0, WFlags f=0 ) </div>
-<li><div class="fn"><a href="#f185a6"><b>~QCanvasView</b></a> () </div>
-<li><div class="fn">QCanvas* <a href="#51344c"><b>canvas</b></a> () const</div>
-<li><div class="fn">void <a href="#9de57d"><b>setCanvas</b></a> ( QCanvas * v ) </div>
+<li><div class="fn"><a href="#71b77a"><b>QCanvasView</b></a>Â (Â QCanvasÂ *Â viewing=0, QWidgetÂ *Â parent=0, constÂ charÂ *Â name=0, WFlagsÂ f=0Â )Â </div>
+<li><div class="fn"><a href="#f185a6"><b>~QCanvasView</b></a>Â ()Â </div>
+<li><div class="fn">QCanvas*Â <a href="#51344c"><b>canvas</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#9de57d"><b>setCanvas</b></a>Â (Â QCanvasÂ *Â vÂ )Â </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><div class="fn">virtual void <a href="#6184cb"><b>drawContents</b></a> ( QPainter *, int cx, int cy, int cw, int ch ) </div>
-<li><div class="fn">virtual QSize <a href="#81579f"><b>sizeHint</b></a> () const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#6184cb"><b>drawContents</b></a>Â (Â QPainterÂ *, intÂ cx, intÂ cy, intÂ cw, intÂ chÂ )Â </div>
+<li><div class="fn">virtualÂ QSizeÂ <a href="#81579f"><b>sizeHint</b></a>Â ()Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 A <a href="qwidget.html">QWidget</a> which views a <a href="qcanvas.html">QCanvas</a>.
@@ -67,20 +67,20 @@ canvas where the user can interact with items on the canvas.
 available for all <a href="qscrollview.html">QScrollView</a> subclasses.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="71b77a"></a>QCanvasView::QCanvasView ( <a href="qcanvas.html">QCanvas</a> * canvas=0, <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0, WFlags f=0 )</h3>
+<h3 class="fn"><a name="71b77a"></a>QCanvasView::QCanvasViewÂ (Â <a href="qcanvas.html">QCanvas</a>Â *Â canvas=0, <a href="qwidget.html">QWidget</a>Â *Â parent=0, constÂ charÂ *Â name=0, WFlagsÂ f=0Â )</h3>
 <p>Constructs a QCanvasView which views <em>canvas.</em>  The
 usual <a href="qwidget.html">QWidget</a> parameters may also be supplied.
-<h3 class="fn"><a name="f185a6"></a>QCanvasView::~QCanvasView ()</h3>
+<h3 class="fn"><a name="f185a6"></a>QCanvasView::~QCanvasViewÂ ()</h3>
 <p>Destructs the view. The associated canvas is <em>not</em> deleted.
-<h3 class="fn"><a href="qcanvas.html">QCanvas</a>* <a name="51344c"></a>QCanvasView::canvas () const</h3>
+<h3 class="fn"><a href="qcanvas.html">QCanvas</a>*Â <a name="51344c"></a>QCanvasView::canvasÂ ()Â const</h3>
 <p>Returns the canvas which the view is currently viewing.
-<h3 class="fn">void <a name="6184cb"></a>QCanvasView::drawContents ( <a href="qpainter.html">QPainter</a> * p, int cx, int cy, int cw, int ch ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="6184cb"></a>QCanvasView::drawContentsÂ (Â <a href="qpainter.html">QPainter</a>Â *Â p, intÂ cx, intÂ cy, intÂ cw, intÂ chÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Repaints the appropriate area of the <a href="qcanvas.html">QCanvas</a> which this
 QCanvasView is viewing.
 <p>Reimplemented from <a href="qscrollview.html#7548fb">QScrollView.</a>
-<h3 class="fn">void <a name="9de57d"></a>QCanvasView::setCanvas ( <a href="qcanvas.html">QCanvas</a> * canvas )</h3>
+<h3 class="fn">voidÂ <a name="9de57d"></a>QCanvasView::setCanvasÂ (Â <a href="qcanvas.html">QCanvas</a>Â *Â canvasÂ )</h3>
 <p>Changes the <a href="qcanvas.html">QCanvas</a> which the QCanvasView is viewing to <em>canvas.</em>
-<h3 class="fn"><a href="qsize.html">QSize</a> <a name="81579f"></a>QCanvasView::sizeHint () const <code>[virtual protected]</code></h3>
+<h3 class="fn"><a href="qsize.html">QSize</a>Â <a name="81579f"></a>QCanvasView::sizeHintÂ ()Â const <code>[virtualÂ protected]</code></h3>
 <p>Suggests a size sufficient to view the entire canvas.
 <p>Reimplemented from <a href="qwidget.html#4511d1">QWidget.</a>
 <hr><p>
@@ -94,6 +94,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

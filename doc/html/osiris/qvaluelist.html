@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QValueList Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -30,48 +30,48 @@ The QValueList class is a value based template class that provides doubly linked
 <p><a href="qvaluelist-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#96a811"><b>QValueList</b></a> () </div>
-<li><div class="fn"><a href="#ca5e29"><b>QValueList</b></a> ( const QValueList&lt;T&gt; &amp; l ) </div>
-<li><div class="fn"><a href="#abd29b"><b>~QValueList</b></a> () </div>
-<li><div class="fn">QValueList&lt;T&gt;&amp; <a href="#23d705"><b>operator=</b></a> ( const QValueList&lt;T&gt; &amp; l ) </div>
-<li><div class="fn">QValueList&lt;T&gt; <a href="#067aae"><b>operator+</b></a> ( const QValueList&lt;T&gt; &amp; l ) const</div>
-<li><div class="fn">QValueList&lt;T&gt;&amp; <a href="#e8381f"><b>operator+=</b></a> ( const QValueList&lt;T&gt; &amp; l ) </div>
-<li><div class="fn">bool <a href="#5e36b3"><b>operator==</b></a> ( const QValueList&lt;T&gt; &amp; l ) const</div>
-<li><div class="fn">bool <a href="#dc3b9f"><b>operator!=</b></a> ( const QValueList&lt;T&gt; &amp; l ) const</div>
-<li><div class="fn">Iterator <a href="#6372f0"><b>begin</b></a> () </div>
-<li><div class="fn">ConstIterator <a href="#df2f80"><b>begin</b></a> () const</div>
-<li><div class="fn">Iterator <a href="#4996b7"><b>end</b></a> () </div>
-<li><div class="fn">ConstIterator <a href="#af2abd"><b>end</b></a> () const</div>
-<li><div class="fn">Iterator <a href="#d314ba"><b>fromLast</b></a> () </div>
-<li><div class="fn">ConstIterator <a href="#41e13a"><b>fromLast</b></a> () const</div>
-<li><div class="fn">bool <a href="#aec057"><b>isEmpty</b></a> () const</div>
-<li><div class="fn">Iterator <a href="#dc18c0"><b>insert</b></a> ( Iterator it, const T &amp; x ) </div>
-<li><div class="fn">Iterator <a href="#d68b11"><b>append</b></a> ( const T &amp; x ) </div>
-<li><div class="fn">Iterator <a href="#3c41a9"><b>prepend</b></a> ( const T &amp; x ) </div>
-<li><div class="fn">Iterator <a href="#273e70"><b>remove</b></a> ( Iterator it ) </div>
-<li><div class="fn">void <a href="#a04cb3"><b>remove</b></a> ( const T &amp; x ) </div>
-<li><div class="fn">T&amp; <a href="#765ed5"><b>first</b></a> () </div>
-<li><div class="fn">const T&amp; <a href="#1bbde8"><b>first</b></a> () const</div>
-<li><div class="fn">T&amp; <a href="#3507b2"><b>last</b></a> () </div>
-<li><div class="fn">const T&amp; <a href="#3e5330"><b>last</b></a> () const</div>
-<li><div class="fn">T&amp; <a href="#b0eb54"><b>operator[]</b></a> ( uint i ) </div>
-<li><div class="fn">const T&amp; <a href="#d89d04"><b>operator[]</b></a> ( uint i ) const</div>
-<li><div class="fn">Iterator <a href="#578bc2"><b>at</b></a> ( uint i ) </div>
-<li><div class="fn">ConstIterator <a href="#6fc7fb"><b>at</b></a> ( uint i ) const</div>
-<li><div class="fn">Iterator <a href="#14e9f4"><b>find</b></a> ( const T &amp; x ) </div>
-<li><div class="fn">ConstIterator <a href="#4a2978"><b>find</b></a> ( const T &amp; x ) const</div>
-<li><div class="fn">Iterator <a href="#907a4c"><b>find</b></a> ( Iterator it, const T &amp; x ) </div>
-<li><div class="fn">ConstIterator <a href="#7dab45"><b>find</b></a> ( ConstIterator it, const T &amp; x ) const</div>
-<li><div class="fn">int <a href="#cff3f4"><b>findIndex</b></a> ( const T &amp; x ) const</div>
-<li><div class="fn">uint <a href="#14aaf9"><b>contains</b></a> ( const T &amp; x ) const</div>
-<li><div class="fn">uint <a href="#434489"><b>count</b></a> () const</div>
-<li><div class="fn">void <a href="#7b8e9e"><b>clear</b></a> () </div>
-<li><div class="fn">QValueList&lt;T&gt;&amp; <a href="#5e278c"><b>operator+=</b></a> ( const T &amp; x ) </div>
-<li><div class="fn">QValueList&lt;T&gt;&amp; <a href="#757ead"><b>operator&lt;&lt;</b></a> ( const T &amp; x ) </div>
+<li><div class="fn"><a href="#96a811"><b>QValueList</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#ca5e29"><b>QValueList</b></a>Â (Â constÂ QValueList&lt;T&gt;Â &amp;Â lÂ )Â </div>
+<li><div class="fn"><a href="#abd29b"><b>~QValueList</b></a>Â ()Â </div>
+<li><div class="fn">QValueList&lt;T&gt;&amp;Â <a href="#23d705"><b>operator=</b></a>Â (Â constÂ QValueList&lt;T&gt;Â &amp;Â lÂ )Â </div>
+<li><div class="fn">QValueList&lt;T&gt;Â <a href="#067aae"><b>operator+</b></a>Â (Â constÂ QValueList&lt;T&gt;Â &amp;Â lÂ )Â const</div>
+<li><div class="fn">QValueList&lt;T&gt;&amp;Â <a href="#e8381f"><b>operator+=</b></a>Â (Â constÂ QValueList&lt;T&gt;Â &amp;Â lÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#5e36b3"><b>operator==</b></a>Â (Â constÂ QValueList&lt;T&gt;Â &amp;Â lÂ )Â const</div>
+<li><div class="fn">boolÂ <a href="#dc3b9f"><b>operator!=</b></a>Â (Â constÂ QValueList&lt;T&gt;Â &amp;Â lÂ )Â const</div>
+<li><div class="fn">IteratorÂ <a href="#6372f0"><b>begin</b></a>Â ()Â </div>
+<li><div class="fn">ConstIteratorÂ <a href="#df2f80"><b>begin</b></a>Â ()Â const</div>
+<li><div class="fn">IteratorÂ <a href="#4996b7"><b>end</b></a>Â ()Â </div>
+<li><div class="fn">ConstIteratorÂ <a href="#af2abd"><b>end</b></a>Â ()Â const</div>
+<li><div class="fn">IteratorÂ <a href="#d314ba"><b>fromLast</b></a>Â ()Â </div>
+<li><div class="fn">ConstIteratorÂ <a href="#41e13a"><b>fromLast</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#aec057"><b>isEmpty</b></a>Â ()Â const</div>
+<li><div class="fn">IteratorÂ <a href="#dc18c0"><b>insert</b></a>Â (Â IteratorÂ it, constÂ TÂ &amp;Â xÂ )Â </div>
+<li><div class="fn">IteratorÂ <a href="#d68b11"><b>append</b></a>Â (Â constÂ TÂ &amp;Â xÂ )Â </div>
+<li><div class="fn">IteratorÂ <a href="#3c41a9"><b>prepend</b></a>Â (Â constÂ TÂ &amp;Â xÂ )Â </div>
+<li><div class="fn">IteratorÂ <a href="#273e70"><b>remove</b></a>Â (Â IteratorÂ itÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#a04cb3"><b>remove</b></a>Â (Â constÂ TÂ &amp;Â xÂ )Â </div>
+<li><div class="fn">T&amp;Â <a href="#765ed5"><b>first</b></a>Â ()Â </div>
+<li><div class="fn">constÂ T&amp;Â <a href="#1bbde8"><b>first</b></a>Â ()Â const</div>
+<li><div class="fn">T&amp;Â <a href="#3507b2"><b>last</b></a>Â ()Â </div>
+<li><div class="fn">constÂ T&amp;Â <a href="#3e5330"><b>last</b></a>Â ()Â const</div>
+<li><div class="fn">T&amp;Â <a href="#b0eb54"><b>operator[]</b></a>Â (Â uintÂ iÂ )Â </div>
+<li><div class="fn">constÂ T&amp;Â <a href="#d89d04"><b>operator[]</b></a>Â (Â uintÂ iÂ )Â const</div>
+<li><div class="fn">IteratorÂ <a href="#578bc2"><b>at</b></a>Â (Â uintÂ iÂ )Â </div>
+<li><div class="fn">ConstIteratorÂ <a href="#6fc7fb"><b>at</b></a>Â (Â uintÂ iÂ )Â const</div>
+<li><div class="fn">IteratorÂ <a href="#14e9f4"><b>find</b></a>Â (Â constÂ TÂ &amp;Â xÂ )Â </div>
+<li><div class="fn">ConstIteratorÂ <a href="#4a2978"><b>find</b></a>Â (Â constÂ TÂ &amp;Â xÂ )Â const</div>
+<li><div class="fn">IteratorÂ <a href="#907a4c"><b>find</b></a>Â (Â IteratorÂ it, constÂ TÂ &amp;Â xÂ )Â </div>
+<li><div class="fn">ConstIteratorÂ <a href="#7dab45"><b>find</b></a>Â (Â ConstIteratorÂ it, constÂ TÂ &amp;Â xÂ )Â const</div>
+<li><div class="fn">intÂ <a href="#cff3f4"><b>findIndex</b></a>Â (Â constÂ TÂ &amp;Â xÂ )Â const</div>
+<li><div class="fn">uintÂ <a href="#14aaf9"><b>contains</b></a>Â (Â constÂ TÂ &amp;Â xÂ )Â const</div>
+<li><div class="fn">uintÂ <a href="#434489"><b>count</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#7b8e9e"><b>clear</b></a>Â ()Â </div>
+<li><div class="fn">QValueList&lt;T&gt;&amp;Â <a href="#5e278c"><b>operator+=</b></a>Â (Â constÂ TÂ &amp;Â xÂ )Â </div>
+<li><div class="fn">QValueList&lt;T&gt;&amp;Â <a href="#757ead"><b>operator&lt;&lt;</b></a>Â (Â constÂ TÂ &amp;Â xÂ )Â </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><div class="fn">void <a href="#c87033"><b>detach</b></a> () </div>
+<li><div class="fn">voidÂ <a href="#c87033"><b>detach</b></a>Â ()Â </div>
 </ul>
 <h2>Related Functions</h2>
 (Note that these are not member functions.)
@@ -196,158 +196,158 @@ qHeapSort():
 <p>See also  <a href="qvaluelistiterator.html">QValueListIterator</a>.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="96a811"></a>QValueList::QValueList ()</h3>
+<h3 class="fn"><a name="96a811"></a>QValueList::QValueListÂ ()</h3>
 <p>Constructs an empty list.
-<h3 class="fn"><a name="ca5e29"></a>QValueList::QValueList ( const QValueList&lt;T&gt; &amp; l )</h3>
+<h3 class="fn"><a name="ca5e29"></a>QValueList::QValueListÂ (Â constÂ QValueList&lt;T&gt;Â &amp;Â lÂ )</h3>
 <p>Constructs a copy of <em>l.</em>
 <p>This operation costs O(1) time since QValueList is implicit shared.
 The first instance applying modifications to a shared list will create
 a copy which takes in turn O(<a href="n.html">n</a>) time. However returning a QValueList from
 a function is very fast.
-<h3 class="fn"><a name="abd29b"></a>QValueList::~QValueList ()</h3>
+<h3 class="fn"><a name="abd29b"></a>QValueList::~QValueListÂ ()</h3>
 <p>Destroys the list. References to the values in the list and all iterators
 of this list become invalidated. Since QValueList is highly tuned for performance
 you wont see warnings if you use invalid iterators,
 because it is impossible for
 an iterator to check wether it is valid or not.
-<h3 class="fn">Iterator <a name="d68b11"></a>QValueList::append ( const T &amp; x )</h3>
+<h3 class="fn">IteratorÂ <a name="d68b11"></a>QValueList::appendÂ (Â constÂ TÂ &amp;Â xÂ )</h3>
 <p>Inserts the value <em>x</em> at the end of the list.
 <p>Returns an iterator pointing at the inserted item.
 <p>See also  <a href="#dc18c0">insert</a>() and <a href="#3c41a9">prepend</a>().
-<h3 class="fn">ConstIterator <a name="6fc7fb"></a>QValueList::at ( uint i ) const</h3>
+<h3 class="fn">ConstIteratorÂ <a name="6fc7fb"></a>QValueList::atÂ (Â uintÂ iÂ )Â const</h3>
 <p>Returns an iterator pointing to the item at position <em>i</em> in the list, or
 <a href="#4996b7">end</a>() if the index is out of range.
-<h3 class="fn">Iterator <a name="578bc2"></a>QValueList::at ( uint i )</h3>
+<h3 class="fn">IteratorÂ <a name="578bc2"></a>QValueList::atÂ (Â uintÂ iÂ )</h3>
 <p>Returns an iterator pointing to the item at position <em>i</em> in the list, or
 <a href="#4996b7">end</a>() if the index is out of range.
-<h3 class="fn">ConstIterator <a name="df2f80"></a>QValueList::begin () const</h3>
+<h3 class="fn">ConstIteratorÂ <a name="df2f80"></a>QValueList::beginÂ ()Â const</h3>
 <p>Returns an iterator pointing to the first element in the list. This
 iterator equals <a href="#4996b7">end</a>() if the list is empty;
 <p>See also  <a href="#1bbde8">first</a>() and <a href="#4996b7">end</a>().
-<h3 class="fn">Iterator <a name="6372f0"></a>QValueList::begin ()</h3>
+<h3 class="fn">IteratorÂ <a name="6372f0"></a>QValueList::beginÂ ()</h3>
 <p>Returns an iterator pointing to the first element in the list. This
 iterator equals <a href="#4996b7">end</a>() if the list is empty;
 <p>See also  <a href="#1bbde8">first</a>() and <a href="#4996b7">end</a>().
-<h3 class="fn">void <a name="7b8e9e"></a>QValueList::clear ()</h3>
+<h3 class="fn">voidÂ <a name="7b8e9e"></a>QValueList::clearÂ ()</h3>
 <p>Removes all items from the list.
 <p>See also  <a href="#273e70">remove</a>().
-<h3 class="fn">uint <a name="14aaf9"></a>QValueList::contains ( const T &amp; x ) const</h3>
+<h3 class="fn">uintÂ <a name="14aaf9"></a>QValueList::containsÂ (Â constÂ TÂ &amp;Â xÂ )Â const</h3>
 <p>Counts and returns the number of occurrences of the value <em>x</em> in the list.
-<h3 class="fn">uint <a name="434489"></a>QValueList::count () const</h3>
+<h3 class="fn">uintÂ <a name="434489"></a>QValueList::countÂ ()Â const</h3>
 <p>Returns the number of items in the list.
 <p>See also  <a href="#aec057">isEmpty</a>().
-<h3 class="fn">void <a name="c87033"></a>QValueList::detach () <code>[protected]</code></h3>
+<h3 class="fn">voidÂ <a name="c87033"></a>QValueList::detachÂ () <code>[protected]</code></h3>
 <p>If the list does not share its data with another QValueList instance, then nothing
 happens, otherwise the function creates a new copy of this data and detaches
 from the shared one. This function is called whenever the list is modified.
 The implicit sharing mechanism is implemented this way.
-<h3 class="fn">ConstIterator <a name="af2abd"></a>QValueList::end () const</h3>
+<h3 class="fn">ConstIteratorÂ <a name="af2abd"></a>QValueList::endÂ ()Â const</h3>
 <p>Returns an iterator pointing behind the last element in the list. This
 iterator equals <a href="#6372f0">begin</a>() if the list is empty.
 <p>See also  <a href="#3507b2">last</a>() and <a href="#6372f0">begin</a>().
-<h3 class="fn">Iterator <a name="4996b7"></a>QValueList::end ()</h3>
+<h3 class="fn">IteratorÂ <a name="4996b7"></a>QValueList::endÂ ()</h3>
 <p>Returns an iterator pointing behind the last element in the list. This
 iterator equals <a href="#6372f0">begin</a>() if the list is empty.
 <p>See also  <a href="#3507b2">last</a>() and <a href="#6372f0">begin</a>().
-<h3 class="fn">ConstIterator <a name="7dab45"></a>QValueList::find ( ConstIterator it, const T &amp; x ) const</h3>
+<h3 class="fn">ConstIteratorÂ <a name="7dab45"></a>QValueList::findÂ (Â ConstIteratorÂ it, constÂ TÂ &amp;Â xÂ )Â const</h3>
 <p>Finds the first occurrence of <em>x</em> in the list starting at
 the position given by <em>it.</em>
 <p>Returns <a href="#4996b7">end</a>() if no item did match.
-<h3 class="fn">ConstIterator <a name="4a2978"></a>QValueList::find ( const T &amp; x ) const</h3>
+<h3 class="fn">ConstIteratorÂ <a name="4a2978"></a>QValueList::findÂ (Â constÂ TÂ &amp;Â xÂ )Â const</h3>
 <p>Finds the first occurrence of <em>x</em> in the list.
 <p>Returns <a href="#4996b7">end</a>() if no item did match.
-<h3 class="fn">Iterator <a name="907a4c"></a>QValueList::find ( Iterator it, const T &amp; x )</h3>
+<h3 class="fn">IteratorÂ <a name="907a4c"></a>QValueList::findÂ (Â IteratorÂ it, constÂ TÂ &amp;Â xÂ )</h3>
 <p>Finds the first occurrence of <em>x</em> in the list starting at
 the position given by <em>it.</em>
 <p>Returns <a href="#4996b7">end</a>() if no item did match.
-<h3 class="fn">Iterator <a name="14e9f4"></a>QValueList::find ( const T &amp; x )</h3>
+<h3 class="fn">IteratorÂ <a name="14e9f4"></a>QValueList::findÂ (Â constÂ TÂ &amp;Â xÂ )</h3>
 <p>Finds the first occurrence of <em>x</em> in the list.
 <p>Returns <a href="#4996b7">end</a>() if no item did match.
-<h3 class="fn">int <a name="cff3f4"></a>QValueList::findIndex ( const T &amp; x ) const</h3>
+<h3 class="fn">intÂ <a name="cff3f4"></a>QValueList::findIndexÂ (Â constÂ TÂ &amp;Â xÂ )Â const</h3>
 <p>Returns the first index of the value <em>x</em> in the list or -1 if no such value
 can be found in the list.
-<h3 class="fn">T&amp; <a name="765ed5"></a>QValueList::first ()</h3>
+<h3 class="fn">T&amp;Â <a name="765ed5"></a>QValueList::firstÂ ()</h3>
 <p>Returns a reference to the first item in the list or the item
 referenced by <a href="#4996b7">end</a>()
 if no such items exists. Please note that you may not change
 the value the end() Iterator is pointing to.
 <p>See also  <a href="#6372f0">begin</a>() and <a href="#3507b2">last</a>().
-<h3 class="fn">const T&amp; <a name="1bbde8"></a>QValueList::first () const</h3>
+<h3 class="fn">constÂ T&amp;Â <a name="1bbde8"></a>QValueList::firstÂ ()Â const</h3>
 <p>Returns a reference to the first item in the list or the item
 referenced by <a href="#4996b7">end</a>() if
 no such items exists.
 <p>See also  <a href="#6372f0">begin</a>() and <a href="#3507b2">last</a>().
-<h3 class="fn">ConstIterator <a name="41e13a"></a>QValueList::fromLast () const</h3>
+<h3 class="fn">ConstIteratorÂ <a name="41e13a"></a>QValueList::fromLastÂ ()Â const</h3>
 <p>Returns an iterator pointing to the last element in the list or
 <a href="#4996b7">end</a>() if no such item exists.
 <p>See also  <a href="#3507b2">last</a>().
-<h3 class="fn">Iterator <a name="d314ba"></a>QValueList::fromLast ()</h3>
+<h3 class="fn">IteratorÂ <a name="d314ba"></a>QValueList::fromLastÂ ()</h3>
 <p>Returns an iterator pointing to the last element in the list or
 <a href="#4996b7">end</a>() if no such item exists.
 <p>See also  <a href="#3507b2">last</a>().
-<h3 class="fn">Iterator <a name="dc18c0"></a>QValueList::insert ( Iterator it, const T &amp; x )</h3>
+<h3 class="fn">IteratorÂ <a name="dc18c0"></a>QValueList::insertÂ (Â IteratorÂ it, constÂ TÂ &amp;Â xÂ )</h3>
 <p>Inserts the value <em>x</em> in front of the iterator <em>it.</em>
 <p>Returns an iterator pointing at the inserted item.
 <p>See also  <a href="#d68b11">append</a>() and <a href="#3c41a9">prepend</a>().
-<h3 class="fn">bool <a name="aec057"></a>QValueList::isEmpty () const</h3>
+<h3 class="fn">boolÂ <a name="aec057"></a>QValueList::isEmptyÂ ()Â const</h3>
 <p>Returns TRUE if the list is empty, i.e. <a href="#434489">count</a>() == 0. Returns FALSE
 otherwise.
 <p>See also  <a href="#434489">count</a>().
-<h3 class="fn">T&amp; <a name="3507b2"></a>QValueList::last ()</h3>
+<h3 class="fn">T&amp;Â <a name="3507b2"></a>QValueList::lastÂ ()</h3>
 <p>Returns a reference to the last item in the list or the item
 referenced by <a href="#4996b7">end</a>() if no
 such item exists. Please note that you may not change
 the value the end() Iterator is pointing to.
 <p>See also  <a href="#4996b7">end</a>(), <a href="#1bbde8">first</a>() and <a href="#41e13a">fromLast</a>().
-<h3 class="fn">const T&amp; <a name="3e5330"></a>QValueList::last () const</h3>
+<h3 class="fn">constÂ T&amp;Â <a name="3e5330"></a>QValueList::lastÂ ()Â const</h3>
 <p>Returns a reference to the last item in the list or the item
 referenced by <a href="#4996b7">end</a>() if no such item exists.
 <p>See also  <a href="#4996b7">end</a>(), <a href="#1bbde8">first</a>() and <a href="#41e13a">fromLast</a>().
-<h3 class="fn">bool <a name="dc3b9f"></a>QValueList::operator!= ( const QValueList&lt;T&gt; &amp; l ) const</h3>
+<h3 class="fn">boolÂ <a name="dc3b9f"></a>QValueList::operator!=Â (Â constÂ QValueList&lt;T&gt;Â &amp;Â lÂ )Â const</h3>
 <p>Compares both lists.
 <p>Returns TRUE if both list are unequal.
-<h3 class="fn">QValueList&lt;T&gt; <a name="067aae"></a>QValueList::operator+ ( const QValueList&lt;T&gt; &amp; l ) const</h3>
+<h3 class="fn">QValueList&lt;T&gt;Â <a name="067aae"></a>QValueList::operator+Â (Â constÂ QValueList&lt;T&gt;Â &amp;Â lÂ )Â const</h3>
 <p>Creates a new list and fills it with the elements of this list. Then the
 elements of <em>l</em> are appended.
 <p>Returns the new list.
-<h3 class="fn">QValueList&lt;T&gt;&amp; <a name="e8381f"></a>QValueList::operator+= ( const QValueList&lt;T&gt; &amp; l )</h3>
+<h3 class="fn">QValueList&lt;T&gt;&amp;Â <a name="e8381f"></a>QValueList::operator+=Â (Â constÂ QValueList&lt;T&gt;Â &amp;Â lÂ )</h3>
 <p>Adds <em>list</em> to this list.
 <p>Returns a reference to this list.
-<h3 class="fn">QValueList&lt;T&gt;&amp; <a name="5e278c"></a>QValueList::operator+= ( const T &amp; x )</h3>
+<h3 class="fn">QValueList&lt;T&gt;&amp;Â <a name="5e278c"></a>QValueList::operator+=Â (Â constÂ TÂ &amp;Â xÂ )</h3>
 <p>Adds the value <em>x</em> to the end of the list.
 <p>Returns a reference to the list.
-<h3 class="fn">QValueList&lt;T&gt;&amp; <a name="757ead"></a>QValueList::operator&lt;&lt; ( const T &amp; x )</h3>
+<h3 class="fn">QValueList&lt;T&gt;&amp;Â <a name="757ead"></a>QValueList::operator&lt;&lt;Â (Â constÂ TÂ &amp;Â xÂ )</h3>
 <p>Adds the value <em>x</em> to the end of the list.
 <p>Returns a reference to the list.
-<h3 class="fn">QValueList&lt;T&gt;&amp; <a name="23d705"></a>QValueList::operator= ( const QValueList&lt;T&gt; &amp; l )</h3>
+<h3 class="fn">QValueList&lt;T&gt;&amp;Â <a name="23d705"></a>QValueList::operator=Â (Â constÂ QValueList&lt;T&gt;Â &amp;Â lÂ )</h3>
 <p>Assigns <em>l</em> to this list and returns a reference to this list.
 <p>All iterators of the current list become invalidated by this operation.
 The cost of such an assignment is O(1) since QValueList is implicitly shared.
-<h3 class="fn">bool <a name="5e36b3"></a>QValueList::operator== ( const QValueList&lt;T&gt; &amp; l ) const</h3>
+<h3 class="fn">boolÂ <a name="5e36b3"></a>QValueList::operator==Â (Â constÂ QValueList&lt;T&gt;Â &amp;Â lÂ )Â const</h3>
 <p>Compares both lists.
 <p>Returns TRUE if both list are equal.
-<h3 class="fn">T&amp; <a name="b0eb54"></a>QValueList::operator[] ( uint i )</h3>
+<h3 class="fn">T&amp;Â <a name="b0eb54"></a>QValueList::operator[]Â (Â uintÂ iÂ )</h3>
 <p>Returns a reference to the item with index <em>i</em> in the list.
 It is up to you to check wether this item really exists. You can do that easily
 with the <a href="#434489">count</a>() function. However this operator does not check wether <em>i</em>
 is in range and will deliver undefined results if it does not exist.
 In contrast to the const operator[] you may manipulate the value returned by this
 operator.
-<h3 class="fn">const T&amp; <a name="d89d04"></a>QValueList::operator[] ( uint i ) const</h3>
+<h3 class="fn">constÂ T&amp;Â <a name="d89d04"></a>QValueList::operator[]Â (Â uintÂ iÂ )Â const</h3>
 <p>Returns a const reference to the item with index <em>i</em> in the list.
 It is up to you to check wether this item really exists. You can do that easily
 with the <a href="#434489">count</a>() function. However this operator does not check wether <em>i</em>
 is in range and will deliver undefined results if it does not exist.
-<h3 class="fn">Iterator <a name="3c41a9"></a>QValueList::prepend ( const T &amp; x )</h3>
+<h3 class="fn">IteratorÂ <a name="3c41a9"></a>QValueList::prependÂ (Â constÂ TÂ &amp;Â xÂ )</h3>
 <p>Inserts the value <em>x</em> at the beginning of the list.
 <p>Returns an iterator pointing at the inserted item.
 <p>See also  <a href="#dc18c0">insert</a>() and <a href="#d68b11">append</a>().
-<h3 class="fn">Iterator <a name="273e70"></a>QValueList::remove ( Iterator it )</h3>
+<h3 class="fn">IteratorÂ <a name="273e70"></a>QValueList::removeÂ (Â IteratorÂ itÂ )</h3>
 <p>Removes the item at position <em>it</em> in the list.
 <p>Returns an iterator pointing to the item following the
 removed on or <a href="#4996b7">end</a>() if the last item was deleted.
 <p>See also  <a href="#7b8e9e">clear</a>().
-<h3 class="fn">void <a name="a04cb3"></a>QValueList::remove ( const T &amp; x )</h3>
+<h3 class="fn">voidÂ <a name="a04cb3"></a>QValueList::removeÂ (Â constÂ TÂ &amp;Â xÂ )</h3>
 <p>Removes all items which have the value <em>x.</em>
 <p>See also  <a href="#7b8e9e">clear</a>().
 <hr><h2>Related Functions</h2>
@@ -370,6 +370,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

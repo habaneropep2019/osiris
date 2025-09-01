@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QDomDocumentType Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,15 +32,15 @@ Inherits <a href="qdomnode.html">QDomNode</a>.
 <p><a href="qdomdocumenttype-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#ebcaab"><b>QDomDocumentType</b></a> () </div>
-<li><div class="fn"><a href="#c122b7"><b>QDomDocumentType</b></a> ( const QDomDocumentType &amp; x ) </div>
-<li><div class="fn">QDomDocumentType&amp; <a href="#b5de46"><b>operator=</b></a> ( const QDomDocumentType &amp; ) </div>
-<li><div class="fn"><a href="#121dce"><b>~QDomDocumentType</b></a> () </div>
-<li><div class="fn">virtual QString <a href="#b0f324"><b>name</b></a> () const</div>
-<li><div class="fn">virtual QDomNamedNodeMap <a href="#8832e2"><b>entities</b></a> () const</div>
-<li><div class="fn">virtual QDomNamedNodeMap <a href="#19eace"><b>notations</b></a> () const</div>
-<li><div class="fn">virtual QDomNode::NodeType <a href="#0c4ce0"><b>nodeType</b></a> () const</div>
-<li><div class="fn">virtual bool <a href="#eaa54e"><b>isDocumentType</b></a> () const</div>
+<li><div class="fn"><a href="#ebcaab"><b>QDomDocumentType</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#c122b7"><b>QDomDocumentType</b></a>Â (Â constÂ QDomDocumentTypeÂ &amp;Â xÂ )Â </div>
+<li><div class="fn">QDomDocumentType&amp;Â <a href="#b5de46"><b>operator=</b></a>Â (Â constÂ QDomDocumentTypeÂ &amp;Â )Â </div>
+<li><div class="fn"><a href="#121dce"><b>~QDomDocumentType</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ QStringÂ <a href="#b0f324"><b>name</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ QDomNamedNodeMapÂ <a href="#8832e2"><b>entities</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ QDomNamedNodeMapÂ <a href="#19eace"><b>notations</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ QDomNode::NodeTypeÂ <a href="#0c4ce0"><b>nodeType</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ boolÂ <a href="#eaa54e"><b>isDocumentType</b></a>Â ()Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QDomDocumentType class is the representation of the DTD in the document tree.
@@ -52,31 +52,31 @@ specified in the &lt;!DOCTYPE name&gt; tag.
 <p>See also  <a href="qdomdocument.html">QDomDocument</a>.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="ebcaab"></a>QDomDocumentType::QDomDocumentType ()</h3>
+<h3 class="fn"><a name="ebcaab"></a>QDomDocumentType::QDomDocumentTypeÂ ()</h3>
 <p>Creates an empty QDomDocumentType object.
-<h3 class="fn"><a name="c122b7"></a>QDomDocumentType::QDomDocumentType ( const QDomDocumentType &amp; <a href="n.html">n</a> )</h3>
+<h3 class="fn"><a name="c122b7"></a>QDomDocumentType::QDomDocumentTypeÂ (Â constÂ QDomDocumentTypeÂ &amp;Â <a href="n.html">n</a>Â )</h3>
 <p>Copy constructor.
 <p>The data of the copy is shared: modifying one will also change the other. If
 you want to make a real copy, use <a href="qdomnode.html#8f17f1">cloneNode</a>() instead.
-<h3 class="fn"><a name="121dce"></a>QDomDocumentType::~QDomDocumentType ()</h3>
+<h3 class="fn"><a name="121dce"></a>QDomDocumentType::~QDomDocumentTypeÂ ()</h3>
 <p>Destructor.
-<h3 class="fn"><a href="qdomnamednodemap.html">QDomNamedNodeMap</a> <a name="8832e2"></a>QDomDocumentType::entities () const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qdomnamednodemap.html">QDomNamedNodeMap</a>Â <a name="8832e2"></a>QDomDocumentType::entitiesÂ ()Â const <code>[virtual]</code></h3>
 <p>Returns a map of all entities described in the DTD.
-<h3 class="fn">bool <a name="eaa54e"></a>QDomDocumentType::isDocumentType () const <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="eaa54e"></a>QDomDocumentType::isDocumentTypeÂ ()Â const <code>[virtual]</code></h3>
 <p>This function overloads <a href="qdomnode.html#905061">QDomNode::isDocumentType</a>().
 <p>See also  <a href="#0c4ce0">nodeType</a>() and <a href="qdomnode.html#cebbb6">QDomNode::toDocumentType</a>().
 <p>Reimplemented from <a href="qdomnode.html#905061">QDomNode.</a>
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="b0f324"></a>QDomDocumentType::name () const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="b0f324"></a>QDomDocumentType::nameÂ ()Â const <code>[virtual]</code></h3>
 <p>Returns the name of the document type as specified in
 the &lt;!DOCTYPE name&gt; tag.
 <p>See also  <a href="qdomnode.html#70cc89">nodeName</a>().
-<h3 class="fn">QDomNode::NodeType <a name="0c4ce0"></a>QDomDocumentType::nodeType() const <code>[virtual]</code></h3>
+<h3 class="fn">QDomNode::NodeTypeÂ <a name="0c4ce0"></a>QDomDocumentType::nodeType()Â const <code>[virtual]</code></h3>
 <p>Returns <code>DocumentTypeNode.</code>
 <p>See also  <a href="#eaa54e">isDocumentType</a>() and <a href="qdomnode.html#cebbb6">QDomNode::toDocumentType</a>().
 <p>Reimplemented from <a href="qdomnode.html#46495e">QDomNode.</a>
-<h3 class="fn"><a href="qdomnamednodemap.html">QDomNamedNodeMap</a> <a name="19eace"></a>QDomDocumentType::notations () const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qdomnamednodemap.html">QDomNamedNodeMap</a>Â <a name="19eace"></a>QDomDocumentType::notationsÂ ()Â const <code>[virtual]</code></h3>
 <p>Returns a map of all notations described in the DTD.
-<h3 class="fn">QDomDocumentType&amp; <a name="b5de46"></a>QDomDocumentType::operator= ( const QDomDocumentType &amp; <a href="n.html">n</a> )</h3>
+<h3 class="fn">QDomDocumentType&amp;Â <a name="b5de46"></a>QDomDocumentType::operator=Â (Â constÂ QDomDocumentTypeÂ &amp;Â <a href="n.html">n</a>Â )</h3>
 <p>Assignement operator.
 <p>The data of the copy is shared: modifying one will also change the other. If
 you want to make a real copy, use <a href="qdomnode.html#8f17f1">cloneNode</a>() instead.
@@ -91,6 +91,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

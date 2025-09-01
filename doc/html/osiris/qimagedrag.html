@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QImageDrag Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,16 +32,16 @@ Inherits <a href="qdragobject.html">QDragObject</a>.
 <p><a href="qimagedrag-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#b9b20e"><b>QImageDrag</b></a> ( QImage image, QWidget * dragSource = 0, const char * name = 0 ) </div>
-<li><div class="fn"><a href="#75ad90"><b>QImageDrag</b></a> ( QWidget * dragSource = 0, const char * name = 0 ) </div>
-<li><div class="fn"><a href="#6c448b"><b>~QImageDrag</b></a> () </div>
-<li><div class="fn">virtual void <a href="#02524f"><b>setImage</b></a> ( QImage image ) </div>
+<li><div class="fn"><a href="#b9b20e"><b>QImageDrag</b></a>Â (Â QImageÂ image, QWidgetÂ *Â dragSourceÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0Â )Â </div>
+<li><div class="fn"><a href="#75ad90"><b>QImageDrag</b></a>Â (Â QWidgetÂ *Â dragSourceÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0Â )Â </div>
+<li><div class="fn"><a href="#6c448b"><b>~QImageDrag</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#02524f"><b>setImage</b></a>Â (Â QImageÂ imageÂ )Â </div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><div class="fn">bool <a href="#c35128"><b>canDecode</b></a> ( const QMimeSource * e ) </div>
-<li><div class="fn">bool <a href="#b17609"><b>decode</b></a> ( const QMimeSource * e, QImage &amp; i ) </div>
-<li><div class="fn">bool <a href="#037fd2"><b>decode</b></a> ( const QMimeSource * e, QPixmap &amp; i ) </div>
+<li><div class="fn">boolÂ <a href="#c35128"><b>canDecode</b></a>Â (Â constÂ QMimeSourceÂ *Â eÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#b17609"><b>decode</b></a>Â (Â constÂ QMimeSourceÂ *Â e, QImageÂ &amp;Â iÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#037fd2"><b>decode</b></a>Â (Â constÂ QMimeSourceÂ *Â e, QPixmapÂ &amp;Â iÂ )Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QImageDrag class provides a drag-and-drop object for transferring images.
@@ -52,24 +52,24 @@ in Qt.
 <p>For detailed information about drag-and-drop, see the <a href="qdragobject.html">QDragObject</a> class.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="b9b20e"></a>QImageDrag::QImageDrag ( <a href="qimage.html">QImage</a> image, <a href="qwidget.html">QWidget</a> * dragSource = 0, const char * name = 0 )</h3>
+<h3 class="fn"><a name="b9b20e"></a>QImageDrag::QImageDragÂ (Â <a href="qimage.html">QImage</a>Â image, <a href="qwidget.html">QWidget</a>Â *Â dragSourceÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0Â )</h3>
 <p>Constructs an image drag object and sets it to <em>image. dragSource</em>
 must be the drag source, <em>name</em> is the object name.
-<h3 class="fn"><a name="75ad90"></a>QImageDrag::QImageDrag ( <a href="qwidget.html">QWidget</a> * dragSource = 0, const char * name = 0 )</h3>
+<h3 class="fn"><a name="75ad90"></a>QImageDrag::QImageDragÂ (Â <a href="qwidget.html">QWidget</a>Â *Â dragSourceÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0Â )</h3>
 <p>Constructs a default text drag object.  <em>dragSource</em> must be the drag
 source, <em>name</em> is the object name.
-<h3 class="fn"><a name="6c448b"></a>QImageDrag::~QImageDrag ()</h3>
+<h3 class="fn"><a name="6c448b"></a>QImageDrag::~QImageDragÂ ()</h3>
 <p>Destructs the image drag object and frees up all allocated resources.
-<h3 class="fn">bool <a name="c35128"></a>QImageDrag::canDecode ( const <a href="qmimesource.html">QMimeSource</a> * e ) <code>[static]</code></h3>
+<h3 class="fn">boolÂ <a name="c35128"></a>QImageDrag::canDecodeÂ (Â constÂ <a href="qmimesource.html">QMimeSource</a>Â *Â eÂ ) <code>[static]</code></h3>
 <p>Returns TRUE if the information in <em>e</em> can be decoded into an image.
 <p>See also  <a href="#037fd2">decode</a>().
 <p>Examples:
  <a href="desktop-desktop-cpp.html#QImageDrag::canDecode">desktop/desktop.cpp</a>
-<h3 class="fn">bool <a name="b17609"></a>QImageDrag::decode ( const <a href="qmimesource.html">QMimeSource</a> * e, <a href="qimage.html">QImage</a> &amp; img ) <code>[static]</code></h3>
+<h3 class="fn">boolÂ <a name="b17609"></a>QImageDrag::decodeÂ (Â constÂ <a href="qmimesource.html">QMimeSource</a>Â *Â e, <a href="qimage.html">QImage</a>Â &amp;Â imgÂ ) <code>[static]</code></h3>
 <p>Attempts to decode the dropped information in <em>e</em>
 into <em>img,</em> returning TRUE if successful.
 <p>See also  <a href="#c35128">canDecode</a>().
-<h3 class="fn">bool <a name="037fd2"></a>QImageDrag::decode ( const <a href="qmimesource.html">QMimeSource</a> * e, <a href="qpixmap.html">QPixmap</a> &amp; pm ) <code>[static]</code></h3>
+<h3 class="fn">boolÂ <a name="037fd2"></a>QImageDrag::decodeÂ (Â constÂ <a href="qmimesource.html">QMimeSource</a>Â *Â e, <a href="qpixmap.html">QPixmap</a>Â &amp;Â pmÂ ) <code>[static]</code></h3>
 <p>Attempts to decode the dropped information in <em>e</em>
 into <em>pm,</em> returning TRUE if successful.
 <p>This is a convenience function that converts
@@ -77,12 +77,12 @@ to <em>pm</em> via a <a href="qimage.html">QImage</a>.
 <p>See also  <a href="#c35128">canDecode</a>().
 <p>Examples:
  <a href="desktop-desktop-cpp.html#QImageDrag::decode">desktop/desktop.cpp</a>
-<h3 class="fn"><a href="qbytearray.html">QByteArray</a> <a name="3a6600"></a>QImageDrag::encodedData ( const char * fmt ) const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qbytearray.html">QByteArray</a>Â <a name="3a6600"></a>QImageDrag::encodedDataÂ (Â constÂ charÂ *Â fmtÂ )Â const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">const char * <a name="f361f9"></a>QImageDrag::format ( int i ) const <code>[virtual]</code></h3>
+<h3 class="fn">constÂ charÂ *Â <a name="f361f9"></a>QImageDrag::formatÂ (Â intÂ iÂ )Â const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qmimesource.html#17ce96">QMimeSource.</a>
-<h3 class="fn">void <a name="02524f"></a>QImageDrag::setImage ( <a href="qimage.html">QImage</a> image ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="02524f"></a>QImageDrag::setImageÂ (Â <a href="qimage.html">QImage</a>Â imageÂ ) <code>[virtual]</code></h3>
 <p>Sets the image to be dragged.  You will need to call this if you did
 not pass the image during construction.
 <hr><p>
@@ -96,6 +96,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

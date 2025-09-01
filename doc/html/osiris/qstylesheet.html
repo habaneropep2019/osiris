@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QStyleSheet Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,21 +32,21 @@ Inherits <a href="qobject.html">QObject</a>.
 <p><a href="qstylesheet-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#0664aa"><b>QStyleSheet</b></a> ( QObject * parent=0, const char * name=0 ) </div>
-<li><div class="fn">virtual <a href="#d4c965"><b>~QStyleSheet</b></a> () </div>
-<li><div class="fn">QStyleSheetItem* <a href="#a6efac"><b>item</b></a> ( const QString &amp; name ) </div>
-<li><div class="fn">const QStyleSheetItem* <a href="#2749ea"><b>item</b></a> ( const QString &amp; name ) const</div>
-<li><div class="fn">void <b>insert</b> ( QStyleSheetItem * item ) (internal)</div>
-<li><div class="fn">virtual QTextCustomItem* <a href="#12755e"><b>tag</b></a> ( const QString &amp; name, const QMap&lt;QString, QString&gt; &amp; attr, const QString &amp; context, const QMimeSourceFactory &amp; factory, bool emptyTag = FALSE ) const</div>
-<li><div class="fn">virtual void <a href="#9a27e3"><b>scaleFont</b></a> ( QFont &amp; font, int logicalSize ) const</div>
-<li><div class="fn">virtual void <a href="#fcd933"><b>error</b></a> ( const QString &amp; ) const</div>
+<li><div class="fn"><a href="#0664aa"><b>QStyleSheet</b></a>Â (Â QObjectÂ *Â parent=0, constÂ charÂ *Â name=0Â )Â </div>
+<li><div class="fn">virtualÂ <a href="#d4c965"><b>~QStyleSheet</b></a>Â ()Â </div>
+<li><div class="fn">QStyleSheetItem*Â <a href="#a6efac"><b>item</b></a>Â (Â constÂ QStringÂ &amp;Â nameÂ )Â </div>
+<li><div class="fn">constÂ QStyleSheetItem*Â <a href="#2749ea"><b>item</b></a>Â (Â constÂ QStringÂ &amp;Â nameÂ )Â const</div>
+<li><div class="fn">voidÂ <b>insert</b>Â (Â QStyleSheetItemÂ *Â itemÂ )Â (internal)</div>
+<li><div class="fn">virtualÂ QTextCustomItem*Â <a href="#12755e"><b>tag</b></a>Â (Â constÂ QStringÂ &amp;Â name, constÂ QMap&lt;QString, QString&gt;Â &amp;Â attr, constÂ QStringÂ &amp;Â context, constÂ QMimeSourceFactoryÂ &amp;Â factory, boolÂ emptyTagÂ =Â FALSEÂ )Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#9a27e3"><b>scaleFont</b></a>Â (Â QFontÂ &amp;Â font, intÂ logicalSizeÂ )Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#fcd933"><b>error</b></a>Â (Â constÂ QStringÂ &amp;Â )Â const</div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><div class="fn">QStyleSheet* <a href="#50ded7"><b>defaultSheet</b></a> () </div>
-<li><div class="fn">void <a href="#0aa4a1"><b>setDefaultSheet</b></a> ( QStyleSheet * ) </div>
-<li><div class="fn">QString <a href="#e1e9e8"><b>convertFromPlainText</b></a> ( const QString &amp; ) </div>
-<li><div class="fn">bool <a href="#58b86f"><b>mightBeRichText</b></a> ( const QString &amp; ) </div>
+<li><div class="fn">QStyleSheet*Â <a href="#50ded7"><b>defaultSheet</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#0aa4a1"><b>setDefaultSheet</b></a>Â (Â QStyleSheetÂ *Â )Â </div>
+<li><div class="fn">QStringÂ <a href="#e1e9e8"><b>convertFromPlainText</b></a>Â (Â constÂ QStringÂ &amp;Â )Â </div>
+<li><div class="fn">boolÂ <a href="#58b86f"><b>mightBeRichText</b></a>Â (Â constÂ QStringÂ &amp;Â )Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 A collection of styles for rich text rendering and a generator of tags.
@@ -238,17 +238,17 @@ and a bold font.
 </ul>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="0664aa"></a>QStyleSheet::QStyleSheet ( <a href="qobject.html">QObject</a> * parent=0, const char * name=0 )</h3>
+<h3 class="fn"><a name="0664aa"></a>QStyleSheet::QStyleSheetÂ (Â <a href="qobject.html">QObject</a>Â *Â parent=0, constÂ charÂ *Â name=0Â )</h3>
 <p>Create a style sheet.  Like any <a href="qobject.html">QObject</a>, the created object will be
 deleted when its parent destructs (if the child still exists then).
 <p>By default, the style sheet has the tag definitions defined above.
-<h3 class="fn"><a name="d4c965"></a>QStyleSheet::~QStyleSheet () <code>[virtual]</code></h3>
+<h3 class="fn"><a name="d4c965"></a>QStyleSheet::~QStyleSheetÂ () <code>[virtual]</code></h3>
 <p>Destructs the style sheet.  All styles inserted into the style sheet
 will be deleted.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="e1e9e8"></a>QStyleSheet::convertFromPlainText ( const <a href="qstring.html">QString</a> &amp; plain ) <code>[static]</code></h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="e1e9e8"></a>QStyleSheet::convertFromPlainTextÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â plainÂ ) <code>[static]</code></h3>
 <p>Auxiliary function. Converts the plain text string <em>plain</em> to a
 rich text formatted string while preserving its look.
-<h3 class="fn">QStyleSheet* <a name="50ded7"></a>QStyleSheet::defaultSheet () <code>[static]</code></h3>
+<h3 class="fn">QStyleSheet*Â <a name="50ded7"></a>QStyleSheet::defaultSheetÂ () <code>[static]</code></h3>
 <p>Returns the application-wide default style sheet.This style sheet is
 used by rich text rendering classes such as <a href="qsimplerichtext.html">QSimpleRichText</a>,
 <a href="qwhatsthis.html">QWhatsThis</a> and also <a href="qmessagebox.html">QMessageBox</a> to define the rendering style and
@@ -256,7 +256,7 @@ available tags within rich text documents. It serves also as initial
 style sheet for the more complex render widgets <a href="qtextview.html">QTextView</a> and
 <a href="qtextbrowser.html">QTextBrowser</a>.
 <p>See also  <a href="#0aa4a1">setDefaultSheet</a>().
-<h3 class="fn">void <a name="fcd933"></a>QStyleSheet::error ( const <a href="qstring.html">QString</a> &amp; msg ) const <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="fcd933"></a>QStyleSheet::errorÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â msgÂ )Â const <code>[virtual]</code></h3>
 <p>This virtual function is called when an error occurs when
 processing rich text. Reimplement if if you need to catch
 error messages.
@@ -264,34 +264,34 @@ error messages.
 not understood by the stylesheet, if some tags are nested wrongly or
 if tags are not closed properly.
 <p><em>msg</em> is the error message.
-<h3 class="fn"><a href="qstylesheetitem.html">QStyleSheetItem</a>* <a name="a6efac"></a>QStyleSheet::item ( const <a href="qstring.html">QString</a> &amp; name )</h3>
+<h3 class="fn"><a href="qstylesheetitem.html">QStyleSheetItem</a>*Â <a name="a6efac"></a>QStyleSheet::itemÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â nameÂ )</h3>
 <p>Returns the style with name <em>name</em> or 0 if there is no such style.
-<h3 class="fn">const <a href="qstylesheetitem.html">QStyleSheetItem</a>* <a name="2749ea"></a>QStyleSheet::item ( const <a href="qstring.html">QString</a> &amp; name ) const</h3>
+<h3 class="fn">constÂ <a href="qstylesheetitem.html">QStyleSheetItem</a>*Â <a name="2749ea"></a>QStyleSheet::itemÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â nameÂ )Â const</h3>
 <p>Returns the style with name <em>name</em> or 0 if there is no such style (const version).
-<h3 class="fn">bool <a name="58b86f"></a>QStyleSheet::mightBeRichText ( const <a href="qstring.html">QString</a> &amp; text ) <code>[static]</code></h3>
+<h3 class="fn">boolÂ <a name="58b86f"></a>QStyleSheet::mightBeRichTextÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â textÂ ) <code>[static]</code></h3>
 <p>Returns whether the string <em>text</em> is likely to be rich text
 formatted.
 <p>Note: The function uses a fast and therefore simple heuristic. It
 mainly checks whether there is something that looks like a tag
 before the first line break. While the result may be correct for
 most common cases, there is no guarantee.
-<h3 class="fn">void <a name="9a27e3"></a>QStyleSheet::scaleFont ( <a href="qfont.html">QFont</a> &amp; font, int logicalSize ) const <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="9a27e3"></a>QStyleSheet::scaleFontÂ (Â <a href="qfont.html">QFont</a>Â &amp;Â font, intÂ logicalSizeÂ )Â const <code>[virtual]</code></h3>
 <p>Scales the font <em>font</em> to the appropriate physical point size
 corresponding to the logical font size <em>logicalSize.</em>
 <p>When calling this function, <em>font</em> has a point size corresponding to
 the logical font size 3.
 <p>Typical logical font sizes range from 1 to 7, with 1 being the smallest.
 <p>See also  <a href="qstylesheetitem.html#2643ac">QStyleSheetItem::logicalFontSize</a>(), <a href="qstylesheetitem.html#cf7bf9">QStyleSheetItem::logicalFontSizeStep</a>() and <a href="qfont.html#fd77c1">QFont::setPointSize</a>().
-<h3 class="fn">void <a name="0aa4a1"></a>QStyleSheet::setDefaultSheet ( QStyleSheet * sheet ) <code>[static]</code></h3>
+<h3 class="fn">voidÂ <a name="0aa4a1"></a>QStyleSheet::setDefaultSheetÂ (Â QStyleSheetÂ *Â sheetÂ ) <code>[static]</code></h3>
 <p>Sets the application-wide default style sheet, deleting any style
 sheet previously set. The ownership is transferred.
 <p>See also  <a href="#50ded7">defaultSheet</a>().
-<h3 class="fn">QTextCustomItem* <a name="12755e"></a>QStyleSheet::tag ( const <a href="qstring.html">QString</a> &amp; name, const <a href="qmap.html">QMap</a>&lt;<a href="qstring.html">QString</a>, <a href="qstring.html">QString</a>&gt; &amp; attr, const <a href="qstring.html">QString</a> &amp; context, const <a href="qmimesourcefactory.html">QMimeSourceFactory</a> &amp; factory, bool = FALSE ) const <code>[virtual]</code></h3>
+<h3 class="fn">QTextCustomItem*Â <a name="12755e"></a>QStyleSheet::tagÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â name, constÂ <a href="qmap.html">QMap</a>&lt;<a href="qstring.html">QString</a>, <a href="qstring.html">QString</a>&gt;Â &amp;Â attr, constÂ <a href="qstring.html">QString</a>Â &amp;Â context, constÂ <a href="qmimesourcefactory.html">QMimeSourceFactory</a>Â &amp;Â factory, boolÂ =Â FALSEÂ )Â const <code>[virtual]</code></h3>
 <p>Generates an internal object for tag named <em>name,</em> given the
 attributes <em>attr,</em> and using additional information provided
 by the mime source factory <em>factory</em> .
 <p>This function should not (yet) be used in application code.
-<h3 class="fn">void <a name="2c9c80"></a>QStyleSheet::insert ( <a href="qstylesheetitem.html">QStyleSheetItem</a> * style )</h3>
+<h3 class="fn">voidÂ <a name="2c9c80"></a>QStyleSheet::insertÂ (Â <a href="qstylesheetitem.html">QStyleSheetItem</a>Â *Â styleÂ )</h3>
 <p>For internal use only.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
@@ -304,6 +304,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QPaintDevice Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -31,19 +31,19 @@ The base class of objects that can be painted.
 <p><a href="qpaintdevice-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">virtual <a href="#b1caad"><b>~QPaintDevice</b></a> () </div>
-<li><div class="fn">int <a href="#754791"><b>devType</b></a> () const</div>
-<li><div class="fn">bool <a href="#350135"><b>isExtDev</b></a> () const</div>
-<li><div class="fn">bool <a href="#11c528"><b>paintingActive</b></a> () const</div>
-<li><div class="fn">enum <b>PDevCmd</b> { PdcNOP = 0, PdcDrawPoint = 1, PdcDrawFirst = PdcDrawPoint, PdcMoveTo = 2, PdcLineTo = 3, PdcDrawLine = 4, PdcDrawRect = 5, PdcDrawRoundRect = 6, PdcDrawEllipse = 7, PdcDrawArc = 8, PdcDrawPie = 9, PdcDrawChord = 10, PdcDrawLineSegments = 11, PdcDrawPolyline = 12, PdcDrawPolygon = 13, PdcDrawQuadBezier = 14, PdcDrawText = 15, PdcDrawTextFormatted = 16, PdcDrawPixmap = 17, PdcDrawImage = 18, PdcDrawText2 = 19, PdcDrawText2Formatted = 20, PdcDrawLast = PdcDrawText2Formatted, PdcBegin = 30, PdcEnd = 31, PdcSave = 32, PdcRestore = 33, PdcSetdev = 34, PdcSetBkColor = 40, PdcSetBkMode = 41, PdcSetROP = 42, PdcSetBrushOrigin = 43, PdcSetFont = 45, PdcSetPen = 46, PdcSetBrush = 47, PdcSetTabStops = 48, PdcSetTabArray = 49, PdcSetUnit = 50, PdcSetVXform = 51, PdcSetWindow = 52, PdcSetViewport = 53, PdcSetWXform = 54, PdcSetWMatrix = 55, PdcSaveWMatrix = 56, PdcRestoreWMatrix = 57, PdcSetClip = 60, PdcSetClipRegion = 61, PdcReservedStart = 0, PdcReservedStop = 199 }</div>
+<li><div class="fn">virtualÂ <a href="#b1caad"><b>~QPaintDevice</b></a>Â ()Â </div>
+<li><div class="fn">intÂ <a href="#754791"><b>devType</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#350135"><b>isExtDev</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#11c528"><b>paintingActive</b></a>Â ()Â const</div>
+<li><div class="fn">enumÂ <b>PDevCmd</b>Â {Â PdcNOPÂ =Â 0, PdcDrawPointÂ =Â 1, PdcDrawFirstÂ =Â PdcDrawPoint, PdcMoveToÂ =Â 2, PdcLineToÂ =Â 3, PdcDrawLineÂ =Â 4, PdcDrawRectÂ =Â 5, PdcDrawRoundRectÂ =Â 6, PdcDrawEllipseÂ =Â 7, PdcDrawArcÂ =Â 8, PdcDrawPieÂ =Â 9, PdcDrawChordÂ =Â 10, PdcDrawLineSegmentsÂ =Â 11, PdcDrawPolylineÂ =Â 12, PdcDrawPolygonÂ =Â 13, PdcDrawQuadBezierÂ =Â 14, PdcDrawTextÂ =Â 15, PdcDrawTextFormattedÂ =Â 16, PdcDrawPixmapÂ =Â 17, PdcDrawImageÂ =Â 18, PdcDrawText2Â =Â 19, PdcDrawText2FormattedÂ =Â 20, PdcDrawLastÂ =Â PdcDrawText2Formatted, PdcBeginÂ =Â 30, PdcEndÂ =Â 31, PdcSaveÂ =Â 32, PdcRestoreÂ =Â 33, PdcSetdevÂ =Â 34, PdcSetBkColorÂ =Â 40, PdcSetBkModeÂ =Â 41, PdcSetROPÂ =Â 42, PdcSetBrushOriginÂ =Â 43, PdcSetFontÂ =Â 45, PdcSetPenÂ =Â 46, PdcSetBrushÂ =Â 47, PdcSetTabStopsÂ =Â 48, PdcSetTabArrayÂ =Â 49, PdcSetUnitÂ =Â 50, PdcSetVXformÂ =Â 51, PdcSetWindowÂ =Â 52, PdcSetViewportÂ =Â 53, PdcSetWXformÂ =Â 54, PdcSetWMatrixÂ =Â 55, PdcSaveWMatrixÂ =Â 56, PdcRestoreWMatrixÂ =Â 57, PdcSetClipÂ =Â 60, PdcSetClipRegionÂ =Â 61, PdcReservedStartÂ =Â 0, PdcReservedStopÂ =Â 199Â }</div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><div class="fn"><a href="#bfb403"><b>QPaintDevice</b></a> ( uint devflags ) </div>
-<li><div class="fn">virtual bool <a href="#4d4225"><b>cmd</b></a> ( int, QPainter *, QPDevCmdParam * ) </div>
-<li><div class="fn">virtual int <a href="#43eff7"><b>metric</b></a> ( int ) const</div>
-<li><div class="fn">virtual int <a href="#935a9c"><b>fontMet</b></a> ( QFont *, int, const char * = 0, int = 0 ) const</div>
-<li><div class="fn">virtual int <a href="#269e25"><b>fontInf</b></a> ( QFont *, int ) const</div>
+<li><div class="fn"><a href="#bfb403"><b>QPaintDevice</b></a>Â (Â uintÂ devflagsÂ )Â </div>
+<li><div class="fn">virtualÂ boolÂ <a href="#4d4225"><b>cmd</b></a>Â (Â int, QPainterÂ *, QPDevCmdParamÂ *Â )Â </div>
+<li><div class="fn">virtualÂ intÂ <a href="#43eff7"><b>metric</b></a>Â (Â intÂ )Â const</div>
+<li><div class="fn">virtualÂ intÂ <a href="#935a9c"><b>fontMet</b></a>Â (Â QFontÂ *, int, constÂ charÂ *Â =Â 0, intÂ =Â 0Â )Â const</div>
+<li><div class="fn">virtualÂ intÂ <a href="#269e25"><b>fontInf</b></a>Â (Â QFontÂ *, intÂ )Â const</div>
 </ul>
 <h2>Related Functions</h2>
 (Note that these are not member functions.)
@@ -85,33 +85,33 @@ devices can be created.  Paint devices access window system resources, and
 these resources are not initialized before an application object is created.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="bfb403"></a>QPaintDevice::QPaintDevice ( uint devflags ) <code>[protected]</code></h3>
+<h3 class="fn"><a name="bfb403"></a>QPaintDevice::QPaintDeviceÂ (Â uintÂ devflagsÂ ) <code>[protected]</code></h3>
 <p>Constructs a paint device with internal flags <em>devflags.</em>
 This constructor can only be invoked from subclasses of QPaintDevice.
-<h3 class="fn"><a name="b1caad"></a>QPaintDevice::~QPaintDevice () <code>[virtual]</code></h3>
+<h3 class="fn"><a name="b1caad"></a>QPaintDevice::~QPaintDeviceÂ () <code>[virtual]</code></h3>
 <p>Destructs the paint device and frees window system resources.
-<h3 class="fn">bool <a name="4d4225"></a>QPaintDevice::cmd ( int, <a href="qpainter.html">QPainter</a> *, QPDevCmdParam * ) <code>[virtual protected]</code></h3>
+<h3 class="fn">boolÂ <a name="4d4225"></a>QPaintDevice::cmdÂ (Â int, <a href="qpainter.html">QPainter</a>Â *, QPDevCmdParamÂ *Â ) <code>[virtualÂ protected]</code></h3>
 <p>Internal virtual function that interprets drawing commands from
 the painter.
 <p>Implemented by subclasses that have no direct support for drawing
 graphics (external paint devices, for example <a href="qpicture.html">QPicture</a>).
 <p>Reimplemented in <a href="qprinter.html#1e8d9c">QPrinter</a> and <a href="qpicture.html#89362c">QPicture</a>.
-<h3 class="fn">int <a name="754791"></a>QPaintDevice::devType () const</h3>
+<h3 class="fn">intÂ <a name="754791"></a>QPaintDevice::devTypeÂ ()Â const</h3>
 <p>Returns the device type identifier: <code>QInternal::Widget, QInternal::Pixmap, QInternal::Printer, QInternal::Picture</code> or
 <code>QInternal::UndefinedDevice.</code>
-<h3 class="fn">int <a name="269e25"></a>QPaintDevice::fontInf ( <a href="qfont.html">QFont</a> *, int ) const <code>[virtual protected]</code></h3>
+<h3 class="fn">intÂ <a name="269e25"></a>QPaintDevice::fontInfÂ (Â <a href="qfont.html">QFont</a>Â *, intÂ )Â const <code>[virtualÂ protected]</code></h3>
 <p>Internal virtual function. Reserved for future use.
-<h3 class="fn">int <a name="935a9c"></a>QPaintDevice::fontMet ( <a href="qfont.html">QFont</a> *, int, const char * = 0, int = 0 ) const <code>[virtual protected]</code></h3>
+<h3 class="fn">intÂ <a name="935a9c"></a>QPaintDevice::fontMetÂ (Â <a href="qfont.html">QFont</a>Â *, int, constÂ charÂ *Â =Â 0, intÂ =Â 0Â )Â const <code>[virtualÂ protected]</code></h3>
 <p>Internal virtual function. Reserved for future use.
-<h3 class="fn">bool <a name="350135"></a>QPaintDevice::isExtDev () const</h3>
+<h3 class="fn">boolÂ <a name="350135"></a>QPaintDevice::isExtDevÂ ()Â const</h3>
 <p>Returns TRUE if the device is a so-called external paint device.
 <p>External paint devices cannot be <a href="#35ae2e">bitBlt</a>()'ed from.
 <a href="qpicture.html">QPicture</a> and <a href="qprinter.html">QPrinter</a> are external paint devices.
-<h3 class="fn">int <a name="43eff7"></a>QPaintDevice::metric ( int ) const <code>[virtual protected]</code></h3>
+<h3 class="fn">intÂ <a name="43eff7"></a>QPaintDevice::metricÂ (Â intÂ )Â const <code>[virtualÂ protected]</code></h3>
 <p>Internal virtual function that returns paint device metrics.
 <p>Please use the <a href="qpaintdevicemetrics.html">QPaintDeviceMetrics</a> class instead.
 <p>Reimplemented in <a href="qpicture.html#1eba1e">QPicture</a>, <a href="qpixmap.html#fa32cf">QPixmap</a>, <a href="qwidget.html#f0e10e">QWidget</a> and <a href="qprinter.html#c4f6e2">QPrinter</a>.
-<h3 class="fn">bool <a name="11c528"></a>QPaintDevice::paintingActive () const</h3>
+<h3 class="fn">boolÂ <a name="11c528"></a>QPaintDevice::paintingActiveÂ ()Â const</h3>
 <p>Returns TRUE if the device is being painted, i.e. someone has called
 <a href="qpainter.html#02ed5d">QPainter::begin</a>() and not yet <a href="qpainter.html#365784">QPainter::end</a>() for this device.
 <p>See also  <a href="qpainter.html#08ba62">QPainter::isActive</a>().
@@ -180,6 +180,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

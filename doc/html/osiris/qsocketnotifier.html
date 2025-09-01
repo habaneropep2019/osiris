@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QSocketNotifier Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,17 +32,17 @@ Inherits <a href="qobject.html">QObject</a>.
 <p><a href="qsocketnotifier-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">enum <b>Type</b> { Read, Write, Exception }</div>
-<li><div class="fn"><a href="#cdd4d5"><b>QSocketNotifier</b></a> ( int socket, Type, QObject * parent=0, const char * name=0 ) </div>
-<li><div class="fn"><a href="#6f02a7"><b>~QSocketNotifier</b></a> () </div>
-<li><div class="fn">int <a href="#cb8bf5"><b>socket</b></a> () const</div>
-<li><div class="fn">Type <a href="#069fe1"><b>type</b></a> () const</div>
-<li><div class="fn">bool <a href="#f8e64e"><b>isEnabled</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#3c8e2e"><b>setEnabled</b></a> ( bool ) </div>
+<li><div class="fn">enumÂ <b>Type</b>Â {Â Read, Write, ExceptionÂ }</div>
+<li><div class="fn"><a href="#cdd4d5"><b>QSocketNotifier</b></a>Â (Â intÂ socket, Type, QObjectÂ *Â parent=0, constÂ charÂ *Â name=0Â )Â </div>
+<li><div class="fn"><a href="#6f02a7"><b>~QSocketNotifier</b></a>Â ()Â </div>
+<li><div class="fn">intÂ <a href="#cb8bf5"><b>socket</b></a>Â ()Â const</div>
+<li><div class="fn">TypeÂ <a href="#069fe1"><b>type</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#f8e64e"><b>isEnabled</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#3c8e2e"><b>setEnabled</b></a>Â (Â boolÂ )Â </div>
 </ul>
 <h2>Signals</h2>
 <ul>
-<li><div class="fn">void <a href="#c0b2e7"><b>activated</b></a> ( int socket ) </div>
+<li><div class="fn">voidÂ <a href="#c0b2e7"><b>activated</b></a>Â (Â intÂ socketÂ )Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QSocketNotifer class provides support for socket callbacks.
@@ -114,7 +114,7 @@ operations.
 <p>See also  <a href="qsocket.html">QSocket</a>, <a href="qserversocket.html">QServerSocket</a> and <a href="qsocketdevice.html">QSocketDevice</a>.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="cdd4d5"></a>QSocketNotifier::QSocketNotifier ( int socket, Type type, <a href="qobject.html">QObject</a> * parent=0, const char * name=0 )</h3>
+<h3 class="fn"><a name="cdd4d5"></a>QSocketNotifier::QSocketNotifierÂ (Â intÂ socket, TypeÂ type, <a href="qobject.html">QObject</a>Â *Â parent=0, constÂ charÂ *Â name=0Â )</h3>
 <p>Constructs a socket notifier with a <em>parent</em> and a <em>name.</em>
 <p>Arguments:
 <ul>
@@ -127,9 +127,9 @@ The <em>parent</em> and <em>name</em> arguments are sent to the <a href="qobject
 <p>The socket notifier is initially enabled.  It is generally advisable to
 explicitly enable or disable it, especially for write notifiers.
 <p>See also  <a href="#3c8e2e">setEnabled</a>() and <a href="#f8e64e">isEnabled</a>().
-<h3 class="fn"><a name="6f02a7"></a>QSocketNotifier::~QSocketNotifier ()</h3>
+<h3 class="fn"><a name="6f02a7"></a>QSocketNotifier::~QSocketNotifierÂ ()</h3>
 <p>Destructs the socket notifier.
-<h3 class="fn">void <a name="c0b2e7"></a>QSocketNotifier::activated ( int socket ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="c0b2e7"></a>QSocketNotifier::activatedÂ (Â intÂ socketÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted under certain conditions, specified by the
 notifier <a href="#069fe1">type</a>:
 <ol>
@@ -140,13 +140,13 @@ exception event).
 </ol>
 <p>The <em>socket</em> argument is the <a href="#cb8bf5">socket</a> identifier.
 <p>See also  <a href="#069fe1">type</a>() and <a href="#cb8bf5">socket</a>().
-<h3 class="fn">bool <a name="8b1e95"></a>QSocketNotifier::event ( <a href="qevent.html">QEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">boolÂ <a name="8b1e95"></a>QSocketNotifier::eventÂ (Â <a href="qevent.html">QEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qobject.html#c67adb">QObject.</a>
-<h3 class="fn">bool <a name="f8e64e"></a>QSocketNotifier::isEnabled () const</h3>
+<h3 class="fn">boolÂ <a name="f8e64e"></a>QSocketNotifier::isEnabledÂ ()Â const</h3>
 <p>Returns TRUE if the notifier is enabled, or FALSE if it is disabled.
 <p>See also  <a href="#3c8e2e">setEnabled</a>().
-<h3 class="fn">void <a name="3c8e2e"></a>QSocketNotifier::setEnabled ( bool enable ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="3c8e2e"></a>QSocketNotifier::setEnabledÂ (Â boolÂ enableÂ ) <code>[virtual]</code></h3>
 <p>Enables the notifier if <em>enable</em> is TRUE, or disables it if <em>enable</em> is
 FALSE.
 <p>The notifier is by default enabled.
@@ -158,10 +158,10 @@ the socket notifier).
 activated() signal has been emitted; see discussion of write
 notifiers in the class description above.
 <p>See also  <a href="#f8e64e">isEnabled</a>() and <a href="#c0b2e7">activated</a>().
-<h3 class="fn">int <a name="cb8bf5"></a>QSocketNotifier::socket () const</h3>
+<h3 class="fn">intÂ <a name="cb8bf5"></a>QSocketNotifier::socketÂ ()Â const</h3>
 <p>Returns the socket identifier specified to the constructor.
 <p>See also  <a href="#069fe1">type</a>().
-<h3 class="fn">Type <a name="069fe1"></a>QSocketNotifier::type () const</h3>
+<h3 class="fn">TypeÂ <a name="069fe1"></a>QSocketNotifier::typeÂ ()Â const</h3>
 <p>Returns the socket event type specified to the constructor;
 <code>QSocketNotifier::Read, QSocketNotifier::Write</code> or
 <code>QSocketNotifier::Exception.</code>
@@ -177,6 +177,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>
