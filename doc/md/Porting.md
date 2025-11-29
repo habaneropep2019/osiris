@@ -20,18 +20,8 @@ Most information in the Qt 2.3.2 HTML documentation is still correct. You should
 
 A brief overview of porting Osiris to other platforms. Bug reports should be submitted to the Osiris project, _not_ Qt!
 
-This is based on the original PORTING file included with Qt 2.3.2.
+Generally, you will need a X11R7 (or newer) compliant Xlib. Motif is not usable. You may run into issues with how threads are implemented in other Unix-like systems.
 
-## REQUIREMENTS
-
-The new platform needs Xlib for X11R7 or newer.  Motif should not be used.
-If it is not a Unix system (for instance VMS) things may get complicated.
-Porting to other Unixes is generally straight-forward.
-
-Osiris requires that your C++ compiler supports multiple inheritance and
-templates. The compiler must recognize the .cpp extension.  Exception
-handling and RTTI (Run-Time Type Information) are not required.
-Expect problems with old CFront-based compilers.
 
 ## PATCHES
 

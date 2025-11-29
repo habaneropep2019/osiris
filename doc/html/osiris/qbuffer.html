@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QBuffer Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,11 +32,11 @@ Inherits <a href="qiodevice.html">QIODevice</a>.
 <p><a href="qbuffer-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#99d1f1"><b>QBuffer</b></a> () </div>
-<li><div class="fn"><a href="#c19c73"><b>QBuffer</b></a> ( QByteArray ) </div>
-<li><div class="fn"><a href="#a8c5d0"><b>~QBuffer</b></a> () </div>
-<li><div class="fn">QByteArray <a href="#6512d9"><b>buffer</b></a> () const</div>
-<li><div class="fn">bool <a href="#9f0762"><b>setBuffer</b></a> ( QByteArray ) </div>
+<li><div class="fn"><a href="#99d1f1"><b>QBuffer</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#c19c73"><b>QBuffer</b></a>Â (Â QByteArrayÂ )Â </div>
+<li><div class="fn"><a href="#a8c5d0"><b>~QBuffer</b></a>Â ()Â </div>
+<li><div class="fn">QByteArrayÂ <a href="#6512d9"><b>buffer</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#9f0762"><b>setBuffer</b></a>Â (Â QByteArrayÂ )Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QBuffer class is an I/O device that operates on a <a href="qbytearray.html">QByteArray</a>
@@ -65,9 +65,9 @@ functions <a href="#9062f3">readBlock</a>(), <a href="#d0ec2c">writeBlock</a>() 
 <p>See also  <a href="qfile.html">QFile</a>, <a href="qdatastream.html">QDataStream</a>, <a href="qtextstream.html">QTextStream</a>, <a href="qbytearray.html">QByteArray</a> and <a href="shclass.html">Shared Classes</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="99d1f1"></a>QBuffer::QBuffer ()</h3>
+<h3 class="fn"><a name="99d1f1"></a>QBuffer::QBufferÂ ()</h3>
 <p>Constructs an empty buffer.
-<h3 class="fn"><a name="c19c73"></a>QBuffer::QBuffer ( <a href="qbytearray.html">QByteArray</a> buf )</h3>
+<h3 class="fn"><a name="c19c73"></a>QBuffer::QBufferÂ (Â <a href="qbytearray.html">QByteArray</a>Â bufÂ )</h3>
 <p>Constructs a buffer that operates on <em>buf.</em>
 If you open the buffer in write mode (<code>IO_WriteOnly</code> or
 <code>IO_ReadWrite)</code> and write something into the buffer, <em>buf</em>
@@ -82,30 +82,30 @@ will be modified.
       // Now, str == "abcdef"
 </pre>
 <p>See also  <a href="#9f0762">setBuffer</a>().
-<h3 class="fn"><a name="a8c5d0"></a>QBuffer::~QBuffer ()</h3>
+<h3 class="fn"><a name="a8c5d0"></a>QBuffer::~QBufferÂ ()</h3>
 <p>Destructs the buffer.
-<h3 class="fn">bool <a name="491c1f"></a>QBuffer::at ( int pos ) <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="491c1f"></a>QBuffer::atÂ (Â intÂ posÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qiodevice.html#90fb01">QIODevice.</a>
-<h3 class="fn">int <a name="3c9864"></a>QBuffer::at () const <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="3c9864"></a>QBuffer::atÂ ()Â const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qiodevice.html#a8b90e">QIODevice.</a>
-<h3 class="fn"><a href="qbytearray.html">QByteArray</a> <a name="6512d9"></a>QBuffer::buffer () const</h3>
+<h3 class="fn"><a href="qbytearray.html">QByteArray</a>Â <a name="6512d9"></a>QBuffer::bufferÂ ()Â const</h3>
 <p>Returns this buffer's byte array.
 <p>See also  <a href="#9f0762">setBuffer</a>().
-<h3 class="fn">void <a name="bcf8f3"></a>QBuffer::close () <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="bcf8f3"></a>QBuffer::closeÂ () <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 Closes an open buffer.
 <p>See also  <a href="#53d514">open</a>().
 <p>Reimplemented from <a href="qiodevice.html#50fcfd">QIODevice.</a>
-<h3 class="fn">void <a name="c73504"></a>QBuffer::flush () <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="c73504"></a>QBuffer::flushÂ () <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 The flush function does nothing for a QBuffer.
 <p>Reimplemented from <a href="qiodevice.html#dfd9f0">QIODevice.</a>
-<h3 class="fn">int <a name="9769c6"></a>QBuffer::getch () <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="9769c6"></a>QBuffer::getchÂ () <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qiodevice.html#09409b">QIODevice.</a>
-<h3 class="fn">bool <a name="53d514"></a>QBuffer::open ( int m ) <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="53d514"></a>QBuffer::openÂ (Â intÂ mÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 Opens the buffer in the mode <em>m.</em>  Returns TRUE if successful,
 otherwise FALSE. The buffer must be opened before use.
@@ -119,7 +119,7 @@ otherwise FALSE. The buffer must be opened before use.
 </ul>
 <p>See also  <a href="#bcf8f3">close</a>() and <a href="qiodevice.html#1bc7b0">isOpen</a>().
 <p>Reimplemented from <a href="qiodevice.html#756b18">QIODevice.</a>
-<h3 class="fn">int <a name="434945"></a>QBuffer::putch ( int ch ) <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="434945"></a>QBuffer::putchÂ (Â intÂ chÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 Writes the character <em>ch</em> into the buffer, overwriting
 the character at the current index, extending the buffer
@@ -127,26 +127,26 @@ if necessary.
 <p>Returns <em>ch,</em> or -1 if some error occurred.
 <p>See also  <a href="#9769c6">getch</a>() and <a href="#4788e0">ungetch</a>().
 <p>Reimplemented from <a href="qiodevice.html#71cd12">QIODevice.</a>
-<h3 class="fn">int <a name="9062f3"></a>QBuffer::readBlock ( char * p, uint len ) <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="9062f3"></a>QBuffer::readBlockÂ (Â charÂ *Â p, uintÂ lenÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qiodevice.html#c12e6e">QIODevice.</a>
-<h3 class="fn">int <a name="07bef1"></a>QBuffer::readLine ( char * p, uint maxlen ) <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="07bef1"></a>QBuffer::readLineÂ (Â charÂ *Â p, uintÂ maxlenÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qiodevice.html#0b6051">QIODevice.</a>
-<h3 class="fn">bool <a name="9f0762"></a>QBuffer::setBuffer ( <a href="qbytearray.html">QByteArray</a> buf )</h3>
+<h3 class="fn">boolÂ <a name="9f0762"></a>QBuffer::setBufferÂ (Â <a href="qbytearray.html">QByteArray</a>Â bufÂ )</h3>
 <p>Replaces the buffer's contents with <em>buf.</em>
 <p>This may not be done when <a href="qiodevice.html#1bc7b0">isOpen</a>() is TRUE.
 <p>Note that if you open the buffer in write mode (<code>IO_WriteOnly</code> or
 IO_ReadWrite) and write something into the buffer, <em>buf</em> is also
 modified because <a href="qbytearray.html">QByteArray</a> is an explicitly shared class.
 <p>See also  <a href="#6512d9">buffer</a>(), <a href="#53d514">open</a>() and <a href="#bcf8f3">close</a>().
-<h3 class="fn">uint <a name="c4d405"></a>QBuffer::size () const <code>[virtual]</code></h3>
+<h3 class="fn">uintÂ <a name="c4d405"></a>QBuffer::sizeÂ ()Â const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qiodevice.html#8ddedd">QIODevice.</a>
-<h3 class="fn">int <a name="4788e0"></a>QBuffer::ungetch ( int ch ) <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="4788e0"></a>QBuffer::ungetchÂ (Â intÂ chÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qiodevice.html#05a43c">QIODevice.</a>
-<h3 class="fn">int <a name="d0ec2c"></a>QBuffer::writeBlock ( const char * p, uint len ) <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="d0ec2c"></a>QBuffer::writeBlockÂ (Â constÂ charÂ *Â p, uintÂ lenÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Writes <em>len</em> bytes from <em>p</em> into the buffer at the current index,
 overwriting any characters there and extending the buffer if necessary.
@@ -165,6 +165,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

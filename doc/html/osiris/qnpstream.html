@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QNPStream Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -31,20 +31,20 @@ A stream of data provided to a <a href="qnpinstance.html">QNPInstance</a> by the
 <p><a href="qnpstream-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#92d58b"><b>~QNPStream</b></a> () </div>
-<li><div class="fn">const char* <a href="#562816"><b>url</b></a> () const</div>
-<li><div class="fn">uint <a href="#d784d1"><b>end</b></a> () const</div>
-<li><div class="fn">uint <a href="#5c3dab"><b>lastModified</b></a> () const</div>
-<li><div class="fn">const char* <a href="#611967"><b>type</b></a> () const</div>
-<li><div class="fn">bool <a href="#dea454"><b>seekable</b></a> () const</div>
-<li><div class="fn">bool <a href="#c295fc"><b>okay</b></a> () const</div>
-<li><div class="fn">bool <a href="#2d104b"><b>complete</b></a> () const</div>
-<li><div class="fn">void <a href="#103722"><b>requestRead</b></a> ( int offset, uint length ) </div>
-<li><div class="fn">int <a href="#7a88d2"><b>write</b></a> ( int len, void * buffer ) </div>
-<li><div class="fn">QNPInstance* <a href="#d25257"><b>instance</b></a> () </div>
-<li><div class="fn"><a href="#5dbc31"><b>QNPStream</b></a> ( QNPInstance *, const char *, _NPStream *, bool ) </div>
-<li><div class="fn">void <b>setOkay</b> ( bool ) (internal)</div>
-<li><div class="fn">void <b>setComplete</b> ( bool ) (internal)</div>
+<li><div class="fn"><a href="#92d58b"><b>~QNPStream</b></a>Â ()Â </div>
+<li><div class="fn">constÂ char*Â <a href="#562816"><b>url</b></a>Â ()Â const</div>
+<li><div class="fn">uintÂ <a href="#d784d1"><b>end</b></a>Â ()Â const</div>
+<li><div class="fn">uintÂ <a href="#5c3dab"><b>lastModified</b></a>Â ()Â const</div>
+<li><div class="fn">constÂ char*Â <a href="#611967"><b>type</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#dea454"><b>seekable</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#c295fc"><b>okay</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#2d104b"><b>complete</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#103722"><b>requestRead</b></a>Â (Â intÂ offset, uintÂ lengthÂ )Â </div>
+<li><div class="fn">intÂ <a href="#7a88d2"><b>write</b></a>Â (Â intÂ len, voidÂ *Â bufferÂ )Â </div>
+<li><div class="fn">QNPInstance*Â <a href="#d25257"><b>instance</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#5dbc31"><b>QNPStream</b></a>Â (Â QNPInstanceÂ *, constÂ charÂ *, _NPStreamÂ *, boolÂ )Â </div>
+<li><div class="fn">voidÂ <b>setOkay</b>Â (Â boolÂ )Â (internal)</div>
+<li><div class="fn">voidÂ <b>setComplete</b>Â (Â boolÂ )Â (internal)</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 This class is defined in the <b>Qt NSPlugin Extension</b>, which can be found in the <tt>qt/extensions</tt> directory.
@@ -59,36 +59,36 @@ Note that this is neither a <a href="qtextstream.html">QTextStream</a> or a <a h
  <a href="grapher-grapher-cpp.html#QNPStream">grapher/grapher.cpp</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="5dbc31"></a>QNPStream::QNPStream ( <a href="qnpinstance.html">QNPInstance</a> * in,const char * mt, _NPStream * st, bool se )</h3>
+<h3 class="fn"><a name="5dbc31"></a>QNPStream::QNPStreamÂ (Â <a href="qnpinstance.html">QNPInstance</a>Â *Â in,constÂ charÂ *Â mt, _NPStreamÂ *Â st, boolÂ seÂ )</h3>
 <p>Creates a stream.  Plugins should not call this, but rather
 <a href="qnpinstance.html#d8bf4f">QNPInstance::newStream</a>() if a stream is required.
-<h3 class="fn"><a name="92d58b"></a>QNPStream::~QNPStream ()</h3>
+<h3 class="fn"><a name="92d58b"></a>QNPStream::~QNPStreamÂ ()</h3>
 <p>Destroys the stream.
-<h3 class="fn">bool <a name="2d104b"></a>QNPStream::complete () const</h3>
+<h3 class="fn">boolÂ <a name="2d104b"></a>QNPStream::completeÂ ()Â const</h3>
 <p>Returns TRUE if the stream has received all the data from
 the source.
-<h3 class="fn">uint <a name="d784d1"></a>QNPStream::end () const</h3>
+<h3 class="fn">uintÂ <a name="d784d1"></a>QNPStream::endÂ ()Â const</h3>
 <p>Returns the length of the stream (???).
-<h3 class="fn"><a href="qnpinstance.html">QNPInstance</a>* <a name="d25257"></a>QNPStream::instance ()</h3>
+<h3 class="fn"><a href="qnpinstance.html">QNPInstance</a>*Â <a name="d25257"></a>QNPStream::instanceÂ ()</h3>
 <p>Returns the <a href="qnpinstance.html">QNPInstance</a> for which this stream was created.
-<h3 class="fn">uint <a name="5c3dab"></a>QNPStream::lastModified () const</h3>
+<h3 class="fn">uintÂ <a name="5c3dab"></a>QNPStream::lastModifiedÂ ()Â const</h3>
 <p>Returns the time when the source of the stream was last modified.
-<h3 class="fn">bool <a name="c295fc"></a>QNPStream::okay () const</h3>
+<h3 class="fn">boolÂ <a name="c295fc"></a>QNPStream::okayÂ ()Â const</h3>
 <p>Returns TRUE if no errors have occurred on the stream.
-<h3 class="fn">void <a name="103722"></a>QNPStream::requestRead ( int offset, uint length )</h3>
+<h3 class="fn">voidÂ <a name="103722"></a>QNPStream::requestReadÂ (Â intÂ offset, uintÂ lengthÂ )</h3>
 <p>Requests the given section of the stream be sent to the
 <a href="qnpinstance.html#248e16">QNPInstance::write</a>() function of the <a href="#d25257">instance</a>() of this stream.
-<h3 class="fn">bool <a name="dea454"></a>QNPStream::seekable () const</h3>
+<h3 class="fn">boolÂ <a name="dea454"></a>QNPStream::seekableÂ ()Â const</h3>
 <p>Returns TRUE if the stream is seekable.
-<h3 class="fn">const char* <a name="611967"></a>QNPStream::type () const</h3>
+<h3 class="fn">constÂ char*Â <a name="611967"></a>QNPStream::typeÂ ()Â const</h3>
 <p>Returns the MIME type of the stream.
-<h3 class="fn">const char* <a name="562816"></a>QNPStream::url () const</h3>
+<h3 class="fn">constÂ char*Â <a name="562816"></a>QNPStream::urlÂ ()Â const</h3>
 <p>Returns the URL from which the stream was created.
-<h3 class="fn">int <a name="7a88d2"></a>QNPStream::write ( int len, void * buffer )</h3>
+<h3 class="fn">intÂ <a name="7a88d2"></a>QNPStream::writeÂ (Â intÂ len, voidÂ *Â bufferÂ )</h3>
 <p>Writes data <em>to</em> the stream.
-<h3 class="fn">void <a name="fa4a7f"></a>QNPStream::setComplete ( bool y )</h3>
+<h3 class="fn">voidÂ <a name="fa4a7f"></a>QNPStream::setCompleteÂ (Â boolÂ yÂ )</h3>
 <p>For internal use only.
-<h3 class="fn">void <a name="4bfbcc"></a>QNPStream::setOkay ( bool y )</h3>
+<h3 class="fn">voidÂ <a name="4bfbcc"></a>QNPStream::setOkayÂ (Â boolÂ yÂ )</h3>
 <p>For internal use only.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
@@ -101,6 +101,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

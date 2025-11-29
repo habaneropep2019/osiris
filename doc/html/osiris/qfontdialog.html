@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QFontDialog Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,29 +32,29 @@ Inherits <a href="qdialog.html">QDialog</a>.
 <p><a href="qfontdialog-members.html">List of all member functions.</a>
 <h2>Signals</h2>
 <ul>
-<li><div class="fn">void <a href="#6a37ea"><b>fontSelected</b></a> ( const QFont &amp; font ) </div>
-<li><div class="fn">void <a href="#35a205"><b>fontHighlighted</b></a> ( const QFont &amp; font ) </div>
+<li><div class="fn">voidÂ <a href="#6a37ea"><b>fontSelected</b></a>Â (Â constÂ QFontÂ &amp;Â fontÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#35a205"><b>fontHighlighted</b></a>Â (Â constÂ QFontÂ &amp;Â fontÂ )Â </div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><div class="fn">QFont <a href="#5eb535"><b>getFont</b></a> ( bool * ok, const QFont &amp; def, QWidget * parent = 0, const char * name = 0 ) </div>
-<li><div class="fn">QFont <a href="#4a9cc8"><b>getFont</b></a> ( bool * ok, QWidget * parent = 0, const char * name = 0 ) </div>
+<li><div class="fn">QFontÂ <a href="#5eb535"><b>getFont</b></a>Â (Â boolÂ *Â ok, constÂ QFontÂ &amp;Â def, QWidgetÂ *Â parentÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0Â )Â </div>
+<li><div class="fn">QFontÂ <a href="#4a9cc8"><b>getFont</b></a>Â (Â boolÂ *Â ok, QWidgetÂ *Â parentÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0Â )Â </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><div class="fn">virtual bool <a href="#c9a592"><b>eventFilter</b></a> ( QObject *, QEvent * ) </div>
-<li><div class="fn">QListBox* <a href="#fca5a4"><b>familyListBox</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#860aab"><b>updateFamilies</b></a> () </div>
-<li><div class="fn">QListBox* <a href="#afa785"><b>styleListBox</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#2fea07"><b>updateStyles</b></a> () </div>
-<li><div class="fn">QListBox* <a href="#9949b3"><b>sizeListBox</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#3d5051"><b>updateSizes</b></a> () </div>
-<li><div class="fn">QComboBox* <a href="#d00b1b"><b>scriptCombo</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#fc4f47"><b>updateScripts</b></a> () </div>
+<li><div class="fn">virtualÂ boolÂ <a href="#c9a592"><b>eventFilter</b></a>Â (Â QObjectÂ *, QEventÂ *Â )Â </div>
+<li><div class="fn">QListBox*Â <a href="#fca5a4"><b>familyListBox</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#860aab"><b>updateFamilies</b></a>Â ()Â </div>
+<li><div class="fn">QListBox*Â <a href="#afa785"><b>styleListBox</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#2fea07"><b>updateStyles</b></a>Â ()Â </div>
+<li><div class="fn">QListBox*Â <a href="#9949b3"><b>sizeListBox</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#3d5051"><b>updateSizes</b></a>Â ()Â </div>
+<li><div class="fn">QComboBox*Â <a href="#d00b1b"><b>scriptCombo</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#fc4f47"><b>updateScripts</b></a>Â ()Â </div>
 </ul>
 <h2>Protected Slots</h2>
 <ul>
-<li><div class="fn">void <a href="#8fa2fd"><b>sizeChanged</b></a> ( const QString &amp; ) </div>
+<li><div class="fn">voidÂ <a href="#8fa2fd"><b>sizeChanged</b></a>Â (Â constÂ QStringÂ &amp;Â )Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QFontDialog class provides a dialog widget for selecting a text font.
@@ -64,18 +64,18 @@ Normally you may use the static convenience function <a href="#4a9cc8">getFont</
 <p><img src=qfontdlg-m.png> <img src=qfontdlg-w.png>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn">bool <a name="c9a592"></a>QFontDialog::eventFilter ( <a href="qobject.html">QObject</a> * o, <a href="qevent.html">QEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">boolÂ <a name="c9a592"></a>QFontDialog::eventFilterÂ (Â <a href="qobject.html">QObject</a>Â *Â o, <a href="qevent.html">QEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Event filter to make up, down, pageup and pagedown work correctly
 in the line edits.
 <p>Reimplemented from <a href="qobject.html#bd20fe">QObject.</a>
-<h3 class="fn"><a href="qlistbox.html">QListBox</a> * <a name="fca5a4"></a>QFontDialog::familyListBox () const <code>[protected]</code></h3>
+<h3 class="fn"><a href="qlistbox.html">QListBox</a>Â *Â <a name="fca5a4"></a>QFontDialog::familyListBoxÂ ()Â const <code>[protected]</code></h3>
 <p>Returns a pointer to the "font family" list box.  This is usable
 mainly if you reimplement updateFontFamilies();.
-<h3 class="fn">void <a name="35a205"></a>QFontDialog::fontHighlighted ( const <a href="qfont.html">QFont</a> &amp; ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="35a205"></a>QFontDialog::fontHighlightedÂ (Â constÂ <a href="qfont.html">QFont</a>Â &amp;Â ) <code>[signal]</code></h3>
 <p>This signal is emitted, when the user changed a setting in the dialog.
-<h3 class="fn">void <a name="6a37ea"></a>QFontDialog::fontSelected ( const <a href="qfont.html">QFont</a> &amp; ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="6a37ea"></a>QFontDialog::fontSelectedÂ (Â constÂ <a href="qfont.html">QFont</a>Â &amp;Â ) <code>[signal]</code></h3>
 <p>This signal is emitted, when the user has chosen a font and clicked ok.
-<h3 class="fn"><a href="qfont.html">QFont</a> <a name="4a9cc8"></a>QFontDialog::getFont ( bool * ok, <a href="qwidget.html">QWidget</a> * parent = 0,const char * name = 0 ) <code>[static]</code></h3>
+<h3 class="fn"><a href="qfont.html">QFont</a>Â <a name="4a9cc8"></a>QFontDialog::getFontÂ (Â boolÂ *Â ok, <a href="qwidget.html">QWidget</a>Â *Â parentÂ =Â 0,constÂ charÂ *Â nameÂ =Â 0Â ) <code>[static]</code></h3>
 <p>Opens a modal font dialog and returns the font selected by the user.
 <p>The <em>ok</em> parameter is set to TRUE if the user clicked OK, and FALSE if
 the user clicked Cancel.
@@ -92,7 +92,7 @@ but is convenient and easy to use.
         // the user cancelled the dialog
     }
 </pre>
-<h3 class="fn"><a href="qfont.html">QFont</a> <a name="5eb535"></a>QFontDialog::getFont ( bool * ok, const <a href="qfont.html">QFont</a> &amp; initial, <a href="qwidget.html">QWidget</a> * parent = 0, const char * name = 0 ) <code>[static]</code></h3>
+<h3 class="fn"><a href="qfont.html">QFont</a>Â <a name="5eb535"></a>QFontDialog::getFontÂ (Â boolÂ *Â ok, constÂ <a href="qfont.html">QFont</a>Â &amp;Â initial, <a href="qwidget.html">QWidget</a>Â *Â parentÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0Â ) <code>[static]</code></h3>
 <p>Opens a modal font dialog and returns the font selected by the user.
 <p><em>initial</em> is the initial selected font.
 <p>The <em>ok</em> parameter is set to TRUE if the user clicked OK, and FALSE if
@@ -113,27 +113,27 @@ but is convenient and easy to use.
 <p>Another example:
 <pre>    mywidget.setFont( <a href="#4a9cc8">QFontDialog::getFont</a>( 0, mywidget.font() ) );
 </pre>
-<h3 class="fn"><a href="qcombobox.html">QComboBox</a> * <a name="d00b1b"></a>QFontDialog::scriptCombo () const <code>[protected]</code></h3>
+<h3 class="fn"><a href="qcombobox.html">QComboBox</a>Â *Â <a name="d00b1b"></a>QFontDialog::scriptComboÂ ()Â const <code>[protected]</code></h3>
 <p>Returns a pointer to the "font style" list box.  This is usable
 mainly if you reimplement updateFontStyles();.
-<h3 class="fn">void <a name="8fa2fd"></a>QFontDialog::sizeChanged ( const <a href="qstring.html">QString</a> &amp; s ) <code>[protected slot]</code></h3>
+<h3 class="fn">voidÂ <a name="8fa2fd"></a>QFontDialog::sizeChangedÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â sÂ ) <code>[protectedÂ slot]</code></h3>
 <p>This slot is called if the user changes the font size.
-<h3 class="fn"><a href="qlistbox.html">QListBox</a> * <a name="9949b3"></a>QFontDialog::sizeListBox () const <code>[protected]</code></h3>
+<h3 class="fn"><a href="qlistbox.html">QListBox</a>Â *Â <a name="9949b3"></a>QFontDialog::sizeListBoxÂ ()Â const <code>[protected]</code></h3>
 <p>Returns a pointer to the "font size" list box.  This is usable
 mainly if you reimplement updateFontSizes();.
-<h3 class="fn"><a href="qlistbox.html">QListBox</a> * <a name="afa785"></a>QFontDialog::styleListBox () const <code>[protected]</code></h3>
+<h3 class="fn"><a href="qlistbox.html">QListBox</a>Â *Â <a name="afa785"></a>QFontDialog::styleListBoxÂ ()Â const <code>[protected]</code></h3>
 <p>Returns a pointer to the "font style" list box.  This is usable
 mainly if you reimplement updateFontStyles();.
-<h3 class="fn">void <a name="860aab"></a>QFontDialog::updateFamilies () <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="860aab"></a>QFontDialog::updateFamiliesÂ () <code>[virtualÂ protected]</code></h3>
 <p>Update the contents of the "font family" list box.  This
 function can be reimplemented if you have special requirements.
-<h3 class="fn">void <a name="fc4f47"></a>QFontDialog::updateScripts () <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="fc4f47"></a>QFontDialog::updateScriptsÂ () <code>[virtualÂ protected]</code></h3>
 <p>Update the contents of the "font script" combo box.  This
 function can be reimplemented if you have special requirements.
-<h3 class="fn">void <a name="3d5051"></a>QFontDialog::updateSizes () <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="3d5051"></a>QFontDialog::updateSizesÂ () <code>[virtualÂ protected]</code></h3>
 <p>Update the contents of the "font size" list box.  This
 function can be reimplemented if you have special requirements.
-<h3 class="fn">void <a name="2fea07"></a>QFontDialog::updateStyles () <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="2fea07"></a>QFontDialog::updateStylesÂ () <code>[virtualÂ protected]</code></h3>
 <p>Update the contents of the "font style" list box.  This
 function can be reimplemented if you have special requirements.
 <hr><p>
@@ -147,6 +147,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

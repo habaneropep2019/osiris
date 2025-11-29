@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QPixmap Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -33,65 +33,65 @@ Inherits <a href="qpaintdevice.html">QPaintDevice</a> and <a href="qt.html">Qt</
 <p><a href="qpixmap-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">enum <a href="#ColorMode"><b>ColorMode</b></a> { Auto, Color, Mono }</div>
-<li><div class="fn">enum <a href="#Optimization"><b>Optimization</b></a> { DefaultOptim, NoOptim, MemoryOptim=NoOptim, NormalOptim, BestOptim }</div>
-<li><div class="fn"><a href="#0b95b1"><b>QPixmap</b></a> () </div>
-<li><div class="fn"><a href="#d66eb9"><b>QPixmap</b></a> ( int w, int h, int depth = -1, Optimization = DefaultOptim ) </div>
-<li><div class="fn"><a href="#c06940"><b>QPixmap</b></a> ( const QSize &amp;, int depth = -1, Optimization = DefaultOptim ) </div>
-<li><div class="fn"><a href="#5b3798"><b>QPixmap</b></a> ( const QString &amp; fileName, const char * format=0, ColorMode mode=Auto ) </div>
-<li><div class="fn"><a href="#2cf92e"><b>QPixmap</b></a> ( const QString &amp; fileName, const char * format, int conversion_flags ) </div>
-<li><div class="fn"><a href="#6f4934"><b>QPixmap</b></a> ( const char * xpm[] ) </div>
-<li><div class="fn"><a href="#cfb2d6"><b>QPixmap</b></a> ( const QByteArray &amp; data ) </div>
-<li><div class="fn"><a href="#6840fd"><b>QPixmap</b></a> ( const QPixmap &amp; ) </div>
-<li><div class="fn"><a href="#d8dcf1"><b>~QPixmap</b></a> () </div>
-<li><div class="fn">QPixmap&amp; <a href="#4a19b0"><b>operator=</b></a> ( const QPixmap &amp; ) </div>
-<li><div class="fn">QPixmap&amp; <a href="#f29bf5"><b>operator=</b></a> ( const QImage &amp; ) </div>
-<li><div class="fn">bool <a href="#7803c4"><b>isNull</b></a> () const</div>
-<li><div class="fn">int <a href="#86dbc5"><b>width</b></a> () const</div>
-<li><div class="fn">int <a href="#d5bb33"><b>height</b></a> () const</div>
-<li><div class="fn">QSize <a href="#60b65f"><b>size</b></a> () const</div>
-<li><div class="fn">QRect <a href="#fbdfe3"><b>rect</b></a> () const</div>
-<li><div class="fn">int <a href="#3c91c2"><b>depth</b></a> () const</div>
-<li><div class="fn">void <a href="#6910a0"><b>fill</b></a> ( const QColor &amp; fillColor = Qt::white ) </div>
-<li><div class="fn">void <a href="#aca980"><b>fill</b></a> ( const QWidget *, int xofs, int yofs ) </div>
-<li><div class="fn">void <a href="#9167e5"><b>fill</b></a> ( const QWidget *, const QPoint &amp; ofs ) </div>
-<li><div class="fn">void <a href="#b4f156"><b>resize</b></a> ( int width, int height ) </div>
-<li><div class="fn">void <a href="#360eec"><b>resize</b></a> ( const QSize &amp; ) </div>
-<li><div class="fn">const QBitmap* <a href="#99119c"><b>mask</b></a> () const</div>
-<li><div class="fn">void <a href="#68a75d"><b>setMask</b></a> ( const QBitmap &amp; ) </div>
-<li><div class="fn">bool <a href="#848613"><b>selfMask</b></a> () const</div>
-<li><div class="fn">QBitmap <a href="#20dfb1"><b>createHeuristicMask</b></a> ( bool clipTight = TRUE ) const</div>
-<li><div class="fn">QPixmap <a href="#ff5fcf"><b>xForm</b></a> ( const QWMatrix &amp; ) const</div>
-<li><div class="fn">QImage <a href="#8c5f15"><b>convertToImage</b></a> () const</div>
-<li><div class="fn">bool <a href="#b6a662"><b>convertFromImage</b></a> ( const QImage &amp;, ColorMode mode=Auto ) </div>
-<li><div class="fn">bool <a href="#00951a"><b>convertFromImage</b></a> ( const QImage &amp;, int conversion_flags ) </div>
-<li><div class="fn">bool <a href="#bdbe68"><b>load</b></a> ( const QString &amp; fileName, const char * format=0, ColorMode mode=Auto ) </div>
-<li><div class="fn">bool <a href="#a728cf"><b>load</b></a> ( const QString &amp; fileName, const char * format, int conversion_flags ) </div>
-<li><div class="fn">bool <a href="#32699f"><b>loadFromData</b></a> ( const uchar * buf, uint len, const char * format=0, ColorMode mode=Auto ) </div>
-<li><div class="fn">bool <a href="#79475e"><b>loadFromData</b></a> ( const uchar * buf, uint len, const char * format, int conversion_flags ) </div>
-<li><div class="fn">bool <a href="#b0e017"><b>loadFromData</b></a> ( const QByteArray &amp; data, const char * format=0, int conversion_flags=0 ) </div>
-<li><div class="fn">bool <a href="#e02a5b"><b>save</b></a> ( const QString &amp; fileName, const char * format ) const</div>
-<li><div class="fn">bool <a href="#a38b1c"><b>save</b></a> ( const QString &amp; fileName, const char * format, int quality ) const</div>
-<li><div class="fn">int <a href="#4f47d9"><b>serialNumber</b></a> () const</div>
-<li><div class="fn">Optimization <a href="#ae6199"><b>optimization</b></a> () const</div>
-<li><div class="fn">void <a href="#41f5cf"><b>setOptimization</b></a> ( Optimization ) </div>
-<li><div class="fn">virtual void <a href="#81b941"><b>detach</b></a> () </div>
-<li><div class="fn">bool <a href="#c0b272"><b>isQBitmap</b></a> () const</div>
+<li><div class="fn">enumÂ <a href="#ColorMode"><b>ColorMode</b></a>Â {Â Auto, Color, MonoÂ }</div>
+<li><div class="fn">enumÂ <a href="#Optimization"><b>Optimization</b></a>Â {Â DefaultOptim, NoOptim, MemoryOptim=NoOptim, NormalOptim, BestOptimÂ }</div>
+<li><div class="fn"><a href="#0b95b1"><b>QPixmap</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#d66eb9"><b>QPixmap</b></a>Â (Â intÂ w, intÂ h, intÂ depthÂ =Â -1, OptimizationÂ =Â DefaultOptimÂ )Â </div>
+<li><div class="fn"><a href="#c06940"><b>QPixmap</b></a>Â (Â constÂ QSizeÂ &amp;, intÂ depthÂ =Â -1, OptimizationÂ =Â DefaultOptimÂ )Â </div>
+<li><div class="fn"><a href="#5b3798"><b>QPixmap</b></a>Â (Â constÂ QStringÂ &amp;Â fileName, constÂ charÂ *Â format=0, ColorModeÂ mode=AutoÂ )Â </div>
+<li><div class="fn"><a href="#2cf92e"><b>QPixmap</b></a>Â (Â constÂ QStringÂ &amp;Â fileName, constÂ charÂ *Â format, intÂ conversion_flagsÂ )Â </div>
+<li><div class="fn"><a href="#6f4934"><b>QPixmap</b></a>Â (Â constÂ charÂ *Â xpm[]Â )Â </div>
+<li><div class="fn"><a href="#cfb2d6"><b>QPixmap</b></a>Â (Â constÂ QByteArrayÂ &amp;Â dataÂ )Â </div>
+<li><div class="fn"><a href="#6840fd"><b>QPixmap</b></a>Â (Â constÂ QPixmapÂ &amp;Â )Â </div>
+<li><div class="fn"><a href="#d8dcf1"><b>~QPixmap</b></a>Â ()Â </div>
+<li><div class="fn">QPixmap&amp;Â <a href="#4a19b0"><b>operator=</b></a>Â (Â constÂ QPixmapÂ &amp;Â )Â </div>
+<li><div class="fn">QPixmap&amp;Â <a href="#f29bf5"><b>operator=</b></a>Â (Â constÂ QImageÂ &amp;Â )Â </div>
+<li><div class="fn">boolÂ <a href="#7803c4"><b>isNull</b></a>Â ()Â const</div>
+<li><div class="fn">intÂ <a href="#86dbc5"><b>width</b></a>Â ()Â const</div>
+<li><div class="fn">intÂ <a href="#d5bb33"><b>height</b></a>Â ()Â const</div>
+<li><div class="fn">QSizeÂ <a href="#60b65f"><b>size</b></a>Â ()Â const</div>
+<li><div class="fn">QRectÂ <a href="#fbdfe3"><b>rect</b></a>Â ()Â const</div>
+<li><div class="fn">intÂ <a href="#3c91c2"><b>depth</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#6910a0"><b>fill</b></a>Â (Â constÂ QColorÂ &amp;Â fillColorÂ =Â Qt::whiteÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#aca980"><b>fill</b></a>Â (Â constÂ QWidgetÂ *, intÂ xofs, intÂ yofsÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#9167e5"><b>fill</b></a>Â (Â constÂ QWidgetÂ *, constÂ QPointÂ &amp;Â ofsÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#b4f156"><b>resize</b></a>Â (Â intÂ width, intÂ heightÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#360eec"><b>resize</b></a>Â (Â constÂ QSizeÂ &amp;Â )Â </div>
+<li><div class="fn">constÂ QBitmap*Â <a href="#99119c"><b>mask</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#68a75d"><b>setMask</b></a>Â (Â constÂ QBitmapÂ &amp;Â )Â </div>
+<li><div class="fn">boolÂ <a href="#848613"><b>selfMask</b></a>Â ()Â const</div>
+<li><div class="fn">QBitmapÂ <a href="#20dfb1"><b>createHeuristicMask</b></a>Â (Â boolÂ clipTightÂ =Â TRUEÂ )Â const</div>
+<li><div class="fn">QPixmapÂ <a href="#ff5fcf"><b>xForm</b></a>Â (Â constÂ QWMatrixÂ &amp;Â )Â const</div>
+<li><div class="fn">QImageÂ <a href="#8c5f15"><b>convertToImage</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#b6a662"><b>convertFromImage</b></a>Â (Â constÂ QImageÂ &amp;, ColorModeÂ mode=AutoÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#00951a"><b>convertFromImage</b></a>Â (Â constÂ QImageÂ &amp;, intÂ conversion_flagsÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#bdbe68"><b>load</b></a>Â (Â constÂ QStringÂ &amp;Â fileName, constÂ charÂ *Â format=0, ColorModeÂ mode=AutoÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#a728cf"><b>load</b></a>Â (Â constÂ QStringÂ &amp;Â fileName, constÂ charÂ *Â format, intÂ conversion_flagsÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#32699f"><b>loadFromData</b></a>Â (Â constÂ ucharÂ *Â buf, uintÂ len, constÂ charÂ *Â format=0, ColorModeÂ mode=AutoÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#79475e"><b>loadFromData</b></a>Â (Â constÂ ucharÂ *Â buf, uintÂ len, constÂ charÂ *Â format, intÂ conversion_flagsÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#b0e017"><b>loadFromData</b></a>Â (Â constÂ QByteArrayÂ &amp;Â data, constÂ charÂ *Â format=0, intÂ conversion_flags=0Â )Â </div>
+<li><div class="fn">boolÂ <a href="#e02a5b"><b>save</b></a>Â (Â constÂ QStringÂ &amp;Â fileName, constÂ charÂ *Â formatÂ )Â const</div>
+<li><div class="fn">boolÂ <a href="#a38b1c"><b>save</b></a>Â (Â constÂ QStringÂ &amp;Â fileName, constÂ charÂ *Â format, intÂ qualityÂ )Â const</div>
+<li><div class="fn">intÂ <a href="#4f47d9"><b>serialNumber</b></a>Â ()Â const</div>
+<li><div class="fn">OptimizationÂ <a href="#ae6199"><b>optimization</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#41f5cf"><b>setOptimization</b></a>Â (Â OptimizationÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#81b941"><b>detach</b></a>Â ()Â </div>
+<li><div class="fn">boolÂ <a href="#c0b272"><b>isQBitmap</b></a>Â ()Â const</div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><div class="fn">int <a href="#e194ad"><b>defaultDepth</b></a> () </div>
-<li><div class="fn">QPixmap <a href="#a7861f"><b>grabWindow</b></a> ( WId, int x=0, int y=0, int w=-1, int h=-1 ) </div>
-<li><div class="fn">QPixmap <a href="#e492b7"><b>grabWidget</b></a> ( QWidget * widget, int x=0, int y=0, int w=-1, int h=-1 ) </div>
-<li><div class="fn">QWMatrix <a href="#952384"><b>trueMatrix</b></a> ( const QWMatrix &amp;, int w, int h ) </div>
-<li><div class="fn">const char* <a href="#360626"><b>imageFormat</b></a> ( const QString &amp; fileName ) </div>
-<li><div class="fn">Optimization <a href="#3ad81f"><b>defaultOptimization</b></a> () </div>
-<li><div class="fn">void <a href="#7675b8"><b>setDefaultOptimization</b></a> ( Optimization ) </div>
+<li><div class="fn">intÂ <a href="#e194ad"><b>defaultDepth</b></a>Â ()Â </div>
+<li><div class="fn">QPixmapÂ <a href="#a7861f"><b>grabWindow</b></a>Â (Â WId, intÂ x=0, intÂ y=0, intÂ w=-1, intÂ h=-1Â )Â </div>
+<li><div class="fn">QPixmapÂ <a href="#e492b7"><b>grabWidget</b></a>Â (Â QWidgetÂ *Â widget, intÂ x=0, intÂ y=0, intÂ w=-1, intÂ h=-1Â )Â </div>
+<li><div class="fn">QWMatrixÂ <a href="#952384"><b>trueMatrix</b></a>Â (Â constÂ QWMatrixÂ &amp;, intÂ w, intÂ hÂ )Â </div>
+<li><div class="fn">constÂ char*Â <a href="#360626"><b>imageFormat</b></a>Â (Â constÂ QStringÂ &amp;Â fileNameÂ )Â </div>
+<li><div class="fn">OptimizationÂ <a href="#3ad81f"><b>defaultOptimization</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#7675b8"><b>setDefaultOptimization</b></a>Â (Â OptimizationÂ )Â </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><div class="fn"><a href="#998315"><b>QPixmap</b></a> ( int w, int h, const uchar * data, bool isXbitmap ) </div>
-<li><div class="fn">virtual int <a href="#fa32cf"><b>metric</b></a> ( int ) const</div>
+<li><div class="fn"><a href="#998315"><b>QPixmap</b></a>Â (Â intÂ w, intÂ h, constÂ ucharÂ *Â data, boolÂ isXbitmapÂ )Â </div>
+<li><div class="fn">virtualÂ intÂ <a href="#fa32cf"><b>metric</b></a>Â (Â intÂ )Â const</div>
 </ul>
 <h2>Related Functions</h2>
 (Note that these are not member functions.)
@@ -183,26 +183,26 @@ and where performance is critical.  Generally uses more memory than
 <p></ul>
 <p>We recommend sticking with <code>DefaultOptim</code>
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="0b95b1"></a>QPixmap::QPixmap ()</h3>
+<h3 class="fn"><a name="0b95b1"></a>QPixmap::QPixmapÂ ()</h3>
 <p>Constructs a null pixmap.
 <p>See also  <a href="#7803c4">isNull</a>().
-<h3 class="fn"><a name="cfb2d6"></a>QPixmap::QPixmap ( const <a href="qbytearray.html">QByteArray</a> &amp; img_data )</h3>
+<h3 class="fn"><a name="cfb2d6"></a>QPixmap::QPixmapÂ (Â constÂ <a href="qbytearray.html">QByteArray</a>Â &amp;Â img_dataÂ )</h3>
 <p>Constructs a pixmaps by loading from <em>img_data.</em>
 The data can be in any image format supported by Qt.
 <p>See also  <a href="#79475e">loadFromData</a>().
-<h3 class="fn"><a name="2cf92e"></a>QPixmap::QPixmap ( const <a href="qstring.html">QString</a> &amp; fileName, const char * format, int conversion_flags )</h3>
+<h3 class="fn"><a name="2cf92e"></a>QPixmap::QPixmapÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â fileName, constÂ charÂ *Â format, intÂ conversion_flagsÂ )</h3>
 <p>Constructs a pixmap from the file <em>fileName.</em> If the file does not
 exist, or is of an unknown format, the pixmap becomes a null pixmap.
 <p>The parameters are passed on to <a href="#a728cf">load</a>().
 <p>See also  <a href="#7803c4">isNull</a>(), <a href="#a728cf">load</a>(), <a href="#79475e">loadFromData</a>(), <a href="#a38b1c">save</a>() and <a href="#360626">imageFormat</a>().
-<h3 class="fn"><a name="5b3798"></a>QPixmap::QPixmap ( const <a href="qstring.html">QString</a> &amp; fileName, const char * format=0, <a href="qpixmap.html#ColorMode">ColorMode</a> mode=Auto )</h3>
+<h3 class="fn"><a name="5b3798"></a>QPixmap::QPixmapÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â fileName, constÂ charÂ *Â format=0, <a href="qpixmap.html#ColorMode">ColorMode</a>Â mode=AutoÂ )</h3>
 <p>Constructs a pixmap from the file <em>fileName.</em> If the file does not
 exist, or is of an unknown format, the pixmap becomes a null pixmap.
 <p>The parameters are passed on to <a href="#a728cf">load</a>().
 <p>See also  <a href="#7803c4">isNull</a>(), <a href="#a728cf">load</a>(), <a href="#79475e">loadFromData</a>(), <a href="#a38b1c">save</a>() and <a href="#360626">imageFormat</a>().
-<h3 class="fn"><a name="6840fd"></a>QPixmap::QPixmap ( const QPixmap &amp; pixmap )</h3>
+<h3 class="fn"><a name="6840fd"></a>QPixmap::QPixmapÂ (Â constÂ QPixmapÂ &amp;Â pixmapÂ )</h3>
 <p>Constructs a pixmap which is a copy of <em>pixmap.</em>
-<h3 class="fn"><a name="6f4934"></a>QPixmap::QPixmap ( const char * xpm[] )</h3>
+<h3 class="fn"><a name="6f4934"></a>QPixmap::QPixmapÂ (Â constÂ charÂ *Â xpm[]Â )</h3>
 <p>Constructs a pixmap from <em>xpm,</em> which must be a valid XPM image.
 <p>Error are silently ignored.
 <p>Note that it's possible to squeeze the XPM variable a little bit by
@@ -218,10 +218,10 @@ and ROMable when the application is to be stored in ROM.
 <p>In order to use that sort of declaration, you must cast the variable
 back to <nobr><code>const char **</code></nobr> when you create the
 QPixmap.
-<h3 class="fn"><a name="998315"></a>QPixmap::QPixmap ( int w, int h, const uchar * bits, bool isXbitmap ) <code>[protected]</code></h3>
+<h3 class="fn"><a name="998315"></a>QPixmap::QPixmapÂ (Â intÂ w, intÂ h, constÂ ucharÂ *Â bits, boolÂ isXbitmapÂ ) <code>[protected]</code></h3>
 <p>Constructs a monochrome pixmap which is initialized with the data in <em>bits.</em>
 This constructor is protected and used by the <a href="qbitmap.html">QBitmap</a> class.
-<h3 class="fn"><a name="d66eb9"></a>QPixmap::QPixmap ( int w, int h, int depth = -1, <a href="qpixmap.html#Optimization">Optimization</a> optimization = DefaultOptim )</h3>
+<h3 class="fn"><a name="d66eb9"></a>QPixmap::QPixmapÂ (Â intÂ w, intÂ h, intÂ depthÂ =Â -1, <a href="qpixmap.html#Optimization">Optimization</a>Â optimizationÂ =Â DefaultOptimÂ )</h3>
 <p>Constructs a pixmap with <em>w</em> width, <em>h</em> height and of <em>depth</em> bits per
 pixels.
 <p>The contents of the pixmap is uninitialized.
@@ -230,11 +230,11 @@ current video mode.  If <em>depth</em> is negative, then the hardware
 depth of the current video mode will be used.
 <p>If either <em>width</em> or <em>height</em> is zero, a null pixmap is constructed.
 <p>See also  <a href="#7803c4">isNull</a>().
-<h3 class="fn"><a name="c06940"></a>QPixmap::QPixmap ( const <a href="qsize.html">QSize</a> &amp; size, int depth = -1, <a href="qpixmap.html#Optimization">Optimization</a> optimization = DefaultOptim )</h3>
+<h3 class="fn"><a name="c06940"></a>QPixmap::QPixmapÂ (Â constÂ <a href="qsize.html">QSize</a>Â &amp;Â size, intÂ depthÂ =Â -1, <a href="qpixmap.html#Optimization">Optimization</a>Â optimizationÂ =Â DefaultOptimÂ )</h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
-<h3 class="fn"><a name="d8dcf1"></a>QPixmap::~QPixmap ()</h3>
+<h3 class="fn"><a name="d8dcf1"></a>QPixmap::~QPixmapÂ ()</h3>
 <p>Destructs the pixmap.
-<h3 class="fn">bool <a name="00951a"></a>QPixmap::convertFromImage ( const <a href="qimage.html">QImage</a> &amp; img, int conversion_flags )</h3>
+<h3 class="fn">boolÂ <a name="00951a"></a>QPixmap::convertFromImageÂ (Â constÂ <a href="qimage.html">QImage</a>Â &amp;Â img, intÂ conversion_flagsÂ )</h3>
 <p>Converts an image and sets this pixmap. Returns TRUE if successful.
 <p>The <em>conversion_flags</em> argument is a bitwise-OR from the following choices.
 The options marked <em>(default)</em> are the choice if no other choice from the
@@ -293,9 +293,9 @@ pixel index 1.
 </ul>
 <p>Examples:
  <a href="qtimage-qtimage-cpp.html#convertFromImage">qtimage/qtimage.cpp</a>
-<h3 class="fn">bool <a name="b6a662"></a>QPixmap::convertFromImage ( const <a href="qimage.html">QImage</a> &amp; image, <a href="qpixmap.html#ColorMode">ColorMode</a> mode=Auto )</h3>
+<h3 class="fn">boolÂ <a name="b6a662"></a>QPixmap::convertFromImageÂ (Â constÂ <a href="qimage.html">QImage</a>Â &amp;Â image, <a href="qpixmap.html#ColorMode">ColorMode</a>Â mode=AutoÂ )</h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
-<h3 class="fn"><a href="qimage.html">QImage</a> <a name="8c5f15"></a>QPixmap::convertToImage () const</h3>
+<h3 class="fn"><a href="qimage.html">QImage</a>Â <a name="8c5f15"></a>QPixmap::convertToImageÂ ()Â const</h3>
 <p>Converts the pixmap to an image. Returns a null image if the operation
 failed.
 <p>If the pixmap has 1 bit depth, the returned image will also be 1
@@ -310,7 +310,7 @@ returned image has 32 bit depth.
 </ul>
 <p>Examples:
  <a href="qmag-qmag-cpp.html#convertToImage">qmag/qmag.cpp</a>
-<h3 class="fn"><a href="qbitmap.html">QBitmap</a> <a name="20dfb1"></a>QPixmap::createHeuristicMask ( bool clipTight = TRUE ) const</h3>
+<h3 class="fn"><a href="qbitmap.html">QBitmap</a>Â <a name="20dfb1"></a>QPixmap::createHeuristicMaskÂ (Â boolÂ clipTightÂ =Â TRUEÂ )Â const</h3>
 <p>Creates and returns a heuristic mask for this pixmap. It works by
 selecting a color from one of the corners, then chipping away pixels of
 that color, starting at all the edges.
@@ -321,19 +321,19 @@ things like:
 <p>This function is slow because it involves transformation to a <a href="qimage.html">QImage</a>,
 non-trivial computations and a transformation back to <a href="qbitmap.html">QBitmap</a>.
 <p>See also  <a href="qimage.html#582c18">QImage::createHeuristicMask</a>().
-<h3 class="fn">int <a name="e194ad"></a>QPixmap::defaultDepth () <code>[static]</code></h3>
+<h3 class="fn">intÂ <a name="e194ad"></a>QPixmap::defaultDepthÂ () <code>[static]</code></h3>
 <p>Returns the default pixmap depth, i.e. the depth a pixmap gets
 if -1 is specified.
 <p>See also  <a href="#3c91c2">depth</a>().
-<h3 class="fn">QPixmap::Optimization <a name="3ad81f"></a>QPixmap::defaultOptimization() <code>[static]</code></h3>
+<h3 class="fn">QPixmap::OptimizationÂ <a name="3ad81f"></a>QPixmap::defaultOptimization() <code>[static]</code></h3>
 <p>Returns the default pixmap optimization setting.
 <p>See also  <a href="#7675b8">setDefaultOptimization</a>(), <a href="#41f5cf">setOptimization</a>() and <a href="#ae6199">optimization</a>().
-<h3 class="fn">int <a name="3c91c2"></a>QPixmap::depth () const</h3>
+<h3 class="fn">intÂ <a name="3c91c2"></a>QPixmap::depthÂ ()Â const</h3>
 <p>Returns the depth of the image.
 <p>The pixmap depth is also called bits per pixel (bpp) or bit planes
 of a pixmap.  A null pixmap has depth 0.
 <p>See also  <a href="#e194ad">defaultDepth</a>(), <a href="#7803c4">isNull</a>() and <a href="qimage.html#ffa6d1">QImage::convertDepth</a>().
-<h3 class="fn">void <a name="81b941"></a>QPixmap::detach () <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="81b941"></a>QPixmap::detachÂ () <code>[virtual]</code></h3>
 <p>Special-purpose function that detaches the pixmap from shared pixmap data.
 <p>A pixmap is automatically detached by Qt whenever its contents is about
 to change.  This is done in all QPixmap member functions that modify the
@@ -346,12 +346,12 @@ that modifies the pixmap contents.  In this case, you can call detach()
 to cut the pixmap loose from other pixmaps that share data with this one.
 <p>detach() returns immediately if there is just a single reference or if
 the pixmap has not been initialized yet.
-<h3 class="fn">void <a name="6910a0"></a>QPixmap::fill ( const <a href="qcolor.html">QColor</a> &amp; fillColor = Qt::white )</h3>
+<h3 class="fn">voidÂ <a name="6910a0"></a>QPixmap::fillÂ (Â constÂ <a href="qcolor.html">QColor</a>Â &amp;Â fillColorÂ =Â Qt::whiteÂ )</h3>
 <p>Fills the pixmap with the color <em>fillColor.</em>
 <p>Examples:
  <a href="xform-xform-cpp.html#fill">xform/xform.cpp</a>
  <a href="desktop-desktop-cpp.html#fill">desktop/desktop.cpp</a>
-<h3 class="fn">void <a name="9167e5"></a>QPixmap::fill ( const <a href="qwidget.html">QWidget</a> * widget, const <a href="qpoint.html">QPoint</a> &amp; ofs )</h3>
+<h3 class="fn">voidÂ <a name="9167e5"></a>QPixmap::fillÂ (Â constÂ <a href="qwidget.html">QWidget</a>Â *Â widget, constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â ofsÂ )</h3>
 <p>Fills the pixmap with the widget's background color or pixmap.
 If the background is empty, nothing is done.
 <p>The <em>ofs</em> point is an offset in the widget.
@@ -379,9 +379,9 @@ the widget.
     <a href="qpaintdevice.html#35ae2e">bitBlt</a>( this, ur.<a href="qrect.html#349186">topLeft</a>(), &amp;pix );
   }
 </pre>
-<h3 class="fn">void <a name="aca980"></a>QPixmap::fill ( const <a href="qwidget.html">QWidget</a> * widget, int xofs, int yofs )</h3>
+<h3 class="fn">voidÂ <a name="aca980"></a>QPixmap::fillÂ (Â constÂ <a href="qwidget.html">QWidget</a>Â *Â widget, intÂ xofs, intÂ yofsÂ )</h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
-<h3 class="fn">QPixmap <a name="e492b7"></a>QPixmap::grabWidget ( <a href="qwidget.html">QWidget</a> * widget, int x=0, int y=0, int w=-1, int h=-1 ) <code>[static]</code></h3>
+<h3 class="fn">QPixmapÂ <a name="e492b7"></a>QPixmap::grabWidgetÂ (Â <a href="qwidget.html">QWidget</a>Â *Â widget, intÂ x=0, intÂ y=0, intÂ w=-1, intÂ h=-1Â ) <code>[static]</code></h3>
 <p>Creates a pixmap and paints <em>widget</em> in it.
 <p>If <em>widget</em> has children, they are painted too, appropriately located.
 <p>If you specify <em>x, y, w</em> or <em>h,</em> only the rectangle you
@@ -403,7 +403,7 @@ containing a rendering of <em>widget.</em>  If the rectangle you ask for
 is a superset of <em>widget,</em> the area outside <em>widget</em> are covered
 with the widget's background.
 <p>See also  <a href="#a7861f">grabWindow</a>(), <a href="qpainter.html#ab2ec8">QPainter::redirect</a>() and <a href="qwidget.html#e3d821">QWidget::paintEvent</a>().
-<h3 class="fn">QPixmap <a name="a7861f"></a>QPixmap::grabWindow ( WId window, int x=0, int y=0, int w=-1, int h=-1 ) <code>[static]</code></h3>
+<h3 class="fn">QPixmapÂ <a name="a7861f"></a>QPixmap::grabWindowÂ (Â WIdÂ window, intÂ x=0, intÂ y=0, intÂ w=-1, intÂ h=-1Â ) <code>[static]</code></h3>
 <p>Grabs the contents of a window and makes a pixmap out of it.
 Returns the pixmap.
 <p>The arguments <em>(x,y)</em> specify the offset in the window, while
@@ -421,7 +421,7 @@ grabbing of windows that are not part of the application, window
 system frames, and so on.<p><b>Warning:</b> Grabbing an area outside the screen is not safe in general.
 This depends on the underlying window system.
 <p>See also  <a href="#e492b7">grabWidget</a>().
-<h3 class="fn">int <a name="d5bb33"></a>QPixmap::height () const</h3>
+<h3 class="fn">intÂ <a name="d5bb33"></a>QPixmap::heightÂ ()Â const</h3>
 <p>Returns the height of the pixmap.
 <p>See also  <a href="#86dbc5">width</a>(), <a href="#60b65f">size</a>() and <a href="#fbdfe3">rect</a>().
 <p>Examples:
@@ -430,12 +430,12 @@ This depends on the underlying window system.
  <a href="desktop-desktop-cpp.html#height">desktop/desktop.cpp</a>
  <a href="scrollview-scrollview-cpp.html#height">scrollview/scrollview.cpp</a>
  <a href="movies-main-cpp.html#height">movies/main.cpp</a>
-<h3 class="fn">const char* <a name="360626"></a>QPixmap::imageFormat ( const <a href="qstring.html">QString</a> &amp; fileName ) <code>[static]</code></h3>
+<h3 class="fn">constÂ char*Â <a name="360626"></a>QPixmap::imageFormatÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â fileNameÂ ) <code>[static]</code></h3>
 <p>Returns a string that specifies the image format of the file <em>fileName,</em>
 or null if the file cannot be read or if the format cannot be recognized.
 <p>The <a href="qimageio.html">QImageIO</a> documentation lists the supported image formats.
 <p>See also  <a href="#a728cf">load</a>() and <a href="#a38b1c">save</a>().
-<h3 class="fn">bool <a name="7803c4"></a>QPixmap::isNull () const</h3>
+<h3 class="fn">boolÂ <a name="7803c4"></a>QPixmap::isNullÂ ()Â const</h3>
 <p>Returns TRUE if it is a null pixmap.
 <p>A null pixmap has zero width, zero height and no contents.
 You cannot draw in a null pixmap or <a href="qpaintdevice.html#35ae2e">bitBlt</a>() anything to it.
@@ -445,9 +445,9 @@ pixmap.
 <p>Examples:
  <a href="qmag-qmag-cpp.html#isNull">qmag/qmag.cpp</a>
  <a href="scrollview-scrollview-cpp.html#isNull">scrollview/scrollview.cpp</a>
-<h3 class="fn">bool <a name="c0b272"></a>QPixmap::isQBitmap () const</h3>
+<h3 class="fn">boolÂ <a name="c0b272"></a>QPixmap::isQBitmapÂ ()Â const</h3>
 <p>Returns TRUE if this is a <a href="qbitmap.html">QBitmap</a>, otherwise FALSE.
-<h3 class="fn">bool <a name="a728cf"></a>QPixmap::load ( const <a href="qstring.html">QString</a> &amp; fileName, const char * format, int conversion_flags )</h3>
+<h3 class="fn">boolÂ <a name="a728cf"></a>QPixmap::loadÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â fileName, constÂ charÂ *Â format, intÂ conversion_flagsÂ )</h3>
 <p>Loads a pixmap from the file <em>fileName.</em>
 Returns TRUE if successful, or FALSE if the pixmap could not be loaded.
 <p>If <em>format</em> is specified, the loader attempts to read the pixmap using the
@@ -462,9 +462,9 @@ explains how to add extra formats.
  <a href="xform-xform-cpp.html#load">xform/xform.cpp</a>
  <a href="scrollview-scrollview-cpp.html#load">scrollview/scrollview.cpp</a>
  <a href="picture-picture-cpp.html#load">picture/picture.cpp</a>
-<h3 class="fn">bool <a name="bdbe68"></a>QPixmap::load ( const <a href="qstring.html">QString</a> &amp; fileName, const char * format=0, <a href="qpixmap.html#ColorMode">ColorMode</a> mode=Auto )</h3>
+<h3 class="fn">boolÂ <a name="bdbe68"></a>QPixmap::loadÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â fileName, constÂ charÂ *Â format=0, <a href="qpixmap.html#ColorMode">ColorMode</a>Â mode=AutoÂ )</h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
-<h3 class="fn">bool <a name="79475e"></a>QPixmap::loadFromData ( const uchar * buf, uint len, const char * format, int conversion_flags )</h3>
+<h3 class="fn">boolÂ <a name="79475e"></a>QPixmap::loadFromDataÂ (Â constÂ ucharÂ *Â buf, uintÂ len, constÂ charÂ *Â format, intÂ conversion_flagsÂ )</h3>
 <p>Loads a pixmap from the binary data in <em>buf</em> (<em>len</em> bytes).
 Returns TRUE if successful, or FALSE if the pixmap could not be loaded.
 <p>If <em>format</em> is specified, the loader attempts to read the pixmap using the
@@ -475,25 +475,25 @@ of the <em>conversion_flags</em> argument.
 <p>The <a href="qimageio.html">QImageIO</a> documentation lists the supported image formats and
 explains how to add extra formats.
 <p>See also  <a href="#a728cf">load</a>(), <a href="#a38b1c">save</a>(), <a href="#360626">imageFormat</a>(), <a href="qimage.html#48cbcb">QImage::loadFromData</a>() and <a href="qimageio.html">QImageIO</a>.
-<h3 class="fn">bool <a name="b0e017"></a>QPixmap::loadFromData ( const <a href="qbytearray.html">QByteArray</a> &amp; buf, const char * format=0, int conversion_flags=0 )</h3>
+<h3 class="fn">boolÂ <a name="b0e017"></a>QPixmap::loadFromDataÂ (Â constÂ <a href="qbytearray.html">QByteArray</a>Â &amp;Â buf, constÂ charÂ *Â format=0, intÂ conversion_flags=0Â )</h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
-<h3 class="fn">bool <a name="32699f"></a>QPixmap::loadFromData ( const uchar * buf, uint len, const char * format=0, <a href="qpixmap.html#ColorMode">ColorMode</a> mode=Auto )</h3>
+<h3 class="fn">boolÂ <a name="32699f"></a>QPixmap::loadFromDataÂ (Â constÂ ucharÂ *Â buf, uintÂ len, constÂ charÂ *Â format=0, <a href="qpixmap.html#ColorMode">ColorMode</a>Â mode=AutoÂ )</h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
-<h3 class="fn">const <a href="qbitmap.html">QBitmap</a> * <a name="99119c"></a>QPixmap::mask () const</h3>
+<h3 class="fn">constÂ <a href="qbitmap.html">QBitmap</a>Â *Â <a name="99119c"></a>QPixmap::maskÂ ()Â const</h3>
 <p>Returns the mask bitmap, or null if no mask has been set.
 <p>See also  <a href="#68a75d">setMask</a>() and <a href="qbitmap.html">QBitmap</a>.
-<h3 class="fn">int <a name="fa32cf"></a>QPixmap::metric ( int m ) const <code>[virtual protected]</code></h3>
+<h3 class="fn">intÂ <a name="fa32cf"></a>QPixmap::metricÂ (Â intÂ mÂ )Â const <code>[virtualÂ protected]</code></h3>
 <p>Internal implementation of the virtual <a href="qpaintdevice.html#43eff7">QPaintDevice::metric</a>() function.
 <p>Use the <a href="qpaintdevicemetrics.html">QPaintDeviceMetrics</a> class instead.
 <p>Reimplemented from <a href="qpaintdevice.html#43eff7">QPaintDevice.</a>
-<h3 class="fn">QPixmap &amp; <a name="f29bf5"></a>QPixmap::operator= ( const <a href="qimage.html">QImage</a> &amp; image )</h3>
+<h3 class="fn">QPixmapÂ &amp;Â <a name="f29bf5"></a>QPixmap::operator=Â (Â constÂ <a href="qimage.html">QImage</a>Â &amp;Â imageÂ )</h3>
 <p>Converts the image <em>image</em> to a pixmap that is assigned to this pixmap.
 Returns a reference to the pixmap.
 <p>See also  <a href="#00951a">convertFromImage</a>().
-<h3 class="fn">QPixmap &amp; <a name="4a19b0"></a>QPixmap::operator= ( const QPixmap &amp; pixmap )</h3>
+<h3 class="fn">QPixmapÂ &amp;Â <a name="4a19b0"></a>QPixmap::operator=Â (Â constÂ QPixmapÂ &amp;Â pixmapÂ )</h3>
 <p>Assigns the pixmap <em>pixmap</em> to this pixmap and returns a reference to
 this pixmap.
-<h3 class="fn">QPixmap::Optimization <a name="ae6199"></a>QPixmap::optimization() const</h3>
+<h3 class="fn">QPixmap::OptimizationÂ <a name="ae6199"></a>QPixmap::optimization()Â const</h3>
 <p>Returns the optimization setting for this pixmap.
 <p>The default optimization setting is <code>QPixmap::NormalOptim.</code> You may
 change this settings in two ways:
@@ -504,26 +504,26 @@ for all new pixmaps.
 pixmaps.
 </ul>
 <p>See also  <a href="#41f5cf">setOptimization</a>(), <a href="#7675b8">setDefaultOptimization</a>() and <a href="#3ad81f">defaultOptimization</a>().
-<h3 class="fn"><a href="qrect.html">QRect</a> <a name="fbdfe3"></a>QPixmap::rect () const</h3>
+<h3 class="fn"><a href="qrect.html">QRect</a>Â <a name="fbdfe3"></a>QPixmap::rectÂ ()Â const</h3>
 <p>Returns the enclosing rectangle (0,0,<a href="#86dbc5">width</a>(),<a href="#d5bb33">height</a>()) of the pixmap.
 <p>See also  <a href="#86dbc5">width</a>(), <a href="#d5bb33">height</a>() and <a href="#60b65f">size</a>().
 <p>Examples:
  <a href="xform-xform-cpp.html#rect">xform/xform.cpp</a>
-<h3 class="fn">void <a name="b4f156"></a>QPixmap::resize ( int w, int h )</h3>
+<h3 class="fn">voidÂ <a name="b4f156"></a>QPixmap::resizeÂ (Â intÂ w, intÂ hÂ )</h3>
 <p>Resizes the pixmap to <em>w</em> width and <em>h</em> height.  If either <em>w</em>
 or <em>h</em> is less than 1, the pixmap becomes a null pixmap.
 <p>If both <em>w</em> and <em>h</em> are greater than 0, a valid pixmap is created.
 New pixels will be uninitialized (random) if the pixmap is expanded.
 <p>Examples:
  <a href="desktop-desktop-cpp.html#resize">desktop/desktop.cpp</a>
-<h3 class="fn">void <a name="360eec"></a>QPixmap::resize ( const <a href="qsize.html">QSize</a> &amp; size )</h3>
+<h3 class="fn">voidÂ <a name="360eec"></a>QPixmap::resizeÂ (Â constÂ <a href="qsize.html">QSize</a>Â &amp;Â sizeÂ )</h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
-<h3 class="fn">bool <a name="e02a5b"></a>QPixmap::save ( const <a href="qstring.html">QString</a> &amp; fileName, const char * format ) const</h3>
+<h3 class="fn">boolÂ <a name="e02a5b"></a>QPixmap::saveÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â fileName, constÂ charÂ *Â formatÂ )Â const</h3>
 <p>Saves the pixmap to the file <em>fileName,</em> using the image file format
 <em>format.</em>  Returns TRUE if successful, or FALSE if the pixmap could not
 be saved.
 <p>See also  <a href="#a728cf">load</a>(), <a href="#79475e">loadFromData</a>(), <a href="#360626">imageFormat</a>(), <a href="qimage.html#9f148a">QImage::save</a>() and <a href="qimageio.html">QImageIO</a>.
-<h3 class="fn">bool <a name="a38b1c"></a>QPixmap::save ( const <a href="qstring.html">QString</a> &amp; fileName, const char * format, int quality ) const</h3>
+<h3 class="fn">boolÂ <a name="a38b1c"></a>QPixmap::saveÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â fileName, constÂ charÂ *Â format, intÂ qualityÂ )Â const</h3>
 <p>Saves the pixmap to the file <em>fileName,</em> using the image file format
 <em>format</em> and a quality factor <em>quality. quality</em> must be in the
 range [0,100] or -1.  Specify 0 to obtain small compressed files, 100
@@ -532,23 +532,23 @@ Returns TRUE if successful, or FALSE if the pixmap could not be saved.
 <p>See also  <a href="#a728cf">load</a>(), <a href="#79475e">loadFromData</a>(), <a href="#360626">imageFormat</a>(), <a href="qimage.html#9f148a">QImage::save</a>() and <a href="qimageio.html">QImageIO</a>.
 <p>Examples:
  <a href="qmag-qmag-cpp.html#save">qmag/qmag.cpp</a>
-<h3 class="fn">bool <a name="848613"></a>QPixmap::selfMask () const</h3>
+<h3 class="fn">boolÂ <a name="848613"></a>QPixmap::selfMaskÂ ()Â const</h3>
 <p>Returns TRUE if the pixmap's mask is identical to the pixmap itself.
 <p>See also  <a href="#99119c">mask</a>().
-<h3 class="fn">int <a name="4f47d9"></a>QPixmap::serialNumber () const</h3>
+<h3 class="fn">intÂ <a name="4f47d9"></a>QPixmap::serialNumberÂ ()Â const</h3>
 <p>Returns a number that uniquely identifies the contents of this QPixmap object.
 This means that multiple QPixmaps objects can have the same serial number
 as long as they refer to the same contents.
 The serial number is for example very useful for caching.
 <p>See also  <a href="qpixmapcache.html">QPixmapCache</a>.
-<h3 class="fn">void <a name="7675b8"></a>QPixmap::setDefaultOptimization ( <a href="qpixmap.html#Optimization">Optimization</a> optimization ) <code>[static]</code></h3>
+<h3 class="fn">voidÂ <a name="7675b8"></a>QPixmap::setDefaultOptimizationÂ (Â <a href="qpixmap.html#Optimization">Optimization</a>Â optimizationÂ ) <code>[static]</code></h3>
 <p>Sets the default pixmap optimization.
 <p>All <em>new</em> pixmaps that are created will use this default optimization.
 You may also set optimization for individual pixmaps using the
 <a href="#41f5cf">setOptimization</a>() function.
 <p>The initial default optimization setting is <code>QPixmap::Normal.</code>
 <p>See also  <a href="#3ad81f">defaultOptimization</a>(), <a href="#41f5cf">setOptimization</a>() and <a href="#ae6199">optimization</a>().
-<h3 class="fn">void <a name="68a75d"></a>QPixmap::setMask ( const <a href="qbitmap.html">QBitmap</a> &amp; newmask )</h3>
+<h3 class="fn">voidÂ <a name="68a75d"></a>QPixmap::setMaskÂ (Â constÂ <a href="qbitmap.html">QBitmap</a>Â &amp;Â newmaskÂ )</h3>
 <p>Sets a mask bitmap.
 <p>The <em>mask</em> bitmap defines the clip mask for this pixmap. Every pixel in
 <em>mask</em> corresponds to a pixel in this pixmap. Pixel value 1 means opaque
@@ -556,7 +556,7 @@ and pixel value 0 means transparent. The mask must have the same size as
 this pixmap.
 <p>Setting a <a href="#7803c4">null</a> mask resets the mask,
 <p>See also  <a href="#99119c">mask</a>(), <a href="#20dfb1">createHeuristicMask</a>() and <a href="qbitmap.html">QBitmap</a>.
-<h3 class="fn">void <a name="41f5cf"></a>QPixmap::setOptimization ( <a href="qpixmap.html#Optimization">Optimization</a> optimization )</h3>
+<h3 class="fn">voidÂ <a name="41f5cf"></a>QPixmap::setOptimizationÂ (Â <a href="qpixmap.html#Optimization">Optimization</a>Â optimizationÂ )</h3>
 <p>Sets pixmap drawing optimization for this pixmap.
 <p>The optimization setting affects pixmap operations, in particular
 drawing of transparent pixmaps (<a href="qpaintdevice.html#35ae2e">bitBlt</a>() a pixmap with a mask set) and
@@ -570,13 +570,13 @@ for all new pixmaps.
 <p>See also  <a href="#ae6199">optimization</a>(), <a href="#7675b8">setDefaultOptimization</a>() and <a href="#3ad81f">defaultOptimization</a>().
 <p>Examples:
  <a href="desktop-desktop-cpp.html#setOptimization">desktop/desktop.cpp</a>
-<h3 class="fn"><a href="qsize.html">QSize</a> <a name="60b65f"></a>QPixmap::size () const</h3>
+<h3 class="fn"><a href="qsize.html">QSize</a>Â <a name="60b65f"></a>QPixmap::sizeÂ ()Â const</h3>
 <p>Returns the size of the pixmap.
 <p>See also  <a href="#86dbc5">width</a>(), <a href="#d5bb33">height</a>() and <a href="#fbdfe3">rect</a>().
 <p>Examples:
  <a href="qtimage-qtimage-cpp.html#size">qtimage/qtimage.cpp</a>
  <a href="movies-main-cpp.html#size">movies/main.cpp</a>
-<h3 class="fn"><a href="qwmatrix.html">QWMatrix</a> <a name="952384"></a>QPixmap::trueMatrix ( const <a href="qwmatrix.html">QWMatrix</a> &amp; matrix, int w, int h ) <code>[static]</code></h3>
+<h3 class="fn"><a href="qwmatrix.html">QWMatrix</a>Â <a name="952384"></a>QPixmap::trueMatrixÂ (Â constÂ <a href="qwmatrix.html">QWMatrix</a>Â &amp;Â matrix, intÂ w, intÂ hÂ ) <code>[static]</code></h3>
 <p>Returns the actual matrix used for transforming a pixmap with <em>w</em>
 width and <em>h</em> height.
 <p>When transforming a pixmap with <a href="#ff5fcf">xForm</a>(), the transformation matrix
@@ -586,7 +586,7 @@ points of the original pixmap.
 <p>This function returns the modified matrix, which maps points
 correctly from the original pixmap into the new pixmap.
 <p>See also  <a href="#ff5fcf">xForm</a>() and <a href="qwmatrix.html">QWMatrix</a>.
-<h3 class="fn">int <a name="86dbc5"></a>QPixmap::width () const</h3>
+<h3 class="fn">intÂ <a name="86dbc5"></a>QPixmap::widthÂ ()Â const</h3>
 <p>Returns the width of the pixmap.
 <p>See also  <a href="#d5bb33">height</a>(), <a href="#60b65f">size</a>() and <a href="#fbdfe3">rect</a>().
 <p>Examples:
@@ -595,7 +595,7 @@ correctly from the original pixmap into the new pixmap.
  <a href="desktop-desktop-cpp.html#width">desktop/desktop.cpp</a>
  <a href="scrollview-scrollview-cpp.html#width">scrollview/scrollview.cpp</a>
  <a href="movies-main-cpp.html#width">movies/main.cpp</a>
-<h3 class="fn">QPixmap <a name="ff5fcf"></a>QPixmap::xForm ( const <a href="qwmatrix.html">QWMatrix</a> &amp; matrix ) const</h3>
+<h3 class="fn">QPixmapÂ <a name="ff5fcf"></a>QPixmap::xFormÂ (Â constÂ <a href="qwmatrix.html">QWMatrix</a>Â &amp;Â matrixÂ )Â const</h3>
 <p>Returns a copy of the pixmap that is transformed using <em>matrix.</em>
 <p>Qt uses this function to implement rotated text on window systems
 that do not support such complex features.
@@ -680,6 +680,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

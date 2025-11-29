@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QSizePolicy Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -30,23 +30,23 @@ A layout attribute describing horizontal and vertical resizing.
 <p><a href="qsizepolicy-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">enum <a href="#SizeType"><b>SizeType</b></a> { Fixed = 0, Minimum = MayGrow, Maximum = MayShrink, Preferred = MayGrow|MayShrink, MinimumExpanding = Minimum|ExpMask, Expanding = MinimumExpanding|MayShrink }</div>
-<li><div class="fn">enum <a href="#ExpandData"><b>ExpandData</b></a> { NoDirection = 0, Horizontal = 1, Vertical = 2, BothDirections = Horizontal | Vertical }</div>
-<li><div class="fn"><a href="#de3d1c"><b>QSizePolicy</b></a> () </div>
-<li><div class="fn"><a href="#3f0af9"><b>QSizePolicy</b></a> ( SizeType hor, SizeType ver, bool hfw = FALSE ) </div>
-<li><div class="fn">SizeType <a href="#ba357c"><b>horData</b></a> () const</div>
-<li><div class="fn">SizeType <a href="#d1d60d"><b>verData</b></a> () const</div>
-<li><div class="fn">bool <a href="#431429"><b>mayShrinkHorizontally</b></a> () const</div>
-<li><div class="fn">bool <a href="#d5d737"><b>mayShrinkVertically</b></a> () const</div>
-<li><div class="fn">bool <a href="#1a99b2"><b>mayGrowHorizontally</b></a> () const</div>
-<li><div class="fn">bool <a href="#5cdd5f"><b>mayGrowVertically</b></a> () const</div>
-<li><div class="fn">ExpandData <a href="#46a792"><b>expanding</b></a> () const</div>
-<li><div class="fn">void <a href="#da085a"><b>setHorData</b></a> ( SizeType d ) </div>
-<li><div class="fn">void <a href="#365c40"><b>setVerData</b></a> ( SizeType d ) </div>
-<li><div class="fn">void <a href="#49bc86"><b>setHeightForWidth</b></a> ( bool b ) </div>
-<li><div class="fn">bool <a href="#445766"><b>hasHeightForWidth</b></a> () const</div>
-<li><div class="fn">bool <b>operator==</b> ( const QSizePolicy &amp; s ) const</div>
-<li><div class="fn">bool <b>operator!=</b> ( const QSizePolicy &amp; s ) const</div>
+<li><div class="fn">enumÂ <a href="#SizeType"><b>SizeType</b></a>Â {Â FixedÂ =Â 0, MinimumÂ =Â MayGrow, MaximumÂ =Â MayShrink, PreferredÂ =Â MayGrow|MayShrink, MinimumExpandingÂ =Â Minimum|ExpMask, ExpandingÂ =Â MinimumExpanding|MayShrinkÂ }</div>
+<li><div class="fn">enumÂ <a href="#ExpandData"><b>ExpandData</b></a>Â {Â NoDirectionÂ =Â 0, HorizontalÂ =Â 1, VerticalÂ =Â 2, BothDirectionsÂ =Â HorizontalÂ |Â VerticalÂ }</div>
+<li><div class="fn"><a href="#de3d1c"><b>QSizePolicy</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#3f0af9"><b>QSizePolicy</b></a>Â (Â SizeTypeÂ hor, SizeTypeÂ ver, boolÂ hfwÂ =Â FALSEÂ )Â </div>
+<li><div class="fn">SizeTypeÂ <a href="#ba357c"><b>horData</b></a>Â ()Â const</div>
+<li><div class="fn">SizeTypeÂ <a href="#d1d60d"><b>verData</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#431429"><b>mayShrinkHorizontally</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#d5d737"><b>mayShrinkVertically</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#1a99b2"><b>mayGrowHorizontally</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#5cdd5f"><b>mayGrowVertically</b></a>Â ()Â const</div>
+<li><div class="fn">ExpandDataÂ <a href="#46a792"><b>expanding</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#da085a"><b>setHorData</b></a>Â (Â SizeTypeÂ dÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#365c40"><b>setVerData</b></a>Â (Â SizeTypeÂ dÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#49bc86"><b>setHeightForWidth</b></a>Â (Â boolÂ bÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#445766"><b>hasHeightForWidth</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <b>operator==</b>Â (Â constÂ QSizePolicyÂ &amp;Â sÂ )Â const</div>
+<li><div class="fn">boolÂ <b>operator!=</b>Â (Â constÂ QSizePolicyÂ &amp;Â sÂ )Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 A layout attribute describing horizontal and vertical resizing.
@@ -108,9 +108,9 @@ make use of extra space, so it should get as much space as
 possible (eg. the horizontal direction of a slider).
 <p></ul>
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="de3d1c"></a>QSizePolicy::QSizePolicy ()</h3>
+<h3 class="fn"><a name="de3d1c"></a>QSizePolicy::QSizePolicyÂ ()</h3>
 <p>Default constructor, produces a minimally initialized QSizePolicy.
-<h3 class="fn"><a name="3f0af9"></a>QSizePolicy::QSizePolicy ( <a href="qsizepolicy.html#SizeType">SizeType</a> hor, <a href="qsizepolicy.html#SizeType">SizeType</a> ver, bool hfw = FALSE )</h3>
+<h3 class="fn"><a name="3f0af9"></a>QSizePolicy::QSizePolicyÂ (Â <a href="qsizepolicy.html#SizeType">SizeType</a>Â hor, <a href="qsizepolicy.html#SizeType">SizeType</a>Â ver, boolÂ hfwÂ =Â FALSEÂ )</h3>
 <p><a name="interesting"></a>
 This is the constructor normally used to return a value in the
 overridden <a href="qwidget.html#23726d">QWidget::sizePolicy()</a> function of a <a href="qwidget.html">QWidget</a> subclass.
@@ -119,28 +119,28 @@ sizing types, <em>hor</em> and <em>ver</em> respectively.  These <a href="#SizeT
 treated by the <a href="qlayout.html">layout engine</a>.
 <p>If <em>hfw</em> is TRUE, the preferred height of the widget is dependent on the
 width of the widget (for example, a <a href="qlabel.html">QLabel</a> with automatic word-breaking).
-<h3 class="fn">QSizePolicy::ExpandData <a name="46a792"></a>QSizePolicy::expanding() const</h3>
+<h3 class="fn">QSizePolicy::ExpandDataÂ <a name="46a792"></a>QSizePolicy::expanding()Â const</h3>
 <p>Returns a value indicating if the widget can make use of extra space
 (ie. if it "wants" to grow) horizontally and/or vertically.
-<h3 class="fn">bool <a name="445766"></a>QSizePolicy::hasHeightForWidth () const</h3>
+<h3 class="fn">boolÂ <a name="445766"></a>QSizePolicy::hasHeightForWidthÂ ()Â const</h3>
 <p>Returns TRUE if the widget's preferred height depends on its width.
-<h3 class="fn">QSizePolicy::SizeType <a name="ba357c"></a>QSizePolicy::horData() const</h3>
+<h3 class="fn">QSizePolicy::SizeTypeÂ <a name="ba357c"></a>QSizePolicy::horData()Â const</h3>
 <p>Returns the horizontal component of the size policy.
-<h3 class="fn">bool <a name="1a99b2"></a>QSizePolicy::mayGrowHorizontally () const</h3>
+<h3 class="fn">boolÂ <a name="1a99b2"></a>QSizePolicy::mayGrowHorizontallyÂ ()Â const</h3>
 <p>Returns TRUE if the widget can sensibly be wider than its sizeHint().
-<h3 class="fn">bool <a name="5cdd5f"></a>QSizePolicy::mayGrowVertically () const</h3>
+<h3 class="fn">boolÂ <a name="5cdd5f"></a>QSizePolicy::mayGrowVerticallyÂ ()Â const</h3>
 <p>Returns TRUE if the widget can sensibly be taller than its sizeHint().
-<h3 class="fn">bool <a name="431429"></a>QSizePolicy::mayShrinkHorizontally () const</h3>
+<h3 class="fn">boolÂ <a name="431429"></a>QSizePolicy::mayShrinkHorizontallyÂ ()Â const</h3>
 <p>Returns TRUE if the widget can sensibly be narrower than its sizeHint().
-<h3 class="fn">bool <a name="d5d737"></a>QSizePolicy::mayShrinkVertically () const</h3>
+<h3 class="fn">boolÂ <a name="d5d737"></a>QSizePolicy::mayShrinkVerticallyÂ ()Â const</h3>
 <p>Returns TRUE if the widget can sensibly be lower than its sizeHint().
-<h3 class="fn">void <a name="49bc86"></a>QSizePolicy::setHeightForWidth ( bool b )</h3>
+<h3 class="fn">voidÂ <a name="49bc86"></a>QSizePolicy::setHeightForWidthÂ (Â boolÂ bÂ )</h3>
 <p>Sets the <a href="#445766">hasHeightForWidth</a>() flag to <em>b.</em>
-<h3 class="fn">void <a name="da085a"></a>QSizePolicy::setHorData ( <a href="qsizepolicy.html#SizeType">SizeType</a> d )</h3>
+<h3 class="fn">voidÂ <a name="da085a"></a>QSizePolicy::setHorDataÂ (Â <a href="qsizepolicy.html#SizeType">SizeType</a>Â dÂ )</h3>
 <p>Sets the horizontal component of the size policy to <em>d.</em>
-<h3 class="fn">void <a name="365c40"></a>QSizePolicy::setVerData ( <a href="qsizepolicy.html#SizeType">SizeType</a> d )</h3>
+<h3 class="fn">voidÂ <a name="365c40"></a>QSizePolicy::setVerDataÂ (Â <a href="qsizepolicy.html#SizeType">SizeType</a>Â dÂ )</h3>
 <p>Sets the vertical component of the size policy to <em>d.</em>
-<h3 class="fn">QSizePolicy::SizeType <a name="d1d60d"></a>QSizePolicy::verData() const</h3>
+<h3 class="fn">QSizePolicy::SizeTypeÂ <a name="d1d60d"></a>QSizePolicy::verData()Â const</h3>
 <p>Returns the vertical component of the size policy.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
@@ -153,6 +153,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

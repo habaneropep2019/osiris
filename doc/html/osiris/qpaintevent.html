@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QPaintEvent Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,11 +32,11 @@ Inherits <a href="qevent.html">QEvent</a>.
 <p><a href="qpaintevent-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#f2f05e"><b>QPaintEvent</b></a> ( const QRegion &amp; paintRegion, bool erased = TRUE ) </div>
-<li><div class="fn"><a href="#0ba54b"><b>QPaintEvent</b></a> ( const QRect &amp; paintRect, bool erased = TRUE ) </div>
-<li><div class="fn">const QRect&amp; <a href="#2d6e18"><b>rect</b></a> () const</div>
-<li><div class="fn">const QRegion&amp; <a href="#dc5fc5"><b>region</b></a> () const</div>
-<li><div class="fn">bool <a href="#e16dab"><b>erased</b></a> () const</div>
+<li><div class="fn"><a href="#f2f05e"><b>QPaintEvent</b></a>Â (Â constÂ QRegionÂ &amp;Â paintRegion, boolÂ erasedÂ =Â TRUEÂ )Â </div>
+<li><div class="fn"><a href="#0ba54b"><b>QPaintEvent</b></a>Â (Â constÂ QRectÂ &amp;Â paintRect, boolÂ erasedÂ =Â TRUEÂ )Â </div>
+<li><div class="fn">constÂ QRect&amp;Â <a href="#2d6e18"><b>rect</b></a>Â ()Â const</div>
+<li><div class="fn">constÂ QRegion&amp;Â <a href="#dc5fc5"><b>region</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#e16dab"><b>erased</b></a>Â ()Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QPaintEvent class contains event parameters for paint events.
@@ -59,14 +59,14 @@ when a part of a widget is exposed because an overlying widget is moved away.
  <a href="picture-picture-cpp.html#QPaintEvent">picture/picture.cpp</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="0ba54b"></a>QPaintEvent::QPaintEvent ( const <a href="qrect.html">QRect</a> &amp; paintRect, bool erased=TRUE = TRUE )</h3>
+<h3 class="fn"><a name="0ba54b"></a>QPaintEvent::QPaintEventÂ (Â constÂ <a href="qrect.html">QRect</a>Â &amp;Â paintRect, boolÂ erased=TRUEÂ =Â TRUEÂ )</h3>
 <p>Constructs a paint event object with the rectangle that should be updated.
-<h3 class="fn"><a name="f2f05e"></a>QPaintEvent::QPaintEvent ( const <a href="qregion.html">QRegion</a> &amp; paintRegion, bool erased=TRUE = TRUE )</h3>
+<h3 class="fn"><a name="f2f05e"></a>QPaintEvent::QPaintEventÂ (Â constÂ <a href="qregion.html">QRegion</a>Â &amp;Â paintRegion, boolÂ erased=TRUEÂ =Â TRUEÂ )</h3>
 <p>Constructs a paint event object with the region that should be updated.
-<h3 class="fn">bool <a name="e16dab"></a>QPaintEvent::erased () const</h3>
+<h3 class="fn">boolÂ <a name="e16dab"></a>QPaintEvent::erasedÂ ()Â const</h3>
 <p>Returns whether the paint event region (or rectangle) has been
 erased with the widget's background.
-<h3 class="fn">const <a href="qrect.html">QRect</a> &amp; <a name="2d6e18"></a>QPaintEvent::rect () const</h3>
+<h3 class="fn">constÂ <a href="qrect.html">QRect</a>Â &amp;Â <a name="2d6e18"></a>QPaintEvent::rectÂ ()Â const</h3>
 <p>Returns the rectangle that should be updated.
 <p>See also  <a href="#dc5fc5">region</a>() and <a href="qpainter.html#898839">QPainter::setClipRect</a>().
 <p>Examples:
@@ -75,7 +75,7 @@ erased with the widget's background.
  <a href="progress-progress-cpp.html#rect">progress/progress.cpp</a>
  <a href="splitter-splitter-cpp.html#rect">splitter/splitter.cpp</a>
  <a href="trivial-trivial-cpp.html#rect">trivial/trivial.cpp</a>
-<h3 class="fn">const <a href="qregion.html">QRegion</a> &amp; <a name="dc5fc5"></a>QPaintEvent::region () const</h3>
+<h3 class="fn">constÂ <a href="qregion.html">QRegion</a>Â &amp;Â <a name="dc5fc5"></a>QPaintEvent::regionÂ ()Â const</h3>
 <p>Returns the region that should be updated.
 <p>See also  <a href="#2d6e18">rect</a>() and <a href="qpainter.html#15cc78">QPainter::setClipRegion</a>().
 <hr><p>
@@ -89,6 +89,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

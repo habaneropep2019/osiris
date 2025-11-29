@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QMetaObject Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -30,40 +30,40 @@ The QMetaObject class contains meta information about Qt objects.
 <p><a href="qmetaobject-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><b>QMetaObject</b> ( const char * class_name, const char * superclass_name, QMetaData * slot_data, int n_slots, QMetaData * signal_data, int n_signals ) (internal)</div>
-<li><div class="fn"><b>QMetaObject</b> ( const char * class_name, const char * superclass_name, QMetaData * slot_data, int n_slots, QMetaData * signal_data, int n_signals, QMetaProperty * prop_data, int n_props, QMetaEnum * enum_data, int n_enums, QClassInfo * class_info, int n_info ) (internal)</div>
-<li><div class="fn">virtual <b>~QMetaObject</b> () (internal)</div>
-<li><div class="fn">const char* <a href="#e8bcda"><b>className</b></a> () const</div>
-<li><div class="fn">const char* <a href="#3ab140"><b>superClassName</b></a> () const</div>
-<li><div class="fn">QMetaObject* <a href="#99683a"><b>superClass</b></a> () const</div>
-<li><div class="fn">bool <a href="#7314ac"><b>inherits</b></a> ( const char * clname ) const</div>
-<li><div class="fn">int <a href="#04ea03"><b>numSlots</b></a> ( bool super = FALSE ) const</div>
-<li><div class="fn">int <a href="#e1d01d"><b>numSignals</b></a> ( bool super = FALSE ) const</div>
-<li><div class="fn">QMetaData* <b>slot</b> ( int index, bool super = FALSE ) const (internal)</div>
-<li><div class="fn">QMetaData* <b>signal</b> ( int index, bool super = FALSE ) const (internal)</div>
-<li><div class="fn">QMetaData* <b>slot</b> ( const char *, bool super = FALSE ) const (internal)</div>
-<li><div class="fn">QMetaData* <b>signal</b> ( const char *, bool super = FALSE ) const (internal)</div>
-<li><div class="fn">QStrList <a href="#d347e1"><b>slotNames</b></a> ( bool super = FALSE ) const</div>
-<li><div class="fn">QStrList <a href="#ce8c4d"><b>signalNames</b></a> ( bool super = FALSE ) const</div>
-<li><div class="fn">int <a href="#937e7c"><b>numClassInfo</b></a> ( bool super = FALSE ) const</div>
-<li><div class="fn">QClassInfo* <a href="#3efbb8"><b>classInfo</b></a> ( int index, bool super = FALSE ) const</div>
-<li><div class="fn">const char* <a href="#37c0e2"><b>classInfo</b></a> ( const char * name, bool super = FALSE ) const</div>
-<li><div class="fn">const QMetaProperty* <a href="#843ead"><b>property</b></a> ( const char * name, bool super = FALSE ) const</div>
-<li><div class="fn">QStrList <a href="#8c9b9c"><b>propertyNames</b></a> ( bool super = FALSE ) const</div>
-<li><div class="fn">void <b>resolveProperty</b> ( QMetaProperty * prop ) (internal)</div>
-<li><div class="fn">void <b>set_slot_access</b> ( QMetaData::Access * ) (internal)</div>
-<li><div class="fn">QMetaData::Access <b>slot_access</b> ( int index, bool super = FALSE ) (internal)</div>
+<li><div class="fn"><b>QMetaObject</b>Â (Â constÂ charÂ *Â class_name, constÂ charÂ *Â superclass_name, QMetaDataÂ *Â slot_data, intÂ n_slots, QMetaDataÂ *Â signal_data, intÂ n_signalsÂ )Â (internal)</div>
+<li><div class="fn"><b>QMetaObject</b>Â (Â constÂ charÂ *Â class_name, constÂ charÂ *Â superclass_name, QMetaDataÂ *Â slot_data, intÂ n_slots, QMetaDataÂ *Â signal_data, intÂ n_signals, QMetaPropertyÂ *Â prop_data, intÂ n_props, QMetaEnumÂ *Â enum_data, intÂ n_enums, QClassInfoÂ *Â class_info, intÂ n_infoÂ )Â (internal)</div>
+<li><div class="fn">virtualÂ <b>~QMetaObject</b>Â ()Â (internal)</div>
+<li><div class="fn">constÂ char*Â <a href="#e8bcda"><b>className</b></a>Â ()Â const</div>
+<li><div class="fn">constÂ char*Â <a href="#3ab140"><b>superClassName</b></a>Â ()Â const</div>
+<li><div class="fn">QMetaObject*Â <a href="#99683a"><b>superClass</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#7314ac"><b>inherits</b></a>Â (Â constÂ charÂ *Â clnameÂ )Â const</div>
+<li><div class="fn">intÂ <a href="#04ea03"><b>numSlots</b></a>Â (Â boolÂ superÂ =Â FALSEÂ )Â const</div>
+<li><div class="fn">intÂ <a href="#e1d01d"><b>numSignals</b></a>Â (Â boolÂ superÂ =Â FALSEÂ )Â const</div>
+<li><div class="fn">QMetaData*Â <b>slot</b>Â (Â intÂ index, boolÂ superÂ =Â FALSEÂ )Â constÂ (internal)</div>
+<li><div class="fn">QMetaData*Â <b>signal</b>Â (Â intÂ index, boolÂ superÂ =Â FALSEÂ )Â constÂ (internal)</div>
+<li><div class="fn">QMetaData*Â <b>slot</b>Â (Â constÂ charÂ *, boolÂ superÂ =Â FALSEÂ )Â constÂ (internal)</div>
+<li><div class="fn">QMetaData*Â <b>signal</b>Â (Â constÂ charÂ *, boolÂ superÂ =Â FALSEÂ )Â constÂ (internal)</div>
+<li><div class="fn">QStrListÂ <a href="#d347e1"><b>slotNames</b></a>Â (Â boolÂ superÂ =Â FALSEÂ )Â const</div>
+<li><div class="fn">QStrListÂ <a href="#ce8c4d"><b>signalNames</b></a>Â (Â boolÂ superÂ =Â FALSEÂ )Â const</div>
+<li><div class="fn">intÂ <a href="#937e7c"><b>numClassInfo</b></a>Â (Â boolÂ superÂ =Â FALSEÂ )Â const</div>
+<li><div class="fn">QClassInfo*Â <a href="#3efbb8"><b>classInfo</b></a>Â (Â intÂ index, boolÂ superÂ =Â FALSEÂ )Â const</div>
+<li><div class="fn">constÂ char*Â <a href="#37c0e2"><b>classInfo</b></a>Â (Â constÂ charÂ *Â name, boolÂ superÂ =Â FALSEÂ )Â const</div>
+<li><div class="fn">constÂ QMetaProperty*Â <a href="#843ead"><b>property</b></a>Â (Â constÂ charÂ *Â name, boolÂ superÂ =Â FALSEÂ )Â const</div>
+<li><div class="fn">QStrListÂ <a href="#8c9b9c"><b>propertyNames</b></a>Â (Â boolÂ superÂ =Â FALSEÂ )Â const</div>
+<li><div class="fn">voidÂ <b>resolveProperty</b>Â (Â QMetaPropertyÂ *Â propÂ )Â (internal)</div>
+<li><div class="fn">voidÂ <b>set_slot_access</b>Â (Â QMetaData::AccessÂ *Â )Â (internal)</div>
+<li><div class="fn">QMetaData::AccessÂ <b>slot_access</b>Â (Â intÂ index, boolÂ superÂ =Â FALSEÂ )Â (internal)</div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><div class="fn">QMetaObject* <b>new_metaobject</b> ( const char *, const char *, QMetaData *, int, QMetaData *, int, QMetaProperty * prop_data, int n_props, QMetaEnum * enum_data, int n_enums, QClassInfo * class_info, int n_info ) (internal)</div>
-<li><div class="fn">QMetaObject* <b>new_metaobject</b> ( const char *, const char *, QMetaData *, int, QMetaData *, int ) (internal)</div>
-<li><div class="fn">QMetaData* <b>new_metadata</b> ( int ) (internal)</div>
-<li><div class="fn">QMetaData::Access* <b>new_metaaccess</b> ( int ) (internal)</div>
-<li><div class="fn">QMetaEnum* <b>new_metaenum</b> ( int ) (internal)</div>
-<li><div class="fn">QMetaEnum::Item* <b>new_metaenum_item</b> ( int ) (internal)</div>
-<li><div class="fn">QMetaProperty* <b>new_metaproperty</b> ( int ) (internal)</div>
-<li><div class="fn">QClassInfo* <b>new_classinfo</b> ( int ) (internal)</div>
+<li><div class="fn">QMetaObject*Â <b>new_metaobject</b>Â (Â constÂ charÂ *, constÂ charÂ *, QMetaDataÂ *, int, QMetaDataÂ *, int, QMetaPropertyÂ *Â prop_data, intÂ n_props, QMetaEnumÂ *Â enum_data, intÂ n_enums, QClassInfoÂ *Â class_info, intÂ n_infoÂ )Â (internal)</div>
+<li><div class="fn">QMetaObject*Â <b>new_metaobject</b>Â (Â constÂ charÂ *, constÂ charÂ *, QMetaDataÂ *, int, QMetaDataÂ *, intÂ )Â (internal)</div>
+<li><div class="fn">QMetaData*Â <b>new_metadata</b>Â (Â intÂ )Â (internal)</div>
+<li><div class="fn">QMetaData::Access*Â <b>new_metaaccess</b>Â (Â intÂ )Â (internal)</div>
+<li><div class="fn">QMetaEnum*Â <b>new_metaenum</b>Â (Â intÂ )Â (internal)</div>
+<li><div class="fn">QMetaEnum::Item*Â <b>new_metaenum_item</b>Â (Â intÂ )Â (internal)</div>
+<li><div class="fn">QMetaProperty*Â <b>new_metaproperty</b>Â (Â intÂ )Â (internal)</div>
+<li><div class="fn">QClassInfo*Â <b>new_classinfo</b>Â (Â intÂ )Â (internal)</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QMetaObject class contains meta information about Qt objects.
@@ -91,91 +91,91 @@ classes properties.
 </ul>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a href="qclassinfo.html">QClassInfo</a>* <a name="3efbb8"></a>QMetaObject::classInfo ( int index, bool super = FALSE ) const</h3>
+<h3 class="fn"><a href="qclassinfo.html">QClassInfo</a>*Â <a name="3efbb8"></a>QMetaObject::classInfoÂ (Â intÂ index, boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>Returns the class information with index <em>index</em> or 0 if no such
 information exists.
 <p>If  <em>super</em> is TRUE,  inherited class information is included.
-<h3 class="fn">const char* <a name="37c0e2"></a>QMetaObject::classInfo ( const char * name, bool super = FALSE ) const</h3>
+<h3 class="fn">constÂ char*Â <a name="37c0e2"></a>QMetaObject::classInfoÂ (Â constÂ charÂ *Â name, boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>Returns the class information with name <em>name</em> or 0 if no such
 information exists.
 <p>If <em>super</em> is TRUE, inherited class information is included.
-<h3 class="fn">const char * <a name="e8bcda"></a>QMetaObject::className () const</h3>
+<h3 class="fn">constÂ charÂ *Â <a name="e8bcda"></a>QMetaObject::classNameÂ ()Â const</h3>
 <p>Returns the class name.
 <p>See also  <a href="qobject.html#fa7716">QObject::className</a>() and <a href="#3ab140">superClassName</a>().
-<h3 class="fn">bool <a name="7314ac"></a>QMetaObject::inherits ( const char * clname ) const</h3>
+<h3 class="fn">boolÂ <a name="7314ac"></a>QMetaObject::inheritsÂ (Â constÂ charÂ *Â clnameÂ )Â const</h3>
 <p>Returns TRUE if this class inherits <em>clname</em> within the meta
 object inheritance chain.
 <p>(A class is considered to inherit itself.).
-<h3 class="fn">int <a name="937e7c"></a>QMetaObject::numClassInfo ( bool super = FALSE ) const</h3>
+<h3 class="fn">intÂ <a name="937e7c"></a>QMetaObject::numClassInfoÂ (Â boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>Returns the number of class information available for this class.
 <p>If  <em>super</em> is TRUE, inherited class information is included.
-<h3 class="fn">int <a name="e1d01d"></a>QMetaObject::numSignals ( bool super = FALSE ) const</h3>
+<h3 class="fn">intÂ <a name="e1d01d"></a>QMetaObject::numSignalsÂ (Â boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>Returns the number of signals for this class.
 <p>If <em>super</em> is TRUE, inherited signals are included.
 <p>See also  <a href="#ce8c4d">signalNames</a>().
-<h3 class="fn">int <a name="04ea03"></a>QMetaObject::numSlots ( bool super = FALSE ) const</h3>
+<h3 class="fn">intÂ <a name="04ea03"></a>QMetaObject::numSlotsÂ (Â boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>Returns the number of slots for this class.
 <p>If <em>super</em> is TRUE, inherited slots are included.
 <p>See also  <a href="#d347e1">slotNames</a>().
-<h3 class="fn">const <a href="qmetaproperty.html">QMetaProperty</a>* <a name="843ead"></a>QMetaObject::property ( const char * name, bool super = FALSE ) const</h3>
+<h3 class="fn">constÂ <a href="qmetaproperty.html">QMetaProperty</a>*Â <a name="843ead"></a>QMetaObject::propertyÂ (Â constÂ charÂ *Â name, boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>Returns the property meta data for the property with name <em>name</em>
 or 0 if no such property exists.
 <p>If <em>super</em> is TRUE, inherited properties are included.
 <p>See also  <a href="#8c9b9c">propertyNames</a>().
-<h3 class="fn"><a href="qstrlist.html">QStrList</a> <a name="8c9b9c"></a>QMetaObject::propertyNames ( bool super = FALSE ) const</h3>
+<h3 class="fn"><a href="qstrlist.html">QStrList</a>Â <a name="8c9b9c"></a>QMetaObject::propertyNamesÂ (Â boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>Returns a list with the names of all properties for this class.
 <p>If <em>super</em> is TRUE, inherited properties are included.
 <p>See also  <a href="#843ead">property</a>().
-<h3 class="fn"><a href="qstrlist.html">QStrList</a> <a name="ce8c4d"></a>QMetaObject::signalNames ( bool super = FALSE ) const</h3>
+<h3 class="fn"><a href="qstrlist.html">QStrList</a>Â <a name="ce8c4d"></a>QMetaObject::signalNamesÂ (Â boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>Returns a list with the names of all signals for this class.
 <p>If <em>super</em> is TRUE, inherited signals are included.
 <p>See also  <a href="#4607fe">signal</a>().
-<h3 class="fn"><a href="qstrlist.html">QStrList</a> <a name="d347e1"></a>QMetaObject::slotNames ( bool super = FALSE ) const</h3>
+<h3 class="fn"><a href="qstrlist.html">QStrList</a>Â <a name="d347e1"></a>QMetaObject::slotNamesÂ (Â boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>Returns a list with the names of all slots for this class.
 <p>If <em>super</em> is TRUE, inherited slots are included.
 <p>See also  <a href="#04ea03">numSlots</a>().
-<h3 class="fn">QMetaObject * <a name="99683a"></a>QMetaObject::superClass () const</h3>
+<h3 class="fn">QMetaObjectÂ *Â <a name="99683a"></a>QMetaObject::superClassÂ ()Â const</h3>
 <p>Returns the meta object of the super class or 0, if there is no such
 object.
-<h3 class="fn">const char * <a name="3ab140"></a>QMetaObject::superClassName () const</h3>
+<h3 class="fn">constÂ charÂ *Â <a name="3ab140"></a>QMetaObject::superClassNameÂ ()Â const</h3>
 <p>Returns the class name of the super class, or 0 if there is no super
 class in the <a href="qobject.html">QObject</a> hierarchy.
 <p>See also  <a href="#e8bcda">className</a>().
-<h3 class="fn"><a name="1d94c4"></a>QMetaObject::QMetaObject ( const char * class_name, const char * superclass_name, <a href="qmetadata.html">QMetaData</a> * slot_data, int n_slots, <a href="qmetadata.html">QMetaData</a> * signal_data, int n_signals )</h3>
+<h3 class="fn"><a name="1d94c4"></a>QMetaObject::QMetaObjectÂ (Â constÂ charÂ *Â class_name, constÂ charÂ *Â superclass_name, <a href="qmetadata.html">QMetaData</a>Â *Â slot_data, intÂ n_slots, <a href="qmetadata.html">QMetaData</a>Â *Â signal_data, intÂ n_signalsÂ )</h3>
 <p>For internal use only.
-<h3 class="fn"><a name="887d23"></a>QMetaObject::QMetaObject ( const char * class_name, const char * superclass_name, <a href="qmetadata.html">QMetaData</a> * slot_data, int n_slots, <a href="qmetadata.html">QMetaData</a> * signal_data, int n_signals, <a href="qmetaproperty.html">QMetaProperty</a> * prop_data, int n_props, QMetaEnum * enum_data, int n_enums, <a href="qclassinfo.html">QClassInfo</a> * class_info, int n_info )</h3>
+<h3 class="fn"><a name="887d23"></a>QMetaObject::QMetaObjectÂ (Â constÂ charÂ *Â class_name, constÂ charÂ *Â superclass_name, <a href="qmetadata.html">QMetaData</a>Â *Â slot_data, intÂ n_slots, <a href="qmetadata.html">QMetaData</a>Â *Â signal_data, intÂ n_signals, <a href="qmetaproperty.html">QMetaProperty</a>Â *Â prop_data, intÂ n_props, QMetaEnumÂ *Â enum_data, intÂ n_enums, <a href="qclassinfo.html">QClassInfo</a>Â *Â class_info, intÂ n_infoÂ )</h3>
 <p>For internal use only.
-<h3 class="fn"><a name="054d84"></a>QMetaObject::~QMetaObject () <code>[virtual]</code></h3>
+<h3 class="fn"><a name="054d84"></a>QMetaObject::~QMetaObjectÂ () <code>[virtual]</code></h3>
 <p>For internal use only.
-<h3 class="fn"><a href="qclassinfo.html">QClassInfo</a> * <a name="b6e0a9"></a>QMetaObject::new_classinfo ( int numEntries ) <code>[static]</code></h3>
+<h3 class="fn"><a href="qclassinfo.html">QClassInfo</a>Â *Â <a name="b6e0a9"></a>QMetaObject::new_classinfoÂ (Â intÂ numEntriesÂ ) <code>[static]</code></h3>
 <p>For internal use only.
-<h3 class="fn">QMetaData::Access * <a name="396cc2"></a>QMetaObject::new_metaaccess( int numEntries ) <code>[static]</code></h3>
+<h3 class="fn">QMetaData::AccessÂ *Â <a name="396cc2"></a>QMetaObject::new_metaaccess(Â intÂ numEntriesÂ ) <code>[static]</code></h3>
 <p>For internal use only.
-<h3 class="fn"><a href="qmetadata.html">QMetaData</a> * <a name="4cc7c0"></a>QMetaObject::new_metadata ( int numEntries ) <code>[static]</code></h3>
+<h3 class="fn"><a href="qmetadata.html">QMetaData</a>Â *Â <a name="4cc7c0"></a>QMetaObject::new_metadataÂ (Â intÂ numEntriesÂ ) <code>[static]</code></h3>
 <p>For internal use only.
-<h3 class="fn">QMetaEnum * <a name="c5ff3f"></a>QMetaObject::new_metaenum ( int numEntries ) <code>[static]</code></h3>
+<h3 class="fn">QMetaEnumÂ *Â <a name="c5ff3f"></a>QMetaObject::new_metaenumÂ (Â intÂ numEntriesÂ ) <code>[static]</code></h3>
 <p>For internal use only.
-<h3 class="fn">QMetaEnum::Item * <a name="23fdfc"></a>QMetaObject::new_metaenum_item( int numEntries ) <code>[static]</code></h3>
+<h3 class="fn">QMetaEnum::ItemÂ *Â <a name="23fdfc"></a>QMetaObject::new_metaenum_item(Â intÂ numEntriesÂ ) <code>[static]</code></h3>
 <p>For internal use only.
-<h3 class="fn">QMetaObject * <a name="b1a2ca"></a>QMetaObject::new_metaobject ( const char * classname, const char * superclassname, <a href="qmetadata.html">QMetaData</a> * slot_data, int n_slots, <a href="qmetadata.html">QMetaData</a> * signal_data,int n_signals ) <code>[static]</code></h3>
+<h3 class="fn">QMetaObjectÂ *Â <a name="b1a2ca"></a>QMetaObject::new_metaobjectÂ (Â constÂ charÂ *Â classname, constÂ charÂ *Â superclassname, <a href="qmetadata.html">QMetaData</a>Â *Â slot_data, intÂ n_slots, <a href="qmetadata.html">QMetaData</a>Â *Â signal_data,intÂ n_signalsÂ ) <code>[static]</code></h3>
 <p>For internal use only.
-<h3 class="fn">QMetaObject * <a name="5d1f33"></a>QMetaObject::new_metaobject ( const char * classname, const char * superclassname, <a href="qmetadata.html">QMetaData</a> * slot_data, int n_slots, <a href="qmetadata.html">QMetaData</a> * signal_data,int n_signals, <a href="qmetaproperty.html">QMetaProperty</a> * prop_data, int n_props, QMetaEnum * enum_data, int n_enums, <a href="qclassinfo.html">QClassInfo</a> * class_info, int n_info ) <code>[static]</code></h3>
+<h3 class="fn">QMetaObjectÂ *Â <a name="5d1f33"></a>QMetaObject::new_metaobjectÂ (Â constÂ charÂ *Â classname, constÂ charÂ *Â superclassname, <a href="qmetadata.html">QMetaData</a>Â *Â slot_data, intÂ n_slots, <a href="qmetadata.html">QMetaData</a>Â *Â signal_data,intÂ n_signals, <a href="qmetaproperty.html">QMetaProperty</a>Â *Â prop_data, intÂ n_props, QMetaEnumÂ *Â enum_data, intÂ n_enums, <a href="qclassinfo.html">QClassInfo</a>Â *Â class_info, intÂ n_infoÂ ) <code>[static]</code></h3>
 <p>For internal use only.
-<h3 class="fn"><a href="qmetaproperty.html">QMetaProperty</a> * <a name="c6ced4"></a>QMetaObject::new_metaproperty ( int numEntries ) <code>[static]</code></h3>
+<h3 class="fn"><a href="qmetaproperty.html">QMetaProperty</a>Â *Â <a name="c6ced4"></a>QMetaObject::new_metapropertyÂ (Â intÂ numEntriesÂ ) <code>[static]</code></h3>
 <p>For internal use only.
-<h3 class="fn">void <a name="7526c0"></a>QMetaObject::resolveProperty ( <a href="qmetaproperty.html">QMetaProperty</a> * prop )</h3>
+<h3 class="fn">voidÂ <a name="7526c0"></a>QMetaObject::resolvePropertyÂ (Â <a href="qmetaproperty.html">QMetaProperty</a>Â *Â propÂ )</h3>
 <p>For internal use only.
-<h3 class="fn">void <a name="2cf473"></a>QMetaObject::set_slot_access ( QMetaData::Access * access )</h3>
+<h3 class="fn">voidÂ <a name="2cf473"></a>QMetaObject::set_slot_accessÂ (Â QMetaData::AccessÂ *Â accessÂ )</h3>
 <p>For internal use only.
-<h3 class="fn"><a href="qmetadata.html">QMetaData</a> * <a name="4607fe"></a>QMetaObject::signal ( const char * <a href="n.html">n</a>, bool super = FALSE ) const</h3>
+<h3 class="fn"><a href="qmetadata.html">QMetaData</a>Â *Â <a name="4607fe"></a>QMetaObject::signalÂ (Â constÂ charÂ *Â <a href="n.html">n</a>, boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>For internal use only.
-<h3 class="fn"><a href="qmetadata.html">QMetaData</a> * <a name="9b578a"></a>QMetaObject::signal ( int index, bool super = FALSE ) const</h3>
+<h3 class="fn"><a href="qmetadata.html">QMetaData</a>Â *Â <a name="9b578a"></a>QMetaObject::signalÂ (Â intÂ index, boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>For internal use only.
-<h3 class="fn"><a href="qmetadata.html">QMetaData</a> * <a name="bcfe23"></a>QMetaObject::slot ( const char * <a href="n.html">n</a>, bool super = FALSE ) const</h3>
+<h3 class="fn"><a href="qmetadata.html">QMetaData</a>Â *Â <a name="bcfe23"></a>QMetaObject::slotÂ (Â constÂ charÂ *Â <a href="n.html">n</a>, boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>For internal use only.
-<h3 class="fn"><a href="qmetadata.html">QMetaData</a> * <a name="dd2470"></a>QMetaObject::slot ( int index, bool super = FALSE ) const</h3>
+<h3 class="fn"><a href="qmetadata.html">QMetaData</a>Â *Â <a name="dd2470"></a>QMetaObject::slotÂ (Â intÂ index, boolÂ superÂ =Â FALSEÂ )Â const</h3>
 <p>For internal use only.
-<h3 class="fn">QMetaData::Access <a name="125c63"></a>QMetaObject::slot_access( int index, bool super = FALSE )</h3>
+<h3 class="fn">QMetaData::AccessÂ <a name="125c63"></a>QMetaObject::slot_access(Â intÂ index, boolÂ superÂ =Â FALSEÂ )</h3>
 <p>For internal use only.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
@@ -188,6 +188,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

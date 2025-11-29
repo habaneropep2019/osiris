@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QMouseEvent Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,17 +32,17 @@ Inherits <a href="qevent.html">QEvent</a>.
 <p><a href="qmouseevent-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#6d471e"><b>QMouseEvent</b></a> ( Type type, const QPoint &amp; pos, int button, int state ) </div>
-<li><div class="fn"><a href="#e49f8c"><b>QMouseEvent</b></a> ( Type type, const QPoint &amp; pos, const QPoint &amp; globalPos, int button, int state ) </div>
-<li><div class="fn">const QPoint&amp; <a href="#ac6f25"><b>pos</b></a> () const</div>
-<li><div class="fn">const QPoint&amp; <a href="#3f4ad0"><b>globalPos</b></a> () const</div>
-<li><div class="fn">int <a href="#07ad9e"><b>x</b></a> () const</div>
-<li><div class="fn">int <a href="#b63f4c"><b>y</b></a> () const</div>
-<li><div class="fn">int <a href="#53ffae"><b>globalX</b></a> () const</div>
-<li><div class="fn">int <a href="#48cb99"><b>globalY</b></a> () const</div>
-<li><div class="fn">ButtonState <a href="#78482f"><b>button</b></a> () const</div>
-<li><div class="fn">ButtonState <a href="#db99dc"><b>state</b></a> () const</div>
-<li><div class="fn">ButtonState <a href="#acd7fe"><b>stateAfter</b></a> () const</div>
+<li><div class="fn"><a href="#6d471e"><b>QMouseEvent</b></a>Â (Â TypeÂ type, constÂ QPointÂ &amp;Â pos, intÂ button, intÂ stateÂ )Â </div>
+<li><div class="fn"><a href="#e49f8c"><b>QMouseEvent</b></a>Â (Â TypeÂ type, constÂ QPointÂ &amp;Â pos, constÂ QPointÂ &amp;Â globalPos, intÂ button, intÂ stateÂ )Â </div>
+<li><div class="fn">constÂ QPoint&amp;Â <a href="#ac6f25"><b>pos</b></a>Â ()Â const</div>
+<li><div class="fn">constÂ QPoint&amp;Â <a href="#3f4ad0"><b>globalPos</b></a>Â ()Â const</div>
+<li><div class="fn">intÂ <a href="#07ad9e"><b>x</b></a>Â ()Â const</div>
+<li><div class="fn">intÂ <a href="#b63f4c"><b>y</b></a>Â ()Â const</div>
+<li><div class="fn">intÂ <a href="#53ffae"><b>globalX</b></a>Â ()Â const</div>
+<li><div class="fn">intÂ <a href="#48cb99"><b>globalY</b></a>Â ()Â const</div>
+<li><div class="fn">ButtonStateÂ <a href="#78482f"><b>button</b></a>Â ()Â const</div>
+<li><div class="fn">ButtonStateÂ <a href="#db99dc"><b>state</b></a>Â ()Â const</div>
+<li><div class="fn">ButtonStateÂ <a href="#acd7fe"><b>stateAfter</b></a>Â ()Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QMouseEvent class contains parameters that describe a mouse event.
@@ -75,7 +75,7 @@ mouse events.
  <a href="movies-main-cpp.html#QMouseEvent">movies/main.cpp</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="e49f8c"></a>QMouseEvent::QMouseEvent ( <a href="qevent.html#Type">Type</a> type, const <a href="qpoint.html">QPoint</a> &amp; pos, const <a href="qpoint.html">QPoint</a> &amp; globalPos, int button, int state )</h3>
+<h3 class="fn"><a name="e49f8c"></a>QMouseEvent::QMouseEventÂ (Â <a href="qevent.html#Type">Type</a>Â type, constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â pos, constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â globalPos, intÂ button, intÂ stateÂ )</h3>
 <p>Constructs a mouse event object.
 <p>The <em>type</em> parameter must be <code>QEvent::MouseButtonPress, QEvent::MouseButtonRelease, QEvent::MouseButtonDblClick</code> or <code>QEvent::MouseMove.</code>
 <p>The <em>pos</em> parameter specifies the position relative to the
@@ -83,7 +83,7 @@ receiving widget; <em>globalPos</em> is the position in absolute
 coordinates; <em>button</em> specifies the <a href="qt.html#ButtonState">ButtonState</a> of the button that
 caused the event, which should be 0 if <em>type</em> is <code>MouseMove;</code> and
 <em>state</em> is the ButtonState at the time of the event.
-<h3 class="fn"><a name="6d471e"></a>QMouseEvent::QMouseEvent ( <a href="qevent.html#Type">Type</a> type, const <a href="qpoint.html">QPoint</a> &amp; pos, int button, int state )</h3>
+<h3 class="fn"><a name="6d471e"></a>QMouseEvent::QMouseEventÂ (Â <a href="qevent.html#Type">Type</a>Â type, constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â pos, intÂ button, intÂ stateÂ )</h3>
 <p>Constructs a mouse event object.
 <p>The <em>type</em> parameter must be one of <code>QEvent::MouseButtonPress, QEvent::MouseButtonRelease, QEvent::MouseButtonDblClick</code> or <code>QEvent::MouseMove.</code>
 <p>The <em>pos</em> parameter specifies the position relative to the
@@ -92,7 +92,7 @@ that caused the event, which should be 0 if <em>type</em> is <code>MouseMove;</c
 <p>The <a href="#3f4ad0">globalPos</a>() is initialized to <a href="qcursor.html#5bce2b">QCursor::pos</a>(), which may not be
 appropriate. Use the other constructor to specify the global position
 explicitly.
-<h3 class="fn"><a href="qt.html#ButtonState">ButtonState</a> <a name="78482f"></a>QMouseEvent::button () const</h3>
+<h3 class="fn"><a href="qt.html#ButtonState">ButtonState</a>Â <a name="78482f"></a>QMouseEvent::buttonÂ ()Â const</h3>
 <p>Returns the button that caused the event.
 <p>Possible return values are <code>LeftButton, RightButton, MidButton</code> and
 <code>NoButton.</code>
@@ -101,20 +101,20 @@ events.
 <p>See also  <a href="#db99dc">state</a>().
 <p>Examples:
  <a href="movies-main-cpp.html#button">movies/main.cpp</a>
-<h3 class="fn">const <a href="qpoint.html">QPoint</a> &amp; <a name="3f4ad0"></a>QMouseEvent::globalPos () const</h3>
+<h3 class="fn">constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â <a name="3f4ad0"></a>QMouseEvent::globalPosÂ ()Â const</h3>
 <p>Returns the global position of the mouse pointer <em>at the time</em> of the event. This is important on asynchronous window systems
 like X11: Whenever you move your widgets around in response to mouse
 evens, globalPos() can differ a lot from the current pointer
 position <a href="qcursor.html#5bce2b">QCursor::pos</a>(), and from
 <code> <a href="qwidget.html#eb4b9c">QWidget::mapToGlobal</a>( <a href="#ac6f25">pos</a>() ) </code>.
 <p>See also  <a href="#53ffae">globalX</a>() and <a href="#48cb99">globalY</a>().
-<h3 class="fn">int <a name="53ffae"></a>QMouseEvent::globalX () const</h3>
+<h3 class="fn">intÂ <a name="53ffae"></a>QMouseEvent::globalXÂ ()Â const</h3>
 <p>Returns the global X position of the mouse pointer at the time of the event
 <p>See also  <a href="#48cb99">globalY</a>() and <a href="#3f4ad0">globalPos</a>().
-<h3 class="fn">int <a name="48cb99"></a>QMouseEvent::globalY () const</h3>
+<h3 class="fn">intÂ <a name="48cb99"></a>QMouseEvent::globalYÂ ()Â const</h3>
 <p>Returns the global Y position of the mouse pointer at the time of the event
 <p>See also  <a href="#53ffae">globalX</a>() and <a href="#3f4ad0">globalPos</a>().
-<h3 class="fn">const <a href="qpoint.html">QPoint</a> &amp; <a name="ac6f25"></a>QMouseEvent::pos () const</h3>
+<h3 class="fn">constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â <a name="ac6f25"></a>QMouseEvent::posÂ ()Â const</h3>
 <p>Returns the position of the mouse pointer, relative to the widget that
 received the event.
 <p>If you move the widget as a result of the mouse event, use the
@@ -124,7 +124,7 @@ global position returned by <a href="#3f4ad0">globalPos</a>() to avoid a shaking
  <a href="qtimage-qtimage-cpp.html#pos">qtimage/qtimage.cpp</a>
  <a href="drawlines-connect-cpp.html#pos">drawlines/connect.cpp</a>
  <a href="qmag-qmag-cpp.html#pos">qmag/qmag.cpp</a>
-<h3 class="fn"><a href="qt.html#ButtonState">ButtonState</a> <a name="db99dc"></a>QMouseEvent::state () const</h3>
+<h3 class="fn"><a href="qt.html#ButtonState">ButtonState</a>Â <a name="db99dc"></a>QMouseEvent::stateÂ ()Â const</h3>
 <p>Returns the button state (a combination of mouse buttons and keyboard
 modifiers), i.e. what buttons and keys were being held depressed
 immediately before the event was generated.
@@ -136,16 +136,16 @@ other cases, button() is more useful.
 <p>See also  <a href="#78482f">button</a>() and <a href="#acd7fe">stateAfter</a>().
 <p>Examples:
  <a href="movies-main-cpp.html#state">movies/main.cpp</a>
-<h3 class="fn"><a href="qt.html#ButtonState">ButtonState</a> <a name="acd7fe"></a>QMouseEvent::stateAfter () const</h3>
+<h3 class="fn"><a href="qt.html#ButtonState">ButtonState</a>Â <a name="acd7fe"></a>QMouseEvent::stateAfterÂ ()Â const</h3>
 <p>Returns the state of buttons after the event.
 <p>See also  <a href="#db99dc">state</a>().
-<h3 class="fn">int <a name="07ad9e"></a>QMouseEvent::x () const</h3>
+<h3 class="fn">intÂ <a name="07ad9e"></a>QMouseEvent::xÂ ()Â const</h3>
 <p>Returns the X position of the mouse pointer, relative to the widget that
 received the event.
 <p>See also  <a href="#b63f4c">y</a>() and <a href="#ac6f25">pos</a>().
 <p>Examples:
  <a href="scrollview-scrollview-cpp.html#x">scrollview/scrollview.cpp</a>
-<h3 class="fn">int <a name="b63f4c"></a>QMouseEvent::y () const</h3>
+<h3 class="fn">intÂ <a name="b63f4c"></a>QMouseEvent::yÂ ()Â const</h3>
 <p>Returns the Y position of the mouse pointer, relative to the widget that
 received the event.
 <p>See also  <a href="#07ad9e">x</a>() and <a href="#ac6f25">pos</a>().
@@ -162,6 +162,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

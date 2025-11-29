@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QChar Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -30,49 +30,49 @@ The QChar class provides a light-weight Unicode character.
 <p><a href="qchar-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#f58106"><b>QChar</b></a> () </div>
-<li><div class="fn"><a href="#80a416"><b>QChar</b></a> ( char c ) </div>
-<li><div class="fn"><a href="#5ccac0"><b>QChar</b></a> ( uchar c ) </div>
-<li><div class="fn"><a href="#eef71a"><b>QChar</b></a> ( uchar c, uchar r ) </div>
-<li><div class="fn"><a href="#0735fc"><b>QChar</b></a> ( const QChar &amp; c ) </div>
-<li><div class="fn"><a href="#42cc64"><b>QChar</b></a> ( ushort rc ) </div>
-<li><div class="fn"><a href="#660223"><b>QChar</b></a> ( short rc ) </div>
-<li><div class="fn"><a href="#45828a"><b>QChar</b></a> ( uint rc ) </div>
-<li><div class="fn"><a href="#d9d049"><b>QChar</b></a> ( int rc ) </div>
-<li><div class="fn">enum <a href="#Category"><b>Category</b></a> { NoCategory, Mark_NonSpacing, Mark_SpacingCombining, Mark_Enclosing, Number_DecimalDigit, Number_Letter, Number_Other, Separator_Space, Separator_Line, Separator_Paragraph, Other_Control, Other_Format, Other_Surrogate, Other_PrivateUse, Other_NotAssigned, Letter_Uppercase, Letter_Lowercase, Letter_Titlecase, Letter_Modifier, Letter_Other, Punctuation_Connector, Punctuation_Dask, Punctuation_Open, Punctuation_Close, Punctuation_InitialQuote, Punctuation_FinalQuote, Punctuation_Other, Symbol_Math, Symbol_Currency, Symbol_Modifier, Symbol_Other }</div>
-<li><div class="fn">enum <a href="#Direction"><b>Direction</b></a> { DirL, DirR, DirEN, DirES, DirET, DirAN, DirCS, DirB, DirS, DirWS, DirON, DirLRE, DirLRO, DirAL, DirRLE, DirRLO, DirPDF, DirNSM, DirBN }</div>
-<li><div class="fn">enum <a href="#Decomposition"><b>Decomposition</b></a> { Single, Canonical, Font, NoBreak, Initial, Medial, Final, Isolated, Circle, Super, Sub, Vertical, Wide, Narrow, Small, Square, Compat, Fraction }</div>
-<li><div class="fn">enum <a href="#Joining"><b>Joining</b></a> { OtherJoining, Dual, Right, Center }</div>
-<li><div class="fn">int <a href="#6ece45"><b>digitValue</b></a> () const</div>
-<li><div class="fn">QChar <a href="#83cf52"><b>lower</b></a> () const</div>
-<li><div class="fn">QChar <a href="#1fe24d"><b>upper</b></a> () const</div>
-<li><div class="fn">Category <a href="#14501e"><b>category</b></a> () const</div>
-<li><div class="fn">Direction <a href="#5d99d7"><b>direction</b></a> () const</div>
-<li><div class="fn">Joining <a href="#c26982"><b>joining</b></a> () const</div>
-<li><div class="fn">bool <a href="#2d749c"><b>mirrored</b></a> () const</div>
-<li><div class="fn">QChar <a href="#72f248"><b>mirroredChar</b></a> () const</div>
-<li><div class="fn">QString <a href="#5fb260"><b>decomposition</b></a> () const</div>
-<li><div class="fn">Decomposition <a href="#b2f5f6"><b>decompositionTag</b></a> () const</div>
-<li><div class="fn">char <a href="#2c350b"><b>latin1</b></a> () const</div>
-<li><div class="fn">ushort <a href="#6e646e"><b>unicode</b></a> () const</div>
-<li><div class="fn">operator <a href=qchar.html#96baac><b>char</b></a> ()const</div>
-<li><div class="fn">bool <a href="#0829fa"><b>isNull</b></a> () const</div>
-<li><div class="fn">bool <a href="#c73446"><b>isPrint</b></a> () const</div>
-<li><div class="fn">bool <a href="#3dce03"><b>isPunct</b></a> () const</div>
-<li><div class="fn">bool <a href="#53ba36"><b>isSpace</b></a> () const</div>
-<li><div class="fn">bool <a href="#b0cc64"><b>isMark</b></a> () const</div>
-<li><div class="fn">bool <a href="#45a904"><b>isLetter</b></a> () const</div>
-<li><div class="fn">bool <a href="#81241c"><b>isNumber</b></a> () const</div>
-<li><div class="fn">bool <a href="#651c6d"><b>isLetterOrNumber</b></a> () const</div>
-<li><div class="fn">bool <a href="#75e23e"><b>isDigit</b></a> () const</div>
-<li><div class="fn">uchar&amp; <a href="#7bf3d4"><b>cell</b></a> () </div>
-<li><div class="fn">uchar&amp; <a href="#a6cccb"><b>row</b></a> () </div>
-<li><div class="fn">uchar <a href="#d0ae42"><b>cell</b></a> () const</div>
-<li><div class="fn">uchar <a href="#e8c8b6"><b>row</b></a> () const</div>
+<li><div class="fn"><a href="#f58106"><b>QChar</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#80a416"><b>QChar</b></a>Â (Â charÂ cÂ )Â </div>
+<li><div class="fn"><a href="#5ccac0"><b>QChar</b></a>Â (Â ucharÂ cÂ )Â </div>
+<li><div class="fn"><a href="#eef71a"><b>QChar</b></a>Â (Â ucharÂ c, ucharÂ rÂ )Â </div>
+<li><div class="fn"><a href="#0735fc"><b>QChar</b></a>Â (Â constÂ QCharÂ &amp;Â cÂ )Â </div>
+<li><div class="fn"><a href="#42cc64"><b>QChar</b></a>Â (Â ushortÂ rcÂ )Â </div>
+<li><div class="fn"><a href="#660223"><b>QChar</b></a>Â (Â shortÂ rcÂ )Â </div>
+<li><div class="fn"><a href="#45828a"><b>QChar</b></a>Â (Â uintÂ rcÂ )Â </div>
+<li><div class="fn"><a href="#d9d049"><b>QChar</b></a>Â (Â intÂ rcÂ )Â </div>
+<li><div class="fn">enumÂ <a href="#Category"><b>Category</b></a>Â {Â NoCategory, Mark_NonSpacing, Mark_SpacingCombining, Mark_Enclosing, Number_DecimalDigit, Number_Letter, Number_Other, Separator_Space, Separator_Line, Separator_Paragraph, Other_Control, Other_Format, Other_Surrogate, Other_PrivateUse, Other_NotAssigned, Letter_Uppercase, Letter_Lowercase, Letter_Titlecase, Letter_Modifier, Letter_Other, Punctuation_Connector, Punctuation_Dask, Punctuation_Open, Punctuation_Close, Punctuation_InitialQuote, Punctuation_FinalQuote, Punctuation_Other, Symbol_Math, Symbol_Currency, Symbol_Modifier, Symbol_OtherÂ }</div>
+<li><div class="fn">enumÂ <a href="#Direction"><b>Direction</b></a>Â {Â DirL, DirR, DirEN, DirES, DirET, DirAN, DirCS, DirB, DirS, DirWS, DirON, DirLRE, DirLRO, DirAL, DirRLE, DirRLO, DirPDF, DirNSM, DirBNÂ }</div>
+<li><div class="fn">enumÂ <a href="#Decomposition"><b>Decomposition</b></a>Â {Â Single, Canonical, Font, NoBreak, Initial, Medial, Final, Isolated, Circle, Super, Sub, Vertical, Wide, Narrow, Small, Square, Compat, FractionÂ }</div>
+<li><div class="fn">enumÂ <a href="#Joining"><b>Joining</b></a>Â {Â OtherJoining, Dual, Right, CenterÂ }</div>
+<li><div class="fn">intÂ <a href="#6ece45"><b>digitValue</b></a>Â ()Â const</div>
+<li><div class="fn">QCharÂ <a href="#83cf52"><b>lower</b></a>Â ()Â const</div>
+<li><div class="fn">QCharÂ <a href="#1fe24d"><b>upper</b></a>Â ()Â const</div>
+<li><div class="fn">CategoryÂ <a href="#14501e"><b>category</b></a>Â ()Â const</div>
+<li><div class="fn">DirectionÂ <a href="#5d99d7"><b>direction</b></a>Â ()Â const</div>
+<li><div class="fn">JoiningÂ <a href="#c26982"><b>joining</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#2d749c"><b>mirrored</b></a>Â ()Â const</div>
+<li><div class="fn">QCharÂ <a href="#72f248"><b>mirroredChar</b></a>Â ()Â const</div>
+<li><div class="fn">QStringÂ <a href="#5fb260"><b>decomposition</b></a>Â ()Â const</div>
+<li><div class="fn">DecompositionÂ <a href="#b2f5f6"><b>decompositionTag</b></a>Â ()Â const</div>
+<li><div class="fn">charÂ <a href="#2c350b"><b>latin1</b></a>Â ()Â const</div>
+<li><div class="fn">ushortÂ <a href="#6e646e"><b>unicode</b></a>Â ()Â const</div>
+<li><div class="fn">operatorÂ <a href=qchar.html#96baac><b>char</b></a>Â ()const</div>
+<li><div class="fn">boolÂ <a href="#0829fa"><b>isNull</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#c73446"><b>isPrint</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#3dce03"><b>isPunct</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#53ba36"><b>isSpace</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#b0cc64"><b>isMark</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#45a904"><b>isLetter</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#81241c"><b>isNumber</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#651c6d"><b>isLetterOrNumber</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#75e23e"><b>isDigit</b></a>Â ()Â const</div>
+<li><div class="fn">uchar&amp;Â <a href="#7bf3d4"><b>cell</b></a>Â ()Â </div>
+<li><div class="fn">uchar&amp;Â <a href="#a6cccb"><b>row</b></a>Â ()Â </div>
+<li><div class="fn">ucharÂ <a href="#d0ae42"><b>cell</b></a>Â ()Â const</div>
+<li><div class="fn">ucharÂ <a href="#e8c8b6"><b>row</b></a>Â ()Â const</div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><div class="fn">bool <a href="#d78f62"><b>networkOrdered</b></a> () </div>
+<li><div class="fn">boolÂ <a href="#d78f62"><b>networkOrdered</b></a>Â ()Â </div>
 </ul>
 <h2>Related Functions</h2>
 (Note that these are not member functions.)
@@ -197,102 +197,102 @@ This enum type defines the Unicode decomposition attributes.
 See <a href="http://www.unicode.org">the Unicode Standard</a>
 for a description of the values.
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="f58106"></a>QChar::QChar ()</h3>
+<h3 class="fn"><a name="f58106"></a>QChar::QCharÂ ()</h3>
 <p>Constructs a null QChar (one that <a href="#0829fa">isNull</a>()).
-<h3 class="fn"><a name="80a416"></a>QChar::QChar ( char c )</h3>
+<h3 class="fn"><a name="80a416"></a>QChar::QCharÂ (Â charÂ cÂ )</h3>
 <p>Constructs a QChar corresponding to ASCII/Latin1 character <em>c.</em>
-<h3 class="fn"><a name="0735fc"></a>QChar::QChar ( const QChar &amp; c )</h3>
+<h3 class="fn"><a name="0735fc"></a>QChar::QCharÂ (Â constÂ QCharÂ &amp;Â cÂ )</h3>
 <p>Constructs a copy of <em>c.</em>  This is a deep copy, if such a
 light-weight object can be said to have deep copies.
-<h3 class="fn"><a name="d9d049"></a>QChar::QChar ( int rc )</h3>
+<h3 class="fn"><a name="d9d049"></a>QChar::QCharÂ (Â intÂ rcÂ )</h3>
 <p>Constructs a QChar for the character with Unicode code point <em>rc.</em>
-<h3 class="fn"><a name="660223"></a>QChar::QChar ( short rc )</h3>
+<h3 class="fn"><a name="660223"></a>QChar::QCharÂ (Â shortÂ rcÂ )</h3>
 <p>Constructs a QChar for the character with Unicode code point <em>rc.</em>
-<h3 class="fn"><a name="5ccac0"></a>QChar::QChar ( uchar c )</h3>
+<h3 class="fn"><a name="5ccac0"></a>QChar::QCharÂ (Â ucharÂ cÂ )</h3>
 <p>Constructs a QChar corresponding to ASCII/Latin1 character <em>c.</em>
-<h3 class="fn"><a name="eef71a"></a>QChar::QChar ( uchar c, uchar r )</h3>
+<h3 class="fn"><a name="eef71a"></a>QChar::QCharÂ (Â ucharÂ c, ucharÂ rÂ )</h3>
 <p>Constructs a QChar for Unicode cell <em>c</em> in row <em>r.</em>
-<h3 class="fn"><a name="45828a"></a>QChar::QChar ( uint rc )</h3>
+<h3 class="fn"><a name="45828a"></a>QChar::QCharÂ (Â uintÂ rcÂ )</h3>
 <p>Constructs a QChar for the character with Unicode code point <em>rc.</em>
-<h3 class="fn"><a name="42cc64"></a>QChar::QChar ( ushort rc )</h3>
+<h3 class="fn"><a name="42cc64"></a>QChar::QCharÂ (Â ushortÂ rcÂ )</h3>
 <p>Constructs a QChar for the character with Unicode code point <em>rc.</em>
-<h3 class="fn"><a name="96baac"></a>QChar::operator char () const</h3>
+<h3 class="fn"><a name="96baac"></a>QChar::operatorÂ charÂ ()Â const</h3>
 <p>Returns the Latin1 character equivalent to the QChar,
 or 0.  This is mainly useful for non-internationalized software.
 <p>See also  <a href="#6e646e">unicode</a>().
-<h3 class="fn">QChar::Category <a name="14501e"></a>QChar::category() const</h3>
+<h3 class="fn">QChar::CategoryÂ <a name="14501e"></a>QChar::category()Â const</h3>
 <p>Returns the character category.
 <p>See also  <a href="#Category">Category</a>.
-<h3 class="fn">uchar <a name="d0ae42"></a>QChar::cell () const</h3>
+<h3 class="fn">ucharÂ <a name="d0ae42"></a>QChar::cellÂ ()Â const</h3>
 <p>Returns the cell (least significant byte) of the Unicode character.
-<h3 class="fn">uchar&amp; <a name="7bf3d4"></a>QChar::cell ()</h3>
+<h3 class="fn">uchar&amp;Â <a name="7bf3d4"></a>QChar::cellÂ ()</h3>
 <p>Returns a reference to the cell (least significant byte) of the Unicode character.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="5fb260"></a>QChar::decomposition () const</h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="5fb260"></a>QChar::decompositionÂ ()Â const</h3>
 <p>Decomposes a character into its parts. Returns QString::null if
 no decomposition exists.
-<h3 class="fn">QChar::Decomposition <a name="b2f5f6"></a>QChar::decompositionTag() const</h3>
+<h3 class="fn">QChar::DecompositionÂ <a name="b2f5f6"></a>QChar::decompositionTag()Â const</h3>
 <p>Returns the tag defining the composition of the character.
 Returns QChar::Single if no decomposition exists.
-<h3 class="fn">int <a name="6ece45"></a>QChar::digitValue () const</h3>
+<h3 class="fn">intÂ <a name="6ece45"></a>QChar::digitValueÂ ()Â const</h3>
 <p>Returns the numeric value of the digit, or -1 if the character is not
 a digit.
-<h3 class="fn">QChar::Direction <a name="5d99d7"></a>QChar::direction() const</h3>
+<h3 class="fn">QChar::DirectionÂ <a name="5d99d7"></a>QChar::direction()Â const</h3>
 <p>Returns the characters directionality.
 <p>See also  <a href="#Direction">Direction</a>.
-<h3 class="fn">bool <a name="75e23e"></a>QChar::isDigit () const</h3>
+<h3 class="fn">boolÂ <a name="75e23e"></a>QChar::isDigitÂ ()Â const</h3>
 <p>Returns whether the character is a decimal digit (Number_DecimalDigit).
-<h3 class="fn">bool <a name="45a904"></a>QChar::isLetter () const</h3>
+<h3 class="fn">boolÂ <a name="45a904"></a>QChar::isLetterÂ ()Â const</h3>
 <p>Returns whether the character is a letter (Letter_* categories).
-<h3 class="fn">bool <a name="651c6d"></a>QChar::isLetterOrNumber () const</h3>
+<h3 class="fn">boolÂ <a name="651c6d"></a>QChar::isLetterOrNumberÂ ()Â const</h3>
 <p>Returns whether the character is a letter or number (Letter_* or Number_* categories).
-<h3 class="fn">bool <a name="b0cc64"></a>QChar::isMark () const</h3>
+<h3 class="fn">boolÂ <a name="b0cc64"></a>QChar::isMarkÂ ()Â const</h3>
 <p>Returns whether the character is a mark (Mark_* categories).
-<h3 class="fn">bool <a name="0829fa"></a>QChar::isNull () const</h3>
+<h3 class="fn">boolÂ <a name="0829fa"></a>QChar::isNullÂ ()Â const</h3>
 <p>Returns TRUE if the characters is the unicode character 0x0000,
 ie. ASCII NUL.
-<h3 class="fn">bool <a name="81241c"></a>QChar::isNumber () const</h3>
+<h3 class="fn">boolÂ <a name="81241c"></a>QChar::isNumberÂ ()Â const</h3>
 <p>Returns whether the character is a number (of any sort - Number_* categories).
 <p>See also  <a href="#75e23e">isDigit</a>().
-<h3 class="fn">bool <a name="c73446"></a>QChar::isPrint () const</h3>
+<h3 class="fn">boolÂ <a name="c73446"></a>QChar::isPrintÂ ()Â const</h3>
 <p>Returns whether the character is a printable character.  This is
 any character not of category Cc or Cn.  Note that this gives no indication
 of whether the character is available in some font.
-<h3 class="fn">bool <a name="3dce03"></a>QChar::isPunct () const</h3>
+<h3 class="fn">boolÂ <a name="3dce03"></a>QChar::isPunctÂ ()Â const</h3>
 <p>Returns whether the character is punctuation (Punctuation_* categories).
-<h3 class="fn">bool <a name="53ba36"></a>QChar::isSpace () const</h3>
+<h3 class="fn">boolÂ <a name="53ba36"></a>QChar::isSpaceÂ ()Â const</h3>
 <p>Returns whether the character is a separator
 character (Separator_* categories).
-<h3 class="fn">QChar::Joining <a name="c26982"></a>QChar::joining() const</h3>
+<h3 class="fn">QChar::JoiningÂ <a name="c26982"></a>QChar::joining()Â const</h3>
 <p>This function is not supported (it may change to use Unicode
 character classes).
 <p>Returns information about the joining properties of the
 character (needed for arabic).
-<h3 class="fn">char <a name="2c350b"></a>QChar::latin1 () const</h3>
+<h3 class="fn">charÂ <a name="2c350b"></a>QChar::latin1Â ()Â const</h3>
 <p>Returns a latin-1 copy of this character, if this character is in
 the latin-1 character set.  If not, this function returns 0.
-<h3 class="fn">QChar <a name="83cf52"></a>QChar::lower () const</h3>
+<h3 class="fn">QCharÂ <a name="83cf52"></a>QChar::lowerÂ ()Â const</h3>
 <p>Returns the lowercase equivalent if the character is uppercase,
 or the character itself otherwise.
-<h3 class="fn">bool <a name="2d749c"></a>QChar::mirrored () const</h3>
+<h3 class="fn">boolÂ <a name="2d749c"></a>QChar::mirroredÂ ()Â const</h3>
 <p>Returns whether the character is a mirrored character (one that
 should be reversed if the text direction is reversed).
-<h3 class="fn">QChar <a name="72f248"></a>QChar::mirroredChar () const</h3>
+<h3 class="fn">QCharÂ <a name="72f248"></a>QChar::mirroredCharÂ ()Â const</h3>
 <p>Returns the mirrored char if this character is a mirrored char, the char
 itself otherwise.
-<h3 class="fn">bool <a name="d78f62"></a>QChar::networkOrdered () <code>[static]</code></h3>
+<h3 class="fn">boolÂ <a name="d78f62"></a>QChar::networkOrderedÂ () <code>[static]</code></h3>
 <p>Returns TRUE if this character is in network byte order (MSB first),
 and FALSE if it is not.  This is a platform-dependent property, so
 we strongly advise against using this function in portable code.
-<h3 class="fn">uchar <a name="e8c8b6"></a>QChar::row () const</h3>
+<h3 class="fn">ucharÂ <a name="e8c8b6"></a>QChar::rowÂ ()Â const</h3>
 <p>Returns the row (most significant byte) of the Unicode character.
-<h3 class="fn">uchar&amp; <a name="a6cccb"></a>QChar::row ()</h3>
+<h3 class="fn">uchar&amp;Â <a name="a6cccb"></a>QChar::rowÂ ()</h3>
 <p>Returns a reference to the row (most significant byte) of the Unicode character.
-<h3 class="fn">ushort <a name="6e646e"></a>QChar::unicode () const</h3>
+<h3 class="fn">ushortÂ <a name="6e646e"></a>QChar::unicodeÂ ()Â const</h3>
 <p>Returns the numeric Unicode value equal to the QChar.  Normally, you
 should use QChar objects as they are equivalent, but for some low-level
 tasks (eg. indexing into an array of Unicode information), this function
 is useful.
-<h3 class="fn">QChar <a name="1fe24d"></a>QChar::upper () const</h3>
+<h3 class="fn">QCharÂ <a name="1fe24d"></a>QChar::upperÂ ()Â const</h3>
 <p>Returns the uppercase equivalent if the character is lowercase,
 or the character itself otherwise.
 <hr><h2>Related Functions</h2>
@@ -373,6 +373,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

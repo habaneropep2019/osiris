@@ -35,6 +35,20 @@
 **
 **********************************************************************/
 
+/****************************************************************************
+ * Sections marked as backported from TQt3 were obtained from the
+ * Trinty Desktop Project
+ * Based on Commit(s): f086971876
+ * Taken from Trinity CGit and/or Gitea at one of:
+ * https://mirror.git.trinitydesktop.org/cgit/tqt3/
+ * https://scm.trinitydesktop.org/gitea/TDE/tqt3/
+ *
+ * The TQt3 code is GPLv2/3 or later. The backport modifications
+ * are released under the same license.
+ *
+ * Backported by Alec A Bloss.
+ **********************************************************************/
+
 #include "qapplication.h"
 #include "qpaintdevicemetrics.h"
 #include "qpainter.h"
@@ -1054,21 +1068,31 @@ void QWidget::setMouseTracking(bool enable)
   \sa releaseMouse(), grabKeyboard(), releaseKeyboard()
 */
 
+// backported fixes from TQt3
+
 void QWidget::grabMouse()
 {
-	if (!qt_nograb()) {
+	if (isVisible() && !qt_nograb()) {
 		if (mouseGrb)
 			mouseGrb->releaseMouse();
 #if defined(CHECK_STATE)
 		int status =
 #endif
-			XGrabPointer(x11Display(), winId(), False,
-				     (uint)(ButtonPressMask |
-					    ButtonReleaseMask |
-					    PointerMotionMask |
-					    EnterWindowMask | LeaveWindowMask),
-				     GrabModeAsync, GrabModeAsync, None, None,
-				     qt_x_time);
+			XGrabPointer(
+				x11Display(), winId(), False,
+				(uint)(ButtonPressMask | ButtonReleaseMask |
+				       PointerMotionMask | EnterWindowMask |
+				       LeaveWindowMask),
+				GrabModeAsync, GrabModeAsync, None, None,
+				CurrentTime); // For whatever reason, qt_x_time
+					      // doesn't work here. I've spent
+					      // hours on this one. qt_x_time
+					      // increments seemingly correctly.
+					      // Yet, it always results in a
+					      // GrabInvalidTime CurrentTime
+					      // should be sufficient. Credit to
+					      // kdchambers for exploring this
+					      // solution.
 #if defined(CHECK_STATE)
 		if (status) {
 			const char *s = status == GrabNotViewable ?
@@ -1086,6 +1110,8 @@ void QWidget::grabMouse()
 		mouseGrb = this;
 	}
 }
+
+// end backport
 
 /*!
   Grabs the mouse input and changes the cursor shape.
@@ -1099,38 +1125,46 @@ void QWidget::grabMouse()
   \sa releaseMouse(), grabKeyboard(), releaseKeyboard(), setCursor()
 */
 
+// backported fixes from TQt3
+
 void QWidget::grabMouse(const QCursor &cursor)
 {
 	if (!qt_nograb()) {
-		if (mouseGrb)
-			mouseGrb->releaseMouse();
+		if (mouseGrb != this) {
+			if (mouseGrb) {
+				mouseGrb->releaseMouse();
+			}
 #if defined(CHECK_STATE)
-		int status =
+			int status =
 #endif
-			XGrabPointer(x11Display(), winId(), False,
-				     (uint)(ButtonPressMask |
-					    ButtonReleaseMask |
-					    PointerMotionMask |
-					    EnterWindowMask | LeaveWindowMask),
-				     GrabModeAsync, GrabModeAsync, None,
-				     cursor.handle(), qt_x_time);
+				XGrabPointer(x11Display(), winId(), False,
+					     (uint)(ButtonPressMask |
+						    ButtonReleaseMask |
+						    PointerMotionMask |
+						    EnterWindowMask |
+						    LeaveWindowMask),
+					     GrabModeAsync, GrabModeAsync, None,
+					     cursor.handle(), qt_x_time);
 #if defined(CHECK_STATE)
-		if (status) {
-			const char *s = status == GrabNotViewable ?
-						"\"GrabNotViewable\"" :
-					status == AlreadyGrabbed ?
-						"\"AlreadyGrabbed\"" :
-					status == GrabFrozen ?
-						"\"GrabFrozen\"" :
-					status == GrabInvalidTime ?
-						"\"GrabInvalidTime\"" :
-						"<?>";
-			qWarning("Grabbing the mouse failed with %s", s);
+			if (status) {
+				const char *s = status == GrabNotViewable ?
+							"\"GrabNotViewable\"" :
+						status == AlreadyGrabbed ?
+							"\"AlreadyGrabbed\"" :
+						status == GrabFrozen ?
+							"\"GrabFrozen\"" :
+						status == GrabInvalidTime ?
+							"\"GrabInvalidTime\"" :
+							"<?>";
+				qWarning("Grabbing the mouse failed with %s",
+					 s);
+			}
+#endif
+			mouseGrb = this;
 		}
-#endif
-		mouseGrb = this;
 	}
 }
+
 
 /*!
   Releases the mouse grab.
@@ -1158,16 +1192,23 @@ void QWidget::releaseMouse()
   \sa releaseKeyboard(), grabMouse(), releaseMouse()
 */
 
+// fixes backported from TQt3
+
 void QWidget::grabKeyboard()
 {
 	if (!qt_nograb()) {
-		if (keyboardGrb)
-			keyboardGrb->releaseKeyboard();
-		XGrabKeyboard(x11Display(), winid, False, GrabModeAsync,
-			      GrabModeAsync, qt_x_time);
-		keyboardGrb = this;
+		if (keyboardGrb != this) {
+			if (keyboardGrb) {
+				keyboardGrb->releaseKeyboard();
+			}
+			XGrabKeyboard(x11Display(), winid, False, GrabModeAsync,
+				      GrabModeAsync, qt_x_time);
+			keyboardGrb = this;
+		}
 	}
 }
+
+// end backport
 
 /*!
   Releases the keyboard grab.

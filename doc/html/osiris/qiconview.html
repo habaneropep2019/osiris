@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QIconView Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,108 +32,108 @@ Inherits <a href="qscrollview.html">QScrollView</a>.
 <p><a href="qiconview-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">enum <a href="#SelectionMode"><b>SelectionMode</b></a> { Single = 0, Multi, Extended, NoSelection }</div>
-<li><div class="fn">enum <a href="#Arrangement"><b>Arrangement</b></a> { LeftToRight = 0, TopToBottom }</div>
-<li><div class="fn">enum <a href="#ResizeMode"><b>ResizeMode</b></a> { Fixed = 0, Adjust }</div>
-<li><div class="fn">enum <a href="#ItemTextPos"><b>ItemTextPos</b></a> { Bottom = 0, Right }</div>
-<li><div class="fn"><a href="#a3849b"><b>QIconView</b></a> ( QWidget * parent = 0, const char * name = 0, WFlags f = 0 ) </div>
-<li><div class="fn">virtual <a href="#5872e0"><b>~QIconView</b></a> () </div>
-<li><div class="fn">virtual void <a href="#2d0207"><b>insertItem</b></a> ( QIconViewItem * item, QIconViewItem * after = 0L ) </div>
-<li><div class="fn">virtual void <a href="#7164b3"><b>takeItem</b></a> ( QIconViewItem * item ) </div>
-<li><div class="fn">int <a href="#e97fe2"><b>index</b></a> ( const QIconViewItem * item ) const</div>
-<li><div class="fn">QIconViewItem* <a href="#f4df66"><b>firstItem</b></a> () const</div>
-<li><div class="fn">QIconViewItem* <a href="#13c5a9"><b>lastItem</b></a> () const</div>
-<li><div class="fn">QIconViewItem* <a href="#b2a5c7"><b>currentItem</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#b30724"><b>setCurrentItem</b></a> ( QIconViewItem * item ) </div>
-<li><div class="fn">virtual void <a href="#81719c"><b>setSelected</b></a> ( QIconViewItem * item, bool s, bool cb = FALSE ) </div>
-<li><div class="fn">uint <a href="#6bb21a"><b>count</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#98457a"><b>setSelectionMode</b></a> ( SelectionMode m ) </div>
-<li><div class="fn">SelectionMode <a href="#0040a8"><b>selectionMode</b></a> () const</div>
-<li><div class="fn">QIconViewItem* <a href="#526763"><b>findItem</b></a> ( const QPoint &amp; pos ) const</div>
-<li><div class="fn">QIconViewItem* <a href="#ec58f0"><b>findItem</b></a> ( const QString &amp; text ) const</div>
-<li><div class="fn">virtual void <a href="#31b5ce"><b>selectAll</b></a> ( bool select ) </div>
-<li><div class="fn">virtual void <a href="#767612"><b>clearSelection</b></a> () </div>
-<li><div class="fn">virtual void <a href="#e283c9"><b>invertSelection</b></a> () </div>
-<li><div class="fn">virtual void <a href="#65c0ac"><b>repaintItem</b></a> ( QIconViewItem * item ) </div>
-<li><div class="fn">void <a href="#76c81f"><b>ensureItemVisible</b></a> ( QIconViewItem * item ) </div>
-<li><div class="fn">QIconViewItem* <a href="#4e4ffe"><b>findFirstVisibleItem</b></a> ( const QRect &amp; r ) const</div>
-<li><div class="fn">QIconViewItem* <a href="#7d074a"><b>findLastVisibleItem</b></a> ( const QRect &amp; r ) const</div>
-<li><div class="fn">virtual void <a href="#f84d65"><b>clear</b></a> () </div>
-<li><div class="fn">virtual void <a href="#6c95d9"><b>setGridX</b></a> ( int rx ) </div>
-<li><div class="fn">virtual void <a href="#feb12c"><b>setGridY</b></a> ( int ry ) </div>
-<li><div class="fn">int <a href="#2c5c00"><b>gridX</b></a> () const</div>
-<li><div class="fn">int <a href="#304c4d"><b>gridY</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#f39ce3"><b>setSpacing</b></a> ( int sp ) </div>
-<li><div class="fn">int <a href="#2f08d8"><b>spacing</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#a495e8"><b>setItemTextPos</b></a> ( ItemTextPos pos ) </div>
-<li><div class="fn">ItemTextPos <a href="#429e49"><b>itemTextPos</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#949782"><b>setItemTextBackground</b></a> ( const QBrush &amp; b ) </div>
-<li><div class="fn">QBrush <a href="#251f1c"><b>itemTextBackground</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#bf383b"><b>setArrangement</b></a> ( Arrangement am ) </div>
-<li><div class="fn">Arrangement <a href="#332d1c"><b>arrangement</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#4a1229"><b>setResizeMode</b></a> ( ResizeMode am ) </div>
-<li><div class="fn">ResizeMode <a href="#6347ef"><b>resizeMode</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#942024"><b>setMaxItemWidth</b></a> ( int w ) </div>
-<li><div class="fn">int <a href="#17c372"><b>maxItemWidth</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#ba0e49"><b>setMaxItemTextLength</b></a> ( int w ) </div>
-<li><div class="fn">int <a href="#da54ae"><b>maxItemTextLength</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#7b3f0b"><b>setAutoArrange</b></a> ( bool b ) </div>
-<li><div class="fn">bool <a href="#70daef"><b>autoArrange</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#612f32"><b>setShowToolTips</b></a> ( bool b ) </div>
-<li><div class="fn">bool <a href="#355480"><b>showToolTips</b></a> () const</div>
-<li><div class="fn">void <a href="#540892"><b>setSorting</b></a> ( bool sort, bool ascending = TRUE ) </div>
-<li><div class="fn">bool <a href="#b779dd"><b>sorting</b></a> () const</div>
-<li><div class="fn">bool <a href="#4ff476"><b>sortDirection</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#037c84"><b>setItemsMovable</b></a> ( bool b ) </div>
-<li><div class="fn">bool <a href="#7aba5f"><b>itemsMovable</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#dbeaa6"><b>setWordWrapIconText</b></a> ( bool b ) </div>
-<li><div class="fn">bool <a href="#644375"><b>wordWrapIconText</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#7be9a1"><b>sort</b></a> ( bool ascending = TRUE ) </div>
+<li><div class="fn">enumÂ <a href="#SelectionMode"><b>SelectionMode</b></a>Â {Â SingleÂ =Â 0, Multi, Extended, NoSelectionÂ }</div>
+<li><div class="fn">enumÂ <a href="#Arrangement"><b>Arrangement</b></a>Â {Â LeftToRightÂ =Â 0, TopToBottomÂ }</div>
+<li><div class="fn">enumÂ <a href="#ResizeMode"><b>ResizeMode</b></a>Â {Â FixedÂ =Â 0, AdjustÂ }</div>
+<li><div class="fn">enumÂ <a href="#ItemTextPos"><b>ItemTextPos</b></a>Â {Â BottomÂ =Â 0, RightÂ }</div>
+<li><div class="fn"><a href="#a3849b"><b>QIconView</b></a>Â (Â QWidgetÂ *Â parentÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0, WFlagsÂ fÂ =Â 0Â )Â </div>
+<li><div class="fn">virtualÂ <a href="#5872e0"><b>~QIconView</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#2d0207"><b>insertItem</b></a>Â (Â QIconViewItemÂ *Â item, QIconViewItemÂ *Â afterÂ =Â 0LÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#7164b3"><b>takeItem</b></a>Â (Â QIconViewItemÂ *Â itemÂ )Â </div>
+<li><div class="fn">intÂ <a href="#e97fe2"><b>index</b></a>Â (Â constÂ QIconViewItemÂ *Â itemÂ )Â const</div>
+<li><div class="fn">QIconViewItem*Â <a href="#f4df66"><b>firstItem</b></a>Â ()Â const</div>
+<li><div class="fn">QIconViewItem*Â <a href="#13c5a9"><b>lastItem</b></a>Â ()Â const</div>
+<li><div class="fn">QIconViewItem*Â <a href="#b2a5c7"><b>currentItem</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#b30724"><b>setCurrentItem</b></a>Â (Â QIconViewItemÂ *Â itemÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#81719c"><b>setSelected</b></a>Â (Â QIconViewItemÂ *Â item, boolÂ s, boolÂ cbÂ =Â FALSEÂ )Â </div>
+<li><div class="fn">uintÂ <a href="#6bb21a"><b>count</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#98457a"><b>setSelectionMode</b></a>Â (Â SelectionModeÂ mÂ )Â </div>
+<li><div class="fn">SelectionModeÂ <a href="#0040a8"><b>selectionMode</b></a>Â ()Â const</div>
+<li><div class="fn">QIconViewItem*Â <a href="#526763"><b>findItem</b></a>Â (Â constÂ QPointÂ &amp;Â posÂ )Â const</div>
+<li><div class="fn">QIconViewItem*Â <a href="#ec58f0"><b>findItem</b></a>Â (Â constÂ QStringÂ &amp;Â textÂ )Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#31b5ce"><b>selectAll</b></a>Â (Â boolÂ selectÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#767612"><b>clearSelection</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#e283c9"><b>invertSelection</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#65c0ac"><b>repaintItem</b></a>Â (Â QIconViewItemÂ *Â itemÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#76c81f"><b>ensureItemVisible</b></a>Â (Â QIconViewItemÂ *Â itemÂ )Â </div>
+<li><div class="fn">QIconViewItem*Â <a href="#4e4ffe"><b>findFirstVisibleItem</b></a>Â (Â constÂ QRectÂ &amp;Â rÂ )Â const</div>
+<li><div class="fn">QIconViewItem*Â <a href="#7d074a"><b>findLastVisibleItem</b></a>Â (Â constÂ QRectÂ &amp;Â rÂ )Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#f84d65"><b>clear</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#6c95d9"><b>setGridX</b></a>Â (Â intÂ rxÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#feb12c"><b>setGridY</b></a>Â (Â intÂ ryÂ )Â </div>
+<li><div class="fn">intÂ <a href="#2c5c00"><b>gridX</b></a>Â ()Â const</div>
+<li><div class="fn">intÂ <a href="#304c4d"><b>gridY</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#f39ce3"><b>setSpacing</b></a>Â (Â intÂ spÂ )Â </div>
+<li><div class="fn">intÂ <a href="#2f08d8"><b>spacing</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#a495e8"><b>setItemTextPos</b></a>Â (Â ItemTextPosÂ posÂ )Â </div>
+<li><div class="fn">ItemTextPosÂ <a href="#429e49"><b>itemTextPos</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#949782"><b>setItemTextBackground</b></a>Â (Â constÂ QBrushÂ &amp;Â bÂ )Â </div>
+<li><div class="fn">QBrushÂ <a href="#251f1c"><b>itemTextBackground</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#bf383b"><b>setArrangement</b></a>Â (Â ArrangementÂ amÂ )Â </div>
+<li><div class="fn">ArrangementÂ <a href="#332d1c"><b>arrangement</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#4a1229"><b>setResizeMode</b></a>Â (Â ResizeModeÂ amÂ )Â </div>
+<li><div class="fn">ResizeModeÂ <a href="#6347ef"><b>resizeMode</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#942024"><b>setMaxItemWidth</b></a>Â (Â intÂ wÂ )Â </div>
+<li><div class="fn">intÂ <a href="#17c372"><b>maxItemWidth</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#ba0e49"><b>setMaxItemTextLength</b></a>Â (Â intÂ wÂ )Â </div>
+<li><div class="fn">intÂ <a href="#da54ae"><b>maxItemTextLength</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#7b3f0b"><b>setAutoArrange</b></a>Â (Â boolÂ bÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#70daef"><b>autoArrange</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#612f32"><b>setShowToolTips</b></a>Â (Â boolÂ bÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#355480"><b>showToolTips</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#540892"><b>setSorting</b></a>Â (Â boolÂ sort, boolÂ ascendingÂ =Â TRUEÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#b779dd"><b>sorting</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#4ff476"><b>sortDirection</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#037c84"><b>setItemsMovable</b></a>Â (Â boolÂ bÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#7aba5f"><b>itemsMovable</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#dbeaa6"><b>setWordWrapIconText</b></a>Â (Â boolÂ bÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#644375"><b>wordWrapIconText</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#7be9a1"><b>sort</b></a>Â (Â boolÂ ascendingÂ =Â TRUEÂ )Â </div>
 </ul>
 <h2>Public Slots</h2>
 <ul>
-<li><div class="fn">virtual void <a href="#9fb7be"><b>arrangeItemsInGrid</b></a> ( const QSize &amp; grid, bool update = TRUE ) </div>
-<li><div class="fn">virtual void <a href="#a66b75"><b>arrangeItemsInGrid</b></a> ( bool update = TRUE ) </div>
-<li><div class="fn">virtual void <b>updateContents</b> () (internal)</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#9fb7be"><b>arrangeItemsInGrid</b></a>Â (Â constÂ QSizeÂ &amp;Â grid, boolÂ updateÂ =Â TRUEÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#a66b75"><b>arrangeItemsInGrid</b></a>Â (Â boolÂ updateÂ =Â TRUEÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <b>updateContents</b>Â ()Â (internal)</div>
 </ul>
 <h2>Signals</h2>
 <ul>
-<li><div class="fn">void <a href="#fac306"><b>selectionChanged</b></a> () </div>
-<li><div class="fn">void <a href="#4dcf65"><b>selectionChanged</b></a> ( QIconViewItem * item ) </div>
-<li><div class="fn">void <a href="#9aaf90"><b>currentChanged</b></a> ( QIconViewItem * item ) </div>
-<li><div class="fn">void <a href="#d37c32"><b>clicked</b></a> ( QIconViewItem * ) </div>
-<li><div class="fn">void <a href="#2d5902"><b>clicked</b></a> ( QIconViewItem *, const QPoint &amp; ) </div>
-<li><div class="fn">void <a href="#9aba48"><b>pressed</b></a> ( QIconViewItem * ) </div>
-<li><div class="fn">void <a href="#bf2323"><b>pressed</b></a> ( QIconViewItem *, const QPoint &amp; ) </div>
-<li><div class="fn">void <a href="#3fac1f"><b>doubleClicked</b></a> ( QIconViewItem * item ) </div>
-<li><div class="fn">void <a href="#0567c1"><b>returnPressed</b></a> ( QIconViewItem * item ) </div>
-<li><div class="fn">void <a href="#ad2630"><b>rightButtonClicked</b></a> ( QIconViewItem * item, const QPoint &amp; pos ) </div>
-<li><div class="fn">void <a href="#3fb30b"><b>rightButtonPressed</b></a> ( QIconViewItem * item, const QPoint &amp; pos ) </div>
-<li><div class="fn">void <a href="#15dc22"><b>mouseButtonPressed</b></a> ( int button, QIconViewItem * item, const QPoint &amp; pos ) </div>
-<li><div class="fn">void <a href="#7a6311"><b>mouseButtonClicked</b></a> ( int button, QIconViewItem * item, const QPoint &amp; pos ) </div>
-<li><div class="fn">void <a href="#b97176"><b>dropped</b></a> ( QDropEvent * e, const QValueList&lt;QIconDragItem&gt; &amp; lst ) </div>
-<li><div class="fn">void <a href="#7d6d77"><b>moved</b></a> () </div>
-<li><div class="fn">void <a href="#21b913"><b>onItem</b></a> ( QIconViewItem * item ) </div>
-<li><div class="fn">void <a href="#608fee"><b>onViewport</b></a> () </div>
-<li><div class="fn">void <a href="#0b5c7c"><b>itemRenamed</b></a> ( QIconViewItem * item, const QString &amp; ) </div>
-<li><div class="fn">void <a href="#c5f6fe"><b>itemRenamed</b></a> ( QIconViewItem * item ) </div>
+<li><div class="fn">voidÂ <a href="#fac306"><b>selectionChanged</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#4dcf65"><b>selectionChanged</b></a>Â (Â QIconViewItemÂ *Â itemÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#9aaf90"><b>currentChanged</b></a>Â (Â QIconViewItemÂ *Â itemÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#d37c32"><b>clicked</b></a>Â (Â QIconViewItemÂ *Â )Â </div>
+<li><div class="fn">voidÂ <a href="#2d5902"><b>clicked</b></a>Â (Â QIconViewItemÂ *, constÂ QPointÂ &amp;Â )Â </div>
+<li><div class="fn">voidÂ <a href="#9aba48"><b>pressed</b></a>Â (Â QIconViewItemÂ *Â )Â </div>
+<li><div class="fn">voidÂ <a href="#bf2323"><b>pressed</b></a>Â (Â QIconViewItemÂ *, constÂ QPointÂ &amp;Â )Â </div>
+<li><div class="fn">voidÂ <a href="#3fac1f"><b>doubleClicked</b></a>Â (Â QIconViewItemÂ *Â itemÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#0567c1"><b>returnPressed</b></a>Â (Â QIconViewItemÂ *Â itemÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#ad2630"><b>rightButtonClicked</b></a>Â (Â QIconViewItemÂ *Â item, constÂ QPointÂ &amp;Â posÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#3fb30b"><b>rightButtonPressed</b></a>Â (Â QIconViewItemÂ *Â item, constÂ QPointÂ &amp;Â posÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#15dc22"><b>mouseButtonPressed</b></a>Â (Â intÂ button, QIconViewItemÂ *Â item, constÂ QPointÂ &amp;Â posÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#7a6311"><b>mouseButtonClicked</b></a>Â (Â intÂ button, QIconViewItemÂ *Â item, constÂ QPointÂ &amp;Â posÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#b97176"><b>dropped</b></a>Â (Â QDropEventÂ *Â e, constÂ QValueList&lt;QIconDragItem&gt;Â &amp;Â lstÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#7d6d77"><b>moved</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#21b913"><b>onItem</b></a>Â (Â QIconViewItemÂ *Â itemÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#608fee"><b>onViewport</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#0b5c7c"><b>itemRenamed</b></a>Â (Â QIconViewItemÂ *Â item, constÂ QStringÂ &amp;Â )Â </div>
+<li><div class="fn">voidÂ <a href="#c5f6fe"><b>itemRenamed</b></a>Â (Â QIconViewItemÂ *Â itemÂ )Â </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><div class="fn">virtual void <a href="#5708e1"><b>drawRubber</b></a> ( QPainter * p ) </div>
-<li><div class="fn">virtual QDragObject* <a href="#8a680b"><b>dragObject</b></a> () </div>
-<li><div class="fn">virtual void <a href="#9918ce"><b>startDrag</b></a> () </div>
-<li><div class="fn">virtual void <a href="#d14416"><b>insertInGrid</b></a> ( QIconViewItem * item ) </div>
-<li><div class="fn">virtual void <a href="#e825cc"><b>drawBackground</b></a> ( QPainter * p, const QRect &amp; r ) </div>
-<li><div class="fn">void <a href="#2206c3"><b>emitSelectionChanged</b></a> ( QIconViewItem * i = 0 ) </div>
-<li><div class="fn">void <b>emitRenamed</b> ( QIconViewItem * item ) (internal)</div>
-<li><div class="fn">QIconViewItem* <a href="#c0ef82"><b>makeRowLayout</b></a> ( QIconViewItem * begin, int &amp; y ) </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#5708e1"><b>drawRubber</b></a>Â (Â QPainterÂ *Â pÂ )Â </div>
+<li><div class="fn">virtualÂ QDragObject*Â <a href="#8a680b"><b>dragObject</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#9918ce"><b>startDrag</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#d14416"><b>insertInGrid</b></a>Â (Â QIconViewItemÂ *Â itemÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#e825cc"><b>drawBackground</b></a>Â (Â QPainterÂ *Â p, constÂ QRectÂ &amp;Â rÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#2206c3"><b>emitSelectionChanged</b></a>Â (Â QIconViewItemÂ *Â iÂ =Â 0Â )Â </div>
+<li><div class="fn">voidÂ <b>emitRenamed</b>Â (Â QIconViewItemÂ *Â itemÂ )Â (internal)</div>
+<li><div class="fn">QIconViewItem*Â <a href="#c0ef82"><b>makeRowLayout</b></a>Â (Â QIconViewItemÂ *Â begin, intÂ &amp;Â yÂ )Â </div>
 </ul>
 <h2>Protected Slots</h2>
 <ul>
-<li><div class="fn">virtual void <a href="#0fc7d8"><b>doAutoScroll</b></a> () </div>
-<li><div class="fn">virtual void <a href="#c9ca05"><b>adjustItems</b></a> () </div>
-<li><div class="fn">virtual void <a href="#0a8823"><b>slotUpdate</b></a> () </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#0fc7d8"><b>doAutoScroll</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#c9ca05"><b>adjustItems</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#0a8823"><b>slotUpdate</b></a>Â ()Â </div>
 </ul>
 <h2>Properties</h2>
 <table border=1 cellpadding=3 cellspacing=0>
@@ -307,13 +307,13 @@ where users can select multiple items but usually want to select
 either just one or a range of contiguous items, and <code>NoSelection</code>
 is for a iconview where the user can look but not touch.
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="a3849b"></a>QIconView::QIconView ( <a href="qwidget.html">QWidget</a> * parent = 0, const char * name = 0, WFlags f = 0 )</h3>
+<h3 class="fn"><a name="a3849b"></a>QIconView::QIconViewÂ (Â <a href="qwidget.html">QWidget</a>Â *Â parentÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0, WFlagsÂ fÂ =Â 0Â )</h3>
 <p>Constructs an empty icon view.
-<h3 class="fn"><a name="5872e0"></a>QIconView::~QIconView () <code>[virtual]</code></h3>
+<h3 class="fn"><a name="5872e0"></a>QIconView::~QIconViewÂ () <code>[virtual]</code></h3>
 <p>Destructs the iconview and deletes all items.
-<h3 class="fn">void <a name="c9ca05"></a>QIconView::adjustItems () <code>[virtual protected slot]</code></h3>
+<h3 class="fn">voidÂ <a name="c9ca05"></a>QIconView::adjustItemsÂ () <code>[virtualÂ protected slot]</code></h3>
 <p>Adjusts the positions of the items to the geometry of the iconview.
-<h3 class="fn">void <a name="a66b75"></a>QIconView::arrangeItemsInGrid ( bool update = TRUE ) <code>[virtual slot]</code></h3>
+<h3 class="fn">voidÂ <a name="a66b75"></a>QIconView::arrangeItemsInGridÂ (Â boolÂ updateÂ =Â TRUEÂ ) <code>[virtualÂ slot]</code></h3>
 <p>Arranges all items in the grid. For the grid the specified
 values, given by <a href="#6c95d9">QIconView::setGridX</a>() and <a href="#feb12c">QIconView::setGridY</a>()
 are used.
@@ -322,76 +322,76 @@ in this method. If you want to sort and re-arrange all items, use
 iconview-><a href="#7be9a1">sort</a>( iconview-><a href="#4ff476">sortDirection</a>() );
 <p>If <em>update</em> is TRUE, the viewport is repainted.
 <p>See also  <a href="#6c95d9">QIconView::setGridX</a>(), <a href="#feb12c">QIconView::setGridY</a>() and <a href="#7be9a1">QIconView::sort</a>().
-<h3 class="fn">void <a name="9fb7be"></a>QIconView::arrangeItemsInGrid ( const <a href="qsize.html">QSize</a> &amp; grid, bool update = TRUE ) <code>[virtual slot]</code></h3>
+<h3 class="fn">voidÂ <a name="9fb7be"></a>QIconView::arrangeItemsInGridÂ (Â constÂ <a href="qsize.html">QSize</a>Â &amp;Â grid, boolÂ updateÂ =Â TRUEÂ ) <code>[virtualÂ slot]</code></h3>
 <p>Arranges all items in the <em>grid;</em> If the grid is invalid (see
 <a href="qsize.html#7336d9">QSize::isValid</a>(), an invalid size is created when using the default
 constructor of <a href="qsize.html">QSize</a>()) the best fitting grid is calculated first
 and used then.
 <p>if <em>update</em> is TRUE, the viewport is repainted.
-<h3 class="fn">QIconView::Arrangement <a name="332d1c"></a>QIconView::arrangement() const</h3>
+<h3 class="fn">QIconView::ArrangementÂ <a name="332d1c"></a>QIconView::arrangement()Â const</h3>
 <p>Returns the arrangement mode of the iconview.
 <p>See also  <a href="#bf383b">QIconView::setArrangement</a>().
-<h3 class="fn">bool <a name="70daef"></a>QIconView::autoArrange () const</h3>
+<h3 class="fn">boolÂ <a name="70daef"></a>QIconView::autoArrangeÂ ()Â const</h3>
 <p>Returns TRUE if all items are re-arranged in the grid if a new one is
 inserted, else FALSE.
 <p>See also  <a href="#7b3f0b">QIconView::setAutoArrange</a>().
-<h3 class="fn">void <a name="f84d65"></a>QIconView::clear () <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="f84d65"></a>QIconView::clearÂ () <code>[virtual]</code></h3>
 <p>Cleares the iconview.
-<h3 class="fn">void <a name="767612"></a>QIconView::clearSelection () <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="767612"></a>QIconView::clearSelectionÂ () <code>[virtual]</code></h3>
 <p>Unselects all items.
-<h3 class="fn">void <a name="d37c32"></a>QIconView::clicked ( <a href="qiconviewitem.html">QIconViewItem</a> * item ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="d37c32"></a>QIconView::clickedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted when the user clicked (pressed + released) with any mouse button on
 either and item (then <em>item</em> is the item under the mouse cursor) or
 somewhere else (then <em>item</em> is 0).
-<h3 class="fn">void <a name="2d5902"></a>QIconView::clicked ( <a href="qiconviewitem.html">QIconViewItem</a> * item, const <a href="qpoint.html">QPoint</a> &amp; pos ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="2d5902"></a>QIconView::clickedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â item, constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â posÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted when the user clicked (pressed + released) with any mouse button on
 either and item (then <em>item</em> is the item under the mouse cursor) or
 somewhere else (then <em>item</em> is 0). <em>pos</em> the position of the mouse cursor.
-<h3 class="fn">void <a name="876ebb"></a>QIconView::contentsDragEnterEvent ( <a href="qdragenterevent.html">QDragEnterEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="876ebb"></a>QIconView::contentsDragEnterEventÂ (Â <a href="qdragenterevent.html">QDragEnterEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">void <a name="2f492d"></a>QIconView::contentsDragLeaveEvent ( <a href="qdragleaveevent.html">QDragLeaveEvent</a> * ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="2f492d"></a>QIconView::contentsDragLeaveEventÂ (Â <a href="qdragleaveevent.html">QDragLeaveEvent</a>Â *Â ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">void <a name="57aa92"></a>QIconView::contentsDragMoveEvent ( <a href="qdragmoveevent.html">QDragMoveEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="57aa92"></a>QIconView::contentsDragMoveEventÂ (Â <a href="qdragmoveevent.html">QDragMoveEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">void <a name="df152f"></a>QIconView::contentsDropEvent ( <a href="qdropevent.html">QDropEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="df152f"></a>QIconView::contentsDropEventÂ (Â <a href="qdropevent.html">QDropEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">void <a name="c87f21"></a>QIconView::contentsMouseDoubleClickEvent ( <a href="qmouseevent.html">QMouseEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="c87f21"></a>QIconView::contentsMouseDoubleClickEventÂ (Â <a href="qmouseevent.html">QMouseEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">void <a name="13f756"></a>QIconView::contentsMouseMoveEvent ( <a href="qmouseevent.html">QMouseEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="13f756"></a>QIconView::contentsMouseMoveEventÂ (Â <a href="qmouseevent.html">QMouseEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">void <a name="ed9722"></a>QIconView::contentsMousePressEvent ( <a href="qmouseevent.html">QMouseEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="ed9722"></a>QIconView::contentsMousePressEventÂ (Â <a href="qmouseevent.html">QMouseEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">void <a name="ec1fe8"></a>QIconView::contentsMouseReleaseEvent ( <a href="qmouseevent.html">QMouseEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="ec1fe8"></a>QIconView::contentsMouseReleaseEventÂ (Â <a href="qmouseevent.html">QMouseEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">uint <a name="6bb21a"></a>QIconView::count () const</h3>
+<h3 class="fn">uintÂ <a name="6bb21a"></a>QIconView::countÂ ()Â const</h3>
 <p>Returns the number of items in the iconview.
-<h3 class="fn">void <a name="9aaf90"></a>QIconView::currentChanged ( <a href="qiconviewitem.html">QIconViewItem</a> * item ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="9aaf90"></a>QIconView::currentChangedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted, when the different items got current.
 <em>item</em> is the new current item or 0, if no item is current now.
-<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a> * <a name="b2a5c7"></a>QIconView::currentItem () const</h3>
+<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a>Â *Â <a name="b2a5c7"></a>QIconView::currentItemÂ ()Â const</h3>
 <p>Returns a pointer to the current item fo the iconview, or 0, if no
 item is current.
-<h3 class="fn">void <a name="0fc7d8"></a>QIconView::doAutoScroll () <code>[virtual protected slot]</code></h3>
+<h3 class="fn">voidÂ <a name="0fc7d8"></a>QIconView::doAutoScrollÂ () <code>[virtualÂ protected slot]</code></h3>
 <p>Does autoscrolling when selecting multiple icons with the rubber band.
-<h3 class="fn">void <a name="3fac1f"></a>QIconView::doubleClicked ( <a href="qiconviewitem.html">QIconViewItem</a> * item ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="3fac1f"></a>QIconView::doubleClickedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted, if the user double-clicked on the item <em>item.</em>
-<h3 class="fn"><a href="qdragobject.html">QDragObject</a> * <a name="8a680b"></a>QIconView::dragObject () <code>[virtual protected]</code></h3>
+<h3 class="fn"><a href="qdragobject.html">QDragObject</a>Â *Â <a name="8a680b"></a>QIconView::dragObjectÂ () <code>[virtualÂ protected]</code></h3>
 <p>Returns the <a href="qdragobject.html">QDragObject</a> which should be used for DnD. This method
 is called by the iconview when starting a drag to get the dragobject
 which should be used for the drag.
 Subclasses may reimplement this.
 <p>See also  <a href="qicondrag.html">QIconDrag</a>.
-<h3 class="fn">void <a name="e825cc"></a>QIconView::drawBackground ( <a href="qpainter.html">QPainter</a> * p, const <a href="qrect.html">QRect</a> &amp; r ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="e825cc"></a>QIconView::drawBackgroundÂ (Â <a href="qpainter.html">QPainter</a>Â *Â p, constÂ <a href="qrect.html">QRect</a>Â &amp;Â rÂ ) <code>[virtualÂ protected]</code></h3>
 <p>This method is called to draw the rectangle <em>r</em> of the background using
 the painter <em>p.</em> xOffset and yOffset are known using the methods
 <a href="qscrollview.html#be020d">contentsX</a>() and <a href="qscrollview.html#459550">contentsY</a>().
 <p>The default implementation only fills <em>r</em> with <a href="qwidget.html#d92bf4">colorGroup</a>().base(). Subclasses
 may reimplement this to draw fency backgrounds.
-<h3 class="fn">void <a name="2af8c2"></a>QIconView::drawContents ( <a href="qpainter.html">QPainter</a> * p, int cx, int cy, int cw, int ch ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="2af8c2"></a>QIconView::drawContentsÂ (Â <a href="qpainter.html">QPainter</a>Â *Â p, intÂ cx, intÂ cy, intÂ cw, intÂ chÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">void <a name="5708e1"></a>QIconView::drawRubber ( <a href="qpainter.html">QPainter</a> * p ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="5708e1"></a>QIconView::drawRubberÂ (Â <a href="qpainter.html">QPainter</a>Â *Â pÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Draws the rubber band using the painter <em>p.</em>
-<h3 class="fn">void <a name="b97176"></a>QIconView::dropped ( <a href="qdropevent.html">QDropEvent</a> * e, const <a href="qvaluelist.html">QValueList</a>&lt;<a href="qicondragitem.html">QIconDragItem</a>&gt; &amp; lst ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="b97176"></a>QIconView::droppedÂ (Â <a href="qdropevent.html">QDropEvent</a>Â *Â e, constÂ <a href="qvaluelist.html">QValueList</a>&lt;<a href="qicondragitem.html">QIconDragItem</a>&gt;Â &amp;Â lstÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted, when a drop event occurred onto the viewport
 (not onto an icon), which the iconview itself can't handle.
 <p><em>e</em> gives you all information about the drop. If the drag object of
@@ -401,200 +401,200 @@ then.
 <p>So, if <em>lst</em> is not empty, use this data for further operations,
 else the drag was not a QIconDrag, so you have to decode <em>e</em>
 yourself and work with that.
-<h3 class="fn">void <a name="2206c3"></a>QIconView::emitSelectionChanged ( <a href="qiconviewitem.html">QIconViewItem</a> * i = 0 ) <code>[protected]</code></h3>
+<h3 class="fn">voidÂ <a name="2206c3"></a>QIconView::emitSelectionChangedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â iÂ =Â 0Â ) <code>[protected]</code></h3>
 <p>Emits signals, that indicate selection changes.
-<h3 class="fn">void <a name="76c81f"></a>QIconView::ensureItemVisible ( <a href="qiconviewitem.html">QIconViewItem</a> * item )</h3>
+<h3 class="fn">voidÂ <a name="76c81f"></a>QIconView::ensureItemVisibleÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ )</h3>
 <p>Makes sure, that <em>item</em> is visible, and scrolls the view if required.
-<h3 class="fn">void <a name="ce1444"></a>QIconView::enterEvent ( <a href="qevent.html">QEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="ce1444"></a>QIconView::enterEventÂ (Â <a href="qevent.html">QEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">bool <a name="a54a67"></a>QIconView::eventFilter ( <a href="qobject.html">QObject</a> * o, <a href="qevent.html">QEvent</a> * e ) <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="a54a67"></a>QIconView::eventFilterÂ (Â <a href="qobject.html">QObject</a>Â *Â o, <a href="qevent.html">QEvent</a>Â *Â eÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qobject.html#bd20fe">QObject.</a>
-<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a>* <a name="4e4ffe"></a>QIconView::findFirstVisibleItem ( const <a href="qrect.html">QRect</a> &amp; r ) const</h3>
+<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a>*Â <a name="4e4ffe"></a>QIconView::findFirstVisibleItemÂ (Â constÂ <a href="qrect.html">QRect</a>Â &amp;Â rÂ )Â const</h3>
 <p>Finds the first item which is visible in the rectangle <em>r</em> in contents coordinates. If no items are
 visible at all, 0 is returned.
-<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a> * <a name="526763"></a>QIconView::findItem ( const <a href="qpoint.html">QPoint</a> &amp; pos ) const</h3>
+<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a>Â *Â <a name="526763"></a>QIconView::findItemÂ (Â constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â posÂ )Â const</h3>
 <p>Returns a pointer to the item which contains <em>pos,</em> which is given
 on contents coordinates.
-<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a> * <a name="ec58f0"></a>QIconView::findItem ( const <a href="qstring.html">QString</a> &amp; text ) const</h3>
+<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a>Â *Â <a name="ec58f0"></a>QIconView::findItemÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â textÂ )Â const</h3>
 <p>Returns a pointer to the first item which could be found that contains
 <em>text,</em> or 0 if no such item could be found.
-<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a>* <a name="7d074a"></a>QIconView::findLastVisibleItem ( const <a href="qrect.html">QRect</a> &amp; r ) const</h3>
+<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a>*Â <a name="7d074a"></a>QIconView::findLastVisibleItemÂ (Â constÂ <a href="qrect.html">QRect</a>Â &amp;Â rÂ )Â const</h3>
 <p>Finds the last item which is visible in the rectangle <em>r</em> in contents coordinates. If no items are
 visible at all, 0 is returned.
-<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a> * <a name="f4df66"></a>QIconView::firstItem () const</h3>
+<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a>Â *Â <a name="f4df66"></a>QIconView::firstItemÂ ()Â const</h3>
 <p>Returns a pointer to the first item fo the iconview, or 0, if there
 are no items in the iconview.
-<h3 class="fn">void <a name="5f006f"></a>QIconView::focusInEvent ( <a href="qfocusevent.html">QFocusEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="5f006f"></a>QIconView::focusInEventÂ (Â <a href="qfocusevent.html">QFocusEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">void <a name="36abfd"></a>QIconView::focusOutEvent ( <a href="qfocusevent.html">QFocusEvent</a> * ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="36abfd"></a>QIconView::focusOutEventÂ (Â <a href="qfocusevent.html">QFocusEvent</a>Â *Â ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">int <a name="2c5c00"></a>QIconView::gridX () const</h3>
+<h3 class="fn">intÂ <a name="2c5c00"></a>QIconView::gridXÂ ()Â const</h3>
 <p>Returns the horizontal grid.
 <p>See also  <a href="#6c95d9">QIconView::setGridX</a>().
-<h3 class="fn">int <a name="304c4d"></a>QIconView::gridY () const</h3>
+<h3 class="fn">intÂ <a name="304c4d"></a>QIconView::gridYÂ ()Â const</h3>
 <p>Returns the vertica grid.
 <p>See also  <a href="#feb12c">QIconView::setGridY</a>().
-<h3 class="fn">int <a name="e97fe2"></a>QIconView::index ( const <a href="qiconviewitem.html">QIconViewItem</a> * item ) const</h3>
+<h3 class="fn">intÂ <a name="e97fe2"></a>QIconView::indexÂ (Â constÂ <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ )Â const</h3>
 <p>Returns the index of <em>item</em> or -1 if <em>item</em> doesn't exist
 in this icon view.
-<h3 class="fn">void <a name="d14416"></a>QIconView::insertInGrid ( <a href="qiconviewitem.html">QIconViewItem</a> * item ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="d14416"></a>QIconView::insertInGridÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Inserts an item in the grid of the iconview. You should never need
 to call this manually.
-<h3 class="fn">void <a name="2d0207"></a>QIconView::insertItem ( <a href="qiconviewitem.html">QIconViewItem</a> * item, <a href="qiconviewitem.html">QIconViewItem</a> * after = 0L ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="2d0207"></a>QIconView::insertItemÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â item, <a href="qiconviewitem.html">QIconViewItem</a>Â *Â afterÂ =Â 0LÂ ) <code>[virtual]</code></h3>
 <p>Inserts the iconview item <em>item</em> after <em>after.</em> If <em>after</em> is 0,
 <em>item</em> is appended.
 <p>You should never need to call this method yourself, you should rather do
 <p><pre>    (void) new <a href="qiconviewitem.html">QIconViewItem</a>( iconview, "This is the text of the item", pixmap );
 </pre>
 <p>This does everything required for inserting an item.
-<h3 class="fn">void <a name="e283c9"></a>QIconView::invertSelection () <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="e283c9"></a>QIconView::invertSelectionÂ () <code>[virtual]</code></h3>
 <p>Inverts the selection. Works only in Multi and Extended selection mode.
-<h3 class="fn">void <a name="c5f6fe"></a>QIconView::itemRenamed ( <a href="qiconviewitem.html">QIconViewItem</a> * item ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="c5f6fe"></a>QIconView::itemRenamedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ ) <code>[signal]</code></h3>
 <p>If the <em>item</em> has been renamed (e.g. by in-place renaming),
 this signal is emitted.
-<h3 class="fn">void <a name="0b5c7c"></a>QIconView::itemRenamed ( <a href="qiconviewitem.html">QIconViewItem</a> * item, const <a href="qstring.html">QString</a> &amp; name ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="0b5c7c"></a>QIconView::itemRenamedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â item, constÂ <a href="qstring.html">QString</a>Â &amp;Â nameÂ ) <code>[signal]</code></h3>
 <p>If the <em>item</em> has been renamed (e.g. by in-place renaming),
 this signal is emitted. <em>name</em> is the new text (name) of the item.
-<h3 class="fn"><a href="qbrush.html">QBrush</a> <a name="251f1c"></a>QIconView::itemTextBackground () const</h3>
+<h3 class="fn"><a href="qbrush.html">QBrush</a>Â <a name="251f1c"></a>QIconView::itemTextBackgroundÂ ()Â const</h3>
 <p>Returns the brush which is used to draw the background of an item text
 <p>See also  <a href="#949782">setItemTextBackground</a>().
-<h3 class="fn">QIconView::ItemTextPos <a name="429e49"></a>QIconView::itemTextPos() const</h3>
+<h3 class="fn">QIconView::ItemTextPosÂ <a name="429e49"></a>QIconView::itemTextPos()Â const</h3>
 <p>Returns the position, at which the text of the items are drawn.
 <p>See also  <a href="#a495e8">QIconView::setItemTextPos</a>().
-<h3 class="fn">bool <a name="7aba5f"></a>QIconView::itemsMovable () const</h3>
+<h3 class="fn">boolÂ <a name="7aba5f"></a>QIconView::itemsMovableÂ ()Â const</h3>
 <p>Returns TRUE, if the user is allowed to move items around
 in the iconview, else FALSE;
 <p>See also  <a href="#037c84">QIconView::setItemsMovable</a>().
-<h3 class="fn">void <a name="c1b24e"></a>QIconView::keyPressEvent ( <a href="qkeyevent.html">QKeyEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="c1b24e"></a>QIconView::keyPressEventÂ (Â <a href="qkeyevent.html">QKeyEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a> * <a name="13c5a9"></a>QIconView::lastItem () const</h3>
+<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a>Â *Â <a name="13c5a9"></a>QIconView::lastItemÂ ()Â const</h3>
 <p>Returns a pointer to the last item fo the iconview, or 0, if there
 are no items in the iconview.
-<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a> * <a name="c0ef82"></a>QIconView::makeRowLayout ( <a href="qiconviewitem.html">QIconViewItem</a> * begin, int &amp; y ) <code>[protected]</code></h3>
+<h3 class="fn"><a href="qiconviewitem.html">QIconViewItem</a>Â *Â <a name="c0ef82"></a>QIconView::makeRowLayoutÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â begin, intÂ &amp;Â yÂ ) <code>[protected]</code></h3>
 <p>Lays out a row of icons (in <a href="#Arrangement">Arrangement</a> == TopToBottom this is a column). Starts
 laying out with the item <em>begin. y</em> is the starting coordinate.
 Returns the last item of the row and sets the new starting coordinate to <em>y.</em>
 <p>This function may be made private in a future version of Qt. We
 recommend not calling it.
-<h3 class="fn">int <a name="da54ae"></a>QIconView::maxItemTextLength () const</h3>
+<h3 class="fn">intÂ <a name="da54ae"></a>QIconView::maxItemTextLengthÂ ()Â const</h3>
 <p>Returns the maximum length (in characters), which the
 text of an icon may have.
 <p>See also  <a href="#ba0e49">QIconView::setMaxItemTextLength</a>().
-<h3 class="fn">int <a name="17c372"></a>QIconView::maxItemWidth () const</h3>
+<h3 class="fn">intÂ <a name="17c372"></a>QIconView::maxItemWidthÂ ()Â const</h3>
 <p>Returns the maximum width (in pixels), which an item may have.
 <p>See also  <a href="#942024">QIconView::setMaxItemWidth</a>().
-<h3 class="fn"><a href="qsize.html">QSize</a> <a name="4789a5"></a>QIconView::minimumSizeHint () const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qsize.html">QSize</a>Â <a name="4789a5"></a>QIconView::minimumSizeHintÂ ()Â const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#553e08">QWidget.</a>
-<h3 class="fn">void <a name="7a6311"></a>QIconView::mouseButtonClicked ( int button, <a href="qiconviewitem.html">QIconViewItem</a> * item, const <a href="qpoint.html">QPoint</a> &amp; pos ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="7a6311"></a>QIconView::mouseButtonClickedÂ (Â intÂ button, <a href="qiconviewitem.html">QIconViewItem</a>Â *Â item, constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â posÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted when the user clicked (pressed + released) with any mouse button on
 either and item (then <em>item</em> is the item under the mouse cursor) or
 somewhere else (then <em>item</em> is 0). <em>button</em> is the number of the mouse button which
 the user clicked, and <em>pos</em> the position of the mouse cursor.
-<h3 class="fn">void <a name="15dc22"></a>QIconView::mouseButtonPressed ( int button, <a href="qiconviewitem.html">QIconViewItem</a> * item, const <a href="qpoint.html">QPoint</a> &amp; pos ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="15dc22"></a>QIconView::mouseButtonPressedÂ (Â intÂ button, <a href="qiconviewitem.html">QIconViewItem</a>Â *Â item, constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â posÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted when the user pressed with any mouse button on
 either and item (then <em>item</em> is the item under the mouse cursor) or
 somewhere else (then <em>item</em> is 0). <em>button</em> is the number of the mouse button which
 the user pressed, and <em>pos</em> the position of the mouse cursor.
-<h3 class="fn">void <a name="7d6d77"></a>QIconView::moved () <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="7d6d77"></a>QIconView::movedÂ () <code>[signal]</code></h3>
 <p>This signal is emitted after successfully dropping an (or some) item(s) of the iconview
 somewhere and if they should be removed now.
-<h3 class="fn">void <a name="21b913"></a>QIconView::onItem ( <a href="qiconviewitem.html">QIconViewItem</a> * i ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="21b913"></a>QIconView::onItemÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â iÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted, when the user moves the mouse cursor onto an item.
-It´s only emitted once per item.
-<h3 class="fn">void <a name="608fee"></a>QIconView::onViewport () <code>[signal]</code></h3>
+ItÂ´s only emitted once per item.
+<h3 class="fn">voidÂ <a name="608fee"></a>QIconView::onViewportÂ () <code>[signal]</code></h3>
 <p>This signal is emitted, when the user moves the mouse cursor, which was
 on an item away from the item onto the viewport.
-<h3 class="fn">void <a name="9aba48"></a>QIconView::pressed ( <a href="qiconviewitem.html">QIconViewItem</a> * item ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="9aba48"></a>QIconView::pressedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted when the user pressed with any mouse button on
 either and item (then <em>item</em> is the item under the mouse cursor) or
 somewhere else (then <em>item</em> is 0).
-<h3 class="fn">void <a name="bf2323"></a>QIconView::pressed ( <a href="qiconviewitem.html">QIconViewItem</a> * item, const <a href="qpoint.html">QPoint</a> &amp; pos ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="bf2323"></a>QIconView::pressedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â item, constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â posÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted when the user pressed with any mouse button on
 either and item (then <em>item</em> is the item under the mouse cursor) or
 somewhere else (then <em>item</em> is 0). <em>pos</em> the position of the mouse cursor.
-<h3 class="fn">void <a name="65c0ac"></a>QIconView::repaintItem ( <a href="qiconviewitem.html">QIconViewItem</a> * item ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="65c0ac"></a>QIconView::repaintItemÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ ) <code>[virtual]</code></h3>
 <p>Repaints the <em>item.</em>
-<h3 class="fn">void <a name="a8aa9e"></a>QIconView::resizeEvent ( <a href="qresizeevent.html">QResizeEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="a8aa9e"></a>QIconView::resizeEventÂ (Â <a href="qresizeevent.html">QResizeEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">QIconView::ResizeMode <a name="6347ef"></a>QIconView::resizeMode() const</h3>
+<h3 class="fn">QIconView::ResizeModeÂ <a name="6347ef"></a>QIconView::resizeMode()Â const</h3>
 <p>Returns the resize mode of the iconview.
 <p>See also  <a href="#4a1229">QIconView::setResizeMode</a>().
-<h3 class="fn">void <a name="0567c1"></a>QIconView::returnPressed ( <a href="qiconviewitem.html">QIconViewItem</a> * item ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="0567c1"></a>QIconView::returnPressedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted, if the user pressed the return or enter button.
 <em>item</em> is the item which was current while return or enter was pressed.
-<h3 class="fn">void <a name="ad2630"></a>QIconView::rightButtonClicked ( <a href="qiconviewitem.html">QIconViewItem</a> * item, const <a href="qpoint.html">QPoint</a> &amp; pos ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="ad2630"></a>QIconView::rightButtonClickedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â item, constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â posÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted when the user clicked (pressed + released) with the right
 mouse button on either and item (then <em>item</em> is the item under the mouse cursor) or
 somewhere else (then <em>item</em> is 0). <em>pos</em> the position of the mouse cursor.
-<h3 class="fn">void <a name="3fb30b"></a>QIconView::rightButtonPressed ( <a href="qiconviewitem.html">QIconViewItem</a> * item, const <a href="qpoint.html">QPoint</a> &amp; pos ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="3fb30b"></a>QIconView::rightButtonPressedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â item, constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â posÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted when the user pressed with the right mouse button on
 either and item (then <em>item</em> is the item under the mouse cursor) or
 somewhere else (then <em>item</em> is 0). <em>pos</em> the position of the mouse cursor.
-<h3 class="fn">void <a name="31b5ce"></a>QIconView::selectAll ( bool select ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="31b5ce"></a>QIconView::selectAllÂ (Â boolÂ selectÂ ) <code>[virtual]</code></h3>
 <p>If <em>select</em> is TRUE, all items get selected, else all get unselected.
 This works only in the selection modes Multi and Extended. In
 Single and NoSelection mode the selection of the current item is
 just set to <em>select.</em>
-<h3 class="fn">void <a name="fac306"></a>QIconView::selectionChanged () <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="fac306"></a>QIconView::selectionChangedÂ () <code>[signal]</code></h3>
 <p>This signal is emitted when the selection has been changed. It's emitted
 in each selection mode.
-<h3 class="fn">void <a name="4dcf65"></a>QIconView::selectionChanged ( <a href="qiconviewitem.html">QIconViewItem</a> * item ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="4dcf65"></a>QIconView::selectionChangedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ ) <code>[signal]</code></h3>
 <p>This signal is emitted when the selection has been changed. <em>item</em>
 is the new selected item. This signal is only emitted in single
 selection mode.
-<h3 class="fn">QIconView::SelectionMode <a name="0040a8"></a>QIconView::selectionMode() const</h3>
+<h3 class="fn">QIconView::SelectionModeÂ <a name="0040a8"></a>QIconView::selectionMode()Â const</h3>
 <p>Returns the selection mode of the iconview.  The initial mode is
 <code>Single.</code>
 <p>See also  <a href="#98457a">setSelectionMode</a>().
-<h3 class="fn">void <a name="bf383b"></a>QIconView::setArrangement ( <a href="qiconview.html#Arrangement">Arrangement</a> am )</h3>
+<h3 class="fn">voidÂ <a name="bf383b"></a>QIconView::setArrangementÂ (Â <a href="qiconview.html#Arrangement">Arrangement</a>Â amÂ )</h3>
 <p>Sets the arrangement mode of the iconview to <em>am,</em> which must be
 one of <code>LeftToRight</code> and TopToBottom.
 <p>See also  <a href="#Arrangement">Arrangement</a>.
-<h3 class="fn">void <a name="7b3f0b"></a>QIconView::setAutoArrange ( bool b ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="7b3f0b"></a>QIconView::setAutoArrangeÂ (Â boolÂ bÂ ) <code>[virtual]</code></h3>
 <p>If <em>b</em> is TRUE, all items are re-arranged in the grid if a new one is
 inserted. Else, the best fitting place for the new item is searched and
 the other ones are not touched.
 <p>This setting only applies if the iconview is visible. If you insert
 items and the iconview is not visible, the icons are reordered when it
 gets visible.
-<h3 class="fn">void <a name="1bf55e"></a>QIconView::setContentsPos ( int x, int y ) <code>[virtual slot]</code></h3>
+<h3 class="fn">voidÂ <a name="1bf55e"></a>QIconView::setContentsPosÂ (Â intÂ x, intÂ yÂ ) <code>[virtualÂ slot]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">void <a name="b30724"></a>QIconView::setCurrentItem ( <a href="qiconviewitem.html">QIconViewItem</a> * item ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="b30724"></a>QIconView::setCurrentItemÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ ) <code>[virtual]</code></h3>
 <p>Makes <em>item</em> the new current item of the iconview.
-<h3 class="fn">void <a name="286880"></a>QIconView::setFont ( const <a href="qfont.html">QFont</a> &amp; f ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="286880"></a>QIconView::setFontÂ (Â constÂ <a href="qfont.html">QFont</a>Â &amp;Â fÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">void <a name="6c95d9"></a>QIconView::setGridX ( int rx ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="6c95d9"></a>QIconView::setGridXÂ (Â intÂ rxÂ ) <code>[virtual]</code></h3>
 <p>Sets the horizontal grid to <em>rx.</em>  If <em>rx</em> is -1, there is no
 horizontal grid used for arranging items.
-<h3 class="fn">void <a name="feb12c"></a>QIconView::setGridY ( int ry ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="feb12c"></a>QIconView::setGridYÂ (Â intÂ ryÂ ) <code>[virtual]</code></h3>
 <p>Sets the vertical grid to <em>ry.</em>  If <em>ry</em> is -1, there is no
 vertical grid used for arranging items.
-<h3 class="fn">void <a name="949782"></a>QIconView::setItemTextBackground ( const <a href="qbrush.html">QBrush</a> &amp; brush ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="949782"></a>QIconView::setItemTextBackgroundÂ (Â constÂ <a href="qbrush.html">QBrush</a>Â &amp;Â brushÂ ) <code>[virtual]</code></h3>
 <p>Sets the <em>brush,</em> which should be used when drawing the background
 of an item text. By default, this brush is set to NoBrush, which means
 no extra brush is used for drawing the item text background (just the normal
 iconview background).
-<h3 class="fn">void <a name="a495e8"></a>QIconView::setItemTextPos ( <a href="qiconview.html#ItemTextPos">ItemTextPos</a> pos )</h3>
+<h3 class="fn">voidÂ <a name="a495e8"></a>QIconView::setItemTextPosÂ (Â <a href="qiconview.html#ItemTextPos">ItemTextPos</a>Â posÂ )</h3>
 <p>Sets the position, where the text of the items is drawn. This can be Bottom
 or Right.
-<h3 class="fn">void <a name="037c84"></a>QIconView::setItemsMovable ( bool b ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="037c84"></a>QIconView::setItemsMovableÂ (Â boolÂ bÂ ) <code>[virtual]</code></h3>
 <p>If <em>b</em> is TRUE, the user is allowed to move items around in
 the iconview.
 if <em>b</em> is FALSE, the user is not allowed to do that.
-<h3 class="fn">void <a name="ba0e49"></a>QIconView::setMaxItemTextLength ( int w ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="ba0e49"></a>QIconView::setMaxItemTextLengthÂ (Â intÂ wÂ ) <code>[virtual]</code></h3>
 <p>Sets the maximum length (in characters), which an item text may have.
-<h3 class="fn">void <a name="942024"></a>QIconView::setMaxItemWidth ( int w ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="942024"></a>QIconView::setMaxItemWidthÂ (Â intÂ wÂ ) <code>[virtual]</code></h3>
 <p>Sets the maximum width, which an item may have. If a <a href="#2c5c00">gridX</a>() is set,
 this value is ignored, and the gridX() value is used.
-<h3 class="fn">void <a name="4bc288"></a>QIconView::setPalette ( const <a href="qpalette.html">QPalette</a> &amp; p ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="4bc288"></a>QIconView::setPaletteÂ (Â constÂ <a href="qpalette.html">QPalette</a>Â &amp;Â pÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">void <a name="4a1229"></a>QIconView::setResizeMode ( <a href="qiconview.html#ResizeMode">ResizeMode</a> rm )</h3>
+<h3 class="fn">voidÂ <a name="4a1229"></a>QIconView::setResizeModeÂ (Â <a href="qiconview.html#ResizeMode">ResizeMode</a>Â rmÂ )</h3>
 <p>Sets the resize mode of the iconview to <em>rm,</em> which must be one of
 <code>Fixed</code> and Adjust.
 <p>See also  <a href="#ResizeMode">ResizeMode</a>.
-<h3 class="fn">void <a name="81719c"></a>QIconView::setSelected ( <a href="qiconviewitem.html">QIconViewItem</a> * item, bool s, bool cb = FALSE ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="81719c"></a>QIconView::setSelectedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â item, boolÂ s, boolÂ cbÂ =Â FALSEÂ ) <code>[virtual]</code></h3>
 <p>Selects or unselects <em>item</em> depending on <em>s,</em> and may also
 unselect other items, depending on <a href="#0040a8">QIconView::selectionMode</a>() and <em>cb.</em>
 <p>If <em>s</em> is FALSE, <em>item</em> is unselected.
@@ -607,28 +607,28 @@ unselected.
 is selected.
 <p>Note that <em>cb</em> is used only if QIconView::selectionMode() is <code>Extended.</code> <em>cb</em> defaults to FALSE.
 <p>All items whose selection status change repaint themselves.
-<h3 class="fn">void <a name="98457a"></a>QIconView::setSelectionMode ( <a href="qiconview.html#SelectionMode">SelectionMode</a> m )</h3>
+<h3 class="fn">voidÂ <a name="98457a"></a>QIconView::setSelectionModeÂ (Â <a href="qiconview.html#SelectionMode">SelectionMode</a>Â mÂ )</h3>
 <p>Sets the selection mode of the iconview to <em>m,</em> which may be one of
 <code>Single</code> (the default), <code>Extended, Multi</code> or <code>NoSelection.</code>
 <p>See also  <a href="#0040a8">selectionMode</a>().
 <p>Examples:
  <a href="iconview-main-cpp.html#setSelectionMode">iconview/main.cpp</a>
-<h3 class="fn">void <a name="612f32"></a>QIconView::setShowToolTips ( bool b ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="612f32"></a>QIconView::setShowToolTipsÂ (Â boolÂ bÂ ) <code>[virtual]</code></h3>
 <p>If <a href="#644375">wordWrapIconText</a>() is FALSE, it happens that an item text
 is truncated because it's too large for one line. If you specify TRUE for
 <em>b</em> here and the user moves the mouse onto the item a tooltip with
 the whole item text is shown.
 If you pass <em>FALSE</em> here this feature is switched off.
 <p>See also  <a href="#dbeaa6">setWordWrapIconText</a>().
-<h3 class="fn">void <a name="540892"></a>QIconView::setSorting ( bool sort, bool ascending = TRUE )</h3>
+<h3 class="fn">voidÂ <a name="540892"></a>QIconView::setSortingÂ (Â boolÂ sort, boolÂ ascendingÂ =Â TRUEÂ )</h3>
 <p>If <em>sort</em> is TRUE, new items are inserted sorted. The sort
 direction is specified using <em>ascending.</em>
 <p>Inserting items sorted only works when re-arranging items is
 set to TRUE as well (using <a href="#7b3f0b">QIconView::setAutoArrange</a>()).
 <p>See also  <a href="#7b3f0b">QIconView::setAutoArrange</a>() and <a href="#70daef">QIconView::autoArrange</a>().
-<h3 class="fn">void <a name="f39ce3"></a>QIconView::setSpacing ( int sp ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="f39ce3"></a>QIconView::setSpacingÂ (Â intÂ spÂ ) <code>[virtual]</code></h3>
 <p>Sets the space between iconview items to <em>sp.</em>
-<h3 class="fn">void <a name="dbeaa6"></a>QIconView::setWordWrapIconText ( bool b ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="dbeaa6"></a>QIconView::setWordWrapIconTextÂ (Â boolÂ bÂ ) <code>[virtual]</code></h3>
 <p>If the width of an item text is larger than the maximal item width,
 there are two possibilities how the QIconView can deal with this.
 Either it does a word wrap of the item text, so that it uses
@@ -640,62 +640,62 @@ text is displayed truncated.
 <p>NOTE: Both possibilities just change the way how the text is
 displayed, they do NOT modify the item text itslef.
 <p>See also  <a href="#612f32">setShowToolTips</a>().
-<h3 class="fn">void <a name="9b31e9"></a>QIconView::showEvent ( <a href="qshowevent.html">QShowEvent</a> * ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="9b31e9"></a>QIconView::showEventÂ (Â <a href="qshowevent.html">QShowEvent</a>Â *Â ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
-<h3 class="fn">bool <a name="355480"></a>QIconView::showToolTips () const</h3>
+<h3 class="fn">boolÂ <a name="355480"></a>QIconView::showToolTipsÂ ()Â const</h3>
 <p>Returns TRUE if a tooltip is shown for truncated item texts and
 FALSE otherwise.
 <p>See also  <a href="#612f32">setShowToolTips</a>() and <a href="#dbeaa6">setWordWrapIconText</a>().
-<h3 class="fn"><a href="qsize.html">QSize</a> <a name="157488"></a>QIconView::sizeHint () const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qsize.html">QSize</a>Â <a name="157488"></a>QIconView::sizeHintÂ ()Â const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Examples:
  <a href="iconview-main-cpp.html#sizeHint">iconview/main.cpp</a>
 <p>Reimplemented from <a href="qwidget.html#4511d1">QWidget.</a>
-<h3 class="fn"><a href="qsizepolicy.html">QSizePolicy</a> <a name="9a6404"></a>QIconView::sizePolicy () const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qsizepolicy.html">QSizePolicy</a>Â <a name="9a6404"></a>QIconView::sizePolicyÂ ()Â const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#23726d">QWidget.</a>
-<h3 class="fn">void <a name="0a8823"></a>QIconView::slotUpdate () <code>[virtual protected slot]</code></h3>
+<h3 class="fn">voidÂ <a name="0a8823"></a>QIconView::slotUpdateÂ () <code>[virtualÂ protected slot]</code></h3>
 <p>Because of efficiency, the iconview is not redrawn immediately after
 inserting a new item, but with a very small delay using a <a href="qtimer.html">QTimer</a>. The
 result of this is, that if lots of items are inserted in a short time
 (e.g. in a loop), the iconview is not redrawn after each inserted item,
 but after inserting all of them, which makes the operation much faster
 and flicker-free.
-<h3 class="fn">void <a name="7be9a1"></a>QIconView::sort ( bool ascending = TRUE ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="7be9a1"></a>QIconView::sortÂ (Â boolÂ ascendingÂ =Â TRUEÂ ) <code>[virtual]</code></h3>
 <p>Sorts the items of the listview and re-arranges them afterwards. If
 <em>ascending</em> is TRUE, the items are sorted in increasing order, else
 in decreasing order. For sorting <a href="qiconviewitem.html#d3dc25">QIconViewItem::compare</a>() is used.
 The default sort direction is set to the sort direction you set
 here.
 <p>See also  <a href="qiconviewitem.html#f40531">QIconViewItem::key</a>(), <a href="qiconviewitem.html#4782f9">QIconViewItem::setKey</a>(), <a href="qiconviewitem.html#d3dc25">QIconViewItem::compare</a>(), <a href="#540892">QIconView::setSorting</a>() and <a href="#4ff476">QIconView::sortDirection</a>().
-<h3 class="fn">bool <a name="4ff476"></a>QIconView::sortDirection () const</h3>
+<h3 class="fn">boolÂ <a name="4ff476"></a>QIconView::sortDirectionÂ ()Â const</h3>
 <p>Returns TRUE if the sort direction for inserting new items is ascending,
 FALSE means descending. This sort direction has only a meaning if re-sorting
 and re-arranging of new inserted items is enabled.
 <p>See also  <a href="#540892">QIconView::setSorting</a>() and <a href="#7b3f0b">QIconView::setAutoArrange</a>().
-<h3 class="fn">bool <a name="b779dd"></a>QIconView::sorting () const</h3>
+<h3 class="fn">boolÂ <a name="b779dd"></a>QIconView::sortingÂ ()Â const</h3>
 <p>Returns TRUE if new items are inserted sorted, else FALSE.
 <p>See also  <a href="#540892">QIconView::setSorting</a>().
-<h3 class="fn">int <a name="2f08d8"></a>QIconView::spacing () const</h3>
+<h3 class="fn">intÂ <a name="2f08d8"></a>QIconView::spacingÂ ()Â const</h3>
 <p>Returns the spacing between iconview items.
-<h3 class="fn">void <a name="9918ce"></a>QIconView::startDrag () <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="9918ce"></a>QIconView::startDragÂ () <code>[virtualÂ protected]</code></h3>
 <p>Starts a drag.
-<h3 class="fn">void <a name="26f923"></a>QIconView::styleChange ( <a href="qstyle.html">QStyle</a> &amp; old ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="26f923"></a>QIconView::styleChangeÂ (Â <a href="qstyle.html">QStyle</a>Â &amp;Â oldÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#5e2e23">QWidget.</a>
-<h3 class="fn">void <a name="7164b3"></a>QIconView::takeItem ( <a href="qiconviewitem.html">QIconViewItem</a> * item ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="7164b3"></a>QIconView::takeItemÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ ) <code>[virtual]</code></h3>
 <p>Takes the iconview item <em>item</em> out of the iconview and causes an update
 of the screen display.  The item is not deleted.  You should normally not
 need to call this function, as QIconViewItem::~<a href="qiconviewitem.html">QIconViewItem</a>() calls it.
 The normal way to delete an item is <code>delete.</code>
-<h3 class="fn">bool <a name="644375"></a>QIconView::wordWrapIconText () const</h3>
+<h3 class="fn">boolÂ <a name="644375"></a>QIconView::wordWrapIconTextÂ ()Â const</h3>
 <p>Returns TRUE, if an item text which needs too much
 space (to the width) is displayed word wrapped, or FALSE
 if it gets displayed truncated.
 <p>See also  <a href="#dbeaa6">setWordWrapIconText</a>() and <a href="#612f32">setShowToolTips</a>().
-<h3 class="fn">void <a name="48df15"></a>QIconView::emitRenamed ( <a href="qiconviewitem.html">QIconViewItem</a> * item ) <code>[protected]</code></h3>
+<h3 class="fn">voidÂ <a name="48df15"></a>QIconView::emitRenamedÂ (Â <a href="qiconviewitem.html">QIconViewItem</a>Â *Â itemÂ ) <code>[protected]</code></h3>
 <p>For internal use only.
-<h3 class="fn">void <a name="b1714a"></a>QIconView::updateContents () <code>[virtual slot]</code></h3>
+<h3 class="fn">voidÂ <a name="b1714a"></a>QIconView::updateContentsÂ () <code>[virtualÂ slot]</code></h3>
 <p>For internal use only.
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
@@ -708,6 +708,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

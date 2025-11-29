@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QStatusBar Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,24 +32,24 @@ Inherits <a href="qwidget.html">QWidget</a>.
 <p><a href="qstatusbar-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#86b1d1"><b>QStatusBar</b></a> ( QWidget * parent = 0, const char * name = 0 ) </div>
-<li><div class="fn"><a href="#dbacef"><b>~QStatusBar</b></a> () </div>
-<li><div class="fn">void <a href="#99b094"><b>addWidget</b></a> ( QWidget *, int stretch = 0, bool = FALSE ) </div>
-<li><div class="fn">void <a href="#dc867a"><b>removeWidget</b></a> ( QWidget * ) </div>
-<li><div class="fn">void <a href="#8b3acc"><b>setSizeGripEnabled</b></a> ( bool ) </div>
-<li><div class="fn">bool <a href="#938ad4"><b>isSizeGripEnabled</b></a> () const</div>
+<li><div class="fn"><a href="#86b1d1"><b>QStatusBar</b></a>Â (Â QWidgetÂ *Â parentÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0Â )Â </div>
+<li><div class="fn"><a href="#dbacef"><b>~QStatusBar</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#99b094"><b>addWidget</b></a>Â (Â QWidgetÂ *, intÂ stretchÂ =Â 0, boolÂ =Â FALSEÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#dc867a"><b>removeWidget</b></a>Â (Â QWidgetÂ *Â )Â </div>
+<li><div class="fn">voidÂ <a href="#8b3acc"><b>setSizeGripEnabled</b></a>Â (Â boolÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#938ad4"><b>isSizeGripEnabled</b></a>Â ()Â const</div>
 </ul>
 <h2>Public Slots</h2>
 <ul>
-<li><div class="fn">void <a href="#16f76d"><b>message</b></a> ( const QString &amp; ) </div>
-<li><div class="fn">void <a href="#1167e5"><b>message</b></a> ( const QString &amp;, int ) </div>
-<li><div class="fn">void <a href="#1a0b3d"><b>clear</b></a> () </div>
+<li><div class="fn">voidÂ <a href="#16f76d"><b>message</b></a>Â (Â constÂ QStringÂ &amp;Â )Â </div>
+<li><div class="fn">voidÂ <a href="#1167e5"><b>message</b></a>Â (Â constÂ QStringÂ &amp;, intÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#1a0b3d"><b>clear</b></a>Â ()Â </div>
 </ul>
 <h2>Protected Members</h2>
 <ul>
-<li><div class="fn">virtual void <a href="#98074a"><b>paintEvent</b></a> ( QPaintEvent * ) </div>
-<li><div class="fn">void <a href="#5dff34"><b>reformat</b></a> () </div>
-<li><div class="fn">void <a href="#0db6e4"><b>hideOrShow</b></a> () </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#98074a"><b>paintEvent</b></a>Â (Â QPaintEventÂ *Â )Â </div>
+<li><div class="fn">voidÂ <a href="#5dff34"><b>reformat</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#0db6e4"><b>hideOrShow</b></a>Â ()Â </div>
 </ul>
 <h2>Properties</h2>
 <table border=1 cellpadding=3 cellspacing=0>
@@ -95,12 +95,12 @@ You can disable this with <a href="#8b3acc">setSizeGripEnabled</a>(FALSE);
 <p>See also  <a href="qtoolbar.html">QToolBar</a>, <a href="qmainwindow.html">QMainWindow</a>, <a href="qlabel.html">QLabel</a> and <a href="guibooks.html#fowler">GUI Design Handbook: Status Bar.</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="86b1d1"></a>QStatusBar::QStatusBar ( <a href="qwidget.html">QWidget</a> * parent = 0, const char * name = 0 )</h3>
+<h3 class="fn"><a name="86b1d1"></a>QStatusBar::QStatusBarÂ (Â <a href="qwidget.html">QWidget</a>Â *Â parentÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0Â )</h3>
 <p>Constructs a status bar with just a size grip.
 <p>See also  <a href="#8b3acc">setSizeGripEnabled</a>().
-<h3 class="fn"><a name="dbacef"></a>QStatusBar::~QStatusBar ()</h3>
+<h3 class="fn"><a name="dbacef"></a>QStatusBar::~QStatusBarÂ ()</h3>
 <p>Destructs the status bar and frees any allocated resources.
-<h3 class="fn">void <a name="99b094"></a>QStatusBar::addWidget ( <a href="qwidget.html">QWidget</a> * widget, int stretch = 0, bool permanent = FALSE )</h3>
+<h3 class="fn">voidÂ <a name="99b094"></a>QStatusBar::addWidgetÂ (Â <a href="qwidget.html">QWidget</a>Â *Â widget, intÂ stretchÂ =Â 0, boolÂ permanentÂ =Â FALSEÂ )</h3>
 <p>Adds <em>widget</em> to this status bar.
 <p><em>widget</em> is permanently visible if <em>permanent</em> is TRUE, and is
 obscured by temporary messages if <em>permanent</em> is FALSE.  The
@@ -112,43 +112,43 @@ the status bar.  If <em>permanent</em> is FALSE (the default) <em>widget</em> is
 located just to the left of the first permanent widget.
 <p>This function may cause some flicker.
 <p>See also  <a href="#dc867a">removeWidget</a>().
-<h3 class="fn">void <a name="1a0b3d"></a>QStatusBar::clear () <code>[slot]</code></h3>
+<h3 class="fn">voidÂ <a name="1a0b3d"></a>QStatusBar::clearÂ () <code>[slot]</code></h3>
 <p>Removes any temporary message being shown.
 <p>See also  <a href="#1167e5">message</a>().
-<h3 class="fn">bool <a name="8964b0"></a>QStatusBar::event ( <a href="qevent.html">QEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">boolÂ <a name="8964b0"></a>QStatusBar::eventÂ (Â <a href="qevent.html">QEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qobject.html#c67adb">QObject.</a>
-<h3 class="fn">void <a name="0db6e4"></a>QStatusBar::hideOrShow () <code>[protected]</code></h3>
+<h3 class="fn">voidÂ <a name="0db6e4"></a>QStatusBar::hideOrShowÂ () <code>[protected]</code></h3>
 <p>Ensures that the right widgets are visible.  Used by <a href="#1167e5">message</a>()
 and <a href="#1a0b3d">clear</a>().
-<h3 class="fn">bool <a name="938ad4"></a>QStatusBar::isSizeGripEnabled () const</h3>
+<h3 class="fn">boolÂ <a name="938ad4"></a>QStatusBar::isSizeGripEnabledÂ ()Â const</h3>
 <p>Returns whether the <a href="qsizegrip.html">QSizeGrip</a> in the bottom right of the status bar
 is enabled.
 <p>See also  <a href="#8b3acc">setSizeGripEnabled</a>().
-<h3 class="fn">void <a name="16f76d"></a>QStatusBar::message ( const <a href="qstring.html">QString</a> &amp; message ) <code>[slot]</code></h3>
+<h3 class="fn">voidÂ <a name="16f76d"></a>QStatusBar::messageÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â messageÂ ) <code>[slot]</code></h3>
 <p>Hide the normal status indicators and display <em>message,</em> until
 <a href="#1a0b3d">clear</a>() or another <a href="#1167e5">message</a>() is called.
 <p>See also  <a href="#1a0b3d">clear</a>().
-<h3 class="fn">void <a name="1167e5"></a>QStatusBar::message ( const <a href="qstring.html">QString</a> &amp; message, int ms ) <code>[slot]</code></h3>
+<h3 class="fn">voidÂ <a name="1167e5"></a>QStatusBar::messageÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â message, intÂ msÂ ) <code>[slot]</code></h3>
 <p>Hide the normal status indications and display <em>message</em> for <em>ms</em> milli-seconds, or until <a href="#1a0b3d">clear</a>() or another message() is called,
 whichever is first.
-<h3 class="fn">void <a name="98074a"></a>QStatusBar::paintEvent ( <a href="qpaintevent.html">QPaintEvent</a> * ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="98074a"></a>QStatusBar::paintEventÂ (Â <a href="qpaintevent.html">QPaintEvent</a>Â *Â ) <code>[virtualÂ protected]</code></h3>
 <p>Shows the temporary message, if appropriate.
 <p>Reimplemented from <a href="qwidget.html#e3d821">QWidget.</a>
-<h3 class="fn">void <a name="5dff34"></a>QStatusBar::reformat () <code>[protected]</code></h3>
+<h3 class="fn">voidÂ <a name="5dff34"></a>QStatusBar::reformatÂ () <code>[protected]</code></h3>
 <p>Changes the status bar's appearance to account for item
 changes. Special subclasses may need this, but normally
 geometry management will take care of any necessary
 rearrangements.
-<h3 class="fn">void <a name="dc867a"></a>QStatusBar::removeWidget ( <a href="qwidget.html">QWidget</a> * widget )</h3>
+<h3 class="fn">voidÂ <a name="dc867a"></a>QStatusBar::removeWidgetÂ (Â <a href="qwidget.html">QWidget</a>Â *Â widgetÂ )</h3>
 <p>Removes <em>widget</em> from the status bar.
 <p>This function may cause some flicker.
 <p>Note that <em>widget</em> is not deleted.
 <p>See also  <a href="#99b094">addWidget</a>().
-<h3 class="fn">void <a name="ca8893"></a>QStatusBar::resizeEvent ( <a href="qresizeevent.html">QResizeEvent</a> * e ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="ca8893"></a>QStatusBar::resizeEventÂ (Â <a href="qresizeevent.html">QResizeEvent</a>Â *Â eÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#7d375f">QWidget.</a>
-<h3 class="fn">void <a name="8b3acc"></a>QStatusBar::setSizeGripEnabled ( bool enabled )</h3>
+<h3 class="fn">voidÂ <a name="8b3acc"></a>QStatusBar::setSizeGripEnabledÂ (Â boolÂ enabledÂ )</h3>
 <p>Enables or disables the <a href="qsizegrip.html">QSizeGrip</a> in the bottom right of the status bar.
 By default, the size grip is enabled.
 <p>See also  <a href="#938ad4">isSizeGripEnabled</a>().
@@ -163,6 +163,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

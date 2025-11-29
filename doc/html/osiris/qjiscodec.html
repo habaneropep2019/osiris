@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QJisCodec Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,14 +32,14 @@ Inherits <a href="qtextcodec.html">QTextCodec</a>.
 <p><a href="qjiscodec-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">virtual int <b>mibEnum</b> () const (internal)</div>
-<li><div class="fn">virtual const char* <b>name</b> () const (internal)</div>
-<li><div class="fn">virtual QTextDecoder* <b>makeDecoder</b> () const (internal)</div>
-<li><div class="fn">virtual QCString <b>fromUnicode</b> ( const QString &amp; uc, int &amp; len_in_out ) const (internal)</div>
-<li><div class="fn">virtual QString <b>toUnicode</b> ( const char * chars, int len ) const (internal)</div>
-<li><div class="fn">virtual int <b>heuristicContentMatch</b> ( const char * chars, int len ) const (internal)</div>
-<li><div class="fn">virtual int <b>heuristicNameMatch</b> ( const char * hint ) const (internal)</div>
-<li><div class="fn"><b>QJisCodec</b> () (internal)</div>
+<li><div class="fn">virtualÂ intÂ <b>mibEnum</b>Â ()Â constÂ (internal)</div>
+<li><div class="fn">virtualÂ constÂ char*Â <b>name</b>Â ()Â constÂ (internal)</div>
+<li><div class="fn">virtualÂ QTextDecoder*Â <b>makeDecoder</b>Â ()Â constÂ (internal)</div>
+<li><div class="fn">virtualÂ QCStringÂ <b>fromUnicode</b>Â (Â constÂ QStringÂ &amp;Â uc, intÂ &amp;Â len_in_outÂ )Â constÂ (internal)</div>
+<li><div class="fn">virtualÂ QStringÂ <b>toUnicode</b>Â (Â constÂ charÂ *Â chars, intÂ lenÂ )Â constÂ (internal)</div>
+<li><div class="fn">virtualÂ intÂ <b>heuristicContentMatch</b>Â (Â constÂ charÂ *Â chars, intÂ lenÂ )Â constÂ (internal)</div>
+<li><div class="fn">virtualÂ intÂ <b>heuristicNameMatch</b>Â (Â constÂ charÂ *Â hintÂ )Â constÂ (internal)</div>
+<li><div class="fn"><b>QJisCodec</b>Â ()Â (internal)</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 Provides conversion to and from JIS character sets
@@ -76,26 +76,26 @@ OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="2c71d9"></a>QJisCodec::QJisCodec ()</h3>
+<h3 class="fn"><a name="2c71d9"></a>QJisCodec::QJisCodecÂ ()</h3>
 <p>For internal use only.
-<h3 class="fn"><a href="qcstring.html">QCString</a> <a name="970f49"></a>QJisCodec::fromUnicode ( const <a href="qstring.html">QString</a> &amp; uc, int &amp; len_in_out ) const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qcstring.html">QCString</a>Â <a name="970f49"></a>QJisCodec::fromUnicodeÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â uc, intÂ &amp;Â len_in_outÂ )Â const <code>[virtual]</code></h3>
 <p>For internal use only.
 <p>Reimplemented from <a href="qtextcodec.html#ec806f">QTextCodec.</a>
-<h3 class="fn">int <a name="678d8c"></a>QJisCodec::heuristicContentMatch ( const char * chars, int len ) const <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="678d8c"></a>QJisCodec::heuristicContentMatchÂ (Â constÂ charÂ *Â chars, intÂ lenÂ )Â const <code>[virtual]</code></h3>
 <p>For internal use only.
 <p>Reimplemented from <a href="qtextcodec.html#fc6ed5">QTextCodec.</a>
-<h3 class="fn">int <a name="251a11"></a>QJisCodec::heuristicNameMatch ( const char * hint ) const <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="251a11"></a>QJisCodec::heuristicNameMatchÂ (Â constÂ charÂ *Â hintÂ )Â const <code>[virtual]</code></h3>
 <p>For internal use only.
 <p>Reimplemented from <a href="qtextcodec.html#1fb71a">QTextCodec.</a>
-<h3 class="fn"><a href="qtextdecoder.html">QTextDecoder</a>* <a name="55a1cc"></a>QJisCodec::makeDecoder () const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qtextdecoder.html">QTextDecoder</a>*Â <a name="55a1cc"></a>QJisCodec::makeDecoderÂ ()Â const <code>[virtual]</code></h3>
 <p>For internal use only.
 <p>Reimplemented from <a href="qtextcodec.html#01e228">QTextCodec.</a>
-<h3 class="fn">int <a name="3645f0"></a>QJisCodec::mibEnum () const <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="3645f0"></a>QJisCodec::mibEnumÂ ()Â const <code>[virtual]</code></h3>
 <p>For internal use only.
-<h3 class="fn">const char* <a name="a9ae73"></a>QJisCodec::name () const <code>[virtual]</code></h3>
+<h3 class="fn">constÂ char*Â <a name="a9ae73"></a>QJisCodec::nameÂ ()Â const <code>[virtual]</code></h3>
 <p>For internal use only.
 <p>Reimplemented from <a href="qtextcodec.html#150a9d">QTextCodec.</a>
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="1cb0c8"></a>QJisCodec::toUnicode ( const char * chars, int len ) const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="1cb0c8"></a>QJisCodec::toUnicodeÂ (Â constÂ charÂ *Â chars, intÂ lenÂ )Â const <code>[virtual]</code></h3>
 <p>For internal use only.
 <p>Reimplemented from <a href="qtextcodec.html#32c727">QTextCodec.</a>
 <hr><p>
@@ -109,6 +109,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

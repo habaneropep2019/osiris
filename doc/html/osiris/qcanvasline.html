@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QCanvasLine Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,12 +32,12 @@ Inherits <a href="qcanvaspolygonalitem.html">QCanvasPolygonalItem</a>.
 <p><a href="qcanvasline-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#3b172e"><b>QCanvasLine</b></a> ( QCanvas * canvas ) </div>
-<li><div class="fn"><a href="#e9aa94"><b>~QCanvasLine</b></a> () </div>
-<li><div class="fn">void <a href="#1f40f5"><b>setPoints</b></a> ( int x1, int y1, int x2, int y2 ) </div>
-<li><div class="fn">QPoint <a href="#8e2c71"><b>startPoint</b></a> () const</div>
-<li><div class="fn">QPoint <a href="#ae3d74"><b>endPoint</b></a> () const</div>
-<li><div class="fn">virtual int <a href="#391039"><b>rtti</b></a> () const</div>
+<li><div class="fn"><a href="#3b172e"><b>QCanvasLine</b></a>Â (Â QCanvasÂ *Â canvasÂ )Â </div>
+<li><div class="fn"><a href="#e9aa94"><b>~QCanvasLine</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#1f40f5"><b>setPoints</b></a>Â (Â intÂ x1, intÂ y1, intÂ x2, intÂ y2Â )Â </div>
+<li><div class="fn">QPointÂ <a href="#8e2c71"><b>startPoint</b></a>Â ()Â const</div>
+<li><div class="fn">QPointÂ <a href="#ae3d74"><b>endPoint</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ intÂ <a href="#391039"><b>rtti</b></a>Â ()Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 A lines on a canvas.
@@ -45,32 +45,32 @@ A lines on a canvas.
 Currently, only width==1 lines are supported.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="3b172e"></a>QCanvasLine::QCanvasLine ( <a href="qcanvas.html">QCanvas</a> * canvas )</h3>
+<h3 class="fn"><a name="3b172e"></a>QCanvasLine::QCanvasLineÂ (Â <a href="qcanvas.html">QCanvas</a>Â *Â canvasÂ )</h3>
 <p>Constructs a line from (0,0) to (0,0) on <em>canvas.</em>
 <p>See also  <a href="#1f40f5">setPoints</a>().
-<h3 class="fn"><a name="e9aa94"></a>QCanvasLine::~QCanvasLine ()</h3>
+<h3 class="fn"><a name="e9aa94"></a>QCanvasLine::~QCanvasLineÂ ()</h3>
 <p>Destroys the line, removing it from its canvas.
-<h3 class="fn"><a href="qpointarray.html">QPointArray</a> <a name="47abe0"></a>QCanvasLine::areaPoints () const <code>[virtual protected]</code></h3>
+<h3 class="fn"><a href="qpointarray.html">QPointArray</a>Â <a name="47abe0"></a>QCanvasLine::areaPointsÂ ()Â const <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Note that the area defined by the line is somewhat thicker than the
 line that is actually drawn.
 <p>Reimplemented from <a href="qcanvaspolygonalitem.html#e56d42">QCanvasPolygonalItem.</a>
-<h3 class="fn">void <a name="d51045"></a>QCanvasLine::drawShape ( <a href="qpainter.html">QPainter</a> &amp; p ) <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="d51045"></a>QCanvasLine::drawShapeÂ (Â <a href="qpainter.html">QPainter</a>Â &amp;Â pÂ ) <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qcanvaspolygonalitem.html#b0e0fb">QCanvasPolygonalItem.</a>
-<h3 class="fn"><a href="qpoint.html">QPoint</a> <a name="ae3d74"></a>QCanvasLine::endPoint () const</h3>
+<h3 class="fn"><a href="qpoint.html">QPoint</a>Â <a name="ae3d74"></a>QCanvasLine::endPointÂ ()Â const</h3>
 <p>Returns the end of the line.
 <p>See also  <a href="#1f40f5">setPoints</a>() and <a href="#8e2c71">startPoint</a>().
-<h3 class="fn">int <a name="391039"></a>QCanvasLine::rtti () const <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="391039"></a>QCanvasLine::rttiÂ ()Â const <code>[virtual]</code></h3>
 <p>Returns 7.
 <p>See also  <a href="qcanvasitem.html#f75ac7">QCanvasItem::rtti</a>().
 <p>Reimplemented from <a href="qcanvasitem.html#f75ac7">QCanvasItem.</a>
-<h3 class="fn">void <a name="42cf64"></a>QCanvasLine::setPen ( <a href="qpen.html">QPen</a> p ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="42cf64"></a>QCanvasLine::setPenÂ (Â <a href="qpen.html">QPen</a>Â pÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qcanvaspolygonalitem.html#f4167e">QCanvasPolygonalItem.</a>
-<h3 class="fn">void <a name="1f40f5"></a>QCanvasLine::setPoints ( int xa, int ya, int xb, int yb )</h3>
+<h3 class="fn">voidÂ <a name="1f40f5"></a>QCanvasLine::setPointsÂ (Â intÂ xa, intÂ ya, intÂ xb, intÂ ybÂ )</h3>
 <p>Sets the ends of the line to (<em>xa, ya)</em> and (<em>xb, yb).</em>
-<h3 class="fn"><a href="qpoint.html">QPoint</a> <a name="8e2c71"></a>QCanvasLine::startPoint () const</h3>
+<h3 class="fn"><a href="qpoint.html">QPoint</a>Â <a name="8e2c71"></a>QCanvasLine::startPointÂ ()Â const</h3>
 <p>Returns the start of the line.
 <p>See also  <a href="#1f40f5">setPoints</a>() and <a href="#ae3d74">endPoint</a>().
 <hr><p>
@@ -84,6 +84,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

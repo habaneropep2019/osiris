@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QColor Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -30,48 +30,48 @@ The QColor class provides colors based on RGB.
 <p><a href="qcolor-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">enum <b>Spec</b> { Rgb, Hsv }</div>
-<li><div class="fn"><a href="#66b6eb"><b>QColor</b></a> () </div>
-<li><div class="fn"><a href="#a7a9f7"><b>QColor</b></a> ( int r, int g, int b ) </div>
-<li><div class="fn"><a href="#a910bb"><b>QColor</b></a> ( int x, int y, int z, Spec ) </div>
-<li><div class="fn"><a href="#a80cb6"><b>QColor</b></a> ( QRgb rgb, uint pixel=0xffffffff ) </div>
-<li><div class="fn"><a href="#63f335"><b>QColor</b></a> ( const QString &amp; name ) </div>
-<li><div class="fn"><a href="#0fae5a"><b>QColor</b></a> ( const char * name ) </div>
-<li><div class="fn"><a href="#8548a2"><b>QColor</b></a> ( const QColor &amp; ) </div>
-<li><div class="fn">QColor&amp; <a href="#2d6b11"><b>operator=</b></a> ( const QColor &amp; ) </div>
-<li><div class="fn">bool <a href="#5cd295"><b>isValid</b></a> () const</div>
-<li><div class="fn">bool <a href="#e98c4b"><b>isDirty</b></a> () const</div>
-<li><div class="fn">QString <a href="#fbadec"><b>name</b></a> () const</div>
-<li><div class="fn">void <a href="#27b1ed"><b>setNamedColor</b></a> ( const QString &amp; name ) </div>
-<li><div class="fn">void <a href="#a038da"><b>rgb</b></a> ( int * r, int * g, int * b ) const</div>
-<li><div class="fn">QRgb <a href="#700837"><b>rgb</b></a> () const</div>
-<li><div class="fn">void <a href="#f7c2cf"><b>setRgb</b></a> ( int r, int g, int b ) </div>
-<li><div class="fn">void <a href="#6dedb4"><b>setRgb</b></a> ( QRgb rgb ) </div>
-<li><div class="fn">int <a href="#cb22b1"><b>red</b></a> () const</div>
-<li><div class="fn">int <a href="#aeee9e"><b>green</b></a> () const</div>
-<li><div class="fn">int <a href="#704c8a"><b>blue</b></a> () const</div>
-<li><div class="fn">void <a href="#aad8bf"><b>hsv</b></a> ( int * h, int * s, int * v ) const</div>
-<li><div class="fn">void getHsv ( int &amp; h, int &amp; s, int &amp; v ) const <em>(obsolete)</em></div>
-<li><div class="fn">void <a href="#e47175"><b>setHsv</b></a> ( int h, int s, int v ) </div>
-<li><div class="fn">QColor <a href="#b8743e"><b>light</b></a> ( int f = 150 ) const</div>
-<li><div class="fn">QColor <a href="#b8dbb6"><b>dark</b></a> ( int f = 200 ) const</div>
-<li><div class="fn">bool <a href="#8401d5"><b>operator==</b></a> ( const QColor &amp; c ) const</div>
-<li><div class="fn">bool <a href="#f97b3c"><b>operator!=</b></a> ( const QColor &amp; c ) const</div>
-<li><div class="fn">uint <a href="#303a85"><b>alloc</b></a> () </div>
-<li><div class="fn">uint <a href="#4cec2b"><b>pixel</b></a> () const</div>
+<li><div class="fn">enumÂ <b>Spec</b>Â {Â Rgb, HsvÂ }</div>
+<li><div class="fn"><a href="#66b6eb"><b>QColor</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#a7a9f7"><b>QColor</b></a>Â (Â intÂ r, intÂ g, intÂ bÂ )Â </div>
+<li><div class="fn"><a href="#a910bb"><b>QColor</b></a>Â (Â intÂ x, intÂ y, intÂ z, SpecÂ )Â </div>
+<li><div class="fn"><a href="#a80cb6"><b>QColor</b></a>Â (Â QRgbÂ rgb, uintÂ pixel=0xffffffffÂ )Â </div>
+<li><div class="fn"><a href="#63f335"><b>QColor</b></a>Â (Â constÂ QStringÂ &amp;Â nameÂ )Â </div>
+<li><div class="fn"><a href="#0fae5a"><b>QColor</b></a>Â (Â constÂ charÂ *Â nameÂ )Â </div>
+<li><div class="fn"><a href="#8548a2"><b>QColor</b></a>Â (Â constÂ QColorÂ &amp;Â )Â </div>
+<li><div class="fn">QColor&amp;Â <a href="#2d6b11"><b>operator=</b></a>Â (Â constÂ QColorÂ &amp;Â )Â </div>
+<li><div class="fn">boolÂ <a href="#5cd295"><b>isValid</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#e98c4b"><b>isDirty</b></a>Â ()Â const</div>
+<li><div class="fn">QStringÂ <a href="#fbadec"><b>name</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#27b1ed"><b>setNamedColor</b></a>Â (Â constÂ QStringÂ &amp;Â nameÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#a038da"><b>rgb</b></a>Â (Â intÂ *Â r, intÂ *Â g, intÂ *Â bÂ )Â const</div>
+<li><div class="fn">QRgbÂ <a href="#700837"><b>rgb</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#f7c2cf"><b>setRgb</b></a>Â (Â intÂ r, intÂ g, intÂ bÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#6dedb4"><b>setRgb</b></a>Â (Â QRgbÂ rgbÂ )Â </div>
+<li><div class="fn">intÂ <a href="#cb22b1"><b>red</b></a>Â ()Â const</div>
+<li><div class="fn">intÂ <a href="#aeee9e"><b>green</b></a>Â ()Â const</div>
+<li><div class="fn">intÂ <a href="#704c8a"><b>blue</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#aad8bf"><b>hsv</b></a>Â (Â intÂ *Â h, intÂ *Â s, intÂ *Â vÂ )Â const</div>
+<li><div class="fn">voidÂ getHsvÂ (Â intÂ &amp;Â h, intÂ &amp;Â s, intÂ &amp;Â vÂ )Â constÂ <em>(obsolete)</em></div>
+<li><div class="fn">voidÂ <a href="#e47175"><b>setHsv</b></a>Â (Â intÂ h, intÂ s, intÂ vÂ )Â </div>
+<li><div class="fn">QColorÂ <a href="#b8743e"><b>light</b></a>Â (Â intÂ fÂ =Â 150Â )Â const</div>
+<li><div class="fn">QColorÂ <a href="#b8dbb6"><b>dark</b></a>Â (Â intÂ fÂ =Â 200Â )Â const</div>
+<li><div class="fn">boolÂ <a href="#8401d5"><b>operator==</b></a>Â (Â constÂ QColorÂ &amp;Â cÂ )Â const</div>
+<li><div class="fn">boolÂ <a href="#f97b3c"><b>operator!=</b></a>Â (Â constÂ QColorÂ &amp;Â cÂ )Â const</div>
+<li><div class="fn">uintÂ <a href="#303a85"><b>alloc</b></a>Â ()Â </div>
+<li><div class="fn">uintÂ <a href="#4cec2b"><b>pixel</b></a>Â ()Â const</div>
 </ul>
 <h2>Static Public Members</h2>
 <ul>
-<li><div class="fn">bool <a href="#522199"><b>lazyAlloc</b></a> () </div>
-<li><div class="fn">void <a href="#1c5a05"><b>setLazyAlloc</b></a> ( bool ) </div>
-<li><div class="fn">int <a href="#3f2f21"><b>maxColors</b></a> () </div>
-<li><div class="fn">int <a href="#e9525c"><b>numBitPlanes</b></a> () </div>
-<li><div class="fn">int <a href="#f6b5c7"><b>enterAllocContext</b></a> () </div>
-<li><div class="fn">void <a href="#30fe87"><b>leaveAllocContext</b></a> () </div>
-<li><div class="fn">int <a href="#a16a0f"><b>currentAllocContext</b></a> () </div>
-<li><div class="fn">void <a href="#cc0257"><b>destroyAllocContext</b></a> ( int ) </div>
-<li><div class="fn">void <a href="#fe133c"><b>initialize</b></a> () </div>
-<li><div class="fn">void <a href="#f48b2a"><b>cleanup</b></a> () </div>
+<li><div class="fn">boolÂ <a href="#522199"><b>lazyAlloc</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#1c5a05"><b>setLazyAlloc</b></a>Â (Â boolÂ )Â </div>
+<li><div class="fn">intÂ <a href="#3f2f21"><b>maxColors</b></a>Â ()Â </div>
+<li><div class="fn">intÂ <a href="#e9525c"><b>numBitPlanes</b></a>Â ()Â </div>
+<li><div class="fn">intÂ <a href="#f6b5c7"><b>enterAllocContext</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#30fe87"><b>leaveAllocContext</b></a>Â ()Â </div>
+<li><div class="fn">intÂ <a href="#a16a0f"><b>currentAllocContext</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#cc0257"><b>destroyAllocContext</b></a>Â (Â intÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#fe133c"><b>initialize</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#f48b2a"><b>cleanup</b></a>Â ()Â </div>
 </ul>
 <h2>Related Functions</h2>
 (Note that these are not member functions.)
@@ -145,27 +145,27 @@ moving slightly towards the magenta, could be H=350 (equivalent to
  <a href="picture-picture-cpp.html#QColor">picture/picture.cpp</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="66b6eb"></a>QColor::QColor ()</h3>
+<h3 class="fn"><a name="66b6eb"></a>QColor::QColorÂ ()</h3>
 <p>Constructs an invalid color with the RGB value (0,0,0). An invalid color
 is a color that is not properly set up for the underlying window system.
 <p>See also  <a href="#5cd295">isValid</a>().
-<h3 class="fn"><a name="a80cb6"></a>QColor::QColor ( QRgb rgb, uint pixel=0xffffffff )</h3>
+<h3 class="fn"><a name="a80cb6"></a>QColor::QColorÂ (Â QRgbÂ rgb, uintÂ pixel=0xffffffffÂ )</h3>
 <p>Constructs a color with a RGB value and a custom pixel value.
 <p>If the <em>pixel</em> = 0xffffffff, then the color uses the RGB value in a
 standard way.  If <em>pixel</em> is something else, then the pixel value will
 be set directly to <em>pixel</em> (skips the normal allocation procedure).
-<h3 class="fn"><a name="63f335"></a>QColor::QColor ( const <a href="qstring.html">QString</a> &amp; name )</h3>
+<h3 class="fn"><a name="63f335"></a>QColor::QColorÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â nameÂ )</h3>
 <p>Constructs a named color in the same way as <a href="#27b1ed">setNamedColor</a>().
 <p>See also  <a href="#27b1ed">setNamedColor</a>().
-<h3 class="fn"><a name="8548a2"></a>QColor::QColor ( const QColor &amp; c )</h3>
+<h3 class="fn"><a name="8548a2"></a>QColor::QColorÂ (Â constÂ QColorÂ &amp;Â cÂ )</h3>
 <p>Constructs a color that is a copy of <em>c.</em>
-<h3 class="fn"><a name="0fae5a"></a>QColor::QColor ( const char * name )</h3>
+<h3 class="fn"><a name="0fae5a"></a>QColor::QColorÂ (Â constÂ charÂ *Â nameÂ )</h3>
 <p>Constructs a named color in the same way as <a href="#27b1ed">setNamedColor</a>().
 <p>See also  <a href="#27b1ed">setNamedColor</a>().
-<h3 class="fn"><a name="a7a9f7"></a>QColor::QColor ( int r, int g, int b )</h3>
+<h3 class="fn"><a name="a7a9f7"></a>QColor::QColorÂ (Â intÂ r, intÂ g, intÂ bÂ )</h3>
 <p>Constructs a color with the RGB value <em>(r,g,b). r, g</em> and <em>b</em> must be in the range 0..255.
 <p>See also  <a href="#6dedb4">setRgb</a>().
-<h3 class="fn"><a name="a910bb"></a>QColor::QColor ( int x, int y, int z, Spec colorSpec )</h3>
+<h3 class="fn"><a name="a910bb"></a>QColor::QColorÂ (Â intÂ x, intÂ y, intÂ z, SpecÂ colorSpecÂ )</h3>
 <p>Constructs a color with the RGB <em>or</em> HSV value <em>(x,y,z).</em>
 <p>The <em>(x,y,z)</em> triplet defines an RGB value if <em>colorSpec</em> == <code>QColor::Rgb.</code>  <em>x</em> (red), <em>y</em> (green) and <em>z</em> (blue) must be in the
 range 0..255.
@@ -173,7 +173,7 @@ range 0..255.
 achromatic), and <em>y</em> (saturation) and <em>z</em> (value) must be in the range
 0..255.
 <p>See also  <a href="#6dedb4">setRgb</a>() and <a href="#e47175">setHsv</a>().
-<h3 class="fn">uint <a name="303a85"></a>QColor::alloc ()</h3>
+<h3 class="fn">uintÂ <a name="303a85"></a>QColor::allocÂ ()</h3>
 <p>Allocates the RGB color and returns the pixel value.
 <p>Allocating a color means to obtain a pixel value from the RGB
 specification.  The pixel value is an index into the global color
@@ -181,17 +181,17 @@ table, but should be considered an arbitrary platform-dependent value.
 <p>The <a href="#4cec2b">pixel</a>() function calls alloc() if necessary, so in general you
 don't need to call this function.
 <p>See also  <a href="#1c5a05">setLazyAlloc</a>() and <a href="#f6b5c7">enterAllocContext</a>().
-<h3 class="fn">int <a name="704c8a"></a>QColor::blue () const</h3>
+<h3 class="fn">intÂ <a name="704c8a"></a>QColor::blueÂ ()Â const</h3>
 <p>Returns the B (blue) component of the RGB value.
-<h3 class="fn">void <a name="f48b2a"></a>QColor::cleanup () <code>[static]</code></h3>
+<h3 class="fn">voidÂ <a name="f48b2a"></a>QColor::cleanupÂ () <code>[static]</code></h3>
 <p>Internal clean up required for QColor.
 This function is called from the <a href="qapplication.html">QApplication</a> destructor.
 <p>See also  <a href="#fe133c">initialize</a>().
-<h3 class="fn">int <a name="a16a0f"></a>QColor::currentAllocContext () <code>[static]</code></h3>
+<h3 class="fn">intÂ <a name="a16a0f"></a>QColor::currentAllocContextÂ () <code>[static]</code></h3>
 <p>Returns the current color allocation context.
 <p>The default context is 0.
 <p>See also  <a href="#f6b5c7">enterAllocContext</a>() and <a href="#30fe87">leaveAllocContext</a>().
-<h3 class="fn">QColor <a name="b8dbb6"></a>QColor::dark ( int factor = 200 ) const</h3>
+<h3 class="fn">QColorÂ <a name="b8dbb6"></a>QColor::darkÂ (Â intÂ factorÂ =Â 200Â )Â const</h3>
 <p>Returns a darker (or lighter) color.
 <p>Returns a darker color if <em>factor</em> is greater than 100.
 Setting <em>factor</em> to 300 returns a color that has
@@ -203,7 +203,7 @@ one third the brightness.
 <p>See also  <a href="#b8743e">light</a>().
 <p>Examples:
  <a href="desktop-desktop-cpp.html#dark">desktop/desktop.cpp</a>
-<h3 class="fn">void <a name="cc0257"></a>QColor::destroyAllocContext ( int context ) <code>[static]</code></h3>
+<h3 class="fn">voidÂ <a name="cc0257"></a>QColor::destroyAllocContextÂ (Â intÂ contextÂ ) <code>[static]</code></h3>
 <p>Destroys a color allocation context, <em>context.</em>
 <p>This function deallocates all colors that were allocated in the
 specified <em>context.</em>
@@ -214,7 +214,7 @@ that the application has allocated, except those in the
 default context.
 <p>The function does nothing for true color displays.
 <p>See also  <a href="#f6b5c7">enterAllocContext</a>() and <a href="#303a85">alloc</a>().
-<h3 class="fn">int <a name="f6b5c7"></a>QColor::enterAllocContext () <code>[static]</code></h3>
+<h3 class="fn">intÂ <a name="f6b5c7"></a>QColor::enterAllocContextÂ () <code>[static]</code></h3>
 <p>Enters a color allocation context and returns a nonzero unique identifier.
 <p>Color allocation contexts are useful for programs that need to
 allocate many colors and throw them away later, like image viewers.
@@ -258,11 +258,11 @@ enterAllocContex() must have a corresponding leaveAllocContext().
 <p>You may also want to set the application's color specification.
 See <a href="qapplication.html#1ee2d1">QApplication::setColorSpec</a>() for more information.
 <p>See also  <a href="#30fe87">leaveAllocContext</a>(), <a href="#a16a0f">currentAllocContext</a>(), <a href="#cc0257">destroyAllocContext</a>() and <a href="qapplication.html#1ee2d1">QApplication::setColorSpec</a>().
-<h3 class="fn">void <a name="1791f6"></a>QColor::getHsv ( int &amp; h, int &amp; s, int &amp; v ) const</h3>
+<h3 class="fn">voidÂ <a name="1791f6"></a>QColor::getHsvÂ (Â intÂ &amp;Â h, intÂ &amp;Â s, intÂ &amp;Â vÂ )Â const</h3>
 <p><b>This function is obsolete.</b> It is provided to keep old source working, and will probably be removed in a future version of Qt.  We strongly advise against using it in new code.<p>
-<h3 class="fn">int <a name="aeee9e"></a>QColor::green () const</h3>
+<h3 class="fn">intÂ <a name="aeee9e"></a>QColor::greenÂ ()Â const</h3>
 <p>Returns the G (green) component of the RGB value.
-<h3 class="fn">void <a name="aad8bf"></a>QColor::hsv ( int * h, int * s, int * v ) const</h3>
+<h3 class="fn">voidÂ <a name="aad8bf"></a>QColor::hsvÂ (Â intÂ *Â h, intÂ *Â s, intÂ *Â vÂ )Â const</h3>
 <p>Returns the current RGB value as HSV.
 <p>Arguments:
 <ul>
@@ -274,26 +274,26 @@ The hue defines the color. Its range is 0..359 if the color is chromatic
 and -1 if the color is achromatic.  The saturation and value both vary
 between 0 and 255 inclusive.
 <p>See also  <a href="#e47175">setHsv</a>() and <a href="#700837">rgb</a>().
-<h3 class="fn">void <a name="fe133c"></a>QColor::initialize () <code>[static]</code></h3>
+<h3 class="fn">voidÂ <a name="fe133c"></a>QColor::initializeÂ () <code>[static]</code></h3>
 <p>Internal initialization required for QColor.
 This function is called from the <a href="qapplication.html">QApplication</a> constructor.
 <p>See also  <a href="#f48b2a">cleanup</a>().
-<h3 class="fn">bool <a name="e98c4b"></a>QColor::isDirty () const</h3>
+<h3 class="fn">boolÂ <a name="e98c4b"></a>QColor::isDirtyÂ ()Â const</h3>
 <p>Returns TRUE if the color is dirty, i.e. lazy allocation is enabled and
 an RGB/HSV value has been set but not allocated.
 <p>See also  <a href="#1c5a05">setLazyAlloc</a>(), <a href="#303a85">alloc</a>() and <a href="#4cec2b">pixel</a>().
-<h3 class="fn">bool <a name="5cd295"></a>QColor::isValid () const</h3>
+<h3 class="fn">boolÂ <a name="5cd295"></a>QColor::isValidÂ ()Â const</h3>
 <p>Returns FALSE if the color is invalid, i.e. it was constructed using the
 default constructor.
-<h3 class="fn">bool <a name="522199"></a>QColor::lazyAlloc () <code>[static]</code></h3>
+<h3 class="fn">boolÂ <a name="522199"></a>QColor::lazyAllocÂ () <code>[static]</code></h3>
 <p>Returns TRUE if lazy color allocation is enabled (on-demand allocation),
 or FALSE if it is disabled (immediate allocation).
 <p>See also  <a href="#1c5a05">setLazyAlloc</a>().
-<h3 class="fn">void <a name="30fe87"></a>QColor::leaveAllocContext () <code>[static]</code></h3>
+<h3 class="fn">voidÂ <a name="30fe87"></a>QColor::leaveAllocContextÂ () <code>[static]</code></h3>
 <p>Leaves a color allocation context.
 <p>See <a href="#f6b5c7">enterAllocContext</a>() for a detailed explanation.
 <p>See also  <a href="#f6b5c7">enterAllocContext</a>() and <a href="#a16a0f">currentAllocContext</a>().
-<h3 class="fn">QColor <a name="b8743e"></a>QColor::light ( int factor = 150 ) const</h3>
+<h3 class="fn">QColorÂ <a name="b8743e"></a>QColor::lightÂ (Â intÂ factorÂ =Â 150Â )Â const</h3>
 <p>Returns a lighter (or darker) color.
 <p>Returns a lighter color if <em>factor</em> is greater than 100.
 Setting <em>factor</em> to 150 returns a color that is 50% brighter.
@@ -304,41 +304,41 @@ Setting <em>factor</em> to 150 returns a color that is 50% brighter.
 <p>See also  <a href="#b8dbb6">dark</a>().
 <p>Examples:
  <a href="desktop-desktop-cpp.html#light">desktop/desktop.cpp</a>
-<h3 class="fn">int <a name="3f2f21"></a>QColor::maxColors () <code>[static]</code></h3>
+<h3 class="fn">intÂ <a name="3f2f21"></a>QColor::maxColorsÂ () <code>[static]</code></h3>
 <p>Returns the maximum number of colors supported by the underlying window
 system.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="fbadec"></a>QColor::name () const</h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="fbadec"></a>QColor::nameÂ ()Â const</h3>
 <p>Returns the name of the color in the format #RRGGBB.
 <p>See also  <a href="#27b1ed">setNamedColor</a>().
-<h3 class="fn">int <a name="e9525c"></a>QColor::numBitPlanes () <code>[static]</code></h3>
+<h3 class="fn">intÂ <a name="e9525c"></a>QColor::numBitPlanesÂ () <code>[static]</code></h3>
 <p>Returns the number of color bit planes for the underlying window system.
 <p>The returned values is equal to the default pixmap depth;
 <p>See also  <a href="qpixmap.html#e194ad">QPixmap::defaultDepth</a>().
-<h3 class="fn">bool <a name="f97b3c"></a>QColor::operator!= ( const QColor &amp; c ) const</h3>
+<h3 class="fn">boolÂ <a name="f97b3c"></a>QColor::operator!=Â (Â constÂ QColorÂ &amp;Â cÂ )Â const</h3>
 <p>Returns TRUE if this color has different RGB value from <em>c,</em>
 or FALSE if they have equal RGB values.
-<h3 class="fn">QColor &amp; <a name="2d6b11"></a>QColor::operator= ( const QColor &amp; c )</h3>
+<h3 class="fn">QColorÂ &amp;Â <a name="2d6b11"></a>QColor::operator=Â (Â constÂ QColorÂ &amp;Â cÂ )</h3>
 <p>Assigns a copy of the color <code>and</code> returns a reference to this color.
-<h3 class="fn">bool <a name="8401d5"></a>QColor::operator== ( const QColor &amp; c ) const</h3>
+<h3 class="fn">boolÂ <a name="8401d5"></a>QColor::operator==Â (Â constÂ QColorÂ &amp;Â cÂ )Â const</h3>
 <p>Returns TRUE if this color has the same RGB value as <em>c,</em>
 or FALSE if they have different RGB values.
-<h3 class="fn">uint <a name="4cec2b"></a>QColor::pixel () const</h3>
+<h3 class="fn">uintÂ <a name="4cec2b"></a>QColor::pixelÂ ()Â const</h3>
 <p>Returns the pixel value.
 <p>This value is used by the underlying window system to refer to a color.
 It can be thought of as an index into the display hardware's color table,
 but the value is an arbitrary 32-bit value.
 <p>See also  <a href="#1c5a05">setLazyAlloc</a>() and <a href="#303a85">alloc</a>().
-<h3 class="fn">int <a name="cb22b1"></a>QColor::red () const</h3>
+<h3 class="fn">intÂ <a name="cb22b1"></a>QColor::redÂ ()Â const</h3>
 <p>Returns the R (red) component of the RGB value.
-<h3 class="fn">QRgb <a name="700837"></a>QColor::rgb () const</h3>
+<h3 class="fn">QRgbÂ <a name="700837"></a>QColor::rgbÂ ()Â const</h3>
 <p>Returns the RGB value.
 <p>The return type <em>QRgb</em> is equivalent to <code>unsigned int.</code>
 <p>See also  <a href="#6dedb4">setRgb</a>(), <a href="#aad8bf">hsv</a>(), <a href="#2f7325">qRed</a>(), <a href="#c84970">qBlue</a>() and <a href="#1cf303">qGreen</a>().
-<h3 class="fn">void <a name="a038da"></a>QColor::rgb ( int * r, int * g, int * b ) const</h3>
+<h3 class="fn">voidÂ <a name="a038da"></a>QColor::rgbÂ (Â intÂ *Â r, intÂ *Â g, intÂ *Â bÂ )Â const</h3>
 <p>Returns the red, green and blue components of the RGB value in
 <em>*r, *g</em> and <em>*b.</em>  The value range for a component is 0..255.
 <p>See also  <a href="#6dedb4">setRgb</a>() and <a href="#aad8bf">hsv</a>().
-<h3 class="fn">void <a name="e47175"></a>QColor::setHsv ( int h, int s, int v )</h3>
+<h3 class="fn">voidÂ <a name="e47175"></a>QColor::setHsvÂ (Â intÂ h, intÂ s, intÂ vÂ )</h3>
 <p>Sets a HSV color value.
 <p>Arguments:
 <ul>
@@ -351,7 +351,7 @@ but the value is an arbitrary 32-bit value.
  <a href="grapher-grapher-cpp.html#setHsv">grapher/grapher.cpp</a>
  <a href="drawdemo-drawdemo-cpp.html#setHsv">drawdemo/drawdemo.cpp</a>
  <a href="progress-progress-cpp.html#setHsv">progress/progress.cpp</a>
-<h3 class="fn">void <a name="1c5a05"></a>QColor::setLazyAlloc ( bool enable ) <code>[static]</code></h3>
+<h3 class="fn">voidÂ <a name="1c5a05"></a>QColor::setLazyAllocÂ (Â boolÂ enableÂ ) <code>[static]</code></h3>
 <p>Enables or disables lazy color allocation.
 <p>If lazy allocation is enabled, colors are allocated the first time they
 are used (upon calling the <a href="#4cec2b">pixel</a>() function).  If lazy allocation is
@@ -359,7 +359,7 @@ disabled, colors are allocated when they are constructed or when either
 <a href="#6dedb4">setRgb</a>() or <a href="#e47175">setHsv</a>() is called.
 <p>Lazy color allocation is enabled by default.
 <p>See also  <a href="#522199">lazyAlloc</a>(), <a href="#4cec2b">pixel</a>() and <a href="#303a85">alloc</a>().
-<h3 class="fn">void <a name="27b1ed"></a>QColor::setNamedColor ( const <a href="qstring.html">QString</a> &amp; name )</h3>
+<h3 class="fn">voidÂ <a name="27b1ed"></a>QColor::setNamedColorÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â nameÂ )</h3>
 <p>Sets the RGB value to that of the named color.
 <p>The color name may be in one of five formats: <ul>
 <li> #RGB (each of R, G and B is a single hex digit)
@@ -370,11 +370,11 @@ disabled, colors are allocated when they are constructed or when either
 "steelblue" or "gainsboro".  These color names also work
 under Qt for Windows.
 </ul>
-<h3 class="fn">void <a name="6dedb4"></a>QColor::setRgb ( QRgb rgb )</h3>
+<h3 class="fn">voidÂ <a name="6dedb4"></a>QColor::setRgbÂ (Â QRgbÂ rgbÂ )</h3>
 <p>Sets the RGB value to <em>rgb.</em>
 <p>The type <em>QRgb</em> is equivalent to <code>unsigned int.</code>
 <p>See also  <a href="#700837">rgb</a>() and <a href="#e47175">setHsv</a>().
-<h3 class="fn">void <a name="f7c2cf"></a>QColor::setRgb ( int r, int g, int b )</h3>
+<h3 class="fn">voidÂ <a name="f7c2cf"></a>QColor::setRgbÂ (Â intÂ r, intÂ g, intÂ bÂ )</h3>
 <p>Sets the RGB value to <em>(r,g,b). r, g</em> and <em>b</em> must be in the range 0..255.
 <p>See also  <a href="#700837">rgb</a>() and <a href="#e47175">setHsv</a>().
 <hr><h2>Related Functions</h2>
@@ -438,6 +438,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>
