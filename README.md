@@ -40,8 +40,8 @@ A change in the versioning is starting as of 2.4.4. Previously, it was planned t
 
 | **Version** | **Release Date**   | **End-of-Life** | **Status** | **Release Type**   |
 |-------------|--------------------|-----------------|------------|--------------------|
-| 2.4.4       | TBD                | N/A             | Unstable   | Maintenance/Bugfix |
-| 2.4.3       | January 14th, 2025 | TBD             | Stable     | Security           |
+| 2.4.4       | November 29th, 2025  | N/A             | Stable   | Maintenance/Bugfix |
+| 2.4.3       | January 14th, 2025 | November 29th, 2025  | Oldstable     | Security           |
 | 2.5.0       | TBD                | N/A             | Testing    | Development        |
 
 ### Distribution Support
