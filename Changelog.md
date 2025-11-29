@@ -2,6 +2,17 @@
 
 # Osiris releases
 
+#### Osiris 2.4.4
+
+Osiris 2.4.4 is a routine maintenance release bringing some QoL and bug fixes
+
+- Work began on moving documentation to Markdown format - see doc/markdown
+- Backported several fixes from TQt3 to help fix fix some bugs that were affecting grabs
+- Fixed missing header file qfiledefs_p.h in build system
+- Added Trixie instructions and support
+- Cleaned up PNGs with garbage bytes present
+- Converted all HTML files to UTF8
+
 #### Osiris 2.4.3
 
 Osiris 2.4.3 is a maintenance release, with some minor security fixes.

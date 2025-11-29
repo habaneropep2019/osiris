@@ -29,7 +29,30 @@ Osiris is provided **WITHOUT** any warranty or guarantee of any kind, either exp
 
 ## A note about security
 
-Osiris is based on old software, released somewhere circa 2000. There may still be unknown security issues or bugs that have not been discovered yet. If you do find one, please submit a bug report and/or a fix merge request.
+Osiris is based on old software, originally released somewhere circa 2000. There may still be unknown security issues or bugs that have not been discovered yet. If you do find one, please submit a bug report and/or a fix merge request.
+
+## Lifecycle and versioning
+
+There isn't a set release schedule. Releases happen when ready.
+
+A change in the versioning is starting as of 2.4.4. Previously, it was planned to stay in the 2.x series indefinitely. However, Osiris has had a number of changes towards allowing it to co-exist with modern Qt, and once the rest of those changes are finalized, there is no reason to stick with one major release.  As a result, Osiris will be following major.minor.point releases from 2.4.4 onwards.
+
+
+| **Version** | **Release Date**   | **End-of-Life** | **Status** | **Release Type**   |
+|-------------|--------------------|-----------------|------------|--------------------|
+| 2.4.4       | TBD                | N/A             | Unstable   | Maintenance/Bugfix |
+| 2.4.3       | January 14th, 2025 | TBD             | Stable     | Security           |
+| 2.5.0       | TBD                | N/A             | Testing    | Development        |
+
+### Distribution Support
+
+These are distributions that are tested with each release. Note that packages are not provided for all supported distributions and architectures due to developer time constraints.
+
+| Distribution | Status    | Latest Stable Release | Notes | Packages |
+|--------------|-----------|-----------------------|-------|----------|
+| Debian 12    | Supported | 2.4.4                 |   Source only, but bug reports are still accepted    |  No |
+| Debian 13    | Supported | 2.4.4                 |       | Yes  |
+| Ubuntu 24.04 | Supported | 2.4.4                 |       |  Yes |
 
 ## About licensing
 
@@ -68,12 +91,12 @@ Osiris requires a Linux system running a X Windows System. G++ and Clang++ are s
 
 Osiris is extremely lean on a modern computer, takes very little time to compile, and is not resource intensive while running.
 
-At a minimum, to run Osiris, you'll need a Pentium 133mhz or better CPU, 64mb of RAM, 10-100MB of disk space, an X11 Window System of at least revision 7 (XFree86 4.0+ should also likely work but is untested). To build Osiris, you'll probably want at least a Pentium II 233Mhz CPU and more than 64MB of RAM, although this isn't necessarily required. FreeType2, Zlib, libjpeg, XFT, XKB and probably some more libraries are required.
+At a minimum, to run Osiris, you'll need a Pentium 133mhz or better CPU, 64mb of RAM, 10-100MB of disk space, an X11R7 compliant X Server, and XLib. To build Osiris, you'll probably want at least a Pentium II 233Mhz CPU and more than 64MB of RAM, although this isn't necessarily required. FreeType2, Zlib, libjpeg, XFT, XKB and probably some more libraries are required.
 
 | Library | Minimum Supported Version | Recommended Version |
 | --- | --- | --- |
-| libpng | 1.6.0 | 1.6.40 |
-| zlib | 1.2.13 | 1.2.13 |
+| libpng | 1.6.39 | 1.6.40 |
+| zlib | 1.2.13 | 1.3 |
 | libglu | 9.0 | 9.0.2 |
 
 #### A note about older libpng and zlib versions
@@ -82,37 +105,35 @@ Osiris has been ported to modern libpng. There was an API change some time ago, 
 
 FWIW, libpng says it needs zlib 1.0.4 or later. However, even zlib 1.1.3 will cause errors. You **should** be using zlib 1.2.13 or later.
 
-#### A note about formerly included 3rd party libraries
-
-Qt2 originally kept copies of 3rd party libraries libpng and zlib. Osiris no longer does, as this can result in terribly out of date versions of these libraries, or other issues arising from mismatches. You should be able to use the libraries provided by your distribution.
-
 #### What about Unix ports?
 
 A lot of ports to other platforms are inherited from the original Qt code. These should still work on 2000-era versions. They have not been tested. We plan to work on ensuring these ports still work on at least a limited subset of non-Linux platforms in the modern world, however, this work has not been completed yet. You are welcome to try building Osiris on other platforms and submit patches here to fix the ports as needed (or add new platform ports).
 
 #### What about Wayland support?
 
-Wayland support is planned for the 2.5.x series. There is no ETA however. Applications ported to Osiris should work properly under XWayland however, ~~with the exception being window managers~~ window managers/DEs will run in XWayland with some caveats. Patches/PRs are welcome.
+Wayland support is planned for the 3.x series. There is no ETA currently. Applications ported to Osiris should work properly under XWayland however, and window managers/DEs will run in XWayland with some caveats. Patches/PRs are welcome.
 
-You can run Osiris using XWayland without problems.
+You can run Osiris-based applications using XWayland without problems, and Osiris-based applications will generally work in a Wayback environment as well.
 
 #### What about Python3 bindings?
 
-~~None available *yet*, sorry! It's on the to-do list somewhere.~~
+**Development on Pysiris is currently stalled** as of November 2025 but will be picked up in a future release.
 
 As of April 2024, work on Pysiris has begun, although no release date is available yet. So yes, Python bindings are on the way.
 
 #### A note on clipboard functionality under X11
 
-Getting the clipboard implemented correctly under X11 is ridiculously complicated. Osiris has some partial fixes to improve X11 clipboard functionality over Qt2.3.2, but it's still not perfect. For now, clipboard functionality is still on the to-do list, although it's not top priority unless we get a lot of users needing it for their applications. The reason being that the clipboard will be re-implemented when Wayland support happens, so it's not currently worth spending a lot of time on.
+The clipboard is somewhat functional. Unfortunately, getting the clipboard right under X11 is very difficult. Some progress has been made on fixing corner cases, but unfortunately there are still situations where the clipboard does not fully work. This will get better as we move towards Wayland support. It's unlikely that much time will be spent fixing the clipboard under X11, but patches are welcome.
 
 ## Packages for Supported Distributions
 
-**New for 2.4.3**: Packages are now available for some distributions!
+Packages are now available for some distributions.
 
 #### Ubuntu Instructions
 
-Supported architectures: `amd64`, `arm64`
+Supported architectures: `amd64`
+
+*Note:* While Osiris supports more architectures, due to developer time constraints, only `amd64` packages are provided as of Osiris 2.4.4. If you have use for a package for a different architecture, please file a bug report.
 
 *Note on supported architectures:* The `arm64` port isn't as well tested as the others, due to not having a good ARM board on hand right now. Please file a bug report if you have any issues.
 
@@ -135,13 +156,13 @@ sudo apt install osiris originator osiris-dev-tools osiris-dev osiris-doc origin
 
 #### Debian Instructions
 
-Supported architectures: `amd64`, `i386`, `arm64`
+Supported architectures: **For Debian bookworm:** `amd64`, `i386`, `arm64` **For Debian trixie:** `amd64`
 
 *Notes on supported architectures:* 
 - The `i386` packages were built for Pentium II or higher machines. If you need support for Pentium machines, you should compile Osiris per the build instructions below.
 - The `arm64` port isn't as well tested as the others, due to not having a good ARM board on hand right now. Please file a bug report if you have any issues.
 
-Supported releases: **bookworm**
+Supported releases: 2.4.3: **bookworm** 2.4.4+: **trixie**
 
 To add the official Libranext Pub-Package repository for Debian, run the following commands as root (substituting your distribution codename):
 
@@ -162,11 +183,11 @@ apt install osiris originator osiris-dev-tools osiris-dev osiris-doc originator-
 
 #### Building a release version on Linux platforms
 
-**New for 2.4.2:** The build system has changed to Meson, so it's even easier to compile and install Osiris.
+We use the Meson build system.
 
 **Notes for Ubuntu systems:** You will need to install the following packages to build Osiris: `libx11-dev gawk bison flex build-essential libjpeg62-dev libxext-dev libxft-dev libglu1-mesa-dev libxmu-dev meson libjpeg-dev`
 
-**Notes for Debian 13:** Given Trixie is in RC at the time of writing this, it's possible these instructions may change (though it's not terribly likely). Please report a bug if you have any issues.
+**Notes for Debian 13:** Trixie has been released now, and 2.4.4 officially supports it.
 
 Meson is now new enough to not require backports. Run the following command to install the required dependencies:
 ```
