@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QIntValidator Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,15 +32,15 @@ Inherits <a href="qvalidator.html">QValidator</a>.
 <p><a href="qintvalidator-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#f5be30"><b>QIntValidator</b></a> ( QWidget * parent, const char * name = 0 ) </div>
-<li><div class="fn"><a href="#07f301"><b>QIntValidator</b></a> ( int bottom, int top, QWidget * parent, const char * name = 0 ) </div>
-<li><div class="fn"><a href="#9806f2"><b>~QIntValidator</b></a> () </div>
-<li><div class="fn">QValidator::State <a href="#91b7e2"><b>validate</b></a> ( QString &amp;, int &amp; ) const</div>
-<li><div class="fn">void <a href="#a3faa0"><b>setBottom</b></a> ( int ) </div>
-<li><div class="fn">void <a href="#18b4cc"><b>setTop</b></a> ( int ) </div>
-<li><div class="fn">virtual void <a href="#e333ca"><b>setRange</b></a> ( int bottom, int top ) </div>
-<li><div class="fn">int <a href="#ba2690"><b>bottom</b></a> () const</div>
-<li><div class="fn">int <a href="#33d78e"><b>top</b></a> () const</div>
+<li><div class="fn"><a href="#f5be30"><b>QIntValidator</b></a>Â (Â QWidgetÂ *Â parent, constÂ charÂ *Â nameÂ =Â 0Â )Â </div>
+<li><div class="fn"><a href="#07f301"><b>QIntValidator</b></a>Â (Â intÂ bottom, intÂ top, QWidgetÂ *Â parent, constÂ charÂ *Â nameÂ =Â 0Â )Â </div>
+<li><div class="fn"><a href="#9806f2"><b>~QIntValidator</b></a>Â ()Â </div>
+<li><div class="fn">QValidator::StateÂ <a href="#91b7e2"><b>validate</b></a>Â (Â QStringÂ &amp;, intÂ &amp;Â )Â const</div>
+<li><div class="fn">voidÂ <a href="#a3faa0"><b>setBottom</b></a>Â (Â intÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#18b4cc"><b>setTop</b></a>Â (Â intÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#e333ca"><b>setRange</b></a>Â (Â intÂ bottom, intÂ topÂ )Â </div>
+<li><div class="fn">intÂ <a href="#ba2690"><b>bottom</b></a>Â ()Â const</div>
+<li><div class="fn">intÂ <a href="#33d78e"><b>top</b></a>Â ()Â const</div>
 </ul>
 <h2>Properties</h2>
 <table border=1 cellpadding=3 cellspacing=0>
@@ -56,29 +56,29 @@ provide a <a href="qvalidator.html#3fa523">fixup</a>() function.
 <p>See also  <a href="qdoublevalidator.html">QDoubleValidator</a>.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="f5be30"></a>QIntValidator::QIntValidator ( <a href="qwidget.html">QWidget</a> * parent, const char * name = 0 )</h3>
+<h3 class="fn"><a name="f5be30"></a>QIntValidator::QIntValidatorÂ (Â <a href="qwidget.html">QWidget</a>Â *Â parent, constÂ charÂ *Â nameÂ =Â 0Â )</h3>
 <p>Constructs a validator object which accepts all integers.
-<h3 class="fn"><a name="07f301"></a>QIntValidator::QIntValidator ( int bottom, int top, <a href="qwidget.html">QWidget</a> * parent, const char * name = 0 )</h3>
+<h3 class="fn"><a name="07f301"></a>QIntValidator::QIntValidatorÂ (Â intÂ bottom, intÂ top, <a href="qwidget.html">QWidget</a>Â *Â parent, constÂ charÂ *Â nameÂ =Â 0Â )</h3>
 <p>Constructs a validator object which accepts all integers from <em>bottom</em> up to and including <em>top.</em>
-<h3 class="fn"><a name="9806f2"></a>QIntValidator::~QIntValidator ()</h3>
+<h3 class="fn"><a name="9806f2"></a>QIntValidator::~QIntValidatorÂ ()</h3>
 <p>Destroys the validator, freeing any storage and other resources
 used.
-<h3 class="fn">int <a name="ba2690"></a>QIntValidator::bottom () const</h3>
+<h3 class="fn">intÂ <a name="ba2690"></a>QIntValidator::bottomÂ ()Â const</h3>
 <p>Returns the lowest valid number according to this validator.
 <p>See also  <a href="#33d78e">top</a>() and <a href="#e333ca">setRange</a>().
-<h3 class="fn">void <a name="a3faa0"></a>QIntValidator::setBottom ( int bottom )</h3>
+<h3 class="fn">voidÂ <a name="a3faa0"></a>QIntValidator::setBottomÂ (Â intÂ bottomÂ )</h3>
 <p>Sets the validator to accept no numbers smaller than <em>bottom.</em>
 <p>See also  <a href="#e333ca">setRange</a>().
-<h3 class="fn">void <a name="e333ca"></a>QIntValidator::setRange ( int bottom, int top ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="e333ca"></a>QIntValidator::setRangeÂ (Â intÂ bottom, intÂ topÂ ) <code>[virtual]</code></h3>
 <p>Sets the validator to accept only number from <em>bottom</em> up to an
 including <em>top.</em>
-<h3 class="fn">void <a name="18b4cc"></a>QIntValidator::setTop ( int top )</h3>
+<h3 class="fn">voidÂ <a name="18b4cc"></a>QIntValidator::setTopÂ (Â intÂ topÂ )</h3>
 <p>Sets the validator to accept no numbers bigger than <em>top.</em>
 <p>See also  <a href="#e333ca">setRange</a>().
-<h3 class="fn">int <a name="33d78e"></a>QIntValidator::top () const</h3>
+<h3 class="fn">intÂ <a name="33d78e"></a>QIntValidator::topÂ ()Â const</h3>
 <p>Returns the highest valid number according to this validator.
 <p>See also  <a href="#ba2690">bottom</a>() and <a href="#e333ca">setRange</a>().
-<h3 class="fn">QValidator::State <a name="91b7e2"></a>QIntValidator::validate( QString & input, int & ) const</h3>
+<h3 class="fn">QValidator::StateÂ <a name="91b7e2"></a>QIntValidator::validate(Â QStringÂ &Â input, intÂ &Â )Â const</h3>
 <p>Returns <em>Acceptable</em> if <em>input</em> contains a number in the legal
 range, <em>Intermediate</em> if it contains another integer or is empty,
 and <em>Invalid</em> if <em>input</em> is not an integer.
@@ -93,6 +93,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

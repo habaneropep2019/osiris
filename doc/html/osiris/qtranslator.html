@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QTranslator Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,25 +32,25 @@ Inherits <a href="qobject.html">QObject</a>.
 <p><a href="qtranslator-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#36b48a"><b>QTranslator</b></a> ( QObject * parent, const char * name = 0 ) </div>
-<li><div class="fn"><a href="#a5a2cc"><b>~QTranslator</b></a> () </div>
-<li><div class="fn">QString <a href="#b21ef6"><b>find</b></a> ( const char *, const char *, const char * ) const</div>
-<li><div class="fn">virtual QString find ( const char *, const char * ) const <em>(obsolete)</em></div>
-<li><div class="fn">QTranslatorMessage <a href="#df8fd0"><b>findMessage</b></a> ( const char *, const char *, const char * ) const</div>
-<li><div class="fn">bool <a href="#4053d1"><b>load</b></a> ( const QString &amp; filename, const QString &amp; directory = QString::null, const QString &amp; search_delimiters = QString::null, const QString &amp; suffix = QString::null ) </div>
-<li><div class="fn">enum <a href="#SaveMode"><b>SaveMode</b></a> { Everything, Stripped }</div>
-<li><div class="fn">bool <a href="#8e3915"><b>save</b></a> ( const QString &amp; filename, SaveMode mode = Everything ) </div>
-<li><div class="fn">void <a href="#66f0cb"><b>clear</b></a> () </div>
-<li><div class="fn">void <a href="#6bd9cb"><b>insert</b></a> ( const QTranslatorMessage &amp; ) </div>
-<li><div class="fn">void insert ( const char *, const char *, const QString &amp; ) <em>(obsolete)</em></div>
-<li><div class="fn">void <a href="#f3ff87"><b>remove</b></a> ( const QTranslatorMessage &amp; ) </div>
-<li><div class="fn">void remove ( const char *, const char * ) <em>(obsolete)</em></div>
-<li><div class="fn">bool <a href="#bc65d3"><b>contains</b></a> ( const char *, const char *, const char * ) const</div>
-<li><div class="fn">bool contains ( const char *, const char * ) const <em>(obsolete)</em></div>
-<li><div class="fn">void <a href="#2eb4c1"><b>squeeze</b></a> ( SaveMode ) </div>
-<li><div class="fn">void <a href="#16832e"><b>squeeze</b></a> () </div>
-<li><div class="fn">void <a href="#544f17"><b>unsqueeze</b></a> () </div>
-<li><div class="fn">QValueList&lt;QTranslatorMessage&gt; <a href="#478747"><b>messages</b></a> () const</div>
+<li><div class="fn"><a href="#36b48a"><b>QTranslator</b></a>Â (Â QObjectÂ *Â parent, constÂ charÂ *Â nameÂ =Â 0Â )Â </div>
+<li><div class="fn"><a href="#a5a2cc"><b>~QTranslator</b></a>Â ()Â </div>
+<li><div class="fn">QStringÂ <a href="#b21ef6"><b>find</b></a>Â (Â constÂ charÂ *, constÂ charÂ *, constÂ charÂ *Â )Â const</div>
+<li><div class="fn">virtualÂ QStringÂ findÂ (Â constÂ charÂ *, constÂ charÂ *Â )Â constÂ <em>(obsolete)</em></div>
+<li><div class="fn">QTranslatorMessageÂ <a href="#df8fd0"><b>findMessage</b></a>Â (Â constÂ charÂ *, constÂ charÂ *, constÂ charÂ *Â )Â const</div>
+<li><div class="fn">boolÂ <a href="#4053d1"><b>load</b></a>Â (Â constÂ QStringÂ &amp;Â filename, constÂ QStringÂ &amp;Â directoryÂ =Â QString::null, constÂ QStringÂ &amp;Â search_delimitersÂ =Â QString::null, constÂ QStringÂ &amp;Â suffixÂ =Â QString::nullÂ )Â </div>
+<li><div class="fn">enumÂ <a href="#SaveMode"><b>SaveMode</b></a>Â {Â Everything, StrippedÂ }</div>
+<li><div class="fn">boolÂ <a href="#8e3915"><b>save</b></a>Â (Â constÂ QStringÂ &amp;Â filename, SaveModeÂ modeÂ =Â EverythingÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#66f0cb"><b>clear</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#6bd9cb"><b>insert</b></a>Â (Â constÂ QTranslatorMessageÂ &amp;Â )Â </div>
+<li><div class="fn">voidÂ insertÂ (Â constÂ charÂ *, constÂ charÂ *, constÂ QStringÂ &amp;Â )Â <em>(obsolete)</em></div>
+<li><div class="fn">voidÂ <a href="#f3ff87"><b>remove</b></a>Â (Â constÂ QTranslatorMessageÂ &amp;Â )Â </div>
+<li><div class="fn">voidÂ removeÂ (Â constÂ charÂ *, constÂ charÂ *Â )Â <em>(obsolete)</em></div>
+<li><div class="fn">boolÂ <a href="#bc65d3"><b>contains</b></a>Â (Â constÂ charÂ *, constÂ charÂ *, constÂ charÂ *Â )Â const</div>
+<li><div class="fn">boolÂ containsÂ (Â constÂ charÂ *, constÂ charÂ *Â )Â constÂ <em>(obsolete)</em></div>
+<li><div class="fn">voidÂ <a href="#2eb4c1"><b>squeeze</b></a>Â (Â SaveModeÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#16832e"><b>squeeze</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#544f17"><b>unsqueeze</b></a>Â ()Â </div>
+<li><div class="fn">QValueList&lt;QTranslatorMessage&gt;Â <a href="#478747"><b>messages</b></a>Â ()Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QTranslator class provides internationalization support for text output.
@@ -139,40 +139,40 @@ There are two modes:
 not work.  The functions that do work with stripped files are
 explicitly documented as such.
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="36b48a"></a>QTranslator::QTranslator ( <a href="qobject.html">QObject</a> * parent, const char * name = 0 )</h3>
+<h3 class="fn"><a name="36b48a"></a>QTranslator::QTranslatorÂ (Â <a href="qobject.html">QObject</a>Â *Â parent, constÂ charÂ *Â nameÂ =Â 0Â )</h3>
 <p>Constructs an empty message file, not connected to any file.
-<h3 class="fn"><a name="a5a2cc"></a>QTranslator::~QTranslator ()</h3>
+<h3 class="fn"><a name="a5a2cc"></a>QTranslator::~QTranslatorÂ ()</h3>
 <p>Destructs the object and frees any allocated resources.
-<h3 class="fn">void <a name="66f0cb"></a>QTranslator::clear ()</h3>
+<h3 class="fn">voidÂ <a name="66f0cb"></a>QTranslator::clearÂ ()</h3>
 <p>Empties this translator of all contents.
 <p>This function works with stripped translator files.
-<h3 class="fn">bool <a name="bc65d3"></a>QTranslator::contains ( const char * context, const char * sourceText, const char * comment ) const</h3>
+<h3 class="fn">boolÂ <a name="bc65d3"></a>QTranslator::containsÂ (Â constÂ charÂ *Â context, constÂ charÂ *Â sourceText, constÂ charÂ *Â commentÂ )Â const</h3>
 <p>Returns TRUE if this message file contains a message with the key
 ( <em>context, sourceText, comment</em> ), and FALSE if it does not.
 <p>This function works with stripped translator files.
 <p>(This is is a one-liner that calls <a href="#b21ef6">find</a>().).
-<h3 class="fn">bool <a name="57de28"></a>QTranslator::contains ( const char * context, const char * sourceText ) const</h3>
+<h3 class="fn">boolÂ <a name="57de28"></a>QTranslator::containsÂ (Â constÂ charÂ *Â context, constÂ charÂ *Â sourceTextÂ )Â const</h3>
 <p><b>This function is obsolete.</b> It is provided to keep old source working, and will probably be removed in a future version of Qt.  We strongly advise against using it in new code.<p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
 <p>This version of the function assumes that the comment is "".
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="b21ef6"></a>QTranslator::find ( const char * context, const char * sourceText, const char * comment ) const</h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="b21ef6"></a>QTranslator::findÂ (Â constÂ charÂ *Â context, constÂ charÂ *Â sourceText, constÂ charÂ *Â commentÂ )Â const</h3>
 <p>Returns the translation for the key ( <em>context, sourceText, comment</em> ), or QString::null if there is none in this translator.
 <p>This function works with stripped translator files.
 <p>See also  findMessage.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="2f8c7f"></a>QTranslator::find ( const char * context, const char * sourceText ) const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="2f8c7f"></a>QTranslator::findÂ (Â constÂ charÂ *Â context, constÂ charÂ *Â sourceTextÂ )Â const <code>[virtual]</code></h3>
 <p><b>This function is obsolete.</b> It is provided to keep old source working, and will probably be removed in a future version of Qt.  We strongly advise against using it in new code.<p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
 <p>Returns the translation for the key ( <em>context, sourceText,</em> "" ), or
 QString::null if there is none in this translator.
-<h3 class="fn"><a href="qtranslatormessage.html">QTranslatorMessage</a> <a name="df8fd0"></a>QTranslator::findMessage ( const char * context, const char * sourceText, const char * comment ) const</h3>
+<h3 class="fn"><a href="qtranslatormessage.html">QTranslatorMessage</a>Â <a name="df8fd0"></a>QTranslator::findMessageÂ (Â constÂ charÂ *Â context, constÂ charÂ *Â sourceText, constÂ charÂ *Â commentÂ )Â const</h3>
 <p>Returns the <a href="qtranslatormessage.html">QTranslatorMessage</a> for the key
 ( <em>context, sourceText, comment</em> ).
-<h3 class="fn">void <a name="6bd9cb"></a>QTranslator::insert ( const <a href="qtranslatormessage.html">QTranslatorMessage</a> &amp; message )</h3>
+<h3 class="fn">voidÂ <a name="6bd9cb"></a>QTranslator::insertÂ (Â constÂ <a href="qtranslatormessage.html">QTranslatorMessage</a>Â &amp;Â messageÂ )</h3>
 <p>Inserts <em>message</em> into this message file.
 <p>This function does <em>not</em> work with stripped translator files.  It
 may seem to, but that is not dependable.
 <p>See also  <a href="#f3ff87">remove</a>().
-<h3 class="fn">void <a name="901619"></a>QTranslator::insert ( const char * context, const char * sourceText, const <a href="qstring.html">QString</a> &amp; translation )</h3>
+<h3 class="fn">voidÂ <a name="901619"></a>QTranslator::insertÂ (Â constÂ charÂ *Â context, constÂ charÂ *Â sourceText, constÂ <a href="qstring.html">QString</a>Â &amp;Â translationÂ )</h3>
 <p><b>This function is obsolete.</b> It is provided to keep old source working, and will probably be removed in a future version of Qt.  We strongly advise against using it in new code.<p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
-<h3 class="fn">bool <a name="4053d1"></a>QTranslator::load ( const <a href="qstring.html">QString</a> &amp; filename, const <a href="qstring.html">QString</a> &amp; directory = QString::null, const <a href="qstring.html">QString</a> &amp; search_delimiters = QString::null, const <a href="qstring.html">QString</a> &amp; suffix = QString::null )</h3>
+<h3 class="fn">boolÂ <a name="4053d1"></a>QTranslator::loadÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â filename, constÂ <a href="qstring.html">QString</a>Â &amp;Â directoryÂ =Â QString::null, constÂ <a href="qstring.html">QString</a>Â &amp;Â search_delimitersÂ =Â QString::null, constÂ <a href="qstring.html">QString</a>Â &amp;Â suffixÂ =Â QString::nullÂ )</h3>
 <p>Loads <em>filename,</em> which may be an absolute file name or relative
 to <em>directory.</em>  If the full filename does not exist, other filenames
 are tried in the following order:
@@ -195,36 +195,36 @@ which would then try to open these files:
 <li>/opt/foolib/foo.qm
 </ol>
 <p>See also  <a href="#8e3915">save</a>().
-<h3 class="fn"><a href="qvaluelist.html">QValueList</a>&lt;<a href="qtranslatormessage.html">QTranslatorMessage</a>&gt; <a name="478747"></a>QTranslator::messages () const</h3>
+<h3 class="fn"><a href="qvaluelist.html">QValueList</a>&lt;<a href="qtranslatormessage.html">QTranslatorMessage</a>&gt;Â <a name="478747"></a>QTranslator::messagesÂ ()Â const</h3>
 <p>Returns a list of the messages in the translator.  This function is
 somewhat slow; since it's seldom called it's optimized for simplicity and
 small size, not speed.
-<h3 class="fn">void <a name="f3ff87"></a>QTranslator::remove ( const <a href="qtranslatormessage.html">QTranslatorMessage</a> &amp; message )</h3>
+<h3 class="fn">voidÂ <a name="f3ff87"></a>QTranslator::removeÂ (Â constÂ <a href="qtranslatormessage.html">QTranslatorMessage</a>Â &amp;Â messageÂ )</h3>
 <p>Removes <em>message</em> from this translator.
 <p>This function works with stripped translator files.
 <p>See also  <a href="#6bd9cb">insert</a>().
-<h3 class="fn">void <a name="ab9994"></a>QTranslator::remove ( const char * context, const char * sourceText )</h3>
+<h3 class="fn">voidÂ <a name="ab9994"></a>QTranslator::removeÂ (Â constÂ charÂ *Â context, constÂ charÂ *Â sourceTextÂ )</h3>
 <p><b>This function is obsolete.</b> It is provided to keep old source working, and will probably be removed in a future version of Qt.  We strongly advise against using it in new code.<p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
 <p>Removes the translation associated to the key ( <em>context, sourceText,</em>
 "" ) from this translator.
-<h3 class="fn">bool <a name="8e3915"></a>QTranslator::save ( const <a href="qstring.html">QString</a> &amp; filename, <a href="qtranslator.html#SaveMode">SaveMode</a> mode = Everything )</h3>
+<h3 class="fn">boolÂ <a name="8e3915"></a>QTranslator::saveÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â filename, <a href="qtranslator.html#SaveMode">SaveMode</a>Â modeÂ =Â EverythingÂ )</h3>
 <p>Saves this message file to <em>filename,</em> overwriting the previous
 contents of <em>filename.</em>  If <em>mode</em> is <code>Everything</code> (this is the
 default), all the information is preserved.  If <em>mode</em> is <code>Stripped,</code>
 all information that is not necessary for <a href="#df8fd0">findMessage</a>() is stripped
 away.
 <p>See also  <a href="#4053d1">load</a>().
-<h3 class="fn">void <a name="2eb4c1"></a>QTranslator::squeeze ( <a href="qtranslator.html#SaveMode">SaveMode</a> mode )</h3>
+<h3 class="fn">voidÂ <a name="2eb4c1"></a>QTranslator::squeezeÂ (Â <a href="qtranslator.html#SaveMode">SaveMode</a>Â modeÂ )</h3>
 <p>Converts this message file to the compact format used to store
 message files on disk.
 <p>You should never need to call this directly; <a href="#8e3915">save</a>() and other functions call
 it as necessary.
 <p>See also  <a href="#8e3915">save</a>() and <a href="#544f17">unsqueeze</a>().
-<h3 class="fn">void <a name="16832e"></a>QTranslator::squeeze ()</h3>
+<h3 class="fn">voidÂ <a name="16832e"></a>QTranslator::squeezeÂ ()</h3>
 <p>This is an overloaded member function, provided for convenience.  It differs from the above function only in what argument(s) it accepts.
 <p>This function calls <a href="#2eb4c1">squeeze</a>( Everything ).  It is provided for compatibility;
 in Qt 3.0 it will be replaced by a default argument.
-<h3 class="fn">void <a name="544f17"></a>QTranslator::unsqueeze ()</h3>
+<h3 class="fn">voidÂ <a name="544f17"></a>QTranslator::unsqueezeÂ ()</h3>
 <p>Converts this message file into an easily modifiable data structure, less
 compact than the format used in the files.
 <p>You should never need to call this function; it is called by <a href="#6bd9cb">insert</a>() and
@@ -241,6 +241,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

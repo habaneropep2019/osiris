@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QDictIterator Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,17 +32,17 @@ Inherits <a href="qgdictiterator.html">QGDictIterator</a>.
 <p><a href="qdictiterator-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#7324d7"><b>QDictIterator</b></a> ( const QDict&lt;type&gt; &amp; dict ) </div>
-<li><div class="fn"><a href="#ba358f"><b>~QDictIterator</b></a> () </div>
-<li><div class="fn">uint <a href="#a44996"><b>count</b></a> () const</div>
-<li><div class="fn">bool <a href="#b1e001"><b>isEmpty</b></a> () const</div>
-<li><div class="fn">type* <a href="#1e593c"><b>toFirst</b></a> () </div>
-<li><div class="fn">operator <a href=qdictiterator.html#361bef><b>type*</b></a> ()const</div>
-<li><div class="fn">type* <a href="#bf3051"><b>current</b></a> () const</div>
-<li><div class="fn">QString <a href="#c55fee"><b>currentKey</b></a> () const</div>
-<li><div class="fn">type* <a href="#250c2c"><b>operator</b></a> () </div>
-<li><div class="fn">type* <a href="#5d2cd0"><b>operator++</b></a> () </div>
-<li><div class="fn">type* <a href="#00a017"><b>operator+=</b></a> ( uint jump ) </div>
+<li><div class="fn"><a href="#7324d7"><b>QDictIterator</b></a>Â (Â constÂ QDict&lt;type&gt;Â &amp;Â dictÂ )Â </div>
+<li><div class="fn"><a href="#ba358f"><b>~QDictIterator</b></a>Â ()Â </div>
+<li><div class="fn">uintÂ <a href="#a44996"><b>count</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#b1e001"><b>isEmpty</b></a>Â ()Â const</div>
+<li><div class="fn">type*Â <a href="#1e593c"><b>toFirst</b></a>Â ()Â </div>
+<li><div class="fn">operatorÂ <a href=qdictiterator.html#361bef><b>type*</b></a>Â ()const</div>
+<li><div class="fn">type*Â <a href="#bf3051"><b>current</b></a>Â ()Â const</div>
+<li><div class="fn">QStringÂ <a href="#c55fee"><b>currentKey</b></a>Â ()Â const</div>
+<li><div class="fn">type*Â <a href="#250c2c"><b>operator</b></a>Â ()Â </div>
+<li><div class="fn">type*Â <a href="#5d2cd0"><b>operator++</b></a>Â ()Â </div>
+<li><div class="fn">type*Â <a href="#00a017"><b>operator+=</b></a>Â (Â uintÂ jumpÂ )Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QDictIterator class provides an iterator for <a href="qdict.html">QDict</a> collections.
@@ -86,39 +86,39 @@ traversing order.
 <p>See also  <a href="qdict.html">QDict</a> and <a href="collection.html">Collection Classes</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="7324d7"></a>QDictIterator::QDictIterator ( const <a href="qdict.html">QDict</a>&lt;type&gt; &amp; dict )</h3>
+<h3 class="fn"><a name="7324d7"></a>QDictIterator::QDictIteratorÂ (Â constÂ <a href="qdict.html">QDict</a>&lt;type&gt;Â &amp;Â dictÂ )</h3>
 <p>Constructs an iterator for <em>dict.</em>  The current iterator item is
 set to point on the first item in the <em>dict.</em>
-<h3 class="fn"><a name="ba358f"></a>QDictIterator::~QDictIterator ()</h3>
+<h3 class="fn"><a name="ba358f"></a>QDictIterator::~QDictIteratorÂ ()</h3>
 <p>Destroys the iterator.
-<h3 class="fn"><a name="361bef"></a>QDictIterator::operator type * () const</h3>
+<h3 class="fn"><a name="361bef"></a>QDictIterator::operatorÂ typeÂ *Â ()Â const</h3>
 <p>Cast operator. Returns a pointer to the current iterator item.
 Same as <a href="#bf3051">current</a>().
-<h3 class="fn">uint <a name="a44996"></a>QDictIterator::count () const</h3>
+<h3 class="fn">uintÂ <a name="a44996"></a>QDictIterator::countÂ ()Â const</h3>
 <p>Returns the number of items in the dictionary this iterator operates on.
 <p>See also  <a href="#b1e001">isEmpty</a>().
-<h3 class="fn">type * <a name="bf3051"></a>QDictIterator::current () const</h3>
+<h3 class="fn">typeÂ *Â <a name="bf3051"></a>QDictIterator::currentÂ ()Â const</h3>
 <p>Returns a pointer to the current iterator item.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="c55fee"></a>QDictIterator::currentKey () const</h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="c55fee"></a>QDictIterator::currentKeyÂ ()Â const</h3>
 <p>Returns a pointer to the key for the current iterator item.
-<h3 class="fn">bool <a name="b1e001"></a>QDictIterator::isEmpty () const</h3>
+<h3 class="fn">boolÂ <a name="b1e001"></a>QDictIterator::isEmptyÂ ()Â const</h3>
 <p>Returns TRUE if the dictionary is empty, i.e. <a href="#a44996">count</a>() == 0, otherwise FALSE.
 <p>See also  <a href="#a44996">count</a>().
-<h3 class="fn">type * <a name="250c2c"></a>QDictIterator::operator() ()</h3>
+<h3 class="fn">typeÂ *Â <a name="250c2c"></a>QDictIterator::operator()Â ()</h3>
 <p>Makes the succeeding item current and returns the original current item.
 <p>If the current iterator item was the last item in the dictionary or if it
 was null, null is returned.
-<h3 class="fn">type * <a name="5d2cd0"></a>QDictIterator::operator++ ()</h3>
+<h3 class="fn">typeÂ *Â <a name="5d2cd0"></a>QDictIterator::operator++Â ()</h3>
 <p>Prefix ++ makes the succeeding item current and returns the new current
 item.
 <p>If the current iterator item was the last item in the dictionary or if it
 was null, null is returned.
-<h3 class="fn">type * <a name="00a017"></a>QDictIterator::operator+= ( uint jump )</h3>
+<h3 class="fn">typeÂ *Â <a name="00a017"></a>QDictIterator::operator+=Â (Â uintÂ jumpÂ )</h3>
 <p>Sets the current item to the item <em>jump</em> positions after the current item,
 and returns a pointer to that item.
 <p>If that item is beyond the last item or if the dictionary is  empty,
 it sets the current item to null and  returns null.
-<h3 class="fn">type * <a name="1e593c"></a>QDictIterator::toFirst ()</h3>
+<h3 class="fn">typeÂ *Â <a name="1e593c"></a>QDictIterator::toFirstÂ ()</h3>
 <p>Sets the current iterator item to point to the first item in the
 dictionary and returns a pointer to the item.
 If the dictionary is  empty it sets the current item to null and 
@@ -134,6 +134,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

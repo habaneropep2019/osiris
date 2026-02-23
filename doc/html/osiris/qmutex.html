@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QMutex Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,11 +32,11 @@ Inherits <a href="qt.html">Qt</a>.
 <p><a href="qmutex-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#29e2e7"><b>QMutex</b></a> ( bool recursive = FALSE ) </div>
-<li><div class="fn">virtual <a href="#9ef650"><b>~QMutex</b></a> () </div>
-<li><div class="fn">void <a href="#4e6e5d"><b>lock</b></a> () </div>
-<li><div class="fn">void <a href="#da15c3"><b>unlock</b></a> () </div>
-<li><div class="fn">bool <a href="#b61471"><b>locked</b></a> () </div>
+<li><div class="fn"><a href="#29e2e7"><b>QMutex</b></a>Â (Â boolÂ recursiveÂ =Â FALSEÂ )Â </div>
+<li><div class="fn">virtualÂ <a href="#9ef650"><b>~QMutex</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#4e6e5d"><b>lock</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#da15c3"><b>unlock</b></a>Â ()Â </div>
+<li><div class="fn">boolÂ <a href="#b61471"><b>locked</b></a>Â ()Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QMutex class provides access serialization between threads.
@@ -85,25 +85,25 @@ but applies to any other case where things need to happen in a particular
 sequence.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="29e2e7"></a>QMutex::QMutex ( bool recursive = FALSE )</h3>
+<h3 class="fn"><a name="29e2e7"></a>QMutex::QMutexÂ (Â boolÂ recursiveÂ =Â FALSEÂ )</h3>
 <p>Constructs a new mutex. The mutex is created in an unlocked state. A
 recursive mutex is created if <em>recursive</em> is TRUE; a normal mutex is
 created if <em>recursive</em> is FALSE (default argument). With a recursive
 mutex, a thread can lock the same mutex multiple times and it will
 not be unlocked until a corresponding number of <a href="#da15c3">unlock</a>() calls have
 been made.
-<h3 class="fn"><a name="9ef650"></a>QMutex::~QMutex () <code>[virtual]</code></h3>
+<h3 class="fn"><a name="9ef650"></a>QMutex::~QMutexÂ () <code>[virtual]</code></h3>
 <p>Destroys the mutex.
-<h3 class="fn">void <a name="4e6e5d"></a>QMutex::lock ()</h3>
+<h3 class="fn">voidÂ <a name="4e6e5d"></a>QMutex::lockÂ ()</h3>
 <p>Attempt to lock the mutex. If another thread has locked the mutex
 then this call will block until that thread has unlocked it.
 <p>See also  <a href="#da15c3">unlock</a>().
-<h3 class="fn">bool <a name="b61471"></a>QMutex::locked ()</h3>
+<h3 class="fn">boolÂ <a name="b61471"></a>QMutex::lockedÂ ()</h3>
 <p>Returns TRUE if the mutex is locked by another thread and FALSE if not.
 <p><em>NOTE:</em> Due to differing implementations of recursive mutexes on various
 platforms, calling this function from the same thread that previous locked
 the mutex will return undefined results.
-<h3 class="fn">void <a name="da15c3"></a>QMutex::unlock ()</h3>
+<h3 class="fn">voidÂ <a name="da15c3"></a>QMutex::unlockÂ ()</h3>
 <p>Unlocks the mutex. Attempting to unlock a mutex in a different thread
 to the one that locked it results in an error.  Unlocking a mutex that
 is not locked results in undefined behaviour (varies between
@@ -120,6 +120,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

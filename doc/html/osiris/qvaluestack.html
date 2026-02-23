@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QValueStack Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,12 +32,12 @@ Inherits <a href="qvaluelist.html">QValueList</a>.
 <p><a href="qvaluestack-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#6c0ea7"><b>QValueStack</b></a> () </div>
-<li><div class="fn"><a href="#c92e39"><b>~QValueStack</b></a> () </div>
-<li><div class="fn">void <a href="#af8057"><b>push</b></a> ( const T &amp; d ) </div>
-<li><div class="fn">T <a href="#333b9f"><b>pop</b></a> () </div>
-<li><div class="fn">T&amp; <a href="#3848cd"><b>top</b></a> () </div>
-<li><div class="fn">const T&amp; <a href="#313566"><b>top</b></a> () const</div>
+<li><div class="fn"><a href="#6c0ea7"><b>QValueStack</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#c92e39"><b>~QValueStack</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#af8057"><b>push</b></a>Â (Â constÂ TÂ &amp;Â dÂ )Â </div>
+<li><div class="fn">TÂ <a href="#333b9f"><b>pop</b></a>Â ()Â </div>
+<li><div class="fn">T&amp;Â <a href="#3848cd"><b>top</b></a>Â ()Â </div>
+<li><div class="fn">constÂ T&amp;Â <a href="#313566"><b>top</b></a>Â ()Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QValueStack class is a value based template class that provides a stack.
@@ -87,28 +87,28 @@ copy constructors if no explicit version is supplied. In many cases,
 this is sufficient.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="6c0ea7"></a>QValueStack::QValueStack ()</h3>
+<h3 class="fn"><a name="6c0ea7"></a>QValueStack::QValueStackÂ ()</h3>
 <p>Constructs an empty stack.
-<h3 class="fn"><a name="c92e39"></a>QValueStack::~QValueStack ()</h3>
+<h3 class="fn"><a name="c92e39"></a>QValueStack::~QValueStackÂ ()</h3>
 <p>Destroys the stack. References to the values in the stack and all iterators
 of this stack become invalidated. Since QValueStack is highly tuned for performance
 you wont see warnings if you use invalid iterators,
 because it is impossible for an iterator to check wether it is valid or not.
-<h3 class="fn">T <a name="333b9f"></a>QValueStack::pop ()</h3>
+<h3 class="fn">TÂ <a name="333b9f"></a>QValueStack::popÂ ()</h3>
 <p>Removes the top item from the stack and returns it.
 <p>See also  <a href="#313566">top</a>() and <a href="#af8057">push</a>().
-<h3 class="fn">void <a name="af8057"></a>QValueStack::push ( const T &amp; d )</h3>
+<h3 class="fn">voidÂ <a name="af8057"></a>QValueStack::pushÂ (Â constÂ TÂ &amp;Â dÂ )</h3>
 <p>Adds an element to the top of the stack.  Last in, first out.
 <p>This function is equivalent to append()
 <p>See also  <a href="#333b9f">pop</a>() and <a href="#313566">top</a>().
-<h3 class="fn">T&amp; <a name="3848cd"></a>QValueStack::top ()</h3>
+<h3 class="fn">T&amp;Â <a name="3848cd"></a>QValueStack::topÂ ()</h3>
 <p>Returns a reference to the top item of the stack or the item
 referenced by end() if no
 such item exists. Please note that you may not change
 the value the end() Iterator is pointing to.
 <p>This function is equivalent to last().
 <p>See also  <a href="#333b9f">pop</a>(), <a href="#af8057">push</a>() and <a href="qvaluelist.html#41e13a">QValueList::fromLast</a>().
-<h3 class="fn">const T&amp; <a name="313566"></a>QValueStack::top () const</h3>
+<h3 class="fn">constÂ T&amp;Â <a name="313566"></a>QValueStack::topÂ ()Â const</h3>
 <p>Returns a reference to the top item of the stack or the item
 referenced by end() if no such item exists.
 <p>This function is equivalent to last().
@@ -124,6 +124,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

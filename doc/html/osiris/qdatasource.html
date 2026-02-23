@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QDataSource Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -33,12 +33,12 @@ Inherits <a href="qasyncio.html">QAsyncIO</a>.
 <p><a href="qdatasource-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">virtual int <a href="#1e015e"><b>readyToSend</b></a> () </div>
-<li><div class="fn">virtual void <a href="#f9b57b"><b>sendTo</b></a> ( QDataSink *, int count ) </div>
-<li><div class="fn">void <a href="#88292d"><b>maybeReady</b></a> () </div>
-<li><div class="fn">virtual bool <a href="#121cd0"><b>rewindable</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#70ae9e"><b>enableRewind</b></a> ( bool ) </div>
-<li><div class="fn">virtual void <a href="#9061dd"><b>rewind</b></a> () </div>
+<li><div class="fn">virtualÂ intÂ <a href="#1e015e"><b>readyToSend</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#f9b57b"><b>sendTo</b></a>Â (Â QDataSinkÂ *, intÂ countÂ )Â </div>
+<li><div class="fn">voidÂ <a href="#88292d"><b>maybeReady</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ boolÂ <a href="#121cd0"><b>rewindable</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#70ae9e"><b>enableRewind</b></a>Â (Â boolÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#9061dd"><b>rewind</b></a>Â ()Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QDataSource class is an asynchronous producer of data.
@@ -51,7 +51,7 @@ it is currently able to provide.
 <p>See also  <a href="qasyncio.html">QAsyncIO</a>, <a href="qdatasink.html">QDataSink</a> and <a href="qdatapump.html">QDataPump</a>.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn">void <a name="70ae9e"></a>QDataSource::enableRewind ( bool ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="70ae9e"></a>QDataSource::enableRewindÂ (Â boolÂ ) <code>[virtual]</code></h3>
 <p>If this function is called with <em>on</em> set to TRUE, and <a href="#121cd0">rewindable</a>()
 is TRUE, then the data source must take measures to allow the <a href="#9061dd">rewind</a>()
 function to subsequently operate as described.  If rewindable() is FALSE,
@@ -62,23 +62,23 @@ of input only if rewinding is enabled before the first buffer-full of
 data is discarded, returning FALSE in rewindable() if that first buffer
 is discarded.
 <p>Reimplemented in <a href="qiodevicesource.html#22bde1">QIODeviceSource</a>.
-<h3 class="fn">void <a name="88292d"></a>QDataSource::maybeReady ()</h3>
+<h3 class="fn">voidÂ <a name="88292d"></a>QDataSource::maybeReadyÂ ()</h3>
 <p>This should be called whenever <a href="#1e015e">readyToSend</a>() might have become non-zero.
 It is merely calls <a href="qasyncio.html#ba677b">QAsyncIO::ready</a>() if readyToSend() is non-zero.
-<h3 class="fn">int <a name="1e015e"></a>QDataSource::readyToSend () <code>[virtual]</code></h3>
+<h3 class="fn">intÂ <a name="1e015e"></a>QDataSource::readyToSendÂ () <code>[virtual]</code></h3>
 <p>The data source should return a value indicating how much data it is ready
 to provide.  This may be 0.  If the data source knows it will never be
 able to provide any more data (until after a <a href="#9061dd">rewind</a>()), it may return -1.
 <p>Reimplemented in <a href="qiodevicesource.html#2e58fe">QIODeviceSource</a>.
-<h3 class="fn">void <a name="9061dd"></a>QDataSource::rewind () <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="9061dd"></a>QDataSource::rewindÂ () <code>[virtual]</code></h3>
 <p>This function rewinds the data source.  This may only be called if
 <a href="#70ae9e">enableRewind</a>(TRUE) has been previously called.
 <p>Reimplemented in <a href="qiodevicesource.html#4e70f1">QIODeviceSource</a>.
-<h3 class="fn">bool <a name="121cd0"></a>QDataSource::rewindable () const <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="121cd0"></a>QDataSource::rewindableÂ ()Â const <code>[virtual]</code></h3>
 <p>This function should return TRUE if the data source can be rewound.
 <p>The default returns FALSE.
 <p>Reimplemented in <a href="qiodevicesource.html#9e4680">QIODeviceSource</a>.
-<h3 class="fn">void <a name="f9b57b"></a>QDataSource::sendTo ( <a href="qdatasink.html">QDataSink</a> *, int count ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="f9b57b"></a>QDataSource::sendToÂ (Â <a href="qdatasink.html">QDataSink</a>Â *, intÂ countÂ ) <code>[virtual]</code></h3>
 <p>This function is called to extract data from the source, by sending
 it to the given data sink.  The count will be no more than the amount
 indicated by the most recent call to <a href="#1e015e">readyToSend</a>().  The source must
@@ -96,6 +96,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

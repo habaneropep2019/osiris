@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QActionGroup Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,15 +32,15 @@ Inherits <a href="qaction.html">QAction</a>.
 <p><a href="qactiongroup-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#05d8e0"><b>QActionGroup</b></a> ( QWidget * parent, const char * name = 0, bool exclusive = TRUE ) </div>
-<li><div class="fn"><a href="#98c340"><b>~QActionGroup</b></a> () </div>
-<li><div class="fn">void <a href="#584335"><b>setExclusive</b></a> ( bool ) </div>
-<li><div class="fn">bool <a href="#44a842"><b>isExclusive</b></a> () const</div>
-<li><div class="fn">void <a href="#2c3afa"><b>insert</b></a> ( QAction * ) </div>
+<li><div class="fn"><a href="#05d8e0"><b>QActionGroup</b></a>Â (Â QWidgetÂ *Â parent, constÂ charÂ *Â nameÂ =Â 0, boolÂ exclusiveÂ =Â TRUEÂ )Â </div>
+<li><div class="fn"><a href="#98c340"><b>~QActionGroup</b></a>Â ()Â </div>
+<li><div class="fn">voidÂ <a href="#584335"><b>setExclusive</b></a>Â (Â boolÂ )Â </div>
+<li><div class="fn">boolÂ <a href="#44a842"><b>isExclusive</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#2c3afa"><b>insert</b></a>Â (Â QActionÂ *Â )Â </div>
 </ul>
 <h2>Signals</h2>
 <ul>
-<li><div class="fn">void <a href="#14ea92"><b>selected</b></a> ( QAction * ) </div>
+<li><div class="fn">voidÂ <a href="#14ea92"><b>selected</b></a>Â (Â QActionÂ *Â )Â </div>
 </ul>
 <h2>Properties</h2>
 <table border=1 cellpadding=3 cellspacing=0>
@@ -67,33 +67,33 @@ toggle actions except the one that was activated. This results in a
 whenever the current child action changes.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="05d8e0"></a>QActionGroup::QActionGroup ( <a href="qwidget.html">QWidget</a> * parent, const char * name = 0, bool exclusive = TRUE )</h3>
+<h3 class="fn"><a name="05d8e0"></a>QActionGroup::QActionGroupÂ (Â <a href="qwidget.html">QWidget</a>Â *Â parent, constÂ charÂ *Â nameÂ =Â 0, boolÂ exclusiveÂ =Â TRUEÂ )</h3>
 <p>Constructs an action group with parent <em>parent</em> and name <em>name.</em>
 <p>If <em>exclusive</em> is TRUE, any toggle action that is a member of this
 group is toggled off by another action being toggled on.
-<h3 class="fn"><a name="98c340"></a>QActionGroup::~QActionGroup ()</h3>
+<h3 class="fn"><a name="98c340"></a>QActionGroup::~QActionGroupÂ ()</h3>
 <p>Destroys the object and frees any allocated resources.
-<h3 class="fn">bool <a name="113ed9"></a>QActionGroup::addTo ( <a href="qwidget.html">QWidget</a> * w ) <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="113ed9"></a>QActionGroup::addToÂ (Â <a href="qwidget.html">QWidget</a>Â *Â wÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qaction.html#780f84">QAction.</a>
-<h3 class="fn">void <a name="2c3afa"></a>QActionGroup::insert ( <a href="qaction.html">QAction</a> * action )</h3>
+<h3 class="fn">voidÂ <a name="2c3afa"></a>QActionGroup::insertÂ (Â <a href="qaction.html">QAction</a>Â *Â actionÂ )</h3>
 <p>Inserts action <em>action</em> to the group.
 <p>It is not necessary to manually insert actions that have this action
 group as their parent object.
-<h3 class="fn">bool <a name="44a842"></a>QActionGroup::isExclusive () const</h3>
+<h3 class="fn">boolÂ <a name="44a842"></a>QActionGroup::isExclusiveÂ ()Â const</h3>
 <p>Returns TRUE if the action group is exclusive, otherwise FALSE.
 <p>See also  <a href="#584335">setExclusive</a>().
-<h3 class="fn">bool <a name="01e8fd"></a>QActionGroup::removeFrom ( <a href="qwidget.html">QWidget</a> * w ) <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="01e8fd"></a>QActionGroup::removeFromÂ (Â <a href="qwidget.html">QWidget</a>Â *Â wÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qaction.html#80c814">QAction.</a>
-<h3 class="fn">void <a name="14ea92"></a>QActionGroup::selected ( <a href="qaction.html">QAction</a> * ) <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="14ea92"></a>QActionGroup::selectedÂ (Â <a href="qaction.html">QAction</a>Â *Â ) <code>[signal]</code></h3>
 <p>This signal is emitted in exclusive groups when the current toggle
 action changes.
 <p>See also  <a href="#584335">setExclusive</a>().
-<h3 class="fn">void <a name="24497a"></a>QActionGroup::setEnabled ( bool enable ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="24497a"></a>QActionGroup::setEnabledÂ (Â boolÂ enableÂ ) <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qaction.html#a536b2">QAction.</a>
-<h3 class="fn">void <a name="584335"></a>QActionGroup::setExclusive ( bool enable )</h3>
+<h3 class="fn">voidÂ <a name="584335"></a>QActionGroup::setExclusiveÂ (Â boolÂ enableÂ )</h3>
 <p>Sets the action group to be exclusive if <em>enable</em> is TRUE,
 or to be non-exclusive if <em>enable</em> is FALSE.
 <p>In an exclusive group, any toggle action that is a member of this
@@ -110,6 +110,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

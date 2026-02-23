@@ -2,7 +2,7 @@ project('osiris', 'cpp',
         default_options : ['prefix=/opt/osiris', 'cpp_std=c++11'],
         license : 'GPL-2.0-only',
         license_files: ['LICENSE.GPL'],
-        version : '2.4.3',
+        version : '2.4.4',
 )
 
 osiris_install_prefix = get_option('prefix')
@@ -731,6 +731,7 @@ tools_headers = [
     tools_header_path / 'qeuckrcodec.h',
     tools_header_path / 'qfile.h',
     tools_header_path / 'qfileinfo.h',
+    tools_header_path / 'qfiledefs_p.h',
     tools_header_path / 'qkoi8codec.h',
     tools_header_path / 'qfeatures.h',
     tools_header_path / 'qgarray.h',

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QDomText Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -33,13 +33,13 @@ Inherits <a href="qdomcharacterdata.html">QDomCharacterData</a>.
 <p><a href="qdomtext-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#2c1153"><b>QDomText</b></a> () </div>
-<li><div class="fn"><a href="#cc0bef"><b>QDomText</b></a> ( const QDomText &amp; x ) </div>
-<li><div class="fn">QDomText&amp; <a href="#9d31a9"><b>operator=</b></a> ( const QDomText &amp; ) </div>
-<li><div class="fn"><a href="#b0fd7e"><b>~QDomText</b></a> () </div>
-<li><div class="fn">QDomText <a href="#764c66"><b>splitText</b></a> ( int offset ) </div>
-<li><div class="fn">virtual QDomNode::NodeType <a href="#3a04e5"><b>nodeType</b></a> () const</div>
-<li><div class="fn">virtual bool <a href="#92c2d4"><b>isText</b></a> () const</div>
+<li><div class="fn"><a href="#2c1153"><b>QDomText</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#cc0bef"><b>QDomText</b></a>Â (Â constÂ QDomTextÂ &amp;Â xÂ )Â </div>
+<li><div class="fn">QDomText&amp;Â <a href="#9d31a9"><b>operator=</b></a>Â (Â constÂ QDomTextÂ &amp;Â )Â </div>
+<li><div class="fn"><a href="#b0fd7e"><b>~QDomText</b></a>Â ()Â </div>
+<li><div class="fn">QDomTextÂ <a href="#764c66"><b>splitText</b></a>Â (Â intÂ offsetÂ )Â </div>
+<li><div class="fn">virtualÂ QDomNode::NodeTypeÂ <a href="#3a04e5"><b>nodeType</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ boolÂ <a href="#92c2d4"><b>isText</b></a>Â ()Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QDomText class represents textual data in the parsed XML document.
@@ -50,26 +50,26 @@ For a more general introduction of the DOM implementation see the
 <a href="qdomdocument.html">QDomDocument</a> documentation.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="2c1153"></a>QDomText::QDomText ()</h3>
+<h3 class="fn"><a name="2c1153"></a>QDomText::QDomTextÂ ()</h3>
 <p>Constructs an empty QDomText object.
 <p>To construct a QDomText with content, use <a href="qdomdocument.html#95c9fe">QDomDocument::createTextNode</a>().
-<h3 class="fn"><a name="cc0bef"></a>QDomText::QDomText ( const QDomText &amp; x )</h3>
+<h3 class="fn"><a name="cc0bef"></a>QDomText::QDomTextÂ (Â constÂ QDomTextÂ &amp;Â xÂ )</h3>
 <p>Copy constructor.
 <p>The data of the copy is shared: modifying one will also change the other. If
 you want to make a real copy, use <a href="qdomnode.html#8f17f1">cloneNode</a>() instead.
-<h3 class="fn"><a name="b0fd7e"></a>QDomText::~QDomText ()</h3>
+<h3 class="fn"><a name="b0fd7e"></a>QDomText::~QDomTextÂ ()</h3>
 <p>Destructor.
-<h3 class="fn">bool <a name="92c2d4"></a>QDomText::isText () const <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="92c2d4"></a>QDomText::isTextÂ ()Â const <code>[virtual]</code></h3>
 <p>Returns TRUE.
 <p>Reimplemented from <a href="qdomnode.html#b5b9d5">QDomNode.</a>
-<h3 class="fn">QDomNode::NodeType <a name="3a04e5"></a>QDomText::nodeType() const <code>[virtual]</code></h3>
+<h3 class="fn">QDomNode::NodeTypeÂ <a name="3a04e5"></a>QDomText::nodeType()Â const <code>[virtual]</code></h3>
 <p>Returns <code>TextNode.</code>
 <p>Reimplemented from <a href="qdomnode.html#46495e">QDomNode.</a>
-<h3 class="fn">QDomText&amp; <a name="9d31a9"></a>QDomText::operator= ( const QDomText &amp; x )</h3>
+<h3 class="fn">QDomText&amp;Â <a name="9d31a9"></a>QDomText::operator=Â (Â constÂ QDomTextÂ &amp;Â xÂ )</h3>
 <p>Assignment operator.
 <p>The data of the copy is shared: modifying one will also change the other. If
 you want to make a real copy, use <a href="qdomnode.html#8f17f1">cloneNode</a>() instead.
-<h3 class="fn">QDomText <a name="764c66"></a>QDomText::splitText ( int offset )</h3>
+<h3 class="fn">QDomTextÂ <a name="764c66"></a>QDomText::splitTextÂ (Â intÂ offsetÂ )</h3>
 <p>Splits this object at position <em>offset</em> into two QDomText objects. The newly
 created object is inserted into the document tree after this object.
 <p>The function returns the newly created object.
@@ -85,6 +85,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

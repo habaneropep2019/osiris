@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QWSDecoration Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -30,16 +30,16 @@ The QWSDecoration class allows the appearance of the Qt/Embedded Window Manager 
 <p><a href="qwsdecoration-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#2b1662"><b>QWSDecoration</b></a> () </div>
-<li><div class="fn">virtual <a href="#cfb58b"><b>~QWSDecoration</b></a> () </div>
-<li><div class="fn">enum <a href="#Region"><b>Region</b></a> { None=0, All=1, Title=2, Top=3, Bottom=4, Left=5, Right=6, TopLeft=7, TopRight=8, BottomLeft=9, BottomRight=10, Close=11, Minimize=12, Maximize=13, Normalize=14, Menu=15, LastRegion=Menu }</div>
-<li><div class="fn">virtual QRegion <a href="#b59a78"><b>region</b></a> ( const QWidget *, const QRect &amp; rect, Region r=All ) </div>
-<li><div class="fn">virtual void <a href="#3ea650"><b>close</b></a> ( QWidget * ) </div>
-<li><div class="fn">virtual void <a href="#3f35e8"><b>minimize</b></a> ( QWidget * ) </div>
-<li><div class="fn">virtual void <a href="#20273e"><b>maximize</b></a> ( QWidget * ) </div>
-<li><div class="fn">virtual QPopupMenu* <a href="#23a481"><b>menu</b></a> ( const QWidget *, const QPoint &amp; ) </div>
-<li><div class="fn">virtual void <a href="#f1b482"><b>paint</b></a> ( QPainter *, const QWidget * ) </div>
-<li><div class="fn">virtual void <a href="#62aafd"><b>paintButton</b></a> ( QPainter *, const QWidget *, Region, int state ) </div>
+<li><div class="fn"><a href="#2b1662"><b>QWSDecoration</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ <a href="#cfb58b"><b>~QWSDecoration</b></a>Â ()Â </div>
+<li><div class="fn">enumÂ <a href="#Region"><b>Region</b></a>Â {Â None=0, All=1, Title=2, Top=3, Bottom=4, Left=5, Right=6, TopLeft=7, TopRight=8, BottomLeft=9, BottomRight=10, Close=11, Minimize=12, Maximize=13, Normalize=14, Menu=15, LastRegion=MenuÂ }</div>
+<li><div class="fn">virtualÂ QRegionÂ <a href="#b59a78"><b>region</b></a>Â (Â constÂ QWidgetÂ *, constÂ QRectÂ &amp;Â rect, RegionÂ r=AllÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#3ea650"><b>close</b></a>Â (Â QWidgetÂ *Â )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#3f35e8"><b>minimize</b></a>Â (Â QWidgetÂ *Â )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#20273e"><b>maximize</b></a>Â (Â QWidgetÂ *Â )Â </div>
+<li><div class="fn">virtualÂ QPopupMenu*Â <a href="#23a481"><b>menu</b></a>Â (Â constÂ QWidgetÂ *, constÂ QPointÂ &amp;Â )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#f1b482"><b>paint</b></a>Â (Â QPainterÂ *, constÂ QWidgetÂ *Â )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#62aafd"><b>paintButton</b></a>Â (Â QPainterÂ *, constÂ QWidgetÂ *, Region, intÂ stateÂ )Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QWSDecoration class allows the appearance of the Qt/Embedded Window Manager to be customized.
@@ -74,30 +74,30 @@ moved by dragging.
 <li> <code>Menu</code> - clicking in this region opens the window operations menu.
 </ul>
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="2b1662"></a>QWSDecoration::QWSDecoration ()</h3>
+<h3 class="fn"><a name="2b1662"></a>QWSDecoration::QWSDecorationÂ ()</h3>
 <p>Constructs a decorator.
-<h3 class="fn"><a name="cfb58b"></a>QWSDecoration::~QWSDecoration () <code>[virtual]</code></h3>
+<h3 class="fn"><a name="cfb58b"></a>QWSDecoration::~QWSDecorationÂ () <code>[virtual]</code></h3>
 <p>Destructs a decorator.
-<h3 class="fn">void <a name="3ea650"></a>QWSDecoration::close ( <a href="qwidget.html">QWidget</a> * widget ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="3ea650"></a>QWSDecoration::closeÂ (Â <a href="qwidget.html">QWidget</a>Â *Â widgetÂ ) <code>[virtual]</code></h3>
 <p>Called when the user clicks in the <code>Close</code> region.
 <p><em>widget</em> is the <a href="qwidget.html">QWidget</a> to be closed.
 <p>The default behaviour is to close the widget.
-<h3 class="fn">void <a name="20273e"></a>QWSDecoration::maximize ( <a href="qwidget.html">QWidget</a> * widget ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="20273e"></a>QWSDecoration::maximizeÂ (Â <a href="qwidget.html">QWidget</a>Â *Â widgetÂ ) <code>[virtual]</code></h3>
 <p>Called when the user clicks in the <code>Maximize</code> region.
 <p><em>widget</em> is the <a href="qwidget.html">QWidget</a> to be maximized.
 <p>The default behaviour is to resize the widget to be full-screen.
 This method can be overridden to, e.g. avoid launch panels.
-<h3 class="fn"><a href="qpopupmenu.html">QPopupMenu</a> * <a name="23a481"></a>QWSDecoration::menu ( const <a href="qwidget.html">QWidget</a> *, const <a href="qpoint.html">QPoint</a> &amp; ) <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qpopupmenu.html">QPopupMenu</a>Â *Â <a name="23a481"></a>QWSDecoration::menuÂ (Â constÂ <a href="qwidget.html">QWidget</a>Â *, constÂ <a href="qpoint.html">QPoint</a>Â &amp;Â ) <code>[virtual]</code></h3>
 <p>Called to create a <a href="qpopupmenu.html">QPopupMenu</a> containing the valid menu operations.
 <p>The default implementation adds all possible window operations.
-<h3 class="fn">void <a name="3f35e8"></a>QWSDecoration::minimize ( <a href="qwidget.html">QWidget</a> * ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="3f35e8"></a>QWSDecoration::minimizeÂ (Â <a href="qwidget.html">QWidget</a>Â *Â ) <code>[virtual]</code></h3>
 <p>Called when the user clicks in the <code>Minimize</code> region.
 <p><em>widget</em> is the <a href="qwidget.html">QWidget</a> to be minimized.
 <p>The default behaviour is to ignore this action.
-<h3 class="fn">void <a name="f1b482"></a>QWSDecoration::paint ( <a href="qpainter.html">QPainter</a> * painter, const <a href="qwidget.html">QWidget</a> * widget ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="f1b482"></a>QWSDecoration::paintÂ (Â <a href="qpainter.html">QPainter</a>Â *Â painter, constÂ <a href="qwidget.html">QWidget</a>Â *Â widgetÂ ) <code>[virtual]</code></h3>
 <p>Override to paint the border and title decoration around <em>widget</em> using
 <em>painter.</em>
-<h3 class="fn">void <a name="62aafd"></a>QWSDecoration::paintButton ( <a href="qpainter.html">QPainter</a> * painter, const <a href="qwidget.html">QWidget</a> * widget, <a href="qwsdecoration.html#Region">Region</a> type, int state )</h3>
+<h3 class="fn">voidÂ <a name="62aafd"></a>QWSDecoration::paintButtonÂ (Â <a href="qpainter.html">QPainter</a>Â *Â painter, constÂ <a href="qwidget.html">QWidget</a>Â *Â widget, <a href="qwsdecoration.html#Region">Region</a>Â type, intÂ stateÂ )</h3>
 <p>Override to paint a button <em>type</em> using <em>painter.</em>
 <p><em>widget</em> is the widget whose button is to be drawn.
 <em>state</em> is the state of the button.  It can be a combination of the
@@ -107,7 +107,7 @@ following ORed together:
 <li> <code>QWSButton::Clicked</code>
 <li> <code>QWSButton::On</code>
 </ul>
-<h3 class="fn"><a href="qregion.html">QRegion</a> <a name="b59a78"></a>QWSDecoration::region ( const <a href="qwidget.html">QWidget</a> * widget, const <a href="qrect.html">QRect</a> &amp; rect, <a href="qwsdecoration.html#Region">Region</a> type=All )</h3>
+<h3 class="fn"><a href="qregion.html">QRegion</a>Â <a name="b59a78"></a>QWSDecoration::regionÂ (Â constÂ <a href="qwidget.html">QWidget</a>Â *Â widget, constÂ <a href="qrect.html">QRect</a>Â &amp;Â rect, <a href="qwsdecoration.html#Region">Region</a>Â type=AllÂ )</h3>
 <p>Returns the requested region <em>type</em> which will contain <em>widget</em>
 with geometry <em>rect.</em>
 <hr><p>
@@ -121,6 +121,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

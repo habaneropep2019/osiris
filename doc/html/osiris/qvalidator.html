@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QValidator Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -33,11 +33,11 @@ Inherits <a href="qobject.html">QObject</a>.
 <p><a href="qvalidator-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#0b5d7d"><b>QValidator</b></a> ( QWidget * parent, const char * name = 0 ) </div>
-<li><div class="fn"><a href="#3baeb0"><b>~QValidator</b></a> () </div>
-<li><div class="fn">enum <a href="#State"><b>State</b></a> { Invalid, Intermediate, Valid=Intermediate, Acceptable }</div>
-<li><div class="fn">virtual State <a href="#da4f8c"><b>validate</b></a> ( QString &amp;, int &amp; ) const</div>
-<li><div class="fn">virtual void <a href="#3fa523"><b>fixup</b></a> ( QString &amp; ) const</div>
+<li><div class="fn"><a href="#0b5d7d"><b>QValidator</b></a>Â (Â QWidgetÂ *Â parent, constÂ charÂ *Â nameÂ =Â 0Â )Â </div>
+<li><div class="fn"><a href="#3baeb0"><b>~QValidator</b></a>Â ()Â </div>
+<li><div class="fn">enumÂ <a href="#State"><b>State</b></a>Â {Â Invalid, Intermediate, Valid=Intermediate, AcceptableÂ }</div>
+<li><div class="fn">virtualÂ StateÂ <a href="#da4f8c"><b>validate</b></a>Â (Â QStringÂ &amp;, intÂ &amp;Â )Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#3fa523"><b>fixup</b></a>Â (Â QStringÂ &amp;Â )Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QValidator class provides validation of input text.
@@ -89,13 +89,13 @@ during editing.
 <p>The state <code>Valid</code> has been renamed <code>Intermediate.</code>  The old name
 confused too many people and is now obsolete.
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="0b5d7d"></a>QValidator::QValidator ( <a href="qwidget.html">QWidget</a> * parent, const char * name = 0 )</h3>
+<h3 class="fn"><a name="0b5d7d"></a>QValidator::QValidatorÂ (Â <a href="qwidget.html">QWidget</a>Â *Â parent, constÂ charÂ *Â nameÂ =Â 0Â )</h3>
 <p>Sets up the internal data structures used by the validator.  At
 the moment there aren't any.
-<h3 class="fn"><a name="3baeb0"></a>QValidator::~QValidator ()</h3>
+<h3 class="fn"><a name="3baeb0"></a>QValidator::~QValidatorÂ ()</h3>
 <p>Destroys the validator, freeing any storage and other resources
 used.
-<h3 class="fn">void <a name="3fa523"></a>QValidator::fixup ( <a href="qstring.html">QString</a> &amp; input ) const <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="3fa523"></a>QValidator::fixupÂ (Â <a href="qstring.html">QString</a>Â &amp;Â inputÂ )Â const <code>[virtual]</code></h3>
 <p>Attempts to change <em>input</em> to be valid according to this validator's
 rules.  Need not result in a valid string - callers of this function
 must re-test afterwards.  The default does nothing.
@@ -105,7 +105,7 @@ want to delete every character except digits and "-", even if the
 result is not a valid ISBN, and a last-name validator might want to
 remove white space from the start and end of the string, even if the
 resulting string is not in the list of known last names.
-<h3 class="fn">QValidator::State <a name="da4f8c"></a>QValidator::validate( QString & input, int & pos ) const</h3>
+<h3 class="fn">QValidator::StateÂ <a name="da4f8c"></a>QValidator::validate(Â QStringÂ &Â input, intÂ &Â posÂ )Â const</h3>
 <p>This pure virtual function returns <code>Invalid</code> if <em>input</em> is invalid
 according to this validator's rules, <code>Intermediate</code> if it is likely that a
 little more editing will make the input acceptable (e.g. the user
@@ -124,6 +124,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

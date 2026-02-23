@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QTranslatorMessage Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -30,26 +30,26 @@ The QTranslatorMessage class contains a translator message and its properties.
 <p><a href="qtranslatormessage-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#56a587"><b>QTranslatorMessage</b></a> () </div>
-<li><div class="fn"><a href="#f549b4"><b>QTranslatorMessage</b></a> ( const char * context, const char * sourceText, const char * comment, const QString &amp; translation = QString::null ) </div>
-<li><div class="fn"><a href="#034404"><b>QTranslatorMessage</b></a> ( QDataStream &amp; ) </div>
-<li><div class="fn"><a href="#9f5219"><b>QTranslatorMessage</b></a> ( const QTranslatorMessage &amp; m ) </div>
-<li><div class="fn">QTranslatorMessage&amp; <a href="#71a3e2"><b>operator=</b></a> ( const QTranslatorMessage &amp; m ) </div>
-<li><div class="fn">uint <a href="#c905a8"><b>hash</b></a> () const</div>
-<li><div class="fn">const char* <a href="#ceae6d"><b>context</b></a> () const</div>
-<li><div class="fn">const char* <a href="#96eff7"><b>sourceText</b></a> () const</div>
-<li><div class="fn">const char* <a href="#840482"><b>comment</b></a> () const</div>
-<li><div class="fn">void <a href="#9600e8"><b>setTranslation</b></a> ( const QString &amp; translation ) </div>
-<li><div class="fn">QString <a href="#d30c72"><b>translation</b></a> () const</div>
-<li><div class="fn">enum <a href="#Prefix"><b>Prefix</b></a> { NoPrefix, Hash, HashContext, HashContextSourceText, HashContextSourceTextComment }</div>
-<li><div class="fn">void <a href="#bb7382"><b>write</b></a> ( QDataStream &amp; s, bool strip, Prefix prefix = HashContextSourceTextComment ) const</div>
-<li><div class="fn">Prefix <a href="#5415e4"><b>commonPrefix</b></a> ( const QTranslatorMessage &amp; ) const</div>
-<li><div class="fn">bool <a href="#39174a"><b>operator==</b></a> ( const QTranslatorMessage &amp; m ) const</div>
-<li><div class="fn">bool <a href="#1aa1cf"><b>operator!=</b></a> ( const QTranslatorMessage &amp; m ) const</div>
-<li><div class="fn">bool <a href="#f263a8"><b>operator&lt;</b></a> ( const QTranslatorMessage &amp; m ) const</div>
-<li><div class="fn">bool <a href="#09b119"><b>operator&lt;=</b></a> ( const QTranslatorMessage &amp; m ) const</div>
-<li><div class="fn">bool <a href="#13ac81"><b>operator&gt;</b></a> ( const QTranslatorMessage &amp; m ) const</div>
-<li><div class="fn">bool <a href="#ef047d"><b>operator&gt;=</b></a> ( const QTranslatorMessage &amp; m ) const</div>
+<li><div class="fn"><a href="#56a587"><b>QTranslatorMessage</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#f549b4"><b>QTranslatorMessage</b></a>Â (Â constÂ charÂ *Â context, constÂ charÂ *Â sourceText, constÂ charÂ *Â comment, constÂ QStringÂ &amp;Â translationÂ =Â QString::nullÂ )Â </div>
+<li><div class="fn"><a href="#034404"><b>QTranslatorMessage</b></a>Â (Â QDataStreamÂ &amp;Â )Â </div>
+<li><div class="fn"><a href="#9f5219"><b>QTranslatorMessage</b></a>Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â </div>
+<li><div class="fn">QTranslatorMessage&amp;Â <a href="#71a3e2"><b>operator=</b></a>Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â </div>
+<li><div class="fn">uintÂ <a href="#c905a8"><b>hash</b></a>Â ()Â const</div>
+<li><div class="fn">constÂ char*Â <a href="#ceae6d"><b>context</b></a>Â ()Â const</div>
+<li><div class="fn">constÂ char*Â <a href="#96eff7"><b>sourceText</b></a>Â ()Â const</div>
+<li><div class="fn">constÂ char*Â <a href="#840482"><b>comment</b></a>Â ()Â const</div>
+<li><div class="fn">voidÂ <a href="#9600e8"><b>setTranslation</b></a>Â (Â constÂ QStringÂ &amp;Â translationÂ )Â </div>
+<li><div class="fn">QStringÂ <a href="#d30c72"><b>translation</b></a>Â ()Â const</div>
+<li><div class="fn">enumÂ <a href="#Prefix"><b>Prefix</b></a>Â {Â NoPrefix, Hash, HashContext, HashContextSourceText, HashContextSourceTextCommentÂ }</div>
+<li><div class="fn">voidÂ <a href="#bb7382"><b>write</b></a>Â (Â QDataStreamÂ &amp;Â s, boolÂ strip, PrefixÂ prefixÂ =Â HashContextSourceTextCommentÂ )Â const</div>
+<li><div class="fn">PrefixÂ <a href="#5415e4"><b>commonPrefix</b></a>Â (Â constÂ QTranslatorMessageÂ &amp;Â )Â const</div>
+<li><div class="fn">boolÂ <a href="#39174a"><b>operator==</b></a>Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â const</div>
+<li><div class="fn">boolÂ <a href="#1aa1cf"><b>operator!=</b></a>Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â const</div>
+<li><div class="fn">boolÂ <a href="#f263a8"><b>operator&lt;</b></a>Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â const</div>
+<li><div class="fn">boolÂ <a href="#09b119"><b>operator&lt;=</b></a>Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â const</div>
+<li><div class="fn">boolÂ <a href="#13ac81"><b>operator&gt;</b></a>Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â const</div>
+<li><div class="fn">boolÂ <a href="#ef047d"><b>operator&gt;=</b></a>Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QTranslatorMessage class contains a translator message and its properties.
@@ -78,66 +78,66 @@ Let ( <em>h, c, s, m</em> ) be the extended key.  The possible prefixes are
 </ul>
 <p>See also  <a href="#bb7382">write</a>() and <a href="#5415e4">commonPrefix</a>().
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="56a587"></a>QTranslatorMessage::QTranslatorMessage ()</h3>
+<h3 class="fn"><a name="56a587"></a>QTranslatorMessage::QTranslatorMessageÂ ()</h3>
 <p>Constructs a translator message with extended key ( 0, "", "", "" ) and
 QString::null as translation.
-<h3 class="fn"><a name="034404"></a>QTranslatorMessage::QTranslatorMessage ( <a href="qdatastream.html">QDataStream</a> &amp; stream )</h3>
+<h3 class="fn"><a name="034404"></a>QTranslatorMessage::QTranslatorMessageÂ (Â <a href="qdatastream.html">QDataStream</a>Â &amp;Â streamÂ )</h3>
 <p>Constructs a translator message read from a <em>stream.</em>  The resulting
 message may have any combination of content.
 <p>See also  save().
-<h3 class="fn"><a name="9f5219"></a>QTranslatorMessage::QTranslatorMessage ( const QTranslatorMessage &amp; m )</h3>
+<h3 class="fn"><a name="9f5219"></a>QTranslatorMessage::QTranslatorMessageÂ (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )</h3>
 <p>Constructs a copy of translator message <em>m.</em>
-<h3 class="fn"><a name="f549b4"></a>QTranslatorMessage::QTranslatorMessage ( const char * context, const char * sourceText, const char * comment, const <a href="qstring.html">QString</a> &amp; translation = QString::null )</h3>
+<h3 class="fn"><a name="f549b4"></a>QTranslatorMessage::QTranslatorMessageÂ (Â constÂ charÂ *Â context, constÂ charÂ *Â sourceText, constÂ charÂ *Â comment, constÂ <a href="qstring.html">QString</a>Â &amp;Â translationÂ =Â QString::nullÂ )</h3>
 <p>Constructs an translator message with extended key
 ( <em>h, context, sourceText, comment</em> ), where <em>h</em> is computed from
 <em>sourceText</em> and <em>comment,</em> and possibly with a <em>translation.</em>
-<h3 class="fn">const char * <a name="840482"></a>QTranslatorMessage::comment () const</h3>
+<h3 class="fn">constÂ charÂ *Â <a name="840482"></a>QTranslatorMessage::commentÂ ()Â const</h3>
 <p>Returns the comment for this message (e.g., "File > Save").
-<h3 class="fn">QTranslatorMessage::Prefix <a name="5415e4"></a>QTranslatorMessage::commonPrefix( const QTranslatorMessage & m ) const</h3>
+<h3 class="fn">QTranslatorMessage::PrefixÂ <a name="5415e4"></a>QTranslatorMessage::commonPrefix(Â constÂ QTranslatorMessageÂ &Â mÂ )Â const</h3>
 <p>Returns the widest lookup prefix that is common to this translator message
 and message <em>m.</em>
 <p>For example, if the extended key is for this message is ( 42, "FunnyDialog",
 "Yes", "Funny?" ) and that for <em>m</em> is ( 42, "FunnyDialog", "No", "Funny?" ),
 returns <code>HashContext.</code>
 <p>See also  <a href="#bb7382">write</a>().
-<h3 class="fn">const char * <a name="ceae6d"></a>QTranslatorMessage::context () const</h3>
+<h3 class="fn">constÂ charÂ *Â <a name="ceae6d"></a>QTranslatorMessage::contextÂ ()Â const</h3>
 <p>Returns the context for this message (e.g., "FunnyDialog").
-<h3 class="fn">uint <a name="c905a8"></a>QTranslatorMessage::hash () const</h3>
+<h3 class="fn">uintÂ <a name="c905a8"></a>QTranslatorMessage::hashÂ ()Â const</h3>
 <p>Returns the hash value used internally to represent the lookup key.  This
 value is zero only if this translator message was constructed from a stream
 containing invalid data.
 <p>The hashing function is unspecified, but it will remain unchanged in future
 versions of Qt.
-<h3 class="fn">bool <a name="1aa1cf"></a>QTranslatorMessage::operator!= ( const QTranslatorMessage &amp; m ) const</h3>
+<h3 class="fn">boolÂ <a name="1aa1cf"></a>QTranslatorMessage::operator!=Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â const</h3>
 <p>Returns TRUE if the extended key of this object is different from that of
 <em>m,</em> otherwise FALSE.
-<h3 class="fn">bool <a name="f263a8"></a>QTranslatorMessage::operator&lt; ( const QTranslatorMessage &amp; m ) const</h3>
+<h3 class="fn">boolÂ <a name="f263a8"></a>QTranslatorMessage::operator&lt;Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â const</h3>
 <p>Returns TRUE if the extended key of this object is lexicographically before
 than that of <em>m,</em> otherwise FALSE.
-<h3 class="fn">bool <a name="09b119"></a>QTranslatorMessage::operator&lt;= ( const QTranslatorMessage &amp; m ) const</h3>
+<h3 class="fn">boolÂ <a name="09b119"></a>QTranslatorMessage::operator&lt;=Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â const</h3>
 <p>Returns TRUE if the extended key of this object is lexicographically before
 that of <em>m</em> or if they are equal, otherwise FALSE.
-<h3 class="fn">QTranslatorMessage &amp; <a name="71a3e2"></a>QTranslatorMessage::operator= ( const QTranslatorMessage &amp; m )</h3>
+<h3 class="fn">QTranslatorMessageÂ &amp;Â <a name="71a3e2"></a>QTranslatorMessage::operator=Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )</h3>
 <p>Assigns <em>m</em> to this translator message and returns a reference to this
 translator message.
-<h3 class="fn">bool <a name="39174a"></a>QTranslatorMessage::operator== ( const QTranslatorMessage &amp; m ) const</h3>
+<h3 class="fn">boolÂ <a name="39174a"></a>QTranslatorMessage::operator==Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â const</h3>
 <p>Returns TRUE if the extended key of this object is equal to that of <em>m,</em>
 otherwise FALSE.
-<h3 class="fn">bool <a name="13ac81"></a>QTranslatorMessage::operator&gt; ( const QTranslatorMessage &amp; m ) const</h3>
+<h3 class="fn">boolÂ <a name="13ac81"></a>QTranslatorMessage::operator&gt;Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â const</h3>
 <p>Returns TRUE if the extended key of this object is lexicographically after
 that of <em>m,</em> otherwise FALSE.
-<h3 class="fn">bool <a name="ef047d"></a>QTranslatorMessage::operator&gt;= ( const QTranslatorMessage &amp; m ) const</h3>
+<h3 class="fn">boolÂ <a name="ef047d"></a>QTranslatorMessage::operator&gt;=Â (Â constÂ QTranslatorMessageÂ &amp;Â mÂ )Â const</h3>
 <p>Returns TRUE if the extended key of this object is lexicographically after
 that of <em>m</em> or if they are equal, otherwise FALSE.
-<h3 class="fn">void <a name="9600e8"></a>QTranslatorMessage::setTranslation ( const <a href="qstring.html">QString</a> &amp; translation )</h3>
+<h3 class="fn">voidÂ <a name="9600e8"></a>QTranslatorMessage::setTranslationÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â translationÂ )</h3>
 <p>Sets the translation of the source text.
 <p>See also  <a href="#d30c72">translation</a>().
-<h3 class="fn">const char * <a name="96eff7"></a>QTranslatorMessage::sourceText () const</h3>
+<h3 class="fn">constÂ charÂ *Â <a name="96eff7"></a>QTranslatorMessage::sourceTextÂ ()Â const</h3>
 <p>Returns the source text of this message (e.g., "&Save").
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="d30c72"></a>QTranslatorMessage::translation () const</h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="d30c72"></a>QTranslatorMessage::translationÂ ()Â const</h3>
 <p>Returns the translation of the source text (e.g., "&Sauvegarder").
 <p>See also  <a href="#9600e8">setTranslation</a>().
-<h3 class="fn">void <a name="bb7382"></a>QTranslatorMessage::write ( <a href="qdatastream.html">QDataStream</a> &amp; stream, bool strip, <a href="qtranslatormessage.html#Prefix">Prefix</a> prefix = HashContextSourceTextComment ) const</h3>
+<h3 class="fn">voidÂ <a name="bb7382"></a>QTranslatorMessage::writeÂ (Â <a href="qdatastream.html">QDataStream</a>Â &amp;Â stream, boolÂ strip, <a href="qtranslatormessage.html#Prefix">Prefix</a>Â prefixÂ =Â HashContextSourceTextCommentÂ )Â const</h3>
 <p>Writes this translator message to a <em>stream.</em>  If <em>strip</em> is FALSE (the
 default), all the information in the message is written.  If <em>strip</em> is TRUE,
 only the part of the extended key specified by <em>prefix</em> is written with the
@@ -154,6 +154,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

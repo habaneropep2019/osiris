@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QGrid Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,10 +32,10 @@ Inherits <a href="qframe.html">QFrame</a>.
 <p><a href="qgrid-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">enum <b>Direction</b> { Horizontal, Vertical }</div>
-<li><div class="fn"><a href="#3a5537"><b>QGrid</b></a> ( int n, QWidget * parent=0, const char * name=0, WFlags f=0 ) </div>
-<li><div class="fn"><a href="#7a6642"><b>QGrid</b></a> ( int n, Direction, QWidget * parent=0, const char * name=0, WFlags f=0 ) </div>
-<li><div class="fn">void <a href="#e1d7c2"><b>setSpacing</b></a> ( int ) </div>
+<li><div class="fn">enumÂ <b>Direction</b>Â {Â Horizontal, VerticalÂ }</div>
+<li><div class="fn"><a href="#3a5537"><b>QGrid</b></a>Â (Â intÂ n, QWidgetÂ *Â parent=0, constÂ charÂ *Â name=0, WFlagsÂ f=0Â )Â </div>
+<li><div class="fn"><a href="#7a6642"><b>QGrid</b></a>Â (Â intÂ n, Direction, QWidgetÂ *Â parent=0, constÂ charÂ *Â name=0, WFlagsÂ f=0Â )Â </div>
+<li><div class="fn">voidÂ <a href="#e1d7c2"><b>setSpacing</b></a>Â (Â intÂ )Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QGrid widget performs geometry management on its children
@@ -53,18 +53,18 @@ multi-row widgets, use the <a href="qgridlayout.html">QGridLayout</a> class dire
  <a href="xml-tagreader-with-features-tagreader-cpp.html#QGrid">xml/tagreader-with-features/tagreader.cpp</a>
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="3a5537"></a>QGrid::QGrid ( int <a href="n.html">n</a>, <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0, WFlags f=0 )</h3>
+<h3 class="fn"><a name="3a5537"></a>QGrid::QGridÂ (Â intÂ <a href="n.html">n</a>, <a href="qwidget.html">QWidget</a>Â *Â parent=0, constÂ charÂ *Â name=0, WFlagsÂ f=0Â )</h3>
 <p>Constructs a grid widget with parent <em>parent</em> and name <em>name. <a href="n.html">n</a></em> specifies the number of columns.
-<h3 class="fn"><a name="7a6642"></a>QGrid::QGrid ( int <a href="n.html">n</a>, Direction dir, <a href="qwidget.html">QWidget</a> * parent=0, const char * name=0, WFlags f=0 )</h3>
+<h3 class="fn"><a name="7a6642"></a>QGrid::QGridÂ (Â intÂ <a href="n.html">n</a>, DirectionÂ dir, <a href="qwidget.html">QWidget</a>Â *Â parent=0, constÂ charÂ *Â name=0, WFlagsÂ f=0Â )</h3>
 <p>Constructs a grid widget with parent <em>parent</em> and name <em>name.</em> If <em>dir</em> is
 <code>Horizontal,</code> <em><a href="n.html">n</a></em> specifies the number of columns. If <em>dir</em> is <code>Vertical,</code>
 <em>n</em> specifies the number of rows.
-<h3 class="fn">void <a name="2b153c"></a>QGrid::frameChanged () <code>[virtual protected]</code></h3>
+<h3 class="fn">voidÂ <a name="2b153c"></a>QGrid::frameChangedÂ () <code>[virtualÂ protected]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qframe.html#ad4c68">QFrame.</a>
-<h3 class="fn">void <a name="e1d7c2"></a>QGrid::setSpacing ( int space )</h3>
+<h3 class="fn">voidÂ <a name="e1d7c2"></a>QGrid::setSpacingÂ (Â intÂ spaceÂ )</h3>
 <p>Sets the spacing between children to <em>space.</em>
-<h3 class="fn"><a href="qsize.html">QSize</a> <a name="bc77a9"></a>QGrid::sizeHint () const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qsize.html">QSize</a>Â <a name="bc77a9"></a>QGrid::sizeHintÂ ()Â const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qwidget.html#4511d1">QWidget.</a>
 <hr><p>
@@ -78,6 +78,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

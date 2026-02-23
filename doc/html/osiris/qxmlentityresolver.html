@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QXmlEntityResolver Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -31,8 +31,8 @@ The QXmlEntityResolver class provides an interface to resolve extern entities co
 <p><a href="qxmlentityresolver-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">virtual bool <a href="#4743ba"><b>resolveEntity</b></a> ( const QString &amp; publicId, const QString &amp; systemId, QXmlInputSource * ret ) </div>
-<li><div class="fn">virtual QString <a href="#66137d"><b>errorString</b></a> () </div>
+<li><div class="fn">virtualÂ boolÂ <a href="#4743ba"><b>resolveEntity</b></a>Â (Â constÂ QStringÂ &amp;Â publicId, constÂ QStringÂ &amp;Â systemId, QXmlInputSourceÂ *Â retÂ )Â </div>
+<li><div class="fn">virtualÂ QStringÂ <a href="#66137d"><b>errorString</b></a>Â ()Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QXmlEntityResolver class provides an interface to resolve extern entities contained in XML data.
@@ -44,10 +44,10 @@ entities, it must implement this interface and register it with
 <p>See also  <a href="qxmldtdhandler.html">QXmlDTDHandler</a>, <a href="qxmldeclhandler.html">QXmlDeclHandler</a>, <a href="qxmlcontenthandler.html">QXmlContentHandler</a>, <a href="qxmlerrorhandler.html">QXmlErrorHandler</a> and <a href="qxmllexicalhandler.html">QXmlLexicalHandler</a>.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="66137d"></a>QXmlEntityResolver::errorString () <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="66137d"></a>QXmlEntityResolver::errorStringÂ () <code>[virtual]</code></h3>
 <p>The reader calls this function to get an error string if any of the handler
 functions returns FALSE to him.
-<h3 class="fn">bool <a name="4743ba"></a>QXmlEntityResolver::resolveEntity ( const <a href="qstring.html">QString</a> &amp; publicId, const <a href="qstring.html">QString</a> &amp; systemId, <a href="qxmlinputsource.html">QXmlInputSource</a> * ret ) <code>[virtual]</code></h3>
+<h3 class="fn">boolÂ <a name="4743ba"></a>QXmlEntityResolver::resolveEntityÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â publicId, constÂ <a href="qstring.html">QString</a>Â &amp;Â systemId, <a href="qxmlinputsource.html">QXmlInputSource</a>Â *Â retÂ ) <code>[virtual]</code></h3>
 <p>The reader will call this function before he opens any external entity,
 except the top-level document entity. The application may request the reader
 to resolve the entity itself (<em>ret</em> is 0) or to use an entirely different
@@ -73,6 +73,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

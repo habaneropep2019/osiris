@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QStoredDrag Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -33,10 +33,10 @@ Inherits <a href="qdragobject.html">QDragObject</a>.
 <p><a href="qstoreddrag-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn"><a href="#a2e891"><b>QStoredDrag</b></a> ( const char * mimeType, QWidget * dragSource = 0, const char * name = 0 ) </div>
-<li><div class="fn"><a href="#f014a8"><b>~QStoredDrag</b></a> () </div>
-<li><div class="fn">virtual void <a href="#a2472a"><b>setEncodedData</b></a> ( const QByteArray &amp; ) </div>
-<li><div class="fn">virtual QByteArray <a href="#c60694"><b>encodedData</b></a> ( const char * ) const</div>
+<li><div class="fn"><a href="#a2e891"><b>QStoredDrag</b></a>Â (Â constÂ charÂ *Â mimeType, QWidgetÂ *Â dragSourceÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0Â )Â </div>
+<li><div class="fn"><a href="#f014a8"><b>~QStoredDrag</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#a2472a"><b>setEncodedData</b></a>Â (Â constÂ QByteArrayÂ &amp;Â )Â </div>
+<li><div class="fn">virtualÂ QByteArrayÂ <a href="#c60694"><b>encodedData</b></a>Â (Â constÂ charÂ *Â )Â const</div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 Simple stored-value drag object for arbitrary MIME data.
@@ -46,19 +46,19 @@ a QStoredDrag to hold it.
 <p>For detailed information about drag-and-drop, see the <a href="qdragobject.html">QDragObject</a> class.
 
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="a2e891"></a>QStoredDrag::QStoredDrag ( const char * mimeType, <a href="qwidget.html">QWidget</a> * dragSource = 0, const char * name = 0 )</h3>
+<h3 class="fn"><a name="a2e891"></a>QStoredDrag::QStoredDragÂ (Â constÂ charÂ *Â mimeType, <a href="qwidget.html">QWidget</a>Â *Â dragSourceÂ =Â 0, constÂ charÂ *Â nameÂ =Â 0Â )</h3>
 <p>Constructs a QStoredDrag.  The parameters are passed
 to the <a href="qdragobject.html">QDragObject</a> constructor, and the format is set to <em>mimeType.</em>
 <p>The data will be unset.  Use <a href="#a2472a">setEncodedData</a>() to set it.
-<h3 class="fn"><a name="f014a8"></a>QStoredDrag::~QStoredDrag ()</h3>
+<h3 class="fn"><a name="f014a8"></a>QStoredDrag::~QStoredDragÂ ()</h3>
 <p>Destructs the drag object and frees up all allocated resources.
-<h3 class="fn"><a href="qbytearray.html">QByteArray</a> <a name="c60694"></a>QStoredDrag::encodedData ( const char * m ) const <code>[virtual]</code></h3>
+<h3 class="fn"><a href="qbytearray.html">QByteArray</a>Â <a name="c60694"></a>QStoredDrag::encodedDataÂ (Â constÂ charÂ *Â mÂ )Â const <code>[virtual]</code></h3>
 <p>Returns the stored data.
 <p>See also  <a href="#a2472a">setEncodedData</a>().
-<h3 class="fn">const char * <a name="5bcf40"></a>QStoredDrag::format ( int i ) const <code>[virtual]</code></h3>
+<h3 class="fn">constÂ charÂ *Â <a name="5bcf40"></a>QStoredDrag::formatÂ (Â intÂ iÂ )Â const <code>[virtual]</code></h3>
 <p>Reimplemented for internal reasons; the API is not affected.
 <p>Reimplemented from <a href="qmimesource.html#17ce96">QMimeSource.</a>
-<h3 class="fn">void <a name="a2472a"></a>QStoredDrag::setEncodedData ( const <a href="qbytearray.html">QByteArray</a> &amp; encodedData ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="a2472a"></a>QStoredDrag::setEncodedDataÂ (Â constÂ <a href="qbytearray.html">QByteArray</a>Â &amp;Â encodedDataÂ ) <code>[virtual]</code></h3>
 <p>Sets the encoded data of this drag object to <em>encodedData.</em>  The
 encoded data is what's delivered to the drop sites, and must be in a
 strictly defined and portable format.
@@ -75,6 +75,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>

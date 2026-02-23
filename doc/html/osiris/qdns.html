@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Qt Toolkit - QDns Class</title><style type="text/css"><!--
 h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
 a:link { color: #004faf; text-decoration: none }
@@ -13,11 +13,11 @@ alt="Home" border="0"><img width="100"
 height="100" src="face.png" alt="Home" border="0">
 </a><td valign=top><div align=right><img src="dochead.png" width="472" height="27"><br>
 <a href="classes.html"><b>Classes</b></a>
-- <a href="annotated.html">Annotated</a>
+-Â <a href="annotated.html">Annotated</a>
 - <a href="hierarchy.html">Tree</a>
-- <a href="functions.html">Functions</a>
-- <a href="index.html">Home</a>
-- <a href="topicals.html"><b>Structure</b></a>
+-Â <a href="functions.html">Functions</a>
+-Â <a href="index.html">Home</a>
+-Â <a href="topicals.html"><b>Structure</b></a>
 </div>
 </table>
 
@@ -32,28 +32,28 @@ Inherits <a href="qobject.html">QObject</a>.
 <p><a href="qdns-members.html">List of all member functions.</a>
 <h2>Public Members</h2>
 <ul>
-<li><div class="fn">enum <a href="#RecordType"><b>RecordType</b></a> { None, A, Aaaa, Mx, Srv, Cname, Ptr, Txt }</div>
-<li><div class="fn"><a href="#e8aaa7"><b>QDns</b></a> () </div>
-<li><div class="fn"><a href="#3eea48"><b>QDns</b></a> ( const QString &amp; label, RecordType rr = A ) </div>
-<li><div class="fn"><a href="#5619ac"><b>QDns</b></a> ( const QHostAddress &amp; address, RecordType rr = Ptr ) </div>
-<li><div class="fn">virtual <a href="#8751b2"><b>~QDns</b></a> () </div>
-<li><div class="fn">virtual void <a href="#44e125"><b>setLabel</b></a> ( const QString &amp; label ) </div>
-<li><div class="fn">virtual void <a href="#6de41c"><b>setLabel</b></a> ( const QHostAddress &amp; address ) </div>
-<li><div class="fn">QString <a href="#764a8b"><b>label</b></a> () const</div>
-<li><div class="fn">virtual void <a href="#7d2bdd"><b>setRecordType</b></a> ( RecordType rr = A ) </div>
-<li><div class="fn">RecordType <a href="#8d6b4f"><b>recordType</b></a> () const</div>
-<li><div class="fn">bool <a href="#a4233a"><b>isWorking</b></a> () const</div>
-<li><div class="fn">QValueList&lt;QHostAddress&gt; <a href="#efc386"><b>addresses</b></a> () const</div>
-<li><div class="fn">QValueList&lt;MailServer&gt; <a href="#265f09"><b>mailServers</b></a> () const</div>
-<li><div class="fn">QValueList&lt;Server&gt; <a href="#0ef392"><b>servers</b></a> () const</div>
-<li><div class="fn">QStringList <a href="#b2163f"><b>hostNames</b></a> () const</div>
-<li><div class="fn">QStringList <a href="#d1ffd8"><b>texts</b></a> () const</div>
-<li><div class="fn">QString <a href="#b49523"><b>canonicalName</b></a> () const</div>
-<li><div class="fn">QStringList <a href="#143b2b"><b>qualifiedNames</b></a> () const</div>
+<li><div class="fn">enumÂ <a href="#RecordType"><b>RecordType</b></a>Â {Â None, A, Aaaa, Mx, Srv, Cname, Ptr, TxtÂ }</div>
+<li><div class="fn"><a href="#e8aaa7"><b>QDns</b></a>Â ()Â </div>
+<li><div class="fn"><a href="#3eea48"><b>QDns</b></a>Â (Â constÂ QStringÂ &amp;Â label, RecordTypeÂ rrÂ =Â AÂ )Â </div>
+<li><div class="fn"><a href="#5619ac"><b>QDns</b></a>Â (Â constÂ QHostAddressÂ &amp;Â address, RecordTypeÂ rrÂ =Â PtrÂ )Â </div>
+<li><div class="fn">virtualÂ <a href="#8751b2"><b>~QDns</b></a>Â ()Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#44e125"><b>setLabel</b></a>Â (Â constÂ QStringÂ &amp;Â labelÂ )Â </div>
+<li><div class="fn">virtualÂ voidÂ <a href="#6de41c"><b>setLabel</b></a>Â (Â constÂ QHostAddressÂ &amp;Â addressÂ )Â </div>
+<li><div class="fn">QStringÂ <a href="#764a8b"><b>label</b></a>Â ()Â const</div>
+<li><div class="fn">virtualÂ voidÂ <a href="#7d2bdd"><b>setRecordType</b></a>Â (Â RecordTypeÂ rrÂ =Â AÂ )Â </div>
+<li><div class="fn">RecordTypeÂ <a href="#8d6b4f"><b>recordType</b></a>Â ()Â const</div>
+<li><div class="fn">boolÂ <a href="#a4233a"><b>isWorking</b></a>Â ()Â const</div>
+<li><div class="fn">QValueList&lt;QHostAddress&gt;Â <a href="#efc386"><b>addresses</b></a>Â ()Â const</div>
+<li><div class="fn">QValueList&lt;MailServer&gt;Â <a href="#265f09"><b>mailServers</b></a>Â ()Â const</div>
+<li><div class="fn">QValueList&lt;Server&gt;Â <a href="#0ef392"><b>servers</b></a>Â ()Â const</div>
+<li><div class="fn">QStringListÂ <a href="#b2163f"><b>hostNames</b></a>Â ()Â const</div>
+<li><div class="fn">QStringListÂ <a href="#d1ffd8"><b>texts</b></a>Â ()Â const</div>
+<li><div class="fn">QStringÂ <a href="#b49523"><b>canonicalName</b></a>Â ()Â const</div>
+<li><div class="fn">QStringListÂ <a href="#143b2b"><b>qualifiedNames</b></a>Â ()Â const</div>
 </ul>
 <h2>Signals</h2>
 <ul>
-<li><div class="fn">void <a href="#3a154a"><b>resultsReady</b></a> () </div>
+<li><div class="fn">voidÂ <a href="#3a154a"><b>resultsReady</b></a>Â ()Â </div>
 </ul>
 <hr><h2><a name="details"></a>Detailed Description</h2>
 The QDns class provides asynchronous DNS lookups.
@@ -106,10 +106,10 @@ name (the canonical name) for a host.
 <a href="http://www.dns.net/dnsrd/rfc/rfc2535.html">RFC-2535</a>
 extensions will be added in future versions.
 <hr><h2>Member Function Documentation</h2>
-<h3 class="fn"><a name="e8aaa7"></a>QDns::QDns ()</h3>
+<h3 class="fn"><a name="e8aaa7"></a>QDns::QDnsÂ ()</h3>
 <p>Constructs a DNS query object with invalid settings both for the
 label and the search type.
-<h3 class="fn"><a name="5619ac"></a>QDns::QDns ( const <a href="qhostaddress.html">QHostAddress</a> &amp; address, <a href="qdns.html#RecordType">QDns::RecordType</a> rr = Ptr )</h3>
+<h3 class="fn"><a name="5619ac"></a>QDns::QDnsÂ (Â constÂ <a href="qhostaddress.html">QHostAddress</a>Â &amp;Â address, <a href="qdns.html#RecordType">QDns::RecordType</a>Â rrÂ =Â PtrÂ )</h3>
 <p>Constructs a DNS query object that will return <em>rr</em> information about
 <em>address.</em>  The label is set to the IN-ADDR.ARPA domain name. This is useful
 in combination with the Ptr record type (i.e. if you want to look up a
@@ -117,21 +117,21 @@ hostname for a given address).
 <p>The DNS lookup is started the next time the application enters the event
 loop. When the result is found the signal <a href="#3a154a">resultsReady</a>() is emmitted.
 <p><em>rr</em> defaults to <code>Ptr,</code> that maps addresses to hostnames.
-<h3 class="fn"><a name="3eea48"></a>QDns::QDns ( const <a href="qstring.html">QString</a> &amp; label, <a href="qdns.html#RecordType">QDns::RecordType</a> rr = A )</h3>
+<h3 class="fn"><a name="3eea48"></a>QDns::QDnsÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â label, <a href="qdns.html#RecordType">QDns::RecordType</a>Â rrÂ =Â AÂ )</h3>
 <p>Constructs a DNS query object that will return <em>rr</em>
 information about <em>label.</em>
 <p>The DNS lookup is started the next time the application enters the event
 loop. When the result is found the signal <a href="#3a154a">resultsReady</a>() is emmitted.
 <p><em>rr</em> defaults to <code>A,</code> IPv4 addresses.
-<h3 class="fn"><a name="8751b2"></a>QDns::~QDns () <code>[virtual]</code></h3>
+<h3 class="fn"><a name="8751b2"></a>QDns::~QDnsÂ () <code>[virtual]</code></h3>
 <p>Destroys the query object and frees its allocated resources.
-<h3 class="fn"><a href="qvaluelist.html">QValueList</a>&lt;<a href="qhostaddress.html">QHostAddress</a>&gt; <a name="efc386"></a>QDns::addresses () const</h3>
+<h3 class="fn"><a href="qvaluelist.html">QValueList</a>&lt;<a href="qhostaddress.html">QHostAddress</a>&gt;Â <a name="efc386"></a>QDns::addressesÂ ()Â const</h3>
 <p>Returns a list of the addresses for this name if this QDns object
 has a <a href="#8d6b4f">recordType</a>() of <em>QDns::A</em> or <em>QDns::Aaaa</em> and the answer is
 available, or an empty list else.
 <p>As a special case, if <a href="#764a8b">label</a>() is a valid numeric IP address, this function
 returns that address.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="b49523"></a>QDns::canonicalName () const</h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="b49523"></a>QDns::canonicalNameÂ ()Â const</h3>
 <p>Returns the canonical name for this DNS node.  (This works
 regardless of what <a href="#8d6b4f">recordType</a>() is set to.)
 <p>If the canonical name isn't known, this function returns a null
@@ -141,31 +141,31 @@ the target of its CNAME.  For example, if l.trolltech.com is a CNAME to
 lupinella.troll.no, and the search path for QDns is "trolltech.com", then
 the canonical name for all of "lupinella", "l", "lupinella.troll.no."
 and "l.trolltech.com" is "lupinella.troll.no.".
-<h3 class="fn"><a href="qstringlist.html">QStringList</a> <a name="b2163f"></a>QDns::hostNames () const</h3>
+<h3 class="fn"><a href="qstringlist.html">QStringList</a>Â <a name="b2163f"></a>QDns::hostNamesÂ ()Â const</h3>
 <p>Returns a list of host names if the record type is <code>Ptr.</code>
-<h3 class="fn">bool <a name="a4233a"></a>QDns::isWorking () const</h3>
+<h3 class="fn">boolÂ <a name="a4233a"></a>QDns::isWorkingÂ ()Â const</h3>
 <p>Returns TRUE if QDns is doing a lookup for this object, and FALSE
 if this object has the information it wants.
 <p>QDns emits the <a href="#3a154a">resultsReady</a>() signal when the status changes to FALSE.
-<h3 class="fn"><a href="qstring.html">QString</a> <a name="764a8b"></a>QDns::label () const</h3>
+<h3 class="fn"><a href="qstring.html">QString</a>Â <a name="764a8b"></a>QDns::labelÂ ()Â const</h3>
 <p>Returns the domain name for which this object returns information.
 <p>See also  <a href="#44e125">setLabel</a>().
-<h3 class="fn"><a href="qvaluelist.html">QValueList</a>&lt;MailServer&gt; <a name="265f09"></a>QDns::mailServers () const</h3>
+<h3 class="fn"><a href="qvaluelist.html">QValueList</a>&lt;MailServer&gt;Â <a name="265f09"></a>QDns::mailServersÂ ()Â const</h3>
 <p>Returns a list of mail servers if the record type is <code>Mx.</code> The struct
 <code>QDns::MailServer</code> contains the following variables:
 <ul>
 <li> <code><a href="qstring.html">QString</a></code> QDns::MailServer::name
 <li> <code>Q_UINT16</code> QDns::MailServer::priority
 </ul>
-<h3 class="fn"><a href="qstringlist.html">QStringList</a> <a name="143b2b"></a>QDns::qualifiedNames () const</h3>
+<h3 class="fn"><a href="qstringlist.html">QStringList</a>Â <a name="143b2b"></a>QDns::qualifiedNamesÂ ()Â const</h3>
 <p>Returns a list of the fully qualified names <a href="#764a8b">label</a>() maps to.
-<h3 class="fn">QDns::RecordType <a name="8d6b4f"></a>QDns::recordType() const</h3>
+<h3 class="fn">QDns::RecordTypeÂ <a name="8d6b4f"></a>QDns::recordType()Â const</h3>
 <p>Returns the record type of this query object.
 <p>See also  <a href="#7d2bdd">setRecordType</a>() and <a href="#RecordType">RecordType</a>.
-<h3 class="fn">void <a name="3a154a"></a>QDns::resultsReady () <code>[signal]</code></h3>
+<h3 class="fn">voidÂ <a name="3a154a"></a>QDns::resultsReadyÂ () <code>[signal]</code></h3>
 <p>This signal is emitted when results are available for one of
 the <a href="#143b2b">qualifiedNames</a>().
-<h3 class="fn"><a href="qvaluelist.html">QValueList</a>&lt;Server&gt; <a name="0ef392"></a>QDns::servers () const</h3>
+<h3 class="fn"><a href="qvaluelist.html">QValueList</a>&lt;Server&gt;Â <a name="0ef392"></a>QDns::serversÂ ()Â const</h3>
 <p>Returns a list of servers if the record type is <code>Srv.</code> The struct <code>QDns::Server</code> contains the following variables:
 <ul>
 <li> <code><a href="qstring.html">QString</a></code> QDns::Server::name
@@ -173,7 +173,7 @@ the <a href="#143b2b">qualifiedNames</a>().
 <li> <code>Q_UINT16</code> QDns::Server::weight
 <li> <code>Q_UINT16</code> QDns::Server::port
 </ul>
-<h3 class="fn">void <a name="6de41c"></a>QDns::setLabel ( const <a href="qhostaddress.html">QHostAddress</a> &amp; address ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="6de41c"></a>QDns::setLabelÂ (Â constÂ <a href="qhostaddress.html">QHostAddress</a>Â &amp;Â addressÂ ) <code>[virtual]</code></h3>
 <p>Sets this query object to query for information about the address <em>address.</em>
 The label is set to the IN-ADDR.ARPA domain name. This is useful in
 combination with the Ptr record type (i.e. if you want to look up a hostname
@@ -182,18 +182,18 @@ for a given address.
 likely changes as a result.
 <p>The DNS lookup is started the next time the application enters the event
 loop. When the result is found the signal <a href="#3a154a">resultsReady</a>() is emmitted.
-<h3 class="fn">void <a name="44e125"></a>QDns::setLabel ( const <a href="qstring.html">QString</a> &amp; label ) <code>[virtual]</code></h3>
+<h3 class="fn">voidÂ <a name="44e125"></a>QDns::setLabelÂ (Â constÂ <a href="qstring.html">QString</a>Â &amp;Â labelÂ ) <code>[virtual]</code></h3>
 <p>Sets this query object to query for information about <em>label.</em>
 <p>This does not change the <a href="#8d6b4f">recordType</a>(), but its <a href="#a4233a">isWorking</a>() most
 likely changes as a result.
 <p>The DNS lookup is started the next time the application enters the event
 loop. When the result is found the signal <a href="#3a154a">resultsReady</a>() is emmitted.
-<h3 class="fn">void <a name="7d2bdd"></a>QDns::setRecordType ( <a href="qdns.html#RecordType">RecordType</a> rr = A )</h3>
+<h3 class="fn">voidÂ <a name="7d2bdd"></a>QDns::setRecordTypeÂ (Â <a href="qdns.html#RecordType">RecordType</a>Â rrÂ =Â AÂ )</h3>
 <p>Sets this object to query for <em>rr</em> records.
 <p>The DNS lookup is started the next time the application enters the event
 loop. When the result is found the signal <a href="#3a154a">resultsReady</a>() is emmitted.
 <p>See also  <a href="#RecordType">RecordType</a>.
-<h3 class="fn"><a href="qstringlist.html">QStringList</a> <a name="d1ffd8"></a>QDns::texts () const</h3>
+<h3 class="fn"><a href="qstringlist.html">QStringList</a>Â <a name="d1ffd8"></a>QDns::textsÂ ()Â const</h3>
 <p>Returns a list of texts if the record type is <code>Txt.</code>
 <hr><p>
 Search the documentation, FAQ, qt-interest archive and more (uses
@@ -206,6 +206,6 @@ This file is part of the <a href="index.html">Qt toolkit</a>,
 copyright &copy; 1995-2001
 <a href="http://www.trolltech.com">Trolltech</a>, all rights reserved.<p><address><hr><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr>
-<td>Copyright © 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td>Copyright Â© 2001 Trolltech<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
 <td align="right"><div align="right">Qt version 2.3.2</div>
 </table></div></address></body></html>
