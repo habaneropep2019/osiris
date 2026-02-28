@@ -9,6 +9,8 @@ osiris_install_prefix = get_option('prefix')
 
 osiris_cpp_flags = [ '-Werror=format-security' ]
 
+subdir('opal')
+
 project_defines = [
     '-DQT_NO_IMAGEIO_MNG',
     '-DQT_NO_SM_SUPPORT',
