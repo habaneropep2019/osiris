@@ -2,6 +2,13 @@
 
 # Osiris releases
 
+#### Osiris 2.5
+
+Osiris 2.5 is a relatively important release, mainly making changes to improve co-existence with modern Qt.
+
+- Added Opal - the Osiris Platform Abstraction Layer, to make the transition to Wayland easier.
+- 
+
 #### Osiris 2.4.4
 
 Osiris 2.4.4 is a routine maintenance release bringing some QoL and bug fixes

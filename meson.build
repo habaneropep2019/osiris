@@ -9,7 +9,61 @@ osiris_install_prefix = get_option('prefix')
 
 osiris_cpp_flags = [ '-Werror=format-security' ]
 
-subdir('opal')
+# Begin Opal section
+
+opal_version = '1.0'
+
+opal_headers = [
+  'opal/opal.h',
+  'opal/opalws.h'
+]
+opal_source_files = [
+  'opal/opal.cpp',
+  'opal/opalws.cpp'
+]
+
+opal_public_headers = include_directories('opal')
+
+opal_project_target = shared_library(
+  'opal',
+  opal_source_files,
+  install : true,
+  #cpp_args : build_args,
+  #gnu_symbol_visibility : 'hidden',
+  include_directories : opal_public_headers
+)
+
+project_dep = declare_dependency(
+  include_directories: opal_public_headers,
+  link_with : opal_project_target
+)
+
+opal_pkg_mod = import('pkgconfig')
+opal_pkg_mod.generate(libraries : [opal_project_target],
+                version : opal_version,
+                name : 'opal',
+                filebase : 'opal',
+                subdirs : 'osiris',
+                description : 'Osiris Platform Abstraction Layer')
+
+testopal_source_files = [
+    'opal/testopal.cpp'
+]
+
+#testopal_dependencies = [
+#  dependency('opal')
+#]
+
+testopal_target = executable(
+  'testopal',
+  testopal_source_files,
+  #dependencies: project_dependencies,
+  link_with: opal_project_target,
+  install : true,
+  #c_args : build_args
+)
+
+# End Opal section
 
 project_defines = [
     '-DQT_NO_IMAGEIO_MNG',
@@ -571,7 +625,7 @@ if get_option('single-thread').enabled()
     osirislib = shared_library('osiris',
                                osiris_sources,
                                cpp_args : project_defines + osiris_cpp_flags,
-                               include_directories : osiris_include_directories,
+                               include_directories : osiris_include_directories + opal_public_headers,
                                dependencies : osiris_deps,
                                install : true,
                                install_dir : lib_install_dir,
@@ -587,7 +641,7 @@ if get_option('multi-thread').enabled()
     osirislib_mt = shared_library('osiris-mt',
                                   osiris_sources,
                                   cpp_args : defines + osiris_cpp_flags,
-                                  include_directories : osiris_include_directories,
+                                  include_directories : osiris_include_directories + opal_public_headers,
                                   dependencies : osiris_deps,
                                   install : true,
                                   install_dir : lib_install_dir,
