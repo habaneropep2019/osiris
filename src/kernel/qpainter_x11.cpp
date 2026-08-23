@@ -480,16 +480,16 @@ static inline void release_gc(void *ref)
 int qt_use_xft(void)
 {
 	static int checked_env = 0;
-	static int use_xft = 0;
+	static int use_xft = 1;
 
 	if (!checked_env) {
 		if (XftDefaultHasRender(qt_xdisplay())) {
-			char *e = getenv("QT_XFT");
+			char *e = getenv("OSIRIS_X_CORE_BITMAP_FONT_ENABLE");
 			if (e && (*e == '1' || *e == 'y' || *e == 'Y' ||
 				  *e == 't' || *e == 'T'))
-				use_xft = 1;
-			else
 				use_xft = 0;
+			else
+				use_xft = 1;
 		}
 		checked_env = 1;
 	}
