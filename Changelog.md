@@ -2,6 +2,14 @@
 
 # Osiris releases
 
+#### Osiris 2.4.5
+
+Osiris 2.4.5 is a routine maintenance release bringing some QoL and bug fixes
+
+- Fonts default to standard non-anti-aliased bitmap fonts. Enable Xft anti-aliased font rendering by default and leave bitmap as fallback.
+- Remove `QT_XFT` environment variable checking. XFT is enabled by default now. If you need to fallback to X core bitmap fonts, you can set the environment variable `OSIRIS_X_CORE_BITMAP_FONT_ENABLE` to true.
+- Fixed a potential string format security flaw in `examples/widgets`, although I seriously doubt this would ever get exploited.
+
 #### Osiris 2.4.4
 
 Osiris 2.4.4 is a routine maintenance release bringing some QoL and bug fixes
