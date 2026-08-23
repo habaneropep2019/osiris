@@ -319,10 +319,15 @@ inline bool QCString::isEmpty() const
  * Sandsmark via
  * https://invent.kde.org/sandsmark/qt2/-/commit/33030661efa9bc563cc3d6cf6a3aa5420bca03f2
  * The licensing notice on the reference file is the same as this file.
+ *
+ * ================================
+ * Well I was going through this with ASAN some time later and this ain't right at all - abloss
+ * ================================
+ *
  */
 inline uint QCString::length() const
 {
-	return strnlen(data(), size());
+	return data() ? strnlen(data(), size()) : 0;
 }
 /*
  * End copied code
