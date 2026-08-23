@@ -1488,7 +1488,7 @@ void QFont::load() const
 					XftTypeInteger, weight_value, XFT_SLANT,
 					XftTypeInteger, slant_value, XFT_SIZE,
 					XftTypeDouble, size_value, XFT_SPACING,
-					XftTypeInteger, mono_value, 0);
+					XftTypeInteger, mono_value, (char *)0);
 			else
 				ft = XftFontOpen(QPaintDevice::x11AppDisplay(),
 						 QPaintDevice::x11AppScreen(),
@@ -1500,7 +1500,7 @@ void QFont::load() const
 						 XftTypeInteger, weight_value,
 						 XFT_SLANT, XftTypeInteger,
 						 slant_value, XFT_SIZE,
-						 XftTypeDouble, size_value, 0);
+						 XftTypeDouble, size_value, (char *)0);
 # if 0
             if (ft)
                 XftPatternPrint (ft->pattern);
