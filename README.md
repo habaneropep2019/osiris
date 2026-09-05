@@ -55,6 +55,73 @@ These are distributions that are tested with each release. Note that packages ar
 | Debian 13    | Supported | 2.4.5                 |       | Yes  |
 | Ubuntu 24.04 | Supported | 2.4.4                 |       |  Yes |
 
+
+### Architecture Support
+
+Osiris is supported on arm64, amd64, and i386 for source builds. Other architectures may work, but have not been tested.
+
+For packages, arm64 is supported on both Debian and Ubuntu. arm64 packages are temporarily unable to be built due to limited availablity of arm64 nodes (as of 09-25-2026)
+
+### Packages for Debian
+
+First, grab the package signing key and add the repository (note that this may need to be done as root or using `sudo`):
+
+```
+wget https://pkg.midesk.top/debian/pool/stable/m/midesktop-archive-keyring/midesktop-archive-keyring_1.0.0-1_all.deb
+
+dpkg -i midesktop-archive-keyring_1.0.0-1_all.deb
+
+echo 'deb [signed-by=/usr/share/keyrings/midesktop.pgp] https://pkg.midesk.top/debian trixie stable' > /etc/apt/sources.list.d/midesktop.list
+
+apt update
+```
+
+**Note:** You can replace `trixie` with your Debian release: e.g., `bookworm`. You can choose from three variants: `stable`, `testing`, and `nightly`. For most users, `stable` is recommended. If you want to test beta/RC releases, you can use `testing`. And lastly, if you want to test the latest updates as they are released during development, you can use `nightly` (though, releases are not necessarily released every night!).
+
+Then, install Osiris:
+
+```
+apt install osiris osiris-doc originator`
+```
+
+If you plan to do development with Osiris, you may also want the development and debugging packages:
+
+```
+apt install originator-dbgsym osiris-dev-tools osiris-dev osiris-dbgsym osiris-dev-tools-dbgsym
+```
+
+It's recommended to reboot after installation.
+
+### Packages for Ubuntu
+
+First, grab the package signing key and add the repository (note that this may need to be done as root or using `sudo`):
+
+```
+wget https://pkg.midesk.top/ubuntu/pool/stable/m/midesktop-archive-keyring/midesktop-archive-keyring_1.0.0-1_all.deb
+
+dpkg -i midesktop-archive-keyring_1.0.0-1_all.deb
+
+echo 'deb [signed-by=/usr/share/keyrings/midesktop.pgp] https://pkg.midesk.top/ubuntu noble stable' > /etc/apt/sources.list.d/midesktop.list
+
+apt update
+```
+
+**Note:** Currently, only `noble` is supported, although the packages may work on newer releases. You can choose from three variants: `stable`, `testing`, and `nightly`. For most users, `stable` is recommended. If you want to test beta/RC releases, you can use `testing`. And lastly, if you want to test the latest updates as they are released during development, you can use `nightly` (though, releases are not necessarily released every night!).
+
+Then, install Osiris:
+
+```
+apt install osiris osiris-doc originator`
+```
+
+If you plan to do development with Osiris, you may also want the development and debugging packages:
+
+```
+apt install originator-dbgsym osiris-dev-tools osiris-dev osiris-dbgsym osiris-dev-tools-dbgsym
+```
+
+It's recommended to reboot after installation.
+
 ## About licensing
 
 First off, I'm not a lawyer, and this is not legal advice. Should you have questions about licensing, please see the source file in question and/or contact a competent software licensing lawyer.
